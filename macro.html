@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国宏观经济数据仪表盘</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            min-height: 100vh;
+            color: #e0e6ed;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 72px 20px 20px;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+        header h1 {
+            font-size: 2.2em;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        header p {
+            color: #7a8599;
+            font-size: 0.95em;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+        }
+        .stat-card.cpi::before { background: linear-gradient(90deg, transparent, #ff6b6b, transparent); }
+        .stat-card.ppi::before { background: linear-gradient(90deg, transparent, #ffd93d, transparent); }
+        .stat-card.pmi::before { background: linear-gradient(90deg, transparent, #a78bfa, transparent); }
+        .stat-card.pmi-nm::before { background: linear-gradient(90deg, transparent, #818cf8, transparent); }
+        .stat-card.bond::before { background: linear-gradient(90deg, transparent, #00ff88, transparent); }
+        .stat-card.gdp::before { background: linear-gradient(90deg, transparent, #fb923c, transparent); }
+        .stat-label {
+            font-size: 0.85em;
+            color: #7a8599;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+        }
+        .stat-card.cpi .stat-value { color: #ff6b6b; }
+        .stat-card.ppi .stat-value { color: #ffd93d; }
+        .stat-card.pmi .stat-value { color: #a78bfa; }
+        .stat-card.pmi-nm .stat-value { color: #818cf8; }
+        .stat-card.bond .stat-value { color: #00ff88; }
+        .stat-card.gdp .stat-value { color: #fb923c; }
+        .stat-meta {
+            font-size: 0.8em;
+            color: #5a6577;
+            margin-top: 8px;
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+        }
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: transparent;
+            color: #a0a8b8;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .toggle-btn:hover {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        .toggle-btn.active {
+            background: rgba(0,212,255,0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        .toggle-btn.cpi.active { background: rgba(255,107,107,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+        .toggle-btn.ppi.active { background: rgba(255,217,61,0.15); border-color: #ffd93d; color: #ffd93d; }
+        .toggle-btn.pmi.active { background: rgba(167,139,250,0.15); border-color: #a78bfa; color: #a78bfa; }
+        .toggle-btn.bond.active { background: rgba(0,255,136,0.15); border-color: #00ff88; color: #00ff88; }
+        .toggle-btn.gdp.active { background: rgba(251,146,60,0.15); border-color: #fb923c; color: #fb923c; }
+        .range-slider {
+            flex: 1;
+            min-width: 280px;
+        }
+        .range-slider label {
+            display: block;
+            font-size: 0.8em;
+            color: #7a8599;
+            margin-bottom: 8px;
+        }
+        .range-slider .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #5a6577;
+            margin-bottom: 8px;
+        }
+        .dual-slider {
+            position: relative;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
+        .dual-slider input[type="range"] {
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background: none;
+            pointer-events: none;
+            -webkit-appearance: none;
+            top: 0;
+        }
+        .dual-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #00d4ff;
+            border-radius: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+        .dual-slider input[type="range"].start::-webkit-slider-thumb {
+            background: #00d4ff;
+        }
+        .dual-slider input[type="range"].end::-webkit-slider-thumb {
+            background: #00ff88;
+        }
+        .dual-slider .slider-track {
+            position: absolute;
+            height: 6px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            border-radius: 3px;
+            pointer-events: none;
+        }
+        .view-mode-group {
+            display: flex;
+            gap: 5px;
+            margin-left: auto;
+        }
+        .view-mode-btn {
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: transparent;
+            color: #a0a8b8;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .view-mode-btn:hover {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        .view-mode-btn.active {
+            background: rgba(0,212,255,0.15);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        .chart-container {
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .split-chart-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+        }
+        .split-chart-row:last-child {
+            margin-bottom: 0;
+        }
+        .split-chart-label {
+            width: 120px;
+            min-width: 120px;
+            padding: 20px 15px;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: 700;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 3px;
+        }
+        .split-chart-label.cpi-label { background: rgba(255,107,107,0.15); color: #ff6b6b; }
+        .split-chart-label.ppi-label { background: rgba(255,217,61,0.15); color: #ffd93d; }
+        .split-chart-label.pmi-label { background: rgba(167,139,250,0.15); color: #a78bfa; }
+        .split-chart-label.bond-label { background: rgba(0,255,136,0.15); color: #00ff88; }
+        .split-chart-label.gdp-label { background: rgba(251,146,60,0.15); color: #fb923c; }
+        .split-chart-label span {
+            font-size: 0.5em;
+            font-weight: 400;
+            letter-spacing: 0;
+        }
+        .split-chart-area {
+            flex: 1;
+            height: 200px;
+            padding: 10px;
+        }
+        @media (max-width: 768px) {
+            .split-chart-row {
+                flex-direction: column;
+            }
+            .split-chart-label {
+                width: 100%;
+                writing-mode: horizontal-tb;
+                padding: 10px;
+                font-size: 1em;
+            }
+            .split-chart-area {
+                width: 100%;
+                height: 180px;
+            }
+        }
+        .chart-title {
+            font-size: 1.1em;
+            color: #c0c8d8;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #00d4ff;
+        }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        .chart-box {
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .table-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .search-box {
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: #e0e6ed;
+            font-size: 0.95em;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        th {
+            position: sticky;
+            top: 0;
+            background: rgba(26,31,53,0.95);
+            font-weight: 600;
+            color: #a0a8b8;
+            font-size: 0.85em;
+            text-transform: uppercase;
+        }
+        td {
+            font-size: 0.9em;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        tr:hover {
+            background: rgba(0,212,255,0.05);
+        }
+        .event-marker {
+            position: absolute;
+            top: -5px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: rgba(255, 100, 100, 0.5);
+        }
+        .correlation-container {
+            margin-top: 15px;
+        }
+        .corr-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .corr-controls select {
+            padding: 10px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            color: #e0e6ed;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .corr-controls select:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .corr-range-slider {
+            flex: 1;
+            min-width: 200px;
+        }
+        .corr-slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75em;
+            color: #5a6577;
+            margin-bottom: 8px;
+        }
+        .corr-dual-slider {
+            height: 6px;
+        }
+        .calc-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            border: none;
+            border-radius: 8px;
+            color: #0a0e1a;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,212,255,0.3);
+        }
+        .corr-matrix {
+            display: grid;
+            grid-template-columns: auto repeat(5, 1fr);
+            gap: 4px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .corr-cell {
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        .corr-header {
+            background: rgba(255,255,255,0.05);
+            color: #a0a8b8;
+            font-weight: 600;
+        }
+        .corr-label {
+            background: rgba(255,255,255,0.05);
+            color: #a0a8b8;
+            font-weight: 600;
+            text-align: right;
+            padding-right: 15px;
+        }
+        .corr-value {
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .corr-value:hover {
+            transform: scale(1.05);
+            z-index: 1;
+        }
+        .corr-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #7a8599;
+        }
+        .corr-interpretation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .corr-interpretation h4 {
+            color: #c0c8d8;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .corr-interpretation p {
+            color: #7a8599;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        .corr-interpretation .corr-pair {
+            margin: 8px 0;
+            padding: 8px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .corr-interpretation .corr-pair .label {
+            color: #a0a8b8;
+        }
+        .corr-interpretation .corr-pair .value {
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+        .corr-interpretation .corr-pair .value.positive {
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+        }
+        .corr-interpretation .corr-pair .value.negative {
+            background: rgba(255,107,107,0.2);
+            color: #ff6b6b;
+        }
+        .corr-interpretation .corr-pair .value.neutral {
+            background: rgba(255,217,61,0.2);
+            color: #ffd93d;
+        }
+        .lagged-corr-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .lagged-corr-section h4 {
+            color: #c0c8d8;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+        .lagged-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .lagged-control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .lagged-control-group label {
+            color: #7a8599;
+            font-size: 0.8em;
+        }
+        .lagged-control-group select {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #c0c8d8;
+            font-size: 0.85em;
+            cursor: pointer;
+        }
+        .lagged-control-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .lagged-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lagged-slider {
+            width: 200px;
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.1);
+        }
+        .lagged-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #00d4ff;
+            cursor: pointer;
+        }
+        .lagged-slider-value {
+            color: #00d4ff;
+            font-weight: 600;
+            min-width: 60px;
+        }
+        .lagged-heatmap {
+            display: grid;
+            gap: 2px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .lagged-heatmap-row {
+            display: flex;
+            gap: 2px;
+        }
+        .lagged-heatmap-cell {
+            width: 36px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            border-radius: 3px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .lagged-heatmap-header {
+            background: transparent !important;
+            color: #7a8599 !important;
+            font-size: 0.7em;
+        }
+        .lagged-heatmap-label {
+            background: transparent !important;
+            color: #a0a8b8 !important;
+            font-size: 0.75em;
+            justify-content: flex-end;
+            padding-right: 8px;
+        }
+        .lagged-interpretation {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+        .lagged-interpretation .best-lag {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .lagged-interpretation .best-lag:last-child {
+            border-bottom: none;
+        }
+        .lagged-interpretation .best-lag .pair-name {
+            color: #a0a8b8;
+        }
+        .lagged-interpretation .best-lag .lag-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .lagged-interpretation .best-lag .lag-value {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        .lagged-interpretation .best-lag .corr-value {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .lagged-interpretation .best-lag .corr-value.positive {
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+        }
+        .lagged-interpretation .best-lag .corr-value.negative {
+            background: rgba(255,107,107,0.2);
+            color: #ff6b6b;
+        }
+        .yaxis-settings {
+            display: none;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .yaxis-settings.visible {
+            display: block;
+        }
+        .yaxis-settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .yaxis-settings-header h4 {
+            color: #c0c8d8;
+            margin: 0;
+            font-size: 0.9em;
+        }
+        .yaxis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+        }
+        .yaxis-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+        }
+        .yaxis-item-label {
+            color: #a0a8b8;
+            font-size: 0.85em;
+            min-width: 70px;
+        }
+        .yaxis-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        .yaxis-range input[type="number"] {
+            width: 70px;
+            padding: 5px 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: #c0c8d8;
+            font-size: 0.8em;
+            text-align: center;
+        }
+        .yaxis-range input[type="number"]:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+        .yaxis-range span {
+            color: #7a8599;
+            font-size: 0.8em;
+        }
+        .yaxis-auto-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .yaxis-auto-toggle input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        .yaxis-auto-toggle span {
+            color: #7a8599;
+            font-size: 0.75em;
+        }
+        .yaxis-toggle-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: #a0a8b8;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .yaxis-toggle-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            header h1 {
+                font-size: 1.6em;
+            }
+        }
+        .site-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 52px;
+            background: rgba(10,14,26,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+        }
+        .nav-brand {
+            color: #c8cdd8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-brand .dot {
+            width: 8px;
+            height: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .nav-back {
+            color: #7a8599;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .nav-back:hover { color: #00d4ff; }
+    </style>
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+        <a href="index.html" class="nav-back">← 返回首页</a>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>📊 中国宏观经济数据仪表盘</h1>
+            <p>CPI · PPI · PMI · 国债收益率 · 名义GDP增速 | 2005年至今</p>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card cpi">
+                <div class="stat-label">CPI 居民消费价格指数</div>
+                <div class="stat-value" id="cpi-latest">—</div>
+                <div class="stat-meta">2026年4月 | 同比(%)</div>
+            </div>
+            <div class="stat-card ppi">
+                <div class="stat-label">PPI 工业生产者出厂价格</div>
+                <div class="stat-value" id="ppi-latest">—</div>
+                <div class="stat-meta">2026年3月 | 同比(%)</div>
+            </div>
+            <div class="stat-card pmi">
+                <div class="stat-label">制造业PMI</div>
+                <div class="stat-value" id="pmi-m-latest">—</div>
+                <div class="stat-meta">2026年3月 | 官方</div>
+            </div>
+            <div class="stat-card pmi-nm">
+                <div class="stat-label">非制造业PMI</div>
+                <div class="stat-value" id="pmi-nm-latest">—</div>
+                <div class="stat-meta">2026年3月 | 官方</div>
+            </div>
+            <div class="stat-card bond">
+                <div class="stat-label">10年期国债收益率</div>
+                <div class="stat-value" id="bond-latest">—</div>
+                <div class="stat-meta">2026年4月 | 月均(%)</div>
+            </div>
+            <div class="stat-card gdp">
+                <div class="stat-label">名义GDP增速</div>
+                <div class="stat-value" id="gdp-latest">—</div>
+                <div class="stat-meta">2026年Q1 | 同比(%)</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="toggle-group">
+                <button class="toggle-btn cpi active" onclick="toggleSeries('cpi')">CPI</button>
+                <button class="toggle-btn ppi active" onclick="toggleSeries('ppi')">PPI</button>
+                <button class="toggle-btn pmi active" onclick="toggleSeries('pmi')">PMI</button>
+                <button class="toggle-btn bond active" onclick="toggleSeries('bond')">国债</button>
+                <button class="toggle-btn gdp active" onclick="toggleSeries('gdp')">GDP</button>
+            </div>
+            <div class="view-mode-group">
+                <button class="view-mode-btn active" id="view-overlay" onclick="setViewMode('overlay')">📈 叠加</button>
+                <button class="view-mode-btn" id="view-split" onclick="setViewMode('split')">📊 分开</button>
+            </div>
+            <div class="range-slider">
+                <label>时间范围选择</label>
+                <div class="slider-labels">
+                    <span id="year-start-label">2000</span>
+                    <span id="year-end-label">2026</span>
+                </div>
+                <div class="dual-slider">
+                    <div class="slider-track" id="slider-track"></div>
+                    <input type="range" id="year-start" min="2000" max="2026" value="2000" oninput="updateDualRange()">
+                    <input type="range" id="year-end" min="2000" max="2026" value="2026" oninput="updateDualRange()">
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container" id="overlay-view">
+            <div class="chart-title">📈 三指标叠加对比图</div>
+            <div id="main-chart" style="width: 100%; height: 450px;"></div>
+        </div>
+
+        <div class="chart-container" id="split-view" style="display: none;">
+            <div class="chart-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span>📊 多指标分列对比图</span>
+                <button class="yaxis-toggle-btn" onclick="toggleYAxisSettings()">⚙️ Y轴设置</button>
+            </div>
+            
+            <!-- Y轴范围设置面板 -->
+            <div class="yaxis-settings" id="yaxis-settings">
+                <div class="yaxis-settings-header">
+                    <h4>各指标Y轴范围设置</h4>
+                    <button class="yaxis-toggle-btn" onclick="resetYAxisRanges()">重置为自动</button>
+                </div>
+                <div class="yaxis-grid">
+                    <div class="yaxis-item">
+                        <span class="yaxis-item-label">CPI</span>
+                        <label class="yaxis-auto-toggle">
+                            <input type="checkbox" id="cpi-yaxis-auto" checked onchange="updateChartYAxis('cpi')">
+                            <span>自动</span>
+                        </label>
+                        <div class="yaxis-range" id="cpi-yaxis-range" style="display: none;">
+                            <input type="number" id="cpi-yaxis-min" value="-5" step="0.5">
+                            <span>至</span>
+                            <input type="number" id="cpi-yaxis-max" value="10" step="0.5">
+                            <button class="yaxis-toggle-btn" onclick="applyYAxisRange('cpi')" style="padding: 4px 8px;">应用</button>
+                        </div>
+                    </div>
+                    <div class="yaxis-item">
+                        <span class="yaxis-item-label">PPI</span>
+                        <label class="yaxis-auto-toggle">
+                            <input type="checkbox" id="ppi-yaxis-auto" checked onchange="updateChartYAxis('ppi')">
+                            <span>自动</span>
+                        </label>
+                        <div class="yaxis-range" id="ppi-yaxis-range" style="display: none;">
+                            <input type="number" id="ppi-yaxis-min" value="-10" step="0.5">
+                            <span>至</span>
+                            <input type="number" id="ppi-yaxis-max" value="15" step="0.5">
+                            <button class="yaxis-toggle-btn" onclick="applyYAxisRange('ppi')" style="padding: 4px 8px;">应用</button>
+                        </div>
+                    </div>
+                    <div class="yaxis-item">
+                        <span class="yaxis-item-label">PMI</span>
+                        <label class="yaxis-auto-toggle">
+                            <input type="checkbox" id="pmi-yaxis-auto" onchange="updateChartYAxis('pmi')">
+                            <span>自动</span>
+                        </label>
+                        <div class="yaxis-range" id="pmi-yaxis-range">
+                            <input type="number" id="pmi-yaxis-min" value="40" step="1">
+                            <span>至</span>
+                            <input type="number" id="pmi-yaxis-max" value="60" step="1">
+                            <button class="yaxis-toggle-btn" onclick="applyYAxisRange('pmi')" style="padding: 4px 8px;">应用</button>
+                        </div>
+                    </div>
+                    <div class="yaxis-item">
+                        <span class="yaxis-item-label">国债收益率</span>
+                        <label class="yaxis-auto-toggle">
+                            <input type="checkbox" id="bond-yaxis-auto" checked onchange="updateChartYAxis('bond')">
+                            <span>自动</span>
+                        </label>
+                        <div class="yaxis-range" id="bond-yaxis-range" style="display: none;">
+                            <input type="number" id="bond-yaxis-min" value="2" step="0.5">
+                            <span>至</span>
+                            <input type="number" id="bond-yaxis-max" value="5" step="0.5">
+                            <button class="yaxis-toggle-btn" onclick="applyYAxisRange('bond')" style="padding: 4px 8px;">应用</button>
+                        </div>
+                    </div>
+                    <div class="yaxis-item">
+                        <span class="yaxis-item-label">GDP</span>
+                        <label class="yaxis-auto-toggle">
+                            <input type="checkbox" id="gdp-yaxis-auto" checked onchange="updateChartYAxis('gdp')">
+                            <span>自动</span>
+                        </label>
+                        <div class="yaxis-range" id="gdp-yaxis-range" style="display: none;">
+                            <input type="number" id="gdp-yaxis-min" value="0" step="5">
+                            <span>至</span>
+                            <input type="number" id="gdp-yaxis-max" value="150" step="5">
+                            <button class="yaxis-toggle-btn" onclick="applyYAxisRange('gdp')" style="padding: 4px 8px;">应用</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-chart-row">
+                <div class="split-chart-label cpi-label">CPI<br><span>居民消费价格指数</span></div>
+                <div id="cpi-overlay-chart" class="split-chart-area"></div>
+            </div>
+            <div class="split-chart-row">
+                <div class="split-chart-label ppi-label">PPI<br><span>工业生产者出厂价格</span></div>
+                <div id="ppi-overlay-chart" class="split-chart-area"></div>
+            </div>
+            <div class="split-chart-row">
+                <div class="split-chart-label pmi-label">PMI<br><span>制造业/非制造业</span></div>
+                <div id="pmi-overlay-chart" class="split-chart-area"></div>
+            </div>
+            <div class="split-chart-row">
+                <div class="split-chart-label bond-label">国债<br><span>10年期收益率</span></div>
+                <div id="bond-overlay-chart" class="split-chart-area"></div>
+            </div>
+            <div class="split-chart-row">
+                <div class="split-chart-label gdp-label">GDP<br><span>名义季度值</span></div>
+                <div id="gdp-overlay-chart" class="split-chart-area"></div>
+            </div>
+        </div>
+
+
+
+        <div class="table-section" style="margin-top: 20px;">
+            <div class="chart-title">🔗 相关性分析</div>
+            <div class="correlation-container">
+                <div class="corr-controls">
+                    <div class="corr-range-slider">
+                        <div class="corr-slider-labels">
+                            <span id="corr-start-label">2002</span>
+                            <span id="corr-end-label">2026</span>
+                        </div>
+                        <div class="dual-slider corr-dual-slider">
+                            <div class="slider-track" id="corr-slider-track"></div>
+                            <input type="range" id="corr-year-start" class="start" min="2002" max="2026" value="2002" oninput="updateCorrRange()">
+                            <input type="range" id="corr-year-end" class="end" min="2002" max="2026" value="2026" oninput="updateCorrRange()">
+                        </div>
+                    </div>
+                    <button class="calc-btn" onclick="calculateCorrelation()">计算相关性</button>
+                </div>
+                <div class="corr-matrix" id="corr-matrix">
+                    <div class="corr-loading">点击"计算相关性"开始分析</div>
+                </div>
+                <div class="corr-interpretation" id="corr-interpretation"></div>
+                
+                <!-- 时差相关系数分析 -->
+                <div class="lagged-corr-section">
+                    <h4>⏱️ 时差相关系数分析（Cross-Lagged Correlation）</h4>
+                    <div class="lagged-controls">
+                        <div class="lagged-control-group">
+                            <label>指标X（先行指标）</label>
+                            <select id="lagged-x-select">
+                                <option value="0">CPI</option>
+                                <option value="1">PPI</option>
+                                <option value="2">制造业PMI</option>
+                                <option value="3">非制造业PMI</option>
+                                <option value="4">国债10Y</option>
+                            </select>
+                        </div>
+                        <div class="lagged-control-group">
+                            <label>指标Y（滞后指标）</label>
+                            <select id="lagged-y-select">
+                                <option value="0">CPI</option>
+                                <option value="1" selected>PPI</option>
+                                <option value="2">制造业PMI</option>
+                                <option value="3">非制造业PMI</option>
+                                <option value="4">国债10Y</option>
+                            </select>
+                        </div>
+                        <div class="lagged-control-group">
+                            <label>滞后月数范围</label>
+                            <div class="lagged-slider-container">
+                                <input type="range" id="lagged-max-lag" class="lagged-slider" min="1" max="12" value="6">
+                                <span class="lagged-slider-value">±<span id="lagged-max-lag-value">6</span>月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="calc-btn" onclick="calculateLaggedCorrelation()">计算时差相关性</button>
+                    <div class="lagged-heatmap" id="lagged-heatmap">
+                        <div style="color: #7a8599; padding: 40px; text-align: center;">选择指标后点击"计算时差相关性"</div>
+                    </div>
+                    <div class="lagged-interpretation" id="lagged-interpretation"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-section" style="margin-top: 20px;">
+            <div class="chart-title">📋 数据明细表</div>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="搜索日期或指标数值..." oninput="filterTable()">
+            </div>
+            <div class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>CPI同比(%)</th>
+                            <th>PPI同比(%)</th>
+                            <th>制造业PMI</th>
+                            <th>非制造业PMI</th>
+                            <th>国债10Y(%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RAW_DATA = [{"date": "2000-01", "year": 2000, "month": 1, "cpi_yoy": -1.0, "ppi_yoy": -0.8, "bond_yield_10y": null}, {"date": "2000-02", "year": 2000, "month": 2, "cpi_yoy": -0.2, "ppi_yoy": 0.0, "bond_yield_10y": null}, {"date": "2000-03", "year": 2000, "month": 3, "cpi_yoy": 0.7, "ppi_yoy": 1.0, "bond_yield_10y": null}, {"date": "2000-04", "year": 2000, "month": 4, "cpi_yoy": -0.2, "ppi_yoy": 1.9, "bond_yield_10y": null}, {"date": "2000-05", "year": 2000, "month": 5, "cpi_yoy": -0.3, "ppi_yoy": 2.6, "bond_yield_10y": null}, {"date": "2000-06", "year": 2000, "month": 6, "cpi_yoy": 0.1, "ppi_yoy": 2.5, "bond_yield_10y": null}, {"date": "2000-07", "year": 2000, "month": 7, "cpi_yoy": 0.5, "ppi_yoy": 3.0, "bond_yield_10y": null}, {"date": "2000-08", "year": 2000, "month": 8, "cpi_yoy": 0.5, "ppi_yoy": 4.5, "bond_yield_10y": null}, {"date": "2000-09", "year": 2000, "month": 9, "cpi_yoy": 0.3, "ppi_yoy": 3.9, "bond_yield_10y": null}, {"date": "2000-10", "year": 2000, "month": 10, "cpi_yoy": 0.0, "ppi_yoy": 3.7, "bond_yield_10y": null}, {"date": "2000-11", "year": 2000, "month": 11, "cpi_yoy": 0.0, "ppi_yoy": 3.6, "bond_yield_10y": null}, {"date": "2000-12", "year": 2000, "month": 12, "cpi_yoy": 1.3, "ppi_yoy": 3.5, "bond_yield_10y": null}, {"date": "2001-01", "year": 2001, "month": 1, "cpi_yoy": 1.5, "ppi_yoy": 2.8, "bond_yield_10y": null}, {"date": "2001-02", "year": 2001, "month": 2, "cpi_yoy": 1.2, "ppi_yoy": 1.4, "bond_yield_10y": null}, {"date": "2001-03", "year": 2001, "month": 3, "cpi_yoy": 0.0, "ppi_yoy": 0.9, "bond_yield_10y": null}, {"date": "2001-04", "year": 2001, "month": 4, "cpi_yoy": 0.8, "ppi_yoy": 0.2, "bond_yield_10y": null}, {"date": "2001-05", "year": 2001, "month": 5, "cpi_yoy": 1.6, "ppi_yoy": -0.1, "bond_yield_10y": null}, {"date": "2001-06", "year": 2001, "month": 6, "cpi_yoy": 1.7, "ppi_yoy": -0.2, "bond_yield_10y": null}, {"date": "2001-07", "year": 2001, "month": 7, "cpi_yoy": 1.4, "ppi_yoy": -0.6, "bond_yield_10y": null}, {"date": "2001-08", "year": 2001, "month": 8, "cpi_yoy": 1.5, "ppi_yoy": -1.3, "bond_yield_10y": null}, {"date": "2001-09", "year": 2001, "month": 9, "cpi_yoy": 1.0, "ppi_yoy": -2.0, "bond_yield_10y": null}, {"date": "2001-10", "year": 2001, "month": 10, "cpi_yoy": -0.1, "ppi_yoy": -2.9, "bond_yield_10y": null}, {"date": "2001-11", "year": 2001, "month": 11, "cpi_yoy": 0.2, "ppi_yoy": -3.1, "bond_yield_10y": null}, {"date": "2001-12", "year": 2001, "month": 12, "cpi_yoy": -0.3, "ppi_yoy": -3.7, "bond_yield_10y": null}, {"date": "2002-01", "year": 2002, "month": 1, "cpi_yoy": -0.3, "ppi_yoy": -4.0, "bond_yield_10y": 3.363}, {"date": "2002-02", "year": 2002, "month": 2, "cpi_yoy": -1.0, "ppi_yoy": -4.2, "bond_yield_10y": 3.1873}, {"date": "2002-03", "year": 2002, "month": 3, "cpi_yoy": 0.0, "ppi_yoy": -4.2, "bond_yield_10y": 3.0119}, {"date": "2002-04", "year": 2002, "month": 4, "cpi_yoy": -0.8, "ppi_yoy": -4.0, "bond_yield_10y": 2.6817}, {"date": "2002-05", "year": 2002, "month": 5, "cpi_yoy": -1.3, "ppi_yoy": -3.1, "bond_yield_10y": 2.488}, {"date": "2002-06", "year": 2002, "month": 6, "cpi_yoy": -1.1, "ppi_yoy": -2.6, "bond_yield_10y": 2.5244}, {"date": "2002-07", "year": 2002, "month": 7, "cpi_yoy": -0.8, "ppi_yoy": -2.5, "bond_yield_10y": 2.7205}, {"date": "2002-08", "year": 2002, "month": 8, "cpi_yoy": -0.9, "ppi_yoy": -2.3, "bond_yield_10y": 3.1173}, {"date": "2002-09", "year": 2002, "month": 9, "cpi_yoy": -0.7, "ppi_yoy": -1.7, "bond_yield_10y": 3.1714}, {"date": "2002-10", "year": 2002, "month": 10, "cpi_yoy": -0.7, "ppi_yoy": -1.4, "bond_yield_10y": 3.0765}, {"date": "2002-11", "year": 2002, "month": 11, "cpi_yoy": -0.8, "ppi_yoy": -1.0, "bond_yield_10y": 3.3004}, {"date": "2002-12", "year": 2002, "month": 12, "cpi_yoy": -0.7, "ppi_yoy": -0.4, "bond_yield_10y": 3.2576}, {"date": "2003-01", "year": 2003, "month": 1, "cpi_yoy": -0.4, "ppi_yoy": 0.4, "bond_yield_10y": 3.1359}, {"date": "2003-02", "year": 2003, "month": 2, "cpi_yoy": 0.4, "ppi_yoy": 2.4, "bond_yield_10y": 3.1891}, {"date": "2003-03", "year": 2003, "month": 3, "cpi_yoy": 0.2, "ppi_yoy": 3.9, "bond_yield_10y": 3.0822}, {"date": "2003-04", "year": 2003, "month": 4, "cpi_yoy": 0.9, "ppi_yoy": 4.6, "bond_yield_10y": 3.0162}, {"date": "2003-05", "year": 2003, "month": 5, "cpi_yoy": 1.0, "ppi_yoy": 3.6, "bond_yield_10y": 2.8373}, {"date": "2003-06", "year": 2003, "month": 6, "cpi_yoy": 0.7, "ppi_yoy": 2.0, "bond_yield_10y": 2.9033}, {"date": "2003-07", "year": 2003, "month": 7, "cpi_yoy": 0.3, "ppi_yoy": 1.3, "bond_yield_10y": 2.9506}, {"date": "2003-08", "year": 2003, "month": 8, "cpi_yoy": 0.5, "ppi_yoy": 1.4, "bond_yield_10y": 2.8916}, {"date": "2003-09", "year": 2003, "month": 9, "cpi_yoy": 0.9, "ppi_yoy": 1.4, "bond_yield_10y": 3.0438}, {"date": "2003-10", "year": 2003, "month": 10, "cpi_yoy": 1.1, "ppi_yoy": 1.4, "bond_yield_10y": 3.3543}, {"date": "2003-11", "year": 2003, "month": 11, "cpi_yoy": 1.8, "ppi_yoy": 1.2, "bond_yield_10y": 3.5924}, {"date": "2003-12", "year": 2003, "month": 12, "cpi_yoy": 3.0, "ppi_yoy": 1.9, "bond_yield_10y": 3.7799}, {"date": "2004-01", "year": 2004, "month": 1, "cpi_yoy": 3.2, "ppi_yoy": 3.0, "bond_yield_10y": 3.7852}, {"date": "2004-02", "year": 2004, "month": 2, "cpi_yoy": 3.2, "ppi_yoy": 3.5, "bond_yield_10y": 3.828}, {"date": "2004-03", "year": 2004, "month": 3, "cpi_yoy": 2.1, "ppi_yoy": 3.5, "bond_yield_10y": 3.8794}, {"date": "2004-04", "year": 2004, "month": 4, "cpi_yoy": 3.0, "ppi_yoy": 3.9, "bond_yield_10y": 4.1671}, {"date": "2004-05", "year": 2004, "month": 5, "cpi_yoy": 3.8, "ppi_yoy": 5.0, "bond_yield_10y": 4.3016}, {"date": "2004-06", "year": 2004, "month": 6, "cpi_yoy": 4.4, "ppi_yoy": 5.7, "bond_yield_10y": 4.3162}, {"date": "2004-07", "year": 2004, "month": 7, "cpi_yoy": 5.0, "ppi_yoy": 6.4, "bond_yield_10y": 4.6513}, {"date": "2004-08", "year": 2004, "month": 8, "cpi_yoy": 5.3, "ppi_yoy": 6.4, "bond_yield_10y": 4.836}, {"date": "2004-09", "year": 2004, "month": 9, "cpi_yoy": 5.3, "ppi_yoy": 6.8, "bond_yield_10y": 5.1674}, {"date": "2004-10", "year": 2004, "month": 10, "cpi_yoy": 5.2, "ppi_yoy": 7.9, "bond_yield_10y": 5.0231}, {"date": "2004-11", "year": 2004, "month": 11, "cpi_yoy": 4.3, "ppi_yoy": 8.4, "bond_yield_10y": 5.2406}, {"date": "2004-12", "year": 2004, "month": 12, "cpi_yoy": 2.9, "ppi_yoy": 8.1, "bond_yield_10y": 5.196}, {"date": "2005-01", "year": 2005, "month": 1, "cpi_yoy": 2.4, "ppi_yoy": 7.1, "bond_yield_10y": 5.0484}, {"date": "2005-02", "year": 2005, "month": 2, "cpi_yoy": 1.9, "ppi_yoy": 5.8, "bond_yield_10y": 4.8198}, {"date": "2005-03", "year": 2005, "month": 3, "cpi_yoy": 4.0, "ppi_yoy": 5.4, "bond_yield_10y": 4.5284}, {"date": "2005-04", "year": 2005, "month": 4, "cpi_yoy": 2.7, "ppi_yoy": 5.6, "bond_yield_10y": 4.0615}, {"date": "2005-05", "year": 2005, "month": 5, "cpi_yoy": 1.8, "ppi_yoy": 5.8, "bond_yield_10y": 3.8575}, {"date": "2005-06", "year": 2005, "month": 6, "cpi_yoy": 1.8, "ppi_yoy": 5.9, "bond_yield_10y": 3.6488}, {"date": "2005-07", "year": 2005, "month": 7, "cpi_yoy": 1.6, "ppi_yoy": 5.2, "bond_yield_10y": 3.3936}, {"date": "2005-08", "year": 2005, "month": 8, "cpi_yoy": 1.8, "ppi_yoy": 5.2, "bond_yield_10y": 3.3172}, {"date": "2005-09", "year": 2005, "month": 9, "cpi_yoy": 1.3, "ppi_yoy": 5.3, "bond_yield_10y": 3.3403}, {"date": "2005-10", "year": 2005, "month": 10, "cpi_yoy": 0.9, "ppi_yoy": 4.5, "bond_yield_10y": 2.982}, {"date": "2005-11", "year": 2005, "month": 11, "cpi_yoy": 1.2, "ppi_yoy": 4.0, "bond_yield_10y": 3.262}, {"date": "2005-12", "year": 2005, "month": 12, "cpi_yoy": 1.3, "ppi_yoy": 3.2, "bond_yield_10y": 3.2277}, {"date": "2006-01", "year": 2006, "month": 1, "cpi_yoy": 1.6, "ppi_yoy": 3.05, "bond_yield_10y": 3.0208}, {"date": "2006-02", "year": 2006, "month": 2, "cpi_yoy": 1.9, "ppi_yoy": 3.01, "bond_yield_10y": 2.9281}, {"date": "2006-03", "year": 2006, "month": 3, "cpi_yoy": 0.9, "ppi_yoy": 2.49, "bond_yield_10y": 2.9105}, {"date": "2006-04", "year": 2006, "month": 4, "cpi_yoy": 0.8, "ppi_yoy": 1.87, "bond_yield_10y": 2.9808}, {"date": "2006-05", "year": 2006, "month": 5, "cpi_yoy": 1.2, "ppi_yoy": 2.43, "bond_yield_10y": 3.0094}, {"date": "2006-06", "year": 2006, "month": 6, "cpi_yoy": 1.4, "ppi_yoy": 3.52, "bond_yield_10y": 3.0939}, {"date": "2006-07", "year": 2006, "month": 7, "cpi_yoy": 1.5, "ppi_yoy": 3.58, "bond_yield_10y": 3.2078}, {"date": "2006-08", "year": 2006, "month": 8, "cpi_yoy": 1.0, "ppi_yoy": 3.4, "bond_yield_10y": 3.2466}, {"date": "2006-09", "year": 2006, "month": 9, "cpi_yoy": 1.3, "ppi_yoy": 3.45, "bond_yield_10y": 3.1269}, {"date": "2006-10", "year": 2006, "month": 10, "cpi_yoy": 1.5, "ppi_yoy": 2.9, "bond_yield_10y": 2.9581}, {"date": "2006-11", "year": 2006, "month": 11, "cpi_yoy": 1.4, "ppi_yoy": 2.78, "bond_yield_10y": 2.9853}, {"date": "2006-12", "year": 2006, "month": 12, "cpi_yoy": 1.9, "ppi_yoy": 3.05, "bond_yield_10y": 3.0241}, {"date": "2007-01", "year": 2007, "month": 1, "cpi_yoy": 2.8, "ppi_yoy": 3.3, "bond_yield_10y": 3.0288}, {"date": "2007-02", "year": 2007, "month": 2, "cpi_yoy": 2.2, "ppi_yoy": 2.6, "bond_yield_10y": 3.1093}, {"date": "2007-03", "year": 2007, "month": 3, "cpi_yoy": 2.7, "ppi_yoy": 2.65, "bond_yield_10y": 3.3008}, {"date": "2007-04", "year": 2007, "month": 4, "cpi_yoy": 3.3, "ppi_yoy": 2.87, "bond_yield_10y": 3.5324}, {"date": "2007-05", "year": 2007, "month": 5, "cpi_yoy": 3.0, "ppi_yoy": 2.76, "bond_yield_10y": 3.8846}, {"date": "2007-06", "year": 2007, "month": 6, "cpi_yoy": 3.4, "ppi_yoy": 2.49, "bond_yield_10y": 4.2964}, {"date": "2007-07", "year": 2007, "month": 7, "cpi_yoy": 4.4, "ppi_yoy": 2.39, "bond_yield_10y": 4.4292}, {"date": "2007-08", "year": 2007, "month": 8, "cpi_yoy": 5.6, "ppi_yoy": 2.56, "bond_yield_10y": 4.2876}, {"date": "2007-09", "year": 2007, "month": 9, "cpi_yoy": 6.5, "ppi_yoy": 2.71, "bond_yield_10y": 4.4033}, {"date": "2007-10", "year": 2007, "month": 10, "cpi_yoy": 6.2, "ppi_yoy": 3.21, "bond_yield_10y": 4.4368}, {"date": "2007-11", "year": 2007, "month": 11, "cpi_yoy": 6.5, "ppi_yoy": 4.55, "bond_yield_10y": 4.5469}, {"date": "2007-12", "year": 2007, "month": 12, "cpi_yoy": 6.9, "ppi_yoy": 5.43, "bond_yield_10y": 4.4655}, {"date": "2008-01", "year": 2008, "month": 1, "cpi_yoy": 6.5, "ppi_yoy": 6.07, "bond_yield_10y": 4.3504}, {"date": "2008-02", "year": 2008, "month": 2, "cpi_yoy": 7.1, "ppi_yoy": 6.62, "bond_yield_10y": 4.154}, {"date": "2008-03", "year": 2008, "month": 3, "cpi_yoy": 8.7, "ppi_yoy": 7.95, "bond_yield_10y": 4.1136}, {"date": "2008-04", "year": 2008, "month": 4, "cpi_yoy": 8.3, "ppi_yoy": 8.12, "bond_yield_10y": 4.0415}, {"date": "2008-05", "year": 2008, "month": 5, "cpi_yoy": 8.5, "ppi_yoy": 8.22, "bond_yield_10y": 4.1431}, {"date": "2008-06", "year": 2008, "month": 6, "cpi_yoy": 7.7, "ppi_yoy": 8.84, "bond_yield_10y": 4.3342}, {"date": "2008-07", "year": 2008, "month": 7, "cpi_yoy": 7.1, "ppi_yoy": 10.03, "bond_yield_10y": 4.4632}, {"date": "2008-08", "year": 2008, "month": 8, "cpi_yoy": 6.3, "ppi_yoy": 10.06, "bond_yield_10y": 4.4154}, {"date": "2008-09", "year": 2008, "month": 9, "cpi_yoy": 4.9, "ppi_yoy": 9.13, "bond_yield_10y": 3.9197}, {"date": "2008-10", "year": 2008, "month": 10, "cpi_yoy": 4.6, "ppi_yoy": 6.59, "bond_yield_10y": 3.1938}, {"date": "2008-11", "year": 2008, "month": 11, "cpi_yoy": 4.0, "ppi_yoy": 1.99, "bond_yield_10y": 3.0055}, {"date": "2008-12", "year": 2008, "month": 12, "cpi_yoy": 2.4, "ppi_yoy": -1.14, "bond_yield_10y": 2.8537}, {"date": "2009-01", "year": 2009, "month": 1, "cpi_yoy": 1.2, "ppi_yoy": -3.35, "bond_yield_10y": 2.8779}, {"date": "2009-02", "year": 2009, "month": 2, "cpi_yoy": 1.0, "ppi_yoy": -4.47, "bond_yield_10y": 3.1894}, {"date": "2009-03", "year": 2009, "month": 3, "cpi_yoy": -1.6, "ppi_yoy": -5.99, "bond_yield_10y": 3.1515}, {"date": "2009-04", "year": 2009, "month": 4, "cpi_yoy": -1.2, "ppi_yoy": -6.6, "bond_yield_10y": 3.1695}, {"date": "2009-05", "year": 2009, "month": 5, "cpi_yoy": -1.5, "ppi_yoy": -7.2, "bond_yield_10y": 3.0546}, {"date": "2009-06", "year": 2009, "month": 6, "cpi_yoy": -1.4, "ppi_yoy": -7.8, "bond_yield_10y": 3.1695}, {"date": "2009-07", "year": 2009, "month": 7, "cpi_yoy": -1.7, "ppi_yoy": -8.22, "bond_yield_10y": 3.3847}, {"date": "2009-08", "year": 2009, "month": 8, "cpi_yoy": -1.8, "ppi_yoy": -7.86, "bond_yield_10y": 3.5092}, {"date": "2009-09", "year": 2009, "month": 9, "cpi_yoy": -1.2, "ppi_yoy": -6.99, "bond_yield_10y": 3.4798}, {"date": "2009-10", "year": 2009, "month": 10, "cpi_yoy": -0.8, "ppi_yoy": -5.85, "bond_yield_10y": 3.6627}, {"date": "2009-11", "year": 2009, "month": 11, "cpi_yoy": -0.5, "ppi_yoy": -2.08, "bond_yield_10y": 3.6793}, {"date": "2009-12", "year": 2009, "month": 12, "cpi_yoy": 0.6, "ppi_yoy": 1.7, "bond_yield_10y": 3.6299}, {"date": "2010-01", "year": 2010, "month": 1, "cpi_yoy": 1.9, "ppi_yoy": 4.32, "bond_yield_10y": 3.644}, {"date": "2010-02", "year": 2010, "month": 2, "cpi_yoy": 1.5, "ppi_yoy": 5.39, "bond_yield_10y": 3.4749}, {"date": "2010-03", "year": 2010, "month": 3, "cpi_yoy": 2.7, "ppi_yoy": 5.91, "bond_yield_10y": 3.4062}, {"date": "2010-04", "year": 2010, "month": 4, "cpi_yoy": 2.4, "ppi_yoy": 6.81, "bond_yield_10y": 3.452}, {"date": "2010-05", "year": 2010, "month": 5, "cpi_yoy": 2.8, "ppi_yoy": 7.13, "bond_yield_10y": 3.2604}, {"date": "2010-06", "year": 2010, "month": 6, "cpi_yoy": 3.1, "ppi_yoy": 6.41, "bond_yield_10y": 3.3186}, {"date": "2010-07", "year": 2010, "month": 7, "cpi_yoy": 2.9, "ppi_yoy": 4.84, "bond_yield_10y": 3.2365}, {"date": "2010-08", "year": 2010, "month": 8, "cpi_yoy": 3.3, "ppi_yoy": 4.32, "bond_yield_10y": 3.2576}, {"date": "2010-09", "year": 2010, "month": 9, "cpi_yoy": 3.5, "ppi_yoy": 4.33, "bond_yield_10y": 3.3088}, {"date": "2010-10", "year": 2010, "month": 10, "cpi_yoy": 3.6, "ppi_yoy": 5.04, "bond_yield_10y": 3.5251}, {"date": "2010-11", "year": 2010, "month": 11, "cpi_yoy": 4.4, "ppi_yoy": 6.06, "bond_yield_10y": 3.8917}, {"date": "2010-12", "year": 2010, "month": 12, "cpi_yoy": 5.1, "ppi_yoy": 5.93, "bond_yield_10y": 3.8516}, {"date": "2011-01", "year": 2011, "month": 1, "cpi_yoy": 4.6, "ppi_yoy": 6.6436, "bond_yield_10y": 3.9355}, {"date": "2011-02", "year": 2011, "month": 2, "cpi_yoy": 4.9, "ppi_yoy": 7.2322, "bond_yield_10y": 4.037}, {"date": "2011-03", "year": 2011, "month": 3, "cpi_yoy": 4.9, "ppi_yoy": 7.3081, "bond_yield_10y": 3.8982}, {"date": "2011-04", "year": 2011, "month": 4, "cpi_yoy": 5.4, "ppi_yoy": 6.821, "bond_yield_10y": 3.891}, {"date": "2011-05", "year": 2011, "month": 5, "cpi_yoy": 5.3, "ppi_yoy": 6.7851, "bond_yield_10y": 3.8396}, {"date": "2011-06", "year": 2011, "month": 6, "cpi_yoy": 5.5, "ppi_yoy": 7.1209, "bond_yield_10y": 3.9022}, {"date": "2011-07", "year": 2011, "month": 7, "cpi_yoy": 6.4, "ppi_yoy": 7.5417, "bond_yield_10y": 3.9717}, {"date": "2011-08", "year": 2011, "month": 8, "cpi_yoy": 6.5, "ppi_yoy": 7.2528, "bond_yield_10y": 3.9984}, {"date": "2011-09", "year": 2011, "month": 9, "cpi_yoy": 6.2, "ppi_yoy": 6.5227, "bond_yield_10y": 4.0134}, {"date": "2011-10", "year": 2011, "month": 10, "cpi_yoy": 6.1, "ppi_yoy": 5.0038, "bond_yield_10y": 3.7782}, {"date": "2011-11", "year": 2011, "month": 11, "cpi_yoy": 5.5, "ppi_yoy": 2.7179, "bond_yield_10y": 3.6481}, {"date": "2011-12", "year": 2011, "month": 12, "cpi_yoy": 4.2, "ppi_yoy": 1.6854, "bond_yield_10y": 3.4708}, {"date": "2012-01", "year": 2012, "month": 1, "cpi_yoy": 4.1, "ppi_yoy": 0.7347, "bond_yield_10y": 3.402}, {"date": "2012-02", "year": 2012, "month": 2, "cpi_yoy": 4.5, "ppi_yoy": 0.0284, "bond_yield_10y": 3.5097}, {"date": "2012-03", "year": 2012, "month": 3, "cpi_yoy": 3.2, "ppi_yoy": -0.3171, "bond_yield_10y": 3.5391}, {"date": "2012-04", "year": 2012, "month": 4, "cpi_yoy": 3.6, "ppi_yoy": -0.6984, "bond_yield_10y": 3.5338}, {"date": "2012-05", "year": 2012, "month": 5, "cpi_yoy": 3.4, "ppi_yoy": -1.3981, "bond_yield_10y": 3.4343}, {"date": "2012-06", "year": 2012, "month": 6, "cpi_yoy": 3.0, "ppi_yoy": -2.0843, "bond_yield_10y": 3.3669}, {"date": "2012-07", "year": 2012, "month": 7, "cpi_yoy": 2.2, "ppi_yoy": -2.8651, "bond_yield_10y": 3.283}, {"date": "2012-08", "year": 2012, "month": 8, "cpi_yoy": 1.8, "ppi_yoy": -3.4784, "bond_yield_10y": 3.3386}, {"date": "2012-09", "year": 2012, "month": 9, "cpi_yoy": 2.0, "ppi_yoy": -3.5545, "bond_yield_10y": 3.4687}, {"date": "2012-10", "year": 2012, "month": 10, "cpi_yoy": 1.9, "ppi_yoy": -2.7558, "bond_yield_10y": 3.5248}, {"date": "2012-11", "year": 2012, "month": 11, "cpi_yoy": 1.7, "ppi_yoy": -2.1995, "bond_yield_10y": 3.5478}, {"date": "2012-12", "year": 2012, "month": 12, "cpi_yoy": 2.0, "ppi_yoy": -1.9397, "bond_yield_10y": 3.577}, {"date": "2013-01", "year": 2013, "month": 1, "cpi_yoy": 2.5, "ppi_yoy": -1.6372, "bond_yield_10y": 3.5935}, {"date": "2013-02", "year": 2013, "month": 2, "cpi_yoy": 2.0, "ppi_yoy": -1.6254, "bond_yield_10y": 3.5874}, {"date": "2013-03", "year": 2013, "month": 3, "cpi_yoy": 3.2, "ppi_yoy": -1.919, "bond_yield_10y": 3.5789}, {"date": "2013-04", "year": 2013, "month": 4, "cpi_yoy": 2.1, "ppi_yoy": -2.6175, "bond_yield_10y": 3.4602}, {"date": "2013-05", "year": 2013, "month": 5, "cpi_yoy": 2.4, "ppi_yoy": -2.8658, "bond_yield_10y": 3.4244}, {"date": "2013-06", "year": 2013, "month": 6, "cpi_yoy": 2.1, "ppi_yoy": -2.6965, "bond_yield_10y": 3.5146}, {"date": "2013-07", "year": 2013, "month": 7, "cpi_yoy": 2.7, "ppi_yoy": -2.2712, "bond_yield_10y": 3.6344}, {"date": "2013-08", "year": 2013, "month": 8, "cpi_yoy": 2.7, "ppi_yoy": -1.625, "bond_yield_10y": 3.913}, {"date": "2013-09", "year": 2013, "month": 9, "cpi_yoy": 2.6, "ppi_yoy": -1.3439, "bond_yield_10y": 4.0485}, {"date": "2013-10", "year": 2013, "month": 10, "cpi_yoy": 3.1, "ppi_yoy": -1.5071, "bond_yield_10y": 4.1133}, {"date": "2013-11", "year": 2013, "month": 11, "cpi_yoy": 3.2, "ppi_yoy": -1.4242, "bond_yield_10y": 4.4633}, {"date": "2013-12", "year": 2013, "month": 12, "cpi_yoy": 3.0, "ppi_yoy": -1.3557, "bond_yield_10y": 4.5492}, {"date": "2014-01", "year": 2014, "month": 1, "cpi_yoy": 2.5, "ppi_yoy": -1.6394, "bond_yield_10y": 4.5624}, {"date": "2014-02", "year": 2014, "month": 2, "cpi_yoy": 2.5, "ppi_yoy": -2.0182, "bond_yield_10y": 4.4823}, {"date": "2014-03", "year": 2014, "month": 3, "cpi_yoy": 2.0, "ppi_yoy": -2.3022, "bond_yield_10y": 4.5048}, {"date": "2014-04", "year": 2014, "month": 4, "cpi_yoy": 2.4, "ppi_yoy": -2.0042, "bond_yield_10y": 4.3862}, {"date": "2014-05", "year": 2014, "month": 5, "cpi_yoy": 1.8, "ppi_yoy": -1.4464, "bond_yield_10y": 4.183}, {"date": "2014-06", "year": 2014, "month": 6, "cpi_yoy": 2.5, "ppi_yoy": -1.1086, "bond_yield_10y": 4.0524}, {"date": "2014-07", "year": 2014, "month": 7, "cpi_yoy": 2.3, "ppi_yoy": -0.8688, "bond_yield_10y": 4.207}, {"date": "2014-08", "year": 2014, "month": 8, "cpi_yoy": 2.3, "ppi_yoy": -1.2038, "bond_yield_10y": 4.2466}, {"date": "2014-09", "year": 2014, "month": 9, "cpi_yoy": 2.0, "ppi_yoy": -1.7996, "bond_yield_10y": 4.1561}, {"date": "2014-10", "year": 2014, "month": 10, "cpi_yoy": 1.6, "ppi_yoy": -2.2428, "bond_yield_10y": 3.8414}, {"date": "2014-11", "year": 2014, "month": 11, "cpi_yoy": 1.6, "ppi_yoy": -2.6928, "bond_yield_10y": 3.5851}, {"date": "2014-12", "year": 2014, "month": 12, "cpi_yoy": 1.4, "ppi_yoy": -3.3152, "bond_yield_10y": 3.6827}, {"date": "2015-01", "year": 2015, "month": 1, "cpi_yoy": 1.5, "ppi_yoy": -4.3202, "bond_yield_10y": 3.5368}, {"date": "2015-02", "year": 2015, "month": 2, "cpi_yoy": 0.8, "ppi_yoy": -4.7976, "bond_yield_10y": 3.3936}, {"date": "2015-03", "year": 2015, "month": 3, "cpi_yoy": 1.4, "ppi_yoy": -4.5603, "bond_yield_10y": 3.4983}, {"date": "2015-04", "year": 2015, "month": 4, "cpi_yoy": 1.4, "ppi_yoy": -4.5725, "bond_yield_10y": 3.527}, {"date": "2015-05", "year": 2015, "month": 5, "cpi_yoy": 1.5, "ppi_yoy": -4.607, "bond_yield_10y": 3.4362}, {"date": "2015-06", "year": 2015, "month": 6, "cpi_yoy": 1.2, "ppi_yoy": -4.8135, "bond_yield_10y": 3.6013}, {"date": "2015-07", "year": 2015, "month": 7, "cpi_yoy": 1.4, "ppi_yoy": -5.3692, "bond_yield_10y": 3.4968}, {"date": "2015-08", "year": 2015, "month": 8, "cpi_yoy": 1.6, "ppi_yoy": -5.9227, "bond_yield_10y": 3.471}, {"date": "2015-09", "year": 2015, "month": 9, "cpi_yoy": 2.0, "ppi_yoy": -5.945, "bond_yield_10y": 3.3149}, {"date": "2015-10", "year": 2015, "month": 10, "cpi_yoy": 1.6, "ppi_yoy": -5.9, "bond_yield_10y": 3.0824}, {"date": "2015-11", "year": 2015, "month": 11, "cpi_yoy": 1.3, "ppi_yoy": -5.9, "bond_yield_10y": 3.1162}, {"date": "2015-12", "year": 2015, "month": 12, "cpi_yoy": 1.5, "ppi_yoy": -5.9, "bond_yield_10y": 2.9387}, {"date": "2016-01", "year": 2016, "month": 1, "cpi_yoy": 1.6, "ppi_yoy": -5.3, "bond_yield_10y": 2.8232}, {"date": "2016-02", "year": 2016, "month": 2, "cpi_yoy": 1.8, "ppi_yoy": -4.9, "bond_yield_10y": 2.8495}, {"date": "2016-03", "year": 2016, "month": 3, "cpi_yoy": 2.3, "ppi_yoy": -4.3, "bond_yield_10y": 2.8555}, {"date": "2016-04", "year": 2016, "month": 4, "cpi_yoy": 2.3, "ppi_yoy": -3.4, "bond_yield_10y": 2.9063}, {"date": "2016-05", "year": 2016, "month": 5, "cpi_yoy": 2.3, "ppi_yoy": -2.8, "bond_yield_10y": 2.9277}, {"date": "2016-06", "year": 2016, "month": 6, "cpi_yoy": 2.0, "ppi_yoy": -2.6, "bond_yield_10y": 2.9465}, {"date": "2016-07", "year": 2016, "month": 7, "cpi_yoy": 1.9, "ppi_yoy": -1.7, "bond_yield_10y": 2.8137}, {"date": "2016-08", "year": 2016, "month": 8, "cpi_yoy": 1.8, "ppi_yoy": -0.8, "bond_yield_10y": 2.7169}, {"date": "2016-09", "year": 2016, "month": 9, "cpi_yoy": 1.3, "ppi_yoy": 0.1, "bond_yield_10y": 2.7502}, {"date": "2016-10", "year": 2016, "month": 10, "cpi_yoy": 1.9, "ppi_yoy": 1.2, "bond_yield_10y": 2.6895}, {"date": "2016-11", "year": 2016, "month": 11, "cpi_yoy": 2.1, "ppi_yoy": 3.3, "bond_yield_10y": 2.8271}, {"date": "2016-12", "year": 2016, "month": 12, "cpi_yoy": 2.3, "ppi_yoy": 5.5, "bond_yield_10y": 3.1478}, {"date": "2017-01", "year": 2017, "month": 1, "cpi_yoy": 2.1, "ppi_yoy": 6.9, "bond_yield_10y": 3.2316}, {"date": "2017-02", "year": 2017, "month": 2, "cpi_yoy": 2.5, "ppi_yoy": 7.8, "bond_yield_10y": 3.3711}, {"date": "2017-03", "year": 2017, "month": 3, "cpi_yoy": 0.8, "ppi_yoy": 7.6, "bond_yield_10y": 3.3288}, {"date": "2017-04", "year": 2017, "month": 4, "cpi_yoy": 0.9, "ppi_yoy": 6.4, "bond_yield_10y": 3.383}, {"date": "2017-05", "year": 2017, "month": 5, "cpi_yoy": 1.2, "ppi_yoy": 5.5, "bond_yield_10y": 3.6182}, {"date": "2017-06", "year": 2017, "month": 6, "cpi_yoy": 1.5, "ppi_yoy": 5.5, "bond_yield_10y": 3.5699}, {"date": "2017-07", "year": 2017, "month": 7, "cpi_yoy": 1.5, "ppi_yoy": 5.5, "bond_yield_10y": 3.5869}, {"date": "2017-08", "year": 2017, "month": 8, "cpi_yoy": 1.4, "ppi_yoy": 6.3, "bond_yield_10y": 3.6243}, {"date": "2017-09", "year": 2017, "month": 9, "cpi_yoy": 1.8, "ppi_yoy": 6.9, "bond_yield_10y": 3.6216}, {"date": "2017-10", "year": 2017, "month": 10, "cpi_yoy": 1.6, "ppi_yoy": 6.9, "bond_yield_10y": 3.7382}, {"date": "2017-11", "year": 2017, "month": 11, "cpi_yoy": 1.9, "ppi_yoy": 5.8, "bond_yield_10y": 3.9199}, {"date": "2017-12", "year": 2017, "month": 12, "cpi_yoy": 1.7, "ppi_yoy": 4.9, "bond_yield_10y": 3.8949}, {"date": "2018-01", "year": 2018, "month": 1, "cpi_yoy": 1.8, "ppi_yoy": 4.3, "bond_yield_10y": 3.9375}, {"date": "2018-02", "year": 2018, "month": 2, "cpi_yoy": 1.5, "ppi_yoy": 3.7, "bond_yield_10y": 3.8726}, {"date": "2018-03", "year": 2018, "month": 3, "cpi_yoy": 2.9, "ppi_yoy": 3.1, "bond_yield_10y": 3.7932}, {"date": "2018-04", "year": 2018, "month": 4, "cpi_yoy": 2.1, "ppi_yoy": 3.4, "bond_yield_10y": 3.6489}, {"date": "2018-05", "year": 2018, "month": 5, "cpi_yoy": 1.8, "ppi_yoy": 4.1, "bond_yield_10y": 3.6638}, {"date": "2018-06", "year": 2018, "month": 6, "cpi_yoy": 1.8, "ppi_yoy": 4.7, "bond_yield_10y": 3.6077}, {"date": "2018-07", "year": 2018, "month": 7, "cpi_yoy": 1.9, "ppi_yoy": 4.6, "bond_yield_10y": 3.5085}, {"date": "2018-08", "year": 2018, "month": 8, "cpi_yoy": 2.1, "ppi_yoy": 4.1, "bond_yield_10y": 3.5677}, {"date": "2018-09", "year": 2018, "month": 9, "cpi_yoy": 2.3, "ppi_yoy": 3.6, "bond_yield_10y": 3.6401}, {"date": "2018-10", "year": 2018, "month": 10, "cpi_yoy": 2.5, "ppi_yoy": 3.3, "bond_yield_10y": 3.5661}, {"date": "2018-11", "year": 2018, "month": 11, "cpi_yoy": 2.5, "ppi_yoy": 2.7, "bond_yield_10y": 3.4298}, {"date": "2018-12", "year": 2018, "month": 12, "cpi_yoy": 2.2, "ppi_yoy": 0.9, "bond_yield_10y": 3.2963}, {"date": "2019-01", "year": 2019, "month": 1, "cpi_yoy": 1.9, "ppi_yoy": 0.1, "bond_yield_10y": 3.1205}, {"date": "2019-02", "year": 2019, "month": 2, "cpi_yoy": 1.7, "ppi_yoy": 0.1, "bond_yield_10y": 3.1182}, {"date": "2019-03", "year": 2019, "month": 3, "cpi_yoy": 1.5, "ppi_yoy": 0.4, "bond_yield_10y": 3.1349}, {"date": "2019-04", "year": 2019, "month": 4, "cpi_yoy": 2.3, "ppi_yoy": 0.9, "bond_yield_10y": 3.3374}, {"date": "2019-05", "year": 2019, "month": 5, "cpi_yoy": 2.5, "ppi_yoy": 0.6, "bond_yield_10y": 3.3064}, {"date": "2019-06", "year": 2019, "month": 6, "cpi_yoy": 2.7, "ppi_yoy": 0.0, "bond_yield_10y": 3.2352}, {"date": "2019-07", "year": 2019, "month": 7, "cpi_yoy": 2.7, "ppi_yoy": -0.3, "bond_yield_10y": 3.1681}, {"date": "2019-08", "year": 2019, "month": 8, "cpi_yoy": 2.8, "ppi_yoy": -0.8, "bond_yield_10y": 3.047}, {"date": "2019-09", "year": 2019, "month": 9, "cpi_yoy": 2.8, "ppi_yoy": -1.2, "bond_yield_10y": 3.0887}, {"date": "2019-10", "year": 2019, "month": 10, "cpi_yoy": 3.0, "ppi_yoy": -1.6, "bond_yield_10y": 3.2011}, {"date": "2019-11", "year": 2019, "month": 11, "cpi_yoy": 3.8, "ppi_yoy": -1.4, "bond_yield_10y": 3.2193}, {"date": "2019-12", "year": 2019, "month": 12, "cpi_yoy": 4.5, "ppi_yoy": -0.5, "bond_yield_10y": 3.1718}, {"date": "2020-01", "year": 2020, "month": 1, "cpi_yoy": 4.5, "ppi_yoy": 0.1, "bond_yield_10y": 3.0916}, {"date": "2020-02", "year": 2020, "month": 2, "cpi_yoy": 5.4, "ppi_yoy": -0.4, "bond_yield_10y": 2.8305}, {"date": "2020-03", "year": 2020, "month": 3, "cpi_yoy": 5.2, "ppi_yoy": -1.5, "bond_yield_10y": 2.6518}, {"date": "2020-04", "year": 2020, "month": 4, "cpi_yoy": 4.3, "ppi_yoy": -3.1, "bond_yield_10y": 2.5423}, {"date": "2020-05", "year": 2020, "month": 5, "cpi_yoy": 3.3, "ppi_yoy": -3.7, "bond_yield_10y": 2.681}, {"date": "2020-06", "year": 2020, "month": 6, "cpi_yoy": 2.4, "ppi_yoy": -3.0, "bond_yield_10y": 2.827}, {"date": "2020-07", "year": 2020, "month": 7, "cpi_yoy": 2.5, "ppi_yoy": -2.4, "bond_yield_10y": 2.9492}, {"date": "2020-08", "year": 2020, "month": 8, "cpi_yoy": 2.7, "ppi_yoy": -2.0, "bond_yield_10y": 2.9861}, {"date": "2020-09", "year": 2020, "month": 9, "cpi_yoy": 2.4, "ppi_yoy": -2.1, "bond_yield_10y": 3.1126}, {"date": "2020-10", "year": 2020, "month": 10, "cpi_yoy": 1.7, "ppi_yoy": -2.1, "bond_yield_10y": 3.1926}, {"date": "2020-11", "year": 2020, "month": 11, "cpi_yoy": 0.5, "ppi_yoy": -1.5, "bond_yield_10y": 3.255}, {"date": "2020-12", "year": 2020, "month": 12, "cpi_yoy": -0.5, "ppi_yoy": -0.4, "bond_yield_10y": 3.2428}, {"date": "2021-01", "year": 2021, "month": 1, "cpi_yoy": 0.2, "ppi_yoy": 0.3, "bond_yield_10y": 3.1478}, {"date": "2021-02", "year": 2021, "month": 2, "cpi_yoy": -0.3, "ppi_yoy": 1.7, "bond_yield_10y": 3.2413}, {"date": "2021-03", "year": 2021, "month": 3, "cpi_yoy": -0.2, "ppi_yoy": 4.4, "bond_yield_10y": 3.2346}, {"date": "2021-04", "year": 2021, "month": 4, "cpi_yoy": 0.4, "ppi_yoy": 6.8, "bond_yield_10y": 3.1846}, {"date": "2021-05", "year": 2021, "month": 5, "cpi_yoy": 0.9, "ppi_yoy": 9.0, "bond_yield_10y": 3.1162}, {"date": "2021-06", "year": 2021, "month": 6, "cpi_yoy": 1.3, "ppi_yoy": 8.8, "bond_yield_10y": 3.0953}, {"date": "2021-07", "year": 2021, "month": 7, "cpi_yoy": 1.1, "ppi_yoy": 9.0, "bond_yield_10y": 2.9613}, {"date": "2021-08", "year": 2021, "month": 8, "cpi_yoy": 1.0, "ppi_yoy": 9.5, "bond_yield_10y": 2.8546}, {"date": "2021-09", "year": 2021, "month": 9, "cpi_yoy": 0.8, "ppi_yoy": 10.7, "bond_yield_10y": 2.8673}, {"date": "2021-10", "year": 2021, "month": 10, "cpi_yoy": 0.7, "ppi_yoy": 13.5, "bond_yield_10y": 2.973}, {"date": "2021-11", "year": 2021, "month": 11, "cpi_yoy": 1.5, "ppi_yoy": 12.9, "bond_yield_10y": 2.9}, {"date": "2021-12", "year": 2021, "month": 12, "cpi_yoy": 2.3, "ppi_yoy": 10.3, "bond_yield_10y": 2.8328}, {"date": "2022-01", "year": 2022, "month": 1, "cpi_yoy": 1.5, "ppi_yoy": 9.1, "bond_yield_10y": 2.7536}, {"date": "2022-02", "year": 2022, "month": 2, "cpi_yoy": 0.9, "ppi_yoy": 8.8, "bond_yield_10y": 2.7779}, {"date": "2022-03", "year": 2022, "month": 3, "cpi_yoy": 0.9, "ppi_yoy": 8.3, "bond_yield_10y": 2.8068}, {"date": "2022-04", "year": 2022, "month": 4, "cpi_yoy": 1.5, "ppi_yoy": 8.0, "bond_yield_10y": 2.798}, {"date": "2022-05", "year": 2022, "month": 5, "cpi_yoy": 2.1, "ppi_yoy": 6.4, "bond_yield_10y": 2.7849}, {"date": "2022-06", "year": 2022, "month": 6, "cpi_yoy": 2.1, "ppi_yoy": 6.1, "bond_yield_10y": 2.783}, {"date": "2022-07", "year": 2022, "month": 7, "cpi_yoy": 2.5, "ppi_yoy": 4.2, "bond_yield_10y": 2.7993}, {"date": "2022-08", "year": 2022, "month": 8, "cpi_yoy": 2.7, "ppi_yoy": 2.3, "bond_yield_10y": 2.667}, {"date": "2022-09", "year": 2022, "month": 9, "cpi_yoy": 2.5, "ppi_yoy": 0.9, "bond_yield_10y": 2.6655}, {"date": "2022-10", "year": 2022, "month": 10, "cpi_yoy": 2.8, "ppi_yoy": -1.3, "bond_yield_10y": 2.7138}, {"date": "2022-11", "year": 2022, "month": 11, "cpi_yoy": 2.1, "ppi_yoy": -1.3, "bond_yield_10y": 2.7751}, {"date": "2022-12", "year": 2022, "month": 12, "cpi_yoy": 1.6, "ppi_yoy": -0.7, "bond_yield_10y": 2.8666}, {"date": "2023-01", "year": 2023, "month": 1, "cpi_yoy": 1.8, "ppi_yoy": -0.8, "bond_yield_10y": 2.883}, {"date": "2023-02", "year": 2023, "month": 2, "cpi_yoy": 2.1, "ppi_yoy": -1.4, "bond_yield_10y": 2.9025}, {"date": "2023-03", "year": 2023, "month": 3, "cpi_yoy": 1.0, "ppi_yoy": -2.5, "bond_yield_10y": 2.8688}, {"date": "2023-04", "year": 2023, "month": 4, "cpi_yoy": 0.7, "ppi_yoy": -3.6, "bond_yield_10y": 2.8278}, {"date": "2023-05", "year": 2023, "month": 5, "cpi_yoy": 0.1, "ppi_yoy": -4.6, "bond_yield_10y": 2.7165}, {"date": "2023-06", "year": 2023, "month": 6, "cpi_yoy": 0.2, "ppi_yoy": -5.4, "bond_yield_10y": 2.6661}, {"date": "2023-07", "year": 2023, "month": 7, "cpi_yoy": 0.0, "ppi_yoy": -4.4, "bond_yield_10y": 2.6367}, {"date": "2023-08", "year": 2023, "month": 8, "cpi_yoy": -0.3, "ppi_yoy": -3.0, "bond_yield_10y": 2.5985}, {"date": "2023-09", "year": 2023, "month": 9, "cpi_yoy": 0.1, "ppi_yoy": -2.5, "bond_yield_10y": 2.6453}, {"date": "2023-10", "year": 2023, "month": 10, "cpi_yoy": 0.0, "ppi_yoy": -2.6, "bond_yield_10y": 2.6945}, {"date": "2023-11", "year": 2023, "month": 11, "cpi_yoy": -0.2, "ppi_yoy": -3.0, "bond_yield_10y": 2.6683}, {"date": "2023-12", "year": 2023, "month": 12, "cpi_yoy": -0.5, "ppi_yoy": -2.7, "bond_yield_10y": 2.6174}, {"date": "2024-01", "year": 2024, "month": 1, "cpi_yoy": -0.3, "ppi_yoy": -2.5, "bond_yield_10y": 2.5059}, {"date": "2024-02", "year": 2024, "month": 2, "cpi_yoy": -0.8, "ppi_yoy": -2.7, "bond_yield_10y": 2.4077}, {"date": "2024-03", "year": 2024, "month": 3, "cpi_yoy": 0.7, "ppi_yoy": -2.8, "bond_yield_10y": 2.3084}, {"date": "2024-04", "year": 2024, "month": 4, "cpi_yoy": 0.1, "ppi_yoy": -2.5, "bond_yield_10y": 2.283}, {"date": "2024-05", "year": 2024, "month": 5, "cpi_yoy": 0.3, "ppi_yoy": -1.4, "bond_yield_10y": 2.3041}, {"date": "2024-06", "year": 2024, "month": 6, "cpi_yoy": 0.3, "ppi_yoy": -0.8, "bond_yield_10y": 2.2564}, {"date": "2024-07", "year": 2024, "month": 7, "cpi_yoy": 0.2, "ppi_yoy": -0.8, "bond_yield_10y": 2.239}, {"date": "2024-08", "year": 2024, "month": 8, "cpi_yoy": 0.5, "ppi_yoy": -1.8, "bond_yield_10y": 2.1743}, {"date": "2024-09", "year": 2024, "month": 9, "cpi_yoy": 0.6, "ppi_yoy": -2.8, "bond_yield_10y": 2.1045}, {"date": "2024-10", "year": 2024, "month": 10, "cpi_yoy": 0.4, "ppi_yoy": -2.9, "bond_yield_10y": 2.147}, {"date": "2024-11", "year": 2024, "month": 11, "cpi_yoy": 0.3, "ppi_yoy": -2.5, "bond_yield_10y": 2.0888}, {"date": "2024-12", "year": 2024, "month": 12, "cpi_yoy": 0.2, "ppi_yoy": -2.3, "bond_yield_10y": 1.8002}, {"date": "2025-01", "year": 2025, "month": 1, "cpi_yoy": 0.5, "ppi_yoy": -2.3, "bond_yield_10y": 1.6379}, {"date": "2025-02", "year": 2025, "month": 2, "cpi_yoy": -0.7, "ppi_yoy": -2.2, "bond_yield_10y": 1.6715}, {"date": "2025-03", "year": 2025, "month": 3, "cpi_yoy": -0.1, "ppi_yoy": -2.5, "bond_yield_10y": 1.814}, {"date": "2025-04", "year": 2025, "month": 4, "cpi_yoy": -0.1, "ppi_yoy": -2.7, "bond_yield_10y": 1.6675}, {"date": "2025-05", "year": 2025, "month": 5, "cpi_yoy": -0.1, "ppi_yoy": -3.3, "bond_yield_10y": 1.682}, {"date": "2025-06", "year": 2025, "month": 6, "cpi_yoy": 0.1, "ppi_yoy": -3.6, "bond_yield_10y": 1.6503}, {"date": "2025-07", "year": 2025, "month": 7, "cpi_yoy": 0.0, "ppi_yoy": -3.6, "bond_yield_10y": 1.6768}, {"date": "2025-08", "year": 2025, "month": 8, "cpi_yoy": -0.4, "ppi_yoy": -2.9, "bond_yield_10y": 1.7501}, {"date": "2025-09", "year": 2025, "month": 9, "cpi_yoy": -0.3, "ppi_yoy": -2.3, "bond_yield_10y": 1.8588}, {"date": "2025-10", "year": 2025, "month": 10, "cpi_yoy": 0.2, "ppi_yoy": -2.1, "bond_yield_10y": 1.8326}, {"date": "2025-11", "year": 2025, "month": 11, "cpi_yoy": 0.7, "ppi_yoy": -2.2, "bond_yield_10y": 1.8168}, {"date": "2025-12", "year": 2025, "month": 12, "cpi_yoy": 0.8, "ppi_yoy": -1.9, "bond_yield_10y": 1.8442}, {"date": "2026-01", "year": 2026, "month": 1, "cpi_yoy": 0.2, "ppi_yoy": -1.4, "bond_yield_10y": 1.847}, {"date": "2026-02", "year": 2026, "month": 2, "cpi_yoy": 1.3, "ppi_yoy": -0.9, "bond_yield_10y": 1.8054}, {"date": "2026-03", "year": 2026, "month": 3, "cpi_yoy": 1.0, "ppi_yoy": 0.5, "bond_yield_10y": 1.8094}, {"date": "2026-04", "year": 2026, "month": 4, "cpi_yoy": 1.0, "ppi_yoy": null, "bond_yield_10y": 1.8024}];
+
+        // 分离各指标数据
+        const cpiData = [["2000-01", -1.0], ["2000-02", -0.2], ["2000-03", 0.7], ["2000-04", -0.2], ["2000-05", -0.3], ["2000-06", 0.1], ["2000-07", 0.5], ["2000-08", 0.5], ["2000-09", 0.3], ["2000-10", 0.0], ["2000-11", 0.0], ["2000-12", 1.3], ["2001-01", 1.5], ["2001-02", 1.2], ["2001-03", 0.0], ["2001-04", 0.8], ["2001-05", 1.6], ["2001-06", 1.7], ["2001-07", 1.4], ["2001-08", 1.5], ["2001-09", 1.0], ["2001-10", -0.1], ["2001-11", 0.2], ["2001-12", -0.3], ["2002-01", -0.3], ["2002-02", -1.0], ["2002-03", 0.0], ["2002-04", -0.8], ["2002-05", -1.3], ["2002-06", -1.1], ["2002-07", -0.8], ["2002-08", -0.9], ["2002-09", -0.7], ["2002-10", -0.7], ["2002-11", -0.8], ["2002-12", -0.7], ["2003-01", -0.4], ["2003-02", 0.4], ["2003-03", 0.2], ["2003-04", 0.9], ["2003-05", 1.0], ["2003-06", 0.7], ["2003-07", 0.3], ["2003-08", 0.5], ["2003-09", 0.9], ["2003-10", 1.1], ["2003-11", 1.8], ["2003-12", 3.0], ["2004-01", 3.2], ["2004-02", 3.2], ["2004-03", 2.1], ["2004-04", 3.0], ["2004-05", 3.8], ["2004-06", 4.4], ["2004-07", 5.0], ["2004-08", 5.3], ["2004-09", 5.3], ["2004-10", 5.2], ["2004-11", 4.3], ["2004-12", 2.9], ["2005-01", 2.4], ["2005-02", 1.9], ["2005-03", 4.0], ["2005-04", 2.7], ["2005-05", 1.8], ["2005-06", 1.8], ["2005-07", 1.6], ["2005-08", 1.8], ["2005-09", 1.3], ["2005-10", 0.9], ["2005-11", 1.2], ["2005-12", 1.3], ["2006-01", 1.6], ["2006-02", 1.9], ["2006-03", 0.9], ["2006-04", 0.8], ["2006-05", 1.2], ["2006-06", 1.4], ["2006-07", 1.5], ["2006-08", 1.0], ["2006-09", 1.3], ["2006-10", 1.5], ["2006-11", 1.4], ["2006-12", 1.9], ["2007-01", 2.8], ["2007-02", 2.2], ["2007-03", 2.7], ["2007-04", 3.3], ["2007-05", 3.0], ["2007-06", 3.4], ["2007-07", 4.4], ["2007-08", 5.6], ["2007-09", 6.5], ["2007-10", 6.2], ["2007-11", 6.5], ["2007-12", 6.9], ["2008-01", 6.5], ["2008-02", 7.1], ["2008-03", 8.7], ["2008-04", 8.3], ["2008-05", 8.5], ["2008-06", 7.7], ["2008-07", 7.1], ["2008-08", 6.3], ["2008-09", 4.9], ["2008-10", 4.6], ["2008-11", 4.0], ["2008-12", 2.4], ["2009-01", 1.2], ["2009-02", 1.0], ["2009-03", -1.6], ["2009-04", -1.2], ["2009-05", -1.5], ["2009-06", -1.4], ["2009-07", -1.7], ["2009-08", -1.8], ["2009-09", -1.2], ["2009-10", -0.8], ["2009-11", -0.5], ["2009-12", 0.6], ["2010-01", 1.9], ["2010-02", 1.5], ["2010-03", 2.7], ["2010-04", 2.4], ["2010-05", 2.8], ["2010-06", 3.1], ["2010-07", 2.9], ["2010-08", 3.3], ["2010-09", 3.5], ["2010-10", 3.6], ["2010-11", 4.4], ["2010-12", 5.1], ["2011-01", 4.6], ["2011-02", 4.9], ["2011-03", 4.9], ["2011-04", 5.4], ["2011-05", 5.3], ["2011-06", 5.5], ["2011-07", 6.4], ["2011-08", 6.5], ["2011-09", 6.2], ["2011-10", 6.1], ["2011-11", 5.5], ["2011-12", 4.2], ["2012-01", 4.1], ["2012-02", 4.5], ["2012-03", 3.2], ["2012-04", 3.6], ["2012-05", 3.4], ["2012-06", 3.0], ["2012-07", 2.2], ["2012-08", 1.8], ["2012-09", 2.0], ["2012-10", 1.9], ["2012-11", 1.7], ["2012-12", 2.0], ["2013-01", 2.5], ["2013-02", 2.0], ["2013-03", 3.2], ["2013-04", 2.1], ["2013-05", 2.4], ["2013-06", 2.1], ["2013-07", 2.7], ["2013-08", 2.7], ["2013-09", 2.6], ["2013-10", 3.1], ["2013-11", 3.2], ["2013-12", 3.0], ["2014-01", 2.5], ["2014-02", 2.5], ["2014-03", 2.0], ["2014-04", 2.4], ["2014-05", 1.8], ["2014-06", 2.5], ["2014-07", 2.3], ["2014-08", 2.3], ["2014-09", 2.0], ["2014-10", 1.6], ["2014-11", 1.6], ["2014-12", 1.4], ["2015-01", 1.5], ["2015-02", 0.8], ["2015-03", 1.4], ["2015-04", 1.4], ["2015-05", 1.5], ["2015-06", 1.2], ["2015-07", 1.4], ["2015-08", 1.6], ["2015-09", 2.0], ["2015-10", 1.6], ["2015-11", 1.3], ["2015-12", 1.5], ["2016-01", 1.6], ["2016-02", 1.8], ["2016-03", 2.3], ["2016-04", 2.3], ["2016-05", 2.3], ["2016-06", 2.0], ["2016-07", 1.9], ["2016-08", 1.8], ["2016-09", 1.3], ["2016-10", 1.9], ["2016-11", 2.1], ["2016-12", 2.3], ["2017-01", 2.1], ["2017-02", 2.5], ["2017-03", 0.8], ["2017-04", 0.9], ["2017-05", 1.2], ["2017-06", 1.5], ["2017-07", 1.5], ["2017-08", 1.4], ["2017-09", 1.8], ["2017-10", 1.6], ["2017-11", 1.9], ["2017-12", 1.7], ["2018-01", 1.8], ["2018-02", 1.5], ["2018-03", 2.9], ["2018-04", 2.1], ["2018-05", 1.8], ["2018-06", 1.8], ["2018-07", 1.9], ["2018-08", 2.1], ["2018-09", 2.3], ["2018-10", 2.5], ["2018-11", 2.5], ["2018-12", 2.2], ["2019-01", 1.9], ["2019-02", 1.7], ["2019-03", 1.5], ["2019-04", 2.3], ["2019-05", 2.5], ["2019-06", 2.7], ["2019-07", 2.7], ["2019-08", 2.8], ["2019-09", 2.8], ["2019-10", 3.0], ["2019-11", 3.8], ["2019-12", 4.5], ["2020-01", 4.5], ["2020-02", 5.4], ["2020-03", 5.2], ["2020-04", 4.3], ["2020-05", 3.3], ["2020-06", 2.4], ["2020-07", 2.5], ["2020-08", 2.7], ["2020-09", 2.4], ["2020-10", 1.7], ["2020-11", 0.5], ["2020-12", -0.5], ["2021-01", 0.2], ["2021-02", -0.3], ["2021-03", -0.2], ["2021-04", 0.4], ["2021-05", 0.9], ["2021-06", 1.3], ["2021-07", 1.1], ["2021-08", 1.0], ["2021-09", 0.8], ["2021-10", 0.7], ["2021-11", 1.5], ["2021-12", 2.3], ["2022-01", 1.5], ["2022-02", 0.9], ["2022-03", 0.9], ["2022-04", 1.5], ["2022-05", 2.1], ["2022-06", 2.1], ["2022-07", 2.5], ["2022-08", 2.7], ["2022-09", 2.5], ["2022-10", 2.8], ["2022-11", 2.1], ["2022-12", 1.6], ["2023-01", 1.8], ["2023-02", 2.1], ["2023-03", 1.0], ["2023-04", 0.7], ["2023-05", 0.1], ["2023-06", 0.2], ["2023-07", 0.0], ["2023-08", -0.3], ["2023-09", 0.1], ["2023-10", 0.0], ["2023-11", -0.2], ["2023-12", -0.5], ["2024-01", -0.3], ["2024-02", -0.8], ["2024-03", 0.7], ["2024-04", 0.1], ["2024-05", 0.3], ["2024-06", 0.3], ["2024-07", 0.2], ["2024-08", 0.5], ["2024-09", 0.6], ["2024-10", 0.4], ["2024-11", 0.3], ["2024-12", 0.2], ["2025-01", 0.5], ["2025-02", -0.7], ["2025-03", -0.1], ["2025-04", -0.1], ["2025-05", -0.1], ["2025-06", 0.1], ["2025-07", 0.0], ["2025-08", -0.4], ["2025-09", -0.3], ["2025-10", 0.2], ["2025-11", 0.7], ["2025-12", 0.8], ["2026-01", 0.2], ["2026-02", 1.3], ["2026-03", 1.0], ["2026-04", 1.0]];
+        const ppiData = [["2000-01", -0.8], ["2000-02", 0.0], ["2000-03", 1.0], ["2000-04", 1.9], ["2000-05", 2.6], ["2000-06", 2.5], ["2000-07", 3.0], ["2000-08", 4.5], ["2000-09", 3.9], ["2000-10", 3.7], ["2000-11", 3.6], ["2000-12", 3.5], ["2001-01", 2.8], ["2001-02", 1.4], ["2001-03", 0.9], ["2001-04", 0.2], ["2001-05", -0.1], ["2001-06", -0.2], ["2001-07", -0.6], ["2001-08", -1.3], ["2001-09", -2.0], ["2001-10", -2.9], ["2001-11", -3.1], ["2001-12", -3.7], ["2002-01", -4.0], ["2002-02", -4.2], ["2002-03", -4.2], ["2002-04", -4.0], ["2002-05", -3.1], ["2002-06", -2.6], ["2002-07", -2.5], ["2002-08", -2.3], ["2002-09", -1.7], ["2002-10", -1.4], ["2002-11", -1.0], ["2002-12", -0.4], ["2003-01", 0.4], ["2003-02", 2.4], ["2003-03", 3.9], ["2003-04", 4.6], ["2003-05", 3.6], ["2003-06", 2.0], ["2003-07", 1.3], ["2003-08", 1.4], ["2003-09", 1.4], ["2003-10", 1.4], ["2003-11", 1.2], ["2003-12", 1.9], ["2004-01", 3.0], ["2004-02", 3.5], ["2004-03", 3.5], ["2004-04", 3.9], ["2004-05", 5.0], ["2004-06", 5.7], ["2004-07", 6.4], ["2004-08", 6.4], ["2004-09", 6.8], ["2004-10", 7.9], ["2004-11", 8.4], ["2004-12", 8.1], ["2005-01", 7.1], ["2005-02", 5.8], ["2005-03", 5.4], ["2005-04", 5.6], ["2005-05", 5.8], ["2005-06", 5.9], ["2005-07", 5.2], ["2005-08", 5.2], ["2005-09", 5.3], ["2005-10", 4.5], ["2005-11", 4.0], ["2005-12", 3.2], ["2006-01", 3.05], ["2006-02", 3.01], ["2006-03", 2.49], ["2006-04", 1.87], ["2006-05", 2.43], ["2006-06", 3.52], ["2006-07", 3.58], ["2006-08", 3.4], ["2006-09", 3.45], ["2006-10", 2.9], ["2006-11", 2.78], ["2006-12", 3.05], ["2007-01", 3.3], ["2007-02", 2.6], ["2007-03", 2.65], ["2007-04", 2.87], ["2007-05", 2.76], ["2007-06", 2.49], ["2007-07", 2.39], ["2007-08", 2.56], ["2007-09", 2.71], ["2007-10", 3.21], ["2007-11", 4.55], ["2007-12", 5.43], ["2008-01", 6.07], ["2008-02", 6.62], ["2008-03", 7.95], ["2008-04", 8.12], ["2008-05", 8.22], ["2008-06", 8.84], ["2008-07", 10.03], ["2008-08", 10.06], ["2008-09", 9.13], ["2008-10", 6.59], ["2008-11", 1.99], ["2008-12", -1.14], ["2009-01", -3.35], ["2009-02", -4.47], ["2009-03", -5.99], ["2009-04", -6.6], ["2009-05", -7.2], ["2009-06", -7.8], ["2009-07", -8.22], ["2009-08", -7.86], ["2009-09", -6.99], ["2009-10", -5.85], ["2009-11", -2.08], ["2009-12", 1.7], ["2010-01", 4.32], ["2010-02", 5.39], ["2010-03", 5.91], ["2010-04", 6.81], ["2010-05", 7.13], ["2010-06", 6.41], ["2010-07", 4.84], ["2010-08", 4.32], ["2010-09", 4.33], ["2010-10", 5.04], ["2010-11", 6.06], ["2010-12", 5.93], ["2011-01", 6.6436], ["2011-02", 7.2322], ["2011-03", 7.3081], ["2011-04", 6.821], ["2011-05", 6.7851], ["2011-06", 7.1209], ["2011-07", 7.5417], ["2011-08", 7.2528], ["2011-09", 6.5227], ["2011-10", 5.0038], ["2011-11", 2.7179], ["2011-12", 1.6854], ["2012-01", 0.7347], ["2012-02", 0.0284], ["2012-03", -0.3171], ["2012-04", -0.6984], ["2012-05", -1.3981], ["2012-06", -2.0843], ["2012-07", -2.8651], ["2012-08", -3.4784], ["2012-09", -3.5545], ["2012-10", -2.7558], ["2012-11", -2.1995], ["2012-12", -1.9397], ["2013-01", -1.6372], ["2013-02", -1.6254], ["2013-03", -1.919], ["2013-04", -2.6175], ["2013-05", -2.8658], ["2013-06", -2.6965], ["2013-07", -2.2712], ["2013-08", -1.625], ["2013-09", -1.3439], ["2013-10", -1.5071], ["2013-11", -1.4242], ["2013-12", -1.3557], ["2014-01", -1.6394], ["2014-02", -2.0182], ["2014-03", -2.3022], ["2014-04", -2.0042], ["2014-05", -1.4464], ["2014-06", -1.1086], ["2014-07", -0.8688], ["2014-08", -1.2038], ["2014-09", -1.7996], ["2014-10", -2.2428], ["2014-11", -2.6928], ["2014-12", -3.3152], ["2015-01", -4.3202], ["2015-02", -4.7976], ["2015-03", -4.5603], ["2015-04", -4.5725], ["2015-05", -4.607], ["2015-06", -4.8135], ["2015-07", -5.3692], ["2015-08", -5.9227], ["2015-09", -5.945], ["2015-10", -5.9], ["2015-11", -5.9], ["2015-12", -5.9], ["2016-01", -5.3], ["2016-02", -4.9], ["2016-03", -4.3], ["2016-04", -3.4], ["2016-05", -2.8], ["2016-06", -2.6], ["2016-07", -1.7], ["2016-08", -0.8], ["2016-09", 0.1], ["2016-10", 1.2], ["2016-11", 3.3], ["2016-12", 5.5], ["2017-01", 6.9], ["2017-02", 7.8], ["2017-03", 7.6], ["2017-04", 6.4], ["2017-05", 5.5], ["2017-06", 5.5], ["2017-07", 5.5], ["2017-08", 6.3], ["2017-09", 6.9], ["2017-10", 6.9], ["2017-11", 5.8], ["2017-12", 4.9], ["2018-01", 4.3], ["2018-02", 3.7], ["2018-03", 3.1], ["2018-04", 3.4], ["2018-05", 4.1], ["2018-06", 4.7], ["2018-07", 4.6], ["2018-08", 4.1], ["2018-09", 3.6], ["2018-10", 3.3], ["2018-11", 2.7], ["2018-12", 0.9], ["2019-01", 0.1], ["2019-02", 0.1], ["2019-03", 0.4], ["2019-04", 0.9], ["2019-05", 0.6], ["2019-06", 0.0], ["2019-07", -0.3], ["2019-08", -0.8], ["2019-09", -1.2], ["2019-10", -1.6], ["2019-11", -1.4], ["2019-12", -0.5], ["2020-01", 0.1], ["2020-02", -0.4], ["2020-03", -1.5], ["2020-04", -3.1], ["2020-05", -3.7], ["2020-06", -3.0], ["2020-07", -2.4], ["2020-08", -2.0], ["2020-09", -2.1], ["2020-10", -2.1], ["2020-11", -1.5], ["2020-12", -0.4], ["2021-01", 0.3], ["2021-02", 1.7], ["2021-03", 4.4], ["2021-04", 6.8], ["2021-05", 9.0], ["2021-06", 8.8], ["2021-07", 9.0], ["2021-08", 9.5], ["2021-09", 10.7], ["2021-10", 13.5], ["2021-11", 12.9], ["2021-12", 10.3], ["2022-01", 9.1], ["2022-02", 8.8], ["2022-03", 8.3], ["2022-04", 8.0], ["2022-05", 6.4], ["2022-06", 6.1], ["2022-07", 4.2], ["2022-08", 2.3], ["2022-09", 0.9], ["2022-10", -1.3], ["2022-11", -1.3], ["2022-12", -0.7], ["2023-01", -0.8], ["2023-02", -1.4], ["2023-03", -2.5], ["2023-04", -3.6], ["2023-05", -4.6], ["2023-06", -5.4], ["2023-07", -4.4], ["2023-08", -3.0], ["2023-09", -2.5], ["2023-10", -2.6], ["2023-11", -3.0], ["2023-12", -2.7], ["2024-01", -2.5], ["2024-02", -2.7], ["2024-03", -2.8], ["2024-04", -2.5], ["2024-05", -1.4], ["2024-06", -0.8], ["2024-07", -0.8], ["2024-08", -1.8], ["2024-09", -2.8], ["2024-10", -2.9], ["2024-11", -2.5], ["2024-12", -2.3], ["2025-01", -2.3], ["2025-02", -2.2], ["2025-03", -2.5], ["2025-04", -2.7], ["2025-05", -3.3], ["2025-06", -3.6], ["2025-07", -3.6], ["2025-08", -2.9], ["2025-09", -2.3], ["2025-10", -2.1], ["2025-11", -2.2], ["2025-12", -1.9], ["2026-01", -1.4], ["2026-02", -0.9], ["2026-03", 0.5]];
+        const bondData = [["2002-01", 3.363], ["2002-02", 3.1873], ["2002-03", 3.0119], ["2002-04", 2.6817], ["2002-05", 2.488], ["2002-06", 2.5244], ["2002-07", 2.7205], ["2002-08", 3.1173], ["2002-09", 3.1714], ["2002-10", 3.0765], ["2002-11", 3.3004], ["2002-12", 3.2576], ["2003-01", 3.1359], ["2003-02", 3.1891], ["2003-03", 3.0822], ["2003-04", 3.0162], ["2003-05", 2.8373], ["2003-06", 2.9033], ["2003-07", 2.9506], ["2003-08", 2.8916], ["2003-09", 3.0438], ["2003-10", 3.3543], ["2003-11", 3.5924], ["2003-12", 3.7799], ["2004-01", 3.7852], ["2004-02", 3.828], ["2004-03", 3.8794], ["2004-04", 4.1671], ["2004-05", 4.3016], ["2004-06", 4.3162], ["2004-07", 4.6513], ["2004-08", 4.836], ["2004-09", 5.1674], ["2004-10", 5.0231], ["2004-11", 5.2406], ["2004-12", 5.196], ["2005-01", 5.0484], ["2005-02", 4.8198], ["2005-03", 4.5284], ["2005-04", 4.0615], ["2005-05", 3.8575], ["2005-06", 3.6488], ["2005-07", 3.3936], ["2005-08", 3.3172], ["2005-09", 3.3403], ["2005-10", 2.982], ["2005-11", 3.262], ["2005-12", 3.2277], ["2006-01", 3.0208], ["2006-02", 2.9281], ["2006-03", 2.9105], ["2006-04", 2.9808], ["2006-05", 3.0094], ["2006-06", 3.0939], ["2006-07", 3.2078], ["2006-08", 3.2466], ["2006-09", 3.1269], ["2006-10", 2.9581], ["2006-11", 2.9853], ["2006-12", 3.0241], ["2007-01", 3.0288], ["2007-02", 3.1093], ["2007-03", 3.3008], ["2007-04", 3.5324], ["2007-05", 3.8846], ["2007-06", 4.2964], ["2007-07", 4.4292], ["2007-08", 4.2876], ["2007-09", 4.4033], ["2007-10", 4.4368], ["2007-11", 4.5469], ["2007-12", 4.4655], ["2008-01", 4.3504], ["2008-02", 4.154], ["2008-03", 4.1136], ["2008-04", 4.0415], ["2008-05", 4.1431], ["2008-06", 4.3342], ["2008-07", 4.4632], ["2008-08", 4.4154], ["2008-09", 3.9197], ["2008-10", 3.1938], ["2008-11", 3.0055], ["2008-12", 2.8537], ["2009-01", 2.8779], ["2009-02", 3.1894], ["2009-03", 3.1515], ["2009-04", 3.1695], ["2009-05", 3.0546], ["2009-06", 3.1695], ["2009-07", 3.3847], ["2009-08", 3.5092], ["2009-09", 3.4798], ["2009-10", 3.6627], ["2009-11", 3.6793], ["2009-12", 3.6299], ["2010-01", 3.644], ["2010-02", 3.4749], ["2010-03", 3.4062], ["2010-04", 3.452], ["2010-05", 3.2604], ["2010-06", 3.3186], ["2010-07", 3.2365], ["2010-08", 3.2576], ["2010-09", 3.3088], ["2010-10", 3.5251], ["2010-11", 3.8917], ["2010-12", 3.8516], ["2011-01", 3.9355], ["2011-02", 4.037], ["2011-03", 3.8982], ["2011-04", 3.891], ["2011-05", 3.8396], ["2011-06", 3.9022], ["2011-07", 3.9717], ["2011-08", 3.9984], ["2011-09", 4.0134], ["2011-10", 3.7782], ["2011-11", 3.6481], ["2011-12", 3.4708], ["2012-01", 3.402], ["2012-02", 3.5097], ["2012-03", 3.5391], ["2012-04", 3.5338], ["2012-05", 3.4343], ["2012-06", 3.3669], ["2012-07", 3.283], ["2012-08", 3.3386], ["2012-09", 3.4687], ["2012-10", 3.5248], ["2012-11", 3.5478], ["2012-12", 3.577], ["2013-01", 3.5935], ["2013-02", 3.5874], ["2013-03", 3.5789], ["2013-04", 3.4602], ["2013-05", 3.4244], ["2013-06", 3.5146], ["2013-07", 3.6344], ["2013-08", 3.913], ["2013-09", 4.0485], ["2013-10", 4.1133], ["2013-11", 4.4633], ["2013-12", 4.5492], ["2014-01", 4.5624], ["2014-02", 4.4823], ["2014-03", 4.5048], ["2014-04", 4.3862], ["2014-05", 4.183], ["2014-06", 4.0524], ["2014-07", 4.207], ["2014-08", 4.2466], ["2014-09", 4.1561], ["2014-10", 3.8414], ["2014-11", 3.5851], ["2014-12", 3.6827], ["2015-01", 3.5368], ["2015-02", 3.3936], ["2015-03", 3.4983], ["2015-04", 3.527], ["2015-05", 3.4362], ["2015-06", 3.6013], ["2015-07", 3.4968], ["2015-08", 3.471], ["2015-09", 3.3149], ["2015-10", 3.0824], ["2015-11", 3.1162], ["2015-12", 2.9387], ["2016-01", 2.8232], ["2016-02", 2.8495], ["2016-03", 2.8555], ["2016-04", 2.9063], ["2016-05", 2.9277], ["2016-06", 2.9465], ["2016-07", 2.8137], ["2016-08", 2.7169], ["2016-09", 2.7502], ["2016-10", 2.6895], ["2016-11", 2.8271], ["2016-12", 3.1478], ["2017-01", 3.2316], ["2017-02", 3.3711], ["2017-03", 3.3288], ["2017-04", 3.383], ["2017-05", 3.6182], ["2017-06", 3.5699], ["2017-07", 3.5869], ["2017-08", 3.6243], ["2017-09", 3.6216], ["2017-10", 3.7382], ["2017-11", 3.9199], ["2017-12", 3.8949], ["2018-01", 3.9375], ["2018-02", 3.8726], ["2018-03", 3.7932], ["2018-04", 3.6489], ["2018-05", 3.6638], ["2018-06", 3.6077], ["2018-07", 3.5085], ["2018-08", 3.5677], ["2018-09", 3.6401], ["2018-10", 3.5661], ["2018-11", 3.4298], ["2018-12", 3.2963], ["2019-01", 3.1205], ["2019-02", 3.1182], ["2019-03", 3.1349], ["2019-04", 3.3374], ["2019-05", 3.3064], ["2019-06", 3.2352], ["2019-07", 3.1681], ["2019-08", 3.047], ["2019-09", 3.0887], ["2019-10", 3.2011], ["2019-11", 3.2193], ["2019-12", 3.1718], ["2020-01", 3.0916], ["2020-02", 2.8305], ["2020-03", 2.6518], ["2020-04", 2.5423], ["2020-05", 2.681], ["2020-06", 2.827], ["2020-07", 2.9492], ["2020-08", 2.9861], ["2020-09", 3.1126], ["2020-10", 3.1926], ["2020-11", 3.255], ["2020-12", 3.2428], ["2021-01", 3.1478], ["2021-02", 3.2413], ["2021-03", 3.2346], ["2021-04", 3.1846], ["2021-05", 3.1162], ["2021-06", 3.0953], ["2021-07", 2.9613], ["2021-08", 2.8546], ["2021-09", 2.8673], ["2021-10", 2.973], ["2021-11", 2.9], ["2021-12", 2.8328], ["2022-01", 2.7536], ["2022-02", 2.7779], ["2022-03", 2.8068], ["2022-04", 2.798], ["2022-05", 2.7849], ["2022-06", 2.783], ["2022-07", 2.7993], ["2022-08", 2.667], ["2022-09", 2.6655], ["2022-10", 2.7138], ["2022-11", 2.7751], ["2022-12", 2.8666], ["2023-01", 2.883], ["2023-02", 2.9025], ["2023-03", 2.8688], ["2023-04", 2.8278], ["2023-05", 2.7165], ["2023-06", 2.6661], ["2023-07", 2.6367], ["2023-08", 2.5985], ["2023-09", 2.6453], ["2023-10", 2.6945], ["2023-11", 2.6683], ["2023-12", 2.6174], ["2024-01", 2.5059], ["2024-02", 2.4077], ["2024-03", 2.3084], ["2024-04", 2.283], ["2024-05", 2.3041], ["2024-06", 2.2564], ["2024-07", 2.239], ["2024-08", 2.1743], ["2024-09", 2.1045], ["2024-10", 2.147], ["2024-11", 2.0888], ["2024-12", 1.8002], ["2025-01", 1.6379], ["2025-02", 1.6715], ["2025-03", 1.814], ["2025-04", 1.6675], ["2025-05", 1.682], ["2025-06", 1.6503], ["2025-07", 1.6768], ["2025-08", 1.7501], ["2025-09", 1.8588], ["2025-10", 1.8326], ["2025-11", 1.8168], ["2025-12", 1.8442], ["2026-01", 1.847], ["2026-02", 1.8054], ["2026-03", 1.8094], ["2026-04", 1.8024]];
+        const gdpData = [["2006-01", 47831.7], ["2006-02", 50623.5], ["2006-03", 52689.2], ["2006-04", 55644.6], ["2007-01", 58080.6], ["2007-02", 61915.8], ["2007-03", 64775.23], ["2007-04", 68544.93], ["2008-01", 70609.6], ["2008-02", 75287.25], ["2008-03", 78080.97], ["2008-04", 81079.45], ["2009-01", 75341.3], ["2009-02", 80348.5], ["2009-03", 84009.0], ["2009-04", 88630.4], ["2010-01", 89125.0], ["2010-02", 95100.0], ["2010-03", 99330.97], ["2010-04", 104813.32], ["2011-01", 106218.9], ["2011-02", 113497.9], ["2011-03", 118519.1], ["2011-04", 123926.9], ["2012-01", 119377.5], ["2012-02", 126434.35], ["2012-03", 131084.23], ["2012-04", 136877.65], ["2013-01", 131879.7], ["2013-02", 138996.8], ["2013-03", 144321.9], ["2013-04", 150915.1], ["2014-01", 143539.4], ["2014-02", 151500.85], ["2014-03", 157201.17], ["2014-04", 163945.73], ["2015-01", 154171.4], ["2015-02", 163029.2], ["2015-03", 168725.7], ["2015-04", 175627.88], ["2016-01", 165735.3], ["2016-02", 175368.75], ["2016-03", 181858.37], ["2016-04", 190298.25], ["2017-01", 185274.4], ["2017-02", 195470.0], ["2017-03", 202565.1], ["2017-04", 211845.73], ["2018-01", 205735.3], ["2018-02", 216888.85], ["2018-03", 224191.5], ["2018-04", 234002.52], ["2019-01", 221453.9], ["2019-02", 233823.9], ["2019-03", 241223.67], ["2019-04", 251468.1], ["2020-01", 209671.1], ["2020-02", 231560.55], ["2020-03", 244343.8], ["2020-04", 258716.9], ["2021-01", 255055.2], ["2021-02", 271517.2], ["2021-03", 280332.07], ["2021-04", 293455.75], ["2022-01", 277175.8], ["2022-02", 288143.65], ["2022-03", 297229.0], ["2022-04", 308507.35], ["2023-01", 292368.8], ["2023-02", 304303.15], ["2023-03", 312349.0], ["2023-04", 323567.92], ["2024-01", 304761.8], ["2024-02", 316799.7], ["2024-03", 324851.27], ["2024-04", 337016.55], ["2025-01", 318466.4], ["2025-02", 329930.8], ["2025-03", 337989.3], ["2025-04", 350469.8], ["2026-01", 334193.0]];
+        // 计算GDP同比增速
+        const gdpGrowthData = [];
+        const gdpMap = new Map(gdpData.map(d => [d[0], d[1]]));
+        for (let i = 0; i < gdpData.length; i++) {
+            const [date, value] = gdpData[i];
+            const [year, quarter] = date.split('-');
+            const prevYear = parseInt(year) - 1;
+            const prevDate = `${prevYear}-${quarter}`;
+            const prevValue = gdpMap.get(prevDate);
+            if (prevValue && prevValue !== 0) {
+                const growth = ((value - prevValue) / prevValue * 100);
+                gdpGrowthData.push([date, growth]);
+            }
+        }
+        const pmiMData = [["2008-01", 53.0], ["2008-02", 53.4], ["2008-03", 58.4], ["2008-04", 59.2], ["2008-05", 53.3], ["2008-06", 52.0], ["2008-07", 48.4], ["2008-08", 48.4], ["2008-09", 51.2], ["2008-10", 44.6], ["2008-11", 38.8], ["2008-12", 41.2], ["2009-01", 45.3], ["2009-02", 49.0], ["2009-03", 52.4], ["2009-04", 53.5], ["2009-05", 53.1], ["2009-06", 53.2], ["2009-07", 53.3], ["2009-08", 54.0], ["2009-09", 54.3], ["2009-10", 55.2], ["2009-11", 55.2], ["2009-12", 56.6], ["2010-01", 55.8], ["2010-02", 52.0], ["2010-03", 55.1], ["2010-04", 55.7], ["2010-05", 53.9], ["2010-06", 52.1], ["2010-07", 51.2], ["2010-08", 51.7], ["2010-09", 53.8], ["2010-10", 54.7], ["2010-11", 55.2], ["2010-12", 53.9], ["2011-01", 52.9], ["2011-02", 52.2], ["2011-03", 53.4], ["2011-04", 52.9], ["2011-05", 52.0], ["2011-06", 50.9], ["2011-07", 50.7], ["2011-08", 50.9], ["2011-09", 51.2], ["2011-10", 50.4], ["2011-11", 49.0], ["2011-12", 50.3], ["2012-01", 50.5], ["2012-02", 51.0], ["2012-03", 53.1], ["2012-04", 53.3], ["2012-05", 50.4], ["2012-06", 50.2], ["2012-07", 50.1], ["2012-08", 49.2], ["2012-09", 49.8], ["2012-10", 50.2], ["2012-11", 50.6], ["2012-12", 50.6], ["2013-01", 50.4], ["2013-02", 50.1], ["2013-03", 50.9], ["2013-04", 50.6], ["2013-05", 50.8], ["2013-06", 50.1], ["2013-07", 50.3], ["2013-08", 51.0], ["2013-09", 51.1], ["2013-10", 51.4], ["2013-11", 51.4], ["2013-12", 51.0], ["2014-01", 50.5], ["2014-02", 50.2], ["2014-03", 50.3], ["2014-04", 50.4], ["2014-05", 50.8], ["2014-06", 51.0], ["2014-07", 51.7], ["2014-08", 51.1], ["2014-09", 51.1], ["2014-10", 50.8], ["2014-11", 50.3], ["2014-12", 50.1], ["2015-01", 49.8], ["2015-02", 49.9], ["2015-03", 50.1], ["2015-04", 50.1], ["2015-05", 50.2], ["2015-06", 50.2], ["2015-07", 50.0], ["2015-08", 49.7], ["2015-09", 49.8], ["2015-10", 49.8], ["2015-11", 49.6], ["2015-12", 49.7], ["2016-01", 49.4], ["2016-02", 49.0], ["2016-03", 50.2], ["2016-04", 50.1], ["2016-05", 50.1], ["2016-06", 50.0], ["2016-07", 49.9], ["2016-08", 50.4], ["2016-09", 50.4], ["2016-10", 51.2], ["2016-11", 51.7], ["2016-12", 51.4], ["2017-01", 51.3], ["2017-02", 51.6], ["2017-03", 51.8], ["2017-04", 51.2], ["2017-05", 51.2], ["2017-06", 51.7], ["2017-07", 51.4], ["2017-08", 51.7], ["2017-09", 52.4], ["2017-10", 51.6], ["2017-11", 51.8], ["2017-12", 51.6], ["2018-01", 51.3], ["2018-02", 50.3], ["2018-03", 51.5], ["2018-04", 51.4], ["2018-05", 51.9], ["2018-06", 51.5], ["2018-07", 51.2], ["2018-08", 51.3], ["2018-09", 50.8], ["2018-10", 50.2], ["2018-11", 50.0], ["2018-12", 49.4], ["2019-01", 49.5], ["2019-02", 49.2], ["2019-03", 50.5], ["2019-04", 50.1], ["2019-05", 49.4], ["2019-06", 49.4], ["2019-07", 49.7], ["2019-08", 49.5], ["2019-09", 49.8], ["2019-10", 49.3], ["2019-11", 50.2], ["2019-12", 50.2], ["2020-01", 50.0], ["2020-02", 35.7], ["2020-03", 52.0], ["2020-04", 50.8], ["2020-05", 50.6], ["2020-06", 50.9], ["2020-07", 51.1], ["2020-08", 51.0], ["2020-09", 51.5], ["2020-10", 51.4], ["2020-11", 52.1], ["2020-12", 51.9], ["2021-01", 51.3], ["2021-02", 50.6], ["2021-03", 51.9], ["2021-04", 51.1], ["2021-05", 51.0], ["2021-06", 50.9], ["2021-07", 50.4], ["2021-08", 50.1], ["2021-09", 49.6], ["2021-10", 49.2], ["2021-11", 50.1], ["2021-12", 50.3], ["2022-01", 50.1], ["2022-02", 50.2], ["2022-03", 49.5], ["2022-04", 47.4], ["2022-05", 49.6], ["2022-06", 50.2], ["2022-07", 49.0], ["2022-08", 49.4], ["2022-09", 50.1], ["2022-10", 49.2], ["2022-11", 48.0], ["2022-12", 47.0], ["2023-01", 50.1], ["2023-02", 52.6], ["2023-03", 51.9], ["2023-04", 49.2], ["2023-05", 48.8], ["2023-06", 49.0], ["2023-07", 49.3], ["2023-08", 49.7], ["2023-09", 50.2], ["2023-10", 49.5], ["2023-11", 49.4], ["2023-12", 49.0], ["2024-01", 49.2], ["2024-02", 49.1], ["2024-03", 50.8], ["2024-04", 50.4], ["2024-05", 49.5], ["2024-06", 49.5], ["2024-07", 49.4], ["2024-08", 49.1], ["2024-09", 49.8], ["2024-10", 50.1], ["2024-11", 50.3], ["2024-12", 50.1], ["2025-01", 49.1], ["2025-02", 50.2], ["2025-03", 50.5], ["2025-04", 49.0], ["2025-05", 49.5], ["2025-06", 49.7], ["2025-07", 49.3], ["2025-08", 49.4], ["2025-09", 49.8], ["2025-10", 49.0], ["2025-11", 49.2], ["2025-12", 50.1], ["2026-01", 49.3], ["2026-02", 49.0], ["2026-03", 50.4]];
+        const pmiNMData = [["2008-01", 60.2], ["2008-02", 59.3], ["2008-03", 58.9], ["2008-04", 58.4], ["2008-05", 57.4], ["2008-06", 57.4], ["2008-07", 55.7], ["2008-08", 52.9], ["2008-09", 55.0], ["2008-10", 53.1], ["2008-11", 51.2], ["2008-12", 50.8], ["2009-01", 53.7], ["2009-02", 55.1], ["2009-03", 54.4], ["2009-04", 53.5], ["2009-05", 54.9], ["2009-06", 55.4], ["2009-07", 57.3], ["2009-08", 57.3], ["2009-09", 57.9], ["2009-10", 59.5], ["2009-11", 58.4], ["2009-12", 58.8], ["2010-01", 58.1], ["2010-02", 57.0], ["2010-03", 57.3], ["2010-04", 57.8], ["2010-05", 58.1], ["2010-06", 58.8], ["2010-07", 57.1], ["2010-08", 58.0], ["2010-09", 57.9], ["2010-10", 57.4], ["2010-11", 58.9], ["2010-12", 58.8], ["2011-01", 57.2], ["2011-02", 57.0], ["2011-03", 59.2], ["2011-04", 58.2], ["2011-05", 58.7], ["2011-06", 56.6], ["2011-07", 57.3], ["2011-08", 57.1], ["2011-09", 55.8], ["2011-10", 55.5], ["2011-11", 55.9], ["2011-12", 56.3], ["2012-01", 55.7], ["2012-02", 57.3], ["2012-03", 58.0], ["2012-04", 56.1], ["2012-05", 55.2], ["2012-06", 56.7], ["2012-07", 55.6], ["2012-08", 56.3], ["2012-09", 53.7], ["2012-10", 55.5], ["2012-11", 55.6], ["2012-12", 56.1], ["2013-01", 56.2], ["2013-02", 54.5], ["2013-03", 55.6], ["2013-04", 54.5], ["2013-05", 54.3], ["2013-06", 53.9], ["2013-07", 54.1], ["2013-08", 53.9], ["2013-09", 55.4], ["2013-10", 56.3], ["2013-11", 56.0], ["2013-12", 54.6], ["2014-01", 53.4], ["2014-02", 55.0], ["2014-03", 54.5], ["2014-04", 54.8], ["2014-05", 55.5], ["2014-06", 55.0], ["2014-07", 54.2], ["2014-08", 54.4], ["2014-09", 54.0], ["2014-10", 53.8], ["2014-11", 53.9], ["2014-12", 54.1], ["2015-01", 53.7], ["2015-02", 53.9], ["2015-03", 53.7], ["2015-04", 53.4], ["2015-05", 53.2], ["2015-06", 53.8], ["2015-07", 53.9], ["2015-08", 53.4], ["2015-09", 53.4], ["2015-10", 53.1], ["2015-11", 53.6], ["2015-12", 54.4], ["2016-01", 53.5], ["2016-02", 52.7], ["2016-03", 53.8], ["2016-04", 53.5], ["2016-05", 53.1], ["2016-06", 53.7], ["2016-07", 53.9], ["2016-08", 53.5], ["2016-09", 53.7], ["2016-10", 54.0], ["2016-11", 54.7], ["2016-12", 54.5], ["2017-01", 54.6], ["2017-02", 54.2], ["2017-03", 55.1], ["2017-04", 54.0], ["2017-05", 54.5], ["2017-06", 54.9], ["2017-07", 54.5], ["2017-08", 53.4], ["2017-09", 55.4], ["2017-10", 54.3], ["2017-11", 54.8], ["2017-12", 55.0], ["2018-01", 55.3], ["2018-02", 54.4], ["2018-03", 54.6], ["2018-04", 54.8], ["2018-05", 54.9], ["2018-06", 55.0], ["2018-07", 54.0], ["2018-08", 54.2], ["2018-09", 54.9], ["2018-10", 53.9], ["2018-11", 53.4], ["2018-12", 53.8], ["2019-01", 54.7], ["2019-02", 54.3], ["2019-03", 54.8], ["2019-04", 54.3], ["2019-05", 54.3], ["2019-06", 54.2], ["2019-07", 53.7], ["2019-08", 53.8], ["2019-09", 53.7], ["2019-10", 52.8], ["2019-11", 54.4], ["2019-12", 53.5], ["2020-01", 54.1], ["2020-02", 29.6], ["2020-03", 52.3], ["2020-04", 53.2], ["2020-05", 53.6], ["2020-06", 54.4], ["2020-07", 54.2], ["2020-08", 55.2], ["2020-09", 55.9], ["2020-10", 56.2], ["2020-11", 56.4], ["2020-12", 55.7], ["2021-01", 52.4], ["2021-02", 51.4], ["2021-03", 56.3], ["2021-04", 54.9], ["2021-05", 55.2], ["2021-06", 53.5], ["2021-07", 53.3], ["2021-08", 47.5], ["2021-09", 53.2], ["2021-10", 52.4], ["2021-11", 52.3], ["2021-12", 52.7], ["2022-01", 51.1], ["2022-02", 51.6], ["2022-03", 48.4], ["2022-04", 41.9], ["2022-05", 47.8], ["2022-06", 54.7], ["2022-07", 53.8], ["2022-08", 52.6], ["2022-09", 50.6], ["2022-10", 48.7], ["2022-11", 46.7], ["2022-12", 41.6], ["2023-01", 54.4], ["2023-02", 56.3], ["2023-03", 58.2], ["2023-04", 56.4], ["2023-05", 54.5], ["2023-06", 53.2], ["2023-07", 51.5], ["2023-08", 51.0], ["2023-09", 51.7], ["2023-10", 50.6], ["2023-11", 50.2], ["2023-12", 50.4], ["2024-01", 50.7], ["2024-02", 51.4], ["2024-03", 53.0], ["2024-04", 51.2], ["2024-05", 51.1], ["2024-06", 50.5], ["2024-07", 50.2], ["2024-08", 50.3], ["2024-09", 50.0], ["2024-10", 50.2], ["2024-11", 50.0], ["2024-12", 52.2], ["2025-01", 50.2], ["2025-02", 50.4], ["2025-03", 50.8], ["2025-04", 50.4], ["2025-05", 50.3], ["2025-06", 50.5], ["2025-07", 50.1], ["2025-08", 50.3], ["2025-09", 50.0], ["2025-10", 50.1], ["2025-11", 49.5], ["2025-12", 50.2], ["2026-01", 49.4], ["2026-02", 49.5], ["2026-03", 50.1]];
+        const annualData = [];
+        const eventsData = [[2008.01, "2008\u91d1\u878d\u5371\u673a"], [2008.07, "CPI\u8fbe\u5cf0\u503c"], [2009.07, "PPI\u8c37\u5e95"], [2015.06, "\u80a1\u5e02\u5f02\u5e38\u6ce2\u52a8"], [2020.01, "\u65b0\u51a0\u75ab\u60c5"], [2022.12, "\u75ab\u60c5\u89e3\u5c01"]];
+
+        // 更新最新值
+        if (cpiData.length > 0) document.getElementById('cpi-latest').textContent = cpiData[cpiData.length-1][1].toFixed(1) + '%';
+        if (ppiData.length > 0) document.getElementById('ppi-latest').textContent = ppiData[ppiData.length-1][1].toFixed(1) + '%';
+        if (bondData.length > 0) document.getElementById('bond-latest').textContent = bondData[bondData.length-1][1].toFixed(2) + '%';
+        if (pmiMData.length > 0) document.getElementById('pmi-m-latest').textContent = pmiMData[pmiMData.length-1][1].toFixed(1);
+        if (pmiNMData.length > 0) document.getElementById('pmi-nm-latest').textContent = pmiNMData[pmiNMData.length-1][1].toFixed(1);
+        if (gdpGrowthData.length > 0) document.getElementById('gdp-latest').textContent = gdpGrowthData[gdpGrowthData.length-1][1].toFixed(1) + '%';
+
+        // 状态
+        const state = { cpi: true, ppi: true, pmi: true, bond: true, gdp: true, startYear: 2000, endYear: 2026, viewMode: 'overlay' };
+
+        function setViewMode(mode) {
+            state.viewMode = mode;
+            document.getElementById('view-overlay').classList.toggle('active', mode === 'overlay');
+            document.getElementById('view-split').classList.toggle('active', mode === 'split');
+            document.getElementById('overlay-view').style.display = mode === 'overlay' ? 'block' : 'none';
+            document.getElementById('split-view').style.display = mode === 'split' ? 'block' : 'none';
+            if (mode === 'split') {
+                setTimeout(() => {
+                    cpiOverlayChart.resize();
+                    ppiOverlayChart.resize();
+                    pmiOverlayChart.resize();
+                    bondOverlayChart.resize();
+                    gdpOverlayChart.resize();
+                }, 100);
+            }
+        }
+
+        function toggleSeries(series) {
+            state[series] = !state[series];
+            document.querySelector('.toggle-btn.' + series).classList.toggle('active');
+            updateCharts();
+        }
+
+        function updateDualRange() {
+            const startInput = document.getElementById('year-start');
+            const endInput = document.getElementById('year-end');
+            let start = parseInt(startInput.value);
+            let end = parseInt(endInput.value);
+
+            // 确保起始年份不超过结束年份
+            if (start > end) {
+                if (this === startInput) {
+                    end = start;
+                    endInput.value = end;
+                } else {
+                    start = end;
+                    startInput.value = start;
+                }
+            }
+
+            state.startYear = start;
+            state.endYear = end;
+
+            // 更新标签显示
+            document.getElementById('year-start-label').textContent = start;
+            document.getElementById('year-end-label').textContent = end;
+
+            // 更新滑块轨道
+            const track = document.getElementById('slider-track');
+            const percentStart = ((start - 2000) / (2026 - 2000)) * 100;
+            const percentEnd = ((end - 2000) / (2026 - 2000)) * 100;
+            track.style.left = percentStart + '%';
+            track.style.width = (percentEnd - percentStart) + '%';
+
+            updateCharts();
+        }
+
+        function filterData(data) {
+            return data.filter(d => {
+                const year = parseFloat(d[0]);
+                return year >= state.startYear && year <= state.endYear;
+            });
+        }
+
+        function updateCharts() {
+            const filteredCPI = state.cpi ? filterData(cpiData) : [];
+            const filteredPPI = state.ppi ? filterData(ppiData) : [];
+            const filteredBond = state.bond ? filterData(bondData) : [];
+
+            mainChart.setOption({
+                series: [
+                    { name: 'CPI', data: filteredCPI, type: 'line' },
+                    { name: 'PPI', data: filteredPPI, type: 'line' },
+                    { name: '国债收益率', data: filteredBond, type: 'line', yAxisIndex: 1 }
+                ]
+            });
+
+            // 更新分列视图图表
+            if (state.viewMode === 'split') {
+                cpiOverlayChart.setOption({
+                    series: [{ name: 'CPI', data: filteredCPI, type: 'line' }]
+                });
+                ppiOverlayChart.setOption({
+                    series: [{ name: 'PPI', data: filteredPPI, type: 'line' }]
+                });
+                bondOverlayChart.setOption({
+                    series: [{ name: '国债收益率', data: filteredBond, type: 'line' }]
+                });
+            }
+        }
+
+        // 图表配置
+        const chartTheme = {
+            backgroundColor: 'transparent',
+            textStyle: { color: '#a0a8b8' },
+            legend: { textStyle: { color: '#a0a8b8' } },
+            tooltip: {
+                trigger: 'axis',
+                backgroundColor: 'rgba(26,31,53,0.95)',
+                borderColor: 'rgba(255,255,255,0.1)',
+                textStyle: { color: '#e0e6ed' },
+                formatter: function(params) {
+                    if (!params || params.length === 0) return '';
+                    // 获取日期 - ECharts time axis 会返回日期对象
+                    let dateStr = '';
+                    if (params[0].axisValue) {
+                        const date = new Date(params[0].axisValue);
+                        const year = date.getFullYear();
+                        const month = date.getMonth() + 1;
+                        const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+                        dateStr = `${year}年${monthNames[month-1]}`;
+                    }
+                    let result = `<div style="font-weight:600;margin-bottom:8px;">${dateStr}</div>`;
+                    params.forEach(function(item) {
+                        const color = item.color;
+                        const name = item.seriesName;
+                        let value = item.value;
+                        // 处理数据格式 [date, value] 或直接是 value
+                        if (Array.isArray(value)) {
+                            value = value[1];
+                        }
+                        const unit = name === '名义GDP增速' ? '' : '%';
+                        result += `<div style="display:flex;align-items:center;gap:8px;margin:4px 0;">
+                            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color}"></span>
+                            <span>${name}: <strong>${typeof value === 'number' ? value.toFixed(2) : value}</strong>${unit}</span>
+                        </div>`;
+                    });
+                    return result;
+                }
+            }
+        };
+
+        // 辅助函数：格式化月份
+        function formatMonth(dateStr) {
+            if (!dateStr) return '';
+            // dateStr 格式为 YYYY-MM
+            const parts = dateStr.split('-');
+            if (parts.length >= 2) {
+                const year = parts[0];
+                const month = parseInt(parts[1]);
+                const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+                return `${year}年${monthNames[month-1]}`;
+            }
+            return dateStr;
+        }
+
+        // 主图
+        const mainChart = echarts.init(document.getElementById('main-chart'));
+        mainChart.setOption({
+            ...chartTheme,
+            legend: { ...chartTheme.legend, bottom: 10, selected: { 'CPI': true, 'PPI': true, '制造业PMI': true, '非制造业PMI': true, '国债收益率': true, '名义GDP增速': true } },
+            grid: { top: 40, right: 80, bottom: 60, left: 60 },
+            xAxis: { type: 'time', axisLine: { lineStyle: { color: '#3a4556' } }, splitLine: { show: false } },
+            yAxis: [
+                { type: 'value', name: '价格指数 (%)', axisLine: { lineStyle: { color: '#3a4556' } }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)' } } },
+                { type: 'value', name: 'PMI', axisLine: { lineStyle: { color: '#3a4556' } }, splitLine: { show: false }, min: 30, max: 70 },
+                { type: 'value', name: 'GDP (万亿)', axisLine: { lineStyle: { color: '#3a4556' } }, splitLine: { show: false }, offset: 80 }
+            ],
+            dataZoom: [
+                { type: 'inside', xAxisIndex: [0, 1] },
+                { type: 'slider', xAxisIndex: [0, 1], height: 20, bottom: 10 }
+            ],
+            series: [
+                { name: 'CPI', data: cpiData, type: 'line', smooth: true, lineStyle: { width: 2 }, itemStyle: { color: '#ff6b6b' }, areaStyle: { color: 'rgba(255,107,107,0.1)' } },
+                { name: 'PPI', data: ppiData, type: 'line', smooth: true, lineStyle: { width: 2 }, itemStyle: { color: '#ffd93d' } },
+                { name: '制造业PMI', data: pmiMData, type: 'line', smooth: true, lineStyle: { width: 2 }, itemStyle: { color: '#a78bfa' }, yAxisIndex: 1, markLine: { data: [{ yAxis: 50, lineStyle: { color: '#666', type: 'dashed' }, label: { formatter: '荣枯线' } }] } },
+                { name: '非制造业PMI', data: pmiNMData, type: 'line', smooth: true, lineStyle: { width: 2, type: 'dotted' }, itemStyle: { color: '#818cf8' }, yAxisIndex: 1 },
+                { name: '国债收益率', data: bondData, type: 'line', smooth: true, lineStyle: { width: 2, type: 'dashed' }, itemStyle: { color: '#00ff88' } },
+                { name: '名义GDP增速', data: gdpGrowthData, type: 'line', itemStyle: { color: '#fb923c' }, yAxisIndex: 2 }
+            ]
+        });
+
+        // 分列视图图表
+        const cpiOverlayChart = echarts.init(document.getElementById('cpi-overlay-chart'));
+        const ppiOverlayChart = echarts.init(document.getElementById('ppi-overlay-chart'));
+        const pmiOverlayChart = echarts.init(document.getElementById('pmi-overlay-chart'));
+        const bondOverlayChart = echarts.init(document.getElementById('bond-overlay-chart'));
+        const gdpOverlayChart = echarts.init(document.getElementById('gdp-overlay-chart'));
+
+        function createOverlayChart(chart, data, color, name, extraOptions = {}) {
+            chart.setOption({
+                ...chartTheme,
+                grid: { top: 20, right: 30, bottom: 30, left: 60 },
+                xAxis: { type: 'time', axisLine: { lineStyle: { color: '#3a4556' } } },
+                yAxis: { type: 'value', axisLine: { lineStyle: { color: '#3a4556' } }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.05)' } }, ...extraOptions.yAxis },
+                series: [{ name: name, data: data, type: 'line', smooth: true, lineStyle: { width: 2.5 }, itemStyle: { color: color }, areaStyle: { color: color.replace(')', ',0.15)').replace('rgb', 'rgba').replace('#', '') }, ...extraOptions.series }]
+            });
+        }
+
+        createOverlayChart(cpiOverlayChart, cpiData, '#ff6b6b', 'CPI');
+        createOverlayChart(ppiOverlayChart, ppiData, '#ffd93d', 'PPI');
+        createOverlayChart(pmiOverlayChart, pmiMData, '#a78bfa', '制造业PMI', {
+            yAxis: { min: 30, max: 70 },
+            series: { markLine: { data: [{ yAxis: 50, lineStyle: { color: '#666', type: 'dashed' }, label: { formatter: '荣枯线' } }] } }
+        });
+        createOverlayChart(bondOverlayChart, bondData, '#00ff88', '国债收益率');
+        createOverlayChart(gdpOverlayChart, gdpGrowthData, '#fb923c', '名义GDP增速', {
+            series: { type: 'line' }
+        });
+
+        // ============ Y轴范围控制 ============
+        function toggleYAxisSettings() {
+            const panel = document.getElementById('yaxis-settings');
+            panel.classList.toggle('visible');
+        }
+
+        function updateChartYAxis(chartKey) {
+            const autoCheckbox = document.getElementById(`${chartKey}-yaxis-auto`);
+            const rangeDiv = document.getElementById(`${chartKey}-yaxis-range`);
+            
+            if (autoCheckbox.checked) {
+                rangeDiv.style.display = 'none';
+                // 重置为自动范围
+                applyAutoYAxis(chartKey);
+            } else {
+                rangeDiv.style.display = 'flex';
+            }
+        }
+
+        function applyAutoYAxis(chartKey) {
+            const chartMap = {
+                'cpi': cpiOverlayChart,
+                'ppi': ppiOverlayChart,
+                'pmi': pmiOverlayChart,
+                'bond': bondOverlayChart,
+                'gdp': gdpOverlayChart
+            };
+            const extraMap = {
+                'cpi': {},
+                'ppi': {},
+                'pmi': {
+                    series: { markLine: { data: [{ yAxis: 50, lineStyle: { color: '#666', type: 'dashed' }, label: { formatter: '荣枯线' } }] } }
+                },
+                'bond': {},
+                'gdp': { series: { type: 'line' } }
+            };
+            
+            const chart = chartMap[chartKey];
+            if (chart) {
+                chart.setOption({
+                    yAxis: { min: undefined, max: undefined },
+                    series: extraMap[chartKey].series
+                });
+            }
+        }
+
+        function applyYAxisRange(chartKey) {
+            const minVal = parseFloat(document.getElementById(`${chartKey}-yaxis-min`).value);
+            const maxVal = parseFloat(document.getElementById(`${chartKey}-yaxis-max`).value);
+            
+            const chartMap = {
+                'cpi': cpiOverlayChart,
+                'ppi': ppiOverlayChart,
+                'pmi': pmiOverlayChart,
+                'bond': bondOverlayChart,
+                'gdp': gdpOverlayChart
+            };
+            const extraMap = {
+                'cpi': {},
+                'ppi': {},
+                'pmi': {
+                    series: { markLine: { data: [{ yAxis: 50, lineStyle: { color: '#666', type: 'dashed' }, label: { formatter: '荣枯线' } }] } }
+                },
+                'bond': {},
+                'gdp': { series: { type: 'line' } }
+            };
+            
+            const chart = chartMap[chartKey];
+            if (chart && !isNaN(minVal) && !isNaN(maxVal)) {
+                chart.setOption({
+                    yAxis: { min: minVal, max: maxVal },
+                    series: extraMap[chartKey].series
+                });
+            }
+        }
+
+        function resetYAxisRanges() {
+            ['cpi', 'ppi', 'pmi', 'bond', 'gdp'].forEach(key => {
+                document.getElementById(`${key}-yaxis-auto`).checked = true;
+                document.getElementById(`${key}-yaxis-range`).style.display = 'none';
+                applyAutoYAxis(key);
+            });
+        }
+
+        // 初始化PMI Y轴设置（因为默认不是自动）
+        document.getElementById('pmi-yaxis-auto').checked = false;
+        document.getElementById('pmi-yaxis-range').style.display = 'flex';
+        applyYAxisRange('pmi');
+
+        // 表格
+        function renderTable() {
+            // 构建PMI数据映射
+            const pmiMMap = {};
+            pmiMData.forEach(d => { pmiMMap[d[0]] = d[1]; });
+            const pmiNMMap = {};
+            pmiNMData.forEach(d => { pmiNMMap[d[0]] = d[1]; });
+
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = RAW_DATA.slice().reverse().map(d => `
+                <tr>
+                    <td>${d.date}</td>
+                    <td>${d.cpi_yoy !== null ? d.cpi_yoy.toFixed(2) : '-'}</td>
+                    <td>${d.ppi_yoy !== null ? d.ppi_yoy.toFixed(2) : '-'}</td>
+                    <td>${pmiMMap[d.date] !== undefined ? pmiMMap[d.date].toFixed(1) : '-'}</td>
+                    <td>${pmiNMMap[d.date] !== undefined ? pmiNMMap[d.date].toFixed(1) : '-'}</td>
+                    <td>${d.bond_yield_10y !== null ? d.bond_yield_10y.toFixed(2) : '-'}</td>
+                </tr>
+            `).join('');
+        }
+        renderTable();
+
+        function filterTable() {
+            const keyword = document.getElementById('search-input').value.toLowerCase();
+            const rows = document.getElementById('table-body').querySelectorAll('tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(keyword) ? '' : 'none';
+            });
+        }
+
+        // ============ 相关性分析 ============
+        function updateCorrRange() {
+            const startInput = document.getElementById('corr-year-start');
+            const endInput = document.getElementById('corr-year-end');
+            let start = parseInt(startInput.value);
+            let end = parseInt(endInput.value);
+
+            if (start > end) {
+                if (this === startInput) {
+                    end = start;
+                    endInput.value = end;
+                } else {
+                    start = end;
+                    startInput.value = start;
+                }
+            }
+
+            document.getElementById('corr-start-label').textContent = start;
+            document.getElementById('corr-end-label').textContent = end;
+
+            const track = document.getElementById('corr-slider-track');
+            const percentStart = ((start - 2002) / (2026 - 2002)) * 100;
+            const percentEnd = ((end - 2002) / (2026 - 2002)) * 100;
+            track.style.left = percentStart + '%';
+            track.style.width = (percentEnd - percentStart) + '%';
+        }
+
+        function pearsonCorrelation(x, y) {
+            const n = x.length;
+            if (n === 0) return 0;
+
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((total, xi, i) => total + xi * y[i], 0);
+            const sumX2 = x.reduce((total, xi) => total + xi * xi, 0);
+            const sumY2 = y.reduce((total, yi) => total + yi * yi, 0);
+
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+
+            if (denominator === 0) return 0;
+            return numerator / denominator;
+        }
+
+        function getColorForCorrelation(r) {
+            if (r > 0.7) return 'rgba(0, 255, 136, 0.7)';
+            if (r > 0.3) return 'rgba(0, 255, 136, 0.4)';
+            if (r > 0) return 'rgba(0, 255, 136, 0.2)';
+            if (r > -0.3) return 'rgba(255, 107, 107, 0.2)';
+            if (r > -0.7) return 'rgba(255, 107, 107, 0.4)';
+            return 'rgba(255, 107, 107, 0.7)';
+        }
+
+        function getTextColorForCorrelation(r) {
+            return Math.abs(r) > 0.3 ? '#fff' : '#a0a8b8';
+        }
+
+        function calculateCorrelation() {
+            // 从滑块获取时间范围
+            const yearStart = parseInt(document.getElementById('corr-year-start').value);
+            const yearEnd = parseInt(document.getElementById('corr-year-end').value);
+
+            // 构建数据映射
+            const dataMap = {};
+            RAW_DATA.forEach(d => {
+                if (d.year >= yearStart && d.year <= yearEnd) {
+                    dataMap[d.date] = d;
+                }
+            });
+
+            // PMI数据映射
+            const pmiMMap = {};
+            pmiMData.forEach(d => { pmiMMap[d[0]] = d[1]; });
+            const pmiNMMap = {};
+            pmiNMData.forEach(d => { pmiNMMap[d[0]] = d[1]; });
+
+            // 提取配对数据（只保留五项都有值的月份）
+            const pairs = [];
+            for (const date in dataMap) {
+                const d = dataMap[date];
+                const pmiM = pmiMMap[date];
+                const pmiNM = pmiNMMap[date];
+                if (d.cpi_yoy !== null && d.ppi_yoy !== null && d.bond_yield_10y !== null && pmiM !== undefined && pmiNM !== undefined) {
+                    pairs.push([d.cpi_yoy, d.ppi_yoy, pmiM, pmiNM, d.bond_yield_10y]);
+                }
+            }
+
+            if (pairs.length < 3) {
+                document.getElementById('corr-matrix').innerHTML = '<div class="corr-loading">数据不足，无法计算相关性</div>';
+                return;
+            }
+
+            // 计算相关系数矩阵
+            const labels = ['CPI', 'PPI', 'PMI-M', 'PMI-NM', '国债'];
+            const corrMatrix = [];
+            for (let i = 0; i < 5; i++) {
+                corrMatrix[i] = [];
+                for (let j = 0; j < 5; j++) {
+                    if (i === j) {
+                        corrMatrix[i][j] = 1.0;
+                    } else {
+                        const seriesI = pairs.map(p => p[i]);
+                        const seriesJ = pairs.map(p => p[j]);
+                        corrMatrix[i][j] = pearsonCorrelation(seriesI, seriesJ);
+                    }
+                }
+            }
+
+            // 渲染矩阵
+            const matrix = document.getElementById('corr-matrix');
+            let matrixHTML = '<div class="corr-cell corr-header"></div>';
+            labels.forEach(label => {
+                matrixHTML += `<div class="corr-cell corr-header">${label}</div>`;
+            });
+
+            labels.forEach((rowLabel, i) => {
+                matrixHTML += `<div class="corr-cell corr-label">${rowLabel}</div>`;
+                for (let j = 0; j < 5; j++) {
+                    if (i === j) {
+                        matrixHTML += `<div class="corr-cell corr-value" style="background: rgba(255,255,255,0.1); color: #a0a8b8;">1.00</div>`;
+                    } else {
+                        const r = corrMatrix[i][j];
+                        matrixHTML += `<div class="corr-cell corr-value" style="background: ${getColorForCorrelation(r)}; color: ${getTextColorForCorrelation(r)};">${r.toFixed(3)}</div>`;
+                    }
+                }
+            });
+
+            matrix.innerHTML = matrixHTML;
+
+            // 渲染解读
+            const interp = document.getElementById('corr-interpretation');
+            const getCorrClass = (r) => r > 0.3 ? 'positive' : (r < -0.3 ? 'negative' : 'neutral');
+            const getCorrDesc = (r) => r > 0.7 ? '强正相关' : (r > 0.3 ? '中等正相关' : (r > 0 ? '弱正相关' : (r > -0.3 ? '弱负相关' : (r > -0.7 ? '中等负相关' : '强负相关'))));
+
+            // 找出强相关对
+            const strongCorrs = [];
+            const pairs_desc = [
+                {i: 0, j: 1, label: 'CPI ↔ PPI'},
+                {i: 0, j: 2, label: 'CPI ↔ 制造业PMI'},
+                {i: 0, j: 3, label: 'CPI ↔ 非制造业PMI'},
+                {i: 0, j: 4, label: 'CPI ↔ 国债'},
+                {i: 1, j: 2, label: 'PPI ↔ 制造业PMI'},
+                {i: 1, j: 3, label: 'PPI ↔ 非制造业PMI'},
+                {i: 1, j: 4, label: 'PPI ↔ 国债'},
+                {i: 2, j: 3, label: '制造业PMI ↔ 非制造业PMI'},
+                {i: 2, j: 4, label: '制造业PMI ↔ 国债'},
+                {i: 3, j: 4, label: '非制造业PMI ↔ 国债'}
+            ];
+
+            pairs_desc.forEach(p => {
+                const r = corrMatrix[p.i][p.j];
+                if (Math.abs(r) > 0.3) {
+                    strongCorrs.push({label: p.label, r: r, desc: getCorrDesc(r)});
+                }
+            });
+
+            let interpHTML = `<h4>📊 相关性解读（样本数：${pairs.length}个月）</h4>`;
+            if (strongCorrs.length > 0) {
+                strongCorrs.forEach(item => {
+                    interpHTML += `<div class="corr-pair">
+                        <span class="label">${item.label}</span>
+                        <span class="value ${getCorrClass(item.r)}">${item.r.toFixed(3)} ${item.desc}</span>
+                    </div>`;
+                });
+            } else {
+                interpHTML += `<p style="color: #7a8599;">暂无显著相关性（|r| > 0.3）</p>`;
+            }
+
+            interpHTML += `
+                <p style="margin-top: 15px;">
+                    <strong>说明：</strong>相关系数范围为-1到1。>0.3表示正相关，<-0.3表示负相关，绝对值越大相关性越强。
+                    皮尔逊相关系数衡量两个变量线性关系的强度和方向。
+                </p>
+            `;
+
+            interp.innerHTML = interpHTML;
+        }
+
+        // 时差相关系数计算
+        function calculateLaggedCorrelation() {
+            const maxLag = parseInt(document.getElementById('lagged-max-lag').value);
+            document.getElementById('lagged-max-lag-value').textContent = maxLag;
+
+            const xi = parseInt(document.getElementById('lagged-x-select').value);
+            const yi = parseInt(document.getElementById('lagged-y-select').value);
+
+            const labels = ['CPI', 'PPI', 'PMI-M', 'PMI-NM', '国债'];
+            const labelX = labels[xi];
+            const labelY = labels[yi];
+
+            // 获取时间范围
+            const yearStart = parseInt(document.getElementById('corr-year-start').value);
+            const yearEnd = parseInt(document.getElementById('corr-year-end').value);
+
+            // 构建日期排序的数据数组
+            const dataMap = {};
+            RAW_DATA.forEach(d => {
+                if (d.year >= yearStart && d.year <= yearEnd) {
+                    dataMap[d.date] = d;
+                }
+            });
+
+            const pmiMMap = {};
+            pmiMData.forEach(d => { pmiMMap[d[0]] = d[1]; });
+            const pmiNMMap = {};
+            pmiNMData.forEach(d => { pmiNMMap[d[0]] = d[1]; });
+
+            // 提取所有日期并排序
+            const dates = Object.keys(dataMap).sort();
+            const allPairs = [];
+
+            for (let i = 0; i < dates.length; i++) {
+                const date = dates[i];
+                const d = dataMap[date];
+                const pmiM = pmiMMap[date];
+                const pmiNM = pmiNMMap[date];
+                if (d.cpi_yoy !== null && d.ppi_yoy !== null && d.bond_yield_10y !== null && pmiM !== undefined && pmiNM !== undefined) {
+                    allPairs.push({
+                        date: date,
+                        values: [d.cpi_yoy, d.ppi_yoy, pmiM, pmiNM, d.bond_yield_10y]
+                    });
+                }
+            }
+
+            if (allPairs.length < maxLag * 2) {
+                document.getElementById('lagged-heatmap').innerHTML = '<div style="color: #ff6b6b; padding: 40px; text-align: center;">数据不足，无法进行时差分析</div>';
+                return;
+            }
+
+            // 计算时差相关系数
+            const laggedCorrs = [];
+            let bestLag = 0;
+            let bestCorr = -999;
+
+            // lag > 0: X领先Y; lag < 0: Y领先X
+            for (let lag = -maxLag; lag <= maxLag; lag++) {
+                const seriesX = [];
+                const seriesY = [];
+
+                for (let i = 0; i < allPairs.length; i++) {
+                    let idxY = i + lag;
+                    if (idxY >= 0 && idxY < allPairs.length) {
+                        seriesX.push(allPairs[i].values[xi]);
+                        seriesY.push(allPairs[idxY].values[yi]);
+                    }
+                }
+
+                if (seriesX.length >= 10) {
+                    const r = pearsonCorrelation(seriesX, seriesY);
+                    laggedCorrs.push({ lag: lag, r: r, n: seriesX.length });
+                    if (Math.abs(r) > Math.abs(bestCorr)) {
+                        bestCorr = r;
+                        bestLag = lag;
+                    }
+                } else {
+                    laggedCorrs.push({ lag: lag, r: null, n: 0 });
+                }
+            }
+
+            // 渲染热力图
+            const heatmap = document.getElementById('lagged-heatmap');
+            let gridCols = maxLag * 2 + 3; // -lag, 0, +lag, plus header and label
+            heatmap.style.gridTemplateColumns = `60px repeat(${gridCols}, 1fr)`;
+
+            let heatmapHTML = '<div class="lagged-heatmap-cell lagged-heatmap-header"></div>';
+            for (let lag = -maxLag; lag <= maxLag; lag++) {
+                const label = lag === 0 ? '0' : (lag > 0 ? `+${lag}` : `${lag}`);
+                heatmapHTML += `<div class="lagged-heatmap-cell lagged-heatmap-header">${label}m</div>`;
+            }
+            heatmapHTML += '</div><div class="lagged-heatmap-row">';
+            heatmapHTML += '<div class="lagged-heatmap-cell lagged-heatmap-label">r</div>';
+
+            laggedCorrs.forEach(item => {
+                if (item.r !== null) {
+                    const color = getColorForCorrelation(item.r);
+                    const textColor = getTextColorForCorrelation(item.r);
+                    heatmapHTML += `<div class="lagged-heatmap-cell" style="background: ${color}; color: ${textColor};">${item.r.toFixed(2)}</div>`;
+                } else {
+                    heatmapHTML += '<div class="lagged-heatmap-cell" style="background: rgba(255,255,255,0.05); color: #4a5568;">-</div>';
+                }
+            });
+            heatmapHTML += '</div>';
+
+            heatmap.innerHTML = heatmapHTML;
+
+            // 渲染解读
+            const interp = document.getElementById('lagged-interpretation');
+            const getCorrClass = (r) => r > 0 ? 'positive' : 'negative';
+            const getCorrDesc = (r) => {
+                if (r > 0.7) return '强正';
+                if (r > 0.3) return '中等正';
+                if (r > 0) return '弱正';
+                if (r > -0.3) return '弱负';
+                if (r > -0.7) return '中等负';
+                return '强负';
+            };
+
+            let interpHTML = `<div class="best-lag">
+                <span class="pair-name">${labelX} vs ${labelY}</span>
+                <span class="lag-info">
+                    <span class="lag-value">最佳滞后期: ${bestLag > 0 ? `${labelX}领先${bestLag}个月` : (bestLag < 0 ? `${labelY}领先${Math.abs(bestLag)}个月` : '同期')}</span>
+                    <span class="corr-value ${getCorrClass(bestCorr)}">r=${bestCorr.toFixed(3)} (${getCorrDesc(bestCorr)}相关)</span>
+                </span>
+            </div>`;
+
+            interp.innerHTML = interpHTML;
+        }
+
+        // 响应式
+        window.addEventListener('resize', () => {
+            mainChart.resize();
+        });
+
+        // 简单resize处理
+        window.onresize = function() {
+            mainChart.resize();
+            if (state.viewMode === 'split') {
+                cpiOverlayChart.resize();
+                ppiOverlayChart.resize();
+                pmiOverlayChart.resize();
+                bondOverlayChart.resize();
+                gdpOverlayChart.resize();
+            }
+        };
+
+        // 初始化双滑块轨道
+        updateDualRange();
+        updateCorrRange();
+
+        // 时差相关系数滑块事件
+        document.getElementById('lagged-max-lag').addEventListener('input', function() {
+            document.getElementById('lagged-max-lag-value').textContent = this.value;
+        });
+    </script>
+</body>
+</html>

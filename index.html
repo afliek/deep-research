@@ -250,6 +250,9 @@
   .card-header.grad-sports {
     background: linear-gradient(135deg, #2d1018 0%, #7b1e3a 40%, #c0392b 100%);
   }
+  .card-header.grad-macro {
+    background: linear-gradient(135deg, #0a1a2e 0%, #0d3d5c 40%, #006d7a 100%);
+  }
   .card-header::after {
     content: '';
     position: absolute;
@@ -400,7 +403,7 @@
   </p>
   <div class="hero-meta">
     <div class="hero-meta-item">
-      <div class="hero-meta-num">2</div>
+      <div class="hero-meta-num">3</div>
       <div class="hero-meta-label">研究主题</div>
     </div>
     <div class="hero-meta-item">
@@ -422,7 +425,7 @@
 <section class="content" id="topics">
   <div class="section-header">
     <div class="section-title"><span class="bar"></span>研究主题</div>
-    <div class="section-count">已发布 2 / 计划中 2+</div>
+    <div class="section-count">已发布 3 / 计划中 2+</div>
   </div>
 
   <div class="card-grid">
@@ -521,22 +524,47 @@
       </div>
     </div>
 
-    <!-- Card 3: Placeholder -->
+    <!-- Card 3: Macro Dashboard -->
     <div class="research-card" data-delay="200">
-      <div class="card-header grad-placeholder">
-        <span class="card-icon" style="opacity:0.4">🔬</span>
-        <span class="card-badge">敬请期待</span>
+      <div class="card-header grad-macro">
+        <span class="card-icon">📊</span>
+        <span class="card-badge">宏观经济</span>
       </div>
       <div class="card-body">
-        <div class="card-title" style="color:var(--text-muted)">待定研究主题</div>
+        <div class="card-title">中国宏观经济数据仪表盘</div>
         <div class="card-desc">
-          更多研究专题正在规划中。每个专题都将包含完整的数据表格、可视化图表与深度分析。
+          2005年至今中国六大宏观经济指标的动态仪表盘：CPI居民消费价格指数、PPI工业生产者出厂价格、制造业与非制造业PMI、10年期国债收益率、名义GDP增速。包含三指标叠加对比、分指标趋势、相关性分析及数据明细表，支持时间范围筛选与多维度切换。
+        </div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <div class="card-stat-val">6<span style="font-size:13px;color:var(--text-muted)">项</span></div>
+            <div class="card-stat-label">核心指标</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-val">20<span style="font-size:13px;color:var(--text-muted)">年+</span></div>
+            <div class="card-stat-label">数据跨度</div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-val">4<span style="font-size:13px;color:var(--text-muted)">视图</span></div>
+            <div class="card-stat-label">可视化模块</div>
+          </div>
         </div>
         <div class="card-tags">
-          <span class="tag" style="border-style:dashed">待定</span>
+          <span class="tag">CPI</span>
+          <span class="tag">PPI</span>
+          <span class="tag">PMI</span>
+          <span class="tag">GDP</span>
+          <span class="tag">国债收益率</span>
         </div>
         <div class="card-links">
-          <span class="card-link disabled">即将上线</span>
+          <a href="macro.html" class="card-link">
+            宏观经济数据仪表盘
+            <span class="arrow">→</span>
+          </a>
+        </div>
+        <div class="card-footer">
+          <span class="card-date">2026.08.03</span>
+          <span>1个子专题</span>
         </div>
       </div>
     </div>
