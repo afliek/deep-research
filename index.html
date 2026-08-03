@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>深层研究 · Deep Research</title>
-<meta name="description" content="深层研究 - 个人深度研究专题集合，覆盖能源、数据、技术等领域。">
+<meta name="description" content="深层研究 - 个人深度研究专题集合，覆盖跳绳竞技、宏观经济等领域。">
 <style>
   :root {
     --bg: #0a0d14;
@@ -19,10 +19,15 @@
     --border: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(59, 130, 246, 0.4);
     --radius: 14px;
+    --cat-sports: #c0392b;
+    --cat-sports-bg: rgba(192, 57, 43, 0.08);
+    --cat-sports-border: rgba(192, 57, 43, 0.25);
+    --cat-macro: #006d7a;
+    --cat-macro-bg: rgba(0, 109, 122, 0.08);
+    --cat-macro-border: rgba(0, 109, 122, 0.25);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -36,10 +41,8 @@
 
   /* Animated grid background */
   .bg-grid {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 0;
-    pointer-events: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0; pointer-events: none;
     background-image:
       linear-gradient(rgba(59, 130, 246, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(59, 130, 246, 0.04) 1px, transparent 1px);
@@ -47,18 +50,14 @@
     mask-image: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
     -webkit-mask-image: radial-gradient(ellipse at 50% 0%, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%);
   }
-
   .bg-glow {
-    position: fixed;
-    top: -30%; left: 50%;
+    position: fixed; top: -30%; left: 50%;
     transform: translateX(-50%);
     width: 800px; height: 600px;
     background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
-    z-index: 0;
-    pointer-events: none;
+    z-index: 0; pointer-events: none;
     animation: glowPulse 8s ease-in-out infinite;
   }
-
   @keyframes glowPulse {
     0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
     50% { opacity: 0.8; transform: translateX(-50%) scale(1.15); }
@@ -77,37 +76,21 @@
     z-index: 100;
   }
   .nav-brand {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: 17px; font-weight: 700;
-    letter-spacing: 1px;
+    color: var(--text-primary); text-decoration: none;
+    font-size: 17px; font-weight: 700; letter-spacing: 1px;
     display: flex; align-items: center; gap: 10px;
   }
   .nav-brand .dot {
     width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
+    background: var(--accent); border-radius: 50%;
     box-shadow: 0 0 12px var(--accent);
   }
-  .nav-links { display: flex; gap: 8px; align-items: center; }
-  .nav-link {
-    color: var(--text-secondary);
-    text-decoration: none;
-    font-size: 13px;
-    padding: 6px 14px;
-    border-radius: 8px;
-    transition: all 0.2s;
-  }
-  .nav-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.06); }
 
-  /* Hero */
+  /* Hero (compact) */
   .hero {
     position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
     text-align: center;
-    padding: 0 24px;
+    padding: 120px 24px 48px;
   }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
@@ -115,261 +98,213 @@
     border: 1px solid var(--border);
     border-radius: 100px;
     font-size: 12px; color: var(--text-secondary);
-    margin-bottom: 32px;
+    margin-bottom: 24px;
     background: rgba(255,255,255,0.03);
     animation: fadeInUp 0.8s ease 0.2s both;
   }
   .hero-badge .pulse {
     width: 6px; height: 6px;
-    background: #10b981;
-    border-radius: 50%;
+    background: #10b981; border-radius: 50%;
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16,185,129,0.4); }
     50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(16,185,129,0); }
   }
-
   .hero-title {
-    font-size: clamp(48px, 8vw, 88px);
-    font-weight: 800;
-    letter-spacing: 2px;
-    line-height: 1.1;
-    margin-bottom: 20px;
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 800; letter-spacing: 2px;
+    line-height: 1.1; margin-bottom: 16px;
     background: linear-gradient(135deg, #e2e8f0 0%, #3b82f6 50%, #06b6d4 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
+    -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: fadeInUp 0.8s ease 0.4s both;
   }
   .hero-tagline {
-    font-size: clamp(16px, 2vw, 20px);
+    font-size: clamp(15px, 1.8vw, 18px);
     color: var(--text-secondary);
-    max-width: 560px;
-    margin-bottom: 40px;
+    max-width: 520px; margin: 0 auto;
     animation: fadeInUp 0.8s ease 0.6s both;
   }
   .hero-tagline strong { color: var(--accent-2); font-weight: 500; }
-  .hero-meta {
-    display: flex; gap: 32px;
-    animation: fadeInUp 0.8s ease 0.8s both;
-  }
-  .hero-meta-item { text-align: center; }
-  .hero-meta-num { font-size: 28px; font-weight: 700; color: var(--text-primary); }
-  .hero-meta-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-
-  .scroll-hint {
-    position: absolute; bottom: 32px; left: 50%;
-    transform: translateX(-50%);
-    color: var(--text-muted);
-    font-size: 12px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    animation: fadeInUp 0.8s ease 1s both;
-  }
-  .scroll-hint .arrow {
-    width: 1px; height: 32px;
-    background: linear-gradient(to bottom, var(--text-muted), transparent);
-    animation: scrollDown 2s infinite;
-  }
-  @keyframes scrollDown {
-    0% { opacity: 0; transform: translateY(-8px); }
-    50% { opacity: 1; }
-    100% { opacity: 0; transform: translateY(8px); }
-  }
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Content section */
-  .content {
+  /* Directory */
+  .directory {
     position: relative; z-index: 1;
-    max-width: 1080px;
+    max-width: 860px;
     margin: 0 auto;
-    padding: 80px 24px 60px;
+    padding: 0 24px 60px;
   }
+
+  /* Category block */
+  .category {
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .category.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .category-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .category-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .category-icon.sports {
+    background: var(--cat-sports-bg);
+    border: 1px solid var(--cat-sports-border);
+  }
+  .category-icon.macro {
+    background: var(--cat-macro-bg);
+    border: 1px solid var(--cat-macro-border);
+  }
+  .category-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--text-primary);
+  }
+  .category-count {
+    font-size: 12px; color: var(--text-muted);
+    margin-left: auto;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+  }
+
+  /* Sub-research item */
+  .sub-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .sub-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    transition: width 0.3s ease;
+  }
+  .sub-item.sports::before { background: var(--cat-sports); }
+  .sub-item.macro::before { background: var(--cat-macro); }
+  .sub-item:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    transform: translateX(4px);
+  }
+  .sub-item:hover::before { width: 5px; }
+
+  .sub-item-body { flex: 1; min-width: 0; }
+  .sub-item-title {
+    font-size: 15px; font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .sub-item-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sub-item-meta {
+    display: flex; gap: 16px;
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .sub-item-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .sub-item-arrow {
+    color: var(--text-muted);
+    font-size: 18px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .sub-item:hover .sub-item-arrow {
+    color: var(--accent-2);
+    transform: translateX(3px);
+  }
+
+  /* Tags within sub-item */
+  .sub-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .sub-tag {
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* About section */
+  .about-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 20px;
+  }
+  .about-box p {
+    font-size: 14px; color: var(--text-secondary); line-height: 1.9;
+  }
+  .about-box p + p { margin-top: 10px; }
+
+  /* Section header */
   .section-header {
     display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 36px;
-    padding-bottom: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
   }
   .section-title {
-    font-size: 22px; font-weight: 700;
+    font-size: 18px; font-weight: 700;
     color: var(--text-primary);
     display: flex; align-items: center; gap: 10px;
   }
   .section-title .bar {
-    width: 4px; height: 20px;
+    width: 4px; height: 18px;
     background: var(--accent);
     border-radius: 2px;
   }
-  .section-count { font-size: 13px; color: var(--text-muted); }
-
-  /* Research cards */
-  .card-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .research-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex; flex-direction: column;
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  .research-card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .research-card:hover {
-    background: var(--bg-card-hover);
-    border-color: var(--border-hover);
-    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
-    transform: translateY(-4px);
-  }
-
-  .card-header {
-    height: 120px;
-    position: relative;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .card-header.grad-energy {
-    background: linear-gradient(135deg, #1a3a2e 0%, #0d4f3c 40%, #0a6e4a 100%);
-  }
-  .card-header.grad-placeholder {
-    background: linear-gradient(135deg, #1a1f2e 0%, #1e2538 100%);
-  }
-  .card-header.grad-sports {
-    background: linear-gradient(135deg, #2d1018 0%, #7b1e3a 40%, #c0392b 100%);
-  }
-  .card-header.grad-macro {
-    background: linear-gradient(135deg, #0a1a2e 0%, #0d3d5c 40%, #006d7a 100%);
-  }
-  .card-header::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-  .card-icon {
-    position: relative; z-index: 1;
-    font-size: 42px;
-  }
-  .card-badge {
-    position: absolute;
-    top: 14px; right: 14px;
-    padding: 4px 10px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 100px;
-    font-size: 11px;
-    color: rgba(255,255,255,0.85);
-    backdrop-filter: blur(4px);
-    z-index: 2;
-  }
-
-  .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-  .card-title {
-    font-size: 19px; font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-  }
-  .card-desc {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 16px;
-    flex: 1;
-  }
-  .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-  .tag {
-    padding: 3px 10px;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-  .card-links {
-    display: flex; flex-wrap: wrap; gap: 10px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-  }
-  .card-link {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px;
-    background: rgba(59, 130, 246, 0.1);
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 8px;
-    color: var(--accent-2);
-    text-decoration: none;
-    font-size: 13px; font-weight: 500;
-    transition: all 0.2s;
-  }
-  .card-link:hover {
-    background: rgba(59, 130, 246, 0.2);
-    border-color: rgba(59, 130, 246, 0.4);
-    transform: translateX(2px);
-  }
-  .card-link .arrow { transition: transform 0.2s; }
-  .card-link:hover .arrow { transform: translateX(3px); }
-
-  .card-link.disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  .card-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 14px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
-  .card-date { display: flex; align-items: center; gap: 6px; }
-
-  /* Stats row in card */
-  .card-stats {
-    display: flex; gap: 20px;
-    margin-bottom: 16px;
-  }
-  .card-stat { text-align: left; }
-  .card-stat-val { font-size: 20px; font-weight: 700; color: var(--text-primary); }
-  .card-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
 
   /* Footer */
   .footer {
     position: relative; z-index: 1;
     text-align: center;
-    padding: 48px 24px 40px;
+    padding: 40px 24px 36px;
     border-top: 1px solid var(--border);
   }
   .footer p { font-size: 13px; color: var(--text-muted); line-height: 1.8; }
-  .footer a { color: var(--text-secondary); text-decoration: none; }
-  .footer a:hover { color: var(--accent-2); }
 
-  /* Responsive */
-  @media (min-width: 680px) {
-    .card-grid { grid-template-columns: 1fr; }
-  }
-  @media (min-width: 880px) {
-    .card-grid { grid-template-columns: 1fr 1fr; }
-  }
   @media (max-width: 520px) {
     .nav-brand { font-size: 15px; }
-    .nav-link { display: none; }
-    .hero-meta { gap: 20px; }
-    .card-stats { gap: 12px; }
+    .hero { padding: 100px 16px 32px; }
+    .directory { padding: 0 16px 40px; }
+    .sub-item { padding: 14px 16px; }
+    .sub-item-desc { white-space: normal; }
   }
 </style>
 </head>
@@ -384,10 +319,6 @@
     <span class="dot"></span>
     深层研究
   </a>
-  <div class="nav-links">
-    <a href="#topics" class="nav-link">研究主题</a>
-    <a href="#about" class="nav-link">关于</a>
-  </div>
 </nav>
 
 <!-- Hero -->
@@ -398,197 +329,99 @@
   </div>
   <h1 class="hero-title">深层研究</h1>
   <p class="hero-tagline">
-    独立视角下的<strong>深度数据分析</strong>与研究专题<br>
-    覆盖能源转型、宏观经济、技术演进等领域
+    独立视角下的<strong>深度数据分析</strong>与研究专题
   </p>
-  <div class="hero-meta">
-    <div class="hero-meta-item">
-      <div class="hero-meta-num">3</div>
-      <div class="hero-meta-label">研究主题</div>
-    </div>
-    <div class="hero-meta-item">
-      <div class="hero-meta-num">36<span style="font-size:16px;font-weight:400;color:var(--text-muted)">年</span></div>
-      <div class="hero-meta-label">时间跨度</div>
-    </div>
-    <div class="hero-meta-item">
-      <div class="hero-meta-num">100<span style="font-size:16px;font-weight:400;color:var(--text-muted)">%</span></div>
-      <div class="hero-meta-label">公开数据</div>
-    </div>
-  </div>
-  <div class="scroll-hint">
-    向下滚动
-    <div class="arrow"></div>
-  </div>
 </section>
 
-<!-- Research Topics -->
-<section class="content" id="topics">
-  <div class="section-header">
-    <div class="section-title"><span class="bar"></span>研究主题</div>
-    <div class="section-count">已发布 3 / 计划中 2+</div>
+<!-- Directory -->
+<section class="directory" id="topics">
+
+  <!-- Category 1: 跳绳 -->
+  <div class="category" data-delay="0">
+    <div class="category-header">
+      <div class="category-icon sports">🏃</div>
+      <div class="category-title">跳绳</div>
+      <div class="category-count">1 个研究</div>
+    </div>
+
+    <a href="jumprope.html" class="sub-item sports">
+      <div class="sub-item-body">
+        <div class="sub-item-title">跳绳运动竞技数据分析</div>
+        <div class="sub-item-desc">2024-2026年全国跳绳联赛/锦标赛总决赛成绩深度分析，覆盖369支队伍排名、健坤队134条获奖记录、UJR世界联赛及17站分站赛成绩册</div>
+        <div class="sub-tags">
+          <span class="sub-tag">联赛成绩</span>
+          <span class="sub-tag">队伍排名</span>
+          <span class="sub-tag">健坤队</span>
+          <span class="sub-tag">UJR</span>
+        </div>
+      </div>
+      <span class="sub-item-arrow">→</span>
+    </a>
   </div>
 
-  <div class="card-grid">
-
-    <!-- Card 1: Power Research -->
-    <div class="research-card" data-delay="0">
-      <div class="card-header grad-energy">
-        <span class="card-icon">⚡</span>
-        <span class="card-badge">能源 · 电力</span>
-      </div>
-      <div class="card-body">
-        <div class="card-title">中国电力发展研究</div>
-        <div class="card-desc">
-          1990-2025年中国发电装机容量与各类型发电量的深度数据分析，覆盖36年发展历程、能源结构转型趋势及关键里程碑。从1.38亿千瓦到38.9亿千瓦，见证中国电力工业27倍增长的完整轨迹。
-        </div>
-        <div class="card-stats">
-          <div class="card-stat">
-            <div class="card-stat-val">36<span style="font-size:13px;color:var(--text-muted)">年</span></div>
-            <div class="card-stat-label">时间跨度</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">38.9<span style="font-size:13px;color:var(--text-muted)">亿kW</span></div>
-            <div class="card-stat-label">2025装机</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">10.6<span style="font-size:13px;color:var(--text-muted)">万亿kWh</span></div>
-            <div class="card-stat-label">2025发电量</div>
-          </div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">电力</span>
-          <span class="tag">能源转型</span>
-          <span class="tag">数据可视化</span>
-          <span class="tag">火电</span>
-          <span class="tag">风光</span>
-        </div>
-        <div class="card-links">
-          <a href="capacity.html" class="card-link">
-            装机容量及增长率
-            <span class="arrow">→</span>
-          </a>
-          <a href="generation.html" class="card-link">
-            各类型发电量及增速
-            <span class="arrow">→</span>
-          </a>
-        </div>
-        <div class="card-footer">
-          <span class="card-date">2026.08.03</span>
-          <span>2个子专题</span>
-        </div>
-      </div>
+  <!-- Category 2: 宏观经济类 -->
+  <div class="category" data-delay="100">
+    <div class="category-header">
+      <div class="category-icon macro">📊</div>
+      <div class="category-title">宏观经济类</div>
+      <div class="category-count">3 个研究</div>
     </div>
 
-    <!-- Card 2: Jump Rope Research -->
-    <div class="research-card" data-delay="100">
-      <div class="card-header grad-sports">
-        <span class="card-icon">🏃</span>
-        <span class="card-badge">体育 · 跳绳</span>
-      </div>
-      <div class="card-body">
-        <div class="card-title">跳绳运动竞技数据分析</div>
-        <div class="card-desc">
-          2024-2026年全国跳绳联赛/锦标赛总决赛成绩深度分析，覆盖369支参赛队伍排名、运动员获奖排行、北京健坤跳绳队134条获奖记录、五一大师班训练数据，以及UJR世界跳绳联赛与17站分站赛成绩册。
-        </div>
-        <div class="card-stats">
-          <div class="card-stat">
-            <div class="card-stat-val">369<span style="font-size:13px;color:var(--text-muted)">支</span></div>
-            <div class="card-stat-label">参赛队伍</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">134<span style="font-size:13px;color:var(--text-muted)">条</span></div>
-            <div class="card-stat-label">健坤获奖</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">17<span style="font-size:13px;color:var(--text-muted)">站</span></div>
-            <div class="card-stat-label">分站赛</div>
-          </div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">跳绳</span>
-          <span class="tag">竞技体育</span>
-          <span class="tag">数据分析</span>
-          <span class="tag">健坤队</span>
-          <span class="tag">UJR</span>
-        </div>
-        <div class="card-links">
-          <a href="jumprope.html" class="card-link">
-            跳绳竞技数据分析
-            <span class="arrow">→</span>
-          </a>
-        </div>
-        <div class="card-footer">
-          <span class="card-date">2026.08.03</span>
-          <span>1个子专题</span>
+    <a href="macro.html" class="sub-item macro">
+      <div class="sub-item-body">
+        <div class="sub-item-title">中国宏观经济数据仪表盘</div>
+        <div class="sub-item-desc">CPI、PPI、制造业/非制造业PMI、10年期国债收益率、名义GDP增速六大指标动态仪表盘，含三指标叠加对比与相关性分析</div>
+        <div class="sub-tags">
+          <span class="sub-tag">CPI</span>
+          <span class="sub-tag">PPI</span>
+          <span class="sub-tag">PMI</span>
+          <span class="sub-tag">GDP</span>
         </div>
       </div>
-    </div>
+      <span class="sub-item-arrow">→</span>
+    </a>
 
-    <!-- Card 3: Macro Dashboard -->
-    <div class="research-card" data-delay="200">
-      <div class="card-header grad-macro">
-        <span class="card-icon">📊</span>
-        <span class="card-badge">宏观经济</span>
-      </div>
-      <div class="card-body">
-        <div class="card-title">中国宏观经济数据仪表盘</div>
-        <div class="card-desc">
-          2005年至今中国六大宏观经济指标的动态仪表盘：CPI居民消费价格指数、PPI工业生产者出厂价格、制造业与非制造业PMI、10年期国债收益率、名义GDP增速。包含三指标叠加对比、分指标趋势、相关性分析及数据明细表，支持时间范围筛选与多维度切换。
-        </div>
-        <div class="card-stats">
-          <div class="card-stat">
-            <div class="card-stat-val">6<span style="font-size:13px;color:var(--text-muted)">项</span></div>
-            <div class="card-stat-label">核心指标</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">20<span style="font-size:13px;color:var(--text-muted)">年+</span></div>
-            <div class="card-stat-label">数据跨度</div>
-          </div>
-          <div class="card-stat">
-            <div class="card-stat-val">4<span style="font-size:13px;color:var(--text-muted)">视图</span></div>
-            <div class="card-stat-label">可视化模块</div>
-          </div>
-        </div>
-        <div class="card-tags">
-          <span class="tag">CPI</span>
-          <span class="tag">PPI</span>
-          <span class="tag">PMI</span>
-          <span class="tag">GDP</span>
-          <span class="tag">国债收益率</span>
-        </div>
-        <div class="card-links">
-          <a href="macro.html" class="card-link">
-            宏观经济数据仪表盘
-            <span class="arrow">→</span>
-          </a>
-        </div>
-        <div class="card-footer">
-          <span class="card-date">2026.08.03</span>
-          <span>1个子专题</span>
+    <a href="capacity.html" class="sub-item macro">
+      <div class="sub-item-body">
+        <div class="sub-item-title">发电装机容量及增长率</div>
+        <div class="sub-item-desc">1990-2025年中国发电装机容量从1.38亿千瓦到38.9亿千瓦的36年完整轨迹，含各类型装机结构变化与关键里程碑</div>
+        <div class="sub-tags">
+          <span class="sub-tag">电力</span>
+          <span class="sub-tag">装机容量</span>
+          <span class="sub-tag">能源转型</span>
         </div>
       </div>
-    </div>
+      <span class="sub-item-arrow">→</span>
+    </a>
 
+    <a href="generation.html" class="sub-item macro">
+      <div class="sub-item-body">
+        <div class="sub-item-title">各类型发电量及增速</div>
+        <div class="sub-item-desc">火电、水电、核电、风电、太阳能发电量1990-2025年趋势分析，2025年总发电量10.6万亿千瓦时，结构转型可视化</div>
+        <div class="sub-tags">
+          <span class="sub-tag">发电量</span>
+          <span class="sub-tag">火电</span>
+          <span class="sub-tag">风光</span>
+        </div>
+      </div>
+      <span class="sub-item-arrow">→</span>
+    </a>
   </div>
-</section>
 
-<!-- About -->
-<section class="content" id="about" style="padding-top:0">
-  <div class="section-header">
+  <!-- About -->
+  <div class="section-header" style="margin-top:40px">
     <div class="section-title"><span class="bar"></span>关于</div>
   </div>
-  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;">
-    <p style="font-size:14px;color:var(--text-secondary);line-height:1.9;margin-bottom:14px;">
-      <strong style="color:var(--text-primary)">深层研究</strong> 是一个个人研究专题集合，旨在以独立视角对感兴趣的主题进行深度数据分析与可视化呈现。所有研究均基于公开数据来源，力求严谨、客观、可追溯。
+  <div class="about-box">
+    <p>
+      <strong style="color:var(--text-primary)">深层研究</strong> 是一个个人研究专题集合，以独立视角对感兴趣的主题进行深度数据分析与可视化呈现。所有研究均基于公开数据来源，力求严谨、客观、可追溯。
     </p>
-    <p style="font-size:14px;color:var(--text-secondary);line-height:1.9;margin-bottom:14px;">
-      每个专题包含完整的数据表格、多维度可视化图表及关键发现总结。研究主题持续扩展中，涵盖能源、经济、技术等领域。
-    </p>
-    <p style="font-size:13px;color:var(--text-muted);line-height:1.8;">
-      数据来源：国家能源局、国家统计局、中国电力企业联合会等官方机构<br>
+    <p style="font-size:13px;color:var(--text-muted)">
+      数据来源：国家能源局、国家统计局、中国电力企业联合会、全国跳绳联赛官方成绩册等<br>
       更新频率：不定期，跟随数据发布节奏更新
     </p>
   </div>
+
 </section>
 
 <!-- Footer -->
@@ -598,7 +431,7 @@
 </footer>
 
 <script>
-  // Scroll-triggered card animations
+  // Scroll-triggered category animations
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -607,20 +440,9 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.15 });
+  }, { threshold: 0.1 });
 
-  document.querySelectorAll('.research-card').forEach(card => observer.observe(card));
-
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', e => {
-      const target = document.querySelector(link.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
+  document.querySelectorAll('.category').forEach(cat => observer.observe(cat));
 </script>
 
 </body>
