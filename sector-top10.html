@@ -258,8 +258,9 @@
   <!-- 20年趋势分析 -->
   <div class="card" style="margin-top:24px;">
     <h2>四、近20年占比趋势：哪些行业的净利润占比在上升？</h2>
-    <div class="sub">口径：各行业净利润占标普500总利润比重（%），2006年 vs 2024年（BofA口径），2025年为估算</div>
+    <div class="sub">上图为2006 vs 2024年占比变化幅度（BofA口径）；下图展示2006-2025年逐年占比轨迹，逐年序列为基于关键数据点与行业事件的估算，虚线标注金融危机（2008）、疫情（2020）、俄乌油价冲击（2022）</div>
     <div id="chart4" style="width:100%;height:460px;"></div>
+    <div id="chart5" style="width:100%;height:500px;margin-top:18px;"></div>
     <table class="plain">
       <tr><th style="width:100px">梯队</th><th style="width:100px">行业</th><th>20年占比变化</th></tr>
       <tr><td><b>持续上升</b></td><td>信息技术</td><td>10% → 20.2%（+10.2pct，唯一占比翻倍的行业）</td></tr>
@@ -390,6 +391,46 @@
   window.__c4 = ch;
 })();
 
+
+// ============ 图5：2006-2025逐年占比轨迹 ============
+(function(){
+  var years = ['2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+  var series = [
+    { name: '信息技术', color: '#6366f1', data: [10,10.5,11.5,12.5,14,14.5,15,15.5,16,16.5,16.5,17,17.5,18,18.5,19.5,19,19.5,20.2,22] },
+    { name: '金融', color: '#0ea5e9', data: [28,25,-5,0,12,13,15,16,17,17.5,16.5,15.5,16,16.5,15,12,13,15.5,14.9,15] },
+    { name: '医疗保健', color: '#22c55e', data: [9,9.5,10,12,14.7,14.5,14,14,14.5,14.5,15,15,15.5,15.3,15.3,14.5,13.5,13.4,13.3,14] },
+    { name: '通信服务', color: '#a855f7', data: [5,5.2,5.5,5.5,6,6.2,6.5,6.8,7,7.5,7.5,7.8,9.5,10,11,10.5,10,9.5,9.1,8.8] },
+    { name: '工业', color: '#f59e0b', data: [9,8.5,7.5,7,7,7.5,7.5,7.5,7.8,8,8,8.2,8,7.8,7,7.5,7.5,7.5,8.1,8.5] },
+    { name: '可选消费', color: '#ef4444', data: [7,6.5,6,6,6,6.3,6.5,6.8,7,7,7.2,7.5,7.8,8,8.5,9,8.8,8.5,8.0,7.5] },
+    { name: '能源', color: '#d97706', data: [12,12.5,13,10,10,11,10.5,10,8.5,7,6,5.5,6,6.5,-1.5,5,15,8,6.2,5.5] },
+    { name: '必需消费', color: '#f97316', data: [6.5,6.8,7,7.2,7,6.8,6.6,6.5,6.5,6.5,6.4,6.2,6,6,6,6.2,6,5.8,5.6,5.5] },
+    { name: '公用事业', color: '#14b8a6', data: [3,3.2,3.4,3.5,3.5,3.4,3.3,3.2,3.1,3,3,3,3,3.2,3.2,3,2.9,2.8,2.7,2.8] },
+    { name: '房地产', color: '#d946ef', data: [2,2.1,1.8,1.5,1.5,1.6,1.7,1.8,1.9,2,2,2.1,2.2,2.3,2.5,2.5,2.5,2.5,2.6,2.5] }
+  ];
+  var ch = echarts.init(document.getElementById('chart5'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(ps){
+      var s = ps[0].axisValue + '年<br/>';
+      ps.forEach(function(p){ s += p.marker + ' ' + p.seriesName + '：' + (p.value < 0 ? '亏损约' + (-p.value) + '%' : p.value + '%') + '<br/>'; });
+      return s;
+    } },
+    legend: { bottom: 0, textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 14, itemHeight: 9, selectedMode: 'multiple' },
+    grid: { left: 55, right: 25, top: 40, bottom: 60 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8', interval: 1 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: -8, max: 30, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: series.map(function(s){
+      return {
+        name: s.name, type: 'line', data: s.data, smooth: true, symbolSize: 4,
+        lineStyle: { width: 2.2, color: s.color }, itemStyle: { color: s.color },
+        markLine: s.name === '信息技术' ? { silent: true, symbol: 'none', lineStyle: { color: 'rgba(255,255,255,0.22)', type: 'dashed', width: 1 }, label: { color: '#64748b', fontSize: 10 }, data: [
+          { xAxis: '2008', name: '金融危机' }, { xAxis: '2020', name: '疫情' }, { xAxis: '2022', name: '俄乌油价冲击' }
+        ] } : undefined
+      };
+    })
+  });
+  window.__c5 = ch;
+})();
+
 // ============ 图表/表格切换 ============
 document.querySelectorAll('.tab').forEach(function(tab){
   tab.addEventListener('click', function(){
@@ -409,6 +450,7 @@ window.addEventListener('resize', function(){
   if (window.__c1) window.__c1.resize();
   if (window.__c2) window.__c2.resize();
   if (window.__c4) window.__c4.resize();
+  if (window.__c5) window.__c5.resize();
 });
 </script>
 </body>
