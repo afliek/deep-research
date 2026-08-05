@@ -64,20 +64,17 @@
   .view-table.active { display:block; }
   .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
   /* 行业卡片 */
-  .sec-grid { display:grid; grid-template-columns:1fr; gap:14px; }
-  @media (min-width:880px) { .sec-grid { grid-template-columns:1fr 1fr; } }
-  .sec-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; transition:all .25s; text-decoration:none; display:block; cursor:pointer; }
-  .sec-card:hover { border-color:rgba(99,102,241,0.4); transform:translateY(-2px); background:var(--bg-card-hover); }
-  .sec-card:hover .sec-name { color:var(--accent-2); }
-  .sec-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-  .sec-rank { width:26px; height:26px; border-radius:8px; background:rgba(99,102,241,0.15); color:#a5b4fc; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .sec-name { font-size:16px; font-weight:700; color:#f1f5f9; }
-  .sec-share { margin-left:auto; font-size:13px; font-weight:700; color:var(--accent-2); }
-  .sec-share small { font-size:11px; color:var(--text-muted); font-weight:400; }
-  .sec-comps { font-size:13px; color:var(--text-secondary); line-height:1.8; margin-bottom:8px; }
-  .sec-comps b { color:#e2e8f0; }
-  .sec-drive { font-size:12px; color:var(--text-muted); line-height:1.7; border-top:1px dashed var(--border); padding-top:8px; }
-  @media(max-width:760px){ .kpi .num{font-size:20px;} .chart-box{height:320px;} }
+  .sec-grid { display:flex; flex-direction:column; gap:8px; }
+  .sec-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; text-decoration:none; transition:all .2s; cursor:pointer; }
+  .sec-card:hover { border-color:rgba(99,102,241,0.4); background:var(--bg-card-hover); }
+  .sec-rank { width:24px; height:24px; border-radius:6px; background:rgba(99,102,241,0.15); color:#a5b4fc; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sec-name { font-size:14px; font-weight:600; color:#f1f5f9; width:76px; flex-shrink:0; }
+  .sec-share { font-size:13px; font-weight:600; color:var(--accent-2); width:52px; flex-shrink:0; }
+  .sec-brief { flex:1; min-width:0; font-size:12px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sec-arrow { color:var(--text-muted); font-size:13px; flex-shrink:0; transition:all .2s; }
+  .sec-card:hover .sec-arrow { color:var(--accent-2); transform:translateX(3px); }
+  @media(max-width:520px){ .sec-name{width:64px;} .sec-share{width:46px;} }
+@media(max-width:760px){ .kpi .num{font-size:20px;} .chart-box{height:320px;} }
 </style>
 </head>
 <body>
@@ -184,169 +181,78 @@
   </div>
 
   <!-- 行业卡片 -->
-  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业逐一分析（点击卡片进入详细页）</h2>
-  <div class="sec-grid">
-
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业逐一分析（点击行进入详细页）</h2>
+    <div class="sec-grid">
     <a class="sec-card" href="tech-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">1</div>
-        <div class="sec-name">信息技术</div>
-        <div class="sec-share">20.2%<small>（4534亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：英伟达1201亿 &gt; 苹果1120亿 &gt; 微软1018亿 &gt; 博通231亿<br>
-        <b>格局</b>：前三家占板块利润约74%，赢家通吃
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约10% → 20.2% ↑↑（唯一占比翻倍板块）<br>
-        <b>核心驱动</b>：移动互联网 → 云计算 → AI算力革命。英伟达FY2026净利润1201亿美元、首次登顶全球利润最高公司。<b>2025年占比约22%</b>。
-      </div>
+      <span class="sec-rank">1</span>
+      <span class="sec-name">信息技术</span>
+      <span class="sec-share">20.2%</span>
+      <span class="sec-brief">英伟达/苹果/微软领衔，AI驱动占比10%→22%翻倍</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="finance-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">2</div>
-        <div class="sec-name">金融</div>
-        <div class="sec-share">14.9%<small>（3353亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：伯克希尔670亿 &gt; 摩根大通568亿 &gt; 美国银行305亿 &gt; 富国213亿<br>
-        <b>格局</b>：六大行合计1568亿，行业高度集中
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约28% → 2008巨亏 → 12-17%波动 ↓<br>
-        <b>核心驱动</b>：2008金融危机终结高杠杆时代；2022年加息红利、2025年降息下信贷扩张接棒。监管永久压低利润占比上限。<b>2025年约15%</b>。
-      </div>
+      <span class="sec-rank">2</span>
+      <span class="sec-name">金融</span>
+      <span class="sec-share">14.9%</span>
+      <span class="sec-brief">六大行合计1568亿，2008年后占比28%→15%腰斩</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="pharma-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">3</div>
-        <div class="sec-name">医疗保健</div>
-        <div class="sec-share">13.3%<small>（2998亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：强生268亿 &gt; 礼来206亿 &gt; 默沙东183亿 &gt; 吉利德85亿<br>
-        <b>格局</b>：制药+医疗器械+健康保险广义口径
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约9% → 14-15% → 13.3% （中枢上移）<br>
-        <b>核心驱动</b>：2008危机被动抬升+老龄化+创新药周期；GLP-1减肥药（礼来+95%）驱动2025年反弹。<b>2025年约13-14%</b>。
-      </div>
+      <span class="sec-rank">3</span>
+      <span class="sec-name">医疗保健</span>
+      <span class="sec-share">13.3%</span>
+      <span class="sec-brief">强生/礼来/默沙东，GLP-1创新药驱动</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="comm-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">4</div>
-        <div class="sec-name">通信服务</div>
-        <div class="sec-share">9.1%<small>（2053亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：谷歌1322亿 &gt; Meta605亿 &gt; 康卡斯特约200亿 &gt; 迪士尼124亿<br>
-        <b>格局</b>：谷歌+Meta占板块约75%，双寡头
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约5% → 2020年峰值11% → 9.1% （2018年GICS重分类）<br>
-        <b>核心驱动</b>：数字广告双寡头；2025年谷歌+32%、Meta因AI资本开支与税改费用 -3%。<b>2025年约8.5-9%</b>。
-      </div>
+      <span class="sec-rank">4</span>
+      <span class="sec-name">通信服务</span>
+      <span class="sec-share">9.1%</span>
+      <span class="sec-brief">谷歌/Meta双寡头占75%，数字广告驱动</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="industrial-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">5</div>
-        <div class="sec-name">工业</div>
-        <div class="sec-share">8.1%<small>（1819亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：卡特彼勒89亿 &gt; GE航空87亿 &gt; 联合太平洋71亿 &gt; 雷神67亿<br>
-        <b>格局</b>：机械/运输/航空航天国防三分天下
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：7-9% 横盘（最稳定板块之一）<br>
-        <b>核心驱动</b>：国防+航空航天超级周期（GE航空订单1900亿$）、制造业回流、AI数据中心基建。波音2025年扭亏22亿。<b>2025年约8.5%</b>。
-      </div>
+      <span class="sec-rank">5</span>
+      <span class="sec-name">工业</span>
+      <span class="sec-share">8.1%</span>
+      <span class="sec-brief">卡特彼勒/GE航空领衔，国防+AI基建</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="consumer-disc-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">6</div>
-        <div class="sec-name">可选消费</div>
-        <div class="sec-share">8.0%<small>（1793亿$���</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：亚马逊777亿 &gt; 家得宝约150亿* &gt; 麦当劳约82亿* &gt; 特斯拉38亿<br>
-        <b>格局</b>：亚马逊一家占板块利润约43%
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约7% → 8.0% 温和上行<br>
-        <b>核心驱动</b>：电商与云计算（亚马逊AWS扭亏后利润爆增）+零售巨头；特斯拉2025年净利大降至38亿、拖累板块。<b>2025年约7.5%</b>（*为2024财年或估算）。
-      </div>
+      <span class="sec-rank">6</span>
+      <span class="sec-name">可选消费</span>
+      <span class="sec-share">8.0%</span>
+      <span class="sec-brief">亚马逊一家占43%，特斯拉拖累</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="energy-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">7</div>
-        <div class="sec-name">能源</div>
-        <div class="sec-share">6.2%<small>（1405亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：埃克森美孚约300亿* &gt; 雪佛龙约150亿* &gt; 康菲约80亿*<br>
-        <b>格局</b>：综合油企+页岩生产商
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约12% → 2022年峰值15%+ → 6.2% ↓↓<br>
-        <b>核心驱动</b>：油价周期主导——2022年俄乌冲突油价暴涨曾使能源重回前三，2023-2025年油价回落利润大幅缩水。<b>2025年约5.5%</b>（*估算，2025年油价下行）。
-      </div>
+      <span class="sec-rank">7</span>
+      <span class="sec-name">能源</span>
+      <span class="sec-share">6.2%</span>
+      <span class="sec-brief">埃克森美孚/雪佛龙，油价从15%回落</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="consumer-staples-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">8</div>
-        <div class="sec-name">必需消费</div>
-        <div class="sec-share">5.6%<small>（1266亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：沃尔玛194亿 &gt; 宝洁160亿 &gt; 可口可乐131亿 &gt; 百事约100亿*<br>
-        <b>格局</b>：零售+品牌快消，防御属性
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约6% → 5.6% 缓慢下行<br>
-        <b>核心驱动</b>：提价能力+品牌护城河维持利润率；但增长平淡、被科技虹吸。沃尔玛FY2026净利219亿创纪录。<b>2025年约5.5%</b>（*为2024财年）。
-      </div>
+      <span class="sec-rank">8</span>
+      <span class="sec-name">必需消费</span>
+      <span class="sec-share">5.6%</span>
+      <span class="sec-brief">沃尔玛/宝洁/可口可乐，稳定防御</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="utility-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">9</div>
-        <div class="sec-name">公用事业</div>
-        <div class="sec-share">2.7%<small>（601亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：NextEra约70亿* &gt; 南方公司约40亿* &gt; 杜克能源约38亿*<br>
-        <b>格局</b>：电力/燃气监管公用事业
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约3% → 2.7% 基本稳定<br>
-        <b>核心驱动</b>：利润率受监管约束、以分红回报为主；<b>2024年起AI数据中心用电需求成为新的增长叙事</b>（美国电力负荷预测上修）。<b>2025年约2.8%</b>（*为估算）。
-      </div>
+      <span class="sec-rank">9</span>
+      <span class="sec-name">公用事业</span>
+      <span class="sec-share">2.7%</span>
+      <span class="sec-brief">新纪元/杜克/南方，AI电力新叙事</span>
+      <span class="sec-arrow">→</span>
     </a>
-
     <a class="sec-card" href="realestate-profit.html">
-      <div class="sec-head">
-        <div class="sec-rank">10</div>
-        <div class="sec-name">房地产</div>
-        <div class="sec-share">2.6%<small>（576亿$）</small></div>
-      </div>
-      <div class="sec-comps">
-        <b>龙头利润</b>：安博约35亿* &gt; 美国铁塔约30亿* &gt; 数字房地产约28亿*<br>
-        <b>格局</b>：REITs为主（须分配90%应税收入）
-      </div>
-      <div class="sec-drive">
-        <b>20年轨迹</b>：约2% → 2.6% 温和上升<br>
-        <b>核心驱动</b>：工业物流（安博）、通信铁塔（美国铁塔）、<b>数据中心REITs（数字房地产）因AI算力需求利润大增</b>；口径特殊（FFO更常用）。<b>2025年约2.5%</b>（*为估算）。
-      </div>
+      <span class="sec-rank">10</span>
+      <span class="sec-name">房地产</span>
+      <span class="sec-share">2.6%</span>
+      <span class="sec-brief">REITs为主，数据中心REITs受益AI</span>
+      <span class="sec-arrow">→</span>
     </a>
-
   </div>
 
   <!-- 总结 -->
