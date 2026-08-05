@@ -255,9 +255,33 @@
     </a>
   </div>
 
+  <!-- 20年趋势分析 -->
+  <div class="card" style="margin-top:24px;">
+    <h2>四、近20年占比趋势：哪些行业的净利润占比在上升？</h2>
+    <div class="sub">口径：各行业净利润占标普500总利润比重（%），2006年 vs 2024年（BofA口径），2025年为估算</div>
+    <div id="chart4" style="width:100%;height:460px;"></div>
+    <table class="plain">
+      <tr><th style="width:100px">梯队</th><th style="width:100px">行业</th><th>20年占比变化</th></tr>
+      <tr><td><b>持续上升</b></td><td>信息技术</td><td>10% → 20.2%（+10.2pct，唯一占比翻倍的行业）</td></tr>
+      <tr><td rowspan="4"><b>中枢上移</b></td><td>医疗保健</td><td>9% → 13.3%（+4.3pct，2020年峰值15.3%后回落）</td></tr>
+      <tr><td>通信服务</td><td>5% → 9.1%（+4.1pct，2018年GICS重分类含谷歌/Meta）</td></tr>
+      <tr><td>可选消费</td><td>7% → 8.0%（+1.0pct，亚马逊一家驱动）</td></tr>
+      <tr><td>房地产</td><td>2% → 2.6%（+0.6pct，REITs扩容+数据中心REITs）</td></tr>
+      <tr><td rowspan="2"><b>横盘</b></td><td>工业</td><td>9% → 8.1%（-0.9pct，7-9%区间波动20年）</td></tr>
+      <tr><td>公用事业</td><td>3% → 2.7%（-0.3pct，受监管利润率）</td></tr>
+      <tr><td rowspan="3"><b>下降</b></td><td>金融</td><td>28% → 14.9%（-13.1pct，2008危机后占比腰斩）</td></tr>
+      <tr><td>能源</td><td>12% → 6.2%（-5.8pct，油价周期+能源转型，2020年曾整体亏损）</td></tr>
+      <tr><td>必需消费</td><td>6.5% → 5.6%（-0.9pct，被科技虹吸）</td></tr>
+    </table>
+    <div class="note">
+      <b>核心规律：</b>严格意义上没有行业20年"逐年单调上升"——但按趋势形态，<b>信息技术是唯一占比翻倍、几乎单边上升的行业（10%→22%）</b>；医疗保健、通信服务、可选消费、房地产属"中枢上移"（20年涨、中途有回落）；工业、公用事业横盘；金融、能源、必需消费趋势下降。<br>
+      贯穿20年的共同规律：<b>上升的行业全部带有"科技/创新"属性</b>（信息技术、数字广告、创新药、数据中心REITs），<b>下降的全是"旧经济"</b>（金融、能源、必需消费）——资本市场的利润正从金融与能源，单向流向科技与创新驱动的板块，这是过去20年标普500利润格局最核心的变迁。
+    </div>
+  </div>
+
   <!-- 总结 -->
   <div class="card" style="margin-top:24px;">
-    <h2>四、总结：20年利润格局变迁的三个阶段</h2>
+    <h2>五、总结：20年利润格局变迁的三个阶段</h2>
     <div class="sub">基于上文数据点与公开行业研究</div>
     <table class="plain">
       <tr><th style="width:170px">阶段</th><th>利润格局特征</th></tr>
@@ -346,6 +370,26 @@
   window.__c2 = ch;
 })();
 
+// ============ 图4：20年占比变化幅度 ============
+(function(){
+  var names = ['信息技术','医疗保健','通信服务','可选消费','房地产','公用事业','工业','必需消费','能源','金融'];
+  var vals = [10.2, 4.3, 4.1, 1.0, 0.6, -0.3, -0.9, -0.9, -5.8, -13.1];
+  var ch = echarts.init(document.getElementById('chart4'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '：' + (p[0].value >= 0 ? '+' : '') + p[0].value + ' 个百分点'; } },
+    grid: { left: 90, right: 60, top: 10, bottom: 30 },
+    xAxis: { type: 'value', name: '变化幅度(百分点)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    yAxis: { type: 'category', data: names.slice().reverse(), axisLabel: { color: '#94a3b8', fontSize: 13 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    series: [{
+      type: 'bar',
+      data: vals.slice().reverse().map(function(v){ return { value: v, itemStyle: { color: v >= 0 ? '#f87171' : '#4ade80', borderRadius: [0,4,4,0] } }; }),
+      barWidth: 20,
+      label: { show: true, position: 'right', formatter: function(p){ return (p.value >= 0 ? '+' : '') + p.value; }, fontSize: 12, color: '#cbd5e1' }
+    }]
+  });
+  window.__c4 = ch;
+})();
+
 // ============ 图表/表格切换 ============
 document.querySelectorAll('.tab').forEach(function(tab){
   tab.addEventListener('click', function(){
@@ -364,6 +408,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
 window.addEventListener('resize', function(){
   if (window.__c1) window.__c1.resize();
   if (window.__c2) window.__c2.resize();
+  if (window.__c4) window.__c4.resize();
 });
 </script>
 </body>
