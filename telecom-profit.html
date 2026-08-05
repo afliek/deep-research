@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通信 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#a855f7; --accent-2:#c084fc; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回中国十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国通信利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财务口径：A股上市公司2024年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>通信是A股第五大利润板块</b>：2024年净利润约 <b>1800亿元、占A股总利润约3.5%</b>，由三大运营商主导。</li>
+      <li><b>2024年龙头利润排名</b>：中国移动（1384亿）＞ 中国电信（330亿）＞ 中国联通（约90亿）。<b>中国移动一家占板块约75%</b>。</li>
+      <li><b>近15年趋势</b>：通信占比长期稳定在 <b>3-4%</b>——运营商利润增长平稳（与GDP增速接近），是A股最稳定的板块之一。</li>
+      <li><b>核心特征</b>：三大运营商是"准公用事业"——现金流强劲、股息率5-7%、资本开支高峰期已过（5G建设放缓），从"成长股"转为"高股息红利资产"；同时云计算（天翼云/移动云）与AI算力带来第二增长曲线。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">1384亿</div><div class="label">中国移动2024年归母净利<br>（占通信板块约75%）</div></div><div class="kpi"><div class="num">~1800亿</div><div class="label">通信行业净利润估算<br>（占A股约3.5%）</div></div><div class="kpi"><div class="num">5-7%</div><div class="label">运营商股息率<br>（高股息红利资产）</div></div><div class="kpi"><div class="num">3-4%</div><div class="label">近15年占比长期稳定区间</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近15年通信占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：基于A股各行业净利润历史数据与行业事件推估，虚线为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>通信占A股利润比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>2010</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2012</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2014</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2016</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2018</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2020</td><td>约 3%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2021</td><td>约 3%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2022</td><td>约 3%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2023</td><td>约 3%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2024</td><td>约 3.5%（估算）</td><td>区间估算</td><td>实际值</td></tr>
+        <tr><td>2025</td><td>约 3.5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 通信板块占A股利润比例15年间几乎不变（3-4%）——运营商收入与利润增长平稳（年增3-8%），与A股整体利润增速相当，占比自然稳定。<br>② 板块利润高度集中于<b>中国移动</b>（约占75%）：其移动用户超10亿、ARPU领先，净利率约13%，是"电信央企"利润的绝对主力。<br>③ 2020-2023年占比略降至3%（5G资本开支高峰+提速降费），2024年回升至3.5%（资本开支见顶回落+云业务减亏）。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>二、通信龙头上市公司净利润排名（2024年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2024年年报/腾讯自选股 · 标*为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2024年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr><td>1</td><td>中国移动</td><td>600941</td><td>1383.73</td><td class="tag-green">+5.1%</td><td>全球最大电信运营商，用户超10亿</td></tr>
+        <tr><td>2</td><td>中国电信</td><td>601728</td><td>330.12</td><td class="tag-green">+8.4%</td><td>天翼云收入1139亿、+17%，云业务减亏</td></tr>
+        <tr><td>3</td><td>中国联通</td><td>600050</td><td>约90*</td><td class="tag-green">+5%*</td><td>混改先行者，产业互联网转型</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>补充说明：</b>① 中国移动2024年归母净利1384亿、+5.1%，分红比例约71%——股息率约5-6%，是A股"中特估+高股息"核心标的。<br>② 中国电信2024年净利330亿、+8.4%，天翼云收入突破1139亿（+17%）并首次全年盈利，云计算成为运营商第二增长曲线。<br>③ 三大运营商2024年资本开支合计约3000亿（5G建设高峰期已过），自由现金流改善，分红率持续提升（电信承诺2026年起分红率75%+）。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三、2024年A股十大行业利润结构（通信所处位置）</h2>
+    <div class="sub">单位：亿元 · 申万一级口径 · 含估算（*）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:440px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>行业</th><th>净利润(亿元)</th><th>占比</th></tr>
+        <tr><td>银行</td><td>21400</td><td>41.0%</td></tr>
+        <tr><td>石油石化</td><td>3529</td><td>6.8%</td></tr>
+        <tr><td>非银金融</td><td>约3000*</td><td>5.8%</td></tr>
+        <tr><td>食品饮料</td><td>约2200*</td><td>4.2%</td></tr>
+        <tr><td>通信</td><td>约1800*</td><td>3.5%</td></tr>
+        <tr><td>煤炭</td><td>约1500*</td><td>2.9%</td></tr>
+        <tr><td>建筑装饰</td><td>约1500*</td><td>2.9%</td></tr>
+        <tr><td>公用事业</td><td>约1400*</td><td>2.7%</td></tr>
+        <tr><td>汽车</td><td>约1100*</td><td>2.1%</td></tr>
+        <tr><td>电力设备</td><td>约1000*</td><td>1.9%</td></tr>
+        <tr class="tot"><td><b>前10大合计</b></td><td><b>约37400</b></td><td><b>约72%</b></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>定位解读：</b>通信2024年以约1800亿净利润位列A股<b>第五大利润板块</b>，占3.5%。作为"数字中国"的基础设施，运营商兼具<b>公用事业的稳定性与科技成长的想象空间</b>（云计算、AI算力、卫星互联网）——在A股利润格局中扮演"压舱石+转型先锋"的双重角色。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note">
+      <b>行业特征：</b>通信（运营商）是A股"类债券资产"——收入稳定、现金流强劲、分红率高（5-7%），受经济周期影响小；中国移动的利润规模（1384亿）甚至超过多数行业的全部利润。<br><b>前瞻判断（观点）：</b>运营商从"管道商"向"算力服务商"转型（移动云/天翼云/联通云+AI数据中心），云计算业务减亏为盈利提供增量；若AI算力需求落地，通信板块利润占比有望温和上移。风险点：提速降费政策、ARPU增长乏力、云计算市场竞争（阿里/腾讯云）。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 各公司2024年年报与腾讯自选股A股利润表（2026-08-05查询）；② 证券时报/中证报/新华财经2025年4月年报季报道；③ 估算值基于行业公开数据推估（标注*）。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['2010','2012','2014','2016','2018','2020','2021','2022','2023','2024','2025'];
+  var vals = [3.5,3.5,3.5,3.5,3.5,3,3,3,3,3.5,3.5];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({ value: [years[i], vals[i]], itemStyle: { color: i === years.length - 2 ? '#a855f7' : '#94a3b8', borderType: 'dashed' }, label: { show: i > 0, formatter: vals[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' } });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ name: '通信占A股利润比重', type: 'line', data: points, symbolSize: 8, lineStyle: { width: 3, color: '#a855f7' } }]
+  });
+  window.__c1 = ch;
+})();
+
+(function(){
+  var names = ['中国移动','中国电信','中国联通'];
+  var vals = [1383.73,330.12,90];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '归母净利(亿元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v, i){ return { value: v, itemStyle: { color: '#a855f7', borderRadius: [6,6,0,0] } }; }), barWidth: 44, label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' } }]
+  });
+  window.__c2 = ch;
+})();
+
+(function(){
+  var data = [
+    { name: '银行', value: 21400, itemStyle: { color: '#e11d48' } },
+    { name: '石油石化', value: 3529, itemStyle: { color: '#f43f5e' } },
+    { name: '非银金融', value: 3000, itemStyle: { color: '#fb7185' } },
+    { name: '食品饮料', value: 2200, itemStyle: { color: '#fda4af' } },
+    { name: '通信', value: 1800, itemStyle: { color: '#a855f7' } },
+    { name: '煤炭', value: 1500, itemStyle: { color: '#d97706' } },
+    { name: '建筑装饰', value: 1500, itemStyle: { color: '#f59e0b' } },
+    { name: '公用事业', value: 1400, itemStyle: { color: '#14b8a6' } },
+    { name: '汽车', value: 1100, itemStyle: { color: '#0ea5e9' } },
+    { name: '电力设备', value: 1000, itemStyle: { color: '#64748b' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 亿元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{ type: 'pie', radius: ['40%', '68%'], center: ['38%', '50%'], avoidLabelOverlap: true, itemStyle: { borderColor: '#0d1117', borderWidth: 2 }, label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' }, data: data }]
+  });
+  window.__c3 = ch;
+})();
+
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+    if (t === 'chart3' && window.__c3) window.__c3.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>

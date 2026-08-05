@@ -66,7 +66,9 @@
   .hl td { color:#e2e8f0; }
   .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
   .sec-grid { display:flex; flex-direction:column; gap:8px; }
-  .sec-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; transition:all .2s; }
+  .sec-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; transition:all .2s; text-decoration:none; cursor:pointer; }
+  .sec-card:hover { border-color:rgba(225,29,72,0.4); background:var(--bg-card-hover); }
+  .sec-card:hover .sec-name { color:var(--accent-2); }
   .sec-rank { width:24px; height:24px; border-radius:6px; background:rgba(225,29,72,0.15); color:#fda4af; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .sec-name { font-size:14px; font-weight:600; color:#f1f5f9; width:72px; flex-shrink:0; }
   .sec-share { font-size:13px; font-weight:600; color:var(--accent-2); width:56px; flex-shrink:0; }
@@ -177,18 +179,18 @@
   </div>
 
   <!-- 十大行业列表 -->
-  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业一览</h2>
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业一览（点击进入详细分析）</h2>
   <div class="sec-grid">
-    <div class="sec-card"><span class="sec-rank">1</span><span class="sec-name">银行</span><span class="sec-share">41.0%</span><span class="sec-brief">42家上市银行2.14万亿，"日赚58.7亿"的吸金王，净息差收窄但利润有韧性</span></div>
-    <div class="sec-card"><span class="sec-rank">2</span><span class="sec-name">石油石化</span><span class="sec-share">6.8%</span><span class="sec-brief">三桶油3529亿，油价回落但上游成本优势+高分红</span></div>
-    <div class="sec-card"><span class="sec-rank">3</span><span class="sec-name">非银金融</span><span class="sec-share">5.8%</span><span class="sec-brief">保险+券商约3000亿，2024年净利+47%（9·24行情）</span></div>
-    <div class="sec-card"><span class="sec-rank">4</span><span class="sec-name">食品饮料</span><span class="sec-share">4.2%</span><span class="sec-brief">白酒主导约2200亿，茅台净利率超50%，中国特色的"高利润消费"</span></div>
-    <div class="sec-card"><span class="sec-rank">5</span><span class="sec-name">通信</span><span class="sec-share">3.5%</span><span class="sec-brief">三大运营商约1800亿，中移动1384亿，现金流与分红稳定</span></div>
-    <div class="sec-card"><span class="sec-rank">6</span><span class="sec-name">煤炭</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，神华558亿领衔，煤价回落但高股息属性突出</span></div>
-    <div class="sec-card"><span class="sec-rank">7</span><span class="sec-name">建筑装饰</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，央企基建巨头，营收大但利润率仅2-3%</span></div>
-    <div class="sec-card"><span class="sec-rank">8</span><span class="sec-name">公用事业</span><span class="sec-share">2.7%</span><span class="sec-brief">约1400亿，长江电力325亿，水电/核电现金流稳定</span></div>
-    <div class="sec-card"><span class="sec-rank">9</span><span class="sec-name">汽车</span><span class="sec-share">2.1%</span><span class="sec-brief">约1100亿，比亚迪403亿，价格战下龙头与尾部剧烈分化</span></div>
-    <div class="sec-card"><span class="sec-rank">10</span><span class="sec-name">电力设备</span><span class="sec-share">1.9%</span><span class="sec-brief">约1000亿，宁德时代507亿，新能源产能过剩后利润收缩</span></div>
+    <a class="sec-card" href="bank-profit.html"><span class="sec-rank">1</span><span class="sec-name">银行</span><span class="sec-share">41.0%</span><span class="sec-brief">42家上市银行2.14万亿，"日赚58.7亿"的吸金王，净息差收窄但利润有韧性</span></a>
+    <a class="sec-card" href="oil-gas-profit.html"><span class="sec-rank">2</span><span class="sec-name">石油石化</span><span class="sec-share">6.8%</span><span class="sec-brief">三桶油3529亿，油价回落但上游成本优势+高分红</span></a>
+    <a class="sec-card" href="nonbank-finance-profit.html"><span class="sec-rank">3</span><span class="sec-name">非银金融</span><span class="sec-share">5.8%</span><span class="sec-brief">保险+券商约3000亿，2024年净利+47%（9·24行情）</span></a>
+    <a class="sec-card" href="food-beverage-profit.html"><span class="sec-rank">4</span><span class="sec-name">食品饮料</span><span class="sec-share">4.2%</span><span class="sec-brief">白酒主导约2200亿，茅台净利率超50%，中国特色的"高利润消费"</span></a>
+    <a class="sec-card" href="telecom-profit.html"><span class="sec-rank">5</span><span class="sec-name">通信</span><span class="sec-share">3.5%</span><span class="sec-brief">三大运营商约1800亿，中移动1384亿，现金流与分红稳定</span></a>
+    <a class="sec-card" href="coal-profit.html"><span class="sec-rank">6</span><span class="sec-name">煤炭</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，神华558亿领衔，煤价回落但高股息属性突出</span></a>
+    <a class="sec-card" href="construction-profit.html"><span class="sec-rank">7</span><span class="sec-name">建筑装饰</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，央企基建巨头，营收大但利润率仅2-3%</span></a>
+    <a class="sec-card" href="china-utility-profit.html"><span class="sec-rank">8</span><span class="sec-name">公用事业</span><span class="sec-share">2.7%</span><span class="sec-brief">约1400亿，长江电力325亿，水电/核电现金流稳定</span></a>
+    <a class="sec-card" href="auto-profit.html"><span class="sec-rank">9</span><span class="sec-name">汽车</span><span class="sec-share">2.1%</span><span class="sec-brief">约1100亿，比亚迪403亿，价格战下龙头与尾部剧烈分化</span></a>
+    <a class="sec-card" href="electric-equip-profit.html"><span class="sec-rank">10</span><span class="sec-name">电力设备</span><span class="sec-share">1.9%</span><span class="sec-brief">约1000亿，宁德时代507亿，新能源产能过剩后利润收缩</span></a>
   </div>
 
   <!-- 中美对比 -->
