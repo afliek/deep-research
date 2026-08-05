@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国可选消费巨头利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #ef4444;
+    --accent-2: #f87171;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-blue { display:inline-block; background:rgba(239,68,68,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(239,68,68,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} .chart-box{height:320px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="sector-top10.html" class="nav-back">← 返回十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>美国可选消费巨头利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 各公司为最近完整财年（财年截止日不同）或2024财年数据，估算值已标注 · 数据来源见各图表注释</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>可选消费板块是第六大利润板块</b>：2024年净利润 <b>1793亿美元、占标普500总利润8.0%</b>，与工业（8.1%）几乎并列，处于全市场利润格局的"腰部"位置。</li>
+      <li><b>2025年龙头利润排名</b>：亚马逊（777亿美元）＞ 家得宝（约150亿*）＞ 麦当劳（约85亿*）＞ 开市客（约80亿*）＞ 劳氏（约72亿*）＞ 特斯拉（38亿）。<b>亚马逊一家占板块利润约43%</b>。</li>
+      <li><b>近20年趋势</b>：板块占比在 <b>6-9%</b> 之间波动——2008危机后消费疲弱（约6%）、2017-2021年亚马逊AWS利润爆发推升至9%上方、近两年回落至8%左右，<b>整体中枢小幅上行但远低于科技板块的爆发式增长</b>。</li>
+      <li><b>核心驱动</b>：亚马逊（电商+云计算AWS）是绝对利润引擎；家得宝/劳氏受益于住房与家装周期；<b>特斯拉2025年净利润大幅下滑（38亿，同比-46%）</b>成为板块最大拖累；2025年汽车价格战与高利率压制可选消费整体。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">8.0<small>%</small></div>
+      <div class="label">可选消费板块占标普500<br>总净利润比例（2024财年，BofA口径）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">777<small>亿美元</small></div>
+      <div class="label">亚马逊2025年净利润<br>（FY2025，全球最大零售商+云服务商）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~43<small>%</small></div>
+      <div class="label">亚马逊占可选消费板块<br>利润比例（一家独大）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">6-9%</div>
+      <div class="label">近20年板块盈利占比区间<br>（2008年约6% → 2021年约9% → 2024年8.0%）</div>
+    </div>
+  </div>
+
+  <!-- 图1：20年趋势 -->
+  <div class="card">
+    <h2>一、近20年可选消费板块盈利占标普500比重趋势</h2>
+    <div class="sub">口径说明：各数据点为估算或BofA实际值，虚线为估算值，仅供参考趋势方向</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>可选消费板块盈利占标普500比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>2006</td><td>约 7%（估算）</td><td>区间估算</td><td>汽车/零售巨头主导</td></tr>
+        <tr><td>2010</td><td>约 6%（估算）</td><td>区间估算</td><td>金融危机后消费疲弱</td></tr>
+        <tr><td>2015</td><td>约 7%（估算）</td><td>区间估算</td><td>亚马逊AWS起飞前夜</td></tr>
+        <tr><td>2020</td><td>约 8.5%（估算）</td><td>区间估算</td><td>疫情消费刺激+亚马逊利润暴增</td></tr>
+        <tr><td>2023</td><td>约 8.5%（估算）</td><td>区间估算</td><td>高通胀下消费韧性</td></tr>
+        <tr><td>2024</td><td>8.0%</td><td>BofA Global Research</td><td>年度，pro-forma口径（实际值）</td></tr>
+        <tr><td>2025</td><td>约 7.5%（估算）</td><td>上市公司财报加总推算</td><td>特斯拉/汽车价格战拖累</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 可选消费板块占比整体呈"温和上行"：从2008年低点约6%升至2020-2021年约9%，近两年回落至8%——波动中枢上移约2个百分点。<br>
+      ② 与信息技术（占比翻倍）形成鲜明对比，可选消费的增长更多来自<b>亚马逊一家公司的利润爆发</b>（AWS云计算从2015年亏损到2025年贡献超500亿美元营业利润），而非板块全面繁荣。<br>
+      ③ 板块内部"冰火两重天"：零售（亚马逊、家得宝、开市客）利润持续创新高，而汽车（特斯拉、通用、福特）受价格战与需求疲弱拖累——2025年占比下滑的主要原因是汽车板块。
+    </div>
+  </div>
+
+  <!-- 图2：龙头利润排名 -->
+  <div class="card">
+    <h2>二、美国可选消费巨头净利润排名（最近完整财年）</h2>
+    <div class="sub">单位：亿美元 · GAAP净利润 · 数据来源：financials.page、腾讯自选股、财富500强（2024财年） · 标*为2024财年或估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>净利润(亿美元)</th><th>财年</th><th>看点</th></tr>
+        <tr><td>1</td><td>亚马逊 AMZN</td><td>usAMZN</td><td>777</td><td>FY2025</td><td class="tag-green">电商+云计算双引擎，AWS营业利润创纪录</td></tr>
+        <tr><td>2</td><td>家得宝 HD</td><td>usHD</td><td>约150（估算）</td><td>FY2025</td><td>家居建材零售龙头，住房周期相关</td></tr>
+        <tr><td>3</td><td>麦当劳 MCD</td><td>usMCD</td><td>约85（估算）</td><td>FY2025</td><td>全球快餐龙头，提价+数字化</td></tr>
+        <tr><td>4</td><td>开市客 COST</td><td>usCOST</td><td>约80（估算）</td><td>FY2025</td><td>会员制仓储零售，客流量强劲</td></tr>
+        <tr><td>5</td><td>劳氏 LOW</td><td>usLOW</td><td>约72（估算）</td><td>FY2025</td><td>家居建材第二龙头</td></tr>
+        <tr><td>6</td><td>特斯拉 TSLA</td><td>usTSLA</td><td>38</td><td>FY2025</td><td class="tag-red">净利润同比约-46%，价格战+需求疲弱</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>补充说明：</b>① <b>亚马逊FY2025净利润777亿美元（营收7169亿、净利率10.8%）</b>，同比增长31%——AWS云计算全年净销售额1619亿美元、扭亏后贡献核心利润，广告业务（约650亿营收）成为第三增长曲线。<br>
+      ② 家得宝（FY2024净利148亿）、开市客（74亿）、麦当劳（82亿）、劳氏（70亿）为财富500强2024财年数据，2025财年（截至2026年1月）预计小幅增长，表中以估算标注。<br>
+      ③ 汽车板块（通用汽车2025年约100亿、福特约50亿、斯特兰蒂斯亏损）与星巴克（约45亿）、耐克（约45亿）等未列入前6；特斯拉从2024年的71亿跌至38亿是板块2025年占比下滑的最大单项变量。
+    </div>
+  </div>
+
+  <!-- 图3：结构占比 -->
+  <div class="card">
+    <h2>三、2024财年标普500各行业净利润结构（可选消费所处位置）</h2>
+    <div class="sub">口径：BofA Global Research 年度盈利预测（pro-forma口径），单位十亿美元</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>行业板块</th><th>2024年盈利预测(十亿美元)</th><th>占比</th></tr>
+        <tr><td>信息技术</td><td>453.4</td><td>20.2%</td></tr>
+        <tr><td>金融</td><td>335.3</td><td>14.9%</td></tr>
+        <tr><td>医疗保健</td><td>299.8</td><td>13.3%</td></tr>
+        <tr><td>通信服务</td><td>205.3</td><td>9.1%</td></tr>
+        <tr><td>工业</td><td>181.9</td><td>8.1%</td></tr>
+        <tr class="hl"><td><b>可选消费</b></td><td><b>179.3</b></td><td><b>8.0%</b></td></tr>
+        <tr><td>能源</td><td>140.5</td><td>6.2%</td></tr>
+        <tr><td>必需消费</td><td>126.6</td><td>5.6%</td></tr>
+        <tr><td>公用事业</td><td>60.1</td><td>2.7%</td></tr>
+        <tr><td>房地产</td><td>57.6</td><td>2.6%</td></tr>
+        <tr><td>原材料</td><td>47.8</td><td>2.1%</td></tr>
+        <tr class="tot"><td><b>标普500合计</b></td><td><b>2249.6</b></td><td><b>100%</b></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>定位解读：</b>可选消费板块2024年以1793亿美元净利润位列全市场<b>第六大利润板块</b>，占8.0%——与工业（1819亿）几乎并列。<br>
+      板块内部集中度极高：<b>仅亚马逊一家（2025年777亿）就占板块利润的约43%</b>，前6大公司合计约1200亿、占板块三分之二以上。这意味着"可选消费板块"的盈利命运在相当程度上取决于亚马逊一家公司的表现——其AWS云业务与广告业务增长直接决定板块占比走向。
+    </div>
+  </div>
+
+  <!-- 结论与风险 -->
+  <div class="card">
+    <h2>四、总结：20年趋势的四个阶段</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <table class="plain">
+      <tr><th style="width:150px">阶段</th><th style="width:110px">占比区间</th><th>核心驱动</th></tr>
+      <tr><td>2006-2007（20年前）</td><td>约7%</td><td>汽车（通用/福特）与零售巨头主导，消费信贷繁荣</td></tr>
+      <tr><td>2008-2012</td><td>6-7%</td><td>金融危机重创汽车业（通用/克莱斯勒破产重组），消费低迷</td></tr>
+      <tr><td>2013-2019</td><td>6.5-7.5%</td><td>亚马逊AWS起量，家得宝/劳氏受益地产复苏，汽车企稳</td></tr>
+      <tr><td>2020-2025</td><td>7.5-9%</td><td>疫情消费刺激+亚马逊利润爆发（占比峰值约9%）；2023年后特斯拉/汽车价格战拖累回落至8%</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>可选消费板块占比的中枢已从20年前的7%小幅上移至8%左右，核心逻辑是亚马逊从"零售商"进化为"云+广告+电商"综合平台后的利润重估。2026年看点：① 亚马逊AWS与广告业务的利润率提升空间；② 利率下行对住房（家得宝/劳氏）与汽车需求的边际提振；③ 特斯拉FSD与机器人业务能否扭转利润下滑——若汽车板块企稳，板块占比有望重回8%上方；否则将继续被AI科技虹吸。<br>
+      <b>口径提示：</b>GICS将亚马逊归入可选消费（因其零售业务为主），但其利润主要来自云计算与广告——理解板块利润结构时需注意这一"名实不符"；各公司财年截止日不同，跨公司排名存在时间差。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① financials.page（亚马逊FY2025净利$77.7B、特斯拉FY2025 $3.8B，2026-08-05查询）；
+    ② 全球TMT《亚马逊2025年Q4和全年财报业绩汇总》（2026-02-24）；
+    ③ 财富中文网《2025年美国500强中最赚钱的50家公司》（2025-06，家得宝/麦当劳/开市客/劳氏2024财年）；
+    ④ NeoData/腾讯自选股利润表（2026-08-05查询）；
+    ⑤ BofA Global Research《US Equity Outlook: time to get picky》（2024-07，标普500分行业盈利）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：20年趋势 ============
+(function(){
+  var years = ['2006','2010','2015','2020','2023','2024','2025'];
+  var share = [7.0, 6.0, 7.0, 8.5, 8.5, 8.0, 7.5];
+  var isEst = [true, true, true, true, true, false, true];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({
+      value: [years[i], share[i]],
+      itemStyle: isEst[i] ? { color: '#94a3b8', borderType: 'dashed' } : { color: '#ef4444' },
+      label: { show: i > 0, formatter: share[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' }
+    });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, max: 12, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      name: '可选消费板块盈利占比',
+      type: 'line',
+      data: points,
+      symbolSize: 9,
+      lineStyle: { width: 3, color: '#ef4444' },
+      connectNulls: false
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：龙头利润排名 ============
+(function(){
+  var names = ['亚马逊','家得宝*','麦当劳*','开市客*','劳氏*','特斯拉'];
+  var vals = [777, 150, 85, 80, 72, 38];
+  var colors = ['#ef4444','#f87171','#fca5a5','#fecaca','#f97316','#64748b'];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿美元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润(亿美元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      type: 'bar',
+      data: vals.map(function(v, i){ return { value: v, itemStyle: { color: colors[i], borderRadius: [6,6,0,0] } }; }),
+      barWidth: 40,
+      label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' }
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图3：行业结构环形图 ============
+(function(){
+  var data = [
+    { name: '信息技术', value: 453.4, itemStyle: { color: '#6366f1' } },
+    { name: '金融', value: 335.3, itemStyle: { color: '#0ea5e9' } },
+    { name: '医疗保健', value: 299.8, itemStyle: { color: '#22c55e' } },
+    { name: '通信服务', value: 205.3, itemStyle: { color: '#a855f7' } },
+    { name: '工业', value: 181.9, itemStyle: { color: '#f59e0b' } },
+    { name: '可选消费', value: 179.3, itemStyle: { color: '#ef4444' } },
+    { name: '能源', value: 140.5, itemStyle: { color: '#64748b' } },
+    { name: '必需消费', value: 126.6, itemStyle: { color: '#f97316' } },
+    { name: '公用事业', value: 60.1, itemStyle: { color: '#14b8a6' } },
+    { name: '房地产', value: 57.6, itemStyle: { color: '#d946ef' } },
+    { name: '原材料', value: 47.8, itemStyle: { color: '#94a3b8' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 十亿美元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['42%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c3 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+    if (t === 'chart3' && window.__c3) window.__c3.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>

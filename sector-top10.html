@@ -66,8 +66,9 @@
   /* 行业卡片 */
   .sec-grid { display:grid; grid-template-columns:1fr; gap:14px; }
   @media (min-width:880px) { .sec-grid { grid-template-columns:1fr 1fr; } }
-  .sec-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; transition:all .25s; }
-  .sec-card:hover { border-color:rgba(99,102,241,0.4); transform:translateY(-2px); }
+  .sec-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; transition:all .25s; text-decoration:none; display:block; cursor:pointer; }
+  .sec-card:hover { border-color:rgba(99,102,241,0.4); transform:translateY(-2px); background:var(--bg-card-hover); }
+  .sec-card:hover .sec-name { color:var(--accent-2); }
   .sec-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
   .sec-rank { width:26px; height:26px; border-radius:8px; background:rgba(99,102,241,0.15); color:#a5b4fc; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .sec-name { font-size:16px; font-weight:700; color:#f1f5f9; }
@@ -183,10 +184,10 @@
   </div>
 
   <!-- 行业卡片 -->
-  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业逐一分析</h2>
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业逐一分析（点击卡片进入详细页）</h2>
   <div class="sec-grid">
 
-    <div class="sec-card">
+    <a class="sec-card" href="tech-profit.html">
       <div class="sec-head">
         <div class="sec-rank">1</div>
         <div class="sec-name">信息技术</div>
@@ -200,9 +201,9 @@
         <b>20年轨迹</b>：约10% → 20.2% ↑↑（唯一占比翻倍板块）<br>
         <b>核心驱动</b>：移动互联网 → 云计算 → AI算力革命。英伟达FY2026净利润1201亿美元、首次登顶全球利润最高公司。<b>2025年占比约22%</b>。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="finance-profit.html">
       <div class="sec-head">
         <div class="sec-rank">2</div>
         <div class="sec-name">金融</div>
@@ -216,9 +217,9 @@
         <b>20年轨迹</b>：约28% → 2008巨亏 → 12-17%波动 ↓<br>
         <b>核心驱动</b>：2008金融危机终结高杠杆时代；2022年加息红利、2025年降息下信贷扩张接棒。监管永久压低利润占比上限。<b>2025年约15%</b>。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="pharma-profit.html">
       <div class="sec-head">
         <div class="sec-rank">3</div>
         <div class="sec-name">医疗保健</div>
@@ -232,9 +233,9 @@
         <b>20年轨迹</b>：约9% → 14-15% → 13.3% （中枢上移）<br>
         <b>核心驱动</b>：2008危机被动抬升+老龄化+创新药周期；GLP-1减肥药（礼来+95%）驱动2025年反弹。<b>2025年约13-14%</b>。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="comm-profit.html">
       <div class="sec-head">
         <div class="sec-rank">4</div>
         <div class="sec-name">通信服务</div>
@@ -248,9 +249,9 @@
         <b>20年轨迹</b>：约5% → 2020年峰值11% → 9.1% （2018年GICS重分类）<br>
         <b>核心驱动</b>：数字广告双寡头；2025年谷歌+32%、Meta因AI资本开支与税改费用 -3%。<b>2025年约8.5-9%</b>。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="industrial-profit.html">
       <div class="sec-head">
         <div class="sec-rank">5</div>
         <div class="sec-name">工业</div>
@@ -264,9 +265,9 @@
         <b>20年轨迹</b>：7-9% 横盘（最稳定板块之一）<br>
         <b>核心驱动</b>：国防+航空航天超级周期（GE航空订单1900亿$）、制造业回流、AI数据中心基建。波音2025年扭亏22亿。<b>2025年约8.5%</b>。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="consumer-disc-profit.html">
       <div class="sec-head">
         <div class="sec-rank">6</div>
         <div class="sec-name">可选消费</div>
@@ -280,9 +281,9 @@
         <b>20年轨迹</b>：约7% → 8.0% 温和上行<br>
         <b>核心驱动</b>：电商与云计算（亚马逊AWS扭亏后利润爆增）+零售巨头；特斯拉2025年净利大降至38亿、拖累板块。<b>2025年约7.5%</b>（*为2024财年或估算）。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="energy-profit.html">
       <div class="sec-head">
         <div class="sec-rank">7</div>
         <div class="sec-name">能源</div>
@@ -296,9 +297,9 @@
         <b>20年轨迹</b>：约12% → 2022年峰值15%+ → 6.2% ↓↓<br>
         <b>核心驱动</b>：油价周期主导——2022年俄乌冲突油价暴涨曾使能源重回前三，2023-2025年油价回落利润大幅缩水。<b>2025年约5.5%</b>（*估算，2025年油价下行）。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="consumer-staples-profit.html">
       <div class="sec-head">
         <div class="sec-rank">8</div>
         <div class="sec-name">必需消费</div>
@@ -312,9 +313,9 @@
         <b>20年轨迹</b>：约6% → 5.6% 缓慢下行<br>
         <b>核心驱动</b>：提价能力+品牌护城河维持利润率；但增长平淡、被科技虹吸。沃尔玛FY2026净利219亿创纪录。<b>2025年约5.5%</b>（*为2024财年）。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="utility-profit.html">
       <div class="sec-head">
         <div class="sec-rank">9</div>
         <div class="sec-name">公用事业</div>
@@ -328,9 +329,9 @@
         <b>20年轨迹</b>：约3% → 2.7% 基本稳定<br>
         <b>核心驱动</b>：利润率受监管约束、以分红回报为主；<b>2024年起AI数据中心用电需求成为新的增长叙事</b>（美国电力负荷预测上修）。<b>2025年约2.8%</b>（*为估算）。
       </div>
-    </div>
+    </a>
 
-    <div class="sec-card">
+    <a class="sec-card" href="realestate-profit.html">
       <div class="sec-head">
         <div class="sec-rank">10</div>
         <div class="sec-name">房地产</div>
@@ -344,7 +345,7 @@
         <b>20年轨迹</b>：约2% → 2.6% 温和上升<br>
         <b>核心驱动</b>：工业物流（安博）、通信铁塔（美国铁塔）、<b>数据中心REITs（数字房地产）因AI算力需求利润大增</b>；口径特殊（FFO更常用）。<b>2025年约2.5%</b>（*为估算）。
       </div>
-    </div>
+    </a>
 
   </div>
 
