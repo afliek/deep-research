@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标普500十大行业利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #6366f1;
+    --accent-2: #22d3ee;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  /* 行业卡片 */
+  .sec-grid { display:grid; grid-template-columns:1fr; gap:14px; }
+  @media (min-width:880px) { .sec-grid { grid-template-columns:1fr 1fr; } }
+  .sec-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; transition:all .25s; }
+  .sec-card:hover { border-color:rgba(99,102,241,0.4); transform:translateY(-2px); }
+  .sec-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .sec-rank { width:26px; height:26px; border-radius:8px; background:rgba(99,102,241,0.15); color:#a5b4fc; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sec-name { font-size:16px; font-weight:700; color:#f1f5f9; }
+  .sec-share { margin-left:auto; font-size:13px; font-weight:700; color:var(--accent-2); }
+  .sec-share small { font-size:11px; color:var(--text-muted); font-weight:400; }
+  .sec-comps { font-size:13px; color:var(--text-secondary); line-height:1.8; margin-bottom:8px; }
+  .sec-comps b { color:#e2e8f0; }
+  .sec-drive { font-size:12px; color:var(--text-muted); line-height:1.7; border-top:1px dashed var(--border); padding-top:8px; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} .chart-box{height:320px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>标普500十大行业利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 行业占比口径：BofA Global Research 2024财年（pro-forma）；公司利润为各公司最近完整财年（财年截止日不同）或2025年，估算值已标注 · 本页为"行业与公司研究"系列合并主题</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>利润高度集中</b>：标普500共11大行业，前10大行业占全市场总利润约 <b>97.9%</b>，而前三名（信息技术、金融、医疗保健）合计就占 <b>48.4%</b>——几乎一半的市场利润来自这三个板块。</li>
+      <li><b>"科技统治"时代</b>：信息技术（20.2%）+ 通信服务（9.1%）若合并为广义科技口径，占全市场利润约 <b>29%</b>；仅英伟达、苹果、微软三家（3340亿美元）就超过通信服务全板块（2053亿）。</li>
+      <li><b>20年最大变迁</b>：金融从2006年第一大板块（约28%）因2008危机让出王座；信息技术从约10%一路升至20%+登顶；能源因2022年俄乌油价暴涨短暂回升、2025年随油价回落；医疗、工业占比基本稳定。</li>
+      <li><b>2025年主线</b>：AI是唯一的结构性变量——直接利好信息技术（英伟达/微软/博通）、公用事业（数据中心用电）、工业（AI基建与电力设备），并对能源、必需消费等形成资金与利润虹吸。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">97.9<small>%</small></div>
+      <div class="label">前10大行业占标普500<br>总净利润比例（2024财年）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">48.4<small>%</small></div>
+      <div class="label">前三名行业合计占比<br>（信息技术20.2%+金融14.9%+医疗13.3%）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~29<small>%</small></div>
+      <div class="label">广义科技口径占比<br>（信息技术+通信服务，含谷歌/Meta）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">28%→20%</div>
+      <div class="label">最大板块易主<br>（金融2006年约28% → 信息技术2024年20.2%）</div>
+    </div>
+  </div>
+
+  <!-- 图1：占比排行 -->
+  <div class="card">
+    <h2>一、2024年标普500十大行业净利润占比排行</h2>
+    <div class="sub">口径：BofA Global Research（pro-forma），前十行业合计占比97.9%，其余为原材料行业（2.1%）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📊 排行图</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:460px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>排名</th><th>行业板块</th><th>2024年净利润(十亿美元)</th><th>占比</th><th>2025年占比估算</th><th>2025年动向</th></tr>
+        <tr><td>1</td><td>信息技术</td><td>453.4</td><td>20.2%</td><td>约22% ↑</td><td>英伟达/微软/苹果AI利润爆发</td></tr>
+        <tr><td>2</td><td>金融</td><td>335.3</td><td>14.9%</td><td>约15% →</td><td>信贷扩张对冲息差压力</td></tr>
+        <tr><td>3</td><td>医疗保健</td><td>299.8</td><td>13.3%</td><td>约13-14% ↑</td><td>礼来/强生GLP-1与创新药驱动</td></tr>
+        <tr><td>4</td><td>通信服务</td><td>205.3</td><td>9.1%</td><td>约8.5-9% ↓</td><td>谷歌+32%被Meta -3%对冲</td></tr>
+        <tr><td>5</td><td>工业</td><td>181.9</td><td>8.1%</td><td>约8.5% ↑</td><td>国防+AI基建+再工业化</td></tr>
+        <tr><td>6</td><td>可选消费</td><td>179.3</td><td>8.0%</td><td>约7.5% ↓</td><td>亚马逊强劲但特斯拉/汽车承压</td></tr>
+        <tr><td>7</td><td>能源</td><td>140.5</td><td>6.2%</td><td>约5.5% ↓</td><td>油价回落侵蚀利润</td></tr>
+        <tr><td>8</td><td>必需消费</td><td>126.6</td><td>5.6%</td><td>约5.5% →</td><td>沃尔玛/宝洁/可口可乐稳健</td></tr>
+        <tr><td>9</td><td>公用事业</td><td>60.1</td><td>2.7%</td><td>约2.8% →</td><td>AI数据中心用电需求抬头</td></tr>
+        <tr><td>10</td><td>房地产</td><td>57.6</td><td>2.6%</td><td>约2.5% →</td><td>数据中心REITs受益</td></tr>
+        <tr class="tot"><td></td><td><b>前10大合计</b></td><td><b>2201.8</b></td><td><b>97.9%</b></td><td></td><td></td></tr>
+        <tr><td>11</td><td>原材料</td><td>47.8</td><td>2.1%</td><td>约2.0%</td><td>化工/金属周期</td></tr>
+        <tr class="tot"><td></td><td><b>标普500合计</b></td><td><b>2249.6</b></td><td><b>100%</b></td><td></td><td></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 标普500利润格局呈典型的"金字塔"结构——前3大行业（48.4%）≈ 后7大行业（49.5%）之和。<br>
+      ② 2025年占比估算的主要变化：信息技术↑（AI）、能源↓（油价）、可选消费↓（特斯拉/汽车价格战）、工业↑（国防与AI基建）。<br>
+      ③ 原材料是唯一未进前十的行业（2.1%），化工与金属价格周期拖累其盈利。
+    </div>
+  </div>
+
+  <!-- 图2：利润规模环形图 -->
+  <div class="card">
+    <h2>二、2024年十大行业利润规模结构</h2>
+    <div class="sub">单位：十亿美元 · BofA口径</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">🥧 环形图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:440px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>行业板块</th><th>2024年净利润(十亿美元)</th><th>占比</th><th>代表性公司（2025年净利润，亿美元）</th></tr>
+        <tr><td>信息技术</td><td>453.4</td><td>20.2%</td><td>英伟达1201 / 苹果1120 / 微软1018 / 博通231</td></tr>
+        <tr><td>金融</td><td>335.3</td><td>14.9%</td><td>伯克希尔670 / 摩根大通568 / 美国银行305 / 富国213</td></tr>
+        <tr><td>医疗保健</td><td>299.8</td><td>13.3%</td><td>强生268 / 礼来206 / 默沙东183 / 吉利德85</td></tr>
+        <tr><td>通信服务</td><td>205.3</td><td>9.1%</td><td>谷歌1322 / Meta605 / 康卡斯特约200 / 迪士尼124</td></tr>
+        <tr><td>工业</td><td>181.9</td><td>8.1%</td><td>卡特彼勒89 / GE航空87 / 联合太平洋71 / 雷神67</td></tr>
+        <tr><td>可选消费</td><td>179.3</td><td>8.0%</td><td>亚马逊777 / 家得宝约150* / 特斯拉38 / 麦当劳约82*</td></tr>
+        <tr><td>能源</td><td>140.5</td><td>6.2%</td><td>埃克森美孚约300* / 雪佛龙约150* / 康菲约80*</td></tr>
+        <tr><td>必需消费</td><td>126.6</td><td>5.6%</td><td>沃尔玛194 / 宝洁160 / 可口可乐131 / 百事约100*</td></tr>
+        <tr><td>公用事业</td><td>60.1</td><td>2.7%</td><td>NextEra约70* / 南方公司约40* / 杜克能源约38*</td></tr>
+        <tr><td>房地产</td><td>57.6</td><td>2.6%</td><td>安博约35* / 美国铁塔约30* / 数字房地产约28*</td></tr>
+        <tr class="tot"><td><b>前10大合计</b></td><td><b>2201.8</b></td><td><b>97.9%</b></td><td>*为估算值或2024财年数据</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 行业卡片 -->
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业逐一分析</h2>
+  <div class="sec-grid">
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">1</div>
+        <div class="sec-name">信息技术</div>
+        <div class="sec-share">20.2%<small>（4534亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：英伟达1201亿 &gt; 苹果1120亿 &gt; 微软1018亿 &gt; 博通231亿<br>
+        <b>格局</b>：前三家占板块利润约74%，赢家通吃
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约10% → 20.2% ↑↑（唯一占比翻倍板块）<br>
+        <b>核心驱动</b>：移动互联网 → 云计算 → AI算力革命。英伟达FY2026净利润1201亿美元、首次登顶全球利润最高公司。<b>2025年占比约22%</b>。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">2</div>
+        <div class="sec-name">金融</div>
+        <div class="sec-share">14.9%<small>（3353亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：伯克希尔670亿 &gt; 摩根大通568亿 &gt; 美国银行305亿 &gt; 富国213亿<br>
+        <b>格局</b>：六大行合计1568亿，行业高度集中
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约28% → 2008巨亏 → 12-17%波动 ↓<br>
+        <b>核心驱动</b>：2008金融危机终结高杠杆时代；2022年加息红利、2025年降息下信贷扩张接棒。监管永久压低利润占比上限。<b>2025年约15%</b>。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">3</div>
+        <div class="sec-name">医疗保健</div>
+        <div class="sec-share">13.3%<small>（2998亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：强生268亿 &gt; 礼来206亿 &gt; 默沙东183亿 &gt; 吉利德85亿<br>
+        <b>格局</b>：制药+医疗器械+健康保险广义口径
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约9% → 14-15% → 13.3% （中枢上移）<br>
+        <b>核心驱动</b>：2008危机被动抬升+老龄化+创新药周期；GLP-1减肥药（礼来+95%）驱动2025年反弹。<b>2025年约13-14%</b>。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">4</div>
+        <div class="sec-name">通信服务</div>
+        <div class="sec-share">9.1%<small>（2053亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：谷歌1322亿 &gt; Meta605亿 &gt; 康卡斯特约200亿 &gt; 迪士尼124亿<br>
+        <b>格局</b>：谷歌+Meta占板块约75%，双寡头
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约5% → 2020年峰值11% → 9.1% （2018年GICS重分类）<br>
+        <b>核心驱动</b>：数字广告双寡头；2025年谷歌+32%、Meta因AI资本开支与税改费用 -3%。<b>2025年约8.5-9%</b>。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">5</div>
+        <div class="sec-name">工业</div>
+        <div class="sec-share">8.1%<small>（1819亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：卡特彼勒89亿 &gt; GE航空87亿 &gt; 联合太平洋71亿 &gt; 雷神67亿<br>
+        <b>格局</b>：机械/运输/航空航天国防三分天下
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：7-9% 横盘（最稳定板块之一）<br>
+        <b>核心驱动</b>：国防+航空航天超级周期（GE航空订单1900亿$）、制造业回流、AI数据中心基建。波音2025年扭亏22亿。<b>2025年约8.5%</b>。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">6</div>
+        <div class="sec-name">可选消费</div>
+        <div class="sec-share">8.0%<small>（1793亿$���</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：亚马逊777亿 &gt; 家得宝约150亿* &gt; 麦当劳约82亿* &gt; 特斯拉38亿<br>
+        <b>格局</b>：亚马逊一家占板块利润约43%
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约7% → 8.0% 温和上行<br>
+        <b>核心驱动</b>：电商与云计算（亚马逊AWS扭亏后利润爆增）+零售巨头；特斯拉2025年净利大降至38亿、拖累板块。<b>2025年约7.5%</b>（*为2024财年或估算）。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">7</div>
+        <div class="sec-name">能源</div>
+        <div class="sec-share">6.2%<small>（1405亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：埃克森美孚约300亿* &gt; 雪佛龙约150亿* &gt; 康菲约80亿*<br>
+        <b>格局</b>：综合油企+页岩生产商
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约12% → 2022年峰值15%+ → 6.2% ↓↓<br>
+        <b>核心驱动</b>：油价周期主导——2022年俄乌冲突油价暴涨曾使能源重回前三，2023-2025年油价回落利润大幅缩水。<b>2025年约5.5%</b>（*估算，2025年油价下行）。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">8</div>
+        <div class="sec-name">必需消费</div>
+        <div class="sec-share">5.6%<small>（1266亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：沃尔玛194亿 &gt; 宝洁160亿 &gt; 可口可乐131亿 &gt; 百事约100亿*<br>
+        <b>格局</b>：零售+品牌快消，防御属性
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约6% → 5.6% 缓慢下行<br>
+        <b>核心驱动</b>：提价能力+品牌护城河维持利润率；但增长平淡、被科技虹吸。沃尔玛FY2026净利219亿创纪录。<b>2025年约5.5%</b>（*为2024财年）。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">9</div>
+        <div class="sec-name">公用事业</div>
+        <div class="sec-share">2.7%<small>（601亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：NextEra约70亿* &gt; 南方公司约40亿* &gt; 杜克能源约38亿*<br>
+        <b>格局</b>：电力/燃气监管公用事业
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约3% → 2.7% 基本稳定<br>
+        <b>核心驱动</b>：利润率受监管约束、以分红回报为主；<b>2024年起AI数据中心用电需求成为新的增长叙事</b>（美国电力负荷预测上修）。<b>2025年约2.8%</b>（*为估算）。
+      </div>
+    </div>
+
+    <div class="sec-card">
+      <div class="sec-head">
+        <div class="sec-rank">10</div>
+        <div class="sec-name">房地产</div>
+        <div class="sec-share">2.6%<small>（576亿$）</small></div>
+      </div>
+      <div class="sec-comps">
+        <b>龙头利润</b>：安博约35亿* &gt; 美国铁塔约30亿* &gt; 数字房地产约28亿*<br>
+        <b>格局</b>：REITs为主（须分配90%应税收入）
+      </div>
+      <div class="sec-drive">
+        <b>20年轨迹</b>：约2% → 2.6% 温和上升<br>
+        <b>核心驱动</b>：工业物流（安博）、通信铁塔（美国铁塔）、<b>数据中心REITs（数字房地产）因AI算力需求利润大增</b>；口径特殊（FFO更常用）。<b>2025年约2.5%</b>（*为估算）。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 总结 -->
+  <div class="card" style="margin-top:24px;">
+    <h2>四、总结：20年利润格局变迁的三个阶段</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <table class="plain">
+      <tr><th style="width:170px">阶段</th><th>利润格局特征</th></tr>
+      <tr><td>2006-2007（20年前）</td><td>金融（约28%）+能源（约12%）主导，"旧经济"占据利润半壁江山；信息技术仅约10%</td></tr>
+      <tr><td>2008-2019</td><td>金融危机终结金融霸权，信息技术与医疗稳步上位；能源在页岩革命中利润波动</td></tr>
+      <tr><td>2020-2025</td><td>信息技术登顶（20%+）、通信服务并入后广义科技约29%；AI成为唯一结构性变量，能源随油价周期沉浮，医疗/工业/必需消费稳定</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>未来3-5年标普500利润格局的核心变量仍是AI——它将同时：① 推升信息技术（算力/云/软件）与公用事业（数据中心用电）的占比；② 通过企业IT与AI资本开支拉动工业与金融（AI相关融资）需求；③ 对传统消费、能源、媒体形成资金虹吸。<b>一个"AI吃下利润蛋糕的绝大部分增量、其余行业瓜分存量"的格局正在固化</b>。风险点：AI资本开支若不及预期（大模型变现瓶颈），信息技术高基数下的增速回落将直接冲击指数盈利。<br>
+      <b>口径提示：</b>① 行业占比为BofA pro-forma口径，与GAAP口径存在±1-2pct差异；② 各公司财年截止日不同（英伟达1月/苹果9月/微软6月），跨公司排名存在时间差；③ 第6-10名行业的公司利润部分为2024财年数据或估算值（已标注*），仅供参考量级；④ 房地产板块REITs以FFO为常用口径，GAAP净利偏低。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① BofA Global Research《US Equity Outlook: time to get picky》（2024-07，标普500分行业盈利）；
+    ② NeoData/腾讯自选股利润表（各公司FY2024/FY2025，2026-08-05查询）；
+    ③ financials.page（美国上市公司财报汇总，2026-08-05查询）；
+    ④ 财富中文网《2025年美国500强中最赚钱的50家公司》（2025-06）；
+    ⑤ 各公司年报与财报新闻稿（苹果、微软、英伟达、伯克希尔、JPMorgan、GE Aerospace、Union Pacific、迪士尼、Meta、沃尔玛、可口可乐等）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：占比排行（横向条形图） ============
+(function(){
+  var data = [
+    { value: 20.2, name: '信息技术' },
+    { value: 14.9, name: '金融' },
+    { value: 13.3, name: '医疗保健' },
+    { value: 9.1, name: '通信服务' },
+    { value: 8.1, name: '工业' },
+    { value: 8.0, name: '可选消费' },
+    { value: 6.2, name: '能源' },
+    { value: 5.6, name: '必需消费' },
+    { value: 2.7, name: '公用事业' },
+    { value: 2.6, name: '房地产' }
+  ];
+  var colors = ['#6366f1','#0ea5e9','#22c55e','#a855f7','#f59e0b','#ef4444','#64748b','#f97316','#14b8a6','#d946ef'];
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '：' + p[0].value + '%（' + (p[0].value*22.496).toFixed(0) + '亿美元）'; } },
+    grid: { left: 90, right: 60, top: 10, bottom: 30 },
+    xAxis: { type: 'value', name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    yAxis: { type: 'category', data: data.map(function(d){ return d.name; }).reverse(), axisLabel: { color: '#94a3b8', fontSize: 13 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    series: [{
+      type: 'bar',
+      data: data.slice().reverse().map(function(d, i){
+        return { value: d.value, itemStyle: { color: colors[data.length-1-i], borderRadius: [0,6,6,0] } };
+      }),
+      barWidth: 22,
+      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 12, color: '#cbd5e1' }
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：利润规模环形图 ============
+(function(){
+  var data = [
+    { name: '信息技术', value: 453.4, itemStyle: { color: '#6366f1' } },
+    { name: '金融', value: 335.3, itemStyle: { color: '#0ea5e9' } },
+    { name: '医疗保健', value: 299.8, itemStyle: { color: '#22c55e' } },
+    { name: '通信服务', value: 205.3, itemStyle: { color: '#a855f7' } },
+    { name: '工业', value: 181.9, itemStyle: { color: '#f59e0b' } },
+    { name: '可选消费', value: 179.3, itemStyle: { color: '#ef4444' } },
+    { name: '能源', value: 140.5, itemStyle: { color: '#64748b' } },
+    { name: '必需消费', value: 126.6, itemStyle: { color: '#f97316' } },
+    { name: '公用事业', value: 60.1, itemStyle: { color: '#14b8a6' } },
+    { name: '房地产', value: 57.6, itemStyle: { color: '#d946ef' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 十亿美元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+});
+</script>
+</body>
+</html>
