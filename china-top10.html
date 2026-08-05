@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国A股十大行业利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #e11d48;
+    --accent-2: #fb7185;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  .sec-grid { display:flex; flex-direction:column; gap:8px; }
+  .sec-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; transition:all .2s; }
+  .sec-rank { width:24px; height:24px; border-radius:6px; background:rgba(225,29,72,0.15); color:#fda4af; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sec-name { font-size:14px; font-weight:600; color:#f1f5f9; width:72px; flex-shrink:0; }
+  .sec-share { font-size:13px; font-weight:600; color:var(--accent-2); width:56px; flex-shrink:0; }
+  .sec-brief { flex:1; min-width:0; font-size:12px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  @media(max-width:520px){ .sec-name{width:64px;} .sec-share{width:48px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国A股十大行业利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 行业口径：申万一级行业 · 财务口径：A股上市公司2024年年报归母净利润 · 部分行业利润为估算值（标注*） · 数据来源见文末</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>银行是绝对利润王者</b>：42家A股上市银行2024年归母净利润合计 <b>2.14万亿元，占全部A股上市公司净利润（5.21万亿）的约41%</b>——每100元A股利润中约41元来自银行，远高于美股金融板块的14.9%。</li>
+      <li><b>十大行业集中度约72%</b>：银行、石油石化、非银金融、食品饮料、通信、煤炭、建筑、公用事业、汽车、电力设备十大行业净利润合计约3.74万亿，占A股总利润约72%。</li>
+      <li><b>与美股格局截然不同</b>：美股是"信息技术20.2%居首、科技主导"；A股是"金融独大（银行41%+非银6%）、能源与白酒特色鲜明"——A股科技公司（半导体、软件）利润占比不足5%，互联网巨头（腾讯、阿里）不在A股。</li>
+      <li><b>2024年边际变化</b>：非银金融净利润+47%（9·24行情带动）、电子营收+17%（AI算力需求）、银行"增利不增收"（营收微增0.08%、净利+2.35%）、房地产延续亏损拖累大盘。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">41<small>%</small></div>
+      <div class="label">银行占A股净利润比例<br>（2024年，2.14万亿/5.21万亿）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">5.21<small>万亿</small></div>
+      <div class="label">A股5405家上市公司<br>2024年归母净利润合计</div>
+    </div>
+    <div class="kpi">
+      <div class="num">3529<small>亿元</small></div>
+      <div class="label">"三桶油"2024年净利润合计<br>（中石油1647+中海油1379+中石化503）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~72<small>%</small></div>
+      <div class="label">十大行业占A股总利润比例<br>（银行/石油/非银/白酒/通信/煤炭等）</div>
+    </div>
+  </div>
+
+  <!-- 图1：占比排行 -->
+  <div class="card">
+    <h2>一、2024年A股十大行业净利润占比排行</h2>
+    <div class="sub">口径：申万一级行业 · 归母净利润（亿元） · 银行占比约41%、石油石化约6.8%、非银金融约5.8% · 行业利润含估算（*）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📊 排行图</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:460px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>排名</th><th>行业</th><th>净利润(亿元)</th><th>占比</th><th>2024年动向</th></tr>
+        <tr class="hl"><td>1</td><td><b>银行</b></td><td><b>21400</b></td><td><b>41.0%</b></td><td>42家上市银行合计，净利+2.35%，"增利不增收"</td></tr>
+        <tr><td>2</td><td>石油石化</td><td>3529</td><td>6.8%</td><td>三桶油合计，中石油+2%、中海油+11.4%</td></tr>
+        <tr><td>3</td><td>非银金融</td><td>约3000*</td><td>5.8%</td><td>保险+券商，净利+47%（9·24行情）</td></tr>
+        <tr><td>4</td><td>食品饮料</td><td>约2200*</td><td>4.2%</td><td>白酒主导，茅台862亿净利率超50%</td></tr>
+        <tr><td>5</td><td>通信</td><td>约1800*</td><td>3.5%</td><td>中移动1384亿领衔，运营商现金流稳健</td></tr>
+        <tr><td>6</td><td>煤炭</td><td>约1500*</td><td>2.9%</td><td>神华558亿，煤价回落但高分红</td></tr>
+        <tr><td>7</td><td>建筑装饰</td><td>约1500*</td><td>2.9%</td><td>中国建筑/中铁等央企，利润率偏低</td></tr>
+        <tr><td>8</td><td>公用事业</td><td>约1400*</td><td>2.7%</td><td>长江电力325亿，水电现金流稳定</td></tr>
+        <tr><td>9</td><td>汽车</td><td>约1100*</td><td>2.1%</td><td>比亚迪403亿领衔，价格战分化</td></tr>
+        <tr><td>10</td><td>电力设备</td><td>约1000*</td><td>1.9%</td><td>宁德时代507亿，新能源产能过剩承压</td></tr>
+        <tr class="tot"><td></td><td><b>前10大合计</b></td><td><b>约37400</b></td><td><b>约72%</b></td><td></td></tr>
+        <tr class="tot"><td></td><td><b>全部A股</b></td><td><b>52100</b></td><td><b>100%</b></td><td>5405家公司，净利同比-1.51%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① A股利润格局呈"银行一柱擎天"结构——银行一家占41%，比后9大行业总和的一半还多。<br>
+      ② 石油石化、非银金融、食品饮料、通信构成第二梯队（各占2-7%），合计约20%。<br>
+      ③ 与美股对照：美股第一大行业信息技术占20.2%、金融占14.9%；中国第一大行业银行占41%、石油石化6.8%居次——<b>A股利润高度集中于金融与资源能源，科技含量低</b>（A股电子+计算机+传媒合计利润占比不足5%，且腾讯/阿里/美团等互联网龙头均不在A股）。
+    </div>
+  </div>
+
+  <!-- 图2：利润规模结构 -->
+  <div class="card">
+    <h2>二、2024年A股十大行业利润规模结构</h2>
+    <div class="sub">单位：亿元 · 申万一级口径 · 行业利润含估算（*）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">🥧 环形图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:440px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>行业</th><th>净利润(亿元)</th><th>占比</th><th>代表公司（2024年归母净利，亿元）</th></tr>
+        <tr><td>银行</td><td>21400</td><td>41.0%</td><td>工行3659 / 建行3356 / 农行2821 / 中行2378 / 招行1484</td></tr>
+        <tr><td>石油石化</td><td>3529</td><td>6.8%</td><td>中石油1647 / 中海油1379 / 中石化503</td></tr>
+        <tr><td>非银金融</td><td>约3000*</td><td>5.8%</td><td>中国平安约1450* / 中国人寿约1100*</td></tr>
+        <tr><td>食品饮料</td><td>约2200*</td><td>4.2%</td><td>茅台862 / 五粮液约320 / 泸州老窖约130</td></tr>
+        <tr><td>通信</td><td>约1800*</td><td>3.5%</td><td>中国移动1384 / 中国电信约330 / 中国联通约90</td></tr>
+        <tr><td>煤炭</td><td>约1500*</td><td>2.9%</td><td>神华558 / 陕西煤业约220 / 中煤约190</td></tr>
+        <tr><td>建筑装饰</td><td>约1500*</td><td>2.9%</td><td>中国建筑约460 / 中国中铁约250</td></tr>
+        <tr><td>公用事业</td><td>约1400*</td><td>2.7%</td><td>长江电力约325 / 华能国际约100</td></tr>
+        <tr><td>汽车</td><td>约1100*</td><td>2.1%</td><td>比亚迪403 / 上汽约130 / 长城约120</td></tr>
+        <tr><td>电力设备</td><td>约1000*</td><td>1.9%</td><td>宁德时代507 / 阳光电源约110</td></tr>
+        <tr class="tot"><td><b>前10大合计</b></td><td><b>约37400</b></td><td><b>约72%</b></td><td></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 十大行业列表 -->
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">三、十大行业一览</h2>
+  <div class="sec-grid">
+    <div class="sec-card"><span class="sec-rank">1</span><span class="sec-name">银行</span><span class="sec-share">41.0%</span><span class="sec-brief">42家上市银行2.14万亿，"日赚58.7亿"的吸金王，净息差收窄但利润有韧性</span></div>
+    <div class="sec-card"><span class="sec-rank">2</span><span class="sec-name">石油石化</span><span class="sec-share">6.8%</span><span class="sec-brief">三桶油3529亿，油价回落但上游成本优势+高分红</span></div>
+    <div class="sec-card"><span class="sec-rank">3</span><span class="sec-name">非银金融</span><span class="sec-share">5.8%</span><span class="sec-brief">保险+券商约3000亿，2024年净利+47%（9·24行情）</span></div>
+    <div class="sec-card"><span class="sec-rank">4</span><span class="sec-name">食品饮料</span><span class="sec-share">4.2%</span><span class="sec-brief">白酒主导约2200亿，茅台净利率超50%，中国特色的"高利润消费"</span></div>
+    <div class="sec-card"><span class="sec-rank">5</span><span class="sec-name">通信</span><span class="sec-share">3.5%</span><span class="sec-brief">三大运营商约1800亿，中移动1384亿，现金流与分红稳定</span></div>
+    <div class="sec-card"><span class="sec-rank">6</span><span class="sec-name">煤炭</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，神华558亿领衔，煤价回落但高股息属性突出</span></div>
+    <div class="sec-card"><span class="sec-rank">7</span><span class="sec-name">建筑装饰</span><span class="sec-share">2.9%</span><span class="sec-brief">约1500亿，央企基建巨头，营收大但利润率仅2-3%</span></div>
+    <div class="sec-card"><span class="sec-rank">8</span><span class="sec-name">公用事业</span><span class="sec-share">2.7%</span><span class="sec-brief">约1400亿，长江电力325亿，水电/核电现金流稳定</span></div>
+    <div class="sec-card"><span class="sec-rank">9</span><span class="sec-name">汽车</span><span class="sec-share">2.1%</span><span class="sec-brief">约1100亿，比亚迪403亿，价格战下龙头与尾部剧烈分化</span></div>
+    <div class="sec-card"><span class="sec-rank">10</span><span class="sec-name">电力设备</span><span class="sec-share">1.9%</span><span class="sec-brief">约1000亿，宁德时代507亿，新能源产能过剩后利润收缩</span></div>
+  </div>
+
+  <!-- 中美对比 -->
+  <div class="card" style="margin-top:24px;">
+    <h2>四、中美十大行业利润格局对比</h2>
+    <div class="sub">口径：美股为2024年BofA标普500行业占比；A股为2024年申万一级行业净利润占比（含估算）</div>
+    <table class="plain">
+      <tr><th style="width:120px">对比项</th><th>美股（标普500）</th><th>A股（全部上市公司）</th></tr>
+      <tr><td>第一大行业</td><td>信息技术 20.2%（英伟达/苹果/微软）</td><td>银行 41.0%（工行/建行/农行）</td></tr>
+      <tr><td>前三大占比</td><td>信息技术+金融+医疗 = 48.4%</td><td>银行+石油+非银 = 53.6%</td></tr>
+      <tr><td>利润风格</td><td>科技主导：AI算力、软件、云、创新药</td><td>金融主导：银行、保险，加资源能源与白酒</td></tr>
+      <tr><td>科技公司利润占比</td><td>信息技术+通信服务约29%（含谷歌/Meta）</td><td>电子+计算机+传媒合计不足5%（互联网龙头不在A股）</td></tr>
+      <tr><td>2024年净利增速</td><td>标普500盈利+8%左右（AI驱动）</td><td>A股整体-1.51%（地产拖累）</td></tr>
+      <tr><td>结构性变量</td><td>AI资本开支（GPU/数据中心）</td><td>9·24行情（资本市场活跃）、AI+制造转型</td></tr>
+    </table>
+    <div class="note">
+      <b>核心差异：</b>美股利润格局由"科技创新"驱动——过去20年信息技术占比从10%翻倍至20%+；A股利润格局由"金融+资源"主导——银行一家占41%，且过去20年这一格局几乎未变（2000年代银行+石油曾占A股利润一半以上）。<br>
+      <b>重要提示：</b>A股口径不含互联网巨头（腾讯、阿里、美团、拼多多均在港股/美股上市）——若把在港上市的科技龙头纳入"中国上市公司利润"统计，中国科技行业利润占比将显著提升（腾讯2024年净利约1900亿、阿里约1000亿、美团约350亿），但它们在A股指数中不可投资、也不计入A股行业利润。
+    </div>
+  </div>
+
+  <!-- 趋势 -->
+  <div class="card">
+    <h2>五、近15年代表行业利润占比趋势（2010-2025）</h2>
+    <div class="sub">估算序列：基于A股各行业净利润历史数据与行业事件推估，虚线为估算；银行长期独大，白酒2016-2021年崛起，石油石化2022年油价冲高后回落</div>
+    <div id="chart3" style="width:100%;height:420px;"></div>
+    <div class="note">
+      <b>读图要点：</b>① <b>银行占比长期在35-50%区间</b>——2010年前后约45-50%，2015年低点约35%，2024年回升至41%，始终是A股利润的"压舱石"。<br>
+      ② 食品饮料（白酒）占比从2015年约3%升至2021年峰值约7%（白酒牛市+茅台提价），2024年回落至约4%。<br>
+      ③ 石油石化受油价周期驱动（2022年约10%高位后回落）；通信、煤炭占比长期稳定在3%左右。<br>
+      ④ <b>与美股最大的不同</b>：A股没有"占比翻倍的科技行业"——电子、电力设备（新能源）2020-2021年曾快速上升，但2022-2024年产能过剩后利润收缩，未形成持续上升趋势。
+    </div>
+  </div>
+
+  <!-- 总结 -->
+  <div class="card">
+    <h2>六、总结：中国上市公司利润格局的三个特征</h2>
+    <div class="sub">基于上文数据点与公开研究</div>
+    <table class="plain">
+      <tr><th style="width:170px">特征</th><th>说明</th></tr>
+      <tr><td>金融独大</td><td>银行（41%）+非银（5.8%）合计约47%，接近A股利润的一半——远高于美股金融的14.9%，反映中国以间接融资（信贷）为主的经济结构</td></tr>
+      <tr><td>资源能源权重高</td><td>石油石化+煤炭合计约9.7%，叠加电力公用事业，传统能源与基础设施类央企是利润重要来源</td></tr>
+      <tr><td>科技含量低但边际改善</td><td>电子、电力设备、汽车在AI与新能源转型下快速成长（2024年电子营收+17%），但利润占比仍不足8%；互联网龙头缺席A股是最大口径缺陷</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>A股利润格局短期内难以撼动"银行独大"——息差虽收窄，但银行业规模效应与低估值高分红使其利润绝对额依然庞大。边际变量：① AI算力与半导体国产化（电子行业利润占比有望持续提升）；② 9·24行情后的资本市场活跃度（非银金融利润弹性）；③ 新能源产能出清后的利润修复；④ 若未来大型互联网公司回归A股（二次上市），科技占比将出现跳升。<br>
+      <b>口径提示：</b>① 行业利润含估算值（标注*），银行、三桶油、茅台等为2024年报确认数据；② 申万一级行业共31个，本页仅列前10大（占比约72%），其余21个行业（含电子、医药、房地产等）合计占约28%；③ A股口径不含在港/在美上市的中国互联网与科技龙头，与"中国上市公司整体"口径有差异。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 证券时报·数据宝《A股2024年业绩50强》（2025-04-30，5405家上市公司合计营收71.92万亿、归母净利5.21万亿）；
+    ② 新华财经/投资时报《42家上市银行2024年报》（银行合计归母净利2.14万亿、六大行1.4万亿、工行3658.63亿等）；
+    ③ 中证金牛座《A股十大盈利王》（中石油1646.8亿、中海油1379.36亿、茅台862.28亿、神华等）；
+    ④ 新浪财经《A股银行一年赚2万亿元》（三桶油合计3529.25亿、中国移动1383.73亿）；
+    ⑤ NeoData/腾讯自选股A股利润表（2026-08-05查询）；
+    ⑥ 各公司2024年年报（贵州茅台、中国海油、中国石油、中国移动、中国神华等）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：占比排行（横向条形图） ============
+(function(){
+  var data = [
+    { value: 41.0, name: '银行' },
+    { value: 6.8, name: '石油石化' },
+    { value: 5.8, name: '非银金融' },
+    { value: 4.2, name: '食品饮料' },
+    { value: 3.5, name: '通信' },
+    { value: 2.9, name: '煤炭' },
+    { value: 2.9, name: '建筑装饰' },
+    { value: 2.7, name: '公用事业' },
+    { value: 2.1, name: '汽车' },
+    { value: 1.9, name: '电力设备' }
+  ];
+  var colors = ['#e11d48','#f43f5e','#fb7185','#fda4af','#a855f7','#d97706','#f59e0b','#14b8a6','#0ea5e9','#64748b'];
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '：' + p[0].value + '%'; } },
+    grid: { left: 95, right: 60, top: 10, bottom: 30 },
+    xAxis: { type: 'value', name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    yAxis: { type: 'category', data: data.map(function(d){ return d.name; }).reverse(), axisLabel: { color: '#94a3b8', fontSize: 13 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    series: [{
+      type: 'bar',
+      data: data.slice().reverse().map(function(d, i){
+        return { value: d.value, itemStyle: { color: colors[data.length-1-i], borderRadius: [0,6,6,0] } };
+      }),
+      barWidth: 22,
+      label: { show: true, position: 'right', formatter: '{c}%', fontSize: 12, color: '#cbd5e1' }
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：利润规模环形图 ============
+(function(){
+  var data = [
+    { name: '银行', value: 21400, itemStyle: { color: '#e11d48' } },
+    { name: '石油石化', value: 3529, itemStyle: { color: '#f43f5e' } },
+    { name: '非银金融', value: 3000, itemStyle: { color: '#fb7185' } },
+    { name: '食品饮料', value: 2200, itemStyle: { color: '#fda4af' } },
+    { name: '通信', value: 1800, itemStyle: { color: '#a855f7' } },
+    { name: '煤炭', value: 1500, itemStyle: { color: '#d97706' } },
+    { name: '建筑装饰', value: 1500, itemStyle: { color: '#f59e0b' } },
+    { name: '公用事业', value: 1400, itemStyle: { color: '#14b8a6' } },
+    { name: '汽车', value: 1100, itemStyle: { color: '#0ea5e9' } },
+    { name: '电力设备', value: 1000, itemStyle: { color: '#64748b' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 亿元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图3：近15年趋势 ============
+(function(){
+  var years = ['2010','2012','2014','2016','2018','2020','2021','2022','2023','2024','2025'];
+  var series = [
+    { name: '银行', color: '#e11d48', data: [47,44,40,36,38,37,36,38,40,41,40] },
+    { name: '石油石化', color: '#f59e0b', data: [12,11,8,5,6,6,6,10,7,6.8,6] },
+    { name: '食品饮料', color: '#fda4af', data: [3,3.5,3.5,4,5,6,7,6,5,4.2,4] },
+    { name: '通信', color: '#a855f7', data: [3.5,3.5,3.5,3.5,3.5,3,3,3,3,3.5,3.5] },
+    { name: '煤炭', color: '#d97706', data: [4,4,3,2,3,3,4,5,3.5,2.9,2.8] },
+    { name: '电力设备', color: '#64748b', data: [1.5,1.5,1.5,2,2.5,3,3.5,3,2.5,1.9,1.8] }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(ps){ var s = ps[0].axisValue + '年<br/>'; ps.forEach(function(p){ s += p.marker + ' ' + p.seriesName + '：' + p.value + '%<br/>'; }); return s; } },
+    legend: { bottom: 0, textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 14, itemHeight: 9 },
+    grid: { left: 55, right: 25, top: 40, bottom: 55 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, max: 50, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: series.map(function(s){
+      return { name: s.name, type: 'line', data: s.data, smooth: true, symbolSize: 5, lineStyle: { width: 2.2, color: s.color }, itemStyle: { color: s.color } };
+    })
+  });
+  window.__c3 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>
