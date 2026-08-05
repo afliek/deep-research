@@ -25,6 +25,9 @@
     --cat-macro: #006d7a;
     --cat-macro-bg: rgba(0, 109, 122, 0.08);
     --cat-macro-border: rgba(0, 109, 122, 0.25);
+    --cat-finance: #6d28d9;
+    --cat-finance-bg: rgba(109, 40, 217, 0.10);
+    --cat-finance-border: rgba(139, 92, 246, 0.30);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -174,6 +177,10 @@
     background: var(--cat-macro-bg);
     border: 1px solid var(--cat-macro-border);
   }
+  .category-icon.finance {
+    background: var(--cat-finance-bg);
+    border: 1px solid var(--cat-finance-border);
+  }
   .category-title {
     font-size: 20px; font-weight: 700;
     color: var(--text-primary);
@@ -209,6 +216,7 @@
   }
   .sub-item.sports::before { background: var(--cat-sports); }
   .sub-item.macro::before { background: var(--cat-macro); }
+  .sub-item.finance::before { background: var(--cat-finance); }
   .sub-item:hover {
     background: var(--bg-card-hover);
     border-color: var(--border-hover);
@@ -408,6 +416,29 @@
     </a>
   </div>
 
+  <!-- Category 3: 市场与金融类 -->
+  <div class="category" data-delay="200">
+    <div class="category-header">
+      <div class="category-icon finance">💊</div>
+      <div class="category-title">市场与金融</div>
+      <div class="category-count">1 个研究</div>
+    </div>
+
+    <a href="pharma-profit.html" class="sub-item finance">
+      <div class="sub-item-body">
+        <div class="sub-item-title">美国上市药企利润占比分析</div>
+        <div class="sub-item-desc">美股药企净利润占全市场总利润比例（狭义制药4-5%、广义医疗板块13-14%），2025财年TOP9药企利润排名，及近20年医疗板块盈利占比从9%到13-15%的趋势演变</div>
+        <div class="sub-tags">
+          <span class="sub-tag">药企</span>
+          <span class="sub-tag">利润占比</span>
+          <span class="sub-tag">美股</span>
+          <span class="sub-tag">20年趋势</span>
+        </div>
+      </div>
+      <span class="sub-item-arrow">→</span>
+    </a>
+  </div>
+
   <!-- About -->
   <div class="section-header" style="margin-top:40px">
     <div class="section-title"><span class="bar"></span>关于</div>
@@ -417,7 +448,7 @@
       <strong style="color:var(--text-primary)">深层研究</strong> 是一个个人研究专题集合，以独立视角对感兴趣的主题进行深度数据分析与可视化呈现。所有研究均基于公开数据来源，力求严谨、客观、可追溯。
     </p>
     <p style="font-size:13px;color:var(--text-muted)">
-      数据来源：国家能源局、国家统计局、中国电力企业联合会、全国跳绳联赛官方成绩册等<br>
+      数据来源：国家能源局、国家统计局、中国电力企业联合会、全国跳绳联赛官方成绩册、腾讯自选股/NeoData、BofA Global Research 等<br>
       更新频率：不定期，跟随数据发布节奏更新
     </p>
   </div>
