@@ -109,13 +109,13 @@
     </div>
     <div class="kpi">
       <div class="num">1.5% → 2.6%</div>
-      <div class="label">近20年板块盈利占比缓慢上升<br>（2008年低谷 → 2024年2.6%）</div>
+      <div class="label">近30年板块盈利占比缓慢上升<br>（2008年低谷 → 2024年2.6%）</div>
     </div>
   </div>
 
   <!-- 图1：20年趋势 -->
   <div class="card">
-    <h2>一、近20年房地产板块盈利占标普500比重趋势</h2>
+    <h2>一、近30年房地产板块盈利占标普500比重趋势</h2>
     <div class="sub">口径说明：各数据点为估算或BofA实际值，虚线为估算值；2008-2009年商业地产崩盘致板块整体亏损</div>
     <div class="tabs">
       <div class="tab active" data-target="chart1">📈 图表</div>
@@ -125,6 +125,9 @@
     <div class="view-table" id="table1">
       <table class="plain">
         <tr><th>年份</th><th>房地产板块盈利占标普500比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 1%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2000</td><td>约 1.4%（估算）</td><td>区间估算</td><td>互联网泡沫/周期年份</td></tr>
+        <tr><td>2005</td><td>约 1.9%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
         <tr><td>2006</td><td>约 2%（估算）</td><td>区间估算</td><td>REITs规模尚小</td></tr>
         <tr><td>2008-2009</td><td>整体亏损</td><td>公开事实</td><td>商业地产崩盘，REITs大面积亏损</td></tr>
         <tr><td>2010</td><td>约 1.5%（估算）</td><td>区间估算</td><td>危机后修复</td></tr>
@@ -206,7 +209,7 @@
     <div class="sub">基于上文数据点与公开行业研究</div>
     <table class="plain">
       <tr><th style="width:150px">阶段</th><th style="width:110px">占比区间</th><th>核心驱动</th></tr>
-      <tr><td>2006-2007（20年前）</td><td>约2%</td><td>REITs制度成熟期，住宅/零售地产主导</td></tr>
+      <tr><td>1995-2005（30年前）</td><td>约2%</td><td>REITs 90年代初兴起，占比约1-1.9%缓慢爬升</td></tr>
       <tr><td>2008-2012</td><td>亏损 → 1.5%</td><td>商业地产崩盘，REITs大面积亏损与去杠杆</td></tr>
       <tr><td>2013-2020</td><td>1.5-2.5%</td><td>低利率+电商仓储需求+数据中心起步，占比缓慢爬升</td></tr>
       <tr><td>2021-2025</td><td>2.5-2.6%</td><td>高利率压制估值；AI数据中心需求爆发（DLR/EQIX利润大增），内部结构剧烈分化</td></tr>
@@ -229,9 +232,9 @@
 <script>
 // ============ 图1：20年趋势 ============
 (function(){
-  var years = ['2006','2008-09','2010','2015','2020','2023','2024','2025'];
-  var share = [2.0, null, 1.5, 2.0, 2.5, 2.5, 2.6, 2.5];
-  var isEst = [true, false, true, true, true, true, false, true];
+  var years = ['1995','2000','2005','2006','2008-09','2010','2015','2020','2023','2024','2025'];
+  var share = [1, 1.4, 1.9,2.0, null, 1.5, 2.0, 2.5, 2.5, 2.6, 2.5];
+  var isEst = [true,true,true,true, false, true, true, true, true, false, true];
   var points = [];
   for (var i = 0; i < years.length; i++) {
     if (share[i] === null) continue;
