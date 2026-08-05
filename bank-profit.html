@@ -184,7 +184,70 @@
   </div>
 
   <div class="card">
-    <h2>三、2024年A股十大行业利润结构（银行业所处位置）</h2>
+    <h2>三、42家上市银行上市以来净利润增速排名</h2>
+    <div class="sub">口径：上市首年年报归母净利润（首年）→ 2024年年报归母净利润 · CAGR = (2024/首年)^(1/年数)-1 · A股上市年份为准 · 累计倍数 = 2024年净利 ÷ 首年净利</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart4">📊 增速排名图</div>
+      <div class="tab" data-target="table4">📋 完整排名表</div>
+    </div>
+    <div class="view-chart active" id="chart4" style="width:100%;height:1180px;"></div>
+<div class="view-table" id="table4">
+      <table class="plain">
+        <tr><th>排名</th><th>银行</th><th>上市年</th><th>首年净利(亿)</th><th>2024年净利(亿)</th><th>年数</th><th>累计倍数</th><th>CAGR</th></tr>
+        <tr class="hl"><td>1</td><td>招商银行</td><td>2002</td><td>17.3</td><td>1483.9</td><td>22</td><td>85.6x</td><td style="color:#f87171;font-weight:600;">+22.41%</td></tr>
+        <tr class="hl"><td>2</td><td>宁波银行</td><td>2007</td><td>9.5</td><td>271.3</td><td>17</td><td>28.5x</td><td style="color:#f87171;font-weight:600;">+21.79%</td></tr>
+        <tr class="hl"><td>3</td><td>齐鲁银行</td><td>2021</td><td>28.2</td><td>49.9</td><td>3</td><td>1.8x</td><td style="color:#f87171;font-weight:600;">+20.91%</td></tr>
+        <tr class="hl"><td>4</td><td>南京银行</td><td>2007</td><td>9.1</td><td>201.8</td><td>17</td><td>22.2x</td><td style="color:#f87171;font-weight:600;">+20.00%</td></tr>
+        <tr class="hl"><td>5</td><td>杭州银行</td><td>2016</td><td>40.2</td><td>169.8</td><td>8</td><td>4.2x</td><td style="color:#f87171;font-weight:600;">+19.73%</td></tr>
+        <tr class="hl"><td>6</td><td>平安银行</td><td>1991</td><td>1.2</td><td>445.1</td><td>33</td><td>377.2x</td><td style="color:#f87171;font-weight:600;">+19.70%</td></tr>
+        <tr class="hl"><td>7</td><td>民生银行</td><td>2000</td><td>5.1</td><td>323.0</td><td>24</td><td>63.8x</td><td style="color:#f87171;font-weight:600;">+18.91%</td></tr>
+        <tr class="hl"><td>8</td><td>成都银行</td><td>2018</td><td>46.5</td><td>128.6</td><td>6</td><td>2.8x</td><td style="color:#f87171;font-weight:600;">+18.48%</td></tr>
+        <tr class="hl"><td>9</td><td>华夏银行</td><td>2003</td><td>8.1</td><td>276.8</td><td>21</td><td>34.0x</td><td style="color:#f87171;font-weight:600;">+18.29%</td></tr>
+        <tr><td>10</td><td>常熟银行</td><td>2016</td><td>10.4</td><td>38.1</td><td>8</td><td>3.7x</td><td style="color:#f87171;font-weight:600;">+17.62%</td></tr>
+        <tr><td>11</td><td>浦发银行</td><td>1999</td><td>9.3</td><td>452.6</td><td>25</td><td>48.9x</td><td style="color:#f87171;font-weight:600;">+16.83%</td></tr>
+        <tr><td>12</td><td>青岛银行</td><td>2019</td><td>19.7</td><td>42.6</td><td>5</td><td>2.2x</td><td style="color:#f87171;font-weight:600;">+16.70%</td></tr>
+        <tr><td>13</td><td>苏州银行</td><td>2019</td><td>24.7</td><td>50.7</td><td>5</td><td>2.0x</td><td style="color:#f87171;font-weight:600;">+15.43%</td></tr>
+        <tr><td>14</td><td>江苏银行</td><td>2016</td><td>106.1</td><td>318.4</td><td>8</td><td>3.0x</td><td style="color:#f87171;font-weight:600;">+14.72%</td></tr>
+        <tr><td>15</td><td>瑞丰银行</td><td>2021</td><td>12.7</td><td>19.2</td><td>3</td><td>1.5x</td><td style="color:#f87171;font-weight:600;">+14.69%</td></tr>
+        <tr><td>16</td><td>苏农银行</td><td>2016</td><td>6.5</td><td>19.4</td><td>8</td><td>3.0x</td><td style="color:#f87171;font-weight:600;">+14.64%</td></tr>
+        <tr><td>17</td><td>兴业银行</td><td>2007</td><td>85.9</td><td>772.0</td><td>17</td><td>9.0x</td><td style="color:#f87171;font-weight:600;">+13.79%</td></tr>
+        <tr><td>18</td><td>张家港行</td><td>2017</td><td>7.7</td><td>18.8</td><td>7</td><td>2.4x</td><td style="color:#f87171;font-weight:600;">+13.57%</td></tr>
+        <tr><td>19</td><td>北京银行</td><td>2007</td><td>29.7</td><td>258.3</td><td>17</td><td>8.7x</td><td style="color:#f87171;font-weight:600;">+13.56%</td></tr>
+        <tr><td>20</td><td>中信银行</td><td>2007</td><td>82.9</td><td>685.8</td><td>17</td><td>8.3x</td><td style="color:#f87171;font-weight:600;">+13.23%</td></tr>
+        <tr><td>21</td><td>江阴银行</td><td>2016</td><td>7.8</td><td>20.4</td><td>8</td><td>2.6x</td><td style="color:#f87171;font-weight:600;">+12.79%</td></tr>
+        <tr><td>22</td><td>无锡银行</td><td>2016</td><td>8.8</td><td>22.5</td><td>8</td><td>2.6x</td><td style="color:#f87171;font-weight:600;">+12.42%</td></tr>
+        <tr><td>23</td><td>工商银行</td><td>2006</td><td>493.4</td><td>3658.6</td><td>18</td><td>7.4x</td><td style="color:#f87171;font-weight:600;">+11.77%</td></tr>
+        <tr><td>24</td><td>邮储银行</td><td>2016</td><td>397.8</td><td>864.8</td><td>8</td><td>2.2x</td><td style="color:#f87171;font-weight:600;">+10.19%</td></tr>
+        <tr><td>25</td><td>长沙银行</td><td>2018</td><td>44.0</td><td>78.3</td><td>6</td><td>1.8x</td><td style="color:#f87171;font-weight:600;">+10.07%</td></tr>
+        <tr><td>26</td><td>中国银行</td><td>2006</td><td>428.3</td><td>2378.4</td><td>18</td><td>5.6x</td><td style="color:#f87171;font-weight:600;">+9.99%</td></tr>
+        <tr><td>27</td><td>建设银行</td><td>2007</td><td>691.4</td><td>3355.8</td><td>17</td><td>4.9x</td><td style="color:#f87171;font-weight:600;">+9.74%</td></tr>
+        <tr><td>28</td><td>交通银行</td><td>2007</td><td>205.1</td><td>935.9</td><td>17</td><td>4.6x</td><td style="color:#f87171;font-weight:600;">+9.34%</td></tr>
+        <tr><td>29</td><td>厦门银行</td><td>2020</td><td>18.2</td><td>25.9</td><td>4</td><td>1.4x</td><td style="color:#f87171;font-weight:600;">+9.23%</td></tr>
+        <tr><td>30</td><td>光大银行</td><td>2010</td><td>127.9</td><td>417.0</td><td>14</td><td>3.3x</td><td style="color:#f87171;font-weight:600;">+8.81%</td></tr>
+        <tr><td>31</td><td>沪农商行</td><td>2021</td><td>97.2</td><td>122.9</td><td>3</td><td>1.3x</td><td style="color:#f87171;font-weight:600;">+8.14%</td></tr>
+        <tr><td>32</td><td>农业银行</td><td>2010</td><td>948.7</td><td>2820.8</td><td>14</td><td>3.0x</td><td style="color:#f87171;font-weight:600;">+8.09%</td></tr>
+        <tr><td>33</td><td>上海银行</td><td>2016</td><td>143.1</td><td>235.6</td><td>8</td><td>1.6x</td><td style="color:#f87171;font-weight:600;">+6.43%</td></tr>
+        <tr><td>34</td><td>兰州银行</td><td>2022</td><td>17.3</td><td>18.9</td><td>2</td><td>1.1x</td><td style="color:#f87171;font-weight:600;">+4.38%</td></tr>
+        <tr><td>35</td><td>贵阳银行</td><td>2016</td><td>36.8</td><td>51.6</td><td>8</td><td>1.4x</td><td style="color:#f87171;font-weight:600;">+4.33%</td></tr>
+        <tr><td>36</td><td>浙商银行</td><td>2019</td><td>129.2</td><td>151.9</td><td>5</td><td>1.2x</td><td style="color:#f87171;font-weight:600;">+3.28%</td></tr>
+        <tr><td>37</td><td>重庆银行</td><td>2021</td><td>46.6</td><td>51.2</td><td>3</td><td>1.1x</td><td style="color:#f87171;font-weight:600;">+3.14%</td></tr>
+        <tr><td>38</td><td>渝农商行</td><td>2019</td><td>100.0</td><td>115.1</td><td>5</td><td>1.2x</td><td style="color:#f87171;font-weight:600;">+2.86%</td></tr>
+        <tr><td>39</td><td>紫金银行</td><td>2019</td><td>14.2</td><td>16.2</td><td>5</td><td>1.1x</td><td style="color:#f87171;font-weight:600;">+2.75%</td></tr>
+        <tr><td>40</td><td>青农商行</td><td>2019</td><td>28.2</td><td>28.6</td><td>5</td><td>1.0x</td><td style="color:#f87171;font-weight:600;">+0.22%</td></tr>
+        <tr><td>41</td><td>西安银行</td><td>2019</td><td>26.8</td><td>25.6</td><td>5</td><td>1.0x</td><td style="color:#4ade80;font-weight:600;">-0.88%</td></tr>
+        <tr><td>42</td><td>郑州银行</td><td>2018</td><td>31.0</td><td>18.8</td><td>6</td><td>0.6x</td><td style="color:#4ade80;font-weight:600;">-8.01%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>板块对比：</b>股份制平均 15.0%（分化最大：招行22.4% vs 浙商3.3%）＞ 城商行 10.6%（江浙系集体强势：宁波/杭州/江苏/苏州/常熟/南京均14%+）＞ 农商行 10.0%（常熟17.6%领跑）＞ 国有大行 9.9%（8-12%窄区间、最稳，工行11.8%居首）。<br>      <b>读图要点：</b>① 招商银行 22.4% 是唯一"长周期+高增速"双优样本（22年85.6倍）；② 平安银行累计377倍最高但1991年基数仅1.18亿；③ 齐鲁银行20.9%仅上市3年、兰州银行4.4%仅2年，短期CAGR受基数效应影响大，需结合累计倍数看；④ 郑州银行-8.0%为唯一利润腰斩银行（31亿→18.8亿），西安银行微降；⑤ 规律：基数越小、上市越早，增速弹性越大，国有大行因巨基数（首年500-950亿）增速天花板最低。
+    </div>
+    <div class="note">
+      <b>口径提示：</b>首年净利润取自各银行上市首份年报（已核验：工行493.36亿/建行691.42亿/中行428.30亿/招行17.34亿/交行205.13亿/兴业85.86亿/中信82.90亿/江苏106.11亿/上海143.08亿/贵阳36.78亿等）；H股先上市者以A股上市年计（浙商2019/重庆2021/渝农商2019/青岛2019/郑州2018）；2007年前上市银行首年数据受新旧会计准则切换影响，个别与后续年报口径略有差异。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、2024年A股十大行业利润结构（银行业所处位置）</h2>
     <div class="sub">单位：亿元 · 申万一级口径 · 含估算（*）</div>
     <div class="tabs">
       <div class="tab active" data-target="chart3">🥧 环形图</div>
@@ -213,7 +276,7 @@
   </div>
 
   <div class="card">
-    <h2>四、总结与前瞻</h2>
+    <h2>五、总结与前瞻</h2>
     <div class="sub">基于上文数据点与公开行业研究</div>
     <div class="note">
       <b>行业特征：</b>银行业是A股"规模驱动+政策庇护"的典型行业——净息差持续收窄（2024年约1.5%），但信贷规模扩张（2024年贷款+7%）与拨备反哺维持利润正增长；国有大行的高分红（股息率5-6%）使其成为险资与"国家队"的核心持仓。<br><b>前瞻判断（观点）：</b>短期银行利润占比仍将维持40%上下——息差下行压力与规模扩张对冲；中期看，若资本市场直接融资占比提升、居民资产向权益迁移，银行利润占比将缓慢回落（参考美国2008年后金融占比腰斩的路径）。风险点：① 净息差跌破1.4%后的利润拐点；② 房地产与地方债务风险暴露；③ 居民与企业信贷需求疲弱。
@@ -297,6 +360,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
     if (t === 'chart1' && window.__c1) window.__c1.resize();
     if (t === 'chart2' && window.__c2) window.__c2.resize();
     if (t === 'chart3' && window.__c3) window.__c3.resize();
+    if (t === 'chart4' && window.__c4) window.__c4.resize();
   });
 });
 
@@ -304,7 +368,25 @@ window.addEventListener('resize', function(){
   if (window.__c1) window.__c1.resize();
   if (window.__c2) window.__c2.resize();
   if (window.__c3) window.__c3.resize();
+  if (window.__c4) window.__c4.resize();
 });
+(function(){
+  var names = ["招商银行","宁波银行","齐鲁银行","南京银行","杭州银行","平安银行","民生银行","成都银行","华夏银行","常熟银行","浦发银行","青岛银行","苏州银行","江苏银行","瑞丰银行","苏农银行","兴业银行","张家港行","北京银行","中信银行","江阴银行","无锡银行","工商银行","邮储银行","长沙银行","中国银行","建设银行","交通银行","厦门银行","光大银行","沪农商行","农业银行","上海银行","兰州银行","贵阳银行","浙商银行","重庆银行","渝农商行","紫金银行","青农商行","西安银行","郑州银行"];
+  var cagrs = [22.41,21.79,20.91,20.00,19.73,19.70,18.91,18.48,18.29,17.62,16.83,16.70,15.43,14.72,14.69,14.64,13.79,13.57,13.56,13.23,12.79,12.42,11.77,10.19,10.07,9.99,9.74,9.34,9.23,8.81,8.14,8.09,6.43,4.38,4.33,3.28,3.14,2.86,2.75,0.22,-0.88,-8.01];
+  var years = [2002,2007,2021,2007,2016,1991,2000,2018,2003,2016,1999,2019,2019,2016,2021,2016,2007,2017,2007,2007,2016,2016,2006,2016,2018,2006,2007,2007,2020,2010,2021,2010,2016,2022,2016,2019,2021,2019,2019,2019,2019,2018];
+  var mults = [85.6,28.5,1.8,22.2,4.2,377.2,63.8,2.8,34.0,3.7,48.9,2.2,2.0,3.0,1.5,3.0,9.0,2.4,8.7,8.3,2.6,2.6,7.4,2.2,1.8,5.6,4.9,4.6,1.4,3.3,1.3,3.0,1.6,1.1,1.4,1.2,1.1,1.2,1.1,1.0,1.0,0.6];
+  var revN = names.slice().reverse(), revC = cagrs.slice().reverse(), revY = years.slice().reverse(), revM = mults.slice().reverse();
+  var ch = echarts.init(document.getElementById('chart4'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ var i = revN.indexOf(p[0].name); return p[0].name + '（' + revY[i] + '年上市）：上市以来净利润CAGR ' + revC[i] + '%，累计' + revM[i] + '倍'; } },
+    grid: { left: 78, right: 66, top: 34, bottom: 26 },
+    xAxis: { type: 'value', name: '年化复合增速 %', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    yAxis: { type: 'category', data: revN, axisLabel: { fontSize: 11, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    series: [{ type: 'bar', data: revC.map(function(v, i){ return { value: v, itemStyle: { color: v >= 0 ? '#e11d48' : '#22c55e', borderRadius: [0,6,6,0] } }; }), barWidth: 15, label: { show: true, position: 'right', formatter: function(p){ return (p.value > 0 ? '+' : '') + p.value + '%'; }, fontSize: 10, color: '#cbd5e1' } }]
+  });
+  window.__c4 = ch;
+})();
+
 </script>
 </body>
 </html>
