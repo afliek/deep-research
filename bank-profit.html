@@ -50,6 +50,13 @@
   .hl td { color:#e2e8f0; }
   .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
   @media(max-width:760px){ .kpi .num{font-size:20px;} }
+
+  .toc { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); }
+  .toc-title { width:100%; font-size:12px; color:var(--text-muted); letter-spacing:1px; margin-bottom:4px; }
+  .toc a { font-size:13px; color:var(--text-secondary); text-decoration:none; padding:6px 12px; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); transition:all .2s; }
+  .toc a:hover { color:#fff; border-color:var(--accent); background:rgba(225,29,72,0.15); }
+  html { scroll-behavior:smooth; }
+  [id^="sec"] { scroll-margin-top: 84px; }
 </style>
 </head>
 <body>
@@ -62,6 +69,16 @@
 <div class="wrap">
   <h1>中国银行业利润格局分析</h1>
   <div class="meta">数据截至 2026年8月5日 · 财务口径：A股上市公司2024年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="toc">
+    <div class="toc-title">本页目录</div>
+      <a href="#sec1">近30年银行业占A股总利润比重趋势</a>
+      <a href="#sec2">42家上市银行净利润完整排名（2024年）</a>
+      <a href="#sec3">42家上市银行上市以来净利润增速排名</a>
+      <a href="#sec4">近10年净利润增速+股息率双因子回报排名</a>
+      <a href="#sec5">2024年A股十大行业利润结构（银行业所处位置）</a>
+      <a href="#sec6">总结与前瞻</a>
+  </div>
 
   <div class="tl-dr">
     <h2>核心结论（TL;DR）</h2>
@@ -77,7 +94,7 @@
     <div class="kpi"><div class="num">41%</div><div class="label">银行占A股净利润比例<br>（2024年，2.14万亿/5.21万亿）</div></div><div class="kpi"><div class="num">2.14万亿</div><div class="label">42家上市银行2024年<br>归母净利润合计</div></div><div class="kpi"><div class="num">3659亿</div><div class="label">工商银行2024年归母净利<br>（连续多年A股利润榜第一）</div></div><div class="kpi"><div class="num">35-50%</div><div class="label">近30年银行占A股利润区间<br>（2015年低点约35%）</div></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec1">
     <h2>一、近30年银行业占A股总利润比重趋势</h2>
     <div class="sub">估算序列（%）：1995-2025年关键年份数据，基于A股各行业净利润历史数据与行业事件推估，估算值已标注</div>
     <div class="tabs">
@@ -103,7 +120,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec2">
     <h2>二、42家上市银行净利润完整排名（2024年）</h2>
     <div class="sub">单位：亿元 · 归母净利润 · 2024年年报口径 · 按四大板块分组展示（板块内按净利润降序） · 42家合计21,440.7亿元与官方披露口径一致</div>
     <div class="tabs">
@@ -183,7 +200,7 @@
       <b>补充说明：</b>① 利润高度集中于国有大行——工建农中四大行均超2000亿，六大行合计1.4万亿、占板块65.4%；五大行（工建农中招）净利润超1000亿。<br>② 42家银行中38家2024年净利正增长（超九成），浦发（+23.3%）、青岛（+20.2%）、杭州（+18.1%）增速居前；仅平安（-4.2%）、民生（-9.9%）、贵阳（-7.2%）、厦门（-2.6%）4家下滑。<br>③ 2024年净息差全线收窄（行业均值降至1.52%，仅常熟2.71%、长沙2.11%高于2%），利润韧性来自债券投资收益增长与负债成本压降；板块股息率普遍5-6%，分红总额6315亿元再创新高，是A股"高股息"行情核心资产。</div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec3">
     <h2>三、42家上市银行上市以来净利润增速排名</h2>
     <div class="sub">口径：上市首年年报归母净利润（首年）→ 2024年年报归母净利润 · CAGR = (2024/首年)^(1/年数)-1 · A股上市年份为准 · 累计倍数 = 2024年净利 ÷ 首年净利</div>
     <div class="tabs">
@@ -246,7 +263,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec4">
     <h2>四、近10年净利润增速+股息率双因子回报排名</h2>
     <div class="sub">持有银行股的预期年化回报 = 净利润增速（盈利推升股价）+ 股息率（分红到账）。总回报% = 近10年净利润CAGR + 近10年平均股息率（直接相加），占70%权重；拨备覆盖率15% + 不良率反向15% 作质量微调，得 BMPI-2 综合分</div>
     <div class="tabs">
@@ -308,7 +325,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec5">
     <h2>五、2024年A股十大行业利润结构（银行业所处位置）</h2>
     <div class="sub">单位：亿元 · 申万一级口径 · 含估算（*）</div>
     <div class="tabs">
@@ -337,7 +354,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sec6">
     <h2>六、总结与前瞻</h2>
     <div class="sub">基于上文数据点与公开行业研究</div>
     <div class="note">
