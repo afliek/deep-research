@@ -57,3 +57,27 @@ git add <files> && git commit -m "说明"
 - 远程恢复点：commit `9782e55fed`（08-13 另一台电脑版，含 gold-research.html 等）。
 - 本地待上传：nasdaq-pe.html、dow-jones-pe.html、nikkei-pe.html（全球股市市盈率板块目前只有 korea-pe.html）。
 - 完整错误清单：`C:\Users\afliek\WorkBuddy\2026-08-05-22-03-16\.workbuddy\memory\ERRORS-LESSONS.md`
+
+---
+
+## 多机协作规范（2026-08-17 补充 · 本次事故复盘）
+
+### 事故复盘（08-17）
+- 本机 deploy/.git 的 `refs/`+`objects/` 意外丢失（疑为多端并发操作 + 清理干扰），git 报 not a git repository。
+- 恢复方式：下载远程 tarball（codeload.github.com，https 通）→ 补齐缺失文件 → 重建 .git → 单 commit（149 文件）→ **force push**（SSH，耗时 13 分钟）。
+- ⚠️ **force push 已把远程历史替换为本地单 commit（e3afa4a）**：内容零丢失（补齐了远程全部文件），但**另一台电脑基于旧历史（9782e55 之前）的 API 推送（force:False）现在会被拒**——如遇 422/被拒，另一台电脑需按本规范第 1 步核对远程、基于最新远程内容重推。
+- 现状：远程 = 本地 = e3afa4a，含全部 149 文件（7 分组 16 专题，含临时研究/SAR_ADC_Report_Review.pdf）。
+
+### 多机协作铁律（三台电脑都遵守）
+1. **改动前必拉最新**：`git pull origin main`（本机 https 443 不通时改用 SSH `git@github.com` 或 API 拿远程 index.html 对比）。
+2. **push 前必核对**：`git status` + 确认远程没有未知新提交（另一台电脑在推）。
+3. **绝不 `git push --force`**（除非仓库损坏且已确认远程内容全部纳入）。
+4. **push 被拒 = 远程有新提交**：先 pull 合并再 push，不要硬推。
+5. **不要在 GitHub 网页直接改文件**（会产生远程分叉）。
+6. **每周健康检查**（任意一台）：`git status && git fsck`，提前发现 refs/objects 异常。
+7. **.git 损坏不要修**：`rm -rf .git` → `git init -b main` → `git remote add origin git@github.com:afliek/deep-research.git` → `git fetch origin main` → `git reset --mixed origin/main`（本地文件保留、与远程对齐）→ 若 fetch 卡（https 443 不通），用 codeload tarball 恢复。
+
+### 待办：files/ 大文件迁移
+- deploy 446MB（files/ 跳绳成绩册 PDF 占 ~400MB），全量 push 需 10+ 分钟、放大损坏影响。
+- 计划：上传到 GitHub Releases（需本机 GitHub token/gh 认证，当前 gh 不可用、github connector 未连接）→ 页面内 files/ 链接替换为 Release URL → `git rm -r files/` → push。
+- 迁移前确认：跳绳相关页面引用 files/*.pdf 的链接清单，替换后逐个验证。
