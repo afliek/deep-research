@@ -22,6 +22,16 @@
 
 ---
 
+
+### 3. 仓库损坏恢复时 force push 覆盖远程新内容（2026-08-17 二次事故）
+- **现象**：本机 .git 损坏，用 tarball 恢复 + 重建仓库后 force push（e3afa4a），覆盖了另一台电脑 08-16 推送的 10 个页面 + 首页 4 个卡片（远程 HEAD 5aacc56 被抹掉）。
+- **根因**：tarball 恢复"补齐缺失文件"只补本地缺失的文件，**不比对已有文件内容**；本地 index.html 是旧版却没被 tarball 覆盖，force push 后远程变旧版。
+- **恢复**：Events API 找 force push 事件的 before SHA（5aacc56）→ trees/contents/blob API 下载缺失文件 → 对比旧 index.html 合并恢复（commit 76dff40，全部 HTTP 200 验证）。
+- **预防（硬性）**：
+  1. 恢复/重建仓库后，**必须比对核心文件（index.html 等）内容与远程 head**，不能只看文件是否存在；
+  2. force push 前记录 Events API 的 before 字段（被覆盖的远程 HEAD），出问题可找回；
+  3. 合并脚本插入卡片前断言"目标不在当前文件"、插入后断言数量，防止重复。
+
 ## P1 · 编辑质量（反复出错的点）
 
 ### 3. 编辑 index.html 误吞相邻结构（犯过 3 次）

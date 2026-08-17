@@ -81,3 +81,15 @@ git add <files> && git commit -m "说明"
 - deploy 446MB（files/ 跳绳成绩册 PDF 占 ~400MB），全量 push 需 10+ 分钟、放大损坏影响。
 - 计划：上传到 GitHub Releases（需本机 GitHub token/gh 认证，当前 gh 不可用、github connector 未连接）→ 页面内 files/ 链接替换为 Release URL → `git rm -r files/` → push。
 - 迁移前确认：跳绳相关页面引用 files/*.pdf 的链接清单，替换后逐个验证。
+
+### 第二次事故复盘（08-17 下午 · force push 覆盖远程内容）
+- **现象**：用户发现线上"全球市盈率研究 7 国""临时研究几个板块"等消失。原因：08-17 上午的 force push（e3afa4a）覆盖了**另一台电脑 08-16 推送的内容**（被覆盖前远程 HEAD = `5aacc56ea07c`），丢失 10 个页面（global-pe/hk-pe/india-pe/nasdaq-pe/nikkei-pe/taiwan-pe/sp500-earnings-vs-price/us-bank-profit/a-share-industry/china-us-total-return）+ 首页 4 个卡片。
+- **根因**：.git 损坏后恢复时，tarball"补齐缺失文件"**只补本地缺失的文件、不比对已有文件内容**——本地 index.html 是旧版（缺另一台电脑的新卡片）却没被 tarball 覆盖，force push 后远程首页变旧版。
+- **恢复方法（GitHub 对象未 GC，可从旧 commit 找回）**：
+  1. `GET /repos/{owner}/{repo}/events` 查 PushEvent，找 force push 事件的 `before` 字段 = 被覆盖前远程 HEAD（本例 5aacc56ea07c）
+  2. `GET /git/trees/{sha}?recursive=1` 拿文件树 → `GET /contents/{path}?ref={sha}` 下载缺失文件（>1MB 用 `GET /git/blobs/{sha}`）
+  3. 拿旧 index.html 对比当前，合并恢复丢失卡片/分区（插入前断言"目标不在当前文件"、插入后断言数量，防止重复）
+  4. 校验全部恢复页面 HTTP 200 → 提交推送
+- **新教训（追加到铁律）**：
+  - **8. 恢复/重建仓库时，不能只看"文件是否存在"，必须比对核心文件（index.html 等）内容与远程 head 是否一致**；force push 前确认远程最新提交的全部内容已纳入。
+  - **9. force push 前用 Events API 的 `before` 字段记录被覆盖的远程 HEAD**，一旦出问题可按此 SHA 从 GitHub 对象库找回（对象保留期内）。
