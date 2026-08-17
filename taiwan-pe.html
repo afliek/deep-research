@@ -191,7 +191,7 @@ function interpolateQ(annualVal,prev,next,qIdx){const p=prev!==undefined?prev:an
 
 const years=Object.keys(annualPE).map(Number).sort((a,b)=>a-b);
 
-years.forEach((year,idx)=>{const prev=idx>0?annualPE[years[idx-1]]:undefined;const next=idx<years.length-1?annualPE[years[idx+1]]:undefined;const base=annualPE[year];[0,1,2,3].forEach(qIdx=>{const qn=['Q1','Q2','Q3','Q4'];const lastY=years[years.length-1];let v;
+years.forEach((year,idx)=>{const prev=idx>0?annualPE[years[idx-1]]:undefined;const next=idx<years.length-1?annualPE[years[idx+1]]:undefined;const base=annualPE[year];const iPrev=idx>0?annualIdx[years[idx-1]]:undefined;const iNext=idx<years.length-1?annualIdx[years[idx+1]]:undefined;const iBase=annualIdx[year];[0,1,2,3].forEach(qIdx=>{const qn=['Q1','Q2','Q3','Q4'];const lastY=years[years.length-1];let v;
 
   if(year===lastY)v=annualPE[lastY];
 

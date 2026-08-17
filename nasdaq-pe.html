@@ -113,7 +113,7 @@ const annualIdx = {1971:114.12,1972:133.73,1973:92.19,1974:59.82,1975:77.62,1976
 const quarters=[];const peValues=[];const idxValues=[];
 function interpolateQ(annualVal,prev,next,qIdx){const p=prev!==undefined?prev:annualVal*0.95;const n=next!==undefined?next:annualVal*1.05;const w=[[0.80,0.20],[0.95,0.05],[1.05,-0.05],[1.10,-0.10]];const[w1,w2]=w[qIdx];let v=annualVal*w1+(qIdx<2?p*w2:n*(-w2));const j=1+(Math.sin(annualVal*10+qIdx*3)*0.04);return Math.round(v*j*100)/100;}
 const years=Object.keys(annualPE).map(Number).sort((a,b)=>a-b);
-years.forEach((year,idx)=>{const prev=idx>0?annualPE[years[idx-1]]:undefined;const next=idx<years.length-1?annualPE[years[idx+1]]:undefined;const base=annualPE[year];[0,1,2,3].forEach(qIdx=>{let v;
+years.forEach((year,idx)=>{const prev=idx>0?annualPE[years[idx-1]]:undefined;const next=idx<years.length-1?annualPE[years[idx+1]]:undefined;const base=annualPE[year];const iPrev=idx>0?annualIdx[years[idx-1]]:undefined;const iNext=idx<years.length-1?annualIdx[years[idx+1]]:undefined;const iBase=annualIdx[year];[0,1,2,3].forEach(qIdx=>{let v;
   if(year===2026&&qIdx===0)v=36;
   else if(year===2026&&qIdx===1)v=38;
   else if(year===2026&&qIdx===2)v=34.1;
