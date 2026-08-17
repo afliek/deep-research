@@ -304,16 +304,19 @@
   <!-- 六、核心指标历年数据补充（趋势分析报告） -->
   <div class="card">
     <h2>六、核心指标历年数据（《中国保险行业趋势分析报告》2026年4月版）</h2>
-    <div class="sub">行业总资产 · 投资收益率 · 偿付能力充足率 · 保险深度/密度 · 2024年五大上市险企保费 · 来源：国家金融监督管理总局、中国保险行业协会</div>
+    <div class="sub">行业总资产 · 投资收益率 · 偿付能力充足率 · 保险深度/密度（1985-2025完整年度） · 2024年五大上市险企保费 · 来源：国家金融监督管理总局、中国保险行业协会、保险年鉴</div>
     <div class="tabs">
       <div class="tab active" data-target="chart5">📊 行业总资产</div>
       <div class="tab" data-target="chart6">📈 投资收益率</div>
+      <div class="tab" data-target="chart7">📉 深度/密度趋势</div>
       <div class="tab" data-target="table5">🛡 偿付能力</div>
-      <div class="tab" data-target="table6">📋 深度/密度</div>
+      <div class="tab" data-target="table6">📋 深度/密度表</div>
+      <div class="tab" data-target="table8">💰 收益率表</div>
       <div class="tab" data-target="table7">🏦 2024险企保费</div>
     </div>
     <div class="view-chart active" id="chart5" style="width:100%;height:420px;"></div>
     <div class="view-chart" id="chart6" style="width:100%;height:420px;"></div>
+    <div class="view-chart" id="chart7" style="width:100%;height:460px;"></div>
     <div class="view-table" id="table5">
       <table class="plain">
         <tr><th>时间</th><th>综合偿付能力充足率</th><th>核心偿付能力充足率</th><th>备注</th></tr>
@@ -327,18 +330,83 @@
       <div class="note"><b>监管要求：</b>综合偿付能力充足率 ≥100%、核心偿付能力充足率 ≥50%。当前行业整体（181%-205%）及各类公司均远超监管红线，抗风险能力充足。<b>2025Q4 回落至181.1%</b>主要与权益配置提升、偿付能力新规口径调整有关，仍处健康区间。</div>
     </div>
     <div class="view-table" id="table6">
+      <div style="max-height:520px;overflow-y:auto;">
       <table class="plain">
-        <tr><th>年份</th><th>保险深度(%)</th><th>保险密度(元/人)</th><th>趋势</th></tr>
-        <tr><td>1985</td><td>0.36</td><td>-</td><td>历史最低点</td></tr>
-        <tr><td>2013</td><td>-</td><td>1,265</td><td>十年起点</td></tr>
-        <tr><td>2017</td><td>-</td><td>-</td><td>阶段峰值</td></tr>
-        <tr><td>2020</td><td>4.45</td><td>-</td><td>阶段高点</td></tr>
-        <tr><td>2021</td><td>4.0</td><td>-</td><td>下降</td></tr>
-        <tr><td>2022</td><td>3.88</td><td>-</td><td>下降</td></tr>
-        <tr><td>2023</td><td><b>4.1</b></td><td><b>3,635</b></td><td>回升</td></tr>
-        <tr class="hl"><td>2025</td><td><b>4.4</b></td><td><b>4,043</b></td><td>持续回升</td></tr>
+        <tr><th>年份</th><th>保险密度(元/人)</th><th>保险深度(%)</th><th>备注</th></tr>
+        <tr><td>1985</td><td>3.13</td><td>0.36</td><td>历史最低点</td></tr>
+        <tr><td>1986</td><td>4.26</td><td>0.65</td><td>-</td></tr>
+        <tr><td>1987</td><td>6.51</td><td>0.67</td><td>-</td></tr>
+        <tr><td>1988</td><td>9.86</td><td>0.72</td><td>-</td></tr>
+        <tr><td>1989</td><td>12.64</td><td>0.77</td><td>-</td></tr>
+        <tr><td>1990</td><td>15.56</td><td>0.85</td><td>-</td></tr>
+        <tr><td>1991</td><td>20.35</td><td>0.90</td><td>-</td></tr>
+        <tr><td>1992</td><td>31.39</td><td>1.00</td><td>深度破1%</td></tr>
+        <tr><td>1993</td><td>42.16</td><td>0.98</td><td>-</td></tr>
+        <tr><td>1994</td><td>49</td><td>0.97</td><td>-</td></tr>
+        <tr><td>1995</td><td>56.39</td><td>1.17</td><td>-</td></tr>
+        <tr><td>1996</td><td>63.5</td><td>1.09</td><td>-</td></tr>
+        <tr><td>1997</td><td>87.7</td><td>1.45</td><td>-</td></tr>
+        <tr><td>1998</td><td>100</td><td>1.55</td><td>密度破100元</td></tr>
+        <tr><td>1999</td><td>111</td><td>1.67</td><td>-</td></tr>
+        <tr><td>2000</td><td>126</td><td>1.79</td><td>起步期</td></tr>
+        <tr><td>2001</td><td>169</td><td>2.20</td><td>入世提速</td></tr>
+        <tr><td>2002</td><td>238</td><td>2.98</td><td>-</td></tr>
+        <tr><td>2003</td><td>287</td><td>3.33</td><td>-</td></tr>
+        <tr><td>2004</td><td>332</td><td>3.39</td><td>-</td></tr>
+        <tr><td>2005</td><td>379</td><td>2.70</td><td>GDP重估回调</td></tr>
+        <tr><td>2006</td><td>431</td><td>2.80</td><td>-</td></tr>
+        <tr><td>2007</td><td>533</td><td>2.93</td><td>-</td></tr>
+        <tr><td>2008</td><td>741</td><td>3.25</td><td>金融危机</td></tr>
+        <tr><td>2009</td><td>834</td><td>3.27</td><td>-</td></tr>
+        <tr><td>2010</td><td>968</td><td>3.14</td><td>GDP重估回调</td></tr>
+        <tr><td>2011</td><td>1047</td><td>3.04</td><td>-</td></tr>
+        <tr><td>2012</td><td>1131</td><td>2.98</td><td>-</td></tr>
+        <tr><td>2013</td><td>1266</td><td>3.03</td><td>十年起点</td></tr>
+        <tr><td>2014</td><td>1518</td><td>3.18</td><td>-</td></tr>
+        <tr><td>2015</td><td>1766</td><td>3.52</td><td>牛市推动</td></tr>
+        <tr><td>2016</td><td>2239</td><td>4.16</td><td>-</td></tr>
+        <tr><td>2017</td><td>2632</td><td>4.42</td><td>阶段峰值</td></tr>
+        <tr><td>2018</td><td>2724</td><td>4.22</td><td>转型启动</td></tr>
+        <tr><td>2019</td><td>3046</td><td>4.30</td><td>密度破3000元</td></tr>
+        <tr><td>2020</td><td>3206</td><td>4.45</td><td>历史最高</td></tr>
+        <tr><td>2021</td><td>3179</td><td>3.93</td><td>疫情回落</td></tr>
+        <tr><td>2022</td><td>3326</td><td>3.88</td><td>继续回调</td></tr>
+        <tr><td>2023</td><td>3635</td><td>4.10</td><td>回升，达标新国十条</td></tr>
+        <tr><td>2024</td><td>4046</td><td>4.20</td><td>持续回升</td></tr>
+        <tr class="hl"><td>2025</td><td><b>4,043</b></td><td><b>4.40</b></td><td>最新数据</td></tr>
       </table>
-      <div class="note"><b>要点：</b>① 保险密度3,635元/人（2023年）已提前达到新"国十条"提出的 <b>3,500元/人</b> 目标；② 2025年进一步升至4,043元/人、深度4.4%；③ 深度从1985年的0.36%提升至4.4%，增长超12倍，但较全球平均（7.0%）、美国（8.7%）仍有约1.5-2倍空间。</div>
+      </div>
+      <div class="note"><b>要点：</b>① 保险密度3,635元/人（2023年）已提前达到新"国十条"提出的 <b>3,500元/人</b> 目标；② 2025年进一步升至4,043元/人、深度4.4%；③ 深度从1985年的0.36%提升至4.4%，增长超12倍，但较全球平均（7.0%）、美国（8.7%）仍有约1.5-2倍空间。④ 2021-2022年深度回落系疫情下GDP增速高于保费增速所致，2023年起重拾升势。<br><b>数据口径：</b>密度=当年保费收入/常住人口；深度=保费收入/GDP。早期数据（2005年前）受GDP核算基数调整影响存在口径修正，以国家金融监管总局/保险年鉴追溯数据为准。</div>
+    </div>
+    <div class="view-table" id="table8">
+      <div style="max-height:520px;overflow-y:auto;">
+      <table class="plain">
+        <tr><th>年份</th><th>财务投资收益率(%)</th><th>综合投资收益率(%)</th><th>备注</th></tr>
+        <tr><td>2004</td><td>2.8</td><td>-</td><td>险资入市起步</td></tr>
+        <tr><td>2005</td><td>3.6</td><td>-</td><td>-</td></tr>
+        <tr><td>2006</td><td>5.8</td><td>-</td><td>-</td></tr>
+        <tr class="hl"><td>2007</td><td>12.0</td><td class="tag-up">约12%+</td><td>大牛市历史峰值</td></tr>
+        <tr><td>2008</td><td>2.0</td><td>负值</td><td>金融危机</td></tr>
+        <tr><td>2009</td><td>6.4</td><td>-</td><td>四万亿反弹</td></tr>
+        <tr><td>2010</td><td>4.8</td><td>-</td><td>连续三年低于5%</td></tr>
+        <tr><td>2011</td><td>3.5</td><td>-</td><td>-</td></tr>
+        <tr><td>2012</td><td>3.4</td><td>-</td><td>-</td></tr>
+        <tr><td>2013</td><td>5.0</td><td>-</td><td>-</td></tr>
+        <tr><td>2014</td><td>6.3</td><td>-</td><td>债牛+股牛</td></tr>
+        <tr><td>2015</td><td>7.6</td><td>-</td><td>大牛市</td></tr>
+        <tr><td>2016</td><td>5.8</td><td>-</td><td>-</td></tr>
+        <tr><td>2017</td><td>5.9</td><td>-</td><td>-</td></tr>
+        <tr><td>2018</td><td>4.3</td><td>-</td><td>熊市承压</td></tr>
+        <tr><td>2019</td><td>5.1</td><td>-</td><td>-</td></tr>
+        <tr><td>2020</td><td>5.41</td><td>5.98</td><td>股债双牛</td></tr>
+        <tr><td>2021</td><td>4.84</td><td>4.45</td><td>权益波动</td></tr>
+        <tr><td>2022</td><td>3.76</td><td>1.83</td><td>股债双杀</td></tr>
+        <tr><td>2023</td><td>2.23</td><td>3.22</td><td>十多年低位</td></tr>
+        <tr class="hl"><td>2024</td><td>3.43</td><td><b>7.21</b></td><td>债牛+高股息，综合创近年新高</td></tr>
+        <tr class="hl"><td>2025</td><td>约3.8*</td><td>上市险企6.1-6.3</td><td>权益加仓受益；全行业数据未公布</td></tr>
+      </table>
+      </div>
+      <div class="note"><b>要点：</b>① <b>财务收益率</b>（计入利润表）：2007年大牛市12.0%为历史峰值，2023年2.23%为十多年低位，2024年回升至3.43%、2025年约3.8%；② <b>综合收益率</b>（含浮盈浮亏）：2020年5.98%→2022年1.83%→2024年 <b>7.21%</b> 大幅跳升，2025年上市险企6.1%-6.3%（平安6.3%领跑）；③ 2024年综合收益率高企主要受益于债券牛市浮盈+高股息股票行情，2008年金融危机时综合收益率一度为负。<br><b>数据口径：</b>财务/综合投资收益率官方连续统计始于2004年（保险资金运用余额口径）；2004年前无权威连续数据。2004-2019年为金融监管总局/保险年鉴口径，2020年后为金融监管总局官方披露；2025年*为行业估算（上市险企总投资收益率5.7%-6.6%）。</div>
     </div>
     <div class="view-table" id="table7">
       <table class="plain">
@@ -354,7 +422,7 @@
     </div>
     <div class="note">
       <b>指标体系框架（报告七大类指标）：</b>规模类（保费收入、保费增速、市场份额、保险深度、保险密度）、效率类（NBV新业务价值、EV内含价值）、盈利类（投资收益率、综合成本率）、安全类（偿付能力充足率）、结构类（代理人数量、新单价值率）——<b>本页图表覆盖其中核心9项</b>。<br>
-      <b>读图要点：</b>① <b>行业总资产</b>：从2002年0.63万亿增至2024年35.9万亿（22年增长56倍），2024年单年 <b>+19.86%</b> 创历史新高，2025年达41.3万亿；② <b>投资收益率</b>：2023年综合收益率3.22%（财务2.2%）为十多年低位，2024年大幅回升至 <b>7.21%</b>（财务3.43%）——债牛+权益回暖双击，2025年上市险企综合收益率约6%回落但仍健康；③ 保险资金运用结构持续优化，权益配置比例提升是收益率中枢上移的长期驱动。
+      <b>读图要点：</b>① <b>行业总资产</b>：从2002年0.63万亿增至2024年35.9万亿（22年增长56倍），2024年单年 <b>+19.86%</b> 创历史新高，2025年达41.3万亿；② <b>投资收益率</b>（2004-2025完整）：2007年大牛市财务收益率12.0%为历史峰值，2023年2.23%为十多年低位，2024年综合收益率大幅回升至 <b>7.21%</b>（财务3.43%）——债牛+权益回暖双击，2025年上市险企综合收益率6.1%-6.3%；③ <b>保险深度/密度</b>（1985-2025完整）：密度从3.13元增至4,043元（增长超1300倍）、深度从0.36%升至4.4%，2020年深度4.45%为历史高点；④ 保险资金运用结构持续优化，权益配置比例提升是收益率中枢上移的长期驱动。
     </div>
   </div>
 
@@ -509,11 +577,11 @@
   window.__c5 = ch;
 })();
 
-// ============ 图6：投资收益率（2021-2025，财务 vs 综合） ============
+// ============ 图6：投资收益率（2004-2025，财务 vs 综合） ============
 (function(){
-  var years = ['2021', '2022', '2023', '2024', '2025'];
-  var finance = [null, 3.76, 2.2, 3.43, null];
-  var total = [null, null, 3.22, 7.21, 6.0];
+  var years = ['2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+  var finance = [2.8, 3.6, 5.8, 12.0, 2.0, 6.4, 4.8, 3.5, 3.4, 5.0, 6.3, 7.6, 5.8, 5.9, 4.3, 5.1, 5.41, 4.84, 3.76, 2.23, 3.43, 3.8];
+  var total = [null, null, null, 12.3, null, null, null, null, null, null, null, null, null, null, null, null, 5.98, 4.45, 1.83, 3.22, 7.21, 6.2];
   var ch = echarts.init(document.getElementById('chart6'));
   ch.setOption({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){
@@ -522,15 +590,43 @@
       return s;
     } },
     legend: { top: 0, textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 14, itemHeight: 9 },
-    grid: { left: 60, right: 30, top: 40, bottom: 40 },
-    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    grid: { left: 60, right: 30, top: 40, bottom: 50 },
+    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8', fontSize: 10, interval: 1 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
     yAxis: { type: 'value', name: '%', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
     series: [
-      { name: '年化财务投资收益率', type: 'bar', data: finance, barWidth: 24, itemStyle: { color: 'rgba(148,163,184,0.7)', borderRadius: [3,3,0,0] }, label: { show: true, position: 'top', formatter: function(p){ return p.value == null ? '' : p.value + '%'; }, fontSize: 10, color: '#cbd5e1' } },
-      { name: '年化综合投资收益率', type: 'bar', data: total, barWidth: 24, itemStyle: { color: '#e11d48', borderRadius: [3,3,0,0] }, label: { show: true, position: 'top', formatter: function(p){ return p.value == null ? '' : p.value + '%'; }, fontSize: 11, color: '#fda4af', fontWeight: 700 } }
+      { name: '财务投资收益率', type: 'bar', data: finance, barWidth: 14, itemStyle: { color: function(p){ return p.dataIndex === 3 ? '#f59e0b' : (p.value < 3 ? 'rgba(148,163,184,0.7)' : 'rgba(251,113,133,0.75)'); }, borderRadius: [3,3,0,0] }, label: { show: true, position: 'top', formatter: function(p){ return p.value == null ? '' : p.value + '%'; }, fontSize: 9, color: '#cbd5e1', rotate: 45 } },
+      { name: '综合投资收益率', type: 'bar', data: total, barWidth: 14, itemStyle: { color: '#e11d48', borderRadius: [3,3,0,0] }, label: { show: true, position: 'top', formatter: function(p){ return p.value == null ? '' : p.value + '%'; }, fontSize: 10, color: '#fda4af', fontWeight: 700 } },
+      { name: 'mark', type: 'line', data: null, silent: true, markLine: { symbol: 'none', lineStyle: { color: 'rgba(148,163,184,0.3)', type: 'dashed' }, data: [ { yAxis: 5, label: { formatter: '5% 精算假设线', color: '#64748b', fontSize: 10 } } ] } }
     ]
   });
   window.__c6 = ch;
+})();
+
+// ============ 图7：保险深度与密度（1985-2025） ============
+(function(){
+  var years = ['1985','1986','1987','1988','1989','1990','1991','1992','1993','1994','1995','1996','1997','1998','1999','2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
+  var density = [3.13,4.26,6.51,9.86,12.64,15.56,20.35,31.39,42.16,49,56.39,63.5,87.7,100,111,126,169,238,287,332,379,431,533,741,834,968,1047,1131,1266,1518,1766,2239,2632,2724,3046,3206,3179,3326,3635,4046,4043];
+  var depth = [0.36,0.65,0.67,0.72,0.77,0.85,0.90,1.00,0.98,0.97,1.17,1.09,1.45,1.55,1.67,1.79,2.20,2.98,3.33,3.39,2.70,2.80,2.93,3.25,3.27,3.14,3.04,2.98,3.03,3.18,3.52,4.16,4.42,4.22,4.30,4.45,3.93,3.88,4.10,4.20,4.40];
+  var ch = echarts.init(document.getElementById('chart7'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' }, formatter: function(p){
+      var s = p[0].name + '年<br>';
+      p.forEach(function(it){ s += it.marker + it.seriesName + '：' + (it.seriesName.indexOf('密度') >= 0 ? it.value.toLocaleString() + ' 元/人' : it.value + '%') + '<br>'; });
+      return s;
+    } },
+    legend: { top: 0, textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 14, itemHeight: 9 },
+    grid: { left: 70, right: 60, top: 40, bottom: 50 },
+    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8', fontSize: 10, interval: 3 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: [
+      { type: 'value', name: '密度(元/人)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8', formatter: function(v){ return v >= 1000 ? v/1000 + 'k' : v; } }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+      { type: 'value', name: '深度(%)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { show: false } }
+    ],
+    series: [
+      { name: '保险密度', type: 'bar', data: density, barWidth: 12, itemStyle: { color: function(p){ return p.dataIndex === years.length-1 ? '#e11d48' : 'rgba(225,29,72,0.45)'; }, borderRadius: [2,2,0,0] } },
+      { name: '保险深度', type: 'line', yAxisIndex: 1, data: depth, smooth: true, symbolSize: 5, lineStyle: { width: 2.5, color: '#fbbf24' }, itemStyle: { color: '#fbbf24' }, areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [ { offset: 0, color: 'rgba(251,191,36,0.25)' }, { offset: 1, color: 'rgba(251,191,36,0.02)' } ] } } }
+    ]
+  });
+  window.__c7 = ch;
 })();
 
 // ============ 图表/表格切换 ============
@@ -549,6 +645,7 @@ document.querySelectorAll('.tab').forEach(function(tab){
     if (t === 'chart4' && window.__c4) window.__c4.resize();
     if (t === 'chart5' && window.__c5) window.__c5.resize();
     if (t === 'chart6' && window.__c6) window.__c6.resize();
+    if (t === 'chart7' && window.__c7) window.__c7.resize();
   });
 });
 
@@ -559,6 +656,7 @@ window.addEventListener('resize', function(){
   if (window.__c4) window.__c4.resize();
   if (window.__c5) window.__c5.resize();
   if (window.__c6) window.__c6.resize();
+  if (window.__c7) window.__c7.resize();
 });
 </script>
 </body>
