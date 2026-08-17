@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国100年净利润增速和股指涨幅关系 · 深层研究</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #e11d48;
+    --accent-2: #fb7185;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .meta b { color:#94a3b8; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:200px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .legend-row { display:flex; flex-wrap:wrap; gap:12px 16px; margin-bottom:12px; font-size:12px; color:var(--text-secondary); }
+  .legend-row .lg { display:flex; align-items:center; gap:4px; }
+  .legend-row .sw { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .chart-box { position:relative; width:100%; height:480px; }
+  .chart-box.small { height:220px; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tag-up { color:#f87171; font-weight:600; }
+  .tag-down { color:#34d399; font-weight:600; }
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>美国100年净利润增速和股指涨幅关系</h1>
+  <div class="meta">数据区间 1926-2025（约 100 年） · <b>标普500指数（SPX，1926-1957 为回溯数据）</b> · 名义口径（未扣通胀） · 三因素分解：盈利增长 + 股息 + 估值变动 · 多源交叉验证（Shiller / Crestmont / Ibbotson-Morningstar / NYU Stern / 方正证券）</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>直接回答：能对上，但要拆开口径看。</b>百年名义总回报约 <b>10.2%/年</b> ≈ 盈利增长 <b>5.0%</b> + 股息 <b>4.0%</b> + 估值变动 <b>0.9%</b>——<b>盈利+股息合计解释约九成回报</b>，估值只占不到一成。</li>
+      <li><b>只看"价格涨幅"：6.6%/年 ≈ 盈利 5.0% + 估值 0.9%</b>。成分股每股盈利（EPS）从 1926 年 <b>$1.24</b> 增长到 2025 年约 <b>$250</b>（约 <b>200 倍</b>），解释了价格涨幅的约四分之三，缺口来自 PE 从百年均值 15-16 倍抬升到约 20 倍。</li>
+      <li><b>时间越长，盈利越主导；10-20 年维度，估值才是收益波动的主源</b>：1980s-2000 年 PE 从 7 倍扩张到 44 倍贡献了当年的大头收益，2000-2010 年 PE 收缩直接把十年回报打成负值。</li>
+      <li><b>两个口径陷阱</b>：① EPS 增速被股票回购"机械抬升"（近年约 +2pp/年），净利润总额实际增速约 3-3.5%；② 指数持续换血有幸存者偏差（1957 年成分股至今仅剩约 60 家），指数盈利增速略高于全市场平均体验。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">$1.24 → ~$250</div>
+      <div class="label">EPS（1926 → 2025）<br>约 200 倍，名义年化 ~5.0%</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~6.6<small>%/年</small></div>
+      <div class="label">指数价格年化涨幅<br>累计约 2,850 倍（不含股息）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~10.2<small>%/年</small></div>
+      <div class="label">总回报年化（含股息再投资）<br>实际（剔通胀）约 7.0%</div>
+    </div>
+    <div class="kpi">
+      <div class="num">5.0 + 4.0 + 0.9</div>
+      <div class="label">盈利 + 股息 + 估值（年化 pp）<br>盈利+股息合计约占九成</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~20<small>×</small></div>
+      <div class="label">当前 PE（TTM）<br>百年均值 15-16×，处历史 60-65 分位</div>
+    </div>
+  </div>
+
+  <!-- 图表1：三因素分解 -->
+  <div class="card">
+    <h2>百年总回报的三因素分解：盈利是底盘，股息是加速器，估值是噪音</h2>
+    <div class="sub">1926-2025 名义年化总回报 10.2% 的构成 · 多源交叉验证（Ibbotson/Morningstar、Crestmont 1900-2025、方正证券 1900-2024 拆解一致）</div>
+    <h2 class="sr-only">标普500百年名义总回报年化10.2%，其中盈利增长贡献5.0%（约50%）、股息再投资贡献4.0%（约40%）、估值变动贡献0.9%（约9%）</h2>
+    <div class="legend-row">
+      <span class="lg"><span class="sw" style="background:#10B981;"></span>盈利增长（EPS）~5.0%</span>
+      <span class="lg"><span class="sw" style="background:#0EA5E9;"></span>股息再投资 ~4.0%</span>
+      <span class="lg"><span class="sw" style="background:#F59E0B;"></span>估值变动（PE 变化）~0.9%</span>
+    </div>
+    <div class="chart-box small">
+      <canvas id="decompChart" role="img" aria-label="水平堆叠条形图：标普500百年名义总回报10.2%由盈利增长5%、股息4%、估值变动0.9%构成">图表加载中…</canvas>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>盈利增长（绿色）贡献约一半</b>——EPS 与名义 GDP（约 6%）大致同步，这是股指长期上行的底盘；② <b>股息（蓝色）贡献约四成</b>——分红再投资是长期复利的关键加速器，虽然近年股息率降至约 1.3-1.5%（公司转向回购），但百年平均股息率约 4%；③ <b>估值变动（黄色）百年只值约 1pp/年</b>——"PE 涨了跌了"在百年维度是次要噪音，但在 10-20 年维度它是回报的最大波动源。
+    </div>
+  </div>
+
+  <!-- 图表2：累计倍数 -->
+  <div class="card">
+    <h2>百年累计倍数：盈利增长 200 倍 vs 价格 2,850 倍 vs 总回报 15.9 万倍</h2>
+    <div class="sub">1926 年投入 1 美元 / 1,000 美元的累计增值倍数（名义）· 对数刻度展示跨数量级对比 · 价格与总回报的差距 = 股息再投资复利</div>
+    <h2 class="sr-only">1926年以来累计增长倍数：总回报（含股息再投资）约15.9万倍，指数价格约2850倍，每股盈利约200倍</h2>
+    <div class="legend-row">
+      <span class="lg"><span class="sw" style="background:#10B981;"></span>总回报（含股息再投资）约 15.9 万倍</span>
+      <span class="lg"><span class="sw" style="background:#0EA5E9;"></span>指数价格约 2,850 倍</span>
+      <span class="lg"><span class="sw" style="background:#F59E0B;"></span>每股盈利 EPS 约 200 倍</span>
+    </div>
+    <div class="chart-box small">
+      <canvas id="multChart" role="img" aria-label="水平条形图：百年累计倍数，总回报约15.9万倍，指数价格约2850倍，每股盈利约200倍">图表加载中…</canvas>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 黄色（EPS 200 倍）与蓝色（价格 2,850 倍）的差距 = 估值扩张（PE 从约 12 倍到 20 倍左右）+ 指数换血；② 蓝色与绿色（总回报 15.9 万倍）之间近 56 倍的差距 = <b>百年股息再投资的复利魔力</b>；③ 对数刻度下斜率差异即年化差异：盈利 ~5.0%、价格 ~6.6%、总回报 ~10.2%。
+    </div>
+  </div>
+
+  <!-- 数据明细 -->
+  <div class="card">
+    <h2>关键数据明细</h2>
+    <div class="sub">名义口径（未扣通胀）· 通胀百年平均约 3.0%/年 · 实际 = 名义 − 通胀</div>
+    <table class="plain">
+      <tr><th>指标</th><th>数值</th><th>说明</th></tr>
+      <tr class="hl"><td>EPS 1926 年</td><td><b class="tag-up">约 $1.24</b></td><td>as-reported GAAP 口径，多源一致</td></tr>
+      <tr class="hl"><td>EPS 2025 年</td><td><b class="tag-up">约 $246-271</b></td><td>NYU Stern（Damodaran）/ dqydj 不同口径，取中值约 $250</td></tr>
+      <tr class="hl"><td>EPS 名义年化增速</td><td><b class="tag-up">约 5.0-5.5%</b></td><td>约 200 倍 / 99 年；Crestmont 1900-2025 口径 5.1%</td></tr>
+      <tr><td>指数价格年化涨幅</td><td class="tag-up">约 6.6%</td><td>1926-2025，不含股息再投资</td></tr>
+      <tr><td>股息贡献</td><td class="tag-up">约 4.0%</td><td>百年平均股息率约 4%（近年降至约 1.3-1.5%）</td></tr>
+      <tr><td>估值变动贡献</td><td class="tag-up">约 0.9%</td><td>PE 长期均值 15-16 倍 → 当前约 20 倍</td></tr>
+      <tr><td>名义总回报</td><td class="tag-up">约 10.2%</td><td>含股息再投资；实际（剔通胀）约 7.0%</td></tr>
+      <tr><td>当前 PE（TTM）</td><td>约 20-21 倍</td><td>历史 60-65 分位；CAPE 约 38-40（接近 2000 年峰值 44）</td></tr>
+      <tr><td>当前股息率</td><td class="tag-down">约 1.3-1.5%</td><td>近 50 年低位；公司转向回购，总股东回报率约 4-5%</td></tr>
+    </table>
+    <div class="note">
+      <b>口径说明：</b>① 1926-1957 年为标普综合指数回溯数据，1957 年正式命名标普500；② EPS 增速含股票回购效应——回购缩股会机械抬升 EPS 约 2pp/年，净利润总额实际增速约 3-3.5%；③ 名义 vs 实际：名义数字里约三分之一是通胀（百年平均约 3%/年）。
+    </div>
+  </div>
+
+  <!-- 洞察 -->
+  <div class="card">
+    <h2>三个关键洞察</h2>
+    <div class="sub">"净利润增速和股指涨幅能不能对上"的完整答案</div>
+    <table class="plain">
+      <tr><th style="width:170px">洞察</th><th>说明</th></tr>
+      <tr><td>盈利解释了涨幅的约一半</td><td>EPS 约 200 倍（年化 5.0%）vs 价格约 2,850 倍（年化 6.6%）——<b>盈利增长解释了价格涨幅的大部分</b>，剩余差额（约 1pp/年）来自 PE 扩张。长期来看，"股指涨幅 ≈ 盈利增速 + 估值变动"这条恒等式基本成立。</td></tr>
+      <tr><td>加上股息，就完全对上了</td><td>总回报 10.2% ≈ 盈利 5.0% + 股息 4.0% + 估值 0.9%。<b>盈利+股息合计贡献约九成</b>——这就是"长期持有指数赚的是企业成长的钱"的数据基础。若只盯价格指数而忽略股息，会低估美股长期回报约 3-4pp/年。</td></tr>
+      <tr><td>对不上的是短期，不是长期</td><td>10-20 年维度估值变动主导回报：1980s-2000 年 PE 从 7 倍扩张到 44 倍贡献当时的大头收益；2000-2010 年 PE 收缩把十年回报打成负值。<b>时间越长，估值贡献越趋近于零，盈利和股息越主导</b>——百年维度估值只值 8-10% 的回报。</td></tr>
+    </table>
+    <div class="note">
+      <b>延伸提示：</b>当前 PE 约 20 倍、CAPE 约 38-40，估值处于历史偏高位置。按 Bogle 公式（预期回报 ≈ 股息率 + 盈利增速 + 估值变动），未来 10 年估值继续扩张的空间有限、甚至可能均值回归收缩，届时回报将更多依赖盈利与股息本身（简单测算约 5-7% 名义区间，低于百年均值 10.2%）。历史表现不代表未来。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源（多源交叉验证）：</b><br>
+    ① Robert Shiller（耶鲁大学）数据库，月频指数/EPS/PE，截至 2026-07（chartrow.com 分解窗口：100 年股息 3.7% + 实际盈利 2.5% + 估值 0.9% + 通胀 3.0% = 名义 10.5%）；<br>
+    ② Crestmont Research：1900-2025 EPS 名义年化 5.1%；<br>
+    ③ Ibbotson / Morningstar（SBBI）：1926 年以来名义总回报约 10.2%、实际约 7.0%；<br>
+    ④ NYU Stern（A. Damodaran）：标普500 EPS 2025 约 $271；dqydj as-reported 口径约 $246；<br>
+    ⑤ 方正证券《美国百年大类资产：复盘与展望》（1900-2024 拆解：盈利 5.1% + 股息 4.0% + 估值 0.5% = 9.8%）；<br>
+    ⑥ 第三方研究/媒体引用（今日头条/雪球等）标注"需核实原文"。<br>
+    <b>免责声明：</b>本页为历史数据的长期回报分解研究，所有数字为名义口径或已注明口径；历史回报不代表未来收益，数据仅供参考，不构成投资建议。
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  new Chart(document.getElementById('decompChart'),{
+    type:'bar',
+    data:{
+      labels:['名义总回报 10.2%'],
+      datasets:[
+        {label:'盈利增长',data:[5.0],backgroundColor:'#10B981',borderRadius:3,barPercentage:0.6,categoryPercentage:0.6},
+        {label:'股息再投资',data:[4.0],backgroundColor:'#0EA5E9',borderRadius:3,barPercentage:0.6,categoryPercentage:0.6},
+        {label:'估值变动',data:[0.9],backgroundColor:'#F59E0B',borderRadius:3,barPercentage:0.6,categoryPercentage:0.6}
+      ]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:12},boxWidth:14,boxHeight:9}},
+        tooltip:{
+          backgroundColor:'#1e293b',titleColor:'#e2e8f0',bodyColor:'#cbd5e1',
+          borderColor:'rgba(255,255,255,0.12)',borderWidth:1,
+          callbacks:{
+            label:function(c){return (c.dataset.label||'')+'：' + c.parsed.x.toFixed(1) + '%/年；占比约' + Math.round(c.parsed.x/10.2*100) + '%';}
+          }
+        }
+      },
+      scales:{
+        x:{stacked:true,min:0,max:11,ticks:{color:'#94a3b8',font:{size:11},callback:function(v){return v+'%';}},grid:{color:'rgba(255,255,255,0.07)'},title:{display:true,text:'年化贡献（%/年，名义）',color:'#94a3b8',font:{size:11}}},
+        y:{stacked:true,ticks:{color:'#e2e8f0',font:{size:12}},grid:{display:false}}
+      }
+    }
+  });
+
+  new Chart(document.getElementById('multChart'),{
+    type:'bar',
+    data:{
+      labels:['总回报（含股息再投资）','指数价格','每股盈利 EPS'],
+      datasets:[
+        {label:'累计倍数',data:[159000,2850,200],backgroundColor:['#10B981','#0EA5E9','#F59E0B'],borderRadius:3,barThickness:26}
+      ]
+    },
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#1e293b',titleColor:'#e2e8f0',bodyColor:'#cbd5e1',
+          borderColor:'rgba(255,255,255,0.12)',borderWidth:1,
+          callbacks:{label:function(c){return c.parsed.x>=1000? c.parsed.x.toLocaleString()+' 倍' : c.parsed.x+' 倍';}}
+        }
+      },
+      scales:{
+        x:{type:'logarithmic',ticks:{color:'#94a3b8',font:{size:11},callback:function(v){return v>=1000? (v/1000)+'k' : v;}},grid:{color:'rgba(255,255,255,0.07)'},title:{display:true,text:'累计倍数（对数刻度）',color:'#94a3b8',font:{size:11}}},
+        y:{ticks:{color:'#e2e8f0',font:{size:12}},grid:{display:false}}
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
