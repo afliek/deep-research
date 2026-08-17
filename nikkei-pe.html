@@ -124,9 +124,10 @@ const annualPE = {
   2005:20,2008:12.8,2010:18,2011:17.5,2013:20,2015:18,2018:16,
   2020:25,2021:26,2022:18,2023:20,2024:21,2025:22
 };
+const annualIdx = {1950:104.45,1952:363.19,1955:417.96,1958:686.21,1960:1354.71,1963:1597.83,1965:1417.83,1968:1714.65,1970:1987.14,1973:4306.8,1975:4358.6,1978:6001.11,1980:7116.41,1983:9893.82,1985:13113.32,1987:21564.0,1989:38915.87,1991:22983.77,1993:17417.24,1995:19868.15,1998:13842.17,2000:13785.69,2002:8578.95,2003:10676.64,2005:16111.43,2008:8859.56,2010:10228.92,2011:8455.35,2013:16291.31,2015:19033.71,2018:20014.77,2020:27444.17,2021:28791.71,2022:26094.5,2023:33464.17,2024:39894.54,2025:50339.48,};
 
 const quarters = [];
-const peValues = [];
+const peValues = [];const idxValues=[];
 const annotations = {};
 
 function interpolateQ(annualVal, prevAnnual, nextAnnual, qIdx) {
@@ -144,7 +145,7 @@ const years = Object.keys(annualPE).map(Number).sort((a,b)=>a-b);
 years.forEach((year, idx) => {
   const prev = idx > 0 ? annualPE[years[idx-1]] : undefined;
   const next = idx < years.length-1 ? annualPE[years[idx+1]] : undefined;
-  const base = annualPE[year];
+  const base = annualPE[year];const iPrev=idx>0?annualIdx[years[idx-1]]:undefined;const iNext=idx<years.length-1?annualIdx[years[idx+1]]:undefined;const iBase=annualIdx[year];
   [0,1,2,3].forEach(qIdx => {
     let v;
     // === 关键转折点季度微调 ===
@@ -180,7 +181,7 @@ years.forEach((year, idx) => {
 
     const qNames = ['Q1','Q2','Q3','Q4'];
     quarters.push(`${year}${qNames[qIdx]}`);
-    peValues.push(v);
+    peValues.push(v);idxValues.push(interpolateQ(iBase,iPrev,iNext,qIdx));
   });
 });
 
@@ -275,8 +276,7 @@ new Chart(ctx, {
       pointBackgroundColor: pointColors,
       pointBorderColor: 'transparent',
       tension: 0.25,
-      fill: true
-    },{
+      fill: true},{label:'指数点位',data:idxValues,borderColor:'rgba(255,107,107,0.75)',backgroundColor:'rgba(255,107,107,0.06)',borderWidth:1.6,pointRadius:0,tension:0.25,fill:false,yAxisID:'y1'},{
       label: `76年均值 (${mean50.toFixed(1)}x)`,
       data: new Array(quarters.length).fill(mean50),
       borderColor: 'rgba(255,217,102,0.55)',
@@ -336,7 +336,7 @@ new Chart(ctx, {
         grid:{color:'rgba(255,255,255,0.04)'},
         border:{color:'rgba(255,255,255,0.08)'},
         min:0,max:90
-      }
+      },y1:{type:'logarithmic',position:'right',title:{display:true,text:'指数点位(对数)',color:'#ff6b6b',font:{size:11}},ticks:{color:'#ff8a8a',font:{size:10},callback:function(v){return v>=1000?(v/1000).toFixed(1)+'k':v;}},grid:{display:false},border:{color:'rgba(255,255,255,0.08)'}}
     }
   }
 });
