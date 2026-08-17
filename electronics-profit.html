@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电子行业 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#6366f1; --accent-2:#818cf8; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-blue { display:inline-block; background:rgba(99,102,241,0.15); color:#818cf8; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(99,102,241,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .chart-box{height:320px;} .kpi .num{font-size:20px;} }
+  .toc { display:flex; flex-direction:column; gap:6px; margin-bottom:24px; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); }
+  .toc-title { width:100%; font-size:12px; color:var(--text-muted); letter-spacing:1px; margin-bottom:4px; }
+  .toc a { font-size:13px; color:var(--text-secondary); text-decoration:none; padding:6px 12px; border-radius:6px; background:rgba(255,255,255,0.05); border:1px solid var(--border); transition:all .2s; }
+  .toc a:hover { color:#fff; border-color:var(--accent); background:rgba(99,102,241,0.15); }
+  html { scroll-behavior:smooth; }
+  [id^="sec"] { scroll-margin-top: 84px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回中国十五大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国电子行业利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月12日 · 行业口径：申万一级"电子" · 财务口径：A股上市公司2025年年报归母净利润（亿元） · 子板块为券商分类口径（见各节注明） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="toc">
+    <div class="toc-title">本页目录</div>
+    <a href="#sec1">1. 2025年电子行业利润全景：营收4.2万亿、净利约1800亿</a>
+    <a href="#sec2">2. 历年净利润增速（1995-2025逐年，31年）</a>
+    <a href="#sec3">3. "大而不赚"：营收巨人与利润矮子的结构性错位</a>
+    <a href="#sec4">4. 六大子板块利润拆解：谁在赚钱、谁在亏钱</a>
+    <a href="#sec5">5. 电子行业净利润Top 20公司排名（2025年报）</a>
+    <a href="#sec6">6. 半导体产业链内部格局：晶圆代工/设备/设计/存储/封测</a>
+    <a href="#sec7">7. AI时代的利润迁移：2026年一季度加速信号</a>
+    <a href="#sec8">8. 总结与前瞻：电子在十五大利润行业中的位置</a>
+  </div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>A股营收之王、利润小弟</b>：电子行业2025年营收 <b>约4.2万亿元</b>（+20%），是全市场营收规模最大的行业之一；但归母净利润仅 <b>约1800亿元</b>（+26%~33%），净利率只有 <b>4.2%</b>——不过2025年已以约1800亿净利正式跻身A股第6大利润行业（详见本页）。</li>
+      <li><b>利润正在加速修复</b>：2023年1015亿 → 2024年1379亿（+35.8%）→ 2025年约1800亿（+31%），三年翻近一番；<b>2026Q1净利同比+72%</b>，利润增速显著快于营收增速，盈利质量持续改善。</li>
+      <li><b>AI是利润迁移的主引擎</b>：2025年PCB板块净利+71%（沪电38.2亿）、显示器件+48%（京东方58.6亿）、半导体+13%（中芯50.4亿）；2026Q1存储利润暴增 <b>+3735%</b>、算力芯片+160%、半导体净利+198%——利润增量高度集中于AI算力链。</li>
+      <li><b>龙头集中度极高</b>：工业富联一家净利352.9亿、约占行业净利 <b>20%</b>；Top 20公司合计约1220亿、占行业净利约68%；"代工组装+面板"等低利润率环节与"AI硬件+半导体设备/设计"等高利润率环节并存，结构分化剧烈。</li>
+      <li><b>与美股形成鲜明反差</b>：美股信息技术板块利润占标普500约20.2%，A股电子行业利润仅占全部A股 <b>约3.3%</b>（约第6大利润行业）——"A股科技含量低"的集中体现，但也是未来利润占比持续提升的空间所在。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">~1800<small>亿元</small></div>
+      <div class="label">电子行业2025年归母净利润<br>（申万口径，同比+26%~33%）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">4.2<small>万亿</small></div>
+      <div class="label">电子行业2025年营业收入<br>（+20%，A股营收最大行业之一）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">4.2<small>%</small></div>
+      <div class="label">行业净利率（2024年仅3.76%）<br>每100元营收只赚约4.2元</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~3.3<small>%</small></div>
+      <div class="label">电子占A股总利润比重<br>（1800亿/5.39万亿，约第6大利润行业）</div>
+    </div>
+  </div>
+
+  <!-- 图1：三年趋势 -->
+  <div class="card" id="sec1">
+    <h2>一、2025年电子行业利润全景：营收4.2万亿、净利约1800亿</h2>
+    <div class="sub">单位：亿元 · 申万一级"电子"口径 · 2025年为年报实际数据（多券商汇总，口径略有差异）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📊 柱状图</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>营业收入(亿元)</th><th>同比</th><th>归母净利润(亿元)</th><th>同比</th><th>净利率</th></tr>
+        <tr><td>2023</td><td>29,600</td><td>-</td><td>1,015</td><td>-</td><td>3.4%</td></tr>
+        <tr><td>2024</td><td>34,801</td><td>+17.4%</td><td>1,379</td><td>+35.8%</td><td>3.76%</td></tr>
+        <tr class="hl"><td><b>2025</b></td><td><b>约42,000</b></td><td><b>+17%~+20%</b></td><td><b>约1,800</b></td><td><b>+26%~+33%</b></td><td><b>4.2%</b></td></tr>
+        <tr class="tot"><td>2026Q1</td><td>约10,900</td><td>+27%~+29%</td><td>约630</td><td>+72%~+74%</td><td>约5.8%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 电子行业利润走出"三年修复三部曲"——2023年半导体下行周期低点1015亿 → 2024年+35.8% → 2025年约1800亿，<b>利润翻近一番，且增速持续快于营收</b>，反映行业从"规模扩张"转向"盈利修复"。<br>
+      ② 2025年各券商统计口径略有差异：万联证券（申万口径）净利1791亿（+31.3%）、国金证券1799.9亿（+32.8%）、长江证券1882亿（+25.8%，含仪器仪表等）——本页取"约1800亿"。<br>
+      ③ 2026Q1利润同比 <b>+72%</b>、净利率升至约5.8%，盈利加速趋势确立（详见第六节）。
+    </div>
+  </div>
+
+  <!-- 增速章节：1995-2025逐年 -->
+  <div class="card" id="sec2">
+    <h2>二、电子行业历年净利润增速（1995-2025逐年）</h2>
+    <div class="sub">电子行业整体归母净利润同比增速 · 31年逐年无省略 · 2018-2025年为公开研报与年报数据（万联/信达/国金/长江证券），2017年及以前为估算区间（基于行业事件与净利序列推估，标注*） · 柱状图正红负绿 · 表格可滚动查看</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart7">增速图</div>
+      <div class="tab" data-target="table7">数据表（31年）</div>
+    </div>
+    <div class="view-chart active" id="chart7" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table7" style="overflow-x:auto;max-height:520px;overflow-y:auto;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="background:#0f172a;color:#fbbf24;padding:6px;">年份</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">电子行业净利润同比增速</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">关键事件</th></tr></thead><tbody><tr><td style="font-weight:500;color:#fcd34d;">1995</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+10%*</td><td>A股电子公司稀少，行业起步期</td></tr><tr><td style="font-weight:500;color:#fcd34d;">1996</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+15%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1997</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+8%*</td><td>亚洲金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">1998</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+12%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1999</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+15%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2000</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+5%*</td><td>互联网泡沫破裂，全球电子下行</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2001</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+8%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2002</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+12%*</td><td>入世后电子制造出口起飞</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2003</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+18%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2004</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+15%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2005</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+12%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2006</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+22%*</td><td>彩电/手机/面板景气上行</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2007</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+18%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2008</td><td style="background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;text-align:right;">-8%*</td><td>全球金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2009</td><td style="background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;text-align:right;">-10%*</td><td>危机延续，下半年回暖</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2010</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+30%*</td><td>智能手机产业链爆发</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2011</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+15%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2012</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+8%*</td><td>智能机渗透率放缓</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2013</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+15%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2014</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+10%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2015</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+12%*</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2016</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+18%*</td><td>面板涨价周期</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2017</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+25%*</td><td>面板+消费电子双高峰</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2018</td><td style="background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;text-align:right;">-19.7%</td><td>中美贸易摩擦，净利708.7亿（万联）</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2019</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+20%*</td><td>半导体国产替代启动</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2020</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+30%*</td><td>疫情居家电子+半导体景气</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2021</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+35%*</td><td>半导体超级周期，缺芯涨价</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2022</td><td style="background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;text-align:right;">-20%*</td><td>面板/消费电子下行</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2023</td><td style="background:rgba(34,197,94,0.15);color:#4ade80;font-weight:600;text-align:right;">-15%</td><td>半导体去库存，低点1015亿（信达）</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2024</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+35.8%</td><td>AI算力+行业复苏，净利1379亿（信达）</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2025</td><td style="background:rgba(225,29,72,0.15);color:#f87171;font-weight:600;text-align:right;">+31%</td><td>AI算力+半导体国产化，净利约1800亿</td></tr></tbody></table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>强成长+强周期</b>：2010年智能手机产业链爆发（+30%）、2021年半导体超级周期（+35%）、2024-2025年AI算力驱动（+35.8%/+31%）构成三大高增长阶段；2018年（-19.7%，贸易摩擦）、2022-2023年（-20%/-15%，面板与消费电子下行、半导体去库存）为两大深度调整。<br>
+      ② 长期看电子是A股成长最快的行业之一：1995年净利约70亿 → 2025年约1800亿，30年约25倍、年化约11%——利润波动远大于营收（"大而不赚"的另一面是"景气时弹性极大"）。<br>
+      ③ 2026Q1净利同比+72%，若全年延续，2026年电子净利有望突破2500亿、占比继续提升（详见第八节前瞻）。
+      <div class="growth-calc" style="margin-top:16px;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;">
+        <b style="color:#e2e8f0;font-size:13px;">年份范围平均增速统计</b>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:13px;color:#94a3b8;">
+          起始年份<input id="calcStart" type="number" min="1995" max="2025" value="2015" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+          结束年份<input id="calcEnd" type="number" min="1995" max="2025" value="2025" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+          <button onclick="calcAvgGrowth()" style="background:#6366f1;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;">统计</button>
+        </div>
+        <div id="calcResult" style="margin-top:10px;font-size:13px;color:#cbd5e1;line-height:1.8;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 图3：大而不赚 -->
+  <div class="card" id="sec3">
+    <h2>三、"大而不赚"：营收巨人与利润矮子的结构性错位</h2>
+    <div class="sub">电子"营收巨大、利润单薄"的成因——先看它的利润厚度（2025年报）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 对比图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>行业/公司</th><th>营业收入(亿元)</th><th>归母净利(亿元)</th><th>净利率</th><th>利润厚度对比</th></tr>
+        <tr class="hl"><td><b>电子行业整体</b></td><td><b>约42,000</b></td><td><b>约1,800</b></td><td><b>4.2%</b></td><td>每100元营收赚4.2元</td></tr>
+        <tr><td>工业富联</td><td>9,029</td><td>352.9</td><td>3.9%</td><td>代工组装：营收大、利润薄</td></tr>
+        <tr><td>立讯精密</td><td>3,323</td><td>约166</td><td>5.0%</td><td>果链代工：净利率个位数</td></tr>
+        <tr><td>京东方</td><td>2,046</td><td>58.6</td><td>2.9%</td><td>面板：重资产周期行业</td></tr>
+        <tr><td>北方华创</td><td>394</td><td>55.2</td><td>14.0%</td><td>半导体设备：国产替代高毛利</td></tr>
+        <tr><td>沪电股份</td><td>189</td><td>38.2</td><td>20.2%</td><td>AI PCB：量价齐升高盈利</td></tr>
+        <tr><td>寒武纪</td><td>65</td><td>20.6</td><td>31.7%</td><td>AI芯片：高毛利高弹性</td></tr>
+        <tr><td colspan="5" style="color:var(--text-muted);font-size:12px;">对比参照：上市银行净利率约35%（2.17万亿净利/约6.2万亿营收）；贵州茅台净利率约51%。</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>行业内部净利率从0~3%（面板、代工）到30%+（AI芯片）剧烈分化</b>——电子是"低净利率的制造行业"与"高净利率的科技行业"的混合体，整体被庞大的代工组装（工业富联+立讯合计营收超1.2万亿）和面板业务拉低。<br>
+      ② 这是它与银行（净利率约35%）、白酒（40%+）最本质的差别：<b>同样的营收规模，利润厚度差一个数量级</b>。<br>
+      ③ 但边际变化是积极的：AI硬件（PCB、存储、算力芯片、半导体设备）等高净利率环节占比提升，正系统性抬升行业整体净利率（2024年3.76% → 2025年4.2% → 2026Q1约5.8%）。
+    </div>
+  </div>
+
+  <!-- 图4：子板块拆解 -->
+  <div class="card" id="sec4">
+    <h2>四、六大子板块利润拆解：谁在赚钱、谁在亏钱</h2>
+    <div class="sub">口径：长江证券电子行业分类（2025年报） · 单位：亿元 · "其他"含电子化学品、仪器仪表等（估算*）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>子板块</th><th>营业收入(亿元)</th><th>同比</th><th>归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr><td>消费电子（零部件）</td><td>9,677</td><td class="tag-green">+11.5%</td><td>386.6</td><td class="tag-green">+10.7%</td><td>工业富联AI服务器爆发，整机承压</td></tr>
+        <tr class="hl"><td><b>半导体</b></td><td><b>8,960</b></td><td class="tag-green"><b>+9.9%</b></td><td><b>354.4</b></td><td class="tag-green"><b>+12.5%</b></td><td>2026Q1净利+198%，数字芯片设计+423%</td></tr>
+        <tr><td>元件（PCB+被动）</td><td>3,642</td><td class="tag-green">+24%</td><td>343.4</td><td class="tag-green">+61%</td><td>PCB净利280.1亿（+71%），AI硬件核心</td></tr>
+        <tr><td>显示器件（面板）</td><td>5,530</td><td class="tag-green">+5.6%</td><td>70.9</td><td class="tag-green">+47.6%</td><td>"按需生产"价格稳定，京东方58.6亿</td></tr>
+        <tr><td>被动元器件</td><td>570</td><td class="tag-green">+17.7%</td><td>63.3</td><td class="tag-green">+25.1%</td><td>AI打开高阶MLCC/电感需求</td></tr>
+        <tr><td>LED</td><td>1,261</td><td class="tag-green">+5.1%</td><td>-1.3</td><td class="tag-red">由盈转亏</td><td>行业产能出清中</td></tr>
+        <tr><td>其他（化学品/仪器等）</td><td>约11,480*</td><td>-</td><td>约728*</td><td>-</td><td>电子化学品45.9亿（2024年报）等</td></tr>
+        <tr class="tot"><td><b>电子行业合计</b></td><td><b>约42,550</b></td><td><b>+16.7%</b></td><td><b>约1,882</b></td><td><b>+25.8%</b></td><td>长江证券口径（含仪器仪表等）</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>利润三支柱</b>：消费电子零部件（387亿）、半导体（354亿）、元件（343亿）合计约1084亿，占行业净利约58%——其中PCB+被动元件是2025年增速最快的板块（+61%）。<br>
+      ② <b>半导体"增收不增利"边际改善</b>：营收+9.9%、净利+12.5%，2026Q1净利同比+198%——AI算力订单正在向利润端加速兑现。<br>
+      ③ <b>面板重回盈利通道</b>：显示器件净利+47.6%（京东方2025年净利58.6亿），但净利率仍仅约2.9%；LED全板块亏损，是唯一亏损子板块。<br>
+      ④ 需要说明：长江证券分类下"其他"占比偏大（约728亿），因其口径含仪器仪表、电子化学品、电子系统组装等，若按申万二级分类（半导体/消费电子/元件/光学光电子/其他电子/电子化学品），各板块占比略有不同，但"半导体+消费电子+元件为三大利润源"的结论一致。
+    </div>
+  </div>
+
+  <!-- 图5：龙头公司排名 -->
+  <div class="card" id="sec5">
+    <h2>五、电子行业净利润Top 20公司排名（2025年报）</h2>
+    <div class="sub">单位：亿元 · 2025年年报归母净利润 · 数据来源：各公司2025年年报 / 业绩快报 · "—"为未披露或口径差异</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart4">📊 柱状图</div>
+      <div class="tab" data-target="table4">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart4" style="width:100%;height:640px;"></div>
+    <div class="view-table" id="table4">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>板块</th><th>营收(亿元)</th><th>净利润(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr class="hl"><td>1</td><td><b>工业富联</b></td><td>AI服务器/代工</td><td>9,029</td><td><b>352.9</b></td><td class="tag-green">+52.0%</td><td>AI服务器营收占比过半，行业利润一哥</td></tr>
+        <tr><td>2</td><td>立讯精密</td><td>消费电子代工</td><td>3,323</td><td>约166</td><td class="tag-green">+24.2%</td><td>果链龙头，汽车+通信第二曲线</td></tr>
+        <tr><td>3</td><td>京东方</td><td>面板</td><td>2,046</td><td>58.6</td><td class="tag-green">+10.0%</td><td>LCD出货全球第一，柔性OLED放量</td></tr>
+        <tr><td>4</td><td>北方华创</td><td>半导体设备</td><td>394</td><td>55.2</td><td class="tag-red">-1.8%</td><td>10年来首次"增收不增利"（研发大增47%）</td></tr>
+        <tr><td>5</td><td>中芯国际</td><td>晶圆代工</td><td>673</td><td>50.4</td><td class="tag-green">+36.3%</td><td>产能利用率回升，毛利率21.6%（+3pct）</td></tr>
+        <tr><td>6</td><td>TCL科技</td><td>面板/光伏</td><td>1,841</td><td>45.2</td><td class="tag-green">+188.8%</td><td>TCL华星盈利修复，中环减值出清</td></tr>
+        <tr><td>7</td><td>豪威集团（原韦尔股份）</td><td>CIS图像芯片</td><td>约250*</td><td>40.5</td><td class="tag-green">+21.7%</td><td>车规CIS放量，手机主摄回归</td></tr>
+        <tr><td>8</td><td>歌尔股份</td><td>声学/VR整机</td><td>966</td><td>39.4</td><td class="tag-green">+47.9%</td><td>AI眼镜/VR代工驱动盈利修复</td></tr>
+        <tr><td>9</td><td>沪电股份</td><td>PCB</td><td>189</td><td>38.2</td><td class="tag-green">+47.7%</td><td>AI服务器/交换机PCB量价齐升</td></tr>
+        <tr><td>10</td><td>传音控股</td><td>智能手机</td><td>656</td><td>25.8</td><td class="tag-red">-53.4%</td><td>存储涨价+竞争加剧，毛利率承压</td></tr>
+        <tr><td>11</td><td>海光信息</td><td>CPU/DCU</td><td>144</td><td>25.5</td><td class="tag-green">+31.8%</td><td>国产算力芯片龙头，DCU放量</td></tr>
+        <tr><td>12</td><td>澜起科技</td><td>内存接口芯片</td><td>约65*</td><td>22.4</td><td class="tag-green">+58.4%</td><td>DDR5+MRCD放量，毛利率50%+</td></tr>
+        <tr><td>13</td><td>中微公司</td><td>半导体设备</td><td>约95*</td><td>21.1</td><td class="tag-green">+30.7%</td><td>刻蚀设备国产化加速</td></tr>
+        <tr><td>14</td><td>寒武纪</td><td>AI芯片</td><td>65</td><td>20.6</td><td class="tag-green">+555%</td><td>首次年度盈利，营收+453%</td></tr>
+        <tr><td>15</td><td>兆易创新</td><td>存储/MCU</td><td>约120*</td><td>16.5</td><td class="tag-green">+49.5%</td><td>存储涨价周期受益</td></tr>
+        <tr><td>16</td><td>蓝思科技</td><td>消费电子代工</td><td>约1,850*</td><td>约42*</td><td class="tag-green">+15%*</td><td>玻璃盖板+组装，果链+折叠屏</td></tr>
+        <tr><td>17</td><td>鹏鼎控股</td><td>PCB</td><td>约420*</td><td>约40*</td><td class="tag-green">+10%*</td><td>全球PCB龙头，AI服务器HDI</td></tr>
+        <tr><td>18</td><td>华勤技术</td><td>智能硬件ODM</td><td>约1,100*</td><td>约35*</td><td class="tag-green">+20%*</td><td>服务器ODM+消费电子</td></tr>
+        <tr><td>19</td><td>三环集团</td><td>被动元件</td><td>约75*</td><td>约25*</td><td class="tag-green">+5%*</td><td>MLCC国产替代</td></tr>
+        <tr><td>20</td><td>生益科技</td><td>覆铜板</td><td>约230*</td><td>约24*</td><td class="tag-green">+40%*</td><td>AI高速覆铜板涨价</td></tr>
+        <tr class="tot"><td colspan="2"><b>Top 20合计</b></td><td>-</td><td>-</td><td><b>约1,220*</b></td><td>-</td><td>占行业净利（约1800亿）约68%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>工业富联一家独大</b>：352.9亿净利约占行业20%，主要来自AI服务器（云计算业务营收同比+64%、AI服务器营收同比+150%+）——A股电子利润的第一大引擎。<br>
+      ② 净利Top 20中<b>8家来自半导体产业链</b>（中芯、豪威、海光、澜起、中微、寒武纪、兆易），AI算力链条（设备/设计/存储）成为利润集中地。<br>
+      ③ 分化剧烈：有净利率30%+的AI芯片（寒武纪31.7%）、净利率20%的PCB（沪电），也有净利率不足3%的面板（京东方2.9%）、代工（工业富联3.9%）——<b>同样叫"电子"，利润质量天差地别</b>。<br>
+      ④ 传音控股是Top 20中唯一下滑的公司（-53.4%），主因存储等元器件涨价挤压毛利率；北方华创因研发/股权激励费用大增出现10年来首次净利下滑。
+    </div>
+  </div>
+
+  <!-- 图6：半导体细分 -->
+  <div class="card" id="sec6">
+    <h2>六、半导体产业链内部格局：晶圆代工/设备/设计/存储/封测</h2>
+    <div class="sub">单位：亿元 · 2025年年报归母净利润 · 数据来源：证券时报（Wind半导体板块）统计，按净利润绝对值排序</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart5">📊 柱状图</div>
+      <div class="tab" data-target="table5">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart5" style="width:100%;height:440px;"></div>
+    <div class="view-table" id="table5">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>细分赛道</th><th>净利润(亿元)</th><th>同比</th><th>净利率参考</th></tr>
+        <tr><td>1</td><td>中芯国际</td><td>晶圆代工</td><td>50.4</td><td class="tag-green">+36.3%</td><td>毛利率21.6%（+3pct）</td></tr>
+        <tr><td>2</td><td>豪威集团（原韦尔股份）</td><td>CIS图像传感器</td><td>40.5</td><td class="tag-green">+21.7%</td><td>约16%*</td></tr>
+        <tr><td>3</td><td>海光信息</td><td>CPU/DCU设计</td><td>25.5</td><td class="tag-green">+31.8%</td><td>约17.7%</td></tr>
+        <tr><td>4</td><td>澜起科技</td><td>内存接口芯片</td><td>22.4</td><td class="tag-green">+58.4%</td><td>50%+</td></tr>
+        <tr><td>5</td><td>中微公司</td><td>刻蚀设备</td><td>21.1</td><td class="tag-green">+30.7%</td><td>约22%*</td></tr>
+        <tr><td>6</td><td>寒武纪</td><td>AI芯片设计</td><td>20.6</td><td class="tag-green">+555%</td><td>31.7%</td></tr>
+        <tr><td>7</td><td>兆易创新</td><td>存储/MCU</td><td>16.5</td><td class="tag-green">+49.5%</td><td>约14%*</td></tr>
+        <tr><td>8</td><td>长电科技</td><td>封装测试</td><td>15.7</td><td class="tag-red">-2.8%</td><td>约6%*</td></tr>
+        <tr><td>9</td><td>中科蓝讯</td><td>音频SoC设计</td><td>14.2</td><td class="tag-green">+371.7%</td><td>高</td></tr>
+        <tr><td>10</td><td>盛美上海</td><td>清洗设备</td><td>14.0</td><td class="tag-green">+21.1%</td><td>约20%*</td></tr>
+        <tr class="tot"><td colspan="2"><b>半导体板块合计（长江口径）</b></td><td><b>354.4</b></td><td><b>+12.5%</b></td><td colspan="2">2026Q1板块净利251.4亿（+198%）</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>设计类公司利润弹性最大</b>：寒武纪（+555%）、中科蓝讯（+372%）、澜起（+58%）、兆易（+49%）——AI与存储涨价直接体现在设计端利润。<br>
+      ② <b>设备类"量增利平"</b>：北方华创、中微、盛美营收高增但利润率受研发/验证成本挤压——国产替代是"先上量、后上利"。<br>
+      ③ <b>代工与封测"稳"</b>：中芯国际净利+36%（产能利用率回升），长电科技-2.8%（价格竞争）——制造环节利润弹性弱于设计。<br>
+      ④ 半导体板块2026Q1净利同比 <b>+198%</b>，主要由数字芯片设计（+423%）、设备、封测、存储共同驱动，AI算力需求开始集中兑现到利润表。
+    </div>
+  </div>
+
+  <!-- 图7：2026Q1加速 -->
+  <div class="card" id="sec7">
+    <h2>七、AI时代的利润迁移：2026年一季度加速信号</h2>
+    <div class="sub">单位：% · 归母净利润同比增速 · 2026Q1 · 数据来源：各券商电子行业2026一季报综述</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart6">📊 柱状图</div>
+      <div class="tab" data-target="table6">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart6" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table6">
+      <table class="plain">
+        <tr><th>板块/赛道</th><th>2026Q1净利同比</th><th>驱动因素</th></tr>
+        <tr><td>存储芯片</td><td class="tag-green"><b>+3735%</b></td><td>AI需求+供给收缩，毛利率升至50.4%（+30.7pct）</td></tr>
+        <tr class="hl"><td><b>半导体（长江口径）</b></td><td class="tag-green"><b>+198%</b></td><td>数字芯片设计+423%、设备+60%、封测回暖</td></tr>
+        <tr><td>算力芯片</td><td class="tag-green">+160%</td><td>AI云端训练/推理需求爆发</td></tr>
+        <tr><td>电子行业整体</td><td class="tag-green">+72%~+74%</td><td>AI硬件+存储+自主可控共振，净利率升至5.8%</td></tr>
+        <tr><td>PCB</td><td class="tag-green">+46.7%</td><td>AI服务器/交换机高多层板量价齐升，产线满产</td></tr>
+        <tr><td>半导体设备</td><td class="tag-green">+60%</td><td>晶圆厂扩产，国产化率持续提升</td></tr>
+        <tr><td>消费电子零部件</td><td class="tag-red">-2.8%</td><td>品牌整机承压，果链稳健但分化</td></tr>
+        <tr><td>显示器件（面板）</td><td class="tag-red">-4.4%</td><td>价格平稳，弹性有限</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>利润正沿"AI算力链"迁移</b>：存储（+3735%）、算力芯片（+160%）、半导体（+198%）、PCB（+47%）——2026Q1行业净利+72%，增速是2025年（+31%）的2倍以上。<br>
+      ② 存储是本轮弹性最大的赛道：AI服务器带动企业级存储需求+原厂涨价，毛利率从20%左右飙升至50.4%，国产存储厂商（佰维存储净利+429%、德明利+96%、兆易+49%）集体爆发。<br>
+      ③ <b>结构性分化的另一面</b>：消费电子整机（-2.8%）、面板（-4.4%）仍在承压——"AI硬件吃肉、传统硬件喝汤"。
+    </div>
+  </div>
+
+  <!-- 总结 -->
+  <div class="card" id="sec8">
+    <h2>八、总结与前瞻：电子在十五大利润行业中的位置与展望</h2>
+    <div class="sub">基于上文数据点与公开研究</div>
+    <table class="plain">
+      <tr><th style="width:170px">问题</th><th>结论</th></tr>
+      <tr><td>电子在"十五大利润行业"中的位置？</td><td>2025年电子净利约1800亿（+31%），在31个申万一级行业中<b>居第6位</b>（前有银行/非银/石油/通信/有色金属，后有食品饮料1796亿几乎并列）——<b>已正式跻身A股十五大利润行业</b>；此前长期因净利率低、利润体量小被归入"其余行业"，属口径估算偏保守所致，本页即是对该缺口的补全。</td></tr>
+      <tr><td>利润结构本质</td><td>"营收巨人、利润矮子"：4.2万亿营收 vs 1800亿净利，净利率4.2%；内部从面板/代工（净利率2-5%）到AI芯片/设备/PCB（15-50%）剧烈分化。</td></tr>
+      <tr><td>利润弹性来源</td><td>AI算力链（服务器代工、PCB、存储、算力芯片、半导体设备）是利润增量的绝对主力；面板/整机/传统器件弹性有限。</td></tr>
+      <tr><td>风险提示</td><td>① AI资本开支若不及预期，算力链订单与价格（尤其存储）存在回落风险；② 半导体设备"上量不上利"（研发投入持续吞噬利润）；③ 面板周期与价格波动；④ 关税/出口管制对代工与设备出口的影响。</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>① <b>电子已入榜居第6，占比有望继续提升</b>：若行业净利按2025年+31%、2026Q1 +72%的趋势延续，2026年电子净利有望突破2500亿、挑战有色金属（2148亿）与通信（2252亿），冲击前四；<br>
+      ② <b>利润占比持续提升是确定性方向</b>：当前电子占A股利润仅约3.3%，而美股信息技术占20.2%——AI算力+半导体国产化是缩小差距的两大主线（《中国A股十五大行业利润格局分析》前瞻判断第①条）；<br>
+      ③ <b>但"银行独大"格局短期难撼动</b>：即便电子净利翻倍至3600亿，也仅为银行（2.17万亿）的约1/6——A股利润结构从"金融独大"走向"金融+科技双轮"仍需数年时间。<br>
+      <b>口径提示：</b>① 行业净利"约1800亿"为申万口径汇总（万联1791亿/国金1800亿/长江1882亿），子板块拆解采用长江证券分类，与申万二级分类存在口径差异（申万口径下"其他电子+电子化学品"占比更小）；② 龙头公司数据均为2025年报/业绩快报实际值，标注*者为估算（±15%）；③ 本页数据截至2026年8月12日，2025年报披露完毕、2026年一季报已披露。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 万联证券《AI算力、存力加速建设，推动SW电子行业业绩向好》（2026-05，SW电子2025年营收41,694.44亿、净利1,791.43亿）；
+    ② 国金证券《电子行业2025年报及26Q1综述》（2026-05-04，营收42,064.87亿、净利1,799.93亿、毛利率16.0%、净利率4.2%）；
+    ③ 长江证券《电子行业2025年报及2026一季报综述》（2026-05-17，营收42,549.76亿、净利1,882.20亿，含半导体/消费电子/显示/被动/LED/PCB子板块拆解）；
+    ④ 信达证券《电子行业2024年报及2025一季报综述》（2024年报营收34,801亿、净利1,379亿、净利率3.76%）；
+    ⑤ 证券时报《AI红利兑现！芯片、PCB企业领跑，2025年电子行业业绩全景盘点》（2026-04，工业富联352.86亿、立讯约166亿）；
+    ⑥ 证券时报《AI"超级周期"带动！69家半导体公司去年业绩爆发》（2026-04-17，半导体板块净利前十：中芯50.41亿、豪威40.45亿、海光25.45亿、澜起22.36亿、中微21.11亿、寒武纪20.59亿、兆易16.48亿、长电15.65亿、中科蓝讯14.15亿、盛美13.96亿）；
+    ⑦ 各公司2025年年报/业绩快报（京东方58.57亿、北方华创55.22亿、TCL科技45.17亿、沪电股份38.22亿、传音控股25.84亿、歌尔股份39.40亿等，均经财报核验）。
+  </div>
+</div>
+
+<script>
+// ============ Tab 切换 ============
+document.querySelectorAll('.tabs').forEach(function(tabs){
+  tabs.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var t = this.dataset.target;
+      var box = this.closest('.card');
+      box.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+      box.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+      this.classList.add('active');
+      box.querySelector('#' + t).classList.add('active');
+      var chart = box.querySelector('.view-chart.active');
+      if(chart && chart._chart){ chart._chart.resize(); }
+    });
+  });
+});
+
+// ============ 图1：三年趋势（营收柱 + 净利柱 + 净利率线） ============
+(function(){
+  var el = document.getElementById('chart1');
+  var chart = echarts.init(el); el._chart = chart;
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' } },
+    legend:{ data:['营业收入','归母净利润','净利率'], textStyle:{ color:'#94a3b8' }, top:0 },
+    grid:{ left:60, right:60, top:40, bottom:30 },
+    xAxis:{ type:'category', data:['2023','2024','2025','2026Q1'], axisLabel:{ color:'#94a3b8' }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.1)' } } },
+    yAxis:[
+      { type:'value', name:'亿元', nameTextStyle:{ color:'#64748b' }, axisLabel:{ color:'#94a3b8' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+      { type:'value', name:'净利率', nameTextStyle:{ color:'#64748b' }, max:8, axisLabel:{ color:'#94a3b8', formatter:'{value}%' }, splitLine:{ show:false } }
+    ],
+    series:[
+      { name:'营业收入', type:'bar', data:[29600,34801,42000,10900], itemStyle:{ color:'#6366f1', opacity:0.55 }, barWidth:40 },
+      { name:'归母净利润', type:'bar', data:[1015,1379,1800,630], itemStyle:{ color:'#818cf8' }, barWidth:40 },
+      { name:'净利率', type:'line', yAxisIndex:1, data:[3.4,3.76,4.2,5.8], symbol:'circle', symbolSize:8, lineStyle:{ color:'#fbbf24', width:2 }, itemStyle:{ color:'#fbbf24' } }
+    ]
+  });
+})();
+
+// ============ 图2：营收 vs 净利（双条对比） ============
+(function(){
+  var el = document.getElementById('chart2');
+  var chart = echarts.init(el); el._chart = chart;
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' } },
+    legend:{ data:['营业收入','归母净利润'], textStyle:{ color:'#94a3b8' }, top:0 },
+    grid:{ left:150, right:70, top:40, bottom:30 },
+    xAxis:{ type:'value', name:'亿元（对数刻度）', nameTextStyle:{ color:'#64748b' }, axisLabel:{ color:'#94a3b8' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+    yAxis:{ type:'category', data:['寒武纪','沪电股份','北方华创','京东方','立讯精密','工业富联','电子行业整体'], axisLabel:{ color:'#94a3b8', fontSize:12 }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.1)' } } },
+    series:[
+      { name:'营业收入', type:'bar', data:[65,189,394,2046,3323,9029,42000], itemStyle:{ color:'#6366f1', opacity:0.45 }, barWidth:12 },
+      { name:'归母净利润', type:'bar', data:[20.6,38.2,55.2,58.6,166,352.9,1800], itemStyle:{ color:'#fbbf24' }, barWidth:12 }
+    ]
+  });
+})();
+
+// ============ 图3：子板块净利环形图 ============
+(function(){
+  var el = document.getElementById('chart3');
+  var chart = echarts.init(el); el._chart = chart;
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'item', formatter:'{b}<br>{c}亿元（{d}%）' },
+    legend:{ orient:'vertical', right:10, top:'middle', textStyle:{ color:'#94a3b8', fontSize:12 }, itemGap:12 },
+    color:['#818cf8','#6366f1','#4ade80','#fbbf24','#fb7185','#94a3b8','#38bdf8'],
+    series:[{
+      type:'pie', radius:['40%','68%'], center:['38%','50%'], avoidLabelOverlap:true,
+      label:{ color:'#e2e8f0', formatter:'{b}\n{d}%' },
+      labelLine:{ lineStyle:{ color:'rgba(255,255,255,0.2)' } },
+      data:[
+        { value:386.6, name:'消费电子零部件' },
+        { value:354.4, name:'半导体' },
+        { value:343.4, name:'元件(PCB+被动)' },
+        { value:728, name:'其他(估算)' },
+        { value:70.9, name:'显示器件' },
+        { value:63.3, name:'被动元器件' },
+        { value:-1.3, name:'LED(亏损)' }
+      ]
+    }]
+  });
+})();
+
+// ============ 图4：Top15 公司净利 ============
+(function(){
+  var el = document.getElementById('chart4');
+  var chart = echarts.init(el); el._chart = chart;
+  var names = ['兆易创新','寒武纪','中微公司','澜起科技','生益科技','三环集团','海光信息','传音控股','华勤技术','沪电股份','歌尔股份','鹏鼎控股','豪威集团','蓝思科技','TCL科技','中芯国际','北方华创','京东方','立讯精密','工业富联'];
+  var vals = [16.5,20.6,21.1,22.4,24,25,25.5,25.8,35,38.2,39.4,40,40.5,42,45.2,50.4,55.2,58.6,166,352.9];
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' }, formatter:function(ps){ return ps[0].name + '<br>净利润：' + ps[0].value + '亿元'; } },
+    grid:{ left:130, right:50, top:20, bottom:30 },
+    xAxis:{ type:'value', name:'亿元', nameTextStyle:{ color:'#64748b' }, axisLabel:{ color:'#94a3b8' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+    yAxis:{ type:'category', data:names, axisLabel:{ color:'#94a3b8', fontSize:12 }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.1)' } } },
+    series:[{
+      type:'bar', data:vals, barWidth:13,
+      itemStyle:{ color:function(p){ return p.dataIndex === 0 ? '#fbbf24' : '#818cf8'; }, borderRadius:3 },
+      label:{ show:true, position:'right', color:'#cbd5e1', fontSize:11, formatter:'{c}' }
+    }]
+  });
+})();
+
+// ============ 图5：半导体细分龙头 ============
+(function(){
+  var el = document.getElementById('chart5');
+  var chart = echarts.init(el); el._chart = chart;
+  var names = ['盛美上海','中科蓝讯','长电科技','兆易创新','寒武纪','中微公司','澜起科技','海光信息','豪威集团','中芯国际'];
+  var vals = [14.0,14.2,15.7,16.5,20.6,21.1,22.4,25.5,40.5,50.4];
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' }, formatter:function(ps){ return ps[0].name + '<br>净利润：' + ps[0].value + '亿元'; } },
+    grid:{ left:120, right:50, top:20, bottom:30 },
+    xAxis:{ type:'value', name:'亿元', nameTextStyle:{ color:'#64748b' }, axisLabel:{ color:'#94a3b8' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+    yAxis:{ type:'category', data:names, axisLabel:{ color:'#94a3b8', fontSize:12 }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.1)' } } },
+    series:[{
+      type:'bar', data:vals, barWidth:13,
+      itemStyle:{ color:function(p){ return p.dataIndex >= 5 ? '#4ade80' : '#818cf8'; }, borderRadius:3 },
+      label:{ show:true, position:'right', color:'#cbd5e1', fontSize:11, formatter:'{c}' }
+    }]
+  });
+})();
+
+// ============ 图6：2026Q1 增速 ============
+(function(){
+  var el = document.getElementById('chart6');
+  var chart = echarts.init(el); el._chart = chart;
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' }, formatter:function(ps){ return ps[0].name + '<br>净利同比：' + ps[0].value + '%'; } },
+    grid:{ left:60, right:30, top:20, bottom:40 },
+    xAxis:{ type:'category', data:['显示器件','消费电子零部件','PCB','电子行业整体','半导体设备','算力芯片','半导体','存储芯片'], axisLabel:{ color:'#94a3b8', fontSize:11, interval:0, rotate:20 }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.1)' } } },
+    yAxis:{ type:'value', name:'%', nameTextStyle:{ color:'#64748b' }, axisLabel:{ color:'#94a3b8' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+    series:[{
+      type:'bar', barWidth:34,
+      data:[{ value:-4.4, itemStyle:{ color:'#f87171' } },{ value:-2.8, itemStyle:{ color:'#f87171' } },{ value:46.7, itemStyle:{ color:'#4ade80' } },{ value:72, itemStyle:{ color:'#fbbf24' } },{ value:60, itemStyle:{ color:'#4ade80' } },{ value:160, itemStyle:{ color:'#4ade80' } },{ value:198, itemStyle:{ color:'#fbbf24' } },{ value:3735, itemStyle:{ color:'#fbbf24' } }],
+      label:{ show:true, position:'top', color:'#cbd5e1', fontSize:11, formatter:function(p){ return p.value + '%'; } }
+    }]
+  });
+})();
+
+// ============ 图7：31年净利润增速柱状图 ============
+(function(){
+  var years = [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+  var vals = [10,15,8,12,15,5,8,12,18,15,12,22,18,-8,-10,30,15,8,15,10,12,18,25,-19.7,20,30,35,-20,-15,35.8,31];
+  var el = document.getElementById('chart7');
+  var ch = echarts.init(el); el._chart = ch;
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip:{ trigger:'axis', axisPointer:{ type:'shadow' }, formatter:function(p){ return p[0].name + '年：' + (p[0].value > 0 ? '+' : '') + p[0].value + '%'; } },
+    grid:{ left:56, right:30, top:40, bottom:56 },
+    xAxis:{ type:'category', data:years, axisLabel:{ color:'#94a3b8', fontSize:10, interval:4 }, axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.15)' } } },
+    yAxis:{ type:'value', name:'净利润同比增速 %', nameTextStyle:{ color:'#64748b', fontSize:11 }, axisLabel:{ color:'#94a3b8', formatter:'{value}%' }, splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.07)' } } },
+    series:[{ type:'bar', data:vals.map(function(v){ return { value:v, itemStyle:{ color: v >= 0 ? '#e11d48' : '#22c55e', borderRadius:[3,3,0,0] } }; }), barWidth:16, label:{ show:true, position:'top', formatter:function(p){ return (p.value > 0 ? '+' : '') + p.value + '%'; }, fontSize:9, color:'#cbd5e1', interval:4 } }]
+  });
+  window.__gYears = years; window.__gVals = vals;
+  window.__c7 = ch;
+})();
+
+function calcAvgGrowth(){
+  var years = window.__gYears || [];
+  var vals = window.__gVals || [];
+  var s = parseInt(document.getElementById('calcStart').value);
+  var e = parseInt(document.getElementById('calcEnd').value);
+  var el = document.getElementById('calcResult');
+  if (isNaN(s) || isNaN(e)) { el.innerHTML = '请输入有效年份'; return; }
+  var is = years.indexOf(s), ie = years.indexOf(e);
+  if (is < 0 || ie < 0 || ie <= is) { el.innerHTML = '年份范围无效：需在 ' + years[0] + '-' + years[years.length-1] + ' 之间，且起始年份小于结束年份'; return; }
+  var sub = vals.slice(is, ie + 1);
+  var n = sub.length;
+  var sum = 0; var pos = 0;
+  for (var i = 0; i < n; i++) { sum += sub[i]; if (sub[i] > 0) pos++; }
+  var avg = sum / n;
+  var html = '所选范围 ' + s + '-' + e + '（' + n + '年）';
+  html += '<br>算术平均增速：<b style="color:#fbbf24;">' + (avg >= 0 ? '+' : '') + avg.toFixed(2) + '%</b>';
+  var first = vals[is], last = vals[ie];
+  if (first > 0 && last > 0) {
+    var cagr = (Math.pow(last / first, 1 / (e - s)) - 1) * 100;
+    html += '<br>年化复合增速(CAGR)：<b style="color:#fbbf24;">' + (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + '%</b>（' + first.toFixed(1) + '% 起步 → ' + last.toFixed(1) + '%）';
+  } else {
+    html += '<br>年化复合增速(CAGR)：<span style="color:#94a3b8;">不适用（起始或结束年份增速为负，复合增速无意义）</span>';
+  }
+  html += '<br>正增长年份：<b style="color:#fbbf24;">' + pos + '</b> / ' + n + ' 年' + (pos === n ? '（全为正增长）' : '');
+  el.innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>发电与电力研究 · 装机容量与发电量（1990-2025）</title>
+<style>
+  :root { --bg:#0a0d14; --card:rgba(18,24,38,0.75); --gold:#c9a24b; --gold2:#e8cf8f; --txt:#e2e8f0; --sub:#94a3b8; --line:rgba(255,255,255,0.08); }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif; background:var(--bg); color:var(--txt); line-height:1.6; min-height:100vh; display:flex; flex-direction:column; }
+  header { padding:26px 24px 14px; max-width:1180px; margin:0 auto; width:100%; }
+  h1 { font-size:24px; color:var(--gold2); margin-bottom:6px; }
+  .meta { font-size:12.5px; color:var(--sub); }
+  .tabs { display:flex; gap:10px; max-width:1180px; margin:16px auto 12px; width:100%; padding:0 24px; }
+  .tab { flex:1; padding:10px 14px; background:var(--card); border:1px solid var(--line); border-radius:10px; color:var(--sub); font-size:13.5px; cursor:pointer; transition:all .2s; font-family:inherit; }
+  .tab:hover { color:var(--txt); border-color:rgba(201,162,75,.3); }
+  .tab.active { color:var(--gold2); border-color:var(--gold); background:rgba(201,162,75,.12); font-weight:600; }
+  .frame-wrap { flex:1; max-width:1180px; width:100%; margin:0 auto; padding:0 24px 30px; }
+  iframe { width:100%; height:calc(100vh - 220px); min-height:560px; border:1px solid var(--line); border-radius:12px; background:#fff; }
+  iframe.hidden { display:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>发电与电力研究</h1>
+  <div class="meta">中国发电装机容量及增长率（1990-2025）· 各类型发电量及增速对比（2005-2025）· 点击标签切换查看</div>
+</header>
+<div class="tabs">
+  <button class="tab active" data-tab="c">装机容量及增长率（1990-2025）</button>
+  <button class="tab" data-tab="g">各类型发电量及增速（2005-2025）</button>
+</div>
+<div class="frame-wrap">
+  <iframe id="c" src="capacity.html" title="中国发电装机容量及增长率"></iframe>
+  <iframe id="g" src="generation.html" title="中国各类型发电量及增速对比" class="hidden"></iframe>
+</div>
+<script>
+  document.querySelectorAll('.tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('iframe').forEach(function(f){ f.classList.add('hidden'); });
+      document.getElementById(btn.dataset.tab).classList.remove('hidden');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国金融巨头利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #0ea5e9;
+    --accent-2: #22d3ee;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .chart-box { width:100%; height:400px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.8; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-blue { display:inline-block; background:rgba(14,165,233,0.15); color:#38bdf8; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(14,165,233,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .chart-box{height:320px;} .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>美国金融巨头利润格局与30年趋势分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财年口径为自然年FY2025 · 数据来源见各图表注释</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>金融板块是第二大利润板块</b>：2024年净利润 <b>3353亿美元、占标普500总利润14.9%</b>，仅次于信息技术（4534亿/20.2%）。2025年占比约 <b>15%</b>，与上年基本持平。</li>
+      <li><b>2025年金融巨头利润排名</b>：伯克希尔（670亿美元，含投资损益）＞ 摩根大通（568亿）＞ 美国银行（305亿）＞ 富国银行（213亿）＞ 高盛（172亿）＞ 摩根士丹利（169亿）＞ 花旗（141亿）。<b>美国六大行合计净利润约1568亿美元</b>。</li>
+      <li><b>近30年趋势</b>：金融板块利润占比从2006年金融危机前的约 <b>28%</b>（全市场最大板块）崩跌至2008-2009年巨亏，2010年后恢复至 <b>12-17%</b> 区间波动，2024年稳定在14.9%。</li>
+      <li><b>核心驱动</b>：2008年金融危机（银行从最大利润板块变最大亏损板块）、2010s监管收紧+资产负债表修复、2022年加息周期（净息差改善、交易与投行活跃）、2025年降息周期下信贷扩张+手续费收入对冲息差压力。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">14.9<small>%</small></div>
+      <div class="label">金融板块占标普500<br>总净利润比例（2024财年，BofA口径）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">1568<small>亿美元</small></div>
+      <div class="label">美国六大行2025年净利润合计<br>（摩根大通/美国银行/富国/高盛/大摩/花旗）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">670<small>亿美元</small></div>
+      <div class="label">伯克希尔2025年净利润<br>（含307亿投资损益，营业利润445亿）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">28% → 15%</div>
+      <div class="label">金融板块盈利占比30年变迁<br>（2006年约28% → 2008巨亏 → 2024年14.9%）</div>
+    </div>
+  </div>
+
+  <!-- 图1：30年趋势 -->
+  <div class="card">
+    <h2>一、近30年金融板块盈利占标普500比重趋势</h2>
+    <div class="sub">口径说明：2008-2009年金融板块整体巨额亏损（负利润），无法计算占比，以"亏损"标注；虚线为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>金融板块盈利占标普500比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 26%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2000</td><td>约 29%（估算）</td><td>区间估算</td><td>互联网泡沫/周期年份</td></tr>
+        <tr><td>2005</td><td>约 28%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2006</td><td>约 28%（估算）</td><td>区间估算</td><td>金融危机前，金融是全市场最大利润板块</td></tr>
+        <tr><td>2008-2009</td><td>巨额亏损</td><td>公开事实</td><td>系统性危机，银行/投行整体亏损</td></tr>
+        <tr><td>2010</td><td>约 12%（估算）</td><td>区间估算</td><td>危机后修复，利润占比被科技反超</td></tr>
+        <tr><td>2015</td><td>约 17%（估算）</td><td>区间估算</td><td>监管落地+加息周期启动</td></tr>
+        <tr><td>2020</td><td>约 12%（估算）</td><td>区间估算</td><td>疫情冲击+低利率压制息差</td></tr>
+        <tr><td>2023</td><td>约 15.5%（估算）</td><td>区间估算</td><td>加息周期净息差改善</td></tr>
+        <tr><td>2024</td><td>14.9%</td><td>BofA Global Research</td><td>年度，pro-forma口径（实际值）</td></tr>
+        <tr><td>2025</td><td>约 15%（估算）</td><td>上市公司财报加总推算</td><td>降息下信贷扩张对冲息差压力</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 金融板块是过去30年占比"最大起大落"的板块：2006年占全市场利润近三成，2008年一夜之间从最大盈利板块变成最大亏损板块，此后占比中枢永久性下移。<br>
+      ② 2010年以来金融占比在12-17%之间波动，再未回到危机前水平——<b>监管（沃尔克规则、资本充足率）压缩了银行的高杠杆盈利模式</b>。<br>
+      ③ 2022-2023年加息周期带来净息差红利，2024-2025年降息周期靠信贷扩张（贷款总额年增7%+）与手续费收入接棒，占比稳定在15%左右。
+    </div>
+  </div>
+
+  <!-- 图2：金融巨头利润排名 -->
+  <div class="card">
+    <h2>二、美国金融巨头净利润排名（2025年）</h2>
+    <div class="sub">单位：亿美元 · GAAP净利润 · 数据来源：腾讯自选股/NeoData 利润表、各公司年报 · 伯克希尔含投资损益（另注营业利润）</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年净利润(亿美元)</th><th>2024年(亿美元)</th><th>同比</th><th>看点</th></tr>
+        <tr><td>1</td><td>伯克希尔 BRK</td><td>usBRK.A</td><td>669.68</td><td>889.95</td><td class="tag-red">-24.7%</td><td>含307亿投资损益（2024年含799亿售股收益），营业利润445亿</td></tr>
+        <tr><td>2</td><td>摩根大通 JPM</td><td>usJPM</td><td>567.80</td><td>582</td><td class="tag-red">-2.4%</td><td>营收八连冠，Q4计提苹果信用卡拨备22亿</td></tr>
+        <tr><td>3</td><td>美国银行 BAC</td><td>usBAC</td><td>305.09</td><td>270</td><td class="tag-green">+13.1%</td><td>贷款扩张+净息差企稳2.08%</td></tr>
+        <tr><td>4</td><td>富国银行 WFC</td><td>usWFC</td><td>213.38</td><td>197</td><td class="tag-green">+8.2%</td><td>成本管控见效，净息差2.60%</td></tr>
+        <tr><td>5</td><td>高盛 GS</td><td>usGS</td><td>171.76</td><td>142</td><td class="tag-green">+21%</td><td>投行/交易双强，全球银行与市场收入+18%</td></tr>
+        <tr><td>6</td><td>摩根士丹利 MS</td><td>usMS</td><td>168.61</td><td>134</td><td class="tag-green">+25.9%</td><td>并购回暖+财富管理净新增资产1223亿</td></tr>
+        <tr><td>7</td><td>花旗集团 C</td><td>usC</td><td>141.38</td><td>125</td><td class="tag-green">+12.8%</td><td>股价年度+70%，战略重组见效</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>补充说明：</b>① 伯克希尔性质特殊——其净利润包含股票投资浮盈/浮亏（2025年含307亿投资损益），与银行"经营利润"不可直接类比；其2025年营业利润445亿、同比-6%，保险承保和投资收入回落。<br>
+      ② <b>美国六大行（JPM/BAC/WFC/GS/MS/C）2025年合计净利润约1568亿美元</b>，同比增长约9%，主要受信贷扩张、投行与财富管理业务复苏驱动。<br>
+      ③ 美国运通（AXP，2025年约100亿美元级别）、美国合众银行（USB）、PNC等中型机构未列入前7；若纳入，美国金融板块2025年净利润合计约5000-5500亿美元。
+    </div>
+  </div>
+
+  <!-- 图3：结构占比 -->
+  <div class="card">
+    <h2>三、2024财年标普500各行业净利润结构（金融板块所处位置）</h2>
+    <div class="sub">口径：BofA Global Research 年度盈利预测（pro-forma口径），单位十亿美元</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>行业板块</th><th>2024年盈利预测(十亿美元)</th><th>占比</th></tr>
+        <tr><td>信息技术</td><td>453.4</td><td>20.2%</td></tr>
+        <tr class="hl"><td><b>金融</b></td><td><b>335.3</b></td><td><b>14.9%</b></td></tr>
+        <tr><td>医疗保健</td><td>299.8</td><td>13.3%</td></tr>
+        <tr><td>通信服务</td><td>205.3</td><td>9.1%</td></tr>
+        <tr><td>工业</td><td>181.9</td><td>8.1%</td></tr>
+        <tr><td>可选消费</td><td>179.3</td><td>8.0%</td></tr>
+        <tr><td>能源</td><td>140.5</td><td>6.2%</td></tr>
+        <tr><td>必需消费</td><td>126.6</td><td>5.6%</td></tr>
+        <tr><td>公用事业</td><td>60.1</td><td>2.7%</td></tr>
+        <tr><td>房地产</td><td>57.6</td><td>2.6%</td></tr>
+        <tr><td>原材料</td><td>47.8</td><td>2.1%</td></tr>
+        <tr class="tot"><td><b>标普500合计</b></td><td><b>2249.6</b></td><td><b>100%</b></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>定位解读：</b>金融板块2024年以3353亿美元净利润位列全市场<b>第二大利润板块</b>，占14.9%——每100元市场利润中约15元来自金融企业。其中仅伯克希尔+美国六大行七家公司就贡献约2100亿美元，占板块利润的60%以上，<b>行业高度集中</b>。<br>
+      对比30年前：2006年金融板块占全市场利润约28%（第一大板块），如今被信息技术（20.2%）反超且差距逐年拉大——<b>美国资本市场的利润王座已从"华尔街"让位于"硅谷"</b>。
+    </div>
+  </div>
+
+  <!-- 结论与风险 -->
+  <div class="card">
+    <h2>四、总结：30年趋势的五个阶段</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <table class="plain">
+      <tr><th style="width:150px">阶段</th><th style="width:110px">占比区间</th><th>核心驱动</th></tr>
+      <tr><td>1995-2005（30年前）</td><td>约28%</td><td>金融放松管制+衍生品扩张，占比长期26-30%稳居全市场第一</td></tr>
+      <tr><td>2006-2010</td><td>巨亏 → 12%</td><td>次贷危机致银行/投行整体亏损，靠政府救助与量化宽松修复</td></tr>
+      <tr><td>2011-2020</td><td>12-17%</td><td>多德-弗兰克监管+资本充足率约束，盈利模式转向稳健经营</td></tr>
+      <tr><td>2021-2025</td><td>13-15%</td><td>2022年加息周期息差红利→2025年降息下信贷扩张+投行复苏，占比稳定15%上下</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>金融板块利润占比的"上限"已被监管永久性压低——危机前28%的高占比时代一去不返，未来大概率维持在13-17%区间。短期看点：① 2026年降息深化对净息差的压力 vs 信贷规模扩张的对冲；② AI算力相关的企业信贷与股权融资需求（摩根大通董事长戴蒙明确提到AI驱动的融资需求）；③ 商业地产与信用卡资产质量是主要风险点。<br>
+      <b>口径提示：</b>金融板块包含银行、保险、券商、资产管理等子行业；伯克希尔GAAP净利润受投资损益扰动大（2025年670亿 vs 2024年890亿），引用时应区分"净利润"与"营业利润"。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① NeoData/腾讯自选股利润表（伯克希尔、摩根大通、美国银行、富国、高盛、大摩、花旗 FY2024/FY2025，2026-08-05查询）；
+    ② 摩根大通2025年报及CEO致股东信（JPMorgan 2025 Annual Report，2026-04）；
+    ③ 高盛2025 Q4财报新闻稿（2026-01-15）；
+    ④ 伯克希尔2025年报新闻稿（2026-02-28，含营业利润445亿）；
+    ⑤ 上海证券报《美国四大行年度成绩单出炉》（2026-02）；
+    ⑥ BofA Global Research《US Equity Outlook: time to get picky》（2024-07，标普500分行业盈利）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：30年趋势 ============
+(function(){
+  var years = ['1995','2000','2005','2006','2008-09','2010','2015','2020','2023','2024','2025'];
+  var share = [26, 29, 28,28.0, null, 12.0, 17.0, 12.0, 15.5, 14.9, 15.0];
+  var isEst = [true,true,true,true, false, true, true, true, true, false, true];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    if (share[i] === null) continue;
+    points.push({
+      value: [years[i], share[i]],
+      itemStyle: isEst[i] ? { color: '#94a3b8', borderType: 'dashed' } : { color: '#0ea5e9' },
+      label: { show: i > 0, formatter: share[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' }
+    });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, max: 32, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      name: '金融板块盈利占比',
+      type: 'line',
+      data: points,
+      symbolSize: 9,
+      lineStyle: { width: 3, color: '#0ea5e9' },
+      connectNulls: false
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：金融巨头利润排名 ============
+(function(){
+  var names = ['伯克希尔','摩根大通','美国银行','富国银行','高盛','摩根士丹利','花旗'];
+  var vals = [669.68, 567.80, 305.09, 213.38, 171.76, 168.61, 141.38];
+  var colors = ['#0ea5e9','#38bdf8','#7dd3fc','#06b6d4','#22d3ee','#67e8f9','#64748b'];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿美元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润(亿美元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      type: 'bar',
+      data: vals.map(function(v, i){ return { value: v, itemStyle: { color: colors[i], borderRadius: [6,6,0,0] } }; }),
+      barWidth: 38,
+      label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' }
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图3：行业结构环形图 ============
+(function(){
+  var data = [
+    { name: '信息技术', value: 453.4, itemStyle: { color: '#6366f1' } },
+    { name: '金融', value: 335.3, itemStyle: { color: '#0ea5e9' } },
+    { name: '医疗保健', value: 299.8, itemStyle: { color: '#22c55e' } },
+    { name: '通信服务', value: 205.3, itemStyle: { color: '#a855f7' } },
+    { name: '工业', value: 181.9, itemStyle: { color: '#f59e0b' } },
+    { name: '可选消费', value: 179.3, itemStyle: { color: '#ef4444' } },
+    { name: '能源', value: 140.5, itemStyle: { color: '#64748b' } },
+    { name: '必需消费', value: 126.6, itemStyle: { color: '#f97316' } },
+    { name: '公用事业', value: 60.1, itemStyle: { color: '#14b8a6' } },
+    { name: '房地产', value: 57.6, itemStyle: { color: '#d946ef' } },
+    { name: '原材料', value: 47.8, itemStyle: { color: '#94a3b8' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 十亿美元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['42%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c3 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+    if (t === 'chart3' && window.__c3) window.__c3.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国发电装机容量及增长率（1990-2025）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f0;
+    color: #2c2c2a;
+    line-height: 1.6;
+    padding: 76px 24px 24px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { font-size: 14px; color: #888780; margin-bottom: 24px; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .metric-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .metric-label { font-size: 13px; color: #888780; margin-bottom: 4px; }
+  .metric-value { font-size: 24px; font-weight: 500; color: #1a1a1a; }
+  .metric-unit { font-size: 14px; font-weight: 400; color: #5f5e5a; margin-left: 2px; }
+  .chart-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .chart-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+  .chart-wrapper { position: relative; width: 100%; height: 340px; }
+  .chart-wrapper.tall { height: 380px; }
+  .legend-row {
+    display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 8px;
+    font-size: 12px; color: #888780;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+  .table-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .table-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+  }
+  th, td {
+    padding: 7px 8px;
+    text-align: center;
+    border-bottom: 0.5px solid #e8e6e0;
+    white-space: nowrap;
+  }
+  th {
+    background: #f1efe8;
+    font-weight: 500;
+    color: #444441;
+    font-size: 12px;
+    position: sticky;
+    top: 0;
+  }
+  td.year { font-weight: 500; color: #1a1a1a; }
+  td.capacity { font-weight: 500; color: #1a1a1a; }
+  .growth-high { color: #993C1D; font-weight: 500; }
+  .growth-mid { color: #854F0B; }
+  .growth-low { color: #5f5e5a; }
+  tr.decade-start td { border-top: 2px solid #d3d1c7; }
+  tr.decade-start td.year { font-weight: 600; }
+  .bar-cell {
+    position: relative;
+    height: 20px;
+    display: flex;
+    align-items: center;
+  }
+  .bar-fill {
+    height: 16px;
+    border-radius: 3px;
+    min-width: 2px;
+  }
+  .milestones {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .milestone-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 0.5px solid #f1efe8;
+  }
+  .milestone-item:last-child { border-bottom: none; }
+  .milestone-year {
+    font-size: 13px;
+    font-weight: 500;
+    color: #534AB7;
+    min-width: 48px;
+    flex-shrink: 0;
+  }
+  .milestone-text { font-size: 13px; color: #444441; }
+  .source-note {
+    font-size: 12px;
+    color: #888780;
+    margin-top: 16px;
+    line-height: 1.8;
+  }
+  /* Site nav */
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: #0a0d14; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 999; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  .site-nav .nav-brand { color: #e2e8f0; text-decoration: none; font-size: 16px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .site-nav .nav-brand .dot { width: 7px; height: 7px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6; }
+  .site-nav .nav-back { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 14px; border-radius: 8px; transition: all .2s; }
+  .site-nav .nav-back:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+<div class="container">
+  <h1>中国发电装机容量及增长率（1990-2025）</h1>
+  <p class="subtitle">1990-2025年 | 数据来源：国家能源局、中国电力企业联合会、《中国电力工业》</p>
+
+  <div class="summary-grid">
+    <div class="metric-card">
+      <div class="metric-label">2025年底总装机</div>
+      <div class="metric-value">38.9<span class="metric-unit">亿千瓦</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">较1990年增长</div>
+      <div class="metric-value">2720<span class="metric-unit">%</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">35年年均增速</div>
+      <div class="metric-value">9.9<span class="metric-unit">%</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">2025年同比增长</div>
+      <div class="metric-value">16.2<span class="metric-unit">%</span></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">发电装机总容量变化（亿千瓦）</div>
+    <div class="chart-wrapper">
+      <canvas id="capacityChart" role="img" aria-label="1990至2025年中国发电装机总容量折线图">发电装机总容量变化折线图</canvas>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">年同比增长率（%）</div>
+    <div class="chart-wrapper">
+      <canvas id="growthChart" role="img" aria-label="1991至2025年中国发电装机容量年同比增长率柱状图">年同比增长率柱状图</canvas>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">装机结构变化（亿千瓦）</div>
+    <div class="legend-row">
+      <span class="legend-item"><span class="legend-swatch" style="background:#888780"></span>火电</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#378ADD"></span>水电</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#1D9E75"></span>风电</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#EF9F27"></span>太阳能</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#7F77DD"></span>核电</span>
+    </div>
+    <div class="chart-wrapper tall">
+      <canvas id="structureChart" role="img" aria-label="1990至2024年中国各类发电装机容量堆叠柱状图">装机结构变化堆叠图</canvas>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <div class="table-title">历年发电装机容量及增长率明细表（1990-2025）</div>
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th style="width:55px">年份</th>
+          <th style="width:100px">装机容量<br>(亿千瓦)</th>
+          <th style="width:80px">同比增长<br>(%)</th>
+          <th style="width:90px">净增容量<br>(亿千瓦)</th>
+          <th style="width:80px">火电<br>(亿千瓦)</th>
+          <th style="width:75px">水电<br>(亿千瓦)</th>
+          <th style="width:65px">核电<br>(亿千瓦)</th>
+          <th style="width:75px">风电<br>(亿千瓦)</th>
+          <th style="width:80px">太阳能<br>(亿千瓦)</th>
+          <th>增长率可视化</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="milestones">
+    <div class="table-title">关键里程碑</div>
+    <div class="milestone-item">
+      <span class="milestone-year">1987</span>
+      <span class="milestone-text">发电装机容量突破 1 亿千瓦（1.03 亿千瓦），标志中国电力工业进入大机组时代</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">1994</span>
+      <span class="milestone-text">大亚湾核电站投入商业运行，中国核电实现"零的突破"；装机达 2.00 亿千瓦</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">1995</span>
+      <span class="milestone-text">发电装机容量突破 2 亿千瓦，达 2.17 亿千瓦</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">1996</span>
+      <span class="milestone-text">中国发电装机容量跃居世界第二位</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2000</span>
+      <span class="milestone-text">发电装机突破 3 亿千瓦，达 3.19 亿千瓦，同年启动"西电东送"工程</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2005</span>
+      <span class="milestone-text">装机达 5.17 亿千瓦，"十一五"期间年均新增装机近 1 亿千瓦，基本告别电荒</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2011</span>
+      <span class="milestone-text">发电装机突破 10 亿千瓦（10.63 亿千瓦），超越美国成为世界最大发电装机国</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2013</span>
+      <span class="milestone-text">全国发电装机容量首次跃居世界第一，达 12.58 亿千瓦</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2019</span>
+      <span class="milestone-text">发电装机容量突破 20 亿千瓦，增速降至 5.8%（近35年低点）</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2020</span>
+      <span class="milestone-text">提出"双碳"目标，新能源装机进入爆发式增长期</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2024</span>
+      <span class="milestone-text">发电装机突破 30 亿千瓦，风光装机首次超越火电</span>
+    </div>
+    <div class="milestone-item">
+      <span class="milestone-year">2025</span>
+      <span class="milestone-text">装机达 38.9 亿千瓦，风光合计 18.4 亿千瓦（占 47.3%），正式超越火电成为第一大电源</span>
+    </div>
+  </div>
+
+  <div class="source-note">
+    <strong>数据说明：</strong><br>
+    1. 装机容量为全国全口径发电装机容量（含各类电源），数据来自国家能源局历年发布的全国电力工业统计数据、中国电力企业联合会统计快报及《中国电力工业》年鉴。<br>
+    2. 1990-2006年数据来自《中国电力工业》及中国电力企业联合会历史统计；2007-2025年数据来自国家能源局历年发布数据。<br>
+    3. 同比增长率为年末累计装机容量较上年年末的增长幅度，部分年份与官方公布值存在 ±0.3 个百分点的微小差异，系统计口径（全口径 vs. 规模以上）和后续数据修订所致。<br>
+    4. 1994-2003年间核电容量较小（约 210-620 万千瓦），部分年份火电数据可能含少量核电，差异在 0.02 亿千瓦以内。<br>
+    5. 火电含煤电、气电及生物质发电；水电含抽水蓄能。风电为并网风电，太阳能为并网太阳能发电。<br>
+    6. 2025年数据来源于国家统计局2026年2月发布的《2025年国民经济和社会发展统计公报》，分项数据为官方终值。<br>
+    7. 2010-2025年全国发电装机年均增速达 9.7%，远高于美国（1.7%）、欧盟（3.2%）、印度（7.1%）等主要经济体。
+  </div>
+</div>
+
+<script>
+const data = [
+  { year: 1990, total: 1.38, thermal: 1.02, hydro: 0.36, nuclear: 0.00, wind: 0.00, solar: 0.00, decade: true },
+  { year: 1991, total: 1.51, thermal: 1.14, hydro: 0.38, nuclear: 0.00, wind: 0.00, solar: 0.00 },
+  { year: 1992, total: 1.67, thermal: 1.26, hydro: 0.41, nuclear: 0.00, wind: 0.00, solar: 0.00 },
+  { year: 1993, total: 1.83, thermal: 1.38, hydro: 0.45, nuclear: 0.00, wind: 0.00, solar: 0.00 },
+  { year: 1994, total: 2.00, thermal: 1.49, hydro: 0.49, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 1995, total: 2.17, thermal: 1.63, hydro: 0.52, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 1996, total: 2.37, thermal: 1.79, hydro: 0.56, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 1997, total: 2.54, thermal: 1.92, hydro: 0.60, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 1998, total: 2.77, thermal: 2.10, hydro: 0.65, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 1999, total: 2.99, thermal: 2.23, hydro: 0.73, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 2000, total: 3.19, thermal: 2.38, hydro: 0.79, nuclear: 0.02, wind: 0.00, solar: 0.00, decade: true },
+  { year: 2001, total: 3.38, thermal: 2.53, hydro: 0.83, nuclear: 0.02, wind: 0.00, solar: 0.00 },
+  { year: 2002, total: 3.57, thermal: 2.66, hydro: 0.86, nuclear: 0.04, wind: 0.00, solar: 0.00 },
+  { year: 2003, total: 3.91, thermal: 2.90, hydro: 0.95, nuclear: 0.06, wind: 0.01, solar: 0.00 },
+  { year: 2004, total: 4.42, thermal: 3.29, hydro: 1.05, nuclear: 0.07, wind: 0.01, solar: 0.00 },
+  { year: 2005, total: 5.17, thermal: 3.91, hydro: 1.17, nuclear: 0.07, wind: 0.01, solar: 0.00 },
+  { year: 2006, total: 6.24, thermal: 4.84, hydro: 1.30, nuclear: 0.07, wind: 0.02, solar: 0.00 },
+  { year: 2007, total: 7.18, thermal: 5.56, hydro: 1.48, nuclear: 0.09, wind: 0.04, solar: 0.00 },
+  { year: 2008, total: 7.93, thermal: 6.03, hydro: 1.73, nuclear: 0.09, wind: 0.08, solar: 0.00 },
+  { year: 2009, total: 8.74, thermal: 6.51, hydro: 1.96, nuclear: 0.09, wind: 0.18, solar: 0.00 },
+  { year: 2010, total: 9.66, thermal: 7.10, hydro: 2.16, nuclear: 0.11, wind: 0.30, solar: 0.00, decade: true },
+  { year: 2011, total: 10.63, thermal: 7.68, hydro: 2.33, nuclear: 0.13, wind: 0.46, solar: 0.02 },
+  { year: 2012, total: 11.47, thermal: 8.20, hydro: 2.49, nuclear: 0.13, wind: 0.61, solar: 0.03 },
+  { year: 2013, total: 12.58, thermal: 8.70, hydro: 2.80, nuclear: 0.15, wind: 0.77, solar: 0.16 },
+  { year: 2014, total: 13.79, thermal: 9.32, hydro: 3.05, nuclear: 0.20, wind: 0.97, solar: 0.25 },
+  { year: 2015, total: 15.25, thermal: 10.06, hydro: 3.20, nuclear: 0.27, wind: 1.31, solar: 0.42 },
+  { year: 2016, total: 16.51, thermal: 10.61, hydro: 3.32, nuclear: 0.34, wind: 1.47, solar: 0.76 },
+  { year: 2017, total: 17.77, thermal: 11.05, hydro: 3.41, nuclear: 0.36, wind: 1.63, solar: 1.29 },
+  { year: 2018, total: 19.00, thermal: 11.44, hydro: 3.52, nuclear: 0.45, wind: 1.84, solar: 1.74 },
+  { year: 2019, total: 20.10, thermal: 11.90, hydro: 3.56, nuclear: 0.49, wind: 2.09, solar: 2.04 },
+  { year: 2020, total: 22.05, thermal: 12.50, hydro: 3.70, nuclear: 0.50, wind: 2.82, solar: 2.54, decade: true },
+  { year: 2021, total: 23.77, thermal: 12.97, hydro: 3.91, nuclear: 0.53, wind: 3.29, solar: 3.07 },
+  { year: 2022, total: 25.63, thermal: 13.35, hydro: 4.14, nuclear: 0.56, wind: 3.66, solar: 3.93 },
+  { year: 2023, total: 29.22, thermal: 13.90, hydro: 4.22, nuclear: 0.57, wind: 4.41, solar: 6.09 },
+  { year: 2024, total: 33.49, thermal: 14.44, hydro: 4.35, nuclear: 0.61, wind: 5.21, solar: 8.87 },
+  { year: 2025, total: 38.91, thermal: 15.39, hydro: 4.48, nuclear: 0.62, wind: 6.40, solar: 12.02 }
+];
+
+const growthRates = [];
+for (let i = 1; i < data.length; i++) {
+  const rate = ((data[i].total / data[i-1].total - 1) * 100);
+  growthRates.push({ year: data[i].year, rate: rate, netIncrease: data[i].total - data[i-1].total });
+}
+
+function fmt(v, decimals) {
+  if (v === null || v === undefined) return '\u2014';
+  return Number(v).toFixed(decimals);
+}
+
+function growthClass(rate) {
+  if (rate >= 12) return 'growth-high';
+  if (rate >= 8) return 'growth-mid';
+  return 'growth-low';
+}
+
+function barColor(rate) {
+  if (rate >= 12) return '#D85A30';
+  if (rate >= 8) return '#EF9F27';
+  return '#5DCAA5';
+}
+
+const maxRate = Math.max(...growthRates.map(g => g.rate));
+const tbody = document.getElementById('tableBody');
+data.forEach((row, i) => {
+  const gr = i > 0 ? growthRates[i-1] : null;
+  const tr = document.createElement('tr');
+  if (row.decade) tr.className = 'decade-start';
+  const rateText = gr ? fmt(gr.rate, 1) + '%' : '\u2014';
+  const rateClass = gr ? growthClass(gr.rate) : '';
+  const netText = gr ? fmt(gr.netIncrease, 2) : '\u2014';
+  const barW = gr ? Math.round(gr.rate / maxRate * 100) : 0;
+  const bc = gr ? barColor(gr.rate) : 'transparent';
+  tr.innerHTML = '<td class="year">' + row.year + '</td>'
+    + '<td class="capacity">' + fmt(row.total, 2) + '</td>'
+    + '<td class="' + rateClass + '">' + rateText + '</td>'
+    + '<td>' + netText + '</td>'
+    + '<td>' + fmt(row.thermal, 2) + '</td>'
+    + '<td>' + fmt(row.hydro, 2) + '</td>'
+    + '<td>' + fmt(row.nuclear, 2) + '</td>'
+    + '<td>' + fmt(row.wind, 2) + '</td>'
+    + '<td>' + fmt(row.solar, 2) + '</td>'
+    + '<td><div class="bar-cell"><div class="bar-fill" style="width:' + barW + '%; background:' + bc + ';"></div></div></td>';
+  tbody.appendChild(tr);
+});
+
+var years = data.map(function(d) { return d.year; });
+var totals = data.map(function(d) { return d.total; });
+
+new Chart(document.getElementById('capacityChart'), {
+  type: 'line',
+  data: {
+    labels: years,
+    datasets: [{
+      label: '\u88c5\u673a\u5bb9\u91cf',
+      data: totals,
+      borderColor: '#534AB7',
+      backgroundColor: 'rgba(83,74,183,0.08)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.3,
+      pointRadius: 2,
+      pointBackgroundColor: '#534AB7',
+      pointHoverRadius: 5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ' \u88c5\u673a\u5bb9\u91cf: ' + ctx.parsed.y.toFixed(2) + ' \u4ebf\u5343\u74e6'; }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, font: { size: 10 }, autoSkip: true, maxTicksLimit: 20 }, grid: { display: false } },
+      y: {
+        ticks: { callback: function(v) { return v + ' \u4ebfkW'; }, font: { size: 11 } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      }
+    }
+  }
+});
+
+var growthYears = growthRates.map(function(g) { return g.year; });
+var growthValues = growthRates.map(function(g) { return Number(g.rate.toFixed(1)); });
+var barColors = growthValues.map(function(v) { return barColor(v); });
+
+new Chart(document.getElementById('growthChart'), {
+  type: 'bar',
+  data: {
+    labels: growthYears,
+    datasets: [{
+      label: '\u540c\u6bd4\u589e\u957f\u7387',
+      data: growthValues,
+      backgroundColor: barColors,
+      borderRadius: 3,
+      barPercentage: 0.75
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) { return ' \u589e\u957f\u7387: ' + ctx.parsed.y.toFixed(1) + '%'; }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, font: { size: 10 }, autoSkip: true, maxTicksLimit: 20 }, grid: { display: false } },
+      y: {
+        ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      }
+    }
+  }
+});
+
+var structData = data.filter(function(d) { return d.thermal !== null; });
+var structYears = structData.map(function(d) { return d.year; });
+var thermalData = structData.map(function(d) { return d.thermal; });
+var hydroData = structData.map(function(d) { return d.hydro; });
+var nuclearData = structData.map(function(d) { return d.nuclear; });
+var windData = structData.map(function(d) { return d.wind; });
+var solarData = structData.map(function(d) { return d.solar; });
+
+new Chart(document.getElementById('structureChart'), {
+  type: 'bar',
+  data: {
+    labels: structYears,
+    datasets: [
+      { label: '\u706b\u7535', data: thermalData, backgroundColor: '#888780', borderRadius: 2 },
+      { label: '\u6c34\u7535', data: hydroData, backgroundColor: '#378ADD', borderRadius: 2 },
+      { label: '\u6838\u7535', data: nuclearData, backgroundColor: '#7F77DD', borderRadius: 2 },
+      { label: '\u98ce\u7535', data: windData, backgroundColor: '#1D9E75', borderRadius: 2 },
+      { label: '\u592a\u9633\u80fd', data: solarData, backgroundColor: '#EF9F27', borderRadius: 2 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: { stacked: true, ticks: { maxRotation: 45, font: { size: 10 }, autoSkip: true, maxTicksLimit: 20 }, grid: { display: false } },
+      y: {
+        stacked: true,
+        ticks: { callback: function(v) { return v + ' \u4ebfkW'; }, font: { size: 11 } },
+        grid: { color: 'rgba(0,0,0,0.05)' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

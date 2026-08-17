@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国A股十五大行业利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #e11d48;
+    --accent-2: #fb7185;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  .sec-grid { display:flex; flex-direction:column; gap:8px; }
+  .sec-card { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; transition:all .2s; text-decoration:none; cursor:pointer; }
+  .sec-card:hover { border-color:rgba(225,29,72,0.4); background:var(--bg-card-hover); }
+  .sec-card:hover .sec-name { color:var(--accent-2); }
+  .sec-card.static { cursor:default; }
+  .sec-card.static:hover { border-color:var(--border); background:var(--bg-card); }
+  .sec-card.static:hover .sec-name { color:#f1f5f9; }
+  .sec-rank { width:24px; height:24px; border-radius:6px; background:rgba(225,29,72,0.15); color:#fda4af; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sec-name { font-size:14px; font-weight:600; color:#f1f5f9; width:72px; flex-shrink:0; }
+  .sec-share { font-size:13px; font-weight:600; color:var(--accent-2); width:56px; flex-shrink:0; }
+  .sec-brief { flex:1; min-width:0; font-size:12px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  @media(max-width:520px){ .sec-name{width:64px;} .sec-share{width:48px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国A股十五大行业利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月13日 · 行业口径：申万一级行业 · 财务口径：A股上市公司2025年年报归母净利润 · 部分行业利润为估算值（标注*） · 数据来源见文末</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>银行是绝对利润王者</b>：42家A股上市银行2025年归母净利润合计 <b>2.17万亿元，占全部A股上市公司净利润（5.39万亿）的约40%</b>——每100元A股利润中约40元来自银行，远高于美股金融板块的14.9%。</li>
+      <li><b>十五大行业集中度约92%</b>：银行、非银金融、石油石化、通信、<b>有色金属（新入榜）</b>、电子、食品饮料、建筑、公用事业、医药生物（新入榜）、电力设备、汽车、煤炭、家用电器（新入榜）、交通运输（新入榜）十五大行业净利润合计约4.99万亿，占A股总利润约92%（口径含少数股东损益）。</li>
+      <li><b>与美股格局截然不同</b>：美股是"信息技术20.2%居首、科技主导"；A股是"金融独大（银行40%+非银12.5%）、资源能源与白酒特色鲜明"——A股科技公司（半导体、软件）利润占比仍不足6%（电子居第6、占3.3%），互联网巨头（腾讯、阿里）不在A股。</li>
+      <li><b>2025年边际变化</b>：有色金属净利+55.3%（铜铝锂涨价，跃居第5）、国防军工+67%（低空经济/商业航天）、钢铁扭亏为盈（+254%）、非银金融+27.7%（权益市场向好）、银行+1.4%（"增利不增收"延续）；<b>电子行业净利约1800亿、+31%，跻身前六</b>。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">40<small>%</small></div>
+      <div class="label">银行占A股净利润比例<br>（2025年，2.17万亿/5.39万亿）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">5.39<small>万亿</small></div>
+      <div class="label">A股5508家上市公司<br>2025年归母净利润合计</div>
+    </div>
+    <div class="kpi">
+      <div class="num">2148<small>亿元</small></div>
+      <div class="label">有色金属2025年净利（+55.3%）<br>铜铝锂涨价，跃居A股第5大利润行业</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~92<small>%</small></div>
+      <div class="label">十五大行业占A股总利润比例<br>（前15大合计约4.99万亿，含少数股东损益）</div>
+    </div>
+  </div>
+
+  <!-- 图1：利润规模结构 -->
+  <div class="card">
+    <h2>一、2025年A股十五大行业净利润占比与规模结构</h2>
+    <div class="sub">单位：亿元 · 申万一级口径 · 行业利润含估算（*） · 占比基准为全部A股归母净利润5.39万亿</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">🥧 环形图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:500px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>行业</th><th>净利润(亿元)</th><th>占比</th><th>代表公司（2025年归母净利，亿元）</th></tr>
+        <tr><td>1</td><td>银行</td><td>21749</td><td>40.4%</td><td>工行3686 / 建行3389 / 农行2910 / 中行2430 / 招行1502</td></tr>
+        <tr><td>2</td><td>非银金融</td><td>6750</td><td>12.5%</td><td>人寿1541 / 平安1348 / 太保535 / 人保466</td></tr>
+        <tr><td>3</td><td>石油石化</td><td>3305</td><td>6.1%</td><td>中石油1573 / 中海油1221 / 中石化318</td></tr>
+        <tr><td>4</td><td>通信</td><td>2252</td><td>4.2%</td><td>中国移动1371 / 中国电信约330 / 中国联通约90</td></tr>
+        <tr class="hl"><td>5</td><td><b>有色金属</b></td><td><b>2148</b></td><td><b>4.0%</b></td><td><b>新入榜：铜铝金锂涨价净利+55.3%（紫金矿业517.8 / 洛阳钼业203.4）</b></td></tr>
+        <tr><td>6</td><td>电子</td><td>约1800*</td><td>3.3%</td><td>工业富联353 / 立讯约166 / 京东方59</td></tr>
+        <tr><td>7</td><td>食品饮料</td><td>1796</td><td>3.3%</td><td>茅台823 / 汾酒122 / 伊利116 / 泸州老窖108 / 五粮液90</td></tr>
+        <tr><td>8</td><td>建筑装饰</td><td>约1600*</td><td>3.0%</td><td>中国建筑391 / 中国中铁约200*</td></tr>
+        <tr><td>9</td><td>公用事业</td><td>约1460*</td><td>2.7%</td><td>长江电力345 / 华能国际144</td></tr>
+        <tr class="hl"><td>10</td><td><b>医药生物</b></td><td><b>约1395*</b></td><td><b>2.6%</b></td><td><b>新入榜：药明康德约110* / 迈瑞医疗约95* / 恒瑞医药约80*</b></td></tr>
+        <tr><td>11</td><td>电力设备</td><td>约1390*</td><td>2.6%</td><td>宁德时代722 / 阳光电源约120*</td></tr>
+        <tr><td>12</td><td>汽车</td><td>约1140*</td><td>2.1%</td><td>比亚迪326 / 上汽约120* / 长城约100*</td></tr>
+        <tr><td>13</td><td>煤炭</td><td>约1100*</td><td>2.0%</td><td>神华528 / 陕西煤业约180* / 中煤约160*</td></tr>
+        <tr class="hl"><td>14</td><td><b>家用电器</b></td><td><b>约1050*</b></td><td><b>1.9%</b></td><td><b>新入榜：美的439 / 格力290 / 海尔196</b></td></tr>
+        <tr class="hl"><td>15</td><td><b>交通运输</b></td><td><b>约950*</b></td><td><b>1.8%</b></td><td><b>新入榜：中远海控309 / 京沪高铁约130* / 大秦铁路约120*</b></td></tr>
+        <tr class="tot"><td></td><td><b>前15大合计</b></td><td><b>约49900</b></td><td><b>约92%</b></td><td>口径含少数股东损益（其余16个行业合计约8%）</td></tr>
+        <tr class="tot"><td></td><td><b>全部A股</b></td><td><b>53900</b></td><td><b>100%</b></td><td>5508家公司，归母净利同比+1.89%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① A股利润格局呈"金融一柱擎天"结构——银行占40.4%、非银金融占12.5%，两者合计超一半。<br>
+      ② 2025年非银金融跃居第二大行业（保险投资收益驱动，人寿+44.1%）；石油石化因油价下跌退居第三。<br>
+      ③ <b>有色金属首次跻身前五</b>：2025年净利2148亿（+55.3%），铜铝金锂涨价+金价创新高驱动（紫金矿业净利517.8亿、洛阳钼业203.4亿，两家合计占行业约三分之一），从2024年第9位跃升至第5位——是2025年排名上升最快的行业之一。<br>
+      ④ <b>电子行业居第6</b>：2025年归母净利约1800亿（+31%），AI算力硬件+半导体国产化驱动利润快速修复（2023年1015亿→2024年1379亿→2025年约1800亿）；医药生物（约1395亿）、家用电器（约1050亿）、交通运输（约950亿）为估算值（*），分列第10/14/15位。<br>
+      ⑤ 与美股对照：美股第一大行业信息技术占20.2%、金融占14.9%；中国金融合计占53%——<b>A股利润高度集中于金融，科技含量仍低</b>（电子居第6、电子+计算机+传媒合计利润占比仍不足6%，且腾讯/阿里/美团等互联网龙头均不在A股）。
+    </div>
+  </div>
+
+  <!-- 十五大行业列表 -->
+  <h2 style="font-size:17px;color:#f1f5f9;margin-bottom:14px;">二、十五大行业一览（点击进入详细分析）</h2>
+  <div class="sec-grid">
+    <a class="sec-card" href="bank-profit.html"><span class="sec-rank">1</span><span class="sec-name">银行</span><span class="sec-share">40.4%</span><span class="sec-brief">42家上市银行2.17万亿，净息差收窄但利润有韧性</span></a>
+    <a class="sec-card" href="nonbank-finance-profit.html"><span class="sec-rank">2</span><span class="sec-name">非银金融</span><span class="sec-share">12.5%</span><span class="sec-brief">保险+券商6750亿，2025年净利+27.7%（权益市场向好）</span></a>
+    <a class="sec-card" href="oil-gas-profit.html"><span class="sec-rank">3</span><span class="sec-name">石油石化</span><span class="sec-share">6.1%</span><span class="sec-brief">三桶油3305亿，油价下跌净利-11.5%，高分红属性突出</span></a>
+    <a class="sec-card" href="telecom-profit.html"><span class="sec-rank">4</span><span class="sec-name">通信</span><span class="sec-share">4.2%</span><span class="sec-brief">三大运营商2252亿，中移动1371亿，现金流与分红稳定</span></a>
+    <a class="sec-card" href="nonferrous-profit.html"><span class="sec-rank">5</span><span class="sec-name">有色金属</span><span class="sec-share">4.0%</span><span class="sec-brief">新入榜第5：2148亿（+55.3%），铜铝锂涨价+金价新高，紫金矿业领衔</span></a>
+    <a class="sec-card" href="electronics-profit.html"><span class="sec-rank">6</span><span class="sec-name">电子</span><span class="sec-share">3.3%</span><span class="sec-brief">净利约1800亿（+31%），AI算力+半导体国产化驱动，2026Q1再+72%</span></a>
+    <a class="sec-card" href="food-beverage-profit.html"><span class="sec-rank">7</span><span class="sec-name">食品饮料</span><span class="sec-share">3.3%</span><span class="sec-brief">白酒主导1796亿，2025年行业-18.3%（消费调整）</span></a>
+    <a class="sec-card" href="construction-profit.html"><span class="sec-rank">8</span><span class="sec-name">建筑装饰</span><span class="sec-share">3.0%</span><span class="sec-brief">约1600亿，央企基建巨头，地产链拖累净利-23.7%</span></a>
+    <a class="sec-card" href="china-utility-profit.html"><span class="sec-rank">9</span><span class="sec-name">公用事业</span><span class="sec-share">2.7%</span><span class="sec-brief">约1460亿，长江电力345亿，水电/核电现金流稳定</span></a>
+    <a class="sec-card static"><span class="sec-rank">10</span><span class="sec-name">医药生物</span><span class="sec-share">2.6%</span><span class="sec-brief">新入榜第10：约1395亿*，创新药出海+集采出清，板块盈利企稳</span></a>
+    <a class="sec-card" href="electric-equip-profit.html"><span class="sec-rank">11</span><span class="sec-name">电力设备</span><span class="sec-share">2.6%</span><span class="sec-brief">约1390亿，宁德时代722亿（+42%），AI算力+储能驱动</span></a>
+    <a class="sec-card" href="auto-profit.html"><span class="sec-rank">12</span><span class="sec-name">汽车</span><span class="sec-share">2.1%</span><span class="sec-brief">约1140亿，比亚迪326亿（-19%），价格战压缩利润</span></a>
+    <a class="sec-card" href="coal-profit.html"><span class="sec-rank">13</span><span class="sec-name">煤炭</span><span class="sec-share">2.0%</span><span class="sec-brief">约1100亿，神华528亿，煤价回落净利-26.5%</span></a>
+    <a class="sec-card static"><span class="sec-rank">14</span><span class="sec-name">家用电器</span><span class="sec-share">1.9%</span><span class="sec-brief">新入榜第14：约1050亿*，白电三巨头（美的439/格力290/海尔196）</span></a>
+    <a class="sec-card static"><span class="sec-rank">15</span><span class="sec-name">交通运输</span><span class="sec-share">1.8%</span><span class="sec-brief">新入榜第15：约950亿*，中远海控309亿领衔，航运/铁路/机场</span></a>
+  </div>
+
+  <!-- 中美对比 -->
+  <div class="card" style="margin-top:24px;">
+    <h2>三、中美十五大行业利润格局对比</h2>
+    <div class="sub">口径：美股为2024年BofA标普500行业占比；A股为2025年申万一级行业净利润占比（含估算）</div>
+    <table class="plain">
+      <tr><th style="width:120px">对比项</th><th>美股（标普500）</th><th>A股（全部上市公司）</th></tr>
+      <tr><td>第一大行业</td><td>信息技术 20.2%（英伟达/苹果/微软）</td><td>银行 40.4%（工行/建行/农行）</td></tr>
+      <tr><td>前三大占比</td><td>信息技术+金融+医疗 = 48.4%</td><td>银行+非银+石油 = 59.0%</td></tr>
+      <tr><td>利润风格</td><td>科技主导：AI算力、软件、云、创新药</td><td>金融主导：银行、保险，加资源能源（石油/有色/煤炭）与白酒</td></tr>
+      <tr><td>科技公司利润占比</td><td>信息技术+通信服务约29%（含谷歌/Meta）</td><td>电子3.3%（第6）+计算机+传媒合计约6%（互联网龙头不在A股）</td></tr>
+      <tr><td>资源能源占比</td><td>能源6.2%+原材料2.1% = 8.3%</td><td>石油石化6.1%+煤炭2.0%+有色金属4.0% = 12.1%</td></tr>
+      <tr><td>2025年净利增速</td><td>标普500盈利+12%左右（AI驱动）</td><td>A股整体+1.89%（金融与周期修复，有色+55%、军工+67%）</td></tr>
+      <tr><td>结构性变量</td><td>AI资本开支（GPU/数据中心）</td><td>9·24行情（资本市场活跃）、AI+制造转型</td></tr>
+    </table>
+    <div class="note">
+      <b>核心差异：</b>美股利润格局由"科技创新"驱动——过去20年信息技术占比从10%翻倍至20%+；A股利润格局由"金融+资源"主导——银行一家占40.4%，叠加石油、有色、煤炭三大资源行业占12.1%，金融+资源合计占A股利润近2/3。<br>
+      <b>重要提示：</b>A股口径不含互联网巨头（腾讯、阿里、美团、拼多多均在港股/美股上市）——若把在港上市的科技龙头纳入"中国上市公司利润"统计，中国科技行业利润占比将显著提升（腾讯2024年净利约1900亿、阿里约1000亿、美团约350亿），但它们在A股指数中不可投资、也不计入A股行业利润。
+    </div>
+  </div>
+
+  <!-- 趋势 -->
+  <div class="card">
+    <h2>四、近30年代表行业利润占比趋势（1995-2025）</h2>
+    <div class="sub">估算序列（%）：1995-2025关键年份，基于A股各行业净利润历史与行业事件推估；为避免多行业曲线相互挤压，按占比区间拆分为3张图（银行30-50%单独一图，能源与消费科技各一图），各图y轴按自身区间缩放</div>
+    <div style="font-size:13px;color:#f1f5f9;font-weight:600;margin:14px 0 4px;">① 银行（A股利润"压舱石"，占比30-50%区间）</div>
+    <div id="trend1" style="width:100%;height:230px;"></div>
+    <div style="font-size:13px;color:#f1f5f9;font-weight:600;margin:18px 0 4px;">② 资源：石油石化 + 煤炭 + 有色金属（油价/煤价/金属价格周期驱动）</div>
+    <div id="trend2" style="width:100%;height:230px;"></div>
+    <div style="font-size:13px;color:#f1f5f9;font-weight:600;margin:18px 0 4px;">③ 消费与科技：食品饮料 + 医药生物 + 通信 + 电力设备 + 电子</div>
+    <div id="trend3" style="width:100%;height:260px;"></div>
+    <div class="note">
+      <b>读图要点：</b>① <b>银行占比长期在35-50%区间</b>——2010年前后约45-50%，2015年低点约35%，2025年约40%，始终是A股利润的"压舱石"。<br>
+      ② 资源三兄弟（石油/煤炭/有色）占比由商品价格主导：石油2022年油价冲高约10%后回落，有色2025年金属涨价占比升至约4%历史高位，煤炭中枢缓慢下移。<br>
+      ③ <b>消费与科技</b>：食品饮料（白酒）2021年峰值约7%后回落至3.3%；医药生物占比从2015年约3%缓降至2.6%（集采+反腐）；<b>电子2025年占比3.3%（第6位）</b>（图③中蓝色线），AI算力+半导体国产化驱动连续两年高增；电力设备回升至约2.6%。
+    </div>
+  </div>
+
+  <!-- 总结 -->
+  <div class="card">
+    <h2>五、总结：中国上市公司利润格局的三个特征</h2>
+    <div class="sub">基于上文数据点与公开研究</div>
+    <table class="plain">
+      <tr><th style="width:170px">特征</th><th>说明</th></tr>
+      <tr><td>金融独大</td><td>银行（40.4%）+非银（12.5%）合计约53%，超过A股利润的一半——远高于美股金融的14.9%，反映中国以间接融资（信贷）为主的经济结构</td></tr>
+      <tr><td>资源能源权重高</td><td>石油石化6.1%+有色金属4.0%+煤炭2.0%合计约12.1%，叠加公用事业（2.7%），资源与基础设施类央企是利润重要来源；有色金属2025年跃居第5大行业</td></tr>
+      <tr><td>科技含量低但边际改善</td><td><b>电子行业2025年净利约1800亿、占A股利润3.3%，位列第6</b>（AI算力+半导体国产化，2026Q1净利再+72%）；电力设备净利+39%、国防军工+67%；但电子+计算机+传媒合计仍不足6%，互联网龙头缺席A股是最大口径缺陷</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>A股利润格局短期内难以撼动"银行独大"——息差虽收窄，但银行业规模效应与低估值高分红使其利润绝对额依然庞大。边际变量：① <b>AI算力与半导体国产化——电子以约1800亿净利居第6，2026Q1净利+72%显示利润弹性仍在释放，占比有望继续提升</b>；② 有色金属景气延续性（铜铝供给约束+贵金属牛市）；③ 9·24行情后的资本市场活跃度（非银金融利润弹性）；④ 新能源产能出清后的利润修复；⑤ 若未来大型互联网公司回归A股（二次上市），科技占比将出现跳升。<br>
+      <b>口径提示：</b>① 行业净利润为2025年报口径（含少数股东损益，标注*为估算），银行、三桶油、茅台、宁德、美的等为2025年报确认数据；② 申万一级行业共31个，本页按净利润绝对值取前15大（合计约4.99万亿、占比约92%）——<b>有色金属（2148亿）新入榜居第5、电子（约1800亿）居第6、医药生物（约1395亿）/家用电器（约1050亿）/交通运输（约950亿）分列第10/14/15（后三者含估算*）</b>，其余16个行业合计约8%；③ 电子行业六大子板块与Top15公司利润拆解见<a href="electronics-profit.html" style="color:var(--accent-2);">电子行业专题页 →</a>；④ A股口径不含在港/在美上市的中国互联网与科技龙头，与"中国上市公司整体"口径有差异。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 证券时报·数据宝《A股2025年业绩》（2026-04-30，5508家上市公司合计营收72.96万亿、归母净利5.39万亿）；
+    ② 证券时报·数据宝《2025年报排行榜：国防军工行业增速领跑》（2026-05-01，通信2252亿、国防军工321.84亿第18名、钢铁158.5亿扭亏）；
+    ③ 证券时报/Wind《42家上市银行2025年报》（银行合计归母净利2.17万亿、工行3685.62亿等）；
+    ④ 上证主板有色集体业绩说明会（Wind申万有色140家2025年归母净利2148亿、+35.75%，全口径约+55%含深市公司）；
+    ⑤ 东方财富《A股2025年报全景透视》（金融28300亿、化石能源4400亿、信息技术2900亿等）；
+    ⑥ NeoData/腾讯自选股A股利润表（2026-08-05查询）；
+    ⑦ 各公司2025年年报（贵州茅台823亿、中国石油1573亿、宁德时代722亿、比亚迪326亿、长江电力345亿、美的439亿、格力290亿、海尔196亿、中远海控309亿等）；
+    ⑧ 万联证券/国金证券/长江证券《电子行业2025年报综述》（电子净利约1800亿、+26%~33%，2026Q1净利+72%）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：利润规模环形图（15大行业） ============
+(function(){
+  var data = [
+    { name: '银行', value: 21749, itemStyle: { color: '#e11d48' } },
+    { name: '非银金融', value: 6750, itemStyle: { color: '#f43f5e' } },
+    { name: '石油石化', value: 3305, itemStyle: { color: '#fb7185' } },
+    { name: '通信', value: 2252, itemStyle: { color: '#fda4af' } },
+    { name: '有色金属', value: 2148, itemStyle: { color: '#f59e0b' } },
+    { name: '电子', value: 1800, itemStyle: { color: '#38bdf8' } },
+    { name: '食品饮料', value: 1796, itemStyle: { color: '#a855f7' } },
+    { name: '建筑装饰', value: 1600, itemStyle: { color: '#d97706' } },
+    { name: '公用事业', value: 1460, itemStyle: { color: '#14b8a6' } },
+    { name: '医药生物', value: 1395, itemStyle: { color: '#0ea5e9' } },
+    { name: '电力设备', value: 1390, itemStyle: { color: '#64748b' } },
+    { name: '汽车', value: 1140, itemStyle: { color: '#0d9488' } },
+    { name: '煤炭', value: 1100, itemStyle: { color: '#b45309' } },
+    { name: '家用电器', value: 1050, itemStyle: { color: '#db2777' } },
+    { name: '交通运输', value: 950, itemStyle: { color: '#059669' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 亿元（{d}%）' },
+    legend: { orient: 'vertical', right: 0, top: 'center', textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 12, itemHeight: 8 },
+    series: [{
+      type: 'pie',
+      radius: ['38%', '66%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      minAngle: 2,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{d}%', fontSize: 10, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图2：近30年趋势（拆分3图，各图独立y轴刻度） ============
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2018','2020','2022','2023','2024','2025'];
+  var groups = [
+    { id: 'trend1', ymax: 50, series: [
+      { name: '银行', color: '#e11d48', data: [47,44,40,36,38,37,36,38,40,41,40] }
+    ]},
+    { id: 'trend2', ymax: 15, series: [
+      { name: '石油石化', color: '#f59e0b', data: [12,11,8,5,6,6,6,10,7,6.8,6] },
+      { name: '煤炭', color: '#d97706', data: [4,4,3,2,3,3,4,5,3.5,2.9,2.8] },
+      { name: '有色金属', color: '#fb923c', data: [1.5,2,2.5,3,2.5,2,2,2.5,2.7,2.7,4.0] }
+    ]},
+    { id: 'trend3', ymax: 10, series: [
+      { name: '食品饮料', color: '#fda4af', data: [3,3.5,3.5,4,5,6,7,6,5,4.2,4] },
+      { name: '医药生物', color: '#0ea5e9', data: [2,2.5,3,3.5,3,2.5,2.5,2.8,2.5,2.6,2.6] },
+      { name: '通信', color: '#a855f7', data: [3.5,3.5,3.5,3.5,3.5,3,3,3,3,3.5,3.5] },
+      { name: '电力设备', color: '#64748b', data: [1.5,1.5,1.5,2,2.5,3,3.5,3,2.5,1.9,1.8] },
+      { name: '电子', color: '#38bdf8', data: [1.5,1.5,2,2,2.5,3,3,2.6,2.0,2.6,3.3] }
+    ]}
+  ];
+  window.__c3 = [];
+  groups.forEach(function(g){
+    var el = document.getElementById(g.id);
+    if (!el) return;
+    var ch = echarts.init(el); el._chart = ch;
+    ch.setOption({
+      tooltip: { trigger: 'axis', formatter: function(ps){ var s = ps[0].axisValue + '年<br/>'; ps.forEach(function(p){ s += p.marker + ' ' + p.seriesName + '：' + p.value + '%<br/>'; }); return s; } },
+      legend: { top: 0, textStyle: { fontSize: 11, color: '#94a3b8' }, itemWidth: 14, itemHeight: 9 },
+      grid: { left: 55, right: 25, top: 30, bottom: 30 },
+      xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+      yAxis: { type: 'value', min: 0, max: g.ymax, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+      series: g.series.map(function(s){
+        return { name: s.name, type: 'line', data: s.data, smooth: true, symbolSize: 6, lineStyle: { width: 2.4, color: s.color }, itemStyle: { color: s.color } };
+      })
+    });
+    window.__c3.push(ch);
+  });
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.forEach(function(c){ c.resize(); });
+});
+</script>
+</body>
+</html>

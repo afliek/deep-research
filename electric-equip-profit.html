@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电力设备 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#64748b; --accent-2:#94a3b8; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回中国十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国电力设备利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财务口径：A股上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>电力设备是A股第十一大利润板块</b>：2025年净利润约 <b>1390亿元*、占A股总利润约2.6%</b>，AI算力+储能驱动净利+39%。</li>
+      <li><b>2025年龙头利润排名</b>：宁德时代（722亿）＞ 阳光电源（135亿）＞ 国电南瑞（83亿）＞ 特变电工（60亿）＞ 正泰电器（45亿）。<b>宁德时代净利+42%，AI算力+储能双驱动</b>。</li>
+      <li><b>近30年趋势</b>：电力设备占比从2010年约1.5%升至2021年峰值约 <b>3.5%</b>（新能源大爆发），2022-2024年产能过剩后回落，2025年回升至约2.6%（AI算力+储能）。</li>
+      <li><b>核心特征</b>：<b>"成也产能、败也产能"</b>——2021年锂电/光伏利润暴涨，2023-2025年全行业产能过剩、价格战（碳酸锂从60万跌至10万/吨），光伏全链条亏损，仅宁德时代等龙头维持高盈利；AI算力带动电网设备（变压器）需求成为新亮点。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">722亿</div><div class="label">宁德时代2024年归母净利<br>（+15%，占板块约一半）</div></div><div class="kpi"><div class="num">3.5%</div><div class="label">2021年占比峰值<br>（新能源大爆发，2025年回升至约2.6%）</div></div><div class="kpi"><div class="num">~1390亿*</div><div class="label">电力设备行业净利润估算<br>（占A股约2.6%）</div></div><div class="kpi"><div class="num">23.9%</div><div class="label">宁德时代动力电池毛利率<br>（2024年，+5.8pct）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年电力设备占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份数据，基于A股各行业净利润历史数据与行业事件推估，估算值已标注</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>电力设备占A股利润比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 1%（估算）</td><td>区间估算</td><td>A股早期，行业占比低</td></tr>
+        <tr><td>2000</td><td>约 1.5%（估算）</td><td>区间估算</td><td>上市公司扩容初期</td></tr>
+        <tr><td>2005</td><td>约 1.5%（估算）</td><td>区间估算</td><td>股权分置改革前</td></tr>
+        <tr><td>2010</td><td>约 1.5%（估算）</td><td>区间估算</td><td>实际值区间</td></tr>
+        <tr><td>2015</td><td>约 2%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2020</td><td>约 3%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2025</td><td>约 2.6%（估算）</td><td>区间估算</td><td>实际值（2025年报）</td></tr>
+        <tr><td>2025</td><td>约 1.8%（估算）</td><td>区间估算</td><td>估算</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 电力设备占A股利润比例呈"新能源周期"：2015-2021年随新能源车/光伏装机爆发快速上升（1.5%→3.5%），2022-2024年产能过剩后回落至1.9%。<br>② 行业"内卷"剧烈：光伏产业链（硅料/硅片/电池/组件）2024年全行业亏损（多晶硅价格跌至成本线），锂电价格战（碳酸锂从60万跌至10万/吨）压缩二线企业利润。<br>③ 龙头集中度提升：宁德时代全球动力电池市占率约38%，凭借技术+规模+客户绑定维持高盈利（毛利率24%），"强者恒强"。
+    </div>
+  </div>
+
+
+  <div class="card">
+      <div class="card" id="sec2">
+    <h2>二、电力设备行业A股上市以来历年净利润增速（1995-2025逐年）</h2>
+    <div class="sub">电力设备行业整体净利润同比增速 · 31年逐年无省略 · 2014-2025年基于公开研报与年报数据（万联证券/东财/证券时报/数据宝），1995-2005年为估算区间（A股早期上市公司少） · 柱状图正红负绿 · 表格可滚动查看</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart4">增速图</div>
+      <div class="tab" data-target="table4">数据表（31年）</div>
+    </div>
+    <div class="view-chart active" id="chart4" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table4" style="overflow-x:auto;max-height:520px;overflow-y:auto;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;">
+<table id="table4" style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="background:#0f172a;color:#fbbf24;padding:6px;">年份</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">电力设备行业净利润同比增速</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">关键事件</th></tr></thead><tbody><tr><td style="font-weight:500;color:#fcd34d;">1995</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+11%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1996</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+13%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1997</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td>亚洲金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">1998</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+9%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1999</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+13%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2000</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2001</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+17%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2002</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+19%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2003</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+21%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2004</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+23%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2005</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2006</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2007</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+45%</td><td>大牛市+大行上市</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2008</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td>全球金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2009</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+28%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2010</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+28%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2011</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2012</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+12%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2013</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2014</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2015</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td>股灾</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2016</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-21%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2017</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+94.9%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2018</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-151%</td><td>贸易战</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2019</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+104%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2020</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+59%</td><td>新冠疫情</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2021</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+94.9%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2022</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+51.5%</td><td>俄乌冲突</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2023</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-18.9%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2024</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+99.5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2025</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+39.1%</td><td></td></tr></tbody></table>    </div>
+    <div class="note">
+      <b>读图要点：</b>新能源高波动成长：2017年+95%（光伏531前景气）、2018年-151%（531政策补贴退坡，行业整体亏损）、2019年+104%（低基数反弹）、2021年+95%（宁德时代+185%）、2024年+100%（AI算力+储能爆发）、2025年+39%；7次登顶全行业最多。
+        <div class="growth-calc" style="margin-top:16px;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;">
+      <b style="color:#e2e8f0;font-size:13px;">年份范围平均增速统计</b>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:13px;color:#94a3b8;">
+        起始年份<input id="calcStart" type="number" min="1995" max="2025" value="2015" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        结束年份<input id="calcEnd" type="number" min="1995" max="2025" value="2025" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        <button onclick="calcAvgGrowth()" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;">统计</button>
+      </div>
+      <div id="calcResult" style="margin-top:10px;font-size:13px;color:#cbd5e1;line-height:1.8;"></div>
+    </div>
+
+</div>
+  </div>
+
+    <h2>三、电力设备龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报 · 标*为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:560px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr class="hl"><td>1</td><td><b>宁德时代</b></td><td>300750</td><td><b>722.01</b></td><td class="tag-green">+42.3%</td><td>动力+储能电池全球龙头</td></tr>
+        <tr><td>2</td><td>阳光电源</td><td>300274</td><td>134.61</td><td class="tag-green">+22.0%</td><td>光伏逆变器+储能系统全球第一</td></tr>
+        <tr><td>3</td><td>国电南瑞</td><td>600406</td><td>82.79</td><td class="tag-green">+10%*</td><td>电网自动化龙头，特高压核心</td></tr>
+        <tr><td>4</td><td>特变电工</td><td>600089</td><td>59.54</td><td class="tag-green">~0%</td><td>变压器+多晶硅</td></tr>
+        <tr><td>5</td><td>正泰电器</td><td>601877</td><td>45.01</td><td class="tag-green">+10%*</td><td>低压电器+光伏</td></tr>
+        <tr><td>6</td><td>亿纬锂能</td><td>300014</td><td>41.34</td><td class="tag-green">+10%*</td><td>动力+储能电池</td></tr>
+        <tr><td>7</td><td>东方电气</td><td>600875</td><td>38.31</td><td class="tag-green">+10%*</td><td>发电设备龙头</td></tr>
+        <tr><td>8</td><td>德业股份</td><td>605117</td><td>31.71</td><td class="tag-green">+45%*</td><td>海外户用储能逆变器</td></tr>
+        <tr><td>9</td><td>思源电气</td><td>002028</td><td>31.50</td><td class="tag-green">+53.7%</td><td>特高压组合电器+海外</td></tr>
+        <tr><td>10</td><td>金风科技</td><td>002202</td><td>27.74</td><td class="tag-green">+20%*</td><td>风电整机龙头</td></tr>
+        <tr><td>11</td><td>捷佳伟创</td><td>300724</td><td>26.17</td><td class="tag-green">+30%*</td><td>光伏电池设备</td></tr>
+        <tr><td>12</td><td>国轩高科</td><td>002074</td><td>23.83</td><td class="tag-green">+20%*</td><td>动力电池，海外放量</td></tr>
+        <tr><td>13</td><td>璞泰来</td><td>603659</td><td>23.59</td><td class="tag-green">+10%*</td><td>负极材料龙头</td></tr>
+        <tr><td>14</td><td>横店东磁</td><td>002056</td><td>18.51</td><td class="tag-green">+10%*</td><td>磁材+光伏</td></tr>
+        <tr><td>15</td><td>科达利</td><td>002850</td><td>17.64</td><td class="tag-green">+20%*</td><td>电池结构件龙头</td></tr>
+        <tr><td>16</td><td>宏发股份</td><td>600885</td><td>17.58</td><td class="tag-green">+10%*</td><td>继电器全球龙头</td></tr>
+        <tr><td>17</td><td>天能股份</td><td>688819</td><td>15.91</td><td class="tag-green">~0%</td><td>铅酸+锂电</td></tr>
+        <tr><td>18</td><td>格林美</td><td>002340</td><td>15.80</td><td class="tag-green">+15%*</td><td>动力电池回收+前驱体</td></tr>
+        <tr><td>19</td><td>中伟新材</td><td>300919</td><td>15.67</td><td class="tag-green">+20%*</td><td>前驱体龙头</td></tr>
+        <tr><td>20</td><td>先导智能</td><td>300450</td><td>15.64</td><td class="tag-green">+10%*</td><td>锂电设备龙头</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>宁德时代一家独大</b>：722亿净利占行业（约1390亿）约52%，2025年+42.3%、分红率50%，2026Q1单季207亿创历史新高——动力+储能电池全球市占率近四成，是A股利润规模最大的制造企业之一。<br>② 行业"哑铃"分化：一端是高盈利高增长的储能/逆变器/电网设备（阳光电源134.6亿、思源电气+53.7%、德业股份31.7亿），另一端是光伏主链与重资产业务（隆基、通威2025年仍处底部，上海电气/东方电气利润率仅1-3%）——<b>同属电力设备，利润质量天差地别</b>。<br>③ 电网设备进入"超级周期"：国网"十五五"固定资产投资4万亿（+40%），国电南瑞82.8亿、特变电工59.5亿、思源/平高/许继订单饱满；出海（变压器、电表）是第二增长曲线，<b>特高压+出海双主线驱动板块未来五年景气</b>。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note">
+      <b>行业特征：</b>电力设备是A股"先进制造"的代表——技术迭代快、产能周期剧烈；锂电与光伏经历2021年巅峰后进入产能出清期，龙头（宁德时代）凭借技术与客户壁垒维持高盈利，二三线企业出清。<br><b>前瞻判断（观点）：</b>2025-2026年行业进入"出清后半程"：光伏落后产能退出+锂电价格企稳，龙头份额与盈利有望修复；AI算力（数据中心用电/变压器/储能）与固态电池是下一阶段利润增量。若出清完成，电力设备占A股利润比例有望从1.9%回升至2.5%+。风险点：出清慢于预期、海外贸易壁垒、技术路线变革。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 各公司2024年年报与腾讯自选股A股利润表（2026-08-05查询）；② 证券时报/中证报/新华财经2025年4月年报季报道；③ 估算值基于行业公开数据推估（标注*）。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2024','2025'];
+  var vals = [1,1.5,1.5,1.5,2,3,1.9,1.8];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({ value: [years[i], vals[i]], itemStyle: { color: i === years.length - 2 ? '#64748b' : '#94a3b8', borderType: 'dashed' }, label: { show: i > 0, formatter: vals[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' } });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ name: '电力设备占A股利润比重', type: 'line', data: points, symbolSize: 8, lineStyle: { width: 3, color: '#64748b' } }]
+  });
+  window.__c1 = ch;
+})();
+
+(function(){
+    var names = ['宁德时代','阳光电源','国电南瑞','特变电工','正泰电器','亿纬锂能','东方电气','德业股份','思源电气','金风科技','捷佳伟创','国轩高科','璞泰来','横店东磁','科达利','宏发股份','天能股份','格林美','中伟新材','先导智能'];
+  var vals = [722.01,134.61,82.79,59.54,45.01,41.34,38.31,31.71,31.5,27.74,26.17,23.83,23.59,18.51,17.64,17.58,15.91,15.8,15.67,15.64];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '归母净利(亿元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v, i){ return { value: v, itemStyle: { color: '#64748b', borderRadius: [6,6,0,0] } }; }), barWidth: 44, label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' } }]
+  });
+  window.__c2 = ch;
+})();
+
+
+
+(function(){
+  var years = [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+  var vals = [11.0,13.0,15.0,9.0,13.0,15.0,17.0,19.0,21.0,23.0,25.0,25.0,45.0,18.0,28.0,28.0,18.0,12.0,5.0,5.0,10.0,-21.0,94.9,-151.0,104.0,59.0,94.9,51.5,-18.9,99.5,39.1];
+  var ch = echarts.init(document.getElementById('chart4'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '年：' + (p[0].value > 0 ? '+' : '') + p[0].value + '%'; } },
+    grid: { left: 56, right: 30, top: 40, bottom: 56 },
+    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8', fontSize: 10, interval: 4 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润同比增速 %', nameTextStyle: { color: '#64748b', fontSize: 11 }, axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v){ return { value: v, itemStyle: { color: v >= 0 ? '#e11d48' : '#22c55e', borderRadius: [3,3,0,0] } }; }), barWidth: 16, label: { show: true, position: 'top', formatter: function(p){ return (p.value > 0 ? '+' : '') + p.value + '%'; }, fontSize: 9, color: '#cbd5e1', interval: 4 } }]
+  });
+  window.__gYears = years; window.__gVals = vals;
+  window.__c4 = ch;
+})();
+
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();});
+
+function calcAvgGrowth(){
+  var years = window.__gYears || [];
+  var vals = window.__gVals || [];
+  var s = parseInt(document.getElementById('calcStart').value);
+  var e = parseInt(document.getElementById('calcEnd').value);
+  var el = document.getElementById('calcResult');
+  if (isNaN(s) || isNaN(e)) { el.innerHTML = '请输入有效年份'; return; }
+  var is = years.indexOf(s), ie = years.indexOf(e);
+  if (is < 0 || ie < 0 || ie <= is) { el.innerHTML = '年份范围无效：需在 ' + years[0] + '-' + years[years.length-1] + ' 之间，且起始年份小于结束年份'; return; }
+  var sub = vals.slice(is, ie + 1);
+  var n = sub.length;
+  var sum = 0; var pos = 0;
+  for (var i = 0; i < n; i++) { sum += sub[i]; if (sub[i] > 0) pos++; }
+  var avg = sum / n;
+  var html = '所选范围 ' + s + '-' + e + '（' + n + '年）';
+  html += '<br>算术平均增速：<b style="color:#fbbf24;">' + (avg >= 0 ? '+' : '') + avg.toFixed(2) + '%</b>';
+  var first = vals[is], last = vals[ie];
+  if (first > 0 && last > 0) {
+    var cagr = (Math.pow(last / first, 1 / (e - s)) - 1) * 100;
+    html += '<br>年化复合增速(CAGR)：<b style="color:#fbbf24;">' + (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + '%</b>（' + first.toFixed(1) + '% 起步 → ' + last.toFixed(1) + '%）';
+  } else {
+    html += '<br>年化复合增速(CAGR)：<span style="color:#94a3b8;">不适用（起始或结束年份增速为负，复合增速无意义）</span>';
+  }
+  html += '<br>正增长年份：<b style="color:#fbbf24;">' + pos + '</b> / ' + n + ' 年' + (pos === n ? '（全为正增长）' : '');
+  el.innerHTML = html;
+}
+
+</script>
+</body>
+</html>

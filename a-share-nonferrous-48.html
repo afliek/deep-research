@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股有色金属全板块 48 家 · 量能释放 × 价格双情景模型（2028）</title>
+<style>
+  :root{
+    --navy:#16213e; --navy-2:#1f2b4d; --gold:#c8a04b; --gold-2:#e3c277;
+    --copper:#b06a3b; --ink:#1d2433; --muted:#5b6678; --line:#e6e9ef;
+    --bg:#f5f6f9; --card:#ffffff; --green:#1f9d6b; --red:#c0392b; --blue:#2c6fbb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Segoe UI",system-ui,sans-serif;line-height:1.7;font-size:14.5px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px;}
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 55%,#26345c 100%);color:#fff;padding:44px 20px 38px;margin-bottom:28px;border-bottom:4px solid var(--gold);}
+  .hero-inner{max-width:1180px;margin:0 auto;}
+  .hero .tag{display:inline-block;font-size:12.5px;letter-spacing:2px;color:var(--gold-2);border:1px solid rgba(227,194,119,.5);border-radius:20px;padding:3px 14px;margin-bottom:16px;}
+  .hero h1{font-size:27px;margin:0 0 8px;font-weight:800;letter-spacing:1px;}
+  .hero .sub{font-size:15px;color:#c7d0e0;margin:0;}
+  .hero .meta{margin-top:16px;font-size:13px;color:#aab4c8;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:-44px auto 30px;max-width:1180px;padding:0 20px;position:relative;z-index:2;}
+  .kpi{background:var(--card);border-radius:12px;padding:16px 14px;box-shadow:0 6px 22px rgba(20,30,60,.10);border-top:3px solid var(--gold);}
+  .kpi .v{font-size:21px;font-weight:800;color:var(--navy);line-height:1.15;}
+  .kpi .v small{font-size:12.5px;font-weight:600;}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;}
+  .kpi.alt{border-top-color:var(--copper);} .kpi.alt2{border-top-color:var(--blue);} .kpi.alt3{border-top-color:var(--green);}
+  section{background:var(--card);border-radius:14px;padding:26px 28px;margin-bottom:24px;box-shadow:0 3px 14px rgba(20,30,60,.06);}
+  .sec-h{display:flex;align-items:center;gap:12px;margin:0 0 14px;}
+  .sec-h .num{width:32px;height:32px;flex:0 0 32px;border-radius:8px;background:var(--navy);color:var(--gold-2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;}
+  .sec-h h2{font-size:19px;margin:0;color:var(--navy);font-weight:800;}
+  p{margin:9px 0;}
+  .lead{font-size:14.5px;color:#333c4d;}
+  .accent{color:var(--copper);font-weight:700;}
+  table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.3px;}
+  th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{background:#f0f2f7;color:var(--navy);font-weight:700;border-bottom:2px solid #d7dcea;white-space:nowrap;}
+  tbody tr:hover{background:#fafbfd;}
+  .pos{color:var(--green);font-weight:600;} .neg{color:var(--red);font-weight:600;}
+  .hl{background:#fff8e8 !important;}
+  .grp{background:#eef1f6 !important;font-weight:800;color:var(--navy);}
+  .grp td{font-size:12px;letter-spacing:1px;}
+  .chart-box{background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:14px;margin:16px 0;}
+  .chart-box .cap{font-size:12px;color:var(--muted);margin-top:7px;text-align:center;}
+  .pbar{display:flex;align-items:center;gap:9px;margin:6px 0;}
+  .pbar .name{width:118px;font-size:12px;color:var(--ink);flex:0 0 118px;}
+  .pbar .name .gr{font-size:10.5px;color:var(--muted);font-weight:400;}
+  .pbar .track{flex:1;background:#eef1f6;border-radius:6px;height:18px;position:relative;overflow:hidden;}
+  .pbar .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#d9b25a,#c8a04b);}
+  .pbar .fill.c{background:linear-gradient(90deg,#c47e4f,#b06a3b);}
+  .pbar .fill.l{background:linear-gradient(90deg,#6fae8f,#1f9d6b);}
+  .pbar .val{width:118px;flex:0 0 118px;font-size:11.5px;font-weight:700;color:var(--ink);text-align:left;}
+  .pbar .val small{font-weight:400;color:var(--muted);}
+  .stars{color:#c8a04b;letter-spacing:1px;font-weight:700;}
+  .callout{background:linear-gradient(135deg,#fff8e8,#fffdf6);border:1px solid #f0e2bd;border-left:5px solid var(--gold);border-radius:10px;padding:14px 17px;margin:14px 0;}
+  .callout.warn{background:linear-gradient(135deg,#fdf0ee,#fffaf9);border-color:#f3cfc8;border-left-color:var(--red);}
+  .callout.blue{background:linear-gradient(135deg,#eef4fc,#fafcff);border-color:#cfe0f3;border-left-color:var(--blue);}
+  .callout b{color:var(--navy);}
+  ul.tight{margin:8px 0;padding-left:20px;} ul.tight li{margin:5px 0;}
+  .foot{font-size:12px;color:var(--muted);text-align:center;margin-top:28px;line-height:1.9;}
+  .pill{display:inline-block;background:#eef1f6;color:var(--navy);font-size:11.5px;padding:2px 9px;border-radius:12px;margin:2px 4px 2px 0;}
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr);} section{padding:18px 14px;}
+    .hero h1{font-size:20px;}
+    .pbar .val{width:86px;flex-basis:86px;font-size:10.5px;} .pbar .name{width:96px;flex-basis:96px;font-size:11px;}
+    table{font-size:11px;} th,td{padding:4px 5px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="tag">A股有色金属 · 全板块 48 家 · 投资分析</span>
+    <h1>2028 量能释放 × 价格双情景模型（全量覆盖）</h1>
+    <p class="sub">黄金 / 白银锡 / 铜 / 铝 / 铅锌 / 锂 / 稀土磁材 / 钨钼 / 锡锑 / 镍钴 / 钛 —— 48 家 A 股上市公司</p>
+    <p class="meta">报告日期：2026-08-13　|　模型：2025 实际净利 × 量能释放(2028 产量规划) × 价格(平价/翻倍,成本刚性)　|　数据：2025 年报 + 产量指引 + 券商研报 + NeoData</p>
+  </div>
+</div>
+
+<div class="kpis">
+  <div class="kpi">
+    <div class="v">48 家</div>
+    <div class="l">A 股有色金属全板块覆盖（申万有色主要成分股）</div>
+  </div>
+  <div class="kpi alt">
+    <div class="v">★★★★★ <small>华友/紫金</small></div>
+    <div class="l">量能释放强度第一梯队（镍产能+22% / 金+50%·铜+42%·锂+11.6倍）</div>
+  </div>
+  <div class="kpi alt2">
+    <div class="v">+80% / +296%</div>
+    <div class="l">高基数下量驱动最快（华友）/ 价驱动最快（紫金）</div>
+  </div>
+  <div class="kpi alt3">
+    <div class="v">量能 × 价格</div>
+    <div class="l">净利润 = 2025 实际 × 量能放大 × 价格杠杆（成本刚性）</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+  <div class="sec-h"><div class="num">1</div><h2>方法论：全板块量能 × 价格双因子模型</h2></div>
+  <p class="lead">覆盖申万有色金属行业全部子板块的主要 A 股上市公司（<b>48 家</b>），每家按同一框架测算：<b>2028 净利润 = 2025 实际净利 × 量能释放因子 × 价格因子</b>。</p>
+  <div class="callout blue">
+    <b>量能释放因子：</b>各公司核心金属 2025 → 2028 产量规划（公告/研报口径），量化量增幅度，并按"在建项目数量 × 推进进度"给确定性 ★ 评级。
+  </div>
+  <div class="callout">
+    <b>价格因子：</b>情景 A = 各金属维持 2025 已实现价（金≈678 元/克、铜≈8.3 万/吨、铝≈2.1 万/吨、碳酸锂≈13 万/吨、锡≈28.5 万/吨、稀土/钼/锑≈2025 均价）；情景 B = 全品种价格翻倍、成本刚性。
+  </div>
+  <p style="font-size:12.5px;color:var(--muted)">口径：锂系（赣锋/天齐/雅化/中矿/融捷/盛新/西藏）2025 为扭亏或低基数年份，增速含恢复性成分；部分小市值公司（永兴材料等）数据按行业与公司公告估算；所有数字为估算区间、非精确值。</p>
+</section>
+
+<section>
+  <div class="sec-h"><div class="num">2</div><h2>全板块 48 家预测总表（亿元）</h2></div>
+  <table>
+    <thead>
+      <tr><th>公司</th><th>金属</th><th>2025 归母净利</th><th>量能评级</th><th>量能亮点（2025→2028）</th><th>A：平价 2028</th><th>A 增速</th><th>B：翻倍 2028</th><th>B 增速</th></tr>
+    </thead>
+    <tbody>
+      <tr class="grp"><td colspan="9">黄金（9 家）</td></tr>
+      <tr class="hl"><td><b>紫金矿业</b></td><td>金铜锂</td><td>517.8</td><td class="stars">★★★★★</td><td>金+50%·铜+42%·锂+11.6倍</td><td><b>~840</b></td><td class="pos">+62%</td><td><b>~2,050</b></td><td class="pos">+296%</td></tr>
+      <tr><td><b>中金黄金</b></td><td>金</td><td>49.3</td><td class="stars">★☆</td><td>量平</td><td><b>~53</b></td><td class="pos">+7%</td><td><b>~115</b></td><td class="pos">+133%</td></tr>
+      <tr><td><b>山东黄金</b></td><td>金</td><td>47.4</td><td class="stars">★★</td><td>金+5%（海外矿）</td><td><b>~52</b></td><td class="pos">+10%</td><td><b>~120</b></td><td class="pos">+153%</td></tr>
+      <tr><td><b>赤峰黄金</b></td><td>金</td><td>30.8</td><td class="stars">★★★</td><td>金+14%（大项目28-30年）</td><td><b>~38</b></td><td class="pos">+23%</td><td><b>~95</b></td><td class="pos">+208%</td></tr>
+      <tr><td><b>山金国际</b></td><td>金</td><td>29.7</td><td class="stars">★★</td><td>量增有限、成本优</td><td><b>~33</b></td><td class="pos">+11%</td><td><b>~70</b></td><td class="pos">+136%</td></tr>
+      <tr><td><b>湖南黄金</b></td><td>金锑钨</td><td>14.9</td><td class="stars">★★★</td><td>金+20%（甘肃加鑫'28）</td><td><b>~20</b></td><td class="pos">+34%</td><td><b>~50</b></td><td class="pos">+236%</td></tr>
+      <tr><td><b>恒邦股份</b></td><td>金(冶)</td><td>6.4</td><td class="stars">★★</td><td>冶炼稳定</td><td><b>~8</b></td><td class="pos">+25%</td><td><b>~16</b></td><td class="pos">+150%</td></tr>
+      <tr><td><b>四川黄金</b></td><td>金</td><td>4.7</td><td class="stars">★★</td><td>量增有限</td><td><b>~6</b></td><td class="pos">+28%</td><td><b>~13</b></td><td class="pos">+177%</td></tr>
+      <tr><td><b>西部黄金</b></td><td>金</td><td>4.7</td><td class="stars">★★</td><td>量增有限</td><td><b>~6</b></td><td class="pos">+28%</td><td><b>~13</b></td><td class="pos">+177%</td></tr>
+      <tr class="grp"><td colspan="9">白银 / 银锡（2 家）</td></tr>
+      <tr><td><b>兴业银锡</b></td><td>银锡</td><td>17.0</td><td class="stars">★★★</td><td>银+87%、锡+17%；收购摩洛哥锡矿</td><td><b>~22</b></td><td class="pos">+29%</td><td><b>~45</b></td><td class="pos">+165%</td></tr>
+      <tr><td><b>盛达资源</b></td><td>银</td><td>5.3</td><td class="stars">★★</td><td>量增有限</td><td><b>~7</b></td><td class="pos">+32%</td><td><b>~15</b></td><td class="pos">+183%</td></tr>
+      <tr class="grp"><td colspan="9">铜（6 家）</td></tr>
+      <tr><td><b>洛阳钼业</b></td><td>铜钴</td><td>203.4</td><td class="stars">★★★★☆</td><td>铜+35%·金0→20t</td><td><b>~340</b></td><td class="pos">+67%</td><td><b>~600</b></td><td class="pos">+195%</td></tr>
+      <tr><td><b>江西铜业</b></td><td>铜(冶)</td><td>71.3</td><td class="stars">★☆</td><td>~0%（冶炼见顶）</td><td><b>~80</b></td><td class="pos">+12%</td><td><b>~115</b></td><td class="pos">+61%</td></tr>
+      <tr><td><b>西部矿业</b></td><td>铜锌</td><td>36.4</td><td class="stars">★★★★</td><td>铜+19%（玉龙三期'27初）</td><td><b>~52</b></td><td class="pos">+43%</td><td><b>~110</b></td><td class="pos">+202%</td></tr>
+      <tr><td><b>铜陵有色</b></td><td>铜(冶)</td><td>24.2</td><td class="stars">★★</td><td>自产矿+、冶炼稳</td><td><b>~28</b></td><td class="pos">+16%</td><td><b>~48</b></td><td class="pos">+98%</td></tr>
+      <tr><td><b>云南铜业</b></td><td>铜(冶)</td><td>13.0</td><td class="stars">★☆</td><td>~0%</td><td><b>~14</b></td><td class="pos">+8%</td><td><b>~24</b></td><td class="pos">+85%</td></tr>
+      <tr><td><b>北方铜业</b></td><td>铜</td><td>7.9</td><td class="stars">★★★</td><td>冶炼扩产+资源</td><td><b>~10</b></td><td class="pos">+27%</td><td><b>~20</b></td><td class="pos">+153%</td></tr>
+      <tr class="grp"><td colspan="9">铝（5 家）</td></tr>
+      <tr><td><b>中国铝业</b></td><td>铝</td><td>126.7</td><td class="stars">★★</td><td>~+5%（央企产能约束）</td><td><b>~140</b></td><td class="pos">+11%</td><td><b>~260</b></td><td class="pos">+105%</td></tr>
+      <tr><td><b>云铝股份</b></td><td>铝</td><td>60.6</td><td class="stars">★★</td><td>权益+15万t（绿电铝）</td><td><b>~90</b></td><td class="pos">+49%</td><td><b>~180</b></td><td class="pos">+197%</td></tr>
+      <tr><td><b>天山铝业</b></td><td>铝</td><td>48.2</td><td class="stars">★★</td><td>产能近顶（新疆低电价）</td><td><b>~54</b></td><td class="pos">+12%</td><td><b>~105</b></td><td class="pos">+118%</td></tr>
+      <tr><td><b>南山铝业</b></td><td>铝加工</td><td>47.4</td><td class="stars">★★</td><td>汽车板放量、量增平</td><td><b>~52</b></td><td class="pos">+10%</td><td><b>~95</b></td><td class="pos">+100%</td></tr>
+      <tr><td><b>神火股份</b></td><td>铝煤</td><td>40.1</td><td class="stars">★★</td><td>铝产能稳定+煤炭</td><td><b>~44</b></td><td class="pos">+10%</td><td><b>~85</b></td><td class="pos">+112%</td></tr>
+      <tr class="grp"><td colspan="9">铅锌（4 家）</td></tr>
+      <tr><td><b>株冶集团</b></td><td>锌</td><td>11.3</td><td class="stars">★☆</td><td>~0%</td><td><b>~13</b></td><td class="pos">+15%</td><td><b>~28</b></td><td class="pos">+148%</td></tr>
+      <tr><td><b>驰宏锌锗</b></td><td>锌锗</td><td>10.4</td><td class="stars">★☆</td><td>~0%（锗弹性）</td><td><b>~20</b></td><td class="pos">+93%</td><td><b>~40</b></td><td class="pos">+286%</td></tr>
+      <tr><td><b>豫光金铅</b></td><td>铅锌银</td><td>8.6</td><td class="stars">★☆</td><td>~0%</td><td><b>~10</b></td><td class="pos">+16%</td><td><b>~22</b></td><td class="pos">+156%</td></tr>
+      <tr><td><b>中金岭南</b></td><td>铅锌铜</td><td>8.0</td><td class="stars">★☆</td><td>~0%</td><td><b>~10</b></td><td class="pos">+25%</td><td><b>~22</b></td><td class="pos">+175%</td></tr>
+      <tr class="grp"><td colspan="9">锂（10 家，2025 低基数）</td></tr>
+      <tr><td><b>盐湖股份</b></td><td>钾锂</td><td>84.8</td><td class="stars">★★★★</td><td>锂+72%（产能8→17万t）</td><td><b>~100</b></td><td class="pos">+18%</td><td><b>~160</b></td><td class="pos">+89%</td></tr>
+      <tr><td><b>藏格矿业</b></td><td>钾锂</td><td>38.5</td><td class="stars">★★★★</td><td>紫金入主+锂扩产</td><td><b>~48</b></td><td class="pos">+25%</td><td><b>~85</b></td><td class="pos">+121%</td></tr>
+      <tr><td><b>赣锋锂业</b></td><td>锂</td><td>16.1</td><td class="stars">★★★★</td><td>锂盐+37%（低基数）</td><td><b>~45</b></td><td class="pos">+179%</td><td><b>~110</b></td><td class="pos">+582%</td></tr>
+      <tr><td><b>雅化集团</b></td><td>锂</td><td>6.3</td><td class="stars">★★★</td><td>锂盐放量（低基数）</td><td><b>~12</b></td><td class="pos">+90%</td><td><b>~30</b></td><td class="pos">+376%</td></tr>
+      <tr><td><b>中矿资源</b></td><td>锂铯</td><td>4.6</td><td class="stars">★★★</td><td>锂+铯铷双轮（低基数）</td><td><b>~9</b></td><td class="pos">+96%</td><td><b>~22</b></td><td class="pos">+378%</td></tr>
+      <tr><td><b>天齐锂业</b></td><td>锂</td><td>4.6</td><td class="stars">★★★</td><td>锂化工+15%（低基数）</td><td><b>~25</b></td><td class="pos">+440%</td><td><b>~85</b></td><td class="pos">+1736%</td></tr>
+      <tr><td><b>融捷股份</b></td><td>锂矿</td><td>2.8</td><td class="stars">★★★</td><td>甲基卡扩产+负极</td><td><b>~5</b></td><td class="pos">+79%</td><td><b>~12</b></td><td class="pos">+329%</td></tr>
+      <tr><td><b>盛新锂能</b></td><td>锂</td><td>-8.9</td><td class="stars">★★★</td><td>木绒矿'26建设→扭亏</td><td><b>~3</b></td><td class="pos">扭亏</td><td><b>~15</b></td><td class="pos">扭亏</td></tr>
+      <tr><td><b>西藏矿业</b></td><td>锂铬</td><td>-0.3</td><td class="stars">★★</td><td>扎布耶扩产→扭亏</td><td><b>~1</b></td><td class="pos">扭亏</td><td><b>~8</b></td><td class="pos">扭亏</td></tr>
+      <tr class="grp"><td colspan="9">稀土 / 磁材（6 家）</td></tr>
+      <tr><td><b>厦门钨业</b></td><td>钨稀土</td><td>23.1</td><td class="stars">★★★</td><td>钨强稀土稳、电池材料+47%</td><td><b>~30</b></td><td class="pos">+30%</td><td><b>~60</b></td><td class="pos">+160%</td></tr>
+      <tr><td><b>北方稀土</b></td><td>稀土</td><td>22.5</td><td class="stars">★★★</td><td>中速（配额约束）</td><td><b>~35</b></td><td class="pos">+56%</td><td><b>~80</b></td><td class="pos">+255%</td></tr>
+      <tr><td><b>盛和资源</b></td><td>稀土</td><td>8.4</td><td class="stars">★★</td><td>量增平</td><td><b>~12</b></td><td class="pos">+43%</td><td><b>~28</b></td><td class="pos">+233%</td></tr>
+      <tr><td><b>金力永磁</b></td><td>磁材</td><td>7.1</td><td class="stars">★★</td><td>产能扩张、加工费模式</td><td><b>~10</b></td><td class="pos">+41%</td><td><b>~18</b></td><td class="pos">+154%</td></tr>
+      <tr><td><b>中国稀土</b></td><td>稀土</td><td>1.7</td><td class="stars">★★</td><td>量增平</td><td><b>~3</b></td><td class="pos">+76%</td><td><b>~8</b></td><td class="pos">+371%</td></tr>
+      <tr><td><b>中稀有色</b></td><td>稀土</td><td>1.3</td><td class="stars">★★</td><td>量增平</td><td><b>~2</b></td><td class="pos">+54%</td><td><b>~6</b></td><td class="pos">+362%</td></tr>
+      <tr class="grp"><td colspan="9">钨 / 钼（3 家）</td></tr>
+      <tr><td><b>金钼股份</b></td><td>钼</td><td>31.6</td><td class="stars">★★</td><td>短期~0%（沙坪沟远期）</td><td><b>~48</b></td><td class="pos">+52%</td><td><b>~95</b></td><td class="pos">+201%</td></tr>
+      <tr><td><b>中钨高新</b></td><td>钨</td><td>12.8</td><td class="stars">★★</td><td>硬质合金稳增</td><td><b>~16</b></td><td class="pos">+25%</td><td><b>~30</b></td><td class="pos">+134%</td></tr>
+      <tr><td><b>章源钨业</b></td><td>钨</td><td>2.9</td><td class="stars">★★</td><td>量增平</td><td><b>~4</b></td><td class="pos">+38%</td><td><b>~9</b></td><td class="pos">+210%</td></tr>
+      <tr class="grp"><td colspan="9">锡 / 锑（2 家）</td></tr>
+      <tr><td><b>锡业股份</b></td><td>锡铟</td><td>19.7</td><td class="stars">★★★★</td><td>锡+10%·锡材+40%·铟+51%</td><td><b>~30</b></td><td class="pos">+53%</td><td><b>~60</b></td><td class="pos">+205%</td></tr>
+      <tr><td><b>华锡有色</b></td><td>锡锑</td><td>8.0</td><td class="stars">★★★</td><td>锡锑资源扩产</td><td><b>~10</b></td><td class="pos">+25%</td><td><b>~22</b></td><td class="pos">+175%</td></tr>
+      <tr class="grp"><td colspan="9">镍 / 钴（5 家）</td></tr>
+      <tr><td><b>华友钴业</b></td><td>镍钴锂</td><td>61.1</td><td class="stars">★★★★★</td><td>镍+22%·正极+108%</td><td><b>~110</b></td><td class="pos">+80%</td><td><b>~200</b></td><td class="pos">+227%</td></tr>
+      <tr><td><b>盛屯矿业</b></td><td>铜钴镍</td><td>19.6</td><td class="stars">★★★</td><td>铜+17%、镍+50%</td><td><b>~26</b></td><td class="pos">+33%</td><td><b>~50</b></td><td class="pos">+155%</td></tr>
+      <tr><td><b>格林美</b></td><td>镍钴回收</td><td>15.8</td><td class="stars">★★★</td><td>回收+印尼镍扩产</td><td><b>~22</b></td><td class="pos">+39%</td><td><b>~45</b></td><td class="pos">+185%</td></tr>
+      <tr><td><b>腾远钴业</b></td><td>钴铜</td><td>11.1</td><td class="stars">★★★</td><td>钴铜扩产</td><td><b>~15</b></td><td class="pos">+35%</td><td><b>~32</b></td><td class="pos">+188%</td></tr>
+      <tr><td><b>寒锐钴业</b></td><td>钴铜</td><td>2.6</td><td class="stars">★★</td><td>量增平</td><td><b>~4</b></td><td class="pos">+54%</td><td><b>~9</b></td><td class="pos">+246%</td></tr>
+      <tr class="grp"><td colspan="9">钛（1 家）</td></tr>
+      <tr><td><b>宝钛股份</b></td><td>钛</td><td>4.0</td><td class="stars">★★</td><td>高端钛材稳增</td><td><b>~5</b></td><td class="pos">+25%</td><td><b>~10</b></td><td class="pos">+150%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:12px;color:var(--muted)">注：增速 = (2028 − 2025)/2025；盛新锂能/西藏矿业 2025 亏损，增速标注"扭亏"；锂系低基数效应明显。估算区间、仅供研究参考。</p>
+</section>
+
+<section>
+  <div class="sec-h"><div class="num">3</div><h2>量能释放强度 Top 15（剔除低基数）</h2></div>
+  <div class="chart-box">
+    <div class="pbar"><div class="name"><span class="rank-badge">1</span>华友钴业<span class="gr">· 镍钴锂</span></div><div class="track"><div class="fill l" style="width:100%"></div></div><div class="val">★★★★★ <small>镍+22%·正极+108%</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">2</span>紫金矿业<span class="gr">· 金铜锂</span></div><div class="track"><div class="fill" style="width:96%"></div></div><div class="val">★★★★★ <small>金+50%·铜+42%·锂+11.6倍</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">3</span>洛阳钼业<span class="gr">· 铜金镍</span></div><div class="track"><div class="fill" style="width:82%"></div></div><div class="val">★★★★☆ <small>铜+35%·金0→20t</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">4</span>盐湖股份<span class="gr">· 锂钾</span></div><div class="track"><div class="fill l" style="width:74%"></div></div><div class="val">★★★★ <small>锂+72%·产能8→17万t</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">5</span>锡业股份<span class="gr">· 锡铟</span></div><div class="track"><div class="fill" style="width:66%"></div></div><div class="val">★★★★ <small>锡+10%·锡材+40%·铟+51%</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">6</span>赣锋锂业<span class="gr">· 锂</span></div><div class="track"><div class="fill l" style="width:62%"></div></div><div class="val">★★★★ <small>锂盐+37%</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">7</span>藏格矿业<span class="gr">· 钾锂</span></div><div class="track"><div class="fill l" style="width:58%"></div></div><div class="val">★★★★ <small>紫金入主+锂扩产</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">8</span>西部矿业<span class="gr">· 铜</span></div><div class="track"><div class="fill" style="width:52%"></div></div><div class="val">★★★★ <small>铜+19%·2030 大释放</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">9</span>北方稀土<span class="gr">· 稀土</span></div><div class="track"><div class="fill" style="width:44%"></div></div><div class="val">★★★ <small>中速·配额约束</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">10</span>盛屯矿业<span class="gr">· 铜镍钴</span></div><div class="track"><div class="fill" style="width:40%"></div></div><div class="val">★★★ <small>铜+17%·镍+50%</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">11</span>湖南黄金<span class="gr">· 金锑钨</span></div><div class="track"><div class="fill" style="width:36%"></div></div><div class="val">★★★ <small>金+20%(甘肃加鑫)</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">12</span>赤峰黄金<span class="gr">· 金</span></div><div class="track"><div class="fill" style="width:32%"></div></div><div class="val">★★★ <small>金+14%·大项目28-30年</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">13</span>兴业银锡<span class="gr">· 银锡</span></div><div class="track"><div class="fill" style="width:30%"></div></div><div class="val">★★★ <small>银+87%·锡+17%·海外并购</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">14</span>格林美<span class="gr">· 镍钴回收</span></div><div class="track"><div class="fill" style="width:28%"></div></div><div class="val">★★★ <small>回收+印尼镍扩产</small></div></div>
+    <div class="pbar"><div class="name"><span class="rank-badge">15</span>雅化集团<span class="gr">· 锂</span></div><div class="track"><div class="fill l" style="width:26%"></div></div><div class="val">★★★ <small>锂盐放量</small></div></div>
+    <div class="cap">图 1　量能释放强度 Top 15（量增幅度 + 项目确定性综合）</div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><div class="num">4</div><h2>关键结论（全板块 48 家）</h2></div>
+  <div class="callout">
+    <b>① 量能驱动型（产量在手、价格只是加分）：</b>华友钴业（+80%）、洛阳钼业（+67%）、紫金矿业（+62%）、盐湖股份、锡业股份、赣锋锂业、藏格矿业、西部矿业。
+  </div>
+  <div class="callout">
+    <b>② 价格弹性型（量平但供给刚性）：</b>稀土（北方稀土 +255%、盛和 +233%、中国稀土 +371%）、锑钨（湖南黄金 +236%、章源 +210%）、锡（锡业 +205%）、锌锗（驰宏 +286%）、银（盛达 +183%）。
+  </div>
+  <div class="callout warn">
+    <b>③ 纯价格 Beta（量能弱，价格不动时增速个位数）：</b>江西铜业、云南铜业、中金黄金、山东黄金、南山铝业、神火股份、中国铝业、天山铝业、株冶集团、豫光金铅。
+  </div>
+  <div class="callout blue">
+    <b>④ 低基数陷阱：</b>天齐（+440%/+1736%）、赣锋（+179%/+582%）、雅化（+90%/+376%）等锂系增速虚高——2025 为扭亏首年；盛新锂能、西藏矿业 2025 亏损，2028 看扭亏弹性。真实高基数增速看华友/金铜双雄。
+  </div>
+  <div class="callout">
+    <b>⑤ 两头都强的只有紫金（量能第二 + 体量第一）与华友（量能第一 + 锂镍价弹性）。</b>若赌"价不动、靠放量"选量能驱动型；若赌"金属翻倍牛市"选供给刚性小金属；求稳吃股息选中金/山东/江铜/南山/神火。
+  </div>
+</section>
+
+<section>
+  <div class="sec-h"><div class="num">5</div><h2>假设与风险（务必阅读）</h2></div>
+  <ul class="tight">
+    <li><b>量能 ≠ 落地：</b>所有 2028 产量目标均为公司公告/研报规划，玉龙三期、KFM 二期、Pomalaa、察尔汗 5 万吨、维拉斯托、摩洛哥矿、甘肃加鑫、木绒矿等均有建设/爬坡/政策风险（印尼镍配额、刚果金钴配额、智利 SQM 国有化）。</li>
+    <li><b>A 情景「平价」指 2025 已实现价</b>（锂为年末 13-16 万/吨，已含反弹）；B 情景全品种翻倍为极端压力测试。</li>
+    <li><b>成本刚性是弹性前提</b>：若通胀推动成本同步上行，B 情景杠杆大幅打折；汇率、套保、资源税未计入。</li>
+    <li><b>覆盖范围：</b>已覆盖申万有色金属主要成分股 48 家；极少数小市值/未披露公司（如永兴材料、宝武镁业、华钰矿业等）未逐一纳入，可按同板块模式外推。</li>
+    <li>本报告所有数字为<b>基于公开数据的估算区间</b>，仅供研究参考，<b>不构成投资建议</b>。</li>
+  </ul>
+</section>
+
+<div class="foot">
+  <span class="pill">各公司 2025 年报/业绩预告/产量指引</span>
+  <span class="pill">德邦/国金/平安/西部/华泰/国联民生/东方证券/汇丰</span>
+  <span class="pill">证券时报/新华财经/新浪财经/雪球/NeoData</span>
+  <br>
+  报告日期：2026-08-13　|　模型：量能释放 × 价格双因子　|　仅供研究参考，不构成投资建议。市场有风险，投资需谨慎。
+</div>
+
+</div>
+</body>
+</html>

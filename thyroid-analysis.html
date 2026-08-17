@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>甲状腺专项分析 - 10年随访</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f0; color: #2c2c2a; line-height: 1.6;
+    padding: 76px 24px 24px;
+  }
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: #0a0d14; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 999; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  .site-nav .nav-brand { color: #e2e8f0; text-decoration: none; font-size: 16px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .site-nav .nav-brand .dot { width: 7px; height: 7px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6; }
+  .site-nav .nav-back { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 14px; border-radius: 8px; transition: all .2s; }
+  .site-nav .nav-back:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { font-size: 14px; color: #888780; margin-bottom: 24px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .metric-card { background: #fff; border-radius: 8px; padding: 14px 16px; }
+  .metric-label { font-size: 12px; color: #888780; margin-bottom: 3px; }
+  .metric-value { font-size: 21px; font-weight: 600; color: #1a1a1a; }
+  .metric-sub { font-size: 11.5px; color: #888780; margin-top: 2px; }
+  .chart-section { background: #fff; border-radius: 12px; padding: 18px 20px; margin-bottom: 18px; }
+  .chart-title { font-size: 14.5px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a; }
+  .chart-wrapper { position: relative; width: 100%; height: 300px; }
+  .section-card { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  .section-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a; border-left: 4px solid #3b82f6; padding-left: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f8f6f0; padding: 9px 10px; text-align: left; font-weight: 600; color: #5f5e5a; border-bottom: 2px solid #e8e6df; white-space: nowrap; }
+  td { padding: 8px 10px; border-bottom: 0.5px solid #f1efe8; color: #444441; }
+  tr:hover td { background: #faf9f5; }
+  .good { color: #1a7f37; font-weight: 600; }
+  .warn { color: #b8860b; font-weight: 700; }
+  .bad { color: #c0392b; font-weight: 700; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-right: 5px; }
+  .tag-green { background: #e7f6ec; color: #1a7f37; }
+  .tag-orange { background: #fdf3e3; color: #b8860b; }
+  .tag-blue { background: #eaf1fd; color: #2d6cdf; }
+  .key-point { border: 1px solid #e8e6df; border-left: 4px solid #b8860b; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; background: #fcfdfe; }
+  .key-point.blue { border-left-color: #3b82f6; }
+  .key-point.green { border-left-color: #1a7f37; }
+  .key-point.red { border-left-color: #c0392b; }
+  .key-point .kp-title { font-weight: 700; font-size: 14px; margin-bottom: 5px; }
+  .key-point p { font-size: 13px; color: #444441; margin-bottom: 4px; }
+  .conclusion-box { background: #eef4fd; border: 1px solid #cfe0f7; border-radius: 10px; padding: 16px 18px; margin-top: 12px; }
+  .conclusion-box p { font-size: 13.5px; margin-bottom: 6px; color: #1d3a6b; }
+  .conclusion-box strong { color: #2d6cdf; }
+  .source-note { font-size: 12px; color: #888780; margin-top: 16px; line-height: 1.8; }
+  @media (max-width: 640px) { body { padding: 66px 12px 12px; } .section-card { padding: 16px 14px; } }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="family-health.html" class="nav-back">← 返回家庭健康分析</a>
+</nav>
+<div class="container">
+  <h1>🦋 甲状腺专项分析：10 年随访（2016-2026）</h1>
+  <p class="subtitle">家庭健康分析 · 子专题 | 基于 8 次体检超声 + 甲功 + 抗体数据 | 更新于 2026-08-13</p>
+
+  <div class="summary-grid">
+    <div class="metric-card">
+      <div class="metric-label">随访年限</div>
+      <div class="metric-value">10<span class="metric-sub" style="font-size:13px;font-weight:400;color:#5f5e5a;margin-left:2px">年</span></div>
+      <div class="metric-sub">2016 首现结节 → 2026</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">当前结节</div>
+      <div class="metric-value">双侧多发</div>
+      <div class="metric-sub">左 6×4 / 右 10×5 mm</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">最新分级</div>
+      <div class="metric-value good">C-TIRADS 3类</div>
+      <div class="metric-sub">2024 年 · 良性可能大</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">甲状腺功能</div>
+      <div class="metric-value good">正常</div>
+      <div class="metric-sub">T3/T4/FT3/FT4 历年均正常</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">TSH 趋势</div>
+      <div class="metric-value warn">3.089</div>
+      <div class="metric-sub">1.00 → 3.089 缓升，仍正常</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">恶性证据</div>
+      <div class="metric-value good">无</div>
+      <div class="metric-sub">无转移、标志物正常</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">甲状腺结节最大径演变（左右叶，mm）</div>
+    <div class="chart-wrapper"><canvas id="noduleChart"></canvas></div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">TSH 变化趋势（正常 0.38-4.34 μIU/mL）</div>
+    <div class="chart-wrapper"><canvas id="tshChart"></canvas></div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">演变时间线（2014-2026）</div>
+    <table>
+      <tr><th>年份</th><th>超声所见</th><th>特征 / 分级</th><th>甲功 TSH</th><th>抗体</th></tr>
+      <tr><td>2014</td><td>未见异常</td><td>—</td><td>未查</td><td>—</td></tr>
+      <tr><td>2015</td><td>触诊Ⅰ度肿大，超声未见结节</td><td>单纯性甲状腺肿</td><td class="good">1.00</td><td>—</td></tr>
+      <tr><td>2016</td><td class="warn">左侧 2×2mm（首现）</td><td>边界清晰</td><td>未查</td><td>—</td></tr>
+      <tr><td>2018</td><td class="bad">右侧 16.3×7.2mm</td><td>形态不规则、毛刺状、浸润样</td><td>未查</td><td>—</td></tr>
+      <tr><td>2023</td><td>左侧 3×3mm 高回声</td><td>边界清晰</td><td class="good">2.012</td><td class="good">正常（TG 降低）</td></tr>
+      <tr><td>2024</td><td>左叶 6×4mm</td><td class="good">C-TIRADS 3 类，实质回声不均</td><td class="good">2.83</td><td class="good">正常</td></tr>
+      <tr><td>2025</td><td class="warn">双侧多发：左 7×4 / 右 10×6</td><td>腺体增粗、回声欠均</td><td class="good">2.166</td><td class="warn">TM-Ab 12.49↑</td></tr>
+      <tr><td>2026</td><td class="warn">双侧多发：左 6×4 / 右 10×5</td><td>低回声、周边血流信号</td><td class="good">3.089</td><td class="good">正常</td></tr>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">四个关键判断</div>
+
+    <div class="key-point blue">
+      <div class="kp-title">① 结节性质：良性可能大，但需持续分级随访</div>
+      <p>2024 年明确为 <strong>C-TIRADS 3 类</strong>（恶性概率 &lt;5%，良性可能大），是最有力的良性证据。</p>
+      <p class="warn">但 2026 年结节从"高回声/等回声"变为<strong>低回声且周边出现血流信号</strong>，提示近年影像特征有变化，需重新做 TI-RADS 分级确认。</p>
+    </div>
+
+    <div class="key-point red">
+      <div class="kp-title">② 2018 年那个 16.3mm 结节值得留意</div>
+      <p>2018 年右侧 16.3×7.2mm 形态不规则、毛刺状，描述偏警惕。但 2025-2026 年右侧又回到 10mm 左右——可能：① 哺乳期甲状腺生理性增大后的缩小；② 不同医院测量差异。</p>
+      <p><strong>建议近期超声时请医生对比历史图像</strong>，确认是否为同一病灶。</p>
+    </div>
+
+    <div class="key-point">
+      <div class="kp-title">③ TSH 缓慢上升（最需关注的信号）</div>
+      <p>TSH：1.00（2015）→ 2.012（2023）→ 2.83（2024）→ 2.166（2025）→ 3.089（2026），仍在正常范围但呈缓慢上行趋势；同时 2024-2025 年出现"实质回声不均匀/腺体增粗"。</p>
+      <p class="warn">结合 2025 年 TM-Ab 一过性升高（12.49，参考 &lt;10），提示存在<strong>桥本甲状腺炎（自身免疫性甲状腺炎）早期倾向</strong>——这是 TSH 上升的最常见原因。</p>
+    </div>
+
+    <div class="key-point green">
+      <div class="kp-title">④ 甲状腺功能：历年均正常</div>
+      <p>T3 / T4 / FT3 / FT4 全部年份都在正常范围，<strong>无甲亢、无甲减的化验证据</strong>；甲状腺相关肿瘤标志物及抗体基本稳定。</p>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">建议行动（按优先级）</div>
+    <table>
+      <tr><th>优先级</th><th>行动</th><th>说明</th></tr>
+      <tr><td><span class="tag tag-orange">近期</span></td><td>挂内分泌科复查三件套</td><td>甲状腺彩超（TI-RADS 分级）+ 甲功全项（含 TSH）+ 抗体（TPO-Ab / TG-Ab / TM-Ab）</td></tr>
+      <tr><td><span class="tag tag-orange">复查时</span></td><td>请医生对比历史图像</td><td>确认 2018 年右侧 16.3mm 结节与现结节是否为同一病灶</td></tr>
+      <tr><td><span class="tag tag-blue">重点</span></td><td>关注 TSH 趋势</td><td>若继续升高超 4.34 上限，评估亚临床甲减，可能需药物干预</td></tr>
+      <tr><td><span class="tag tag-blue">频率</span></td><td>6-12 个月复查</td><td>分级 3 类且无增大 → 常规随访；升级 4 类或快速增大 → 考虑穿刺（FNA）</td></tr>
+      <tr><td><span class="tag tag-green">生活</span></td><td>饮食与情绪</td><td>正常碘盐无需回避；避免长期大量海带/紫菜；保持情绪稳定</td></tr>
+    </table>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">需要放心的部分</div>
+    <div class="conclusion-box">
+      <p>① 10 年随访<strong>无恶性证据</strong>：无淋巴结转移迹象、肿瘤标志物正常、多次分级均在良性范围。</p>
+      <p>② 甲状腺功能始终正常，<strong>目前阶段无需用药</strong>。</p>
+      <p>③ 2025 年 TM-Ab 升高在 2026 年已回落至正常（5.51），免疫波动有一定自限性。</p>
+    </div>
+  </div>
+
+  <p class="source-note">数据来源：2014-2026 年 8 次体检报告（爱康国宾 6 次 + 瑞慈健康 2 次）。本分析仅供健康管理参考，不构成医疗诊断，具体诊疗请遵医嘱。</p>
+</div>
+
+<script>
+const YEARS = ['2014','2015','2016','2018','2023','2024','2025','2026'];
+
+new Chart(document.getElementById('noduleChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [
+      { label: '左叶结节', data: [null,null,2,null,3,6,7,6], borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.10)', fill: false, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#185FA5', spanGaps: true },
+      { label: '右叶结节', data: [null,null,null,16.3,null,null,10,10], borderColor: '#D85A30', backgroundColor: 'rgba(216,90,48,0.10)', fill: false, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#D85A30', spanGaps: true }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+    scales: { y: { title: { display: true, text: '最大径 (mm)' }, suggestedMin: 0, suggestedMax: 18, grid: { color: 'rgba(0,0,0,0.06)' } }, x: { grid: { display: false } } }
+  }
+});
+
+new Chart(document.getElementById('tshChart'), {
+  type: 'line',
+  data: {
+    labels: ['2015','2023','2024','2025','2026'],
+    datasets: [{
+      label: 'TSH (μIU/mL)', data: [1.00, 2.012, 2.83, 2.166, 3.089],
+      borderColor: '#534AB7', backgroundColor: 'rgba(83,74,183,0.10)', fill: true, tension: 0.3,
+      pointRadius: 5, pointBackgroundColor: '#534AB7'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: { y: { suggestedMin: 0, suggestedMax: 4.6, grid: { color: 'rgba(0,0,0,0.06)' } }, x: { grid: { display: false } } }
+  },
+  plugins: [{
+    afterDraw: function(chart){
+      var y = chart.scales.y, ctx = chart.ctx;
+      ctx.save();
+      ctx.strokeStyle = '#c0392b'; ctx.setLineDash([5,4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(chart.chartArea.left, y.getPixelForValue(4.34)); ctx.lineTo(chart.chartArea.right, y.getPixelForValue(4.34)); ctx.stroke();
+      ctx.strokeStyle = '#1a7f37';
+      ctx.beginPath(); ctx.moveTo(chart.chartArea.left, y.getPixelForValue(0.38)); ctx.lineTo(chart.chartArea.right, y.getPixelForValue(0.38)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    }
+  }]
+});
+</script>
+</body>
+</html>

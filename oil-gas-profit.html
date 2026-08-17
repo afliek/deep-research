@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>石油石化 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#f59e0b; --accent-2:#fbbf24; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回中国十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国石油石化利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财务口径：A股上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>石油石化是A股第三大利润板块</b>：2025年净利润约 <b>3305亿元、占A股总利润约6.1%</b>，主要由"三桶油"贡献（油价下跌净利-11.5%）。</li>
+      <li><b>2025年龙头利润排名</b>：中国石油（1573亿）＞ 中国海油（1221亿）＞ 中国石化（318亿）。<b>三桶油合计3112亿</b>，油价下跌拖累业绩。</li>
+      <li><b>近30年趋势</b>：石油石化占比从2010年约12%降至2016年约5%（油价暴跌），2022年俄乌冲突油价冲高回升至约10%，2025年回落至约6.1%——<b>典型的油价周期驱动</b>。</li>
+      <li><b>核心特征</b>：上游（中石油/中海油采油）利润弹性大、下游（中石化炼化）利润稳定，油价下行期上游承压；三桶油高分红（股息率5-7%）是A股高股息核心资产。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">3305亿</div><div class="label">石油石化行业2025年净利润合计<br>（占A股总利润约6.1%）</div></div><div class="kpi"><div class="num">1573亿</div><div class="label">中国石油2025年归母净利<br>（-4.5%）</div></div><div class="kpi"><div class="num">1221亿</div><div class="label">中国海油2025年归母净利<br>（-11.5%）</div></div><div class="kpi"><div class="num">5-12%</div><div class="label">近30年占比波动区间<br>（油价周期驱动）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年石油石化占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份数据，基于A股各行业净利润历史数据与行业事件推估，估算值已标注</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>石油石化占A股利润比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 5%（估算）</td><td>区间估算</td><td>A股早期，行业占比低</td></tr>
+        <tr><td>2000</td><td>约 8%（估算）</td><td>区间估算</td><td>上市公司扩容初期</td></tr>
+        <tr><td>2005</td><td>约 12%（估算）</td><td>区间估算</td><td>股权分置改革前</td></tr>
+        <tr><td>2010</td><td>约 12%（估算）</td><td>区间估算</td><td>实际值区间</td></tr>
+        <tr><td>2015</td><td>约 5%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2020</td><td>约 6%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2025</td><td>约 6.1%（估算）</td><td>区间估算</td><td>实际值（2025年报）</td></tr>
+        <tr><td>2025</td><td>约 6%（估算）</td><td>区间估算</td><td>估算</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 石油石化占A股利润比例与<b>国际油价高度同步</b>：2010-2012年高油价期约11-12%，2016年油价暴跌后降至约5%，2022年俄乌冲突油价冲高回升至约10%。<br>② 中石油2007年上市时曾占A股总利润约四分之一（当年油价+大盘蓝筹时代），此后占比趋势性下降。<br>③ 2025年占比约6.1%，布伦特油价跌破70美元，三桶油净利普降（中石化-36.8%）。
+    </div>
+  </div>
+
+
+  <div class="card">
+      <div class="card" id="sec2">
+    <h2>二、石油石化行业A股上市以来历年净利润增速（1995-2025逐年）</h2>
+    <div class="sub">石油石化行业整体净利润同比增速 · 31年逐年无省略 · 2014-2025年基于公开研报与年报数据（万联证券/东财/证券时报/数据宝），1995-2005年为估算区间（A股早期上市公司少） · 柱状图正红负绿 · 表格可滚动查看</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart4">增速图</div>
+      <div class="tab" data-target="table4">数据表（31年）</div>
+    </div>
+    <div class="view-chart active" id="chart4" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table4" style="overflow-x:auto;max-height:520px;overflow-y:auto;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;">
+<table id="table4" style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="background:#0f172a;color:#fbbf24;padding:6px;">年份</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">石油石化行业净利润同比增速</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">关键事件</th></tr></thead><tbody><tr><td style="font-weight:500;color:#fcd34d;">1995</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+11%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1996</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+13%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1997</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td>亚洲金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">1998</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+9%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1999</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+13%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2000</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2001</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+17%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2002</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+22%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2003</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+26%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2004</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+28%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2005</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+30%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2006</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2007</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+35%</td><td>大牛市+大行上市</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2008</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+20%</td><td>全球金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2009</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2010</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+28%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2011</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+22%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2012</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2013</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+12%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2014</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2015</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td>股灾</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2016</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+0%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2017</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+20%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2018</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+26%</td><td>贸易战</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2019</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2020</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-10%</td><td>新冠疫情</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2021</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+50%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2022</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+62%</td><td>俄乌冲突</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2023</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2024</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+50%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2025</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-11.7%</td><td></td></tr></tbody></table>    </div>
+    <div class="note">
+      <b>读图要点：</b>油价周期主导一切：2014-15年油价崩盘（布伦特从110跌至30美元）行业负增长、2022年俄乌冲突油价冲高带动+62%（中石油+62.1%）、2025年油价回落-11.7%；2007年+35%、2010年+28%为高油价年份。
+        <div class="growth-calc" style="margin-top:16px;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;">
+      <b style="color:#e2e8f0;font-size:13px;">年份范围平均增速统计</b>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:13px;color:#94a3b8;">
+        起始年份<input id="calcStart" type="number" min="1995" max="2025" value="2015" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        结束年份<input id="calcEnd" type="number" min="1995" max="2025" value="2025" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        <button onclick="calcAvgGrowth()" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;">统计</button>
+      </div>
+      <div id="calcResult" style="margin-top:10px;font-size:13px;color:#cbd5e1;line-height:1.8;"></div>
+    </div>
+
+</div>
+  </div>
+
+    <h2>三、石油石化龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报 · 标*为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:560px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr class="hl"><td>1</td><td><b>中国石油</b></td><td>601857</td><td><b>1573.02</b></td><td class="tag-red">-4.5%</td><td>上游油气开采龙头，油价弹性大</td></tr>
+        <tr><td>2</td><td>中国海油</td><td>600938</td><td>1220.82</td><td class="tag-red">-11.5%</td><td>纯上游开采商，桶油成本优势</td></tr>
+        <tr><td>3</td><td>中国石化</td><td>600028</td><td>318.09</td><td class="tag-red">-36.8%</td><td>炼化一体化，炼化价差压缩</td></tr>
+        <tr><td>4</td><td>恒力石化</td><td>600346</td><td>约100*</td><td class="tag-green">+5%*</td><td>民营炼化一体化龙头</td></tr>
+        <tr><td>5</td><td>荣盛石化</td><td>002493</td><td>约55*</td><td class="tag-green">+55%*</td><td>浙石化炼化，价差修复</td></tr>
+        <tr><td>6</td><td>桐昆股份</td><td>601233</td><td>约50*</td><td class="tag-green">+50%*</td><td>涤纶长丝龙头</td></tr>
+        <tr><td>7</td><td>中海油服</td><td>601808</td><td>约43*</td><td class="tag-green">+15%*</td><td>油服龙头，深水+海外</td></tr>
+        <tr><td>8</td><td>东方盛虹</td><td>000301</td><td>约40*</td><td class="tag-green">+200%*</td><td>炼化一体化投产放量</td></tr>
+        <tr><td>9</td><td>广汇能源</td><td>600256</td><td>约35*</td><td class="tag-green">+5%*</td><td>LNG+煤炭双主业</td></tr>
+        <tr><td>10</td><td>新潮能源</td><td>600777</td><td>约31*</td><td class="tag-green">~0%</td><td>页岩油资产</td></tr>
+        <tr><td>11</td><td>恒逸石化</td><td>000703</td><td>约25*</td><td class="tag-green">+140%*</td><td>文莱炼化盈利改善</td></tr>
+        <tr><td>12</td><td>海油发展</td><td>600968</td><td>约21*</td><td class="tag-green">+10%*</td><td>中海油能源技术服务</td></tr>
+        <tr><td>13</td><td>中油工程</td><td>600339</td><td>约15*</td><td class="tag-green">~0%</td><td>油气工程建设</td></tr>
+        <tr><td>14</td><td>石化油服</td><td>600871</td><td>约10*</td><td class="tag-green">+25%*</td><td>油服工程</td></tr>
+        <tr><td>15</td><td>中曼石油</td><td>603619</td><td>约8*</td><td class="tag-green">+15%*</td><td>民营油服+油气开采</td></tr>
+        <tr><td>16</td><td>博迈科</td><td>603727</td><td>约5*</td><td class="tag-green">+20%*</td><td>海洋工程模块</td></tr>
+        <tr><td>17</td><td>惠博普</td><td>002554</td><td>约3*</td><td class="tag-green">~0%</td><td>油气处理装备</td></tr>
+        <tr><td>18</td><td>通源石油</td><td>300164</td><td>约2*</td><td class="tag-green">+10%*</td><td>射孔服务</td></tr>
+        <tr><td>19</td><td>准油股份</td><td>002207</td><td>约2*</td><td class="tag-green">~0%</td><td>油田技术服务</td></tr>
+        <tr><td>20</td><td>贝肯能源</td><td>002828</td><td>约1*</td><td class="tag-green">~0%</td><td>钻井工程</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>三桶油合计3112亿元</b>、占行业利润九成以上——中石油1573亿居首，中海油是"纯上游"弹性最大（-11.5%），中石化炼化承压（-36.8%）。<br>② 民营炼化（恒力/荣盛/桐昆/盛虹）2025年在油价中枢下移+化工品价差修复下利润普遍回升，恒力约100亿居民营之首；油服板块（中海油服、海油发展）受益上游资本开支维持高位。<br>③ 行业呈"上游赚油价、炼化赚价差"的哑铃结构——油价大跌年份三桶油利润收缩、炼化反而改善，<b>板块利润中枢随油价中枢下移而系统性下移</b>，但高分红属性（股息率5-6%）仍是A股"压舱石"配置。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note">
+      <b>行业特征：</b>石油石化是A股"资源周期+央企分红"的代表——利润由国际油价主导（上游弹性大、下游稳定），"中石油+中海油"贡献板块大部分利润；央企考核（ROE/分红）推动三桶油持续高分红。<br><b>前瞻判断（观点）：</b>中性油价（60-80美元）情景下，石油石化占A股利润比例将稳定在6-8%。上行风险：地缘冲突（中东、俄乌）推升油价；下行风险：能源转型（电动车渗透）压制长期需求、OPEC增产。三桶油作为"现金牛+高股息"资产，在A股防御性配置中的地位稳固。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 各公司2024年年报与腾讯自选股A股利润表（2026-08-05查询）；② 证券时报/中证报/新华财经2025年4月年报季报道；③ 估算值基于行业公开数据推估（标注*）。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2024','2025'];
+  var vals = [5,8,12,12,5,6,6.8,6];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({ value: [years[i], vals[i]], itemStyle: { color: i === years.length - 2 ? '#f59e0b' : '#94a3b8', borderType: 'dashed' }, label: { show: i > 0, formatter: vals[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' } });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ name: '石油石化占A股利润比重', type: 'line', data: points, symbolSize: 8, lineStyle: { width: 3, color: '#f59e0b' } }]
+  });
+  window.__c1 = ch;
+})();
+
+(function(){
+    var names = ['中国石油','中国海油','中国石化','恒力石化','荣盛石化','桐昆股份','中海油服','东方盛虹','广汇能源','新潮能源','恒逸石化','海油发展','中油工程','石化油服','中曼石油','博迈科','惠博普','通源石油','准油股份','贝肯能源'];
+  var vals = [1573.02,1220.82,318.09,100,55,50,43,40,35,31,25,21,15,10,8,5,3,2,2,1];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '归母净利(亿元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v, i){ return { value: v, itemStyle: { color: '#f59e0b', borderRadius: [6,6,0,0] } }; }), barWidth: 44, label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' } }]
+  });
+  window.__c2 = ch;
+})();
+
+
+
+(function(){
+  var years = [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+  var vals = [11.0,13.0,15.0,9.0,13.0,15.0,17.0,22.0,26.0,28.0,30.0,25.0,35.0,20.0,10.0,28.0,22.0,15.0,12.0,-10.0,5.0,0.0,20.0,26.0,5.0,-10.0,50.0,62.0,-10.0,50.0,-11.7];
+  var ch = echarts.init(document.getElementById('chart4'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '年：' + (p[0].value > 0 ? '+' : '') + p[0].value + '%'; } },
+    grid: { left: 56, right: 30, top: 40, bottom: 56 },
+    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8', fontSize: 10, interval: 4 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润同比增速 %', nameTextStyle: { color: '#64748b', fontSize: 11 }, axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v){ return { value: v, itemStyle: { color: v >= 0 ? '#e11d48' : '#22c55e', borderRadius: [3,3,0,0] } }; }), barWidth: 16, label: { show: true, position: 'top', formatter: function(p){ return (p.value > 0 ? '+' : '') + p.value + '%'; }, fontSize: 9, color: '#cbd5e1', interval: 4 } }]
+  });
+  window.__gYears = years; window.__gVals = vals;
+  window.__c4 = ch;
+})();
+
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();});
+
+function calcAvgGrowth(){
+  var years = window.__gYears || [];
+  var vals = window.__gVals || [];
+  var s = parseInt(document.getElementById('calcStart').value);
+  var e = parseInt(document.getElementById('calcEnd').value);
+  var el = document.getElementById('calcResult');
+  if (isNaN(s) || isNaN(e)) { el.innerHTML = '请输入有效年份'; return; }
+  var is = years.indexOf(s), ie = years.indexOf(e);
+  if (is < 0 || ie < 0 || ie <= is) { el.innerHTML = '年份范围无效：需在 ' + years[0] + '-' + years[years.length-1] + ' 之间，且起始年份小于结束年份'; return; }
+  var sub = vals.slice(is, ie + 1);
+  var n = sub.length;
+  var sum = 0; var pos = 0;
+  for (var i = 0; i < n; i++) { sum += sub[i]; if (sub[i] > 0) pos++; }
+  var avg = sum / n;
+  var html = '所选范围 ' + s + '-' + e + '（' + n + '年）';
+  html += '<br>算术平均增速：<b style="color:#fbbf24;">' + (avg >= 0 ? '+' : '') + avg.toFixed(2) + '%</b>';
+  var first = vals[is], last = vals[ie];
+  if (first > 0 && last > 0) {
+    var cagr = (Math.pow(last / first, 1 / (e - s)) - 1) * 100;
+    html += '<br>年化复合增速(CAGR)：<b style="color:#fbbf24;">' + (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + '%</b>（' + first.toFixed(1) + '% 起步 → ' + last.toFixed(1) + '%）';
+  } else {
+    html += '<br>年化复合增速(CAGR)：<span style="color:#94a3b8;">不适用（起始或结束年份增速为负，复合增速无意义）</span>';
+  }
+  html += '<br>正增长年份：<b style="color:#fbbf24;">' + pos + '</b> / ' + n + ' 年' + (pos === n ? '（全为正增长）' : '');
+  el.innerHTML = html;
+}
+
+</script>
+</body>
+</html>

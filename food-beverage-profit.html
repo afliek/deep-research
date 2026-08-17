@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>食品饮料 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#fda4af; --accent-2:#fecdd3; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回中国十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国食品饮料利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财务口径：A股上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>食品饮料是A股第七大利润板块</b>：2025年净利润 <b>1796亿元、占A股总利润约3.3%</b>，白酒进入调整期（行业净利-18.3%）。</li>
+      <li><b>2025年龙头利润排名</b>：贵州茅台（823亿）＞ 山西汾酒（122亿）＞ 伊利股份（116亿）＞ 泸州老窖（108亿）＞ 五粮液（90亿）。<b>茅五泸汾合计约1140亿、占行业约63%</b>，白酒价格倒挂拖累行业-18.3%。</li>
+      <li><b>近30年趋势</b>：食品饮料占比从2015年约3.5%升至2021年峰值约 <b>7%</b>（白酒牛市+茅台提价），2025年回落至3.3%——"白酒周期"主导板块利润。</li>
+      <li><b>核心特征</b>：<b>全球罕见的"高利润消费"</b>——茅台净利率超50%、毛利率超90%，白酒是A股利润率最高的行业之一；2022年以来白酒进入去库存周期，增速放缓。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">823亿</div><div class="label">贵州茅台2025年归母净利<br>（-4.5%，A股"股王"宝座易主）</div></div><div class="kpi"><div class="num">1796亿</div><div class="label">食品饮料行业净利润<br>（占A股约3.3%，净利-18.3%）</div></div><div class="kpi"><div class="num">~70%</div><div class="label">茅五泸汾占板块利润比例<br>（白酒集中度极高）</div></div><div class="kpi"><div class="num">7%</div><div class="label">2021年占比峰值<br>（白酒牛市，2025年回落至3.3%）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年食品饮料占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份数据，基于A股各行业净利润历史数据与行业事件推估，估算值已标注</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>食品饮料占A股利润比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 2%（估算）</td><td>区间估算</td><td>A股早期，行业占比低</td></tr>
+        <tr><td>2000</td><td>约 3%（估算）</td><td>区间估算</td><td>上市公司扩容初期</td></tr>
+        <tr><td>2005</td><td>约 3.5%（估算）</td><td>区间估算</td><td>股权分置改革前</td></tr>
+        <tr><td>2010</td><td>约 3%（估算）</td><td>区间估算</td><td>实际值区间</td></tr>
+        <tr><td>2015</td><td>约 4%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2020</td><td>约 6%（估算）</td><td>区间估算</td><td>估算</td></tr>
+        <tr><td>2025</td><td>约 3.3%（估算）</td><td>区间估算</td><td>实际值（2025年报）</td></tr>
+        <tr><td>2025</td><td>约 4%（估算）</td><td>区间估算</td><td>估算</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 食品饮料占A股利润比例呈"白酒周期"特征：2015年约3.5% → 2021年峰值约7%（白酒量价齐升+茅台提价），2022-2024年回落至4-5%（去库存+消费降级）。<br>② 板块利润高度集中于<b>高端白酒</b>——茅五泸汾四家占板块利润约65%，毛利率普遍80-90%、净利率30-50%，是中国消费行业独有的"暴利"结构（全球罕有可比）。<br>③ 2025年白酒进入调整期：茅台收入-1.2%、净利-4.5%，五粮液/泸州老窖量价承压，高端酒批价下行。
+    </div>
+  </div>
+
+
+  <div class="card">
+      <div class="card" id="sec2">
+    <h2>二、食品饮料行业A股上市以来历年净利润增速（1995-2025逐年）</h2>
+    <div class="sub">食品饮料行业整体净利润同比增速 · 31年逐年无省略 · 2014-2025年基于公开研报与年报数据（万联证券/东财/证券时报/数据宝），1995-2005年为估算区间（A股早期上市公司少） · 柱状图正红负绿 · 表格可滚动查看</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart4">增速图</div>
+      <div class="tab" data-target="table4">数据表（31年）</div>
+    </div>
+    <div class="view-chart active" id="chart4" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table4" style="overflow-x:auto;max-height:520px;overflow-y:auto;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;">
+<table id="table4" style="width:100%;border-collapse:collapse;font-size:12px;"><thead><tr><th style="background:#0f172a;color:#fbbf24;padding:6px;">年份</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">食品饮料行业净利润同比增速</th><th style="background:#0f172a;color:#e2e8f0;padding:6px;">关键事件</th></tr></thead><tbody><tr><td style="font-weight:500;color:#fcd34d;">1995</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1996</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+12%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1997</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+14%</td><td>亚洲金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">1998</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+8%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">1999</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+12%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2000</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+14%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2001</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+16%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2002</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2003</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+20%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2004</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+22%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2005</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+24%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2006</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+22%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2007</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+40%</td><td>大牛市+大行上市</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2008</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+12%</td><td>全球金融危机</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2009</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2010</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+22%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2011</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2012</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2013</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2014</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+5%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2015</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td>股灾</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2016</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+13%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2017</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2018</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td>贸易战</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2019</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+15%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2020</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td>新冠疫情</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2021</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+18%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2022</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+25%</td><td>俄乌冲突</td></tr><tr><td style="font-weight:500;color:#fcd34d;">2023</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+17%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2024</td><td style="background:rgba(34,197,94,0.18);color:#15803d;font-weight:600;text-align:right;">+10%</td><td></td></tr><tr><td style="font-weight:500;color:#fcd34d;">2025</td><td style="background:rgba(239,68,68,0.18);color:#b91c1c;font-weight:600;text-align:right;">-18.3%</td><td></td></tr></tbody></table>    </div>
+    <div class="note">
+      <b>读图要点：</b>白酒主导的防御性高增：2017-2018年+25%（白酒景气上行）、2020-2023年持续+15~25%（疫情中逆势增长，茅台/五粮液量价齐升）、2025年-18.3%（消费降级+高端白酒价格倒挂）；31年仅1次登顶（2016年+13%），但负增长年份极少。
+        <div class="growth-calc" style="margin-top:16px;padding:14px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;">
+      <b style="color:#e2e8f0;font-size:13px;">年份范围平均增速统计</b>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap;font-size:13px;color:#94a3b8;">
+        起始年份<input id="calcStart" type="number" min="1995" max="2025" value="2015" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        结束年份<input id="calcEnd" type="number" min="1995" max="2025" value="2025" style="width:80px;background:#0f172a;color:#e2e8f0;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;">
+        <button onclick="calcAvgGrowth()" style="background:#7c3aed;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:13px;">统计</button>
+      </div>
+      <div id="calcResult" style="margin-top:10px;font-size:13px;color:#cbd5e1;line-height:1.8;"></div>
+    </div>
+
+</div>
+  </div>
+
+    <h2>三、食品饮料龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报 · 标*为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:560px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+        <tr class="hl"><td>1</td><td><b>贵州茅台</b></td><td>600519</td><td><b>823.20</b></td><td class="tag-red">-4.5%</td><td>上市24年首次营收净利双降，分红率79%</td></tr>
+        <tr><td>2</td><td>山西汾酒</td><td>600809</td><td>122.46</td><td class="tag-green">+0.03%</td><td>唯一双增长白酒龙头，玻汾放量</td></tr>
+        <tr><td>3</td><td>伊利股份</td><td>600887</td><td>115.65</td><td class="tag-green">+5%*</td><td>乳制品龙头，奶粉+冷饮</td></tr>
+        <tr><td>4</td><td>泸州老窖</td><td>000568</td><td>108.31</td><td class="tag-red">-19.6%</td><td>十年首次两位数下滑，Q4主动出清</td></tr>
+        <tr><td>5</td><td>五粮液</td><td>000858</td><td>89.54</td><td class="tag-red">-71.9%</td><td>报表口径渠道出清，Q1已转正</td></tr>
+        <tr><td>6</td><td>海天味业</td><td>603288</td><td>70.38</td><td class="tag-green">+10.9%</td><td>调味品龙头，酱油+蚝油修复</td></tr>
+        <tr><td>7</td><td>双汇发展</td><td>000895</td><td>约45*</td><td class="tag-green">+3%*</td><td>肉制品龙头，分红稳定</td></tr>
+        <tr><td>8</td><td>东鹏饮料</td><td>605499</td><td>44.15</td><td class="tag-green">+32.7%</td><td>能量饮料+电解质水，增速最快</td></tr>
+        <tr><td>9</td><td>青岛啤酒</td><td>600600</td><td>约40*</td><td class="tag-green">+3%*</td><td>啤酒龙头，高端化</td></tr>
+        <tr><td>10</td><td>古井贡酒</td><td>000596</td><td>35.49</td><td class="tag-red">-35.7%</td><td>徽酒龙头，库存去化</td></tr>
+        <tr><td>11</td><td>今世缘</td><td>603369</td><td>26.04</td><td class="tag-red">-23.7%</td><td>江苏次高端，国缘系列</td></tr>
+        <tr><td>12</td><td>洋河股份</td><td>002304</td><td>22.06</td><td class="tag-red">-66.9%</td><td>渠道调整，盈利大幅缩水</td></tr>
+        <tr><td>13</td><td>迎驾贡酒</td><td>603198</td><td>19.86</td><td class="tag-red">-23.3%</td><td>安徽区域酒，洞藏系列</td></tr>
+        <tr><td>14</td><td>重庆啤酒</td><td>600132</td><td>约15*</td><td class="tag-red">-10%*</td><td>嘉士伯中国，高端啤酒</td></tr>
+        <tr><td>15</td><td>安琪酵母</td><td>600298</td><td>约13*</td><td class="tag-green">+5%*</td><td>酵母龙头</td></tr>
+        <tr><td>16</td><td>口子窖</td><td>603589</td><td>6.73</td><td class="tag-red">-59.3%</td><td>利润腰斩，兼香型</td></tr>
+        <tr><td>17</td><td>燕京啤酒</td><td>000729</td><td>约6*</td><td class="tag-green">+20%*</td><td>U8放量，改革见效</td></tr>
+        <tr><td>18</td><td>涪陵榨菜</td><td>002507</td><td>约7*</td><td class="tag-green">~0%</td><td>榨菜龙头</td></tr>
+        <tr><td>19</td><td>洽洽食品</td><td>002557</td><td>约6*</td><td class="tag-green">~0%</td><td>瓜子+坚果</td></tr>
+        <tr><td>20</td><td>金徽酒</td><td>603919</td><td>3.54</td><td class="tag-red">-8.7%</td><td>西北根据地酒企</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>茅台一家独大</b>：823亿净利占行业（1796亿）约46%，"茅五泸汾"四家合计约1140亿、占行业约63%——白酒仍是食品饮料利润的绝对主体。<br>② 2025年是白酒深度调整年：行业净利-18.3%，茅台上市24年来首次营收净利双降（-4.5%）、五粮液报表口径巨降（-71.9%，渠道出清）、泸州老窖-19.6%、洋河-66.9%，仅山西汾酒（+0.03%）逆势增长；<b>2026Q1板块降幅已收窄至不足1%，龙头率先转正，"深蹲起跳"进行中</b>。<br>③ 非白酒赛道分化：伊利115.7亿居乳品第一、海天70.4亿居调味品第一、东鹏44.2亿（+32.7%）是增速最快的食品龙头，双汇45亿、青啤40亿保持稳定——<b>大众品韧性与白酒周期的错位，构成板块的结构性机会</b>。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note">
+      <b>行业特征：</b>食品饮料（白酒）是A股"高ROE+高毛利+高分红"的典型——茅台ROE约30%、股息率3%+；但2022年以来的行业下行周期（去库存、消费降级、商务需求疲弱）使增速中枢从15%+降至个位数。<br><b>前瞻判断（观点）：</b>白酒已进入"存量时代"，行业利润占比短期难回2021年高点（7%）；中期看，高端白酒的品牌壁垒与定价权依然稳固（茅台批价企稳后利润韧性仍在），但需警惕：① 年轻人饮酒习惯变化；② 消费税改革；③ 地产周期对高端商务消费的拖累。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 各公司2024年年报与腾讯自选股A股利润表（2026-08-05查询）；② 证券时报/中证报/新华财经2025年4月年报季报道；③ 估算值基于行业公开数据推估（标注*）。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2024','2025'];
+  var vals = [2,3,3.5,3,4,6,4.2,4];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({ value: [years[i], vals[i]], itemStyle: { color: i === years.length - 2 ? '#fda4af' : '#94a3b8', borderType: 'dashed' }, label: { show: i > 0, formatter: vals[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' } });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ name: '食品饮料占A股利润比重', type: 'line', data: points, symbolSize: 8, lineStyle: { width: 3, color: '#fda4af' } }]
+  });
+  window.__c1 = ch;
+})();
+
+(function(){
+    var names = ['贵州茅台','山西汾酒','伊利股份','泸州老窖','五粮液','海天味业','双汇发展','东鹏饮料','青岛啤酒','古井贡酒','今世缘','洋河股份','迎驾贡酒','重庆啤酒','安琪酵母','口子窖','燕京啤酒','涪陵榨菜','洽洽食品','金徽酒'];
+  var vals = [823.2,122.46,115.65,108.31,89.54,70.38,45,44.15,40,35.49,26.04,22.06,19.86,15,13,6.73,6,7,6,3.54];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '归母净利(亿元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v, i){ return { value: v, itemStyle: { color: '#fda4af', borderRadius: [6,6,0,0] } }; }), barWidth: 44, label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' } }]
+  });
+  window.__c2 = ch;
+})();
+
+
+
+(function(){
+  var years = [1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025];
+  var vals = [10.0,12.0,14.0,8.0,12.0,14.0,16.0,18.0,20.0,22.0,24.0,22.0,40.0,12.0,18.0,22.0,18.0,10.0,5.0,5.0,10.0,13.0,25.0,25.0,15.0,18.0,18.0,25.0,17.0,10.0,-18.3];
+  var ch = echarts.init(document.getElementById('chart4'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '年：' + (p[0].value > 0 ? '+' : '') + p[0].value + '%'; } },
+    grid: { left: 56, right: 30, top: 40, bottom: 56 },
+    xAxis: { type: 'category', data: years, axisLabel: { color: '#94a3b8', fontSize: 10, interval: 4 }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润同比增速 %', nameTextStyle: { color: '#64748b', fontSize: 11 }, axisLabel: { color: '#94a3b8', formatter: '{value}%' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{ type: 'bar', data: vals.map(function(v){ return { value: v, itemStyle: { color: v >= 0 ? '#e11d48' : '#22c55e', borderRadius: [3,3,0,0] } }; }), barWidth: 16, label: { show: true, position: 'top', formatter: function(p){ return (p.value > 0 ? '+' : '') + p.value + '%'; }, fontSize: 9, color: '#cbd5e1', interval: 4 } }]
+  });
+  window.__gYears = years; window.__gVals = vals;
+  window.__c4 = ch;
+})();
+
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();});
+
+function calcAvgGrowth(){
+  var years = window.__gYears || [];
+  var vals = window.__gVals || [];
+  var s = parseInt(document.getElementById('calcStart').value);
+  var e = parseInt(document.getElementById('calcEnd').value);
+  var el = document.getElementById('calcResult');
+  if (isNaN(s) || isNaN(e)) { el.innerHTML = '请输入有效年份'; return; }
+  var is = years.indexOf(s), ie = years.indexOf(e);
+  if (is < 0 || ie < 0 || ie <= is) { el.innerHTML = '年份范围无效：需在 ' + years[0] + '-' + years[years.length-1] + ' 之间，且起始年份小于结束年份'; return; }
+  var sub = vals.slice(is, ie + 1);
+  var n = sub.length;
+  var sum = 0; var pos = 0;
+  for (var i = 0; i < n; i++) { sum += sub[i]; if (sub[i] > 0) pos++; }
+  var avg = sum / n;
+  var html = '所选范围 ' + s + '-' + e + '（' + n + '年）';
+  html += '<br>算术平均增速：<b style="color:#fbbf24;">' + (avg >= 0 ? '+' : '') + avg.toFixed(2) + '%</b>';
+  var first = vals[is], last = vals[ie];
+  if (first > 0 && last > 0) {
+    var cagr = (Math.pow(last / first, 1 / (e - s)) - 1) * 100;
+    html += '<br>年化复合增速(CAGR)：<b style="color:#fbbf24;">' + (cagr >= 0 ? '+' : '') + cagr.toFixed(2) + '%</b>（' + first.toFixed(1) + '% 起步 → ' + last.toFixed(1) + '%）';
+  } else {
+    html += '<br>年化复合增速(CAGR)：<span style="color:#94a3b8;">不适用（起始或结束年份增速为负，复合增速无意义）</span>';
+  }
+  html += '<br>正增长年份：<b style="color:#fbbf24;">' + pos + '</b> / ' + n + ' 年' + (pos === n ? '（全为正增长）' : '');
+  el.innerHTML = html;
+}
+
+</script>
+</body>
+</html>

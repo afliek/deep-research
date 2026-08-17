@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国各类型发电量及增速对比（2005-2025）</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f0;
+    color: #2c2c2a;
+    line-height: 1.6;
+    padding: 76px 24px 24px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { font-size: 14px; color: #888780; margin-bottom: 24px; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .metric-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .metric-label { font-size: 13px; color: #888780; margin-bottom: 4px; }
+  .metric-value { font-size: 24px; font-weight: 500; color: #1a1a1a; }
+  .metric-unit { font-size: 14px; font-weight: 400; color: #5f5e5a; margin-left: 2px; }
+  .metric-sub { font-size: 12px; color: #888780; margin-top: 2px; }
+  .chart-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .chart-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+  .chart-wrapper { position: relative; width: 100%; height: 360px; }
+  .chart-wrapper.tall { height: 420px; }
+  .legend-row {
+    display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 8px;
+    font-size: 12px; color: #888780;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+  .table-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+  }
+  .table-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    table-layout: auto;
+  }
+  th, td {
+    padding: 6px 7px;
+    text-align: center;
+    border-bottom: 0.5px solid #e8e6e0;
+    white-space: nowrap;
+  }
+  th {
+    background: #f1efe8;
+    font-weight: 500;
+    color: #444441;
+    font-size: 11px;
+    position: sticky;
+    top: 0;
+  }
+  td.year { font-weight: 500; color: #1a1a1a; }
+  td.total { font-weight: 600; color: #1a1a1a; }
+  .gr-neg { color: #2D7A4F; }
+  .gr-low { color: #5f5e5a; }
+  .gr-mid { color: #854F0B; }
+  .gr-high { color: #993C1D; font-weight: 500; }
+  .gr-slash { color: #bbb; }
+  tr.decade-start td { border-top: 2px solid #d3d1c7; }
+  tr.decade-start td.year { font-weight: 600; }
+  .insights {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .insights-title { font-size: 15px; font-weight: 500; margin-bottom: 12px; color: #1a1a1a; }
+  .insight-item {
+    padding: 8px 0;
+    border-bottom: 0.5px solid #f1efe8;
+    font-size: 13px;
+    color: #444441;
+  }
+  .insight-item:last-child { border-bottom: none; }
+  .insight-item strong { color: #1a1a1a; }
+  .source-note {
+    font-size: 12px;
+    color: #888780;
+    margin-top: 16px;
+    line-height: 1.8;
+  }
+  .type-header { background: #e8e6df !important; }
+  /* Site nav */
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: #0a0d14; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 999; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  .site-nav .nav-brand { color: #e2e8f0; text-decoration: none; font-size: 16px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .site-nav .nav-brand .dot { width: 7px; height: 7px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6; }
+  .site-nav .nav-back { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 14px; border-radius: 8px; transition: all .2s; }
+  .site-nav .nav-back:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+<div class="container">
+  <h1>中国各类型发电量及增速对比（2005-2025）</h1>
+  <p class="subtitle">2005-2025年 | 数据来源：国家统计局历年统计公报、中国电力企业联合会、国家能源局</p>
+
+  <div class="summary-grid">
+    <div class="metric-card">
+      <div class="metric-label">2025年总发电量</div>
+      <div class="metric-value">10.58<span class="metric-unit">万亿千瓦时</span></div>
+      <div class="metric-sub">较2005年增长323%</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">火电发电量</div>
+      <div class="metric-value">6.33<span class="metric-unit">万亿千瓦时</span></div>
+      <div class="metric-sub">占比59.8%，首次出现负增长（-0.7%）</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">风光合计发电量</div>
+      <div class="metric-value">2.30<span class="metric-unit">万亿千瓦时</span></div>
+      <div class="metric-sub">占比21.8%，20年从0到2.3万亿</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">太阳能增速（2025）</div>
+      <div class="metric-value">+39.8<span class="metric-unit">%</span></div>
+      <div class="metric-sub">连续3年增速超35%</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">各类型发电量变化趋势（亿千瓦时）</div>
+    <div class="legend-row" id="legend1"></div>
+    <div class="chart-wrapper tall">
+      <canvas id="genChart" role="img" aria-label="2005至2025年中国各类型发电量变化趋势堆叠面积图">各类型发电量变化趋势堆叠面积图</canvas>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">各类型发电量年同比增长率对比（%）</div>
+    <div class="chart-wrapper tall">
+      <canvas id="growthChart" role="img" aria-label="各类型发电量年同比增长率对比折线图">各类型发电量年同比增长率对比折线图</canvas>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="chart-title">发电量结构占比变化（%）</div>
+    <div class="chart-wrapper">
+      <canvas id="shareChart" role="img" aria-label="各类型发电量占比变化图">发电量结构占比变化图</canvas>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <div class="table-title">各类型发电量及增速明细表（2005-2025，单位：亿千瓦时）</div>
+    <table id="mainTable">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width:50px">年份</th>
+          <th colspan="2" class="type-header">总发电量</th>
+          <th colspan="2" class="type-header">火电</th>
+          <th colspan="2" class="type-header">水电</th>
+          <th colspan="2" class="type-header">核电</th>
+          <th colspan="2" class="type-header">风电</th>
+          <th colspan="2" class="type-header">太阳能</th>
+        </tr>
+        <tr>
+          <th>发电量</th><th>增速</th>
+          <th>发电量</th><th>增速</th>
+          <th>发电量</th><th>增速</th>
+          <th>发电量</th><th>增速</th>
+          <th>发电量</th><th>增速</th>
+          <th>发电量</th><th>增速</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="insights">
+    <div class="insights-title">关键发现</div>
+    <div class="insight-item"><strong>1. 总量翻两番：</strong>发电量从2005年的2.50万亿千瓦时增至2025年的10.58万亿千瓦时，20年增长323%，年均增速约7.6%。2024年首次突破10万亿大关。</div>
+    <div class="insight-item"><strong>2. 火电见顶信号：</strong>2025年火电发电量63272亿千瓦时，同比下降0.7%，为20年来首次负增长。火电占比从2005年的81.9%持续下降至2025年的59.8%。</div>
+    <div class="insight-item"><strong>3. 太阳能爆发：</strong>太阳能发电量从2010年的5亿千瓦时飙升至2025年的11732亿千瓦时，15年增长2345倍。2025年增速39.8%，已超越水电成为第三大电源。</div>
+    <div class="insight-item"><strong>4. 风电稳步高增：</strong>风电发电量从2010年的494亿千瓦时增至2025年的11279亿千瓦时，15年增长22倍，年均增速23%。</div>
+    <div class="insight-item"><strong>5. 水电瓶颈显现：</strong>水电受资源禀赋限制，增速长期在2-6%低位徘徊。2023年甚至同比下降4.9%（来水偏枯），发电量波动性大。</div>
+    <div class="insight-item"><strong>6. 核电稳而小：</strong>核电发电量稳步增长（年均约12%），但占比仅从2.1%升至4.6%，绝对规模仍有限。</div>
+    <div class="insight-item"><strong>7. 装机vs发电量差异：</strong>风光装机占比已达47.3%（2025），但发电量占比仅21.8%——利用小时数远低于火电（风电1979h vs 火电4147h），"装机高、发电低"特征显著。</div>
+  </div>
+
+  <div class="source-note">
+    <strong>数据说明：</strong><br>
+    1. 2020-2025年数据来源于国家统计局历年发布的《国民经济和社会发展统计公报》及中电联年度报告，为全口径数据。<br>
+    2. 2019年数据来源于中电联《中国电力行业年度发展报告2020》全口径数据。<br>
+    3. 2005-2018年数据来源于国家统计局历年统计公报、中电联历史统计及《中国电力工业》等公开资料。2005-2009年风电发电量数据已根据中电联历年统计快报修正（原数据严重偏低），2005-2009年太阳能发电量较小，部分年份为估算值。<br>
+    4. "火电"口径包括燃煤、燃气、燃油、余热余压余气、垃圾焚烧及生物质发电。2018年及以前部分年份的风电、太阳能数据来自中电联统计，可能与统计公报规模以上口径存在细微差异。<br>
+    5. 各类型发电量之和不完全等于总发电量，差额为地热、潮汐等其他发电，一般不超过总量的0.5%。<br>
+    6. 增速为同比增长率，2005年（首年）无增速数据，以"—"表示。
+  </div>
+</div>
+
+<script>
+const data = [
+  { year: 2005, total: 24975, thermal: 20437, hydro: 3964,  nuclear: 531,  wind: 16,   solar: 0,   decade: true },
+  { year: 2006, total: 28499, thermal: 23741, hydro: 4148,  nuclear: 548,  wind: 29,   solar: 0   },
+  { year: 2007, total: 32644, thermal: 27207, hydro: 4714,  nuclear: 621,  wind: 56,   solar: 0   },
+  { year: 2008, total: 34510, thermal: 28030, hydro: 5655,  nuclear: 653,  wind: 128,  solar: 0   },
+  { year: 2009, total: 36812, thermal: 30117, hydro: 5717,  nuclear: 700,  wind: 276,  solar: 0   },
+  { year: 2010, total: 42072, thermal: 33319, hydro: 7222,  nuclear: 739,  wind: 494,  solar: 5,   decade: true },
+  { year: 2011, total: 47130, thermal: 38337, hydro: 6989,  nuclear: 864,  wind: 715,  solar: 18   },
+  { year: 2012, total: 49876, thermal: 38928, hydro: 8721,  nuclear: 974,  wind: 1028, solar: 41   },
+  { year: 2013, total: 54316, thermal: 42470, hydro: 9203,  nuclear: 1107, wind: 1393, solar: 85   },
+  { year: 2014, total: 56496, thermal: 42337, hydro: 10643, nuclear: 1332, wind: 1534, solar: 250  },
+  { year: 2015, total: 58146, thermal: 42842, hydro: 11127, nuclear: 1714, wind: 1856, solar: 395  },
+  { year: 2016, total: 61625, thermal: 44371, hydro: 11807, nuclear: 2132, wind: 2410, solar: 662  },
+  { year: 2017, total: 66044, thermal: 47546, hydro: 11930, nuclear: 2481, wind: 3057, solar: 1182 },
+  { year: 2018, total: 71118, thermal: 50739, hydro: 12342, nuclear: 2944, wind: 3658, solar: 1775 },
+  { year: 2019, total: 73266, thermal: 50465, hydro: 13021, nuclear: 3487, wind: 4053, solar: 2237, decade: true },
+  { year: 2020, total: 76236, thermal: 51743, hydro: 13552, nuclear: 3662, wind: 4665, solar: 2611 },
+  { year: 2021, total: 83959, thermal: 56655, hydro: 13399, nuclear: 4075, wind: 6558, solar: 3270 },
+  { year: 2022, total: 88487, thermal: 58888, hydro: 13522, nuclear: 4178, wind: 7627, solar: 4273 },
+  { year: 2023, total: 94564, thermal: 62657, hydro: 12859, nuclear: 4347, wind: 8859, solar: 5842 },
+  { year: 2024, total: 100869,thermal: 63743, hydro: 14257, nuclear: 4509, wind: 9970, solar: 8390 },
+  { year: 2025, total: 105753,thermal: 63272, hydro: 14617, nuclear: 4852, wind: 11279,solar: 11732, decade: true }
+];
+
+const types = ['total','thermal','hydro','nuclear','wind','solar'];
+const typeLabels = { total:'总发电量', thermal:'火电', hydro:'水电', nuclear:'核电', wind:'风电', solar:'太阳能' };
+const typeColors = { thermal:'#8C8273', hydro:'#4A90C4', nuclear:'#C4956A', wind:'#5DCAA5', solar:'#EF9F27', total:'#D85A30' };
+
+// Calculate growth rates
+const growth = {};
+types.forEach(t => {
+  growth[t] = [];
+  for (let i = 1; i < data.length; i++) {
+    const prev = data[i-1][t];
+    const curr = data[i][t];
+    if (prev > 0) {
+      growth[t].push({ year: data[i].year, rate: (curr/prev - 1) * 100 });
+    } else {
+      growth[t].push({ year: data[i].year, rate: null });
+    }
+  }
+});
+
+function fmt(v) {
+  if (v === null || v === undefined) return '\u2014';
+  return Math.round(v).toLocaleString('en-US');
+}
+function fmtPct(v) {
+  if (v === null || v === undefined) return '\u2014';
+  const r = v.toFixed(1);
+  return (v >= 0 ? '+' : '') + r + '%';
+}
+function grClass(v) {
+  if (v === null) return 'gr-slash';
+  if (v < 0) return 'gr-neg';
+  if (v < 5) return 'gr-low';
+  if (v < 15) return 'gr-mid';
+  return 'gr-high';
+}
+
+// Build table
+const tbody = document.getElementById('tableBody');
+data.forEach((row, i) => {
+  const tr = document.createElement('tr');
+  if (row.decade) tr.className = 'decade-start';
+  let html = '<td class="year">' + row.year + '</td>';
+  types.forEach(t => {
+    const val = row[t];
+    const gr = i > 0 ? growth[t][i-1] : null;
+    const rate = gr ? gr.rate : null;
+    html += '<td' + (t==='total' ? ' class="total"' : '') + '>' + fmt(val) + '</td>';
+    html += '<td class="' + grClass(rate) + '">' + fmtPct(rate) + '</td>';
+  });
+  tr.innerHTML = html;
+  tbody.appendChild(tr);
+});
+
+// Chart 1: Stacked area chart
+const ctx1 = document.getElementById('genChart').getContext('2d');
+const chartTypes = ['thermal','hydro','nuclear','wind','solar'];
+const labels = data.map(d => d.year);
+const datasets1 = chartTypes.map(t => {
+  const c = typeColors[t];
+  // Add alpha to fill color for visible stacked areas
+  const r = parseInt(c.slice(1,3),16), g = parseInt(c.slice(3,5),16), b = parseInt(c.slice(5,7),16);
+  const fillAlpha = 'rgba(' + r + ',' + g + ',' + b + ',0.65)';
+  return {
+    label: typeLabels[t],
+    data: data.map(d => d[t]),
+    backgroundColor: fillAlpha,
+    borderColor: c,
+    fill: true,
+    stack: 'gen',
+    borderWidth: 1.5,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    tension: 0.3
+  };
+});
+datasets1.push({
+  label: '总计',
+  data: data.map(d => d.total),
+  borderColor: '#D85A30',
+  backgroundColor: 'transparent',
+  fill: false,
+  borderWidth: 2,
+  borderDash: [5,3],
+  pointRadius: 0,
+  pointHoverRadius: 4,
+  tension: 0.3
+});
+new Chart(ctx1, {
+  type: 'line',
+  data: { labels, datasets: datasets1 },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': ' + fmt(ctx.parsed.y) + ' 亿千瓦时';
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#f0eee8' }, ticks: { font: { size: 11 } } },
+      y: {
+        stacked: true,
+        grid: { color: '#f0eee8' },
+        ticks: { font: { size: 11 }, callback: v => v >= 10000 ? (v/10000).toFixed(1)+'万' : v },
+        title: { display: true, text: '亿千瓦时', font: { size: 11 } }
+      }
+    }
+  }
+});
+// Legend for chart 1
+const legend1 = document.getElementById('legend1');
+chartTypes.forEach(t => {
+  const div = document.createElement('div');
+  div.className = 'legend-item';
+  div.innerHTML = '<span class="legend-swatch" style="background:' + typeColors[t] + '"></span>' + typeLabels[t];
+  legend1.appendChild(div);
+});
+const divT = document.createElement('div');
+divT.className = 'legend-item';
+divT.innerHTML = '<span class="legend-swatch" style="background:#D85A30"></span>总计（虚线）';
+legend1.appendChild(divT);
+
+// Chart 2: Growth rate comparison
+const ctx2 = document.getElementById('growthChart').getContext('2d');
+const growthTypes = ['thermal','hydro','nuclear','wind','solar'];
+const datasets2 = growthTypes.map(t => ({
+  label: typeLabels[t],
+  data: growth[t].map(g => g.rate),
+  borderColor: typeColors[t],
+  backgroundColor: typeColors[t] + '20',
+  borderWidth: 2,
+  pointRadius: 2,
+  pointHoverRadius: 5,
+  tension: 0.2,
+  fill: false
+}));
+new Chart(ctx2, {
+  type: 'line',
+  data: { labels: labels.slice(1), datasets: datasets2 },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, usePointType: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': ' + fmtPct(ctx.parsed.y);
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#f0eee8' }, ticks: { font: { size: 11 } } },
+      y: {
+        grid: { color: '#f0eee8' },
+        ticks: { font: { size: 11 }, callback: v => v + '%' },
+        title: { display: true, text: '同比增长率 (%)', font: { size: 11 } }
+      }
+    }
+  }
+});
+
+// Chart 3: Share comparison
+const ctx3 = document.getElementById('shareChart').getContext('2d');
+const shareYears = [2005, 2010, 2015, 2020, 2025];
+const shareData = shareYears.map(yr => {
+  const d = data.find(d => d.year === yr);
+  return {
+    thermal: d.thermal/d.total*100,
+    hydro: d.hydro/d.total*100,
+    nuclear: d.nuclear/d.total*100,
+    wind: d.wind/d.total*100,
+    solar: d.solar/d.total*100
+  };
+});
+const datasets3 = ['thermal','hydro','nuclear','wind','solar'].map(t => ({
+  label: typeLabels[t],
+  data: shareData.map(s => s[t]),
+  backgroundColor: typeColors[t],
+  borderColor: typeColors[t],
+  borderWidth: 1,
+  stack: 'share',
+}));
+new Chart(ctx3, {
+  type: 'bar',
+  data: { labels: shareYears, datasets: datasets3 },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, usePointType: true, pointStyle: 'rectRounded' } },
+      tooltip: {
+        callbacks: {
+          label: function(ctx) {
+            return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(1) + '%';
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { color: '#f0eee8' }, ticks: { font: { size: 12 } } },
+      y: {
+        stacked: true,
+        max: 100,
+        grid: { color: '#f0eee8' },
+        ticks: { font: { size: 11 }, callback: v => v + '%' },
+        title: { display: true, text: '占比 (%)', font: { size: 11 } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

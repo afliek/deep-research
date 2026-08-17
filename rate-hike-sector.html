@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>利率上行受益板块全景分析（A股视角）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f6f8; color:#1f2933; font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif; line-height:1.65; }
+  .wrap { max-width:1060px; margin:0 auto; padding:28px 18px 56px; }
+  .header { background:#fff; border-radius:14px; padding:26px 30px; box-shadow:0 2px 10px rgba(0,0,0,.05); margin-bottom:16px; border-top:4px solid #185fa5; }
+  .header h1 { font-size:24px; color:#16181d; margin-bottom:6px; }
+  .header .sub { color:#5c6570; font-size:13px; }
+  .tag { display:inline-block; background:#e8f0fb; color:#185fa5; font-size:12px; padding:2px 10px; border-radius:12px; margin-right:6px; }
+  .card { background:#fff; border-radius:14px; padding:22px 26px; box-shadow:0 2px 10px rgba(0,0,0,.05); margin-bottom:16px; }
+  .card h2 { font-size:18px; color:#16181d; margin-bottom:12px; padding-left:11px; border-left:4px solid #185fa5; }
+  .card h3 { font-size:15px; color:#2c3e50; margin:14px 0 6px; }
+  .tldr { background:#f0f7ff; border:1px solid #c8ddf3; border-radius:10px; padding:14px 18px; margin:12px 0; font-size:14px; }
+  .tldr b { color:#185fa5; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+  th, td { border:1px solid #e3e7ec; padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#f0f2f5; color:#333; font-weight:600; }
+  .chain { display:flex; align-items:stretch; gap:6px; margin:12px 0; flex-wrap:wrap; }
+  .chain .node { flex:1; min-width:130px; border-radius:8px; padding:8px 10px; text-align:center; border:1px solid; font-size:13px; }
+  .chain .node .t2 { font-size:12px; margin-top:2px; }
+  .chain .arr { display:flex; align-items:center; color:#888780; font-size:16px; }
+  .cols { display:flex; gap:12px; margin:12px 0; flex-wrap:wrap; }
+  .cols .col { flex:1; min-width:250px; border-radius:10px; padding:12px 14px; border:1px solid; }
+  .cols .col h4 { font-size:14px; margin-bottom:8px; }
+  .cols .col li { font-size:13px; margin:5px 0 5px 16px; }
+  .cols .col .note { font-size:12px; margin-top:8px; }
+  .chart { width:100%; height:300px; margin:10px 0; }
+  .note { font-size:12px; color:#8a94a0; margin:4px 0 8px; }
+  .risk { background:#fdf7f7; border-left:4px solid #c0392b; padding:10px 14px; margin:8px 0; border-radius:0 8px 8px 0; font-size:13px; }
+  .concl { background:#16181d; color:#f2f4f7; border-radius:12px; padding:20px 24px; }
+  .concl h2 { color:#f2f4f7; border-left-color:#7fb3d5; }
+  .concl b { color:#7fb3d5; }
+  .src { font-size:12px; color:#98a2ad; margin-top:6px; }
+  .disclaimer { background:#f1f2f4; border-radius:10px; padding:12px 16px; font-size:12px; color:#5c6570; margin-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="tag">宏观传导</span><span class="tag">风格轮动</span><span class="tag">A股策略</span>
+    <h1>利率上行受益板块全景分析（A股视角）</h1>
+    <div class="sub">框架 + 板块分层 + 历史印证 + 当前环境定位 · 数据截至 2026-08-13</div>
+  </div>
+
+  <div class="card">
+    <h2>TL;DR · 30秒结论</h2>
+    <div class="tldr">
+      <b>利率上行利好的板块，由"利率为什么涨"决定，而非利率本身。</b><br>
+      ① <b>经济过热驱动</b> → 银行、保险（息差/资产端直接受益）+ 周期资源（涨价）；② <b>通胀回升驱动</b> → 抗通胀资源、银行，警惕滞胀；③ <b>政策收紧/防风险</b> → 几乎无受益板块。<br>
+      通用规律：<b>价值跑赢成长、金融跑赢科技</b>——银行/保险确定性最高，周期资源弹性最大（但依赖成因），高估值成长（AI/创新药/新能源）与高杠杆地产链系统性承压。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>一、传导框架：成因 → 路径 → 分层</h2>
+    <div class="chain">
+      <div class="node" style="background:#E1F5EE;border-color:#0F6E56;color:#085041;">经济复苏/过热<div class="t2" style="color:#0F6E56;">盈利扩张 → 受益面广</div></div>
+      <div class="node" style="background:#FAEEDA;border-color:#854F0B;color:#633806;">通胀回升<div class="t2" style="color:#854F0B;">抗通胀资产 · 防滞胀</div></div>
+      <div class="node" style="background:#FCEBEB;border-color:#A32D2D;color:#791F1F;">政策收紧/防风险<div class="t2" style="color:#A32D2D;">流动性收缩 · 几乎无受益</div></div>
+    </div>
+    <div class="chain">
+      <div class="arr">▼</div>
+    </div>
+    <div class="chain">
+      <div class="node" style="background:#E6F1FB;border-color:#185FA5;color:#0C447C;">贴现率↑ → 估值中枢↓<div class="t2" style="color:#185FA5;">利空主线：杀成长估值</div></div>
+      <div class="node" style="background:#E6F1FB;border-color:#185FA5;color:#0C447C;">银行息差↑<div class="t2" style="color:#185FA5;">资产重定价领先负债端</div></div>
+      <div class="node" style="background:#E6F1FB;border-color:#185FA5;color:#0C447C;">保险新增收益↑<div class="t2" style="color:#185FA5;">利差损担忧缓解</div></div>
+      <div class="node" style="background:#E6F1FB;border-color:#185FA5;color:#0C447C;">风格切换 → 流向价值<div class="t2" style="color:#185FA5;">现金流资产占优</div></div>
+    </div>
+    <div class="chain">
+      <div class="arr">▼</div>
+    </div>
+    <div class="cols">
+      <div class="col" style="background:#EAF3DE;border-color:#3B6D11;">
+        <h4 style="color:#27500A;">一阶受益 · 盈利直接改善</h4>
+        <li>银行：净息差扩张</li>
+        <li>保险：资产端收益上行</li>
+        <li>券商利息收入（弱）</li>
+        <div class="note" style="color:#5F5E5A;">确定性最高，不依赖成因</div>
+      </div>
+      <div class="col" style="background:#FAEEDA;border-color:#854F0B;">
+        <h4 style="color:#633806;">二阶受益 · 依赖成因</h4>
+        <li>周期资源：煤/油/有色</li>
+        <li>价值红利：公用/电力/运营商</li>
+        <li>顺周期：建材/机械</li>
+        <div class="note" style="color:#5F5E5A;">过热/通胀驱动才成立；价值红利属"相对抗跌"</div>
+      </div>
+      <div class="col" style="background:#FCEBEB;border-color:#A32D2D;">
+        <h4 style="color:#791F1F;">受损 · 贴现率敏感</h4>
+        <li>高估值成长：AI/创新药/新能源</li>
+        <li>高杠杆地产链</li>
+        <li>长久期类债资产</li>
+        <div class="note" style="color:#5F5E5A;">利率上行期系统性跑输</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>二、板块分层详表</h2>
+    <table>
+      <tr><th style="width:14%">层次</th><th style="width:18%">板块</th><th>受益逻辑</th><th style="width:26%">代表方向 / 条件</th></tr>
+      <tr><td rowspan="3"><b>一阶</b><br>盈利端直接受益</td><td><b>银行</b></td><td>贷款重定价快于存款成本调整 → 净息差走阔，营收利润直接改善</td><td>国有大行、优质城商行；确定性最高</td></tr>
+      <tr><td><b>保险</b></td><td>新增及再配置资金收益率上行，利差损担忧缓解；寿险弹性大于财险</td><td>寿险龙头；利率上行越陡越受益</td></tr>
+      <tr><td>券商（弱）</td><td>两融利息、固收自营受益，但利率上行压制股市估值，净效应中性</td><td>弹性依赖股市，非纯利率标的</td></tr>
+      <tr><td rowspan="3"><b>二阶</b><br>依赖利率上行成因</td><td><b>周期资源</b></td><td>商品涨价逻辑（仅过热/通胀驱动时成立）</td><td>煤炭、石油、有色、钢铁</td></tr>
+      <tr><td><b>价值红利</b></td><td>风格切换的"避风港"，相对收益占优；绝对收益上股息率吸引力相对债券下降</td><td>电力、公用事业、运营商、高速</td></tr>
+      <tr><td>顺周期</td><td>盈利扩张跟随经济强度</td><td>建材、机械、消费</td></tr>
+      <tr><td rowspan="3"><b>受损</b><br>贴现率敏感</td><td><b>高估值成长</b></td><td>折现率上行 → 估值中枢压缩，远期现金流占比越高的越受伤</td><td>半导体、AI算力、创新药、新能源</td></tr>
+      <tr><td><b>高杠杆地产链</b></td><td>融资成本上行 + 需求弱化，戴维斯双杀</td><td>地产、建筑、家居</td></tr>
+      <tr><td>长久期类债资产</td><td>利率上行期资本利得承压</td><td>水电等高股息类债品种</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>三、成因 × 受益矩阵</h2>
+    <table>
+      <tr><th style="width:20%">利率上行成因</th><th>银行</th><th>保险</th><th>周期资源</th><th>价值红利</th><th>高估值成长</th></tr>
+      <tr><td>经济复苏/过热</td><td>强</td><td>强</td><td>强</td><td>中</td><td>弱/负</td></tr>
+      <tr><td>通胀回升</td><td>中</td><td>中</td><td>强</td><td>中</td><td>负</td></tr>
+      <tr><td>政策收紧/防风险</td><td>弱</td><td>弱</td><td>弱</td><td>相对抗跌</td><td>强负</td></tr>
+    </table>
+    <h3>历史印证</h3>
+    <table>
+      <tr><th style="width:24%">时期</th><th>利率环境</th><th>结果</th></tr>
+      <tr><td>A股 2016-2017</td><td>金融去杠杆，10Y国债 2.6% → 4.0%</td><td>上证50/银行/保险"漂亮50"行情，中小创杀估值——价值完胜成长</td></tr>
+      <tr><td>美股 2022-2023</td><td>美联储激进加息周期</td><td>能源+银行跑赢，纳指/生物科技重挫——同样规律</td></tr>
+    </table>
+    <div class="note">结论规律：利率上行期，价值 &gt; 成长、金融 &gt; 科技；资源超额收益取决于经济强度而非利率本身。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、当前环境定位（2026年8月，中国）</h2>
+    <p style="font-size:13px;color:#5c6570;">当前中国并非利率上行期：10年期国债收益率约 1.8%（机构预期 2026 年区间 1.6%-2.0%、核心 1.7%-1.9%），货币政策"适度宽松"基调延续、降准降息预期仍在，市场利率处历史低位。因此"利率上涨"对 A 股当前更接近<b>情景推演</b>而非现实。</p>
+    <div id="chart1" class="chart"></div>
+    <div class="note">来源：中诚信国际、远东资信、银河证券等机构 2026 年利率展望（2025-12~2026-04，非一手来源）。当前点位为区间估算。</div>
+    <div class="risk"><b>若未来利率中枢上移</b>，大概率来自"PPI 转正 + 内需修复 + 反内卷再通胀"——这种情形下<b>银行（息差修复）、保险（长端利率回升）、上游资源（PPI 上行）</b>相对受益，而当前拥挤的高估值方向（AI 算力、题材成长）面临贴现率压力。<b>若为外部输入型通胀冲击（油价/地缘）</b>，则进入类滞胀逻辑：防御优先，周期资源一枝独秀。</div>
+  </div>
+
+  <div class="card concl">
+    <h2>结论</h2>
+    <p><b>利率上行期：买"赚钱靠利息差"的（银行/保险），买"涨价靠周期"的（资源，前提是经济强）；躲"估值靠远期现金流"的（高估值成长），躲"高杠杆"的（地产链）。而这一切的前提，是先判断利率为什么涨——成因决定受益板块，这是利率交易的第一性。</b></p>
+  </div>
+
+  <div class="src">数据来源：中国银河证券、中诚信国际、远东资信、华西证券等机构公开研报（2025-12~2026-04，非一手来源，需核实原文）；历史行情为公开市场复盘。历史规律不代表未来，市场可能提前定价或反向交易。</div>
+
+  <div class="disclaimer"><b>免责声明：</b>以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</div>
+</div>
+
+<script>
+(function(){
+  echarts.init(document.getElementById('chart1')).setOption({
+    tooltip: { trigger: 'item' },
+    xAxis: { type: 'category', data: ['10年期国债收益率（%）'] },
+    yAxis: { type: 'value', min: 1.2, max: 2.2, name: '%' },
+    series: [{
+      type: 'line',
+      data: [1.8],
+      symbolSize: 10,
+      itemStyle: { color: '#c0392b' },
+      lineStyle: { color: '#c0392b', width: 2 },
+      label: { show: true, position: 'top', formatter: '当前约1.8%', color: '#a32d2d', fontWeight: 500 },
+      markArea: {
+        silent: true,
+        itemStyle: { color: 'rgba(55,138,221,0.18)' },
+        data: [[{ yAxis: 1.6, name: '机构预期区间' }, { yAxis: 2.0 }]]
+      },
+      markLine: {
+        silent: true,
+        symbol: 'none',
+        label: { show: false },
+        lineStyle: { color: '#185fa5', type: 'dashed' },
+        data: [
+          { yAxis: 1.6 },
+          { yAxis: 2.0 }
+        ]
+      }
+    }]
+  });
+})();
+</script>
+</body>
+</html>

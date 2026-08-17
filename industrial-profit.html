@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国工业巨头利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #f59e0b;
+    --accent-2: #fbbf24;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .chart-box { width:100%; height:400px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.8; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-blue { display:inline-block; background:rgba(245,158,11,0.15); color:#fbbf24; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(245,158,11,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .chart-box{height:320px;} .kpi .num{font-size:20px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>美国工业巨头利润格局与30年趋势分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财年口径为自然年FY2025 · 数据来源见各图表注释</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>工业板块是第五大利润板块</b>：2024年净利润 <b>1819亿美元、占标普500总利润8.1%</b>，2025年占比约 <b>8.5%</b>，小幅回升。</li>
+      <li><b>2025年工业巨头利润排名</b>：卡特彼勒（89亿美元）＞ GE航空航天（87亿）＞ 联合太平洋（71亿）＞ 雷神（67亿）＞ UPS（56亿）＞ 洛克希德马丁（50亿）＞ 霍尼韦尔（47亿）。<b>TOP7合计约467亿美元</b>。</li>
+      <li><b>近30年趋势</b>：工业板块利润占比长期在 <b>7-9%</b> 区间横盘——不同于科技板块的占比翻倍，工业是标普500中利润结构最"稳定"的大板块之一，周期性波动但中枢几乎未变。</li>
+      <li><b>核心驱动</b>：2008年危机后基建与再工业化、2017年税改（卡特彼勒等受益）、疫情后供应链重构+国防开支扩张（GE航空、雷神、洛克希德订单创纪录）、2025年制造业回流与AI数据中心建设（电力设备、工程机械需求）。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">8.1<small>%</small></div>
+      <div class="label">工业板块占标普500<br>总净利润比例（2024财年，BofA口径）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">467<small>亿美元</small></div>
+      <div class="label">TOP7工业巨头2025年净利润合计<br>（卡特彼勒/GE航空/联合太平洋/雷神/UPS/洛克希德/霍尼韦尔）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">89<small>亿美元</small></div>
+      <div class="label">卡特彼勒2025年净利润<br>（工程机械龙头，全球基建+矿业资本开支驱动）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">7-9%</div>
+      <div class="label">近30年工业板块盈利占比横盘区间<br>（周期性波动，中枢几乎不变）</div>
+    </div>
+  </div>
+
+  <!-- 图1：30年趋势 -->
+  <div class="card">
+    <h2>一、近30年工业板块盈利占标普500比重趋势</h2>
+    <div class="sub">口径说明：工业板块包含航空航天、机械、运输、国防、专业服务等子行业；虚线为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>工业板块盈利占标普500比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 11%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2000</td><td>约 9.5%（估算）</td><td>区间估算</td><td>互联网泡沫/周期年份</td></tr>
+        <tr><td>2005</td><td>约 9%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2006</td><td>约 9%（估算）</td><td>区间估算</td><td>制造业景气，波音/GE/卡特彼勒利润高企</td></tr>
+        <tr><td>2010</td><td>约 7%（估算）</td><td>区间估算</td><td>金融危机后制造业低谷</td></tr>
+        <tr><td>2015</td><td>约 8%（估算）</td><td>区间估算</td><td>页岩气开发+基建周期</td></tr>
+        <tr><td>2020</td><td>约 7%（估算）</td><td>区间估算</td><td>疫情冲击，航空/制造业停摆</td></tr>
+        <tr><td>2023</td><td>约 7.5%（估算）</td><td>区间估算</td><td>供应链修复+国防订单增长</td></tr>
+        <tr><td>2024</td><td>8.1%</td><td>BofA Global Research</td><td>年度，pro-forma口径（实际值）</td></tr>
+        <tr><td>2025</td><td>约 8.5%（估算）</td><td>上市公司财报加总推算</td><td>再工业化+国防+AI基建需求共振</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 工业板块是标普500中利润占比最"平稳"的大板块之一——30年间始终在7-9%区间波动，既没有像金融那样大起大落，也没有像科技那样持续扩张。<br>
+      ② 周期性特征明显：2008年危机（7%）与2020年疫情（7%）构成两个低点，2017年税改与2024-2025年再工业化构成高点。<br>
+      ③ <b>结构性亮点</b>：2022年以来航空航天与国防进入超级周期——GE航空航天（2025年净利润+33%、在手订单1900亿美元）、雷神、洛克希德均创纪录；卡特彼勒受益于全球基建与矿业资本开支，2025年净利润89亿创历史新高。
+    </div>
+  </div>
+
+  <!-- 图2：工业巨头利润排名 -->
+  <div class="card">
+    <h2>二、美国工业巨头净利润排名（2025年）</h2>
+    <div class="sub">单位：亿美元 · GAAP净利润 · 数据来源：腾讯自选股/NeoData 利润表、各公司年报 · 波音2025年扭亏（净利22亿）未入前7</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年净利润(亿美元)</th><th>2024年(亿美元)</th><th>同比</th><th>看点</th></tr>
+        <tr><td>1</td><td>卡特彼勒 CAT</td><td>usCAT</td><td>88.84</td><td>约84</td><td class="tag-green">+6%</td><td>工程机械全球龙头，矿业+基建+AI数据中心电力需求</td></tr>
+        <tr><td>2</td><td>GE航空航天 GE</td><td>usGE</td><td>87.04</td><td>65.56</td><td class="tag-green">+32.8%</td><td>LEAP发动机交付创纪录，在手订单约1900亿美元</td></tr>
+        <tr><td>3</td><td>联合太平洋 UNP</td><td>usUNP</td><td>71.38</td><td>67.47</td><td class="tag-green">+5.8%</td><td>美国最大铁路公司，营业利润率创纪录59.8%</td></tr>
+        <tr><td>4</td><td>雷神技术 RTX</td><td>usRTX</td><td>67.32</td><td>约55</td><td class="tag-green">+22%</td><td>国防+航空航天双主业，导弹/雷达需求旺盛</td></tr>
+        <tr><td>5</td><td>联合包裹 UPS</td><td>usUPS</td><td>55.72</td><td>约50</td><td class="tag-green">+11%</td><td>快递物流龙头，电商+供应链需求恢复</td></tr>
+        <tr><td>6</td><td>洛克希德马丁 LMT</td><td>usLMT</td><td>50.17</td><td>约54</td><td class="tag-red">-7%</td><td>F-35战斗机+导弹防御，国防订单稳定</td></tr>
+        <tr><td>7</td><td>霍尼韦尔 HON</td><td>usHON</td><td>47.29</td><td>57.05</td><td class="tag-red">-17.1%</td><td>航空航天+自动化，Q4受重组费用拖累</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>补充说明：</b>① <b>波音2025年扭亏为盈</b>（净利润22.3亿美元，2024年亏损），但仍在安全/产能爬坡期，未进入利润前7；其商用飞机交付恢复+国防业务是2025年工业板块的重要增量。<br>
+      ② GE航空航天为2024年4月从通用电气分拆后的独立公司，2025年净利润87亿美元、创历史新高，LEAP发动机交付量+28%创纪录，航空发动机后市场（维修）利润持续爬坡。<br>
+      ③ 工业板块中运输（UNP、UPS）、机械（CAT）、航空航天与国防（GE、RTX、LMT）三大子行业贡献了TOP7的全部利润——若计入波音（22亿）与工程/电气设备公司，板块2025年合计净利润约2000-2200亿美元。
+    </div>
+  </div>
+
+  <!-- 图3：结构占比 -->
+  <div class="card">
+    <h2>三、2024财年标普500各行业净利润结构（工业板块所处位置）</h2>
+    <div class="sub">口径：BofA Global Research 年度盈利预测（pro-forma口径），单位十亿美元</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>行业板块</th><th>2024年盈利预测(十亿美元)</th><th>占比</th></tr>
+        <tr><td>信息技术</td><td>453.4</td><td>20.2%</td></tr>
+        <tr><td>金融</td><td>335.3</td><td>14.9%</td></tr>
+        <tr><td>医疗保健</td><td>299.8</td><td>13.3%</td></tr>
+        <tr><td>通信服务</td><td>205.3</td><td>9.1%</td></tr>
+        <tr class="hl"><td><b>工业</b></td><td><b>181.9</b></td><td><b>8.1%</b></td></tr>
+        <tr><td>可选消费</td><td>179.3</td><td>8.0%</td></tr>
+        <tr><td>能源</td><td>140.5</td><td>6.2%</td></tr>
+        <tr><td>必需消费</td><td>126.6</td><td>5.6%</td></tr>
+        <tr><td>公用事业</td><td>60.1</td><td>2.7%</td></tr>
+        <tr><td>房地产</td><td>57.6</td><td>2.6%</td></tr>
+        <tr><td>原材料</td><td>47.8</td><td>2.1%</td></tr>
+        <tr class="tot"><td><b>标普500合计</b></td><td><b>2249.6</b></td><td><b>100%</b></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>定位解读：</b>工业板块2024年以1819亿美元净利润位列全市场<b>第五大利润板块</b>，占8.1%——与可选消费（8.0%）几乎并列，处于全市场利润格局的"腰部"位置。<br>
+      值得注意的是：工业板块利润的"含金量"在提升——航空航天与国防进入超级周期、工程机械创历史新高，2025年占比预计升至8.5%，<b>是少数在AI时代反而受益的"实体经济"板块</b>（AI数据中心建设拉动电力设备、工程机械与物流需求）。
+    </div>
+  </div>
+
+  <!-- 结论与风险 -->
+  <div class="card">
+    <h2>四、总结：30年趋势的五个阶段</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <table class="plain">
+      <tr><th style="width:150px">阶段</th><th style="width:110px">占比区间</th><th>核心驱动</th></tr>
+      <tr><td>1995-2005（30年前）</td><td>约9%</td><td>制造业黄金期（GE/波音/卡特彼勒），占比约10-11%</td></tr>
+      <tr><td>2008-2012</td><td>7-8%</td><td>金融危机后制造业低谷，航空业受挫</td></tr>
+      <tr><td>2013-2019</td><td>7.5-8.5%</td><td>2017年税改红利+页岩气开发+基建投资回升</td></tr>
+      <tr><td>2020-2025</td><td>7% → 8.5%</td><td>疫情低谷后V型修复，国防+航空航天超级周期，AI数据中心基建拉动</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>工业板块2026年有望延续上行——三大长逻辑：① 全球国防开支扩张（GE航空/雷神/洛克希德在手订单创纪录）；② 制造业回流+再工业化政策（卡特彼勒、霍尼韦尔受益）；③ AI数据中心建设带来的电力、工程机械与物流需求（卡特彼勒明确提到数据中心电力需求）。主要风险：全球经济放缓压制运输与机械周期、波音供应链质量问题的外溢影响。<br>
+      <b>口径提示：</b>工业板块子行业差异大（航空航天/机械/运输/国防），板块整体占比稳定但内部结构变化剧烈——过去30年"老工业"（综合制造）占比下降，航空航天与国防占比持续上升。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① NeoData/腾讯自选股利润表（卡特彼勒、GE、联合太平洋、雷神、UPS、洛克希德、霍尼韦尔、波音 FY2024/FY2025，2026-08-05查询）；
+    ② GE航空航天2025 Q4及全年财报新闻稿（2026-01-22，GE Aerospace）；
+    ③ Union Pacific 2025 Q4及全年业绩公告（2026-01-27）；
+    ④ 搜狐财经《波音、空客、RTX、洛克希德马丁、赛峰、罗罗等23大军工和航空航天企业2025年Q4和全年财报业绩汇总》；
+    ⑤ Macrotrends（GE、UNP、HON 净利润历史数据）；
+    ⑥ BofA Global Research《US Equity Outlook: time to get picky》（2024-07，标普500分行业盈利）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：30年趋势 ============
+(function(){
+  var years = ['1995','2000','2005','2006','2010','2015','2020','2023','2024','2025'];
+  var share = [11, 9.5, 9,9.0, 7.0, 8.0, 7.0, 7.5, 8.1, 8.5];
+  var isEst = [true,true,true,true, true, true, true, true, false, true];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    points.push({
+      value: [years[i], share[i]],
+      itemStyle: isEst[i] ? { color: '#94a3b8', borderType: 'dashed' } : { color: '#f59e0b' },
+      label: { show: i > 0, formatter: share[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' }
+    });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, max: 12, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      name: '工业板块盈利占比',
+      type: 'line',
+      data: points,
+      symbolSize: 9,
+      lineStyle: { width: 3, color: '#f59e0b' },
+      connectNulls: false
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：工业巨头利润排名 ============
+(function(){
+  var names = ['卡特彼勒','GE航空','联合太平洋','雷神','UPS','洛克希德','霍尼韦尔'];
+  var vals = [88.84, 87.04, 71.38, 67.32, 55.72, 50.17, 47.29];
+  var colors = ['#f59e0b','#fbbf24','#fcd34d','#fde68a','#f97316','#fb923c','#64748b'];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿美元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润(亿美元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      type: 'bar',
+      data: vals.map(function(v, i){ return { value: v, itemStyle: { color: colors[i], borderRadius: [6,6,0,0] } }; }),
+      barWidth: 38,
+      label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' }
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图3：行业结构环形图 ============
+(function(){
+  var data = [
+    { name: '信息技术', value: 453.4, itemStyle: { color: '#6366f1' } },
+    { name: '金融', value: 335.3, itemStyle: { color: '#0ea5e9' } },
+    { name: '医疗保健', value: 299.8, itemStyle: { color: '#22c55e' } },
+    { name: '通信服务', value: 205.3, itemStyle: { color: '#a855f7' } },
+    { name: '工业', value: 181.9, itemStyle: { color: '#f59e0b' } },
+    { name: '可选消费', value: 179.3, itemStyle: { color: '#ef4444' } },
+    { name: '能源', value: 140.5, itemStyle: { color: '#64748b' } },
+    { name: '必需消费', value: 126.6, itemStyle: { color: '#f97316' } },
+    { name: '公用事业', value: 60.1, itemStyle: { color: '#14b8a6' } },
+    { name: '房地产', value: 57.6, itemStyle: { color: '#d946ef' } },
+    { name: '原材料', value: 47.8, itemStyle: { color: '#94a3b8' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 十亿美元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['42%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c3 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+    if (t === 'chart3' && window.__c3) window.__c3.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>

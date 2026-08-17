@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>寒武纪（688256）深度研报：千亿激励的底气、产能天花板与三情景测算</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f6f8; color:#1f2933; font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif; line-height:1.65; }
+  .wrap { max-width:1060px; margin:0 auto; padding:28px 18px 56px; }
+  .header { background:#fff; border-radius:14px; padding:26px 30px; box-shadow:0 2px 10px rgba(0,0,0,.05); margin-bottom:18px; border-top:4px solid #c0392b; }
+  .header h1 { font-size:24px; color:#16181d; margin-bottom:6px; }
+  .header .sub { color:#5c6570; font-size:13px; }
+  .tag { display:inline-block; background:#fdecea; color:#c0392b; font-size:12px; padding:2px 10px; border-radius:12px; margin-right:6px; }
+  .card { background:#fff; border-radius:14px; padding:22px 26px; box-shadow:0 2px 10px rgba(0,0,0,.05); margin-bottom:16px; }
+  .card h2 { font-size:18px; color:#16181d; margin-bottom:12px; padding-left:11px; border-left:4px solid #c0392b; }
+  .card h3 { font-size:15px; color:#2c3e50; margin:14px 0 6px; }
+  .tldr { background:#fff8f0; border:1px solid #f0d9b5; border-radius:10px; padding:14px 18px; margin:12px 0; font-size:14px; }
+  .tldr b { color:#c0392b; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+  th, td { border:1px solid #e3e7ec; padding:7px 10px; text-align:left; }
+  th { background:#f0f2f5; color:#333; font-weight:600; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .kpi { display:flex; flex-wrap:wrap; gap:10px; margin:12px 0; }
+  .kpi .box { flex:1; min-width:140px; background:#fafbfc; border:1px solid #e8ebf0; border-radius:10px; padding:10px 12px; }
+  .kpi .box .v { font-size:20px; font-weight:700; color:#c0392b; }
+  .kpi .box .l { font-size:12px; color:#6b7480; margin-top:2px; }
+  .chart { width:100%; height:340px; margin:10px 0; }
+  .note { font-size:12px; color:#8a94a0; margin:4px 0 8px; }
+  .good { background:#f4faf7; border-left:4px solid #0e7a4a; padding:10px 14px; margin:8px 0; border-radius:0 8px 8px 0; font-size:13px; }
+  .risk { background:#fdf7f7; border-left:4px solid #c0392b; padding:10px 14px; margin:8px 0; border-radius:0 8px 8px 0; font-size:13px; }
+  .chain { display:flex; align-items:center; gap:6px; margin:12px 0; flex-wrap:wrap; }
+  .chain .node { flex:1; min-width:120px; border-radius:8px; padding:8px 10px; text-align:center; border:1px solid; font-size:13px; }
+  .chain .node .t2 { font-size:12px; margin-top:2px; }
+  .chain .arr { color:#888780; font-size:16px; }
+  .bar { margin:10px 0; }
+  .bar .row { display:flex; height:22px; border-radius:4px; overflow:hidden; margin:6px 0; }
+  .bar .row span { display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; white-space:nowrap; }
+  .legend { font-size:12px; color:#5c6570; margin-top:4px; }
+  .concl { background:#16181d; color:#f2f4f7; border-radius:12px; padding:20px 24px; }
+  .concl h2 { color:#f2f4f7; border-left-color:#e0a458; }
+  .concl b { color:#e0a458; }
+  .src { font-size:12px; color:#98a2ad; margin-top:6px; }
+  .disclaimer { background:#f1f2f4; border-radius:10px; padding:12px 16px; font-size:12px; color:#5c6570; margin-top:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="tag">个股深度</span><span class="tag">股权激励</span><span class="tag">产能研究</span><span class="tag">情景测算</span>
+    <h1>寒武纪（688256.SH）：千亿激励的底气、产能天花板与三情景业绩测算</h1>
+    <div class="sub">合并版精简研报 · 数据截至 2026-08-13 · 一手来源：公司公告/半年报/年报；行业参数为媒体与专家纪要口径（未经官方证实）</div>
+  </div>
+
+  <div class="card">
+    <h2>TL;DR · 三条主线</h2>
+    <div class="tldr">
+      <b>① 敢订千亿考核（2026-28累计营收1000亿）：</b>不是"敢"而是"算得过来账"——订单可见性（H1存货82.48亿+预付款29.14亿，111亿真金白银锁产能）+卖方市场（供需缺口约40%）+政策刚性（强制适配/信创死线）+上一期激励100%超额兑现，本质是"以高目标求中结果"的预期管理（目标值1000/触发值800双轨）。<br>
+      <b>② 产能是命门：</b>先进制程（7nm级）实质单点依赖中芯N+2，2026年靠下半年产能翻倍勉强够用，2027-2028年大概率跟不上考核斜率（设备"长短脚"、良率30-35%、封装/基板/HBM多级瓶颈）。<br>
+      <b>③ 三情景测算：</b>谨慎116/220/406亿（三年累计742，触发值以下激励作废）；温和151/284/491亿（累计926，80%归属）；激进182/364/644亿（累计1190，100%归属）。<b>温和情景≈考核目标值</b>——说明目标"中性偏乐观"，不是画饼。
+    </div>
+    <div class="kpi">
+      <div class="box"><div class="v">135亿</div><div class="l">2026营收目标（触发108亿）</div></div>
+      <div class="box"><div class="v">1000亿</div><div class="l">三年累计目标（触发800亿）</div></div>
+      <div class="box"><div class="v">85.4%</div><div class="l">激励覆盖率（945人/1107人）</div></div>
+      <div class="box"><div class="v">40万颗</div><div class="l">2026大芯片交付目标（行业口径）</div></div>
+      <div class="box"><div class="v">742/926/1190亿</div><div class="l">三情景三年累计营收</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>一、2026年激励方案与"敢"的底气</h2>
+    <table>
+      <tr><th style="width:22%">要素</th><th>内容</th><th style="width:34%">要点</th></tr>
+      <tr><td>授予总量/价格</td><td class="num">500万股（0.80%）/ 750元</td><td>公告日收盘1128元，折价33.5%；人均账面浮盈约160万</td></tr>
+      <tr><td>覆盖</td><td class="num">945人（85.37%）</td><td>技术骨干761人占80%，防挖角"金手铐"</td></tr>
+      <tr><td>考核指标</td><td>营收（全员）+ 扣非净利（8名高管）</td><td>首次引入利润指标：27年≥91.88亿（+300%）、28年≥137.82亿（+500%），基数为2025年扣股份支付净利22.97亿</td></tr>
+      <tr><td>归属规则</td><td>目标值100% / 触发值80% / 以下归零</td><td>个人考核分档100%~0%；新员工三期30/30/40</td></tr>
+    </table>
+    <div id="chart1" class="chart"></div>
+    <div class="note">注：柱状为考核口径（单年/累计），非同一统计口径，仅比较数量级。来源：公司激励计划草案（2026-07-28）。</div>
+
+    <h3>五重底气（精简）</h3>
+    <div class="good"><b>① 订单可见性（最硬）：</b>H1存货82.48亿（+66.8%，原材料57.49亿+委托加工25.37亿）、预付款29.14亿（+291%）、合同负债1.88亿（+306倍）——Fabless按单备货，产能已提前买下。</div>
+    <div class="good"><b>② 卖方市场：</b>2026年国产AI芯片缺口约100-200万颗（需求400-450万 vs 供给270-300万），英伟达在华份额85%→约8%，H20停产；瓶颈是产能不是需求。</div>
+    <div class="good"><b>③ 政策刚性：</b>发改委指导大模型适配国产算力（2026-05）、9款国产芯片I级安全认证、79号文2027年信创死线。</div>
+    <div class="good"><b>④ 兑现记录：</b>2023年激励目标11/26/46亿，实际11.74亿/累计76.7亿，100%归属——上一轮"画的饼"兑现了。</div>
+    <div class="good"><b>⑤ 算得过账：</b>高管利润目标对应净利率23%-34%，远低于当前38.5%，利润比营收更容易达成；股份支付费用约15亿量级可控；120亿授信（2026-05获批）备足弹药。</div>
+
+    <h3>设计巧思</h3>
+    <table>
+      <tr><th style="width:22%">设计</th><th>作用</th></tr>
+      <tr><td>目标/触发双轨（1000/800）</td><td>"高目标求中结果"：退一档（800亿）仍是2025年的12倍，向下有安全垫</td></tr>
+      <tr><td>累计口径考核</td><td>平滑年度波动，产能爬坡留弹性</td></tr>
+      <tr><td>利润指标只压8名高管</td><td>员工扛营收、高管扛利润；向市场传递利润率信心</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>二、产能命门：流片渠道与中芯产能</h2>
+    <table>
+      <tr><th style="width:24%">环节</th><th>渠道</th><th>状态</th></tr>
+      <tr><td>先进制程（7nm级）</td><td>中芯国际 N+2（大陆唯一）</td><td>思元590/690主力产品核心命脉，<b>实质单点依赖</b></td></tr>
+      <tr><td>成熟制程（28nm+）</td><td>华虹、中芯</td><td>非核心产品，无瓶颈</td></tr>
+      <tr><td>海外渠道</td><td>三星约5万片/月（8-5nm）；台积电已断供</td><td>三星可流片但合规风险+良率波动，不可规模化依赖</td></tr>
+      <tr><td>封测/基板/HBM</td><td>长电、通富（2.5D）；ABF基板日本/台湾进口；HBM海外+长鑫爬坡</td><td>次级瓶颈：CoWoS类封装紧、ABF依赖进口</td></tr>
+    </table>
+    <h3>中芯产能：官方 vs 行业口径</h3>
+    <table>
+      <tr><th style="width:18%">口径</th><th>关键数据</th></tr>
+      <tr><td>官方（中芯业绩会）</td><td>2026Q2产能利用率93.7%近满产；2026年新增约4万片12英寸月产能、资本开支约80亿美元；<b>关键设备提前买但配套未到位，"已购设备不一定当年形成完整产能"</b>；2026年折旧+30%</td></tr>
+      <tr><td>行业（纪要/媒体）</td><td>N+2月产能约1.5-2万片，良率30-35%，单片切23-28颗；全年最多约260万颗 vs 需求420万颗，缺口约40%；2026Q4前产能计划翻倍</td></tr>
+    </table>
+    <h3>N+2产能分配（2026年，行业口径）</h3>
+    <div class="bar">
+      <div class="row">
+        <span style="width:43%;background:#E24B4A;">华为 43%</span>
+        <span style="width:11%;background:#BA7517;">寒武纪 11%</span>
+        <span style="width:5%;background:#888780;">海光 5%</span>
+        <span style="width:41%;background:#D3D1C7;color:#444441;">其他 41%</span>
+      </div>
+      <div class="legend">华为锁5年长约+优先良率；寒武纪Q1约2000片/月，下半年随中芯翻倍计划同步翻倍；分配逻辑=国家优先级+国资背景+地方配额，非纯市场出价。</div>
+    </div>
+    <div class="chain">
+      <div class="node" style="background:#E6F1FB;border-color:#185FA5;color:#0C447C;">芯片设计<div class="t2" style="color:#185FA5;">寒武纪 Fabless</div></div>
+      <div class="arr">→</div>
+      <div class="node" style="background:#FCEBEB;border-color:#A32D2D;color:#791F1F;">晶圆制造<div class="t2" style="color:#A32D2D;">中芯 N+2 · 最紧</div></div>
+      <div class="arr">→</div>
+      <div class="node" style="background:#FAEEDA;border-color:#854F0B;color:#633806;">封装·基板<div class="t2" style="color:#854F0B;">长电/通富 · ABF进口</div></div>
+      <div class="arr">→</div>
+      <div class="node" style="background:#E1F5EE;border-color:#0F6E56;color:#085041;">服务器整机<div class="t2" style="color:#0F6E56;">工业富联/华懋</div></div>
+    </div>
+    <div class="tldr"><b>结论：2026年勉强够用，2027-2028年跟不上目标斜率。</b>2026年135亿目标靠"下半年产能翻倍"兜底（与寒武纪月产能翻倍同步）；但2027年270亿、2028年595亿需出货量在40万颗基础上再翻3-4倍，依赖中芯N+2扩产3-4倍——卡在设备、良率、封装、基板四道锁上，非寒武纪单方可解。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、产能驱动三情景业绩测算（2026-2028E）</h2>
+    <p style="font-size:13px;color:#5c6570;">模型：月配额（片）× 25颗/片 × 良率 = 年出货（万颗）× ASP = 营收 → 净利率 = 净利。三情景仅动配额、良率、ASP 三个变量。</p>
+    <table>
+      <tr><th>驱动变量（26/27/28E）</th><th class="num">谨慎</th><th class="num">温和</th><th class="num">激进</th></tr>
+      <tr><td>月产能配额（片）</td><td class="num">2500/4200/6500</td><td class="num">3000/6000/10000</td><td class="num">3400/8000/14000</td></tr>
+      <tr><td>良率</td><td class="num">30%/35%/40%</td><td class="num">35%/40%/45%</td><td class="num">38%/45%/50%</td></tr>
+      <tr><td>ASP（万元/颗）</td><td class="num">5.8</td><td class="num">6.3</td><td class="num">7.0</td></tr>
+      <tr><td>隐含年出货（万颗）</td><td class="num">20/38/70</td><td class="num">24/45/78</td><td class="num">26/52/92</td></tr>
+    </table>
+    <div id="chart2" class="chart"></div>
+    <div class="note">虚线为激励目标值单年隐含路径（135/270/595亿）。来源：行业参数口径测算（非官方，仅量级参考）。</div>
+    <table>
+      <tr><th>指标（亿元）</th><th class="num">谨慎</th><th class="num">温和</th><th class="num">激进</th></tr>
+      <tr><td>2026E / 2027E / 2028E 营收</td><td class="num">116 / 220 / 406</td><td class="num">151 / 284 / 491</td><td class="num">182 / 364 / 644</td></tr>
+      <tr><td>三年累计营收</td><td class="num">742</td><td class="num">926</td><td class="num">1190</td></tr>
+      <tr><td>归母净利（净利率27%/30%/33%）</td><td class="num">31 / 59 / 110</td><td class="num">45 / 85 / 147</td><td class="num">60 / 120 / 213</td></tr>
+    </table>
+    <h3>映射到激励考核</h3>
+    <table>
+      <tr><th>考核节点</th><th class="num">谨慎</th><th class="num">温和</th><th class="num">激进</th></tr>
+      <tr><td>2026年135亿（触发108）</td><td class="num">116，仅80%归属</td><td class="num">151，100%</td><td class="num">182，超额</td></tr>
+      <tr><td>26-27累计405亿（触发324）</td><td class="num">336，80%</td><td class="num">435，100%</td><td class="num">546，超额</td></tr>
+      <tr><td>26-28累计1000亿（触发800）</td><td class="num">742，<b>触发值以下作废</b></td><td class="num">926，80%</td><td class="num">1190，100%</td></tr>
+      <tr><td>高管利润 27年91.88/28年137.82</td><td class="num">59/110，两年不达标</td><td class="num">85/147，<b>27年差7%砍半</b>，28年达标</td><td class="num">120/213，全达标</td></tr>
+    </table>
+    <h3>三点洞察</h3>
+    <div class="good"><b>① 温和情景≈公司目标值：</b>中性假设（月均3000片/良率35%/ASP 6.3万）算得三年累计926亿，落在1000亿目标九成附近——目标"中性偏乐观"，需要产能翻倍如期兑现但不需要奇迹。</div>
+    <div class="good"><b>② 高管利润考核比员工营收考核苛刻一档：</b>温和情景营收可拿80%归属，但高管2027年利润（85亿）离91.88亿差一口气——及格线更高，要么真信心，要么强化信号。</div>
+    <div class="good"><b>③ 情景差异根源全在产能，不在需求：</b>742 vs 1190亿的差距对应中芯扩产设备落地率、良率爬坡、寒武纪能否守住约13%配额（华为挤占风险）。</div>
+    <h3>季度验证清单</h3>
+    <div class="risk">① 2026Q3/Q4单季营收是否站上35-40亿（对应年化140-160亿温和档）；② 存货+预付款是否继续环比攀升；③ 中芯"年底新增4万片12英寸"指引兑现度；④ 思元790流片节奏（决定ASP能否上7万）。</div>
+  </div>
+
+  <div class="card concl">
+    <h2>结论</h2>
+    <p><b>寒武纪这次激励，本质是用市场已price-in的乐观预期做对赌：考核目标≈卖方最乐观情形，达成则全员兑现、股价有锚；退一档触发值仍是爆发式增长。真正决定"敢不敢"的从来不是需求，而是产能——所以"敢"的底气来自'稀缺产能=确定收入'的卖方市场商业模式+111亿真金白银的备货背书；而"能不能兑现"的变量，全部收敛到中芯N+2的扩产节奏与良率爬坡上。</b></p>
+  </div>
+
+  <div class="src">数据来源：公司公告（2026年激励计划草案2026-07-28、2026年半年报2026-08-07、2025年年报2026-03-13、2023年激励计划2023-11-17）为一手来源；行业产能/分配/良率参数与券商预测引自媒体、专家纪要、研报（2026-05~2026-08，非一手来源，需核实原文），各来源口径存在差异（如N+2月产能1.5-2万片与3.5-6万片两个版本）；三情景测算基于上述行业参数，仅为量级参考。</div>
+
+  <div class="disclaimer"><b>免责声明：</b>以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</div>
+</div>
+
+<script>
+(function(){
+  echarts.init(document.getElementById('chart1')).setOption({
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['目标值（100%归属）', '触发值（80%归属）'] },
+    xAxis: { type: 'category', data: ['2026年单年', '2026-2027累计', '2026-2028累计'] },
+    yAxis: { type: 'value', name: '营收（亿元）' },
+    series: [
+      { name: '目标值（100%归属）', type: 'bar', barWidth: 40, data: [135, 405, 1000], itemStyle: { color: '#c0392b' } },
+      { name: '触发值（80%归属）', type: 'bar', barWidth: 40, data: [108, 324, 800], itemStyle: { color: '#e67e22' } }
+    ]
+  });
+
+  echarts.init(document.getElementById('chart2')).setOption({
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['谨慎', '温和', '激进'] },
+    xAxis: { type: 'category', data: ['2026E', '2027E', '2028E'] },
+    yAxis: { type: 'value', name: '营收（亿元）' },
+    series: [
+      { name: '谨慎', type: 'bar', barWidth: 24, data: [116, 220, 406], itemStyle: { color: '#b4b2a9' }, markLine: { symbol: 'none', label: { show: false }, lineStyle: { color: '#a32d2d', type: 'dashed' }, data: [ { xAxis: '2026E', yAxis: 135 }, { xAxis: '2027E', yAxis: 270 }, { xAxis: '2028E', yAxis: 595 } ] } },
+      { name: '温和', type: 'bar', barWidth: 24, data: [151, 284, 491], itemStyle: { color: '#378add' } },
+      { name: '激进', type: 'bar', barWidth: 24, data: [182, 364, 644], itemStyle: { color: '#e24b4a' } }
+    ]
+  });
+})();
+</script>
+</body>
+</html>

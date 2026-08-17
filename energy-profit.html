@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美国能源巨头利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #d97706;
+    --accent-2: #fbbf24;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .tag-blue { display:inline-block; background:rgba(217,119,6,0.15); color:#fbbf24; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tabs { display:flex; gap:8px; margin-bottom:10px; }
+  .tab { padding:6px 16px; border-radius:6px; background:rgba(255,255,255,0.06); color:var(--text-secondary); font-size:13px; cursor:pointer; border:1px solid var(--border); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .view-table, .view-chart { display:none; }
+  .view-chart.active { display:block; }
+  .view-table.active { display:block; }
+  .hl { background:rgba(217,119,6,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tot td { background:rgba(255,255,255,0.05); color:#f1f5f9; font-weight:600; }
+  @media(max-width:760px){ .kpi .num{font-size:20px;} .chart-box{height:320px;} }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="sector-top10.html" class="nav-back">← 返回十大行业总览</a>
+</nav>
+
+<div class="wrap">
+  <h1>美国能源巨头利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月5日 · 财年口径为自然年FY2025 · 数据来源见各图表注释</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>能源板块是第七大利润板块</b>：2024年净利润 <b>1405亿美元、占标普500总利润6.2%</b>。但2022年油价暴涨时曾达到约15%（全市场前三），2023-2025年随油价回落大幅缩水，<b>2025年占比降至约5.5%</b>。</li>
+      <li><b>2025年龙头利润排名</b>：埃克森美孚（288亿美元）＞ 雪佛龙（123亿）＞ 康菲石油（80亿）。三大油企2025年净利润较2024年普遍下滑15-30%（2024年：XOM 337亿、CVX 177亿、COP 92亿）。</li>
+      <li><b>近30年趋势</b>：能源板块盈利占比呈现极端的<b>油价周期驱动</b>——2006年约12%、2015-2016年油价暴跌至6%以下、2020年疫情油价转负致板块整体亏损、2022年俄乌冲突油价冲高回落峰值约15%、2024年回落至6.2%。</li>
+      <li><b>核心驱动</b>：油价（WTI/Brent）是唯一主导变量。2022年俄乌战争+供给中断推动油价冲破120美元；2023-2025年OPEC增产+需求疲弱+页岩油供给弹性，油价从高位回落至65-70美元区间，能源利润"戴维斯双杀"。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">6.2<small>%</small></div>
+      <div class="label">能源板块占标普500<br>总净利润比例（2024财年，BofA口径）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~15<small>%</small></div>
+      <div class="label">2022年峰值占比<br>（俄乌冲突油价暴涨时的历史高位）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">491<small>亿美元</small></div>
+      <div class="label">三大油企2025年净利润合计<br>（埃克森美孚288+雪佛龙123+康菲80）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">3% → 15%</div>
+      <div class="label">近30年板块占比剧烈波动区间<br>（2020年约3%低点 → 2022年峰值15% → 2024年6.2%）</div>
+    </div>
+  </div>
+
+  <!-- 图1：30年趋势 -->
+  <div class="card">
+    <h2>一、近30年能源板块盈利占标普500比重趋势</h2>
+    <div class="sub">口径说明：2020年能源板块整体亏损（疫情油价转负），无法计算占比；虚线为估算值</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart1">📈 图表</div>
+      <div class="tab" data-target="table1">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart1" style="width:100%;height:400px;"></div>
+    <div class="view-table" id="table1">
+      <table class="plain">
+        <tr><th>年份</th><th>能源板块盈利占标普500比重</th><th>数据来源</th><th>备注</th></tr>
+        <tr><td>1995</td><td>约 9%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2000</td><td>约 9%（估算）</td><td>区间估算</td><td>互联网泡沫/周期年份</td></tr>
+        <tr><td>2005</td><td>约 11.5%（估算）</td><td>区间估算</td><td>90年代历史估算</td></tr>
+        <tr><td>2006</td><td>约 12%（估算）</td><td>区间估算</td><td>油价60-70美元，油企高利润时代</td></tr>
+        <tr><td>2010</td><td>约 10%（估算）</td><td>区间估算</td><td>金融危机后油价回升</td></tr>
+        <tr><td>2015</td><td>约 6%（估算）</td><td>区间估算</td><td>页岩革命+OPEC增产，油价暴跌至30-40美元</td></tr>
+        <tr><td>2020</td><td>整体亏损</td><td>公开事实</td><td>疫情油价一度转负（WTI -37美元），板块集体亏损</td></tr>
+        <tr><td>2022</td><td>约 15%（估算）</td><td>区间估算</td><td>俄乌冲突油价冲高，能源重回利润前三</td></tr>
+        <tr><td>2024</td><td>6.2%</td><td>BofA Global Research</td><td>年度，pro-forma口径（实际值）</td></tr>
+        <tr><td>2025</td><td>约 5.5%（估算）</td><td>上市公司财报加总推算</td><td>油价回落至65-70美元，利润继续缩水</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① 能源是标普500中利润占比<b>波动最剧烈</b>的板块——从2020年的集体亏损到2022年的15%峰值，振幅之大无出其右。<br>
+      ② 2022年俄乌冲突导致的能源危机是"十年一遇"的利润脉冲：当年美国五大油企合计利润超2000亿美元创历史纪录，但随后两年随着油价回落，板块利润以同样速度缩水。<br>
+      ③ <b>长期趋势向下</b>：即使剔除周期波动，能源板块占比的长期中枢也在下移（2006年12% → 2024年6.2%），反映能源转型（电动车、可再生能源）对化石能源需求的结构性侵蚀——页岩油产量再创新高也无法阻止利润占比中枢的下移。
+    </div>
+  </div>
+
+  <!-- 图2：龙头利润排名 -->
+  <div class="card">
+    <h2>二、美国能源巨头净利润排名（2025年）</h2>
+    <div class="sub">单位：亿美元 · GAAP净利润 · 数据来源：腾讯自选股/NeoData 利润表、公司财报 · 2025年油价（WTI约65-70美元）较2024年（约76美元）回落</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart2">📊 柱状图</div>
+      <div class="tab" data-target="table2">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart2" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table2">
+      <table class="plain">
+        <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年净利润(亿美元)</th><th>2024年(亿美元)</th><th>同比</th><th>看点</th></tr>
+        <tr><td>1</td><td>埃克森美孚 XOM</td><td>usXOM</td><td>288.44</td><td>336.80</td><td class="tag-red">-14.4%</td><td>综合油企龙头，上游+下游一体，成本优势显著</td></tr>
+        <tr><td>2</td><td>雪佛龙 CVX</td><td>usCVX</td><td>122.99</td><td>176.61</td><td class="tag-red">-30.4%</td><td>加大Permian页岩与LNG投入，油价回落侵蚀利润</td></tr>
+        <tr><td>3</td><td>康菲石油 COP</td><td>usCOP</td><td>79.61</td><td>92.45</td><td class="tag-red">-13.9%</td><td>完成马拉松石油整合，产量创新高但均价下跌19%</td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>补充说明：</b>① 三家公司合计2025年净利润491亿美元，较2024年（606亿）下降约19%——油价下跌是主因（康菲全年实现均价47美元/桶油当量，同比下降14%）。<br>
+      ② 除三大综合/页岩油企外，威廉姆斯（天然气管道）、西方石油（巴菲特重仓）、Devon等中型能源公司合计贡献约150-200亿美元；若计入，美国能源板块2025年净利润合计约700-800亿美元，仅约为2022年峰值（约2500亿）的三分之一。<br>
+      ③ 值得注意的是，即便利润下滑，三大油企仍维持高分红与回购（康菲2025年向股东返还90亿美元、占经营现金流45%），能源板块仍是标普500分红与回购的重要来源。
+    </div>
+  </div>
+
+  <!-- 图3：结构占比 -->
+  <div class="card">
+    <h2>三、2024财年标普500各行业净利润结构（能源板块所处位置）</h2>
+    <div class="sub">口径：BofA Global Research 年度盈利预测（pro-forma口径），单位十亿美元</div>
+    <div class="tabs">
+      <div class="tab active" data-target="chart3">🥧 环形图</div>
+      <div class="tab" data-target="table3">📋 数据表</div>
+    </div>
+    <div class="view-chart active" id="chart3" style="width:100%;height:420px;"></div>
+    <div class="view-table" id="table3">
+      <table class="plain">
+        <tr><th>行业板块</th><th>2024年盈利预测(十亿美元)</th><th>占比</th></tr>
+        <tr><td>信息技术</td><td>453.4</td><td>20.2%</td></tr>
+        <tr><td>金融</td><td>335.3</td><td>14.9%</td></tr>
+        <tr><td>医疗保健</td><td>299.8</td><td>13.3%</td></tr>
+        <tr><td>通信服务</td><td>205.3</td><td>9.1%</td></tr>
+        <tr><td>工业</td><td>181.9</td><td>8.1%</td></tr>
+        <tr><td>可选消费</td><td>179.3</td><td>8.0%</td></tr>
+        <tr class="hl"><td><b>能源</b></td><td><b>140.5</b></td><td><b>6.2%</b></td></tr>
+        <tr><td>必需消费</td><td>126.6</td><td>5.6%</td></tr>
+        <tr><td>公用事业</td><td>60.1</td><td>2.7%</td></tr>
+        <tr><td>房地产</td><td>57.6</td><td>2.6%</td></tr>
+        <tr><td>原材料</td><td>47.8</td><td>2.1%</td></tr>
+        <tr class="tot"><td><b>标普500合计</b></td><td><b>2249.6</b></td><td><b>100%</b></td></tr>
+      </table>
+    </div>
+    <div class="note">
+      <b>定位解读：</b>能源板块2024年以1405亿美元净利润位列全市场<b>第七大利润板块</b>，占6.2%——排在可选消费（1793亿）之后、必需消费（1266亿）之前。<br>
+      对比2022年：当年能源板块利润占比约15%、位列前三，如今已跌至第七——<b>两年间能源板块从"市场利润核心"滑落为"普通周期板块"</b>，生动展示了油价周期对板块利润格局的短期主导力。长期看，能源转型（电动车渗透、可再生能源扩张、ESG投资约束）将持续压制其利润占比中枢。
+    </div>
+  </div>
+
+  <!-- 结论与风险 -->
+  <div class="card">
+    <h2>四、总结：30年趋势的五个阶段</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <table class="plain">
+      <tr><th style="width:150px">阶段</th><th style="width:110px">占比区间</th><th>核心驱动</th></tr>
+      <tr><td>1995-2005（30年前）</td><td>约12%</td><td>油价波动，1998年亚洲金融危机后回升，2003-05年中国需求拉动至11.5%</td></tr>
+      <tr><td>2010-2019</td><td>6-10%</td><td>页岩革命+OPEC价格战，油价长期40-80美元区间波动，占比中枢下移至7%</td></tr>
+      <tr><td>2020-2022</td><td>亏损 → 15%</td><td>疫情油价转负（集体亏损）→ 俄乌冲突油价冲高（利润峰值约2500亿$）</td></tr>
+      <tr><td>2023-2025</td><td>6.2% → 约5.5%</td><td>OPEC增产+需求疲弱+能源转型，油价回落至65-70美元，利润"戴维斯双杀"</td></tr>
+    </table>
+    <div class="note">
+      <b>前瞻判断（观点）：</b>能源板块2026年利润取决于两大变量的拉锯：① 供给端——OPEC+增产节奏、美国页岩油资本纪律（油企优先分红而非增产）、地缘冲突（中东、俄乌）的供给冲击风险；② 需求端——全球经济放缓压制需求、电动车渗透率持续提升。中性情景下，油价大概率维持60-80美元区间，能源板块占比将稳定在5-7%。<b>能源板块已从"成长叙事"转为"高分红价值股"</b>——利润弹性下降，但现金流与股东回报（分红+回购）依然丰厚。<br>
+      <b>口径提示：</b>能源板块子行业差异大（综合油企/页岩/天然气管道/油服）；2020年板块整体亏损导致当年无法计算占比；2022年峰值占比为估算值。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① NeoData/腾讯自选股利润表（埃克森美孚、雪佛龙、康菲石油 FY2024/FY2025，2026-08-05查询）；
+    ② 康菲石油2025 Q4及全年财报新闻稿（2026-02-05，earnings-release.com/oilprice.com）；
+    ③ 财富中文网《2025年美国500强中最赚钱的50家公司》（2025-06，2024财年数据）；
+    ④ BofA Global Research《US Equity Outlook: time to get picky》（2024-07，标普500分行业盈利）；
+    ⑤ Macrotrends（历史净利润数据）。
+  </div>
+</div>
+
+<script>
+// ============ 图1：30年趋势 ============
+(function(){
+  var years = ['1995','2000','2005','2006','2010','2015','2020','2022','2024','2025'];
+  var share = [9, 9, 11.5,12.0, 10.0, 6.0, null, 15.0, 6.2, 5.5];
+  var isEst = [true,true,true,true, true, true, false, true, false, true];
+  var points = [];
+  for (var i = 0; i < years.length; i++) {
+    if (share[i] === null) continue;
+    points.push({
+      value: [years[i], share[i]],
+      itemStyle: isEst[i] ? { color: '#94a3b8', borderType: 'dashed' } : { color: '#d97706' },
+      label: { show: i > 0, formatter: share[i] + '%', position: 'top', fontSize: 11, color: '#94a3b8' }
+    });
+  }
+  var ch = echarts.init(document.getElementById('chart1'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].data.value[1] + '%'; } },
+    grid: { left: 50, right: 30, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: years, name: '年份', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', min: 0, max: 18, name: '占比 %', nameTextStyle: { color: '#64748b' }, axisLabel: { formatter: '{value}%', color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      name: '能源板块盈利占比',
+      type: 'line',
+      data: points,
+      symbolSize: 9,
+      lineStyle: { width: 3, color: '#d97706' },
+      connectNulls: false
+    }]
+  });
+  window.__c1 = ch;
+})();
+
+// ============ 图2：龙头利润排名 ============
+(function(){
+  var names = ['埃克森美孚','雪佛龙','康菲石油'];
+  var vals = [288.44, 122.99, 79.61];
+  var colors = ['#d97706','#f59e0b','#fbbf24'];
+  var ch = echarts.init(document.getElementById('chart2'));
+  ch.setOption({
+    tooltip: { trigger: 'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿美元'; } },
+    grid: { left: 60, right: 30, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: names, name: '', axisLabel: { fontSize: 12, interval: 0, color: '#94a3b8' }, axisLine: { lineStyle: { color: 'rgba(255,255,255,0.15)' } } },
+    yAxis: { type: 'value', name: '净利润(亿美元)', nameTextStyle: { color: '#64748b' }, axisLabel: { color: '#94a3b8' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.07)' } } },
+    series: [{
+      type: 'bar',
+      data: vals.map(function(v, i){ return { value: v, itemStyle: { color: colors[i], borderRadius: [6,6,0,0] } }; }),
+      barWidth: 60,
+      label: { show: true, position: 'top', formatter: function(p){ return p.value; }, fontSize: 11, color: '#cbd5e1' }
+    }]
+  });
+  window.__c2 = ch;
+})();
+
+// ============ 图3：行业结构环形图 ============
+(function(){
+  var data = [
+    { name: '信息技术', value: 453.4, itemStyle: { color: '#6366f1' } },
+    { name: '金融', value: 335.3, itemStyle: { color: '#0ea5e9' } },
+    { name: '医疗保健', value: 299.8, itemStyle: { color: '#22c55e' } },
+    { name: '通信服务', value: 205.3, itemStyle: { color: '#a855f7' } },
+    { name: '工业', value: 181.9, itemStyle: { color: '#f59e0b' } },
+    { name: '可选消费', value: 179.3, itemStyle: { color: '#ef4444' } },
+    { name: '能源', value: 140.5, itemStyle: { color: '#d97706' } },
+    { name: '必需消费', value: 126.6, itemStyle: { color: '#f97316' } },
+    { name: '公用事业', value: 60.1, itemStyle: { color: '#14b8a6' } },
+    { name: '房地产', value: 57.6, itemStyle: { color: '#d946ef' } },
+    { name: '原材料', value: 47.8, itemStyle: { color: '#94a3b8' } }
+  ];
+  var ch = echarts.init(document.getElementById('chart3'));
+  ch.setOption({
+    tooltip: { trigger: 'item', formatter: '{b}：{c} 十亿美元（{d}%）' },
+    legend: { orient: 'vertical', right: 10, top: 'center', textStyle: { fontSize: 12, color: '#94a3b8' } },
+    series: [{
+      type: 'pie',
+      radius: ['42%', '68%'],
+      center: ['38%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: { borderColor: '#0d1117', borderWidth: 2 },
+      label: { show: true, formatter: '{b} {d}%', fontSize: 11, color: '#cbd5e1' },
+      data: data
+    }]
+  });
+  window.__c3 = ch;
+})();
+
+// ============ 图表/表格切换 ============
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var t = this.getAttribute('data-target');
+    this.parentNode.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    this.classList.add('active');
+    var card = this.closest('.card');
+    card.querySelectorAll('.view-chart, .view-table').forEach(function(v){ v.classList.remove('active'); });
+    var el = card.querySelector('#' + t);
+    if (el) el.classList.add('active');
+    if (t === 'chart1' && window.__c1) window.__c1.resize();
+    if (t === 'chart2' && window.__c2) window.__c2.resize();
+    if (t === 'chart3' && window.__c3) window.__c3.resize();
+  });
+});
+
+window.addEventListener('resize', function(){
+  if (window.__c1) window.__c1.resize();
+  if (window.__c2) window.__c2.resize();
+  if (window.__c3) window.__c3.resize();
+});
+</script>
+</body>
+</html>

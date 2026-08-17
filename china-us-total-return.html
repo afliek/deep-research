@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中美全收益对比 · 因素贡献归因</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#1f2430; --sub:#5b6472; --line:#e6e9ef;
+    --red:#d84a3f; --green:#1f9e6b; --blue:#2f6fed; --amber:#c98a1b; --purple:#7a5af8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.7; padding:28px 16px 60px;}
+  .wrap{max-width:1080px; margin:0 auto;}
+  h1{font-size:26px; font-weight:800; letter-spacing:.5px;}
+  .meta{color:var(--sub); font-size:13px; margin-top:8px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; margin-top:18px; box-shadow:0 1px 3px rgba(20,30,60,.04);}
+  .tl{background:linear-gradient(135deg,#ffffff,#f3f6ff); border-left:4px solid var(--blue);}
+  .tl h2{font-size:16px; margin-bottom:10px; color:var(--blue);}
+  .tl ul{padding-left:20px;}
+  .tl li{margin-bottom:8px; font-size:14.5px;}
+  .tl b{color:#16203a;}
+  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:14px;}
+  .kpi{background:#fbfcfe; border:1px solid var(--line); border-radius:10px; padding:14px 16px;}
+  .kpi .v{font-size:22px; font-weight:800; color:var(--blue);}
+  .kpi .l{font-size:12px; color:var(--sub); margin-top:2px;}
+  h3.sect{font-size:16px; margin-bottom:14px; padding-left:10px; border-left:3px solid var(--blue);}
+  .chart{width:100%; height:420px;}
+  .chart-sm{width:100%; height:360px;}
+  .src{font-size:12px; color:var(--sub); margin-top:10px; border-top:1px dashed var(--line); padding-top:8px;}
+  .src b{color:var(--ink);}
+  table{width:100%; border-collapse:collapse; font-size:13px; margin-top:8px;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left;}
+  th{background:#f2f5fa; font-weight:600; white-space:nowrap;}
+  td{vertical-align:top;}
+  .up{color:var(--red); font-weight:700;}
+  .down{color:var(--green); font-weight:700;}
+  .note{background:#f7f9ff; border:1px solid #dbe3f7; border-radius:10px; padding:14px 18px; margin-top:14px; font-size:13px; color:#3a4352;}
+  .note b{color:#1f3a8a;}
+  .verdict{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;}
+  .vbox{border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:10px; padding:14px 16px; background:#fcfdff;}
+  .vbox.a{border-left-color:var(--red); background:#fffcfc;}
+  .vbox h4{font-size:14px; margin-bottom:6px;}
+  .vbox p{font-size:13px; color:#3a4352;}
+  .footer{font-size:12px; color:var(--sub); margin-top:26px; text-align:center;}
+  @media(max-width:760px){ .kpi-row{grid-template-columns:repeat(2,1fr);} .verdict{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>中美指数全收益对比：谁涨得多？各因素贡献多少？</h1>
+  <div class="meta">主口径：2005-2025（20年，权威研报口径）｜ 附最新窗口：2005-2026-08-14 ｜ 编制：WorkBuddy 金融研究</div>
+
+  <!-- TL;DR -->
+  <div class="card tl">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>全收益口径下，标普500 年化约 10.7%，沪深300 年化约 9.9%（2005-2025），美股领先约 0.8~1 个百分点/年；</b>累计涨幅标普500 约 +748%，沪深300 约 +575%（截至 2025-12）。若算到 2026-08（美股 2026 年前 8 个月全收益 +14.5%）：11.1% vs 9.4%，差距温和扩大到约 1.7pp——加上 8 个月不会让 21 年的年化差距从 1pp 跳变到 3pp 量级（早期版本 12.6%/3.2pp 为标普500 全收益基期点位取值错误所致，已修正）。</li>
+      <li><b>A股在"企业盈利增长"和"股息"上并不输，甚至领先——</b>企业盈利年化约 10%（沪深300）vs 约 5.5%（标普500），股息 2.1% vs 1.8%。</li>
+      <li><b>美股赢在两个"金融工程"因素：股本效应 + 估值扩张。</b>回购缩股每年给标普500 EPS 增厚约 1.5pp，A股股权融资每年稀释约 1.5pp——一正一负差约 <b>3pp/年</b>；叠加估值变动（美股 PE 期初 20→期末 30，扩张约 50%；A股 14→14 不动），构成中美回报差距的大头。</li>
+      <li><b>一句话归因：A股"赚得多、留得少"（盈利强但被扩股稀释、估值不涨），美股"赚得少、留得多"（盈利弱但回购缩股+估值扩张）——股本与估值两把"金融杠杆"决定了最终谁赢。</b></li>
+    </ul>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v">9.9%</div><div class="l">沪深300全收益年化(2005-25)</div></div>
+      <div class="kpi"><div class="v">10.7%</div><div class="l">标普500全收益年化(2005-25)</div></div>
+      <div class="kpi"><div class="v">≈3pp</div><div class="l">股本效应方向差(回购vs稀释)</div></div>
+      <div class="kpi"><div class="v">+2.5pp</div><div class="l">估值变动差(美股扩张vsA股持平)</div></div>
+    </div>
+  </div>
+
+  <!-- 图1：累计涨幅 -->
+  <div class="card">
+    <h3 class="sect">一、全收益累计涨幅（2005年初 → 2026-08-14，约21.6年）</h3>
+    <div id="chartCum" class="chart"></div>
+    <div class="src"><b>数据来源：</b>沪深300 全收益 H00300.CSI（基日 2004-12-31=1000，2026-08-14=6988.12）；标普500 全收益 SPXT.US（2004-12-31=1801.98，2026-08-14=17433.30）。累计涨幅：沪深300 +598.8%（年化≈9.4%）、标普500 +867%（年化≈11.1%）。权威口径（截至 2025 年底）：标普500 全收益 2005-2025 年化约 10.7%（与荀玉根研报 10.7% 一致），沪深300 年化 9.5%~9.9%。<b>注：标普500 全收益指数基期 1988-12-30=1000，2004 年末官方点位 1801.98（Bloomberg）；2026-08-14 点位按 slickcharts 2026 年 YTD 全收益 +14.54% 推算。</b></div>
+  </div>
+
+  <!-- 图2：因素归因（核心） -->
+  <div class="card">
+    <h3 class="sect">二、年化收益因素归因（2005-2025，单位 pp/年）—— 核心图</h3>
+    <div id="chartAttr" class="chart"></div>
+    <div class="src"><b>归因框架：全收益年化 ≈ 企业盈利增长 + 股本效应（回购增厚/融资稀释） + 股息 + 估值变动。</b>沪深300：盈利 ≈+10%（中金口径总净利年化，指数EPS口径约 8.5%）、股本稀释 ≈-1.5pp（中金：指数EPS相对净利润年化稀释 1.5pp）、股息 +2.1%、估值 ≈-0.7%（PE 期初≈期末 14 倍）→ 合计 ≈9.9%。标普500：盈利 ≈+5.5%（EPS 口径约 7%，含回购增厚）、回购缩股 +1.5pp（高盛净回购收益率≈2%，摩根大通 LTCMA 回购贡献 +3%）、股息 +1.8%、估值 +1.8%（PE 约 20→30，扩张约 50%，大马哈投资口径）→ 合计 ≈10.6%。<b>注：A股"企业盈利"口径含成分换血水分，更严格的指数EPS口径下 A股盈利约 8.5% 仍高于美股的 7%。</b></div>
+  </div>
+
+  <!-- 图3：股本效应 -->
+  <div class="card">
+    <h3 class="sect">三、股本效应：方向相反，一正一负差 3pp</h3>
+    <div id="chartShare" class="chart-sm"></div>
+    <div class="src"><b>数据来源：</b>美股：标普500 2024 年回购 9425 亿美元（标普道琼斯），净回购收益率≈2%（高盛），流通股净减少 1~1.5%/年；A股：总股本年均扩张 3.6%~6.5%（近年约 3.6%），回购占市值不足 0.2%，中金测算指数EPS年化稀释约 1.5pp。<b>机制：回购注销→流通股减少→EPS 机械增厚→指数点位直接受益；增发扩股→EPS 被稀释→指数点位被摊薄。</b></div>
+  </div>
+
+  <!-- 归因表 -->
+  <div class="card">
+    <h3 class="sect">四、因素贡献明细表</h3>
+    <table>
+      <thead>
+        <tr><th>因素（pp/年，2005-2025）</th><th>沪深300</th><th>标普500</th><th>差异（美股-A股）</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>企业盈利增长</b></td><td class="up">≈+10%</td><td>≈+5.5%</td><td class="down">-4.5pp（A股领先）</td><td>总净利口径；更严的指数EPS口径：8.5% vs 7%，A股仍领先</td></tr>
+        <tr><td><b>股本效应（回购/稀释）</b></td><td class="down">≈-1.5%</td><td class="up">≈+1.5%</td><td class="up">+3pp（美股领先）</td><td>A股融资稀释 vs 美股回购缩股，方向相反</td></tr>
+        <tr><td><b>股息再投资</b></td><td class="up">+2.1%</td><td>+1.8%</td><td class="down">-0.3pp（A股略高）</td><td>A股高股息特性</td></tr>
+        <tr><td><b>估值变动</b></td><td class="down">≈-0.7%</td><td class="up">≈+1.8%</td><td class="up">+2.5pp（美股领先）</td><td>美股 PE 20→30 扩张约50%；A股 14→14 持平</td></tr>
+        <tr><td><b>全收益年化</b></td><td><b>≈9.9%</b></td><td><b>≈10.7%</b></td><td class="up"><b>+0.8pp</b></td><td>差距=股本(3pp)+估值(2.5pp)-盈利(4.5pp)-股息(0.3pp)</td></tr>
+      </tbody>
+    </table>
+    <div class="src"><b>数据来源：</b>国信荀玉根研报（2026-06-28：沪深300 全收益 2005-2025 年化 9.9%、盈利贡献 8.5%、股息 2.1%；标普500 1960-2025 年化 10.7%）、大马哈投资（2005-2025.12 标普500 年化 10.72%、沪深300 年化 9.52%；PE 变动对比）、中金（股本稀释 1.5pp）、高盛（净回购收益率 2%）、摩根大通 LTCMA（回购贡献 3%）。各因素为区间估算，加总与研报口径可能差 0.1-0.2pp。</div>
+  </div>
+
+  <!-- 数据修正说明 -->
+  <div class="card">
+    <h3 class="sect">附、数据修正说明（重要）</h3>
+    <div class="note">
+      <b>早期版本误用标普500 全收益 2004 年末点位 1346.88，导致年化被高估（12.6%）、差距被夸大（3.2pp）。经权威数据复核修正：</b><br><br>
+      · <b>标普500 全收益（SPXT）官方点位：</b>基期 1988-12-30=1000；2004-12-30=1,801.98、2005-12-30=1,887.94（Natwest 招股书引 Bloomberg）；2015 年末=4,506.30、2025 年末≈15,220（雪球/Nasdaq，slickcharts 逐年回报连乘交叉验证一致）。<br>
+      · <b>正确年化：</b>2005-2025 全收益年化 = (15,220/1,802)^(1/21)-1 ≈ <b>10.7%</b>——与荀玉根研报 10.7%、大马哈投资 10.72% 完全吻合，说明权威口径本来就没有分歧。<br>
+      · <b>2026 前 8 个月：</b>标普500 全收益 +14.54%（slickcharts，截至 2026-08-14）→ 2026-08-14 点位≈17,433 → 21.6 年年化约 <b>11.1%</b>。<br>
+      · <b>修正后结论：</b>沪深300 vs 标普500 全收益年化（截至 2026-08）≈ <b>9.4% vs 11.1%，差距约 1.7pp</b>；2026 年前 8 个月只把差距从约 0.8pp 温和推到 1.7pp（美股 +14.5% vs A股约 +3%），符合"短窗口对长周期年化影响有限"的数学直觉。<br>
+      <b>教训：跨市场长周期对比，起点的官方点位取值至关重要——基期点位差 30%，年化就能差出 1.5pp。</b>
+    </div>
+  </div>
+
+  <!-- 汇率视角 -->
+  <div class="card">
+    <h3 class="sect">五、别忘了汇率：人民币投资者的真实差距</h3>
+    <div class="note">
+      上述均为各自主计价货币（人民币/美元）。2005 年 USD/CNY ≈8.07 → 2026 年 ≈7.0，<b>人民币升值约 13%</b>，美元收益换汇后打折。<br><br>
+      · 美元口径：标普500 全收益累计 +867%（年化 ≈11.1%）→ 折人民币口径累计约 <b>+739%</b>（年化约 <b>10.3%</b>），与沪深300（9.4%）差距收窄至约 0.9pp（截至 2026-08）。<br>
+      · 截至 2025 年底口径：各投 100 万人民币，投沪深300 全收益约得 <b>739 万</b>，投标普500 全收益约得 <b>702 万</b>（雪球回测）——<b>人民币投资者持有 A股反而略胜</b>。<br>
+      <b>结论：计价币种会显著改变"谁赢"的答案，跨市场比较必须标注币种口径。</b>
+    </div>
+  </div>
+
+  <!-- 结论 -->
+  <div class="card">
+    <h3 class="sect">六、最终判断</h3>
+    <div class="verdict">
+      <div class="vbox a">
+        <h4>A股：赚得多，但"留不住"</h4>
+        <p>企业盈利增长强（约 10%/年，EPS 口径 8.5%）、股息高（2.1%）——基本面赚钱能力不输美股。<br><b>失分项：</b>①股权融资持续扩股，EPS 被稀释约 1.5pp/年；②估值 20 年不涨（14 倍→14 倍），盈利没换来重估。<br>结果：盈利与股息的领先，被股本稀释和估值不动吞掉。</p>
+      </div>
+      <div class="vbox">
+        <h4>美股：赚得少，但"留得多"</h4>
+        <p>企业盈利增长约 5.5%/年、股息 1.8%——基础层面弱于 A股。<br><b>加分项：</b>①回购缩股每年 EPS 增厚约 1.5pp（2024 回购 9425 亿美元）；②估值扩张约 50%（PE 20→30），贡献约 1.8pp/年。<br>结果：用"回购+重估"两把金融杠杆，把回报抬到 10.7%。</p>
+      </div>
+    </div>
+    <div class="note">
+      <b>最终一句话：</b><b>全收益口径下美股涨得更多（年化约 10.7% vs 9.9%，2005-2025），但差距不是"赚钱能力"，而是三个结构性因素：股本效应（美股回购+1.5pp vs A股稀释-1.5pp）、估值变动（美股+1.8pp vs A股-0.7pp）贡献了全部差距，A股在盈利（+4.5pp）和股息（+0.3pp）上其实领先。</b>若剔除回购与估值、只看企业盈利，A股反而更强；若按人民币计价，两者实际差距仅约 0.5~2.6pp。<br><br>
+      <b>对投资者的含义：</b>①比较中美指数必须用全收益+同一币种口径；②A股的超额回报要靠"盈利兑现+估值修复"实现（赚 EPS 的钱），美股则额外享受"回购+重估"的金融杠杆；③A股若补齐回购文化、控制股权稀释，长期回报有向美股收敛的制度空间。
+    </div>
+  </div>
+
+  <div class="footer">
+    数据来源：中证指数公司、标普道琼斯、国信荀玉根研报（2026-06-28）、大马哈投资、中金、高盛、摩根大通 LTCMA、雪球回测。<br>
+    本报告为历史数据归因研究，不构成投资建议。历史表现不预示未来收益。
+  </div>
+</div>
+
+<script>
+var COL = { red:'#d84a3f', green:'#1f9e6b', blue:'#2f6fed', amber:'#c98a1b', grey:'#8a93a3' };
+
+/* 图1：累计涨幅 */
+echarts.init(document.getElementById('chartCum')).setOption({
+  tooltip: { trigger:'axis', axisPointer:{ type:'shadow' }, formatter:function(p){
+    var v = p[0].value;
+    return p[0].name + '<br/>累计涨幅 +' + v + '%';
+  }},
+  legend: { data:['沪深300全收益','标普500全收益'], top:6 },
+  grid: { left:60, right:20, top:44, bottom:30 },
+  xAxis: { type:'category', data:['2005-2026-08 累计涨幅(%)'] },
+  yAxis: { type:'value', name:'累计涨幅(%)' },
+  series: [
+    { name:'沪深300全收益', type:'bar', barMaxWidth:80, itemStyle:{ color:COL.red }, data:[599] },
+    { name:'标普500全收益', type:'bar', barMaxWidth:80, itemStyle:{ color:COL.blue }, data:[867] }
+  ]
+});
+
+/* 图2：因素归因（堆叠） */
+echarts.init(document.getElementById('chartAttr')).setOption({
+  tooltip: { trigger:'axis', axisPointer:{ type:'shadow' } },
+  legend: { data:['企业盈利增长','股本效应(回购/稀释)','股息','估值变动'], top:6 },
+  grid: { left:50, right:20, top:44, bottom:30 },
+  xAxis: { type:'category', data:['沪深300 (合计≈9.9%)','标普500 (合计≈10.7%)'] },
+  yAxis: { type:'value', name:'贡献(pp/年)' },
+  series: [
+    { name:'企业盈利增长', type:'bar', stack:'t', barMaxWidth:70, itemStyle:{ color:COL.blue }, data:[10, 5.5] },
+    { name:'股本效应(回购/稀释)', type:'bar', stack:'t', itemStyle:{ color:COL.red }, data:[-1.5, 1.5] },
+    { name:'股息', type:'bar', stack:'t', itemStyle:{ color:COL.amber }, data:[2.1, 1.8] },
+    { name:'估值变动', type:'bar', stack:'t', itemStyle:{ color:'#c9d4ea' }, data:[-0.7, 1.8] }
+  ]
+});
+
+/* 图3：股本效应方向 */
+echarts.init(document.getElementById('chartShare')).setOption({
+  tooltip: { trigger:'axis', axisPointer:{ type:'shadow' } },
+  grid: { left:50, right:20, top:30, bottom:30 },
+  xAxis: { type:'category', data:['A股 融资稀释','美股 回购增厚'] },
+  yAxis: { type:'value', name:'对EPS/回报贡献(pp/年)' },
+  series: [{
+    type:'bar', barMaxWidth:90,
+    label: { show:true, position:'top', formatter:'{c}pp' },
+    itemStyle: {
+      color: function(p){ return p.dataIndex===0 ? COL.green : COL.red; },
+      borderRadius:[4,4,0,0]
+    },
+    data:[-1.5, 1.5]
+  }]
+});
+</script>
+</body>
+</html>

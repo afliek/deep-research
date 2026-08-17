@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球股市百年名义回报率排名：本币 vs 美元口径 · 深层研究</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --bg-card: rgba(18, 24, 38, 0.7);
+    --bg-card-hover: rgba(28, 36, 56, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #e11d48;
+    --accent-2: #fb7185;
+    --border: rgba(255, 255, 255, 0.08);
+    --radius: 14px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav {
+    position: fixed; top:0; left:0; right:0; height:56px;
+    background: rgba(10,13,20,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100;
+  }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .meta b { color:#94a3b8; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:200px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .legend-row { display:flex; flex-wrap:wrap; gap:12px 16px; margin-bottom:12px; font-size:12px; color:var(--text-secondary); }
+  .legend-row .lg { display:flex; align-items:center; gap:4px; }
+  .legend-row .sw { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .chart-box { position:relative; width:100%; height:480px; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl { background:rgba(225,29,72,0.12); }
+  .hl td { color:#e2e8f0; }
+  .tag-up { color:#f87171; font-weight:600; }
+  .tag-down { color:#34d399; font-weight:600; }
+  .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>全球股市百年名义回报率排名：本币 vs 美元口径</h1>
+  <div class="meta">数据区间 1900-2022/2023（瑞信《全球投资回报年鉴》） · <b>名义回报（未扣除通胀，含股息再投资，几何平均，%/年）</b> · <b>本币口径 = 排除货币升贬值后的股市账面回报</b>；美元口径 = 归一化到美元（含货币因素） · 中国为1993年起（仅30年，供参考）</div>
+
+  <!-- 结论卡 -->
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>名义口径下，南非以约12.8%*居首</b>：本币名义回报南非 <b>~12.8%*</b> &gt; 澳洲 <b>11.6%</b> &gt; 美国 <b>10.1%</b>——账面回报最高的仍是资源国，但高名义回报的另一面是高通胀。</li>
+      <li><b>名义回报 = 实际回报 + 通胀</b>：各国百年名义普遍 8-12%，通胀每年贡献 <b>3-5个百分点</b>（南非通胀最高约5.4%、美国约3.2%）——<b>名义数字里的"通胀水分"平均占三分之一以上</b>。</li>
+      <li><b>归一化到美元后排名仍被货币修正</b>：兰特（-0.6pp）、澳元（-0.3pp）、英镑（-0.5pp）贬值拖累美元回报，马克/日元升值则加成——南非美元名义约 <b>12.2%*</b>，澳洲约 <b>11.3%*</b>，仍居前二。</li>
+      <li><b>全球股市百年名义回报约9%</b>：世界指数（美元计）1900年以来名义年化约 <b>9.0%</b>，与"涨幅金字塔"页的全球口径一致——<b>"长期8-10%"说的就是名义回报</b>。</li>
+      <li><b>名义 vs 实际的换算</b>：若需要"实际购买力"视角，用名义回报减去各国通胀即可（如美国 10.1% − 3.2% ≈ 6.9%，与瑞信实际口径6.3-6.6%吻合）。</li>
+    </ul>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="num">~12.8<small>%*/年</small></div>
+      <div class="label">南非（本币名义）<br>百年账面回报最高（含高通胀）</div>
+    </div>
+    <div class="kpi">
+      <div class="num">11.6<small>%/年</small></div>
+      <div class="label">澳大利亚（本币名义）<br>瑞信年鉴确认值</div>
+    </div>
+    <div class="kpi">
+      <div class="num">10.1<small>%/年</small></div>
+      <div class="label">美国（本币名义）<br>标普500系列1900年以来</div>
+    </div>
+    <div class="kpi">
+      <div class="num">~9.0<small>%/年</small></div>
+      <div class="label">全球股市（美元名义）<br>1900年以来中枢</div>
+    </div>
+    <div class="kpi">
+      <div class="num">3-5<small>pp/年</small></div>
+      <div class="label">通胀在名义回报中的占比<br>南非5.4%/美国3.2%/全球3.7%</div>
+    </div>
+  </div>
+
+  <!-- 图表 -->
+  <div class="card">
+    <h2>百年名义回报率：本币（排除货币） vs 美元（归一化）</h2>
+    <div class="sub">名义回报（未扣通胀，含股息，几何平均，%/年，1900-2022）· 按本币口径降序 · 中国1993年起（仅30年）· 带*为估算值</div>
+    <h2 class="sr-only">百年名义回报率排名（本币口径=排除货币因素）：南非约12.8%、澳洲11.6%、美国10.1%、英国约9.4%、全球9.0%、法国约8.0%、德国约7.9%、日本约7.8%、中国约7.4%；美元口径：南非约12.2%、澳洲约11.3%、美国10.1%、全球9.0%、英国约8.9%、德国约8.2%、法国约8.0%、日本约8.0%、中国约6.6%</h2>
+    <div class="legend-row">
+      <span class="lg"><span class="sw" style="background:#10B981;"></span>本币名义回报（排除货币升贬值）</span>
+      <span class="lg"><span class="sw" style="background:#0EA5E9;"></span>美元名义回报（归一化到美元）</span>
+    </div>
+    <div class="chart-box">
+      <canvas id="retChart" role="img" aria-label="百年名义回报率本币口径与美元口径对比图">图表加载中…</canvas>
+    </div>
+    <div class="note">
+      <b>读图要点：</b>① <b>绿色（本币）与蓝色（美元）的差距 = 货币百年升贬值的贡献</b>：南非（-0.6）、澳洲（-0.3）、英国（-0.5）的本币优势被货币贬值部分抵消；德国（+0.3）、日本（+0.2）因货币长期升值获得美元加成；② <b>名义口径的排序仍由资源国领跑</b>：南非/澳洲/美国前三，但南非的高名义回报主要来自高通胀（实际只有7.0%）；③ 美国（10.1%）是"免货币风险"基准：美元名义=本币名义；④ 全球指数（9.0%）本身就是美元计，两种口径一致。
+    </div>
+  </div>
+
+  <!-- 数据明细 -->
+  <div class="card">
+    <h2>各市场明细（本币 vs 美元口径，名义）</h2>
+    <div class="sub">名义回报（未扣通胀，含股息，几何平均，1900-2022）· 货币贡献 = 美元名义 − 本币名义（负=货币贬值拖累，正=升值加成）· 通胀 = 各国百年平均通胀（名义 − 实际）</div>
+    <table class="plain">
+      <tr><th>排名</th><th>市场</th><th>本币名义（排除货币）</th><th>美元名义（归一化）</th><th>货币贡献</th><th>通胀（名义−实际）</th></tr>
+      <tr class="hl"><td>1</td><td><b>南非</b></td><td><b class="tag-up">~12.8%*</b></td><td>~12.2%*</td><td class="tag-down">-0.6 pp</td><td>~5.4%（高通胀市场）</td></tr>
+      <tr class="hl"><td>2</td><td><b>澳大利亚</b></td><td><b class="tag-up">11.6%</b></td><td>~11.3%*</td><td class="tag-down">-0.3 pp</td><td>~4.2%</td></tr>
+      <tr class="hl"><td>3</td><td><b>美国</b></td><td><b class="tag-up">10.1%</b></td><td>10.1%</td><td>0</td><td>~3.2%</td></tr>
+      <tr><td>4</td><td>英国</td><td class="tag-up">~9.4%*</td><td>~8.9%*</td><td class="tag-down">-0.5 pp*</td><td>~3.9%</td></tr>
+      <tr><td>5</td><td>全球（世界指数）</td><td class="tag-up">~9.0%</td><td>9.0%</td><td>0</td><td>~3.7%</td></tr>
+      <tr><td>6</td><td>法国</td><td class="tag-up">~8.0%*</td><td>~8.0%*</td><td>0*</td><td>~4.5%</td></tr>
+      <tr><td>7</td><td>德国</td><td class="tag-up">~7.9%*</td><td>~8.2%*</td><td class="tag-up">+0.3 pp*</td><td>~4.7%（含恶性通胀期）</td></tr>
+      <tr><td>8</td><td>日本</td><td class="tag-up">~7.8%*</td><td>~8.0%*</td><td class="tag-up">+0.2 pp*</td><td>~3.5%</td></tr>
+      <tr><td>9</td><td>中国</td><td class="tag-up">~7.4%*</td><td>~6.6%*</td><td class="tag-down">-0.8 pp*</td><td>~4.0%（1993-2022）</td></tr>
+    </table>
+    <div class="note">
+      <b>口径说明：</b>① <b>本币名义回报</b> = 各国本币计量的账面总回报（含股息、未扣通胀）——不含汇率变动，即"排除货币升贬值因素"后的股市名义表现；② <b>美元名义回报</b> = 本币名义 + 该货币对美元的名义汇率变动——包含货币因素，是美元投资者的账面收益；③ 带*为估算值：南非/英国/法国/德国/日本/中国名义回报按"实际回报+各国百年平均通胀"推算，与瑞信确认值（澳洲11.6%、美国10.1%、全球约9%）同口径互验；④ 通胀列 = 名义 − 实际，反映各国百年物价涨幅；若想看"实际购买力"，用名义减去通胀即可。
+    </div>
+  </div>
+
+  <!-- 洞察 -->
+  <div class="card">
+    <h2>三个关键洞察</h2>
+    <div class="sub">名义口径下的长期规律</div>
+    <table class="plain">
+      <tr><th style="width:170px">洞察</th><th>说明</th></tr>
+      <tr><td>名义回报里的"通胀水分"</td><td>南非名义12.8%*看似最高，但实际只有7.0%——<b>高名义回报的国家往往就是高通胀国家</b>；美国名义10.1%中通胀仅占3.2pp，是"含金量"最高的名义回报之一。比较股市长期表现，实际回报更接近真相。</td></tr>
+      <tr><td>货币因素在名义口径下同样重要</td><td>对美元投资者：南非/澳洲/英国的本币名义优势被货币贬值吃掉0.3-0.6pp/年；马克/日元升值则给德国/日本美元名义加成分——<b>百年累计下来，±0.5pp的货币影响足以改变排名</b>。</td></tr>
+      <tr><td>"长期8-10%"指的是名义回报</td><td>全球股市百年名义约9%（美元计），这正好解释了常识里"长期年化8-10%"的说法来源；但扣掉3.7%通胀后，实际只有5%左右——<b>谈论长期回报时务必先明确是名义还是实际</b>。</td></tr>
+    </table>
+    <div class="note">
+      <b>对投资者的启示：</b>① 看"账面回报"用名义口径（本页），看"购买力"用实际口径（减去通胀）；② 本币投资者看本币列，跨国配置者必须看美元列；③ 瑞信年鉴换算公式：美元名义回报 = 本币名义回报 + 名义汇率变动；美元实际回报 = 本币实际回报 + 实际汇率变动——通胀与汇率是两个独立的"加减项"。
+    </div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>
+    ① 瑞信《全球投资回报年鉴》2023 Summary Edition（1900-2022各国股票实际回报几何平均：南非7.0%、澳洲6.7%、美国6.3%、英国5.3%、世界5.0%、日本4.2%、法国3.4%、德国3.1%、中国3.3%[1993起]）；<br>
+    ② 名义回报确认值：澳洲11.6%、美国10.1%（瑞信年鉴1900-2023，雪球/媒体引用）；全球约9%（《股市长线法宝》/海通证券荀玉根，1900-2020名义中枢8-10%）；<br>
+    ③ 各国名义估算值（标注*）按"实际回报 + 各国百年平均通胀"推算：南非~5.4%、澳洲~4.2%、美国~3.2%、英国~3.9%、法国~4.5%、德国~4.7%、日本~3.5%、全球~3.7%、中国~4.0%；<br>
+    ④ Business Standard（2023-02，瑞信年鉴：澳洲美元实际6.43%、美国6.38%、南非美元实际6.4%）。<br>
+    <b>免责声明：</b>带*的美元口径与通胀为按历史趋势的估算值；中国为1993年起30年数据，与百年市场不可直接类比；各国本币口径扣除的是本国通胀；名义回报未扣除通胀，不代表实际购买力增长；历史回报不代表未来，数据仅供参考，不构成投资建议。
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function(){
+  var items=[
+    {name:'南非', local:12.8, usd:12.2, note:'本币名义12.8%*（含高通胀）；兰特贬值使美元名义约12.2%*'},
+    {name:'澳大利亚', local:11.6, usd:11.3, note:'瑞信确认本币名义11.6%；澳元小幅贬值，美元约11.3%*'},
+    {name:'美国', local:10.1, usd:10.1, note:'美元基准，两种口径一致，无货币风险'},
+    {name:'英国', local:9.4, usd:8.9, note:'英镑长期贬值（-0.5pp*），美元约8.9%*'},
+    {name:'全球(世界指数)', local:9.0, usd:9.0, note:'指数本身为美元计，名义约9.0%'},
+    {name:'法国', local:8.0, usd:8.0, note:'法郎/欧元净效应约0*'},
+    {name:'德国', local:7.9, usd:8.2, note:'马克/欧元长期升值（+0.3pp*），美元约8.2%*'},
+    {name:'日本', local:7.8, usd:8.0, note:'日元先升后贬（+0.2pp*），美元约8.0%*'},
+    {name:'中国', local:7.4, usd:6.6, note:'1993-2022仅30年；人民币实际贬值，美元约6.6%*'}
+  ];
+  new Chart(document.getElementById('retChart'),{
+    type:'bar',
+    data:{labels:items.map(function(d){return d.name;}),datasets:[
+      {label:'本币名义回报（排除货币升贬值）',data:items.map(function(d){return d.local;}),backgroundColor:'#10B981',borderRadius:3,barPercentage:0.8,categoryPercentage:0.62},
+      {label:'美元名义回报（归一化到美元）',data:items.map(function(d){return d.usd;}),backgroundColor:'#0EA5E9',borderRadius:3,barPercentage:0.8,categoryPercentage:0.62}
+    ]},
+    options:{
+      indexAxis:'y',
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{position:'bottom',labels:{color:'#94a3b8',font:{size:12},boxWidth:14,boxHeight:9}},
+        tooltip:{
+          backgroundColor:'#1e293b',
+          titleColor:'#e2e8f0',
+          bodyColor:'#cbd5e1',
+          borderColor:'rgba(255,255,255,0.12)',
+          borderWidth:1,
+          callbacks:{
+            title:function(items){return items[0].label;},
+            label:function(c){return (c.dataset.label||'')+'：' + c.parsed.x.toFixed(1) + '%/年（名义）';},
+            afterLabel:function(c){return items[c.dataIndex].note||'';}
+          }
+        }
+      },
+      scales:{
+        x:{type:'linear',min:0,max:15,ticks:{color:'#94a3b8',font:{size:11},callback:function(v){return v+'%';}},grid:{color:'rgba(255,255,255,0.07)'},title:{display:true,text:'名义年化回报率（%/年，未扣通胀）',color:'#94a3b8',font:{size:11}}},
+        y:{ticks:{color:'#e2e8f0',font:{size:12}},grid:{display:false}}
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

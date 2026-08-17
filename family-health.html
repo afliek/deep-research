@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家庭健康分析 - 12年体检趋势</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f0; color: #2c2c2a; line-height: 1.6;
+    padding: 76px 24px 24px;
+  }
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 52px; background: #0a0d14; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; z-index: 999; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+  .site-nav .nav-brand { color: #e2e8f0; text-decoration: none; font-size: 16px; font-weight: 700; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+  .site-nav .nav-brand .dot { width: 7px; height: 7px; background: #3b82f6; border-radius: 50%; box-shadow: 0 0 10px #3b82f6; }
+  .site-nav .nav-back { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 14px; border-radius: 8px; transition: all .2s; }
+  .site-nav .nav-back:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; color: #1a1a1a; }
+  .subtitle { font-size: 14px; color: #888780; margin-bottom: 24px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .metric-card { background: #fff; border-radius: 8px; padding: 14px 16px; }
+  .metric-label { font-size: 12px; color: #888780; margin-bottom: 3px; }
+  .metric-value { font-size: 21px; font-weight: 600; color: #1a1a1a; }
+  .metric-sub { font-size: 11.5px; color: #888780; margin-top: 2px; }
+  .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+  @media (max-width: 820px) { .chart-row { grid-template-columns: 1fr; } }
+  .chart-section { background: #fff; border-radius: 12px; padding: 18px 20px; }
+  .chart-title { font-size: 14.5px; font-weight: 600; margin-bottom: 10px; color: #1a1a1a; }
+  .chart-wrapper { position: relative; width: 100%; height: 300px; }
+  .section-card { background: #fff; border-radius: 12px; padding: 20px 24px; margin-bottom: 18px; }
+  .section-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #1a1a1a; border-left: 4px solid #3b82f6; padding-left: 10px; }
+  .section-sub { font-size: 13.5px; color: #444441; margin-bottom: 10px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { background: #f8f6f0; padding: 8px 9px; text-align: center; font-weight: 600; color: #5f5e5a; border-bottom: 2px solid #e8e6df; white-space: nowrap; }
+  td { padding: 7px 9px; border-bottom: 0.5px solid #f1efe8; color: #444441; text-align: center; }
+  td:first-child, th:first-child { text-align: left; }
+  tr:hover td { background: #faf9f5; }
+  .good { color: #1a7f37; font-weight: 600; }
+  .warn { color: #b8860b; font-weight: 700; }
+  .bad { color: #c0392b; font-weight: 700; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-right: 5px; }
+  .tag-green { background: #e7f6ec; color: #1a7f37; }
+  .tag-orange { background: #fdf3e3; color: #b8860b; }
+  .tag-blue { background: #eaf1fd; color: #2d6cdf; }
+  .file-cat { margin-bottom: 14px; }
+  .file-cat-title { font-size: 13.5px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+  .file-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid #f1efe8; font-size: 12.5px; }
+  .file-name { color: #3b82f6; text-decoration: none; }
+  .file-name:hover { text-decoration: underline; }
+  .file-desc { color: #888780; font-size: 12px; }
+  .source-note { font-size: 12px; color: #888780; margin-top: 16px; line-height: 1.8; }
+  ul { padding-left: 22px; }
+  li { font-size: 13px; margin-bottom: 4px; color: #444441; }
+  .conclusion-box { background: #eef4fd; border: 1px solid #cfe0f7; border-radius: 10px; padding: 16px 18px; margin-top: 12px; }
+  .conclusion-box p { font-size: 13.5px; margin-bottom: 6px; color: #1d3a6b; }
+  .conclusion-box strong { color: #2d6cdf; }
+  @media (max-width: 640px) { .chart-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+<div class="container">
+  <h1>🏠 家庭健康分析：12 年体检纵向趋势（2014-2026）</h1>
+  <p class="subtitle">吴玲女士 · 8 次健康体检（爱康国宾 6 次 + 瑞慈健康 2 次）· 数据来源：历年体检报告原始文件</p>
+
+  <div class="section-card" style="margin-bottom:18px;">
+    <div class="section-title">专题深入分析</div>
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <a href="thyroid-analysis.html" style="display:inline-flex; align-items:center; gap:8px; padding:10px 18px; background:#fff; border:1px solid #e8e6df; border-left:4px solid #3b82f6; border-radius:10px; text-decoration:none; color:#1a1a1a; font-size:14px; font-weight:600;">
+        🦋 甲状腺专项分析（10 年随访）<span style="color:#888780; font-weight:400; font-size:12px;">结节演变 + TSH 趋势 + 桥本倾向</span><span style="color:#3b82f6;">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="metric-card">
+      <div class="metric-label">覆盖年份</div>
+      <div class="metric-value">12<span class="metric-sub" style="font-size:13px;font-weight:400;color:#5f5e5a;margin-left:2px">年</span></div>
+      <div class="metric-sub">2014 → 2026</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">体检次数</div>
+      <div class="metric-value">8<span class="metric-sub" style="font-size:13px;font-weight:400;color:#5f5e5a;margin-left:2px">次</span></div>
+      <div class="metric-sub">年龄跨度 27-39 岁</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">血压</div>
+      <div class="metric-value good">12年正常</div>
+      <div class="metric-sub">102-120 / 61-72 mmHg</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">血糖 / 血脂</div>
+      <div class="metric-value good">12年正常</div>
+      <div class="metric-sub">无糖尿病/高血脂迹象</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">肿瘤标志物</div>
+      <div class="metric-value good">历年正常</div>
+      <div class="metric-sub">AFP/CEA/CA125/CA15-3</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">体重 / BMI</div>
+      <div class="metric-value warn">43.8kg / 18.5</div>
+      <div class="metric-sub">2018 峰值 48.7kg → 2026 降至低位</div>
+    </div>
+  </div>
+
+  <!-- 图表区 -->
+  <div class="chart-row">
+    <div class="chart-section">
+      <div class="chart-title">体重变化趋势（kg）</div>
+      <div class="chart-wrapper"><canvas id="weightChart"></canvas></div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-title">身高变化趋势（cm）</div>
+      <div class="chart-wrapper"><canvas id="heightChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-section">
+      <div class="chart-title">BMI 变化趋势（正常 18.5-23.99）</div>
+      <div class="chart-wrapper"><canvas id="bmiChart"></canvas></div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-title">空腹血糖与收缩压趋势（均正常）</div>
+      <div class="chart-wrapper"><canvas id="bpChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-row">
+    <div class="chart-section">
+      <div class="chart-title">血脂趋势（mmol/L，均正常）</div>
+      <div class="chart-wrapper"><canvas id="lipidChart"></canvas></div>
+    </div>
+    <div class="chart-section">
+      <div class="chart-title">白细胞与血红蛋白趋势</div>
+      <div class="chart-wrapper"><canvas id="bloodChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- 核心指标表 -->
+  <div class="section-card">
+    <div class="section-title">核心指标 12 年趋势总表</div>
+    <div style="overflow-x:auto;">
+    <table>
+      <tr><th>指标</th><th>2014</th><th>2015</th><th>2016</th><th>2018</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>趋势</th></tr>
+      <tr><td>年龄（岁）</td><td>27</td><td>28</td><td>29</td><td>31</td><td>36</td><td>37</td><td>38</td><td>39</td><td>—</td></tr>
+      <tr><td>体重（kg）</td><td>45.2</td><td>43.8</td><td>46.2</td><td class="warn">48.7</td><td>46.3</td><td>46.0</td><td>45.0</td><td class="warn">43.8</td><td class="warn">先升后降，偏低</td></tr>
+      <tr><td>BMI</td><td class="warn">18.45↓</td><td>18.7</td><td>19.6</td><td>20.7</td><td>19.3</td><td>19.3</td><td>18.9</td><td class="warn">18.5</td><td class="warn">偏低</td></tr>
+      <tr><td>收缩压 mmHg</td><td>118</td><td>112</td><td>120</td><td>112</td><td>102</td><td>104</td><td>102</td><td>105</td><td class="good">正常</td></tr>
+      <tr><td>空腹血糖</td><td>5.54</td><td>5.78</td><td>5.46</td><td>4.77</td><td>5.33</td><td>5.16</td><td>5.03</td><td>5.18</td><td class="good">正常</td></tr>
+      <tr><td>总胆固醇</td><td>3.30</td><td>3.91</td><td>3.64</td><td>3.34</td><td>3.73</td><td>4.28</td><td>3.78</td><td>4.13</td><td class="good">正常</td></tr>
+      <tr><td>低密度脂蛋白</td><td>1.86</td><td>2.28</td><td>2.09</td><td>1.94</td><td>1.83</td><td>2.15</td><td>1.91</td><td>2.12</td><td class="good">正常</td></tr>
+      <tr><td>尿酸 μmol/L</td><td>193</td><td>203</td><td>261</td><td>293</td><td>184</td><td>240</td><td>202</td><td>194</td><td class="good">正常</td></tr>
+      <tr><td>白细胞 WBC</td><td>4.3</td><td>4.3</td><td>5.1</td><td>6.0</td><td>4.1</td><td>3.87</td><td class="bad">3.1↓</td><td>3.9</td><td class="warn">2025偏低后回升</td></tr>
+      <tr><td>血红蛋白 Hb</td><td>136</td><td>133</td><td>132</td><td>127</td><td>121</td><td>130</td><td>125</td><td>131</td><td class="good">正常</td></tr>
+      <tr><td>TSH</td><td>—</td><td>1.00</td><td>—</td><td>—</td><td>2.012</td><td>2.83</td><td>2.166</td><td>3.089</td><td class="warn">正常范围内上升</td></tr>
+    </table>
+    </div>
+    <p class="source-note">单位：血糖/血脂 mmol/L；尿酸 μmol/L；WBC ×10⁹/L；Hb g/L；TSH μIU/mL。部分年份个别项目未检（—）。</p>
+  </div>
+
+  <!-- 主要发现 -->
+  <div class="section-card">
+    <div class="section-title">主要发现</div>
+    <div class="section-sub"><span class="tag tag-green">稳定良性</span>持续 10-12 年、无恶变证据的慢性改变</div>
+    <table>
+      <tr><th>项目</th><th>持续年限</th><th>历年表现</th><th>关键证据</th></tr>
+      <tr><td>完全性右束支阻滞</td><td>12 年连续</td><td>2014-2026 每次心电图均存在</td><td class="good">心脏彩超 2016/2024 未见明显异常，血压正常</td></tr>
+      <tr><td>左肾囊肿（2025起双侧）</td><td>12 年</td><td>15-23mm 波动，&lt;50mm 阈值</td><td class="good">肾功能、尿常规历年正常</td></tr>
+      <tr><td>肝血管瘤可能</td><td>11 年</td><td>1-2cm 稳定，AFP 历年正常</td><td class="good">2024 超声见"筛状结构"典型特征</td></tr>
+      <tr><td>乳腺增生+囊性结节</td><td>12 年</td><td>结节 ≤6mm，大小几乎不变</td><td class="good">2024 BI-RADS 2 类（良性）</td></tr>
+      <tr><td>甲状腺结节</td><td>10 年</td><td>单发 → 双侧多发（右 10mm）</td><td class="good">2024 C-TIRADS 3 类（良性可能大）</td></tr>
+    </table>
+    <div style="margin-top:16px;">
+      <div class="section-sub"><span class="tag tag-orange">需要关注</span>近年新出现或进展的变化</div>
+      <table>
+        <tr><th>项目</th><th>变化</th><th>建议</th></tr>
+        <tr><td>甲状腺</td><td class="warn">2025 起 TM-Ab 增高 + TSH 缓升（1.00→3.089）+ 腺体回声欠均匀</td><td>内分泌科复查，桥本甲状腺炎倾向</td></tr>
+        <tr><td>右眼</td><td class="warn">外伤性瞳孔散大/白内障反复记录，视力波动（2025 右 0.4）</td><td>眼科系统评估</td></tr>
+        <tr><td>白细胞</td><td class="warn">2025 年 3.1↓（2026 回升 3.9）</td><td>复查确认，注意休息</td></tr>
+        <tr><td>右侧卵巢囊肿</td><td class="warn">2026 年新发 22×19mm</td><td>月经后复查妇科超声</td></tr>
+        <tr><td>BMI</td><td class="warn">2018 峰值 20.7 → 2026 降至 18.5（体重 43.8kg）</td><td>适当增重 2-3kg</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 结论 -->
+  <div class="section-card">
+    <div class="section-title">总体结论</div>
+    <div class="conclusion-box">
+      <p><strong>代谢健康极佳：</strong>血压、血糖、血脂、肝肾功能、尿酸、肿瘤标志物、甲功、尿常规、幽门螺杆菌 12 年全部正常，无慢病迹象。</p>
+      <p><strong>慢性良性改变稳定：</strong>右束支阻滞、肾囊肿、肝血管瘤、乳腺增生、甲状腺结节均为良性、稳定、无恶变证据。</p>
+      <p><strong>当前三件小事：</strong>① 内分泌科复查甲状腺（结节+TSH）；② 增重 2-3kg 改善偏瘦；③ 妇科复查卵巢囊肿 + 眼科复查右眼。</p>
+      <p style="font-size:12px;color:#5e7bb0;margin-top:8px">声明：本分析基于历年体检报告数据，仅供健康管理参考，不构成医疗诊断，具体诊疗请遵医嘱。</p>
+    </div>
+  </div>
+
+  <!-- 原始文件 -->
+  <div class="section-card">
+    <div class="section-title">原始数据文件（历年体检报告）</div>
+    <div class="file-cat">
+      <div class="file-cat-title">📊 综合分析报告（PDF 版）</div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/历年体检趋势分析.pdf" target="_blank">历年体检趋势分析报告.pdf</a><span class="file-desc">12 年纵向趋势 · 9 页 · 含 BMI/血糖/血脂/血细胞趋势与总体结论</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/甲状腺专项分析.pdf" target="_blank">甲状腺专项分析报告.pdf</a><span class="file-desc">10 年随访 · 结节演变 + TSH 趋势 + 桥本倾向 · 建议行动清单</span></div>
+    </div>
+    <div class="file-cat">
+      <div class="file-cat-title">📄 8 份历年体检报告 PDF（点击查看）</div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2014-11-13体检报告.pdf" target="_blank">吴玲 2014-11-13 体检报告.pdf</a><span class="file-desc">爱康国宾 · 中关村分院 · BMI 18.45↓</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2015-11-12体检报告.pdf" target="_blank">吴玲 2015-11-12 体检报告.pdf</a><span class="file-desc">爱康国宾 · 西直门分院 · 甲状腺Ⅰ度肿大</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2016-10-06体检报告.pdf" target="_blank">吴玲 2016-10-06 体检报告.pdf</a><span class="file-desc">爱康国宾 · 亚运村分院 · 甲状腺结节首现</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2018-10-07体检报告.pdf" target="_blank">吴玲 2018-10-07 体检报告.pdf</a><span class="file-desc">爱康国宾 · 安华桥中心 · 哺乳期</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2023-07-18体检报告.pdf" target="_blank">吴玲 2023-07-18 体检报告.pdf</a><span class="file-desc">爱康国宾 · 亚运村分院 · 外伤性白内障</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2024体检报告.pdf" target="_blank">吴玲 2024 体检报告.pdf</a><span class="file-desc">瑞慈健康 · C-TIRADS 3 类 / BI-RADS 2 类</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2025体检报告.pdf" target="_blank">吴玲 2025 体检报告.pdf</a><span class="file-desc">爱康国宾 · 中关村方正分院 · WBC 3.1↓</span></div>
+      <div class="file-item"><a class="file-name" href="files/家庭健康/吴玲2026体检报告.pdf" target="_blank">吴玲 2026 体检报告.pdf</a><span class="file-desc">爱康国宾 · 西三旗分院 · 右侧卵巢囊肿新发</span></div>
+    </div>
+    <p class="source-note">所有报告原始文件均为被检者本人持有，上传本页仅为个人健康数据归档与纵向研究之目的。</p>
+  </div>
+
+</div>
+
+<script>
+const YEARS = ['2014','2015','2016','2018','2023','2024','2025','2026'];
+
+// Weight chart
+new Chart(document.getElementById('weightChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [{
+      label: '体重 (kg)',
+      data: [45.2, 43.8, 46.2, 48.7, 46.3, 46.0, 45.0, 43.8],
+      borderColor: '#b8860b', backgroundColor: 'rgba(184,134,11,0.12)',
+      fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#b8860b'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 40, max: 52, grid: { color: '#f0eee8' }, ticks: { stepSize: 2 } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Height chart
+new Chart(document.getElementById('heightChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [{
+      label: '身高 (cm)',
+      data: [156.5, 153.2, 153.7, 153.5, 155.0, 154.5, 154.5, 154.0],
+      borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.12)',
+      fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#16a34a'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 150, max: 160, grid: { color: '#f0eee8' }, ticks: { stepSize: 2 } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// BMI chart
+new Chart(document.getElementById('bmiChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [{
+      label: 'BMI',
+      data: [18.45, 18.7, 19.6, 20.7, 19.3, 19.3, 18.9, 18.5],
+      borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.12)',
+      fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#3b82f6'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 17, max: 22, grid: { color: '#f0eee8' }, ticks: { stepSize: 1 } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// BP + glucose
+new Chart(document.getElementById('bpChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [
+      { label: '收缩压 (mmHg)', data: [118,112,120,112,102,104,102,105], borderColor: '#c0392b', tension: 0.3, pointRadius: 4 },
+      { label: '空腹血糖 (mmol/L×10)', data: [5.54,5.78,5.46,4.77,5.33,5.16,5.03,5.18], borderColor: '#b8860b', tension: 0.3, pointRadius: 4, hidden: true }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+    scales: { y: { grid: { color: '#f0eee8' } }, x: { grid: { display: false } } }
+  }
+});
+
+// Lipid
+new Chart(document.getElementById('lipidChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [
+      { label: '总胆固醇', data: [3.30,3.91,3.64,3.34,3.73,4.28,3.78,4.13], borderColor: '#2d6cdf', tension: 0.3, pointRadius: 4 },
+      { label: '低密度脂蛋白', data: [1.86,2.28,2.09,1.94,1.83,2.15,1.91,2.12], borderColor: '#7c3aed', tension: 0.3, pointRadius: 4 },
+      { label: '甘油三酯', data: [0.59,0.64,0.85,0.31,0.89,0.67,0.74,0.59], borderColor: '#16a34a', tension: 0.3, pointRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+    scales: { y: { grid: { color: '#f0eee8' } }, x: { grid: { display: false } } }
+  }
+});
+
+// Blood cells
+new Chart(document.getElementById('bloodChart'), {
+  type: 'line',
+  data: {
+    labels: YEARS,
+    datasets: [
+      { label: '白细胞 WBC (×10⁹/L)', data: [4.3,4.3,5.1,6.0,4.1,3.87,3.1,3.9], borderColor: '#c0392b', tension: 0.3, pointRadius: 4 },
+      { label: '血红蛋白 Hb (g/L÷10)', data: [13.6,13.3,13.2,12.7,12.1,13.0,12.5,13.1], borderColor: '#16a34a', tension: 0.3, pointRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } },
+    scales: { y: { grid: { color: '#f0eee8' } }, x: { grid: { display: false } } }
+  }
+});
+</script>
+</body>
+</html>
