@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>段永平（H&H International）公开持仓研究 · 2026Q2 13F</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; background:#f7f5f0; color:#2c2a26; line-height:1.7; }
+  .wrap { max-width:1080px; margin:0 auto; padding:24px 18px 60px; }
+  .banner { background:linear-gradient(135deg,#1c2a3d 0%,#2c4a6b 70%,#3a5f8a 100%); color:#f4ead6; padding:34px 30px 26px; border-radius:14px; margin-bottom:22px; }
+  .banner .tag { display:inline-block; font-size:12px; letter-spacing:2px; color:#d9b877; border:1px solid rgba(217,184,119,.5); border-radius:16px; padding:3px 12px; margin-bottom:12px; }
+  .banner h1 { font-size:26px; letter-spacing:1px; margin-bottom:8px; }
+  .banner .sub { font-size:14px; color:#c9d4e0; }
+  .banner .meta { margin-top:12px; font-size:12px; color:#9fb2c8; }
+  .banner .meta span { margin-right:14px; }
+
+  .tldr { background:#fff; border:1px solid #e4dcc8; border-left:5px solid #c9a24b; border-radius:10px; padding:18px 22px; margin-bottom:22px; }
+  .tldr h2 { font-size:16px; color:#8c6a1e; margin-bottom:10px; }
+  .tldr ul { padding-left:20px; font-size:14px; }
+  .tldr li { margin:5px 0; }
+
+  h2.sec { font-size:20px; color:#1c2a3d; margin:30px 0 6px; padding-bottom:8px; border-bottom:2px solid #c9a24b; }
+  .sec-sub { font-size:12px; color:#8a8378; margin-bottom:14px; }
+
+  .kpi-row { display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 4px; }
+  .kpi { flex:1; min-width:150px; background:#fff; border:1px solid #e4dcc8; border-radius:10px; padding:14px 16px; text-align:center; }
+  .kpi .num { font-size:22px; font-weight:700; color:#1c2a3d; }
+  .kpi .num.red { color:#c0392b; }
+  .kpi .num.green { color:#1e8449; }
+  .kpi .lab { font-size:12px; color:#8a8378; margin-top:4px; }
+
+  table { width:100%; border-collapse:collapse; background:#fff; font-size:13px; margin:12px 0 20px; }
+  th { background:#f3ead6; color:#4a3f2a; font-weight:600; padding:9px 10px; border:1px solid #e0d6bd; text-align:left; white-space:nowrap; }
+  td { padding:8px 10px; border:1px solid #ece5d4; vertical-align:top; }
+  tr:nth-child(even) td { background:#fdfbf5; }
+  .up { color:#c0392b; font-weight:600; }
+  .down { color:#1e8449; font-weight:600; }
+  .pos { font-weight:700; color:#1c2a3d; }
+
+  .note { background:#fdf8ec; border:1px solid #e8ddc0; border-radius:8px; padding:10px 14px; font-size:12px; color:#7a6a44; margin:10px 0; }
+  .warn { background:#fdeeec; border:1px solid #f0cfc9; border-radius:8px; padding:10px 14px; font-size:12px; color:#8a3f34; margin:10px 0; }
+
+  .card { background:#fff; border:1px solid #e4dcc8; border-radius:10px; padding:16px 20px; margin:12px 0; }
+  .card h3 { font-size:16px; color:#1c2a3d; margin-bottom:8px; }
+  .card h3 .code { font-size:12px; color:#8a8378; font-weight:400; margin-left:8px; }
+  .card p, .card li { font-size:13.5px; margin:4px 0; }
+  .card ul { padding-left:20px; }
+  .bar { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; }
+
+  .chartbox { background:#fff; border:1px solid #e4dcc8; border-radius:10px; padding:14px; margin:12px 0; }
+  #chartPie { width:100%; height:420px; }
+  #chartBar { width:100%; height:400px; }
+  #chartTrend { width:100%; height:430px; }
+  .tabbtn { display:inline-block; font-size:12px; color:#4a3f2a; background:#f3ead6; border:1px solid #e0d6bd; border-radius:6px 6px 0 0; padding:5px 14px; cursor:pointer; margin-right:2px; }
+  .tabbtn.active { background:#c9a24b; color:#fff; border-color:#c9a24b; }
+
+  .disc { font-size:11px; color:#8a8378; border-top:1px solid #e4dcc8; margin-top:30px; padding-top:14px; }
+  footer { text-align:center; font-size:11px; color:#9a9388; margin-top:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="banner">
+  <div class="tag">机 构 持 仓 · 13F</div>
+  <h1>段永平（H&H International）公开持仓研究</h1>
+  <div class="sub">美股 13F 持仓结构 · 按持仓市值排序 · 基本面与近期表现简析</div>
+  <div class="meta">
+    <span>📄 数据口径：2026Q2 13F（截至 2026-06-30，2026 年 8 月中旬 SEC 披露）</span>
+    <span>📈 行情时点：2026-08-18 收盘（美股 / 港股）</span>
+  </div>
+</div>
+
+<div class="tldr">
+  <h2>◆ 先看结论（TL;DR）</h2>
+  <ul>
+    <li><b>最新 13F（2026Q2）总持仓约 191 亿美元</b>（折合人民币约 1,300 亿元），共持 18 只美股，<b>前五大重仓合计占 89.3%</b>，组合高度集中。</li>
+    <li><b>头号重仓仍是苹果（AAPL）</b>，市值约 78.4 亿美元、占 41.05%——但已<b>连续两个季度减持</b>（Q1 减 341 万股、Q2 再减 184.69 万股），段永平多次表态"苹果不便宜了"。</li>
+    <li><b>第二重仓伯克希尔 B（BRK.B）</b>约 46.2 亿美元、占 24.18%，作为防御性配置持续增持。</li>
+    <li><b>越跌越买的拼多多（PDD）升至第三</b>，约 19.1 亿美元、占 9.99%，Q2 加仓 527 万股（+26.71%）；英伟达被大幅减持 54.63% 落至第五。</li>
+    <li><b>Q2 调仓主线：</b>减持苹果/英伟达/谷歌/微软，加仓伯克希尔/拼多多/迪士尼，<b>重新买回阿里巴巴</b>（观察仓约 2,893 万美元），清仓台积电与 CrowdStrike。</li>
+    <li><b>重要口径提示：</b>13F 只披露美股多头。腾讯（00700.HK）、贵州茅台等 A/港股不在此表，但属于其公开认可的个人长期持仓（腾讯 YTD -25.5%、PE 约 14.9 倍）。</li>
+    <li><b>13F 之外（雪球发言推断）：</b>段永平自述重仓只有"苹果、腾讯、茅台"三只。A股几乎只重仓<b>贵州茅台</b>（约 200-250 亿元）；港股核心为<b>腾讯</b>（向总股本 1% 目标迈进，约 350-400 亿港元）+ 2026 年新晋的<b>泡泡玛特</b>（举牌至第二大股东，约 150-160 亿港元，唯一有港交所权益披露硬数据）；中国神华已清仓换仓（详见第六节）。</li>
+    <li><b>最活跃的"期权建仓"方向（13F 之外的新线索）：</b>2026-07-23 雪球原话显示他正在卖 put 布局 <b>美光科技 MU（存储超级周期，已滚动一年）、SpaceX（SPCX，8/5 已买 10 万股正股）、Palantir PLTR、特斯拉</b>；苹果部分仓位被 call 走后换成 t-bill；谷歌表示还想增持；一季度还新建了 Circle/SNPS/SNOW/Innodata/Tempus 等 <0.2% 的"研究清单"仓位（详见第六节）。</li>
+  </ul>
+</div>
+
+<h2 class="sec">一、组合总览（2026Q2 13F）</h2>
+<div class="sec-sub">来源：H&H International Investment 2026Q2 13F（SEC 披露，2026 年 8 月中旬）· 经第三方财经媒体汇总，非一手整理，需以 SEC 原文核实</div>
+<div class="kpi-row">
+  <div class="kpi"><div class="num">≈191亿</div><div class="lab">总持仓市值（美元）</div></div>
+  <div class="kpi"><div class="num">18</div><div class="lab">持有美股数量</div></div>
+  <div class="kpi"><div class="num">89.3%</div><div class="lab">前五大重仓占比</div></div>
+  <div class="kpi"><div class="num">≈-4.5%</div><div class="lab">较上季度末环比</div></div>
+</div>
+
+<h2 class="sec">二、持仓排序表（按 13F 披露市值）</h2>
+<div class="sec-sub">市值口径：2026Q2 末（2026-06-30）；行情/估值口径：2026-08-18 收盘（westock 行情，美股 $ / 港股 HK$）；YTD = 年初至 8/18</div>
+<table>
+  <tr><th>#</th><th>标的</th><th>代码</th><th>持仓市值（美元）</th><th>占组合</th><th>现价</th><th>YTD</th><th>近20日</th><th>PE(TTM)</th><th>Q2 调仓</th></tr>
+  <tr><td>1</td><td class="pos">苹果 Apple</td><td>AAPL</td><td>≈78.4 亿</td><td>41.05%</td><td>$305.59</td><td class="up">+12.71%</td><td class="down">-6.35%</td><td>35.0</td><td class="down">减持 -6.38%（连续两季）</td></tr>
+  <tr><td>2</td><td class="pos">伯克希尔 B Berkshire Hathaway</td><td>BRK.B</td><td>≈46.2 亿</td><td>24.18%</td><td>$498.23</td><td class="down">-0.88%</td><td class="up">+1.42%</td><td>12.5</td><td class="up">增持</td></tr>
+  <tr><td>3</td><td class="pos">拼多多 PDD</td><td>PDD</td><td>≈19.1 亿</td><td>9.99%</td><td>$86.94</td><td class="down">-23.33%</td><td class="up">+1.03%</td><td>9.3</td><td class="up">增持 +527 万股（+26.7%）</td></tr>
+  <tr><td>4</td><td class="pos">特斯拉 Tesla</td><td>TSLA</td><td>≈14.2 亿</td><td>7.44%</td><td>$339.30</td><td class="down">-24.55%</td><td class="down">-8.19%</td><td>314</td><td>—</td></tr>
+  <tr><td>5</td><td class="pos">英伟达 Nvidia</td><td>NVDA</td><td>≈12.57 亿</td><td>6.58%</td><td>$225.01</td><td class="up">+20.81%</td><td class="up">+10.69%</td><td>34.5</td><td class="down">减持 -54.63%</td></tr>
+  <tr><td>6</td><td>谷歌 C Alphabet</td><td>GOOG</td><td>≈6.96 亿</td><td>3.64%</td><td>$341.45</td><td class="up">+8.95%</td><td class="down">-2.82%</td><td>17.1</td><td class="down">减持 -46.88%</td></tr>
+  <tr><td>7+</td><td>微软 / 迪士尼 / 阿里巴巴 / 西方石油 / 联合健康 / 其他 7 只</td><td>—</td><td>合计 ≈13.4 亿</td><td>≈7.1%</td><td>—</td><td>—</td><td>—</td><td>—</td><td>微软减 / 迪士尼加 / 阿里重新建仓 / 台积电、CrowdStrike 清仓</td></tr>
+</table>
+<div class="note">注：① 特斯拉持仓市值按总规模 191 亿美元 × 7.44% 推算（约 14.2 亿），具体股数以 SEC 原文为准；② "7+" 行其余标的合计为 191 亿减前六后的余量，占比四舍五入；③ 段永平 Q2 新进/重仓阿里约 30.14 万股（约 2,893 万美元），为观察仓。</div>
+
+<div class="chartbox">
+  <div id="chartPie"></div>
+</div>
+<div class="chartbox">
+  <div id="chartBar"></div>
+</div>
+
+<h2 class="sec">三、首次建仓时间与仓位演变（随时间变化）</h2>
+<div class="sec-sub">首次建仓时间依据：段永平公开表态（雪球/访谈）与 H&H 13F 首见季度；占比 = 各季度末市值 / 组合总市值（受股价涨跌与主动交易共同影响）</div>
+
+<h3 style="font-size:16px;color:#1c2a3d;margin:16px 0 8px;">① 各标的首次买入时间点</h3>
+<table>
+  <tr><th>标的</th><th>代码</th><th>首次建仓时间</th><th>依据 / 说明</th></tr>
+  <tr><td class="pos">苹果</td><td>AAPL</td><td><b>2011 年</b>（个人层面，早于 H&H）</td><td>段永平多次公开称 2011 年起买入；H&H 自 2018Q4 首份 13F 即持有</td></tr>
+  <tr><td class="pos">伯克希尔 B</td><td>BRK.B</td><td><b>2018Q4 前</b>（H&H 首份 13F 即持有）</td><td>2018Q4 首次披露名单即包含</td></tr>
+  <tr><td class="pos">谷歌</td><td>GOOG</td><td><b>2018Q4 前</b>（H&H 首份 13F 即持有）</td><td>2018Q4 首次披露名单即包含（曾持 GOOGL，后转 GOOG）</td></tr>
+  <tr><td class="pos">拼多多</td><td>PDD</td><td><b>2018Q4 首次 → 2024Q1 第三次建仓（最终持有）</b></td><td>多轮进出：2020Q2 清仓 → 2023Q3 再建 → 2023Q4 又清 → 2024Q1 重建并持有至今</td></tr>
+  <tr><td class="pos">英伟达</td><td>NVDA</td><td><b>2025Q1（新建仓）</b></td><td>2025Q1 新进，初始占比仅 0.58%</td></tr>
+  <tr><td class="pos">特斯拉</td><td>TSLA</td><td><b>2026Q1（新建仓）</b></td><td>2026Q1 新进即跻身第五大重仓</td></tr>
+  <tr><td>阿里巴巴</td><td>BABA</td><td><b>2021Q2</b>（13F 可查首个季度；本人自述 2014 年 IPO 时曾买）</td><td>2026Q1 清仓，Q2 重新买回观察仓</td></tr>
+  <tr><td>腾讯控股</td><td>00700.HK</td><td><b>2018 年 10 月</b>（个人/家族港股账户，非 13F 口径）</td><td>游戏版号停发、股价腰斩时约 250-300 港元区间首次建仓；2021-2022 年多次加仓</td></tr>
+</table>
+<div class="note">注：腾讯不在 13F 范围内，其仓位演变无法用 13F 口径量化（公开口径长期约 1%）；下表与图表均为 13F 美股口径。</div>
+
+<h3 style="font-size:16px;color:#1c2a3d;margin:16px 0 8px;">② 仓位占比演变（2023Q3 - 2026Q2，占组合市值比重 %）</h3>
+<div class="chartbox">
+  <div id="chartTrend"></div>
+</div>
+
+<div class="card">
+  <h3>苹果 AAPL：80.95% → 41.05%（2024 年中见顶后一路降仓）</h3>
+  <ul>
+    <li>2023Q3-2024Q2 稳定在 78%-81% 的历史高位（2024Q2 达 80.95% 峰值）；2024Q3 起持续下降，2026Q1 降至 36.72% 最低点，2026Q2 因总盘子缩水回升至 41.05%。</li>
+    <li>两年降幅近一半，与段永平"苹果不便宜了"的表态一致——减仓兑现但保持第一大重仓地位。</li>
+  </ul>
+  <h3>伯克希尔 B：11.7% → 24.18%（2025 年起持续升仓的防御压舱石）</h3>
+  <ul>
+    <li>2023-2024 维持在 9.5%-12% 区间；2025Q1 起阶梯式上升，2026Q2 达 24.18%，五年间占比翻倍。</li>
+  </ul>
+  <h3>拼多多 PDD：多次进出后连续加仓至第三大重仓</h3>
+  <ul>
+    <li>2018Q4 首持 → 2020Q2 清仓 → 2023Q3 重建 → 2023Q4 又清 → 2024Q1 第三次建仓；此后占比从 0.09% 一路升至 2026Q1 的 10.09%（2026Q2 为 9.99%），是 2023 年以来主动加仓最坚决的中概。</li>
+  </ul>
+  <h3>谷歌 GOOG：长期 5% 上下，2025 年收缩后 2026 再放大</h3>
+  <ul>
+    <li>2023-2024 稳定在 4.9%-5.5%；2025Q1 骤降至 1.45%，Q3 低至 1.57%，2025Q4-2026Q1 回升至 3.3%-5.3%，2026Q2 因减持近 47% 回落至 3.64%。</li>
+  </ul>
+  <h3>英伟达 NVDA：2025Q1 建仓 → 2025Q4 暴增 → 2026Q2 兑现</h3>
+  <ul>
+    <li>2025Q1 建仓（0.58%）→ Q2 升至 1.32% → Q3 回落 0.48% → <b>2025Q4 暴增 11 倍至 7.72%</b> → 2026Q1 达 12.07% 峰值 → 2026Q2 减持 54.63% 至 6.58%。</li>
+  </ul>
+  <h3>特斯拉 TSLA：2026 年新进</h3>
+  <ul>
+    <li>2026Q1 新建仓 6.34% → 2026Q2 升至 7.44%，为最新引入的成长配置。</li>
+  </ul>
+</div>
+
+<h2 class="sec">四、行业分布</h2>
+<div class="sec-sub">按 13F 披露市值占比归类（2026Q2 末）</div>
+<table>
+  <tr><th>行业</th><th>代表标的</th><th>估算占比</th><th>集中度</th></tr>
+  <tr><td>消费电子 / 科技硬件</td><td>苹果 AAPL</td><td>≈41%</td><td>单一标的超四成</td></tr>
+  <tr><td>保险 / 投资控股（防御）</td><td>伯克希尔 B</td><td>≈24%</td><td>组合"压舱石"</td></tr>
+  <tr><td>电商 / 消费互联网</td><td>拼多多 PDD、阿里巴巴 BABA</td><td>≈10%+</td><td>拼多多为主</td></tr>
+  <tr><td>新能源汽车</td><td>特斯拉 TSLA</td><td>≈7.4%</td><td>——</td></tr>
+  <tr><td>半导体 / AI 算力</td><td>英伟达 NVDA</td><td>≈6.6%</td><td>Q2 大幅减仓后仍在前五</td></tr>
+  <tr><td>互联网平台 / AI 应用</td><td>谷歌 C、微软</td><td>≈4-5%</td><td>谷歌 Q2 减半</td></tr>
+  <tr><td>能源 / 医药 / 传媒等</td><td>西方石油、联合健康、迪士尼等</td><td>≈5%</td><td>分散观察仓</td></tr>
+</table>
+<div class="warn"><b>行业偏好小结：</b>组合是典型的"<b>消费电子 + 保险防御打底，AI 产业链弹性点缀</b>"结构。苹果与伯克希尔合计占约 65%，构成绝对底仓；AI 相关（英伟达/谷歌/微软及小仓位 CoreWeave、Credo、Tempus）合计约 12-15%，且 Q2 整体在减仓兑现；电商（拼多多/阿里）是被越跌越买的加仓方向。</div>
+
+<h2 class="sec">五、主要持仓基本面与近期表现简析</h2>
+
+<div class="card">
+  <h3>1. 苹果 Apple <span class="code">AAPL · 41.05% · ≈78.4 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>全球最大消费电子公司，硬件 + 服务双轮，服务收入占比持续提升；段永平长期认为其"用户忠诚度高、提价后仍会购买"，商业模式优于可口可乐。</li>
+    <li><b>近期表现：</b>8/18 收 $305.59，YTD +12.71%，但近 20 日 -6.35%；PE(TTM) 约 35 倍，处于历史偏高位。</li>
+    <li><b>段永平态度：</b>连续两个季度减持（Q1 -341 万股、Q2 -184.69 万股），仓位从 2024Q2 的 80%+ 降至四成，公开表态"苹果不便宜了"。属"减仓兑现、核心地位不变"。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>2. 伯克希尔 B Berkshire Hathaway <span class="code">BRK.B · 24.18% · ≈46.2 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>巴菲特旗下保险 + 投资控股平台，账上巨额现金与短期国债提供防御性；PE(TTM) 仅约 12.5 倍，属于低估值 "现金奶牛"。</li>
+    <li><b>近期表现：</b>8/18 收 $498.23，YTD -0.88%，近 60 日 +3.6%，波动远小于科技股。</li>
+    <li><b>段永平态度：</b>Q2 继续增持，且多次通过"卖 put"方式低吸（此前 8 月曾表态"希望买进来拿着，比标普 500 合算"）。是组合里的防守压舱石。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>3. 拼多多 PDD <span class="code">PDD · 9.99% · ≈19.1 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>国内电商 + Temu 海外扩张，供应链效率突出；PE(TTM) 仅约 9.3 倍，是前五大中估值最低者。段永平为拼多多天使投资人，逻辑是"供应链能力 + 海外空间 + 安全边际"。</li>
+    <li><b>近期表现：</b>8/18 收 $86.94，YTD -23.33%，近 60 日 -11.42%，<b>是组合里跌幅最大、被越跌越买最明显的标的</b>（Q2 加仓 527 万股 +26.7%）。</li>
+    <li><b>风险点：</b>海外政策与关税、国内竞争加剧、增长放缓是市场主要担忧。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>4. 特斯拉 Tesla <span class="code">TSLA · ≈7.44% · ≈14.2 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>电动车 + 储能 + Robotaxi/AI 叙事；PE(TTM) 约 314 倍，估值极高，股价对预期高度敏感。</li>
+    <li><b>近期表现：</b>8/18 收 $339.30，YTD -24.55%，近 60 日 -18.68%，<b>表现疲弱</b>；52 周高点 $498.83 较现价回落约 32%。</li>
+    <li><b>段永平态度：</b>持股比例不低但 Q2 未明显加码，更多是长期持有的"非核心"仓位，反映其"看不懂的不重仓"原则下的试探性配置。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>5. 英伟达 Nvidia <span class="code">NVDA · 6.58% · ≈12.57 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>AI 算力芯片绝对龙头，数据中心业务驱动高增长；PE(TTM) 约 34.5 倍，相对增速仍属合理。</li>
+    <li><b>近期表现：</b>8/18 收 $225.01，<b>YTD +20.81%</b>，近 20 日 +10.69%，是组合中表现最强的科技股。</li>
+    <li><b>段永平态度：</b>2025Q4 曾 11 倍加仓，但 <b>2026Q2 大幅减持 54.63%</b>（从第三大降至第五），体现"涨高兑现 + 保留底仓"；他公开表示仍认可黄仁勋与 AI 方向，倾向用卖 put 低位增持。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>6. 谷歌 C Alphabet <span class="code">GOOG · 3.64% · ≈6.96 亿美元</span></h3>
+  <ul>
+    <li><b>基本面：</b>搜索广告基本盘 + 云 + Gemini AI；PE(TTM) 约 17.1 倍，大科技中估值偏低。</li>
+    <li><b>近期表现：</b>8/18 收 $341.45，YTD +8.95%，近 60 日 -11.24% 回落明显。</li>
+    <li><b>段永平态度：</b>Q2 减持约 47%（173.74 万股），与其"涨后兑现"的节奏一致；此前他多次提及 Gemini，属于"关注 AI 但不重仓"的标的。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>附：腾讯控股（不在 13F，但为段永平公开认可的个人重仓）<span class="code">00700.HK</span></h3>
+  <ul>
+    <li>腾讯是段永平除美股外最著名的长期持仓（他曾自嘲"漏了腾讯"后又重仓）。<b>8/18 收 HK$442.40，YTD -25.48%</b>，PE(TTM) 约 14.9 倍，处于历史估值低位。详细持仓推断见下文"六、雪球发言推断的 13F 之外持仓"。</li>
+  </ul>
+</div>
+
+<h2 class="sec">六、通过雪球发言推断的其他持仓（13F 之外 · A股/港股）</h2>
+<div class="sec-sub">依据：段永平雪球账号"大道无形我有型"公开发言、2025 年 11 月《方略》访谈、港交所权益披露（泡泡玛特）。A/港股无 13F 强制披露，仓位均为市场推算，非官方数据，需谨慎对待</div>
+
+<div class="warn"><b>自述总纲：</b>段永平多次公开表示"我一般跟大家讲，我就三只股票：<b>苹果、腾讯、茅台</b>，差不多真是这样"。他自述真正投过比较大金额的序列为：<b>网易 → 雅虎（其实想买阿里）→ 苹果 → 伯克希尔（比重不大）→ 茅台（比重蛮大）→ 腾讯（现在比重也还可以）</b>，遵循巴菲特"20 个打孔位"原则，自述"10 个孔还没打完"。A股几乎只重仓茅台，是其投资边界。</div>
+
+<h3 style="font-size:16px;color:#1c2a3d;margin:16px 0 8px;">① 通过卖 put / 期权正在建仓或关注的美股标的（2026-07-23 雪球原话）</h3>
+<div class="warn"><b>一手发言（2026-07-23 雪球"大道无形我有型"）：</b>"前几天我已经卖了一些 MU（美光科技）的 put，这几天我会卖点 SpaceX、特斯拉的 put，还有 PLTR 也会卖点 put……我应该还会保持我的 NVDA 体量，就是 put 到期后会继续卖 put 的意思。""我的水果（苹果）已经比较成熟了，刚刚被 call 走了一些（买了 t-bill 了）。"——<b>这些期权标的虽未计入 13F 多头持仓，却是其当下最活跃的建仓方向</b>，也是理解其 AI 布局的关键线索。</div>
+<table>
+  <tr><th>标的</th><th>代码</th><th>状态</th><th>操作细节（据雪球发言/公开报道）</th></tr>
+  <tr><td class="pos">美光科技 Micron</td><td>MU</td><td>卖 put 建仓中（<b>已持续一年多</b>）</td><td>7/23 明说"卖了一些 MU 的 put"；8 月晒单：999 张行权价 93.5 美元 put 到期，权利金折年化超 100%（"保险公司的生意不错"）；自述"卖 MU 的 put 已经一年多了，第一次卖的时候还在 300 多，有过一次被 put 进来的经历，还卖了一个 call 今天也被 call 走了"；核心逻辑：<b>存储超级周期</b>——"存储不可能一直这样，但 2-3 年这样非常有可能，现在需求远大于供应能力"（AI 数据中心对 HBM/SSD 需求爆发，参考 SK 海力士 2026Q2 营业利润同比 +596%）</td></tr>
+  <tr><td class="pos">SpaceX</td><td>SPCX（2026-06 IPO 新股）</td><td><b>已买正股 + 卖 put</b></td><td>7/24 卖出 1000 张 2026-12-18 到期、行权价 115 美元 put（权利金约 232.6 万美元，年化约 60%）；<b>8/5 以约 108.68 美元买入 10 万股正股</b>（"支持一下马斯克的梦想"），至 8/14 浮盈约 30.7%；他看好 SpaceX 长期盈利潜力："要是能一年赚 1500 亿以上，3 万亿市值其实也不离谱"</td></tr>
+  <tr><td class="pos">Palantir</td><td>PLTR</td><td>13F 已建仓（<0.2%）+ 卖 put 关注</td><td>一季度新建小仓位（13F 可见）；7/23 明说"PLTR 也会卖点 put"；对 AI 数据分析赛道保持跟踪，"卖点 put 先关注着"</td></tr>
+  <tr><td class="pos">特斯拉</td><td>TSLA</td><td>13F 已持仓 + 卖 put</td><td>态度转变："给我钱也不投"→"我卖 put 了，就当风投吧"；7/23 明说会卖特斯拉 put（同时仍在 13F 持有约 14 亿美元正股）</td></tr>
+  <tr><td>谷歌</td><td>GOOG</td><td>13F 已持仓 + 计划增持</td><td>7/23 表示"我想我还会增加一些谷歌股份，有机会还想增加一些伯克希尔"（对应 Q2 减持 46.88% 属兑现而非看空）；但 8 月又表示谷歌企业文化"有点问题了，留不住大神"，态度谨慎</td></tr>
+  <tr><td>苹果（被 call 走部分）</td><td>AAPL</td><td>部分仓位转 t-bill</td><td>"我的水果（苹果）已经比较成熟了，刚刚被 call 走了一些（买了 t-bill 了）"——卖 call 被行权后，资金暂放美国短期国债，并非看空</td></tr>
+  <tr><td>英伟达</td><td>NVDA</td><td>13F 已持仓</td><td>"我应该还会保持我的 NVDA 体量，就是 put 到期后会继续卖 put"——Q2 减持属兑现浮盈，底仓保留 + 卖 put 等待低位接回</td></tr>
+</table>
+<div class="note">注：13F 一季度（2026Q1）新建的小仓位还包括 Circle、新思科技（SNPS）、Snowflake（SNOW）、Innodata、Tempus AI 等，合计占比不到 0.2%，二季度全部一股未动，更像"研究清单上的标记"而非正式仓位——覆盖 AI 应用、数据云、EDA、连接芯片、大模型数据供给等环节。</div>
+
+<h3 style="font-size:16px;color:#1c2a3d;margin:16px 0 8px;">② A股 / 港股当前持仓推断</h3>
+<table>
+  <tr><th>标的</th><th>代码</th><th>市场</th><th>推断持仓</th><th>推断市值（约）</th><th>依据 / 近期动态</th></tr>
+  <tr><td class="pos">贵州茅台</td><td>600519.SH</td><td>A股</td><td>约 1,900 万股</td><td>约 200-250 亿元人民币</td><td>段永平在 A 股唯一重仓；2011 年前后建仓、2013-2014 塑化剂风波大幅逆势加仓（约 140 元/股）；2026-01-21 再买、1/27 清仓 150 万股神华 H 换入茅台约 7.72 万股（均价约 1,330 元、耗资约 1.03 亿元）；2026-05-07 仍表态"我今天还买了茅台"；2026-08 抛出"十年赌局"（拿茅台与任何国内基金赌 1 亿元、10 年为限，赢的钱捐学校）</td></tr>
+  <tr><td class="pos">腾讯控股</td><td>00700.HK</td><td>港股</td><td>目标"腾讯总股本的 1%"（约 9,100 万股量级）</td><td>约 350-400 亿港元量级</td><td>2018-10 首次建仓（约 285 港元）；2021-2022 年 5 次公开加仓（约 400→198 港元"每跌 10% 加一次"）；2023-01 将美股腾讯 ADR 换成苹果（港股未动）；2024-08 起大规模卖 put 收集筹码；自述<b>从未卖出一股腾讯</b>，称"非卖品"，"只要微信还在就值得持有"；确定性不如苹果故仓位低于苹果</td></tr>
+  <tr><td class="pos">泡泡玛特</td><td>09992.HK</td><td>港股</td><td>约 1.026 亿股（2026-08-06 权益披露 7.70%）</td><td>约 150-160 亿港元</td><td><b>唯一有港交所权益披露硬数据的持仓</b>；2026-04-09 以卖 put 建仓（"泡泡玛特保险公司正式开张"，行权价 150 港元）；4/29 到期未接货赚权利金；<b>5/7 直接换股买入"我把神华都换了泡泡玛特"</b>，5 月底持 5.69% 举牌成第二大股东；7/30 因期权履约（put 到期 + 部分被 call 走）降至 5.55% 引发"减持"风波，本人澄清"就是 put expired，部分被 call 走了"，从未主动卖出；8/6 回升至 7.70%（1.02576 亿股）；他称"泡泡玛特我才刚开始买……10 年内大概率不会卖"，并认为"20 年后泡泡玛特利润超过迪士尼的概率超 50%"；8/12 收 151 港元</td></tr>
+  <tr><td>中国神华</td><td>601088.SH / 01088.HK</td><td>A股+港股</td><td><b>已清仓</b></td><td>—</td><td>段永平自述"我还买过神华，我现在有神华，只是它比重不大"；2026-01-27 卖 150 万股 H 股（约 6,500 万港元）换茅台；2026-05 清仓剩余全部持仓换入泡泡玛特；他表示"未来还会买回神华"，属主动换仓而非看空煤炭</td></tr>
+</table>
+<div class="note">注：① 除泡泡玛特（超 5% 触发港交所权益披露）有硬数据外，茅台/腾讯/神华的持股数量与成本均为媒体/市场基于段永平本人言论的<b>推算</b>，存在口径差异；② 茅台市值按约 1,300-1,400 元/股区间粗估，腾讯按目标 1% 股本 × 8/18 收盘价 HK$442.40 粗估，泡泡玛特按约 1.02 亿股 × 约 150-160 港元粗估；③ 段永平 2026-04 后曾宣布"相当长时间不再上雪球"，信息存在滞后。</div>
+
+<h3 style="font-size:16px;color:#1c2a3d;margin:16px 0 8px;">③ 历史上公开提及/曾持有的其他标的（当前大概率已清仓）</h3>
+<table>
+  <tr><th>标的</th><th>代码 / 市场</th><th>历史操作与公开言论</th><th>当前状态</th></tr>
+  <tr><td>网易</td><td>NTES 美股</td><td>2001 年互联网泡沫后以不到 1 美元重仓，2002 年投入约 200 万美元买入约 152 万股，后成第二大股东，转型成功后收益超 100 倍</td><td>最成功投资之一，早已卖出大部分</td></tr>
+  <tr><td>雅虎</td><td>YHOO 美股</td><td>自述"投雅虎其实就是想买阿里"，看重其持有阿里股权</td><td>早已清仓</td></tr>
+  <tr><td>阿里巴巴</td><td>BABA 美股</td><td>2023-2024 大举买入，2024 年底约 3,982 万股（约 5.27 亿美元，占 4.39%）；2025 年起逐步减仓；2026Q1 清仓、2026Q2 买回 30.14 万股观察仓；曾称"70 多块的阿里确实便宜"</td><td>2026Q2 为小仓位观察仓（已计入 13F）</td></tr>
+  <tr><td>万科</td><td>000002.SZ A股</td><td>2005 年买入，地产扩张早期，最终约 6 倍离场</td><td>早已卖出</td></tr>
+  <tr><td>创维</td><td>00751.HK 港股</td><td>2004 年底创始人危机暴跌时逆向抄底，持有约 5 年赚约 5 倍</td><td>早已卖出</td></tr>
+  <tr><td>通用电气</td><td>GE 美股</td><td>2008 年金融危机抄底，20 多美元卖出赚约 200%；后自认 GE 商业模式不好、不该投</td><td>早已卖出</td></tr>
+  <tr><td>分众 / 携程</td><td>美股</td><td>早期买入过</td><td>早已卖出</td></tr>
+  <tr><td>特斯拉</td><td>TSLA 美股</td><td>访谈中承认"卖出特斯拉是个错误决策，我可能应该留着"；曾因"不喜欢马斯克的品行"及认为"电动车生意差异化小、会很累"而看空；2026 年态度转为"我卖 put 了，就当风投吧"（见上表）</td><td><b>已在 13F 持仓</b>（2026Q1 新进，约 7.4%）+ 卖 put 关注</td></tr>
+</table>
+
+<div class="warn"><b>综合研判：</b>13F 之外，段永平真实重仓的 A/港股按公开信息可归纳为——<b>A股：几乎只有贵州茅台</b>（重仓，约 200-250 亿元）；<b>港股：腾讯控股</b>（核心，向总股本 1% 目标迈进）+ <b>泡泡玛特</b>（2026 年新晋、第二大股东，约 150-160 亿港元）；中国神华已清仓换仓。仓位逻辑共性：极度集中于"看得懂"的商业模式（品牌定价权、网络效应、平台生态）；大量使用<b>期权（卖 put / 卖 call）</b>作为建仓与增强收益工具——他把这套打法称为"保险公司"和"长线短做"：<b>卖 put 收权利金、跌到行权价就低价接货；持股涨到不便宜就卖 call、涨过行权价就被 call 走换成 t-bill</b>（苹果被 call 走部分即如此）；对确定性低的标的（拼多多、泡泡玛特、MU、SpaceX、PLTR、AI 股）仓位克制、只做"试错仓"或"风投仓"。需注意：段永平投资体量大、资金期限长（来自 OPPO/vivo 实业分红），普通人无法简单复制其"长期扛 50% 回撤"的模式。</div>
+
+<h2 class="sec">七、Q2 调仓动作与投资风格解读</h2>
+<div class="sec-sub">来源：2026Q2 13F 变动明细（媒体汇总）</div>
+<table>
+  <tr><th>动作</th><th>标的</th><th>说明</th></tr>
+  <tr><td class="up">加仓</td><td>拼多多 PDD</td><td>+527.38 万股（+26.71%），升至第三大重仓，越跌越买</td></tr>
+  <tr><td class="up">加仓</td><td>伯克希尔 B</td><td>+8.19 万股，防御性配置持续加码</td></tr>
+  <tr><td class="up">加仓</td><td>迪士尼 DIS</td><td>+19.48 万股（+12.89%）</td></tr>
+  <tr><td class="up">重新建仓</td><td>阿里巴巴 BABA</td><td>新建 30.14 万股（≈2,893 万美元）观察仓，Q1 刚清仓</td></tr>
+  <tr><td class="down">减持</td><td>苹果 AAPL</td><td>-184.69 万股（-6.38%），连续第二季减持</td></tr>
+  <tr><td class="down">减持</td><td>英伟达 NVDA</td><td>-756.31 万股（-54.63%），从第三大降至第五</td></tr>
+  <tr><td class="down">减持</td><td>谷歌 C</td><td>-173.74 万股（-46.88%）</td></tr>
+  <tr><td class="down">减持</td><td>微软 MSFT</td><td>-25.78%</td></tr>
+  <tr><td class="down">清仓</td><td>台积电 TSM / CrowdStrike CRWD</td><td>退出半导体代工与网络安全小仓位</td></tr>
+</table>
+<div class="warn"><b>风格解读：</b>① 对"看不懂或觉得贵"的标的果断兑现（苹果两季连减、英伟达/谷歌减半）；② 对"看得懂且便宜"的标的越跌越买（拼多多）；③ 用伯克希尔 + 卖 put 构建防御与低吸工具；④ 小仓位观察 AI 产业链（CoreWeave / Credo / Tempus 约 0.1-0.12%），符合其一贯"集中 + 能力圈 + 安全边际"的价值投资框架。需要警惕的反向声音：组合中特斯拉估值极高、拼多多政策风险大，前五之外占比小，集中度过高意味着单一标的波动会显著影响组合。</div>
+
+<div class="disc">
+  <b>数据来源与口径：</b>13F 持仓数据来自 H&H International Investment 2026Q2 报告（截至 2026-06-30，2026 年 8 月中旬披露），经财联社 / 上海证券报 / 证券时报等媒体汇总（非一手整理，需以 SEC 原文核实）；行情与估值数据来自行情终端 2026-08-18 收盘（美股 USD、港股 HKD）；2025Q4 对照数据来自 2026-02-18 媒体披露。持仓市值按 13F 披露时点（6/30）计算，与当前股价存在时差；特斯拉市值系按占比推算。<b>第六节 A/港股持仓均基于段永平雪球公开言论与媒体推算</b>（雪球"大道无形我有型"发言、2025-11《方略》访谈、港交所权益披露），除泡泡玛特（超 5% 权益披露）外均无官方持仓数据，存在口径差异与不确定性，需以官方披露为准。本报告为客观数据梳理，不构成任何投资建议。
+</div>
+
+<footer>Deep Research · 2026-08-18 · 基于公开数据</footer>
+</div>
+
+<script>
+var pieChart = echarts.init(document.getElementById('chartPie'));
+pieChart.setOption({
+  title: { text: 'H&H 组合占比（2026Q2 末）', left: 'center', textStyle: { fontSize: 15, color: '#1c2a3d' } },
+  tooltip: { trigger: 'item', formatter: '{b}: {d}%' },
+  legend: { orient: 'vertical', right: 10, top: 'middle', textStyle: { fontSize: 12 } },
+  series: [{
+    type: 'pie',
+    radius: ['38%', '68%'],
+    center: ['40%', '55%'],
+    data: [
+      { name: '苹果 AAPL', value: 41.05, itemStyle: { color: '#3a5f8a' } },
+      { name: '伯克希尔B BRK.B', value: 24.18, itemStyle: { color: '#1e8449' } },
+      { name: '拼多多 PDD', value: 9.99, itemStyle: { color: '#c0392b' } },
+      { name: '特斯拉 TSLA', value: 7.44, itemStyle: { color: '#8e6a1a' } },
+      { name: '英伟达 NVDA', value: 6.58, itemStyle: { color: '#7d5ba6' } },
+      { name: '谷歌C GOOG', value: 3.64, itemStyle: { color: '#2f8f9e' } },
+      { name: '其他 12 只', value: 7.12, itemStyle: { color: '#b9b2a4' } }
+    ],
+    label: { fontSize: 11, formatter: '{b}\n{d}%' }
+  }]
+});
+
+var barChart = echarts.init(document.getElementById('chartBar'));
+barChart.setOption({
+  title: { text: '持仓市值排序（亿美元 · 2026Q2 末）', left: 'center', textStyle: { fontSize: 15, color: '#1c2a3d' } },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}<br/>{c} 亿美元' },
+  grid: { left: 90, right: 30, top: 60, bottom: 30 },
+  xAxis: { type: 'value', name: '亿美元' },
+  yAxis: {
+    type: 'category',
+    inverse: true,
+    data: ['其他 12 只', '谷歌C GOOG', '英伟达 NVDA', '特斯拉 TSLA', '拼多多 PDD', '伯克希尔B BRK.B', '苹果 AAPL'],
+    axisLabel: { fontSize: 12 }
+  },
+  series: [{
+    type: 'bar',
+    barWidth: 22,
+    data: [
+      { value: 13.4, itemStyle: { color: '#b9b2a4' } },
+      { value: 6.96, itemStyle: { color: '#2f8f9e' } },
+      { value: 12.57, itemStyle: { color: '#7d5ba6' } },
+      { value: 14.2, itemStyle: { color: '#8e6a1a' } },
+      { value: 19.1, itemStyle: { color: '#c0392b' } },
+      { value: 46.2, itemStyle: { color: '#1e8449' } },
+      { value: 78.4, itemStyle: { color: '#3a5f8a' } }
+    ],
+    label: { show: true, position: 'right', formatter: '{c}' }
+  }]
+});
+
+var trendChart = echarts.init(document.getElementById('chartTrend'));
+trendChart.setOption({
+  title: { text: '各标的仓位占比演变（2023Q3 - 2026Q2）', left: 'center', textStyle: { fontSize: 15, color: '#1c2a3d' } },
+  tooltip: { trigger: 'axis', formatter: function(params) {
+    var s = params[0].axisValue + '<br/>';
+    for (var i = 0; i < params.length; i++) {
+      if (params[i].value != null) s += params[i].marker + ' ' + params[i].seriesName + ': ' + params[i].value + '%<br/>';
+    }
+    return s;
+  } },
+  legend: { data: ['苹果 AAPL', '伯克希尔B', '拼多多 PDD', '谷歌C', '英伟达 NVDA', '特斯拉 TSLA'], top: 28, textStyle: { fontSize: 11 } },
+  grid: { left: 55, right: 30, top: 70, bottom: 30 },
+  xAxis: { type: 'category', data: ['23Q3','23Q4','24Q1','24Q2','24Q3','24Q4','25Q1','25Q2','25Q3','25Q4','26Q1','26Q2'], axisLabel: { fontSize: 11 } },
+  yAxis: { type: 'value', name: '占比 %', axisLabel: { fontSize: 11 } },
+  series: [
+    { name: '苹果 AAPL', type: 'line', smooth: true, symbolSize: 6, data: [79.8, 80.0, 78.01, 80.95, 74.33, 70.5, 63.33, 62.47, 60.42, 50.3, 36.72, 41.05], lineStyle: { width: 3, color: '#3a5f8a' }, itemStyle: { color: '#3a5f8a' } },
+    { name: '伯克希尔B', type: 'line', smooth: true, symbolSize: 6, data: [11.7, 11.7, 12.12, 9.54, 10.52, 11.31, 15.0, 14.24, 17.78, 20.63, 21.91, 24.18], lineStyle: { width: 2.5, color: '#1e8449' }, itemStyle: { color: '#1e8449' } },
+    { name: '拼多多 PDD', type: 'line', smooth: true, symbolSize: 6, data: [null, null, 0.09, 0.1, 3.18, 4.83, 7.0, 7.86, 6.25, 7.48, 10.09, 9.99], lineStyle: { width: 2.5, color: '#c0392b' }, itemStyle: { color: '#c0392b' } },
+    { name: '谷歌C', type: 'line', smooth: true, symbolSize: 6, data: [5.2, 5.2, 5.5, 5.54, 5.12, 4.94, 1.45, 2.99, 1.57, 3.33, 5.31, 3.64], lineStyle: { width: 2, color: '#2f8f9e' }, itemStyle: { color: '#2f8f9e' } },
+    { name: '英伟达 NVDA', type: 'line', smooth: true, symbolSize: 6, data: [null, null, null, null, null, null, 0.58, 1.32, 0.48, 7.72, 12.07, 6.58], lineStyle: { width: 2, color: '#7d5ba6' }, itemStyle: { color: '#7d5ba6' } },
+    { name: '特斯拉 TSLA', type: 'line', smooth: true, symbolSize: 6, data: [null, null, null, null, null, null, null, null, null, null, 6.34, 7.44], lineStyle: { width: 2, color: '#8e6a1a' }, itemStyle: { color: '#8e6a1a' } }
+  ]
+});
+</script>
+</body>
+</html>
