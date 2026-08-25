@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI芯片与存储芯片供需全景分析 · 2026-08</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#1a2230; --muted:#5b6573; --line:#e6e9ef;
+    --blue:#0a3d8f; --blue-bg:#eef3fb; --gold:#c8a24a; --gold-bg:#fbf5e8;
+    --red:#b23b3b; --green:#1d7a4d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+  .wrap{max-width:1060px;margin:0 auto;padding:40px 26px 80px}
+  header.top{border-bottom:3px solid var(--gold);padding-bottom:20px;margin-bottom:26px}
+  header.top h1{font-size:27px;margin:0 0 8px;letter-spacing:.3px}
+  header.top .sub{color:var(--muted);font-size:14px}
+  .tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;margin-right:6px;margin-top:6px}
+  .tag.blue{background:var(--blue-bg);color:var(--blue);border:1px solid #cdddf5}
+  .tag.gold{background:var(--gold-bg);color:#8a6d1f;border:1px solid #ecdcb4}
+  h2{font-size:21px;margin:44px 0 14px;padding-left:12px;border-left:4px solid var(--gold)}
+  h3{font-size:16.5px;margin:24px 0 10px}
+  p{margin:10px 0}
+  .tldr{background:linear-gradient(180deg,#fff,#fbfcfe);border:1px solid var(--line);border-radius:14px;
+    padding:20px 24px;margin-bottom:8px}
+  .tldr h2{border:none;padding:0;margin:0 0 10px}
+  .tldr ol{margin:6px 0;padding-left:20px}
+  .tldr li{margin:7px 0}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+  @media(max-width:760px){.cards{grid-template-columns:1fr}}
+  .kpi{border:1px solid var(--line);border-radius:12px;padding:14px 18px;background:var(--card)}
+  .kpi .n{font-size:26px;font-weight:800;color:var(--blue);line-height:1.2}
+  .kpi .n.gold{color:#a8842a}
+  .kpi .n.red{color:var(--red)}
+  .kpi .t{font-size:12.5px;color:var(--muted);margin-top:4px}
+  .box{border:1px solid var(--line);border-radius:12px;padding:16px 20px;background:var(--card);margin-top:14px}
+  table.cmp{border-collapse:collapse;width:100%;margin-top:14px;font-size:13.5px;background:var(--card);
+    border:1px solid var(--line)}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:9px 12px;vertical-align:top;text-align:left}
+  table.cmp thead th{background:#1a2230;color:#fff;font-weight:600}
+  table.cmp tbody th{background:#f3f5f8;font-weight:600}
+  .chartbox{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px 16px;margin-top:14px}
+  .chartbox .cap{font-size:13px;font-weight:700;margin-bottom:4px}
+  .chartbox .src-note{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .toggle{display:inline-block;font-size:12.5px;padding:3px 14px;border-radius:14px;cursor:pointer;
+    border:1px solid var(--line);background:#f3f5f8;margin:2px 4px 0 0;user-select:none}
+  .toggle.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .note{background:#fff8ec;border:1px solid #f0e2bf;border-radius:10px;padding:11px 16px;font-size:13px;
+    color:#6b531a;margin:13px 0}
+  .risk{background:#fdf3f3;border:1px solid #f0d5d5;border-radius:10px;padding:11px 16px;font-size:13px;
+    color:#7a3232;margin:13px 0}
+  .src{font-size:12px;color:var(--muted);background:#f3f5f8;border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px}
+  .src a{color:var(--blue);word-break:break-all}
+  footer{margin-top:46px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:12px}
+  .disc{background:#f3f5f8;border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:12.5px;
+    color:#4a5462;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>AI 芯片与存储芯片：需求与供给会发生"很大变化"吗？</h1>
+  <div class="sub">基于 2026 年 8 月当期多机构数据的供需全景量化分析 ｜ 灼识咨询 · IIM · 野村 · TrendForce · 摩根大通 · 高盛 · Counterpoint · 长城证券 等</div>
+  <span class="tag blue">AI 芯片 · GPU / ASIC</span>
+  <span class="tag gold">存储芯片 · HBM / DRAM / NAND</span>
+</header>
+
+<div class="tldr">
+  <h2>结论先行（TL;DR）</h2>
+  <ol>
+    <li><strong>需求端：会，而且是历史级的变化（已在进行时）</strong>——算力需求引擎已从"模型训练"切换到"应用推理 + Agent 智能体"，2026 年 3 月全球大模型 Token 日调用量约 20.4 万亿（环比 +20.7%）；海外四大云厂商资本开支两年近乎翻倍至约 6000 亿美元/年，2026 年海外五云 AI 基建总开支 6000–6300 亿美元。</li>
+    <li><strong>供给端：量也在大幅扩张，但追不上需求</strong>——台积电 CoWoS 月产能 2026 年底目标翻倍至 12–14 万片；存储三巨头 2026 年资本开支合计约 1200–1500 亿美元（70% 投向 HBM/先进制程）；但新建产线 1.5–2 年才满产，<strong>真正的供给释放要等到 2027 年底之后</strong>。</li>
+    <li><strong>供需缺口：贯穿 2026–2028 年</strong>——CoWoS 缺口 &gt;20%、HBM 缺口 22%（部分口径 Q2 高达 50–60%）、DRAM（不含 HBM）缺口 15–20%、中国国产 AI 芯片缺口 25–40%；高盛预计 2026–2028 年全球 DRAM 供需缺口 5.0% / 5.9% / 3.9%。</li>
+    <li><strong>价格：历史级涨幅</strong>——DRAM 合约价 2026Q1 环比 +93–98%、Q2 +58–63%、Q3 回落至 +13–18%，全年或累计 +150–160%；32GB DDR5 内存条一年内从约 900 元涨至 3300–3800 元（+300%）。</li>
+    <li><strong>结构在变：三轨并行 + HBM 主导</strong>——GPU 一家独大 → GPU + 定制 ASIC + 国产芯片三轨并行；存储产能分配从"消费级 DRAM"大幅转向 HBM；存储正从"周期品"升级为"AI 基础设施战略资产"。</li>
+    <li><strong>反向声音（风险）</strong>——涨价已开始反噬消费需求（TrendForce 将 2026 年全球笔电出货预测下调至 -2.4%）；若 2027H2 后新产能集中释放叠加 AI 资本开支放缓，供需可能快速逆转，这是本轮周期最大的变量。</li>
+  </ol>
+</div>
+
+<h2>一、需求端：会不会大幅增长？——会，且已经是进行时</h2>
+
+<div class="cards">
+  <div class="kpi"><div class="n">~6000亿<span style="font-size:15px">美元</span></div>
+    <div class="t">海外四大云厂商（微软/谷歌/亚马逊/Meta）AI 资本开支，两年近乎翻倍至约 6000 亿美元/年；Meta 一家 2026 年指引 1150–1350 亿美元（来源：NextWaves/多机构，2026）</div></div>
+  <div class="kpi"><div class="n">20.4万亿</div>
+    <div class="t">2026 年 3 月全球大模型 Token 日调用量（环比 +20.7%），智能体（Agent）普及推动算力指数级消耗（来源：行业跟踪数据，2026-03）</div></div>
+  <div class="kpi"><div class="n">+180%</div>
+    <div class="t">2026 年全球 AI 服务器出货量预计达 150 万台，同比增长 180%；单台 AI 服务器 DRAM 用量为传统服务器 8–10 倍、NAND 用量 3 倍以上（来源：Gartner/Counterpoint，2026）</div></div>
+  <div class="kpi"><div class="n red">&gt;1万亿</div>
+    <div class="t">英伟达 2026–2027 意向订单总额据称已突破万亿美元；FY26Q4 营收 681 亿美元（+73%），数据中心 623 亿（+75%）（来源：英伟达财报/行业报道，2026）</div></div>
+</div>
+
+<h3>1. 需求引擎切换：训练 → 推理 → Agent</h3>
+<p>2024 年起，<strong>推理侧投资已超越训练侧</strong>，AI 算力需求从"一次性训练"转向"持续推理消耗"。叠加智能体（Agent）普及带来的 Token 指数级消耗——2026 年 3 月全球大模型日调用量 20.4 万亿 Tokens（环比 +20.7%）。英伟达黄仁勋在 GTC 明确表态：智能 Agent 普及带来的算力增长是"长期指数级上行，不是短期一波行情"。</p>
+
+<h3>2. 云厂商资本开支：真金白银的"签单锁定"</h3>
+<p>需求不是预期，而是已落地的订单：海外五家头部云厂商 2026 全年 AI 基建总开支 6000–6300 亿美元，其中约七成五用于采购 AI 芯片与服务器硬件；四大云厂商（微软、谷歌、亚马逊、Meta）合计资本开支两年内近乎翻倍至约 6000 亿美元/年。国内互联网大厂 2026 年内 GPU 采购预算已从年初 1600 亿元上调至 2300 亿元（+44%）。</p>
+
+<h3>3. 市场规模：从千亿美元到五千亿美元</h3>
+<div class="chartbox">
+  <div class="cap">全球 AI 加速卡市场规模（亿美元）</div>
+  <div id="chart1" style="width:100%;height:340px;"></div>
+  <div class="src-note">数据来源：灼识咨询（2024 起点 / 2028 预测，CAGR&gt;40%）；IIM 2026 报告（2025 实际 1420 亿美元 +31.7%、2026E 突破 1850 亿美元）。口径为 AI 加速芯片（含 GPU/ASIC/FPGA），各机构口径略有差异。</div>
+</div>
+
+<h2>二、供给端：供给量也在大幅扩张，但追不上需求</h2>
+<p>供给端并非不扩产——恰恰相反，本轮是半导体史上最激进的扩产周期。核心矛盾在于：<strong>扩产周期（1.5–2 年）远长于需求爆发速度，且瓶颈环节（先进封装、HBM、良率）短期无解</strong>。</p>
+
+<h3>1. AI 芯片：瓶颈已从"晶圆制造"转移到"先进封装 + HBM"</h3>
+<div class="box">
+  <p><strong>CoWoS 先进封装——全行业最核心卡点：</strong></p>
+  <ul>
+    <li>台积电 CoWoS 产能：2025 年约 7.5 万片/月 → 2026 年底目标 <strong>12–14 万片/月</strong>（全年约 152 万片），2027 年计划再扩超 60%；设备交期已从 12 个月翻倍至 18–24 个月。</li>
+    <li>但 2026 年全球 CoWoS 需求约 100 万片，<strong>缺口仍超 20%</strong>；英伟达一家需求约 59.5–70 万片（占全球约 60%），台积电订单满足率仅约 80%。台积电董事长魏哲家："供应依旧极度紧张。"</li>
+  </ul>
+  <p><strong>良率与交付：</strong>Blackwell 系列整体良率据供应链 ODM 数据仅约 60%；高密度机架过热迫使多次改设计。野村证券测算 2026 年 GB200 NVL72 理想出货 7.3 万台，实际可交付约 5 万台，<strong>缺口率约 31.5%</strong>；B200 积压订单约 360 万颗，新增订单需等 6–12 个月，Blackwell 价格年初至今已上涨约 23%。</p>
+  <p><strong>中国国产端：</strong>核心制约是中芯国际 N+2（7nm 级）先进制程产能——2026 年底月产能目标约 7 万片，折算全年 AI 芯片有效供给极限约 260 万颗，与需求存在硬缺口（详见供需缺口章节）。</p>
+</div>
+
+<h3>2. 存储芯片：HBM 的"虹吸效应"正在重塑产能分配</h3>
+<div class="box">
+  <ul>
+    <li><strong>HBM 消耗晶圆约为传统 DRAM 的 3 倍</strong>（摩根大通口径 3–4 倍 Die Penalty）：生产同等 bit 的 HBM，需消耗 3 倍晶圆资源（TSV 硅通孔、微凸块、禁布区占用存储阵列面积）。</li>
+    <li><strong>70%–80% 的新增/可调配先进产能</strong>已被三大原厂转向 HBM 和高端 DDR5，导致传统消费级 DDR4/DDR5 供给严重收缩，甚至出现"前代产品价格反超新一代"的反常现象。</li>
+    <li>HBM 占 DRAM 晶圆产能比例：2022 年不足 5% → 2025 年底约 20% → <strong>2027 年预计升至 35%</strong>；SK 海力士 CEO 郭鲁正警告：<strong>2027 年将是供应最紧张的一年，短缺或延续至 2030 年以后</strong>。</li>
+    <li>三大原厂 2025 年资本开支同比 +80% 以上，2026 年合计约 1200–1500 亿美元（约 70% 投向 HBM/先进制程）——但新晶圆厂从动工到满产需 1.5–2 年，<strong>2026 年新增供给有限，真正的产能释放要等到 2027–2028 年</strong>。</li>
+    <li>议价模式质变：三家与一级 AI 客户普遍签订 3–5 年<strong>长期协议（LTA）</strong>锁量（含预付款与违约条款），三星 60–70%、SK 海力士 60%（2027 年升至 70%）、美光超 50% 产能已签 LTA。</li>
+  </ul>
+</div>
+
+<h2>三、供需缺口全景量化（2026 年当期）</h2>
+<div class="chartbox">
+  <div class="cap">各环节供需缺口率对比（2026 年，多机构口径）</div>
+  <div id="chart2" style="width:100%;height:380px;"></div>
+  <div class="src-note">数据来源：野村证券（GB200 NVL72）；IIM/行业渠道（CoWoS 缺口 &gt;20%、NAND ~15%）；摩根大通/长城证券（HBM 22%，部分口径 2026Q2 高达 50–60%）；行业综合（DRAM 不含 HBM 15–20%）；九方金融研究所（国产 AI 芯片 2026 缺口 25–40%）。注：各环节统计口径与时间点不同，仅供参考。</div>
+</div>
+
+<table class="cmp">
+  <thead><tr><th>环节</th><th>2026 供需状况</th><th>量化缺口</th><th>关键约束</th></tr></thead>
+  <tbody>
+    <tr><th>CoWoS 先进封装</th><td>台积电产能售罄至 2026 年底</td><td><strong>&gt;20%</strong>（英伟达占 ~60% 产能）</td><td>设备交期 18–24 个月；2027 年再扩 60% 仍难闭合</td></tr>
+    <tr><th>HBM 高带宽内存</th><td>三家 2026 产能被客户买断，锁至 2028</td><td><strong>22%</strong>（JPM/长城口径；2026Q2 部分口径 50–60%）</td><td>HBM4 交付周期超 30 周；GPU 无 HBM 无法出货</td></tr>
+    <tr><th>DRAM（不含 HBM）</th><td>供不应求，消费级产能被挤占</td><td><strong>15–20%</strong>（高盛：5.0% / 5.9% / 3.9% for 2026–2028）</td><td>HBM 虹吸 70–80% 新增产能</td></tr>
+    <tr><th>NAND Flash</th><td>偏紧，大容量企业级 SSD 缺货</td><td><strong>~15%</strong></td><td>122TB/245TB Nearline SSD 转产</td></tr>
+    <tr><th>国产 AI 芯片（中国）</th><td>2026 需求 400–450 万颗 vs 供给 ~300 万颗</td><td><strong>25–40%</strong>（100–160 万颗缺口）</td><td>中芯 N+2 月产能 ~7 万片，年供给极限 ~260 万颗</td></tr>
+    <tr><th>GB200 NVL72 机柜</th><td>理想出货 7.3 万台 vs 实际 ~5 万台</td><td><strong>~31.5%</strong>（约 165 万颗 B200）</td><td>先进制程 + 先进封装 + 良率（~60%）三重制约</td></tr>
+  </tbody>
+</table>
+<p class="note">注：供需缺口率因统计口径（收入/出货量、是否计入网络芯片）差异较大，摩根大通对 2026–2028 年 HBM 缺口的保守口径为 15% / 14% / 22%——即便按最保守假设，HBM 依然短缺。</p>
+
+<h2>四、价格的"量变"：历史级涨幅</h2>
+
+<div class="chartbox">
+  <div class="cap">DRAM 合约价季度环比涨幅走势（2026）</div>
+  <div style="margin:4px 0 8px">
+    <span class="toggle on" id="tg1" onclick="switchView('c3','t3',this)">📈 看图</span>
+    <span class="toggle" id="tg2" onclick="switchView('t3','c3',this)">📋 看表</span>
+  </div>
+  <div id="c3" style="width:100%;height:340px;"></div>
+  <div id="t3" style="display:none">
+    <table class="cmp">
+      <thead><tr><th>季度</th><th>环比涨幅</th><th>阶段特征</th></tr></thead>
+      <tbody>
+        <tr><th>2026Q1</th><td>+93% ~ +98%</td><td>历史级普涨（三星通用 DRAM 均价环比近翻倍）</td></tr>
+        <tr><th>2026Q2</th><td>+58% ~ +63%</td><td>涨幅仍大，消费级继续跟涨</td></tr>
+        <tr><th>2026Q3</th><td>+13% ~ +18%</td><td>涨幅明显回落，由"普涨"转入"结构性行情"</td></tr>
+        <tr><th>2026 全年</th><td>累计 +150% ~ +160%</td><td>2027 年涨幅预计温和（最多 +10%）</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="src-note">数据来源：TrendForce/行业综合（2026 各季度合约价环比），2026-08。</div>
+</div>
+
+<div class="chartbox">
+  <div class="cap">HBM 市场规模预测（亿美元，摩根大通口径）</div>
+  <div id="chart4" style="width:100%;height:340px;"></div>
+  <div class="src-note">数据来源：摩根大通（财联社转引，2026-08）；对比口径：Counterpoint/SEMI 预计 2026 年 HBM 市场 460–546 亿美元（+58%），占 DRAM 市场近四成。</div>
+</div>
+
+<table class="cmp">
+  <thead><tr><th>价格指标</th><th>数值</th><th>来源</th></tr></thead>
+  <tbody>
+    <tr><th>32GB DDR5 内存条（消费端）</th><td>2025 年约 900 元 → 2026 年 3300–3800 元，<strong>累计 +300%</strong></td><td>行业报道，2026-08</td></tr>
+    <tr><th>DDR4 合约价</th><td>同期累计上涨约 150%</td><td>Omdia/行业，2026</td></tr>
+    <tr><th>DDR5 16Gb 现货价</th><td>2026 年 3 月底约 39.46 美元（历史高位）</td><td>TrendForce，2026-03</td></tr>
+    <tr><th>HBM3E / HBM4</th><td>约 300 美元/36GB 堆栈；约 500 美元/48GB 堆栈</td><td>TrendForce，2026</td></tr>
+    <tr><th>三星 HBM4 报价</th><td>上调 15–20%，单颗约 700 美元，交付周期超 20 周</td><td>行业报道，2026</td></tr>
+    <tr><th>HBM 混合 ASP</th><td>2025 约 1.7 美元/Gb → 2027 +42% → 2028 约 3.4 美元/Gb</td><td>摩根大通，2026-08</td></tr>
+    <tr><th>智能手机存储合约均价</th><td>2025 年末至 2026 年中累计上涨超 200%</td><td>Counterpoint/行业，2026</td></tr>
+  </tbody>
+</table>
+
+<h2>五、结构变化：三轨并行 + HBM 主导</h2>
+<div class="box">
+  <h3>1. GPU 一家独大 → GPU + ASIC + 国产三轨并行</h3>
+  <ul>
+    <li><strong>定制 ASIC 增速首超通用 GPU</strong>：TrendForce 预计 2026 年定制 AI 芯片出货 +44.6%，商用 GPU 仅 +16.1%；Omdia 预计 2028 年 AI-ASIC 出货量（1050 万块）将超过 GPU（1010 万块），但<strong>营收上 GPU 领先优势将维持到 2032 年</strong>（GPU 单价高）。</li>
+    <li>谷歌 TPU 2026 年出货预计约 332.6 万颗（占 AI ASIC 市场 46%），Anthropic 已承诺采购近 100 万颗；亚马逊 Trainium2 已部署超 50 万颗、Trainium3 2026 年出货约 147 万颗；博通/迈威尔控制全球约 95% 的定制 AI ASIC 共同设计市场，博通 2026 财年 Q2 AI 半导体收入 108 亿美元（+143%）、AI 积压订单约 730 亿美元。</li>
+    <li>英伟达 AI 加速卡份额：2025 年约 70% → 2026E 约 61.5%（Bernstein 按收入口径 80–85%）；多芯片策略成标配（Anthropic 同时跑在 Trainium/TPU/Azure GPU 四大平台）。</li>
+    <li><strong>中国国产替代加速</strong>：2025 年国内 AI 加速卡总出货约 400 万张、国产化率约 41%；2026 年国产市占率预计突破 60%，英伟达在华份额从约 55% 收缩至个位数。华为昇腾、寒武纪、海光三家合计占 2026 年国产算力交付量约 70%（华为约占 50%）。</li>
+  </ul>
+  <h3>2. 存储：从"周期品"到"AI 基础设施战略资产"</h3>
+  <ul>
+    <li>2026 年 DRAM 营收预计约 3006–3010 亿美元（TrendForce，同比 +85%）；摩根大通更激进口径：2025 年 1430 亿 → 2026 年 6360 亿 → 2028 年 1.24 万亿美元。</li>
+    <li>HBM 占 DRAM 总产值贡献度从 2025 年约 30% 持续提升；AI 与服务器相关应用占 DRAM 产能比例：2024 年 46% → 2026 年 66% → 2027 年突破 70%。</li>
+    <li>格局：SK 海力士 HBM 份额 50–58%（龙头，与英伟达长期协议覆盖至 2030）、三星 21–30%、美光 20–22%；DRAM 三家合计份额约 89–92%。美光甚至<strong>终止消费级 Crucial 品牌业务</strong>，全面转向数据中心/AI 高利润市场。</li>
+    <li>国产"两存"：长鑫存储 DRAM 全球份额 7.7–8%（全球第四，DDR5 量产，HBM 预计 2026–2027 量产）；长江存储 NAND 全球份额 13–16%（400 层+ 突破），被视为未来市场最大变量。</li>
+  </ul>
+</div>
+
+<h2>六、会持续多久？——节奏判断与反向声音</h2>
+
+<h3>主流节奏判断（多家机构）</h3>
+<table class="cmp">
+  <thead><tr><th>阶段</th><th>特征</th></tr></thead>
+  <tbody>
+    <tr><th>2026–2027 上半年</th><td>量价齐升但涨价斜率放缓；HBM/先进封装持续紧缺</td></tr>
+    <tr><th>2027 下半年–2028</th><td>新产能集中释放，供需边际缓解，高端环节仍紧缺</td></tr>
+    <tr><th>2029 年后</th><td>大规模产能落地，紧张格局才真正缓解（SK 海力士 CEO 警示短缺或延续至 2030 年后）</td></tr>
+  </tbody>
+</table>
+
+<div class="risk">
+  <strong>⚠️ 反向声音（必须警惕的三条）：</strong>
+  <ol style="margin:6px 0 0;padding-left:20px">
+    <li><strong>涨价正在反噬消费需求</strong>：TrendForce 已把 2026 年全球笔电出货预测从 +1.7% 下调至 <strong>-2.4%</strong>；32GB 内存条 +300% 后，PC/手机厂商集体陷入"成本承压、需求走弱"困境——下游需求弹性是最大不确定性。</li>
+    <li><strong>周期逆转风险</strong>：本轮上行完全由 AI 资本开支驱动，若全球 AI 迭代放缓、云厂商算力建设见顶（如对 Capex 回报率不满意），存储与 AI 芯片供需会<strong>快速逆转</strong>——历史上存储是半导体最剧烈的周期放大器。</li>
+    <li><strong>扩产与 LTA 的"双击"风险</strong>：2027 年后新产能集中落地 + LTA 锁价锁量，若需求增速不及预期，可能出现"价格战压制全行业利润率"的局面；摩根大通测算要使 2028 年 DRAM 平衡还需再增约 30 万片/月产能（+580 亿美元资本开支）——供给过剩的风险与缺口并存。</li>
+  </ol>
+</div>
+
+<h2>七、结论</h2>
+<div class="box">
+  <p><strong>回答用户问题：AI 芯片和存储芯片的需求和供给会发生很大的变化吗？——会，而且是历史级的量变与质变，且已经发生。</strong></p>
+  <ol>
+    <li><strong>需求：大幅增长（确定性强）</strong>——引擎从训练切换到推理与 Agent，Token 消耗指数级增长，云厂商资本开支两年翻倍，AI 服务器出货 +180%。这不是预期，是已签单的现金流。</li>
+    <li><strong>供给：大幅扩产但结构性受限</strong>——资本开支创历史新高（台积电 520–560 亿美元、存储三巨头 1200–1500 亿美元），但 1.5–2 年建厂周期 + CoWoS/HBM/良率三大瓶颈，使供给增速阶段性追不上需求。</li>
+    <li><strong>净效果：全行业供不应求贯穿 2026–2028</strong>——CoWoS 缺口 &gt;20%、HBM 缺口 22%（部分口径 50–60%）、DRAM 缺口 15–20%、国产 AI 芯片缺口 25–40%；DRAM 合约价单季最高环比 +98%。</li>
+    <li><strong>结构之变比总量之变更深刻</strong>——GPU 一家独大让位于"GPU + ASIC + 国产"三轨并行；存储产能分配从消费级 DRAM 全面转向 HBM；存储从强周期品升级为 AI 战略资产，议价模式从现货转向 3–5 年长协。</li>
+    <li><strong>最大的变量在 2027 下半年之后</strong>——新产能集中释放 + 消费端涨价反噬 + AI 资本开支若放缓，可能引发供需快速逆转。当下"供不应求"是事实，但"永远供不应求"不是。</li>
+  </ol>
+</div>
+
+<h2>附录：主要数据来源</h2>
+<div class="src">
+  <ul style="margin:4px 0;padding-left:18px">
+    <li>灼识咨询：全球 AI 加速卡市场 2024 超 1000 亿美元 → 2028 超 5000 亿美元（CAGR&gt;40%），经 IIM 2026 行业报告引述</li>
+    <li>IIM（2026）：全球 AI 算力芯片行业趋势深度报告——2025 市场规模 1420 亿美元（+31.7%）、2026E 突破 1850 亿美元；CoWoS 月产能 2026 年中 9.6 万片、缺口约 22%</li>
+    <li>野村证券：GB200 NVL72 2026 理想出货 7.3 万台 vs 实际可交付 5 万台（缺口率 ~31.5%）</li>
+    <li>TrendForce：DRAM 2026 营收约 3006–3010 亿美元（+85%）；合约价 2026Q1 +93–98%、Q2 +58–63%、Q3 +13–18%；HBM4 单价与 2027 产能占比（35%）预测</li>
+    <li>摩根大通（财联社 2026-08 转引）：DRAM 收入 2025 1430 亿 → 2026 6360 亿 → 2028 1.24 万亿美元；HBM 2025 335 亿 → 2026 643 亿 → 2027 1456 亿 → 2028 2521 亿美元；HBM 缺口 15% / 14% / 22%（2026–2028）；DRAM 资本开支 2025 592 亿 → 2026 998 亿美元</li>
+    <li>高盛（经济日报 2026-08 转引）：2026–2028 全球 DRAM 供需缺口 5.0% / 5.9% / 3.9%</li>
+    <li>Counterpoint / SEMI / Omdia：HBM 2026 市场规模 460–546 亿美元（+58%）；DRAM 三家合计份额 89–92%；2028 ASIC 出货超 GPU 预测</li>
+    <li>Gartner：单台 AI 服务器 DRAM 用量为传统 8–10 倍、NAND 3 倍以上</li>
+    <li>长城证券（2026-02 研报）：HBM 2025–2026 供需缺口 45% / 27%，ASP 1.76 / 1.84 美元/Gb</li>
+    <li>九方金融研究所（2026-06）：国产 AI 芯片 2026 需求 400 万 vs 供给 300 万颗、缺口 25–40%；2028 需求破千万</li>
+    <li>英伟达财报（FY26Q4/FY27Q1）、台积电业绩会、SK 海力士/三星/美光财报与高管表态（2025–2026）</li>
+    <li>来源链接（部分原文）：<a href="https://www.9fzt.com/9fztgw_1_top/03f1786490f9eeebd942251ff878bfe2.html">九方智投行业洞察</a> · <a href="https://m.iim.net.cn/75/view-337147-1.html">IIM 报告</a> · <a href="https://nextwavesinsight.com/ai-semiconductor-supply-chain-tsmc-capacity-2026/">NextWaves Insight</a> · <a href="https://www.cls.cn/detail/2450419">财联社·摩根大通</a> · <a href="http://paper.ce.cn/pc/content/202608/25/content_337809.html">经济日报</a> · <a href="https://thirdpolemarkets.com/samsungs-ddr5-memory-just-went-from-149-to-239-blame-ai-chips">Third Pole Markets</a> · <a href="https://news.china.com/socialgd/10000169/20260808/49661963_2.html">中华网</a> · <a href="https://stock.finance.sina.com.cn/stock/view/paper.php?symbol=sh000001&reportid=825990485131">新浪财经·电子行业专题</a></li>
+  </ul>
+  <p style="margin-top:6px">注：以上数据为 2026 年 8 月当期各机构口径，不同机构（收入/出货量、是否计入网络芯片）存在差异，个别数值在不同来源间略有出入，请以各机构原文为准。</p>
+</div>
+
+<div class="disc"><strong>免责声明</strong>：以上内容基于公开数据和第三方机构预测，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</div>
+
+<footer>AI 芯片与存储芯片供需全景分析 ｜ 生成日期：2026-08-25 ｜ 数据时点：截至 2026 年 8 月</footer>
+
+</div>
+
+<script>
+function switchView(showId, hideId, btn){
+  document.getElementById(showId).style.display='block';
+  document.getElementById(hideId).style.display='none';
+  var t1=document.getElementById('tg1'), t2=document.getElementById('tg2');
+  t1.classList.remove('on'); t2.classList.remove('on');
+  btn.classList.add('on');
+}
+
+var c1=echarts.init(document.getElementById('chart1'));
+c1.setOption({
+  tooltip:{trigger:'axis', axisPointer:{type:'shadow'}},
+  grid:{left:60,right:30,top:30,bottom:40},
+  xAxis:{type:'category', data:['2024','2025','2026E','2028E']},
+  yAxis:{type:'value', name:'亿美元', axisLabel:{formatter:'{value}'}},
+  series:[{
+    name:'市场规模', type:'bar', barWidth:46,
+    data:[
+      {value:1000, itemStyle:{color:'#c8a24a'}, label:{show:true,position:'top',formatter:'>1000'}},
+      {value:1420, itemStyle:{color:'#0a3d8f'}, label:{show:true,position:'top',formatter:'1420'}},
+      {value:1850, itemStyle:{color:'#0a3d8f'}, label:{show:true,position:'top',formatter:'>1850'}},
+      {value:5000, itemStyle:{color:'#b23b3b'}, label:{show:true,position:'top',formatter:'>5000'}}
+    ]
+  }]
+});
+
+var c2=echarts.init(document.getElementById('chart2'));
+c2.setOption({
+  tooltip:{trigger:'axis', axisPointer:{type:'shadow'},
+    formatter:function(params){var p=params[0]; return p.name+'<br/>缺口率：'+p.value+'%（'+(p.data.range||'')+'）';}},
+  grid:{left:170,right:60,top:20,bottom:30},
+  xAxis:{type:'value', name:'缺口率 %', max:70},
+  yAxis:{type:'category', inverse:true, data:['NAND Flash','DRAM(不含HBM)','CoWoS 先进封装','HBM 高带宽内存','GB200 NVL72 机柜','国产 AI 芯片(中国)']},
+  series:[{
+    name:'缺口率', type:'bar', barWidth:20,
+    data:[
+      {value:15, range:'~15%', itemStyle:{color:'#9aa7bd'}},
+      {value:17.5, range:'15–20%', itemStyle:{color:'#6f86a8'}},
+      {value:21, range:'>20%', itemStyle:{color:'#4a6fa5'}},
+      {value:22, range:'22% (2026H2 口径 50–60%)', itemStyle:{color:'#0a3d8f'}},
+      {value:31.5, range:'~31.5%', itemStyle:{color:'#a8842a'}},
+      {value:32.5, range:'25–40%', itemStyle:{color:'#b23b3b'}}
+    ],
+    label:{show:true,position:'right',formatter:function(p){return p.value+'%';}}
+  }]
+});
+
+var c3=echarts.init(document.getElementById('c3'));
+c3.setOption({
+  tooltip:{trigger:'axis'},
+  grid:{left:55,right:40,top:35,bottom:40},
+  legend:{data:['环比涨幅'], top:0},
+  xAxis:{type:'category', data:['2026Q1','2026Q2','2026Q3','2027E(全年)']},
+  yAxis:{type:'value', name:'环比 %', axisLabel:{formatter:'+{value}%'}},
+  series:[{
+    name:'环比涨幅', type:'line', smooth:true, symbolSize:9,
+    data:[95.5, 60.5, 15.5, 10],
+    lineStyle:{width:3,color:'#0a3d8f'},
+    itemStyle:{color:'#0a3d8f'},
+    label:{show:true,position:'top',formatter:function(p){var v=p.value; return '+'+v+'%';}}
+  }]
+});
+
+var c4=echarts.init(document.getElementById('chart4'));
+c4.setOption({
+  tooltip:{trigger:'axis', axisPointer:{type:'shadow'}},
+  grid:{left:70,right:40,top:30,bottom:40},
+  xAxis:{type:'category', data:['2025','2026E','2027E','2028E']},
+  yAxis:{type:'value', name:'亿美元'},
+  series:[{
+    name:'HBM市场规模', type:'bar', barWidth:46,
+    data:[
+      {value:335, itemStyle:{color:'#9aa7bd'}, label:{show:true,position:'top',formatter:'335'}},
+      {value:643, itemStyle:{color:'#4a6fa5'}, label:{show:true,position:'top',formatter:'643'}},
+      {value:1456, itemStyle:{color:'#0a3d8f'}, label:{show:true,position:'top',formatter:'1456'}},
+      {value:2521, itemStyle:{color:'#a8842a'}, label:{show:true,position:'top',formatter:'2521'}}
+    ]
+  }]
+});
+
+window.addEventListener('resize', function(){
+  c1.resize(); c2.resize(); c3.resize(); c4.resize();
+});
+</script>
+</body>
+</html>
