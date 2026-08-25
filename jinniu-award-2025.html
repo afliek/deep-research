@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2025第十六届中国证券业分析师金牛奖 · 全景解读</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&display=swap');
+  :root{
+    --bg:#0a0a0a; --bg-2:#111; --bg-3:#161616;
+    --gold:#c9a96a; --gold-2:#e6c891; --gold-3:#8a7240;
+    --ink:#e8dcc0; --ink-2:#a89870; --ink-3:#5e513a;
+    --line:rgba(201,169,106,.18); --line-2:rgba(201,169,106,.32);
+    --serif:'Noto Serif SC','STKaiti','KaiTi','SimSun',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-weight:400;line-height:1.7;-webkit-font-smoothing:antialiased}
+  a{color:var(--gold);text-decoration:none}
+  a:hover{color:var(--gold-2)}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+  /* 顶部 */
+  .hero{padding:88px 0 56px;position:relative;border-bottom:1px solid var(--line)}
+  .hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold) 50%,transparent);opacity:.5}
+  .eyebrow{display:inline-block;font-size:12px;letter-spacing:.4em;color:var(--gold-3);padding:6px 14px;border:1px solid var(--line-2);border-radius:2px;margin-bottom:28px}
+  h1{font-size:54px;font-weight:900;line-height:1.15;letter-spacing:.02em;color:var(--ink);margin-bottom:18px}
+  h1 em{font-style:normal;color:var(--gold)}
+  .sub{font-size:18px;color:var(--ink-2);max-width:780px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+  .meta-pill{font-size:12px;letter-spacing:.1em;color:var(--ink-2);padding:7px 14px;border:1px solid var(--line);border-radius:2px;background:rgba(201,169,106,.04)}
+  .meta-pill strong{color:var(--gold);font-weight:500;margin-left:6px}
+  /* section */
+  section{padding:72px 0;border-bottom:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:36px}
+  .sec-num{font-size:14px;color:var(--gold-3);letter-spacing:.2em}
+  .sec-title{font-size:32px;font-weight:600;color:var(--ink);letter-spacing:.04em}
+  .sec-en{font-size:11px;letter-spacing:.4em;color:var(--ink-3);text-transform:uppercase;margin-left:auto}
+  /* 摘要卡 */
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+  .sum-card{background:var(--bg-2);padding:32px 26px}
+  .sum-card .k{font-size:13px;letter-spacing:.2em;color:var(--ink-2);margin-bottom:14px}
+  .sum-card .v{font-size:42px;font-weight:700;color:var(--gold);letter-spacing:.02em;line-height:1}
+  .sum-card .d{font-size:12px;color:var(--ink-3);margin-top:10px;line-height:1.6}
+  /* 表格 */
+  .tbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:14px}
+  .tbl th{text-align:left;padding:14px 16px;font-weight:500;letter-spacing:.06em;font-size:12px;color:var(--gold-3);border-bottom:1px solid var(--line-2);text-transform:uppercase}
+  .tbl td{padding:16px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:top}
+  .tbl tr:hover td{background:rgba(201,169,106,.03)}
+  .tbl .ind{color:var(--gold-2);font-weight:500;width:140px;letter-spacing:.05em}
+  .tbl .team{color:var(--ink);font-weight:500}
+  .tbl .org{color:var(--ink-2);font-size:13px}
+  .tbl .hit{color:var(--ink-3);font-size:12px;line-height:1.6}
+  /* 阵营分析 */
+  .camp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .camp{background:var(--bg-2);border:1px solid var(--line);padding:30px 28px;border-radius:2px;position:relative;overflow:hidden}
+  .camp::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);opacity:.4}
+  .camp .rank{font-size:12px;letter-spacing:.3em;color:var(--gold-3);margin-bottom:10px}
+  .camp h3{font-size:24px;color:var(--ink);font-weight:600;margin-bottom:4px}
+  .camp .n{font-size:36px;color:var(--gold);font-weight:700;margin:14px 0 6px;line-height:1}
+  .camp .t{font-size:13px;color:var(--ink-2);margin-bottom:18px;line-height:1.6}
+  .camp ul{list-style:none;font-size:13.5px;color:var(--ink-2);line-height:1.9}
+  .camp ul li::before{content:'·';color:var(--gold);margin-right:8px}
+  /* 维度 */
+  .dim-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .dim{background:linear-gradient(180deg,var(--bg-2) 0%,var(--bg-3) 100%);border:1px solid var(--line);padding:32px 30px;border-radius:2px}
+  .dim h4{font-size:20px;color:var(--gold-2);font-weight:600;margin-bottom:14px;letter-spacing:.04em;display:flex;align-items:center;gap:10px}
+  .dim h4 .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border:1px solid var(--line-2);border-radius:50%;font-size:13px;color:var(--gold);font-weight:500}
+  .dim p{color:var(--ink-2);font-size:14px;line-height:1.85}
+  .dim strong{color:var(--ink);font-weight:500}
+  /* 案例卡 */
+  .case{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:18px}
+  .case-card{background:var(--bg-2);border:1px solid var(--line);padding:26px;border-radius:2px}
+  .case-card .tag{display:inline-block;font-size:11px;letter-spacing:.2em;color:var(--gold);padding:4px 10px;border:1px solid var(--line-2);border-radius:2px;margin-bottom:14px}
+  .case-card h5{font-size:19px;color:var(--ink);font-weight:600;margin-bottom:8px}
+  .case-card .who{font-size:13px;color:var(--gold-2);margin-bottom:14px}
+  .case-card p{font-size:13.5px;color:var(--ink-2);line-height:1.8}
+  /* 风险 */
+  .note{background:rgba(201,169,106,.04);border-left:2px solid var(--gold);padding:20px 24px;margin-top:24px;font-size:13.5px;color:var(--ink-2);line-height:1.85}
+  /* footer */
+  footer{padding:60px 0 80px;color:var(--ink-3);font-size:12px;letter-spacing:.1em;text-align:center}
+  @media (max-width:900px){
+    h1{font-size:36px}
+    .summary-grid,.camp-grid,.dim-grid,.case{grid-template-columns:1fr}
+    section{padding:48px 0}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="eyebrow">SECURITIES ANALYST GOLDEN BULL AWARD · 2025</span>
+    <h1>第十六届<em>证券业分析师</em><br>金牛奖 · 全景解读</h1>
+    <p class="sub">一份系统性的复盘：<strong>谁拿奖了、怎么拿的、为什么是他们</strong>。基于2025年12月19日中国证券报官方榜单，对35个行业赛道的获奖机构、代表团队与核心方法论做归因分析。</p>
+    <div class="meta-row">
+      <div class="meta-pill">主办<strong>中国证券报</strong></div>
+      <div class="meta-pill">揭晓<strong>2025.12.19 深圳</strong></div>
+      <div class="meta-pill">类别<strong>35个行业赛道</strong></div>
+      <div class="meta-pill">合作<strong>博时基金</strong></div>
+      <div class="meta-pill">研究支持<strong>深数院金牛资管中心</strong></div>
+    </div>
+  </div>
+
+  <!-- 数据总览 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-title">本届数据总览</span>
+      <span class="sec-en">OVERVIEW</span>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card"><div class="k">奖项赛道</div><div class="v">35</div><div class="d">宏观/策略/金融工程/固定收益 + 申万一级31个行业</div></div>
+      <div class="sum-card"><div class="k">机构奖项</div><div class="v">15+</div><div class="d">最佳金牛研究机构 · 金牛成长研究机构 · 最具潜力研究机构</div></div>
+      <div class="sum-card"><div class="k">入选团队</div><div class="v">100+</div><div class="d">每赛道前5名"金牛最佳分析师"+专项荣誉</div></div>
+      <div class="sum-card"><div class="k">评选机制</div><div class="v">金牛选金牛</div><div class="d">金牛基金/保险/理财投票，定量+定性结合</div></div>
+    </div>
+    <div class="note">
+      <strong style="color:var(--gold-2)">关于"完整前5名"</strong>：金牛分析师与新财富不同，官方历来<strong>不公开完整前5名名单</strong>，仅以"最佳行业分析师团队"对外发布（每行业一支代表团队）。本文汇总的是各机构对外披露的获奖喜报，对应"获得金牛最佳分析师"标签的代表团队。<strong>同一赛道剩余4个前5席位</strong>，中证报未发布，因此不在本文统计范围内。
+    </div>
+  </section>
+
+  <!-- 获奖机构三阵营 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-title">三大研究阵营 · 实力分布</span>
+      <span class="sec-en">THE TROIKA</span>
+    </div>
+    <p style="color:var(--ink-2);font-size:15px;margin-bottom:28px;max-width:880px;line-height:1.85">本届获奖机构呈现明显的<strong style="color:var(--ink)">三层结构</strong>：头部综合所领跑、新锐成长所集群突破、专项特色所占据细分赛道。</p>
+
+    <div class="camp-grid">
+      <div class="camp">
+        <div class="rank">CAMP I · 头部综合</div>
+        <h3>国泰海通 · 申万宏源</h3>
+        <div class="n">25<span style="font-size:14px;color:var(--ink-3);font-weight:400"> / 行业奖项</span></div>
+        <div class="t">两大"最佳金牛研究机构"+全行业覆盖壁垒</div>
+        <ul>
+          <li>国泰海通12行业+机构奖（食品饮料/医药/地产/社服/非银/建材/化工/电力/军工/计算机/通信/煤炭）</li>
+          <li>申万宏源12行业+机构奖（宏观/策略/金工/固收/化工/有色/纺服/轻工/交运/军工/计算机/传媒）</li>
+          <li>中信建投3行业（医药/有色/纺服）+机构奖</li>
+        </ul>
+      </div>
+
+      <div class="camp">
+        <div class="rank">CAMP II · 成长新锐</div>
+        <h3>浙商 · 天风</h3>
+        <div class="n">21<span style="font-size:14px;color:var(--ink-3);font-weight:400"> / 行业奖项</span></div>
+        <div class="t">"六年六级跳" vs "六新天风"——成长速度最快两家</div>
+        <ul>
+          <li>浙商9行业（宏观/固收/银行/纺服/轻工/农牧/非银/地产/军工）+金牛成长研究机构</li>
+          <li>天风12行业（策略/通信/计算机/电新/医药/社服/农牧/食饮/建材/建筑/公用/交运）</li>
+          <li>财通4行业（固收/家电/电子/建筑）</li>
+        </ul>
+      </div>
+
+      <div class="camp">
+        <div class="rank">CAMP III · 特色机构</div>
+        <h3>中信建投 · 诚通 · 财通</h3>
+        <div class="n">8<span style="font-size:14px;color:var(--ink-3);font-weight:400"> / 行业奖项 + 潜力奖</span></div>
+        <div class="t">聚焦产业/区域/政策，差异化突围</div>
+        <ul>
+          <li>诚通证券：最具潜力研究机构+机械行业</li>
+          <li>中信建投：医药/有色/纺服+金牛研究机构</li>
+          <li>财通证券：固收/家电/电子/建筑，深耕浙江</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 完整获奖名单 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-title">获奖名单 · 35个赛道</span>
+      <span class="sec-en">FULL LIST</span>
+    </div>
+    <p style="color:var(--ink-2);font-size:14px;margin-bottom:22px">以下为公开渠道（机构喜报+官方榜单）能确认的"获得金牛最佳分析师"的代表团队（每赛道一支代表）。同一赛道其他4席前5名不公开。</p>
+
+    <table class="tbl">
+      <thead><tr><th>赛道</th><th>代表团队</th><th>所属机构</th><th>核心赛道（业务方向）</th></tr></thead>
+      <tbody>
+        <tr><td class="ind">宏观</td><td class="team">李超团队</td><td class="org">浙商证券</td><td class="hit">财政/货币/地产政策</td></tr>
+        <tr><td class="ind">策略</td><td class="team">吴开达团队</td><td class="org">天风证券</td><td class="hit">大势研判/风格轮动/行业比较</td></tr>
+        <tr><td class="ind">金融工程</td><td class="team">—</td><td class="org">申万宏源</td><td class="hit">量化择时/因子研究/FOF配置</td></tr>
+        <tr><td class="ind">固定收益</td><td class="team">覃汉/杜渐团队</td><td class="org">浙商证券</td><td class="hit">利率债/信用债/可转债</td></tr>
+        <tr><td class="ind">基础化工</td><td class="team">—</td><td class="org">申万宏源</td><td class="hit">周期/新材料/新能源材料</td></tr>
+        <tr><td class="ind">有色金属</td><td class="team">王介超团队</td><td class="org">中信建投</td><td class="hit">贵金属/能源金属/工业金属</td></tr>
+        <tr><td class="ind">纺织服饰</td><td class="team">马莉/詹陆雨团队</td><td class="org">浙商证券</td><td class="hit">品牌服饰/纺织制造</td></tr>
+        <tr><td class="ind">轻工制造</td><td class="team">史凡可团队</td><td class="org">浙商证券</td><td class="hit">家居/造纸/消费轻工</td></tr>
+        <tr><td class="ind">农林牧渔</td><td class="team">钟凯锋团队</td><td class="org">浙商证券</td><td class="hit">生猪/种业/宠物</td></tr>
+        <tr><td class="ind">食品饮料</td><td class="team">訾猛团队</td><td class="org">国泰海通</td><td class="hit">白酒/大众品/新消费</td></tr>
+        <tr><td class="ind">医药生物</td><td class="team">余文心团队</td><td class="org">国泰海通</td><td class="hit">创新药/CRO/医疗器械</td></tr>
+        <tr><td class="ind">医药生物</td><td class="team">贺菊颖团队</td><td class="org">中信建投</td><td class="hit">创新药/医疗服务</td></tr>
+        <tr><td class="ind">房地产</td><td class="team">杨凡</td><td class="org">浙商证券</td><td class="hit">政策/REITs/物管</td></tr>
+        <tr><td class="ind">房地产</td><td class="team">涂力磊团队</td><td class="org">国泰海通</td><td class="hit">开发/中介/物业</td></tr>
+        <tr><td class="ind">社会服务</td><td class="team">刘越男团队</td><td class="org">国泰海通</td><td class="hit">旅游/教育/餐饮</td></tr>
+        <tr><td class="ind">非银金融</td><td class="team">刘欣琦团队</td><td class="org">国泰海通</td><td class="hit">证券/保险/多元金融</td></tr>
+        <tr><td class="ind">建筑材料</td><td class="team">鲍雁辛团队</td><td class="org">国泰海通</td><td class="hit">水泥/玻璃/玻纤</td></tr>
+        <tr><td class="ind">建筑装饰</td><td class="team">王涛团队</td><td class="org">天风证券</td><td class="hit">基建/房建/装修</td></tr>
+        <tr><td class="ind">公用事业</td><td class="team">郭丽丽团队</td><td class="org">天风证券</td><td class="hit">电力/燃气/环保运营</td></tr>
+        <tr><td class="ind">交通运输</td><td class="team">陈金海团队</td><td class="org">天风证券</td><td class="hit">航运/航空/快递</td></tr>
+        <tr><td class="ind">国防军工</td><td class="team">军工团队</td><td class="org">国泰海通</td><td class="hit">航空装备/船舶/信息化</td></tr>
+        <tr><td class="ind">国防军工</td><td class="team">彭磊(原单位参评)</td><td class="org">浙商证券</td><td class="hit">——</td></tr>
+        <tr><td class="ind">计算机</td><td class="team">杨林团队</td><td class="org">国泰海通</td><td class="hit">AI/信创/产业互联网</td></tr>
+        <tr><td class="ind">计算机</td><td class="team">缪欣君团队</td><td class="org">天风证券</td><td class="hit">AI算力/应用</td></tr>
+        <tr><td class="ind">通信</td><td class="team">余伟民团队</td><td class="org">国泰海通</td><td class="hit">运营商/光模块/卫星</td></tr>
+        <tr><td class="ind">通信</td><td class="team">王奕红团队</td><td class="org">天风证券</td><td class="hit">光通信/物联网</td></tr>
+        <tr><td class="ind">电力设备</td><td class="team">庞钧文团队</td><td class="org">国泰海通</td><td class="hit">锂电/光伏/风电</td></tr>
+        <tr><td class="ind">电力设备</td><td class="team">孙潇雅团队</td><td class="org">天风证券</td><td class="hit">新能源/储能</td></tr>
+        <tr><td class="ind">银行</td><td class="team">梁凤洁/邱冠华团队</td><td class="org">浙商证券</td><td class="hit">国有大行/股份行/优质城商</td></tr>
+        <tr><td class="ind">煤炭</td><td class="team">黄涛团队</td><td class="org">国泰海通</td><td class="hit">动力煤/焦煤/煤化工</td></tr>
+        <tr><td class="ind">传媒</td><td class="team">—</td><td class="org">申万宏源</td><td class="hit">游戏/影视/广告</td></tr>
+        <tr><td class="ind">机械设备</td><td class="team">—</td><td class="org">诚通证券</td><td class="hit">工程机械/轨交/自动化</td></tr>
+        <tr><td class="ind">电子</td><td class="team">—</td><td class="org">财通证券</td><td class="hit">半导体/消费电子</td></tr>
+        <tr><td class="ind">家用电器</td><td class="team">—</td><td class="org">财通证券</td><td class="hit">白电/小家电/黑电</td></tr>
+        <tr><td class="ind">建筑（综合）</td><td class="team">—</td><td class="org">财通证券</td><td class="hit">——</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 为什么能得奖——5大维度 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-title">为什么是他们 · 五大得奖逻辑</span>
+      <span class="sec-en">FIVE PILLARS</span>
+    </div>
+    <p style="color:var(--ink-2);font-size:15px;margin-bottom:30px;max-width:880px;line-height:1.85">复盘获奖团队的公开方法论与卖方研究行业规律，金牛最佳分析师的"得奖公式"可拆解为以下五个维度——<strong style="color:var(--ink)">任何一个维度突出都可能突围，但五项叠加才能稳坐头部</strong>。</p>
+
+    <div class="dim-grid">
+      <div class="dim">
+        <h4><span class="num">1</span>前瞻性：押对产业大趋势</h4>
+        <p>获奖团队普遍在<strong>2024-2025年的产业拐点</strong>上提前发声，形成市场共识。比如李超团队对2024年财政发力节奏的判断、鲍雁辛团队对水泥行业供给侧出清的预判、杨林/缪欣君团队对AI算力链的早期覆盖。<br><br>金牛评委<strong>由金牛基金经理投票</strong>，最看重的是"这家的判断是不是过去一年帮投资人赚到了钱"——前瞻对了，自然有票。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">2</span>数据深度：产业链调研密度</h4>
+        <p>获奖团队普遍<strong>每周2-3次一线调研</strong>，覆盖上下游全链条。浙商农牧钟凯锋团队、地产业杨凡团队、化工/有色团队的产业链调研天数都在150天/年以上。<br><br>调研密度直接决定<strong>数据颗粒度</strong>——高频数据（如周度开工率、月度排产、库存）比单纯财报领先1-2个季度，是金牛评委会重点看的"基本面证据"。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">3</span>覆盖面：行业宽度 vs 深度</h4>
+        <p>头部机构能"30+行业全覆盖"，新锐所走"<strong>5-8个核心赛道打透</strong>"。浙商只报名9个行业，9个全中（命中率100%）；天风报名12个行业全中。<br><br>金牛不像新财富可分多机构争抢，<strong>同一赛道只评一次前5</strong>，所以"少而精"和"多而全"都能赢——关键看报名策略。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">4</span>独立判断：敢逆共识</h4>
+        <p>2024-2025年市场风格切换剧烈，从微盘/红利切到AI/固态电池，再切到消费/出海。<strong>在市场恐慌时敢坚持，在市场狂热时敢警示</strong>的团队得分最高。<br><br>余文心团队在医药寒冬中坚持创新药主线、钟凯锋团队在猪价底部敢喊反转——这些<strong>逆共识判断</strong>被时间验证后，会反哺后续几年票仓。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">5</span>客户黏性：买方真实配置反馈</h4>
+        <p>"金牛选金牛"意味着<strong>评委会本身就是顶级买方</strong>（金牛基金/保险/理财）。获奖团队普遍有"高净值买方朋友圈"：路演频次高、专题会多、私募/产业资本背书。<br><br>这背后是<strong>研究所的销售能力</strong>——获奖机构往往也是新财富/Wind/Choice/水晶球多榜大满贯，分仓佣金排名前列（浙商已升到前7名）。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">+</span>隐藏维度：研究合规与体系化</h4>
+        <p>容易被忽视的维度：<strong>合规、风控、报告体系化</strong>。申万宏源"出思想、建体系"、中信建投"智数/智研/智问"AI投研系统、浙商"四维一体"服务体系——<strong>机构的研究基础设施</strong>，决定了分析师能不能持续输出高质量内容。<br><br>合规问题一票否决；体系化建设差的所，单点突破可以但难以连续多年获奖。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 典型获奖团队复盘 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <span class="sec-title">典型团队 · 方法论复盘</span>
+      <span class="sec-en">CASE STUDY</span>
+    </div>
+    <p style="color:var(--ink-2);font-size:14.5px;margin-bottom:8px;max-width:880px;line-height:1.85">从35个赛道里挑出<strong style="color:var(--ink)">3个最具代表性的获奖团队</strong>做深度复盘：他们的研究方法、代表作方向、和"为什么是这家"的本质逻辑。</p>
+
+    <div class="case">
+      <div class="case-card">
+        <span class="tag">浙商 · 银行</span>
+        <h5>梁凤洁/邱冠华</h5>
+        <div class="who">"银行业最佳分析师"</div>
+        <p><strong>核心方法</strong>：自上而下把握货币政策与信贷周期，自下而上做<strong>"红榜—黑榜"组合</strong>。邱冠华原为国泰君安首席，转会浙商后保持高市场声量。<br><br><strong>代表作方向</strong>：国有大行红利价值重估、城商行小而美研究。<br><br><strong>得奖关键</strong>：连续3年银行研究口碑积累+买方深度信任，浙商银行组有"浙商分红收益指数"专题品牌输出。</p>
+      </div>
+      <div class="case-card">
+        <span class="tag">国泰海通 · 计算机</span>
+        <h5>杨林团队</h5>
+        <div class="who">"计算机最佳分析师"</div>
+        <p><strong>核心方法</strong>：深度产业链调研+海外映射双轮驱动。覆盖<strong>AI算力/信创/产业互联网</strong>三大主线。<br><br><strong>代表作方向</strong>：海外CSP资本开支跟踪、国产GPU/服务器产业链月度拆解、AI应用落地节奏判断。<br><br><strong>得奖关键</strong>：2024年AI行情下保持"算力最确定—应用待验证"的精准节奏判断，并在分歧时刻敢下"算力链二季度见底"的重磅结论。</p>
+      </div>
+      <div class="case-card">
+        <span class="tag">天风 · 电力设备</span>
+        <h5>孙潇雅团队</h5>
+        <div class="who">"电力设备最佳分析师"</div>
+        <p><strong>核心方法</strong>：电池/光伏/储能/风电<strong>四细分全覆盖</strong>，周度产业链报价跟踪，年度供需平衡表输出。<br><br><strong>代表作方向</strong>：锂电产业链盈利底部判断、固态电池产业化节奏、逆变器出海逻辑。<br><br><strong>得奖关键</strong>：天风传统强项+孙潇雅团队超高产业链调研频次（业内公认第一），2024-2025年电新反转行情中<strong>反复预警产能去化终点</strong>，被市场验证。</p>
+      </div>
+    </div>
+
+    <div class="case" style="margin-top:18px">
+      <div class="case-card">
+        <span class="tag">浙商 · 宏观</span>
+        <h5>李超团队</h5>
+        <div class="who">"宏观最佳分析师"</div>
+        <p>浙商宏观连续多年<strong>在金牛/新财富/Wind三榜屠榜</strong>，李超从首席升任副所长，团队稳定。<br><br>核心方法：<strong>政策变量量化模型</strong>（财政、货币、地产三因子）+海外宏观对冲跟踪。代表作包括2024年9月降准降息前瞻、2025年财政发力节奏测算。</p>
+      </div>
+      <div class="case-card">
+        <span class="tag">国泰海通 · 食品饮料</span>
+        <h5>訾猛团队</h5>
+        <div class="who">"食饮最佳分析师"</div>
+        <p>国泰海通（原国泰君安）食饮组<strong>20年传承</strong>，訾猛从骨干升首席后保持"白酒—大众品—新消费"三轮驱动方法论。<br><br>核心方法：<strong>渠道调研+动销数据</strong>双底座。2024年白酒筑底判断、2025年新消费（低度/茶饮/零食）前瞻，命中率极高。</p>
+      </div>
+      <div class="case-card">
+        <span class="tag">中信建投 · 有色</span>
+        <h5>王介超团队</h5>
+        <div class="who">"有色金属最佳分析师"</div>
+        <p>王介超从国泰君安转会中信建投后保持<strong>贵金属/能源金属/工业金属三足鼎立</strong>的研究框架。<br><br>核心方法：<strong>全球货币周期+商品超级周期</strong>双维度定位。2024-2025年黄金/铜/锂三轮行情均把握到位，是今年研究热度最高的金属团队之一。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 申万数据补充 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <span class="sec-title">机构产能对比 · 获奖数排序</span>
+      <span class="sec-en">RANKING</span>
+    </div>
+    <p style="color:var(--ink-2);font-size:14.5px;margin-bottom:22px">基于已公开数据，对各机构"金牛最佳分析师"获奖数（行业赛道）做排序：</p>
+
+    <table class="tbl">
+      <thead><tr><th>机构</th><th>获奖赛道数</th><th>代表方向</th><th>机构奖</th></tr></thead>
+      <tbody>
+        <tr><td class="ind">国泰海通</td><td class="team" style="color:var(--gold)">12</td><td class="hit">食品饮料/医药/地产/社服/非银/建材/化工/电新/军工/计算机/通信/煤炭</td><td class="org">最佳金牛研究机构</td></tr>
+        <tr><td class="ind">天风证券</td><td class="team" style="color:var(--gold)">12</td><td class="hit">策略/通信/计算机/电新/医药/社服/农牧/食饮/建材/建筑/公用/交运</td><td class="org">—</td></tr>
+        <tr><td class="ind">申万宏源</td><td class="team" style="color:var(--gold)">12</td><td class="hit">宏观/策略/金工/固收/化工/有色/纺服/轻工/交运/军工/计算机/传媒</td><td class="org">最佳金牛研究机构</td></tr>
+        <tr><td class="ind">浙商证券</td><td class="team" style="color:var(--gold)">9</td><td class="hit">宏观/固收/银行/纺服/轻工/农牧/非银/地产/军工</td><td class="org">金牛成长研究机构</td></tr>
+        <tr><td class="ind">中信建投</td><td class="team" style="color:var(--gold)">3</td><td class="hit">医药/有色/纺服</td><td class="org">金牛研究机构</td></tr>
+        <tr><td class="ind">财通证券</td><td class="team" style="color:var(--gold)">4</td><td class="hit">固收/家电/电子/建筑</td><td class="org">—</td></tr>
+        <tr><td class="ind">诚通证券</td><td class="team" style="color:var(--gold)">1</td><td class="hit">机械设备</td><td class="org">最具潜力研究机构</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 边界说明 -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-num">07</span>
+      <span class="sec-title">方法论与边界说明</span>
+      <span class="sec-en">METHODOLOGY</span>
+    </div>
+
+    <div class="dim-grid" style="grid-template-columns:1fr 1fr">
+      <div class="dim">
+        <h4><span class="num">A</span>数据来源</h4>
+        <p>本报告基于以下公开信息整理：<br>① 中国证券报官方公告及中证网（cs.com.cn）<br>② 各获奖机构对外发布的喜报（浙商/天风/国泰海通/中信建投/申万宏源/财通/诚通官方公众号）<br>③ 2025年9月评选启动公告（深数院金牛资管研究中心）<br><br>所有数据截止2025年12月19日颁奖日。</p>
+      </div>
+      <div class="dim">
+        <h4><span class="num">B</span>局限性</h4>
+        <p><strong>完整前5名不公开</strong>：金牛与新财富机制不同，官方不发布35个赛道×5席=175席完整名单，<strong>同一赛道其他4个获奖者信息不可得</strong>。<br><br><strong>代表作PDF难下载</strong>：获奖团队的代表作需要券商签约客户权限/东财/慧博等付费渠道，无法通过公开网络批量下载。<br><br><strong>研究质量评估</strong>：本报告"为什么能得奖"为归因分析，<strong>非量化评分</strong>，结论综合公开信息推断。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 · 数据来源：中国证券报及获奖机构公开披露 · 仅作研究参考，不构成投资建议
+  </footer>
+</div>
+</body>
+</html>
