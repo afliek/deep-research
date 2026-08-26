@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股黄金股 · 双金属价格情景测算（2026-08）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --card:rgba(18,24,38,0.75); --gold:#c9a24b; --gold2:#e8cf8f; --blue:#5b8def; --txt:#e2e8f0; --sub:#94a3b8; --line:rgba(255,255,255,0.08); --up:#e11d48; --down:#22c55e; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif; background:var(--bg); color:var(--txt); line-height:1.65; padding:24px; }
+  .wrap { max-width:1180px; margin:0 auto; }
+  h1 { font-size:26px; margin-bottom:6px; color:var(--gold2); }
+  .meta { font-size:12.5px; color:var(--sub); margin-bottom:22px; line-height:1.9; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; margin-bottom:20px; }
+  .card h2 { font-size:16px; color:var(--gold2); margin-bottom:6px; }
+  .card .sub { font-size:12px; color:var(--sub); margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th { background:#141c30; color:var(--gold2); padding:7px 10px; text-align:right; }
+  th:first-child, td:first-child { text-align:left; }
+  td { padding:6px 10px; border-bottom:1px solid var(--line); color:var(--sub); text-align:right; }
+  tr:hover td { background:rgba(255,255,255,0.03); }
+  .hl td { color:var(--gold2); font-weight:600; }
+  .up { color:var(--up); font-weight:600; } .down { color:var(--down); font-weight:600; }
+  .kpis { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:20px; }
+  .kpi { flex:1; min-width:180px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .kpi .num { font-size:20px; font-weight:700; color:var(--gold2); }
+  .kpi .lab { font-size:12px; color:var(--sub); margin-top:4px; }
+  .note { font-size:12px; color:var(--sub); line-height:1.8; margin-top:12px; }
+  .risk { font-size:12.5px; color:#f0c8c8; line-height:1.8; background:rgba(225,29,72,0.08); border:1px solid rgba(225,29,72,0.25); border-radius:10px; padding:12px 16px; margin-top:8px; }
+  .rank li { margin:8px 0; font-size:13.5px; }
+  .rank b { color:var(--gold2); }
+  .scroll { max-height:420px; overflow-y:auto; }
+  .chartbox { margin-top:10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>A股黄金股 · 双金属价格情景测算</h1>
+  <div class="meta">情景假设（相对 2026 现价）：黄金 2 年翻 1 倍（2028E×2）、4 年翻 4 倍（2030E×4）；其他贵金属（铜/银/锑）2 年 +50%（2028E×1.5）、4 年 +100%（2030E×2），中间年份线性插值。市值/股价取 2026-08-26。六家公司：紫金矿业 / 赤峰黄金 / 山东黄金 / 山金国际 / 湖南黄金 / 中金黄金 · 仅供研究参考，非投资建议</div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">×2 / ×4</div><div class="lab">金价路径：2028E 翻 1 倍、2030E 翻 4 倍</div></div>
+    <div class="kpi"><div class="num">×1.5 / ×2</div><div class="lab">其他金属路径：2028E +50%、2030E +100%</div></div>
+    <div class="kpi"><div class="num">77.5%</div><div class="lab">情景下最高 5 年利润 CAGR（赤峰黄金）</div></div>
+    <div class="kpi"><div class="num">1.6x</div><div class="lab">2030E 最低前瞻 PE（赤峰，2026-08-26 市值口径）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、情景利润路径（双金属 ×2 版，亿元）</h2>
+    <div class="sub">2025A 为实际基数，2026E 起按"基准产量增长 + 双金属价格重定价"；5 年 CAGR 相对 2025A</div>
+    <table>
+      <tr><th>公司</th><th>2025A</th><th>2026E</th><th>2027E</th><th>2028E</th><th>2029E</th><th>2030E</th><th>基准CAGR</th><th>情景CAGR</th></tr>
+      <tr><td>赤峰黄金</td><td>30.8</td><td>40</td><td>88</td><td>176</td><td>335</td><td>542</td><td>26.3%</td><td class="up">77.5%</td></tr>
+      <tr><td>山东黄金</td><td>47.4</td><td>90</td><td>186</td><td>304</td><td>541</td><td>814</td><td>27.5%</td><td class="up">76.6%</td></tr>
+      <tr><td>山金国际</td><td>29.7</td><td>48</td><td>93</td><td>155</td><td>264</td><td>391</td><td>22.5%</td><td class="up">67.5%</td></tr>
+      <tr><td>中金黄金</td><td>49.3</td><td>88</td><td>149</td><td>219</td><td>346</td><td>489</td><td>19.5%</td><td class="up">58.2%</td></tr>
+      <tr><td>紫金矿业</td><td>518</td><td>730</td><td>1298</td><td>2018</td><td>3218</td><td>4709</td><td>19.8%</td><td class="up">55.5%</td></tr>
+      <tr><td>湖南黄金</td><td>14.9</td><td>20</td><td>34</td><td>51</td><td>78</td><td>109</td><td>20.6%</td><td class="up">49.0%</td></tr>
+    </table>
+    <div class="note">基准情景 = 金价高位持平、利润增长全靠产量与成本。模型把基准利润拆为「金价敏感 / 其他金属敏感 / 非价格敏感」三段，前两段按各自价格经营杠杆重定价：放大倍数 = (m − cfrac)/(1 − cfrac)，cfrac 为成本占现价比重（金：赤峰 0.36 / 山金 0.24 / 其余 0.30；铜 0.40；锑 0.20）。</div>
+  </div>
+
+  <div class="card">
+    <h2>二、利润增速表（相对 2025A，双金属 ×2 版）</h2>
+    <div class="sub">2 年 = 2027E、3 年 = 2028E、4 年 = 2029E、5 年 = 2030E</div>
+    <table>
+      <tr><th>公司</th><th>2年 →2027E</th><th>3年 →2028E</th><th>4年 →2029E</th><th>5年 →2030E</th></tr>
+      <tr><td>赤峰黄金</td><td>+185%</td><td>+471%</td><td>+989%</td><td class="up">+1660%</td></tr>
+      <tr><td>山东黄金</td><td>+292%</td><td>+542%</td><td>+1042%</td><td class="up">+1617%</td></tr>
+      <tr><td>山金国际</td><td>+214%</td><td>+421%</td><td>+789%</td><td>+1217%</td></tr>
+      <tr><td>中金黄金</td><td>+203%</td><td>+345%</td><td>+602%</td><td>+891%</td></tr>
+      <tr><td>紫金矿业</td><td>+151%</td><td>+290%</td><td>+521%</td><td>+809%</td></tr>
+      <tr><td>湖南黄金</td><td>+125%</td><td>+240%</td><td>+421%</td><td>+633%</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>三、四档情景 2030E 利润与 5 年 CAGR 对比（亿元）</h2>
+    <div class="sub">敏感性矩阵：基准（金价持平）→ 只涨黄金 → 双金属 ×2（本页主场景）→ 双金属 ×3（其他金属 4 年 +200% 的上限参考）</div>
+    <table>
+      <tr><th>公司</th><th>基准 2030E</th><th>只涨金 2030E</th><th>双金属×2 2030E</th><th>双金属×3 2030E</th><th>基准 CAGR</th><th>只涨金 CAGR</th><th>双×2 CAGR</th><th>双×3 CAGR</th></tr>
+      <tr><td>赤峰黄金</td><td>99</td><td>531</td><td>542</td><td>554</td><td>26.3%</td><td>76.7%</td><td class="up">77.5%</td><td>78.2%</td></tr>
+      <tr><td>山东黄金</td><td>160</td><td>798</td><td>814</td><td>830</td><td>27.5%</td><td>75.9%</td><td class="up">76.6%</td><td>77.3%</td></tr>
+      <tr><td>山金国际</td><td>82</td><td>383</td><td>391</td><td>399</td><td>22.5%</td><td>66.8%</td><td class="up">67.5%</td><td>68.2%</td></tr>
+      <tr><td>中金黄金</td><td>120</td><td>480</td><td>489</td><td>549</td><td>19.5%</td><td>57.6%</td><td class="up">58.2%</td><td>61.9%</td></tr>
+      <tr><td>紫金矿业</td><td>1280</td><td>3749</td><td>4709</td><td>5669</td><td>19.8%</td><td>48.6%</td><td class="up">55.5%</td><td>61.4%</td></tr>
+      <tr><td>湖南黄金</td><td>38</td><td>95</td><td>109</td><td>124</td><td>20.6%</td><td>44.8%</td><td class="up">49.0%</td><td>52.6%</td></tr>
+    </table>
+    <div class="chartbox"><div id="c1" style="width:100%;height:360px;"></div></div>
+    <div class="note">其他金属涨幅从 ×3 降至 ×2 时，纯金股（赤峰/山东/山金，铜银敞口仅约 7%）CAGR 只回落 0.6~0.7pp，几乎免疫；受冲击最大的是铜/锑占比高的紫金（61.4%→55.5%）、中金（61.9%→58.2%）、湖南（52.6%→49.0%）。相对排序整体稳定——「纯金高杠杆 &gt; 金铜兼备 &gt; 冶炼型」结论对非金金属假设不敏感。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、前瞻 PE 表（市值/股价取 2026-08-26，利润取双金属 ×2 情景）</h2>
+    <div class="sub">2025A PE = 市值 ÷ 2025 实际净利；2028E / 2030E PE = 市值 ÷ 情景利润</div>
+    <table>
+      <tr><th>公司</th><th>市值(亿)</th><th>现价(元)</th><th>2025A PE</th><th>2028E PE</th><th>2030E PE</th></tr>
+      <tr><td>赤峰黄金</td><td>894</td><td>47.03</td><td>29.0x</td><td>5.1x</td><td class="up">1.6x</td></tr>
+      <tr><td>紫金矿业</td><td>9174</td><td>34.50</td><td>17.7x</td><td>4.5x</td><td class="up">1.9x</td></tr>
+      <tr><td>山金国际</td><td>758</td><td>27.35</td><td>25.5x</td><td>4.9x</td><td class="up">1.9x</td></tr>
+      <tr><td>山东黄金</td><td>1596</td><td>34.63</td><td>33.7x</td><td>5.2x</td><td class="up">2.0x</td></tr>
+      <tr><td>中金黄金</td><td>1283</td><td>26.46</td><td>26.0x</td><td>5.9x</td><td>2.6x</td></tr>
+      <tr><td>湖南黄金</td><td>384</td><td>24.56</td><td>25.8x</td><td>7.6x</td><td>3.5x</td></tr>
+    </table>
+    <div class="chartbox"><div id="c2" style="width:100%;height:340px;"></div></div>
+    <div class="note">情景下 2030E 六家前瞻 PE 全部压到 1.6x~3.5x，相对当前市场动态 PE（紫金 11.7x、赤峰 22.6x 等）为极端重估空间。PE 与 CAGR 匹配（PEG）看：赤峰 0.02 / 山东 0.03 / 山金 0.03 / 紫金 0.04 / 中金 0.05 / 湖南 0.07——赤峰最便宜、湖南最贵。</div>
+  </div>
+
+  <div class="card">
+    <h2>五、谁更值得买？（2026-08-26 股价口径）</h2>
+    <div class="sub">综合增速、前瞻 PE、确定性与绝对利润体量</div>
+    <ol class="rank">
+      <li><b>赤峰黄金</b> — 弹性之王：纯金 + 最高经营杠杆 + 紫金赋能产量高增，5 年 CAGR 77.5%、2030E 利润 542 亿（基数最小倍数最夸张），前瞻 PE 1.6x 全场最低，且铜/银敞口仅 7%，对非金金属假设几乎免疫。</li>
+      <li><b>山东黄金</b> — 本土产量基数最大（49t→）+ 焦家金矿扩产确定性高，CAGR 76.6%，PE 2.0x。</li>
+      <li><b>山金国际</b> — 全市场最低成本（cfrac 0.24）+ 纳米比亚 Osino 2027 放量，CAGR 67.5%，PE 1.9x，质优但绝对量小。</li>
+      <li><b>紫金矿业</b> — 铜占净利约 45%，非金金属假设下调对其冲击最大（CAGR 61.4%→55.5%）；但绝对利润 4709 亿遥遥领先、PE 1.9x、PEG 0.04，是确定性 + 绝对回报的压舱石。</li>
+      <li><b>中金黄金</b> — 金铜兼备，纯弹性（58.2%）反超紫金，但 PE 2.6x 更贵、绝对体量小，综合排在紫金之后。</li>
+      <li><b>湖南黄金</b> — 锑涨价虽补足部分弹性，但外购冶炼占比高、金价敏感部分仅 35%，CAGR 49.0% 与 PE 3.5x 均为末位，两档情景下都垫底。</li>
+    </ol>
+    <div class="note">纯弹性排序：赤峰 &gt; 山东 &gt; 山金 &gt; 中金 &gt; 紫金 &gt; 湖南；综合排序：赤峰 &gt; 山东 &gt; 山金 &gt; 紫金 &gt; 中金 &gt; 湖南。进攻选赤峰，压舱选紫金，均衡选山东/山金。</div>
+  </div>
+
+  <div class="risk">
+    ⚠️ 压力测试提示：×4 金价（约 13000–18000 美元/盎司）+ ×2 铜属极端货币贬值/危机情景，非基准预测。若金价只走到 ×2 后停滞，排序将大幅收敛，紫金"低 PE + 确定性"优势重新凸显。相对排序（纯金高杠杆 &gt; 金铜兼备 &gt; 冶炼型）是稳健结论，绝对数字仅作弹性量级参考。
+  </div>
+
+  <div class="card">
+    <h2>口径与数据来源</h2>
+    <div class="note">基准盈利预测（2025A–2030E）基于公司产量规划与券商一致预期，2026-08-26 记录整理；2025A 实际净利：紫金 518 亿 / 赤峰 30.8 亿 / 山东 47.4 亿 / 山金 29.7 亿 / 湖南 14.9 亿 / 中金 49.3 亿。行情：东方财富 push2 接口 2026-08-26 收盘（湖南黄金当日行情字段缺失，按市值/股本反推 24.56 元）。成本占比 cfrac 为模型假设（金 0.24–0.36、铜 0.40、锑 0.20），非公司披露口径。数据日期：2026-08-26 · 仅供研究参考</div>
+  </div>
+
+  <div style="text-align:center;color:var(--sub);font-size:12px;padding:14px 0 6px;">深层研究 · 临时研究 · © 2026 · 基于公开数据 · 独立研究</div>
+</div>
+
+<script>
+const T = ['赤峰黄金','山东黄金','山金国际','中金黄金','紫金矿业','湖南黄金'];
+const baseC = [26.3,27.5,22.5,19.5,19.8,20.6];
+const goldOnlyC = [76.7,75.9,66.8,57.6,48.6,44.8];
+const dm2C = [77.5,76.6,67.5,58.2,55.5,49.0];
+const dm3C = [78.2,77.3,68.2,61.9,61.4,52.6];
+echarts.init(document.getElementById('c1')).setOption({
+  backgroundColor:'transparent',
+  title:{text:'四档情景 5 年利润 CAGR（%）',left:'center',textStyle:{color:'#e8cf8f',fontSize:14}},
+  tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+  legend:{bottom:0,textStyle:{color:'#94a3b8'}},
+  grid:{left:40,right:16,top:46,bottom:56},
+  xAxis:{type:'category',data:T,axisLabel:{color:'#94a3b8'},axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}}},
+  yAxis:{type:'value',max:90,axisLabel:{color:'#94a3b8',formatter:'{value}%'},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
+  series:[
+    {name:'基准（金价持平）',type:'bar',data:baseC,itemStyle:{color:'rgba(148,163,184,0.55)'},barGap:'20%'},
+    {name:'只涨黄金',type:'bar',data:goldOnlyC,itemStyle:{color:'rgba(91,141,239,0.75)'}},
+    {name:'双金属×2（本页主场景）',type:'bar',data:dm2C,itemStyle:{color:'#c9a24b'}},
+    {name:'双金属×3（上限参考）',type:'bar',data:dm3C,itemStyle:{color:'rgba(232,207,143,0.5)'}}
+  ]
+});
+const mcap = [894,1596,758,1283,9174,384];
+const pe25 = [29.0,33.7,25.5,26.0,17.7,25.8];
+const pe28 = [5.1,5.2,4.9,5.9,4.5,7.6];
+const pe30 = [1.6,2.0,1.9,2.6,1.9,3.5];
+echarts.init(document.getElementById('c2')).setOption({
+  backgroundColor:'transparent',
+  title:{text:'前瞻 PE（2026-08-26 市值 ÷ 情景利润）',left:'center',textStyle:{color:'#e8cf8f',fontSize:14}},
+  tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+  legend:{bottom:0,textStyle:{color:'#94a3b8'}},
+  grid:{left:40,right:16,top:46,bottom:56},
+  xAxis:{type:'category',data:T,axisLabel:{color:'#94a3b8'},axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}}},
+  yAxis:{type:'value',axisLabel:{color:'#94a3b8',formatter:'{value}x'},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
+  series:[
+    {name:'2025A PE',type:'bar',data:pe25,itemStyle:{color:'rgba(148,163,184,0.5)'},barGap:'20%'},
+    {name:'2028E PE',type:'bar',data:pe28,itemStyle:{color:'rgba(91,141,239,0.7)'}},
+    {name:'2030E PE',type:'bar',data:pe30,itemStyle:{color:'#c9a24b'}}
+  ]
+});
+</script>
+</body>
+</html>
