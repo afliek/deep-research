@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国交通运输利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#059669; --accent-2:#6ee7b7; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回 A股十五大行业利润格局</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国交通运输利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月13日 · 财务口径：A股交通运输上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>交通运输是A股第十五大利润板块</b>：2025年净利润约 <b>950亿元*、占A股总利润约1.8%</b>，新入榜前15（航运景气+出行恢复）。</li>
+      <li><b>2025年龙头利润排名</b>：中远海控（约309亿）＞ 京沪高铁（约130亿）＞ 大秦铁路（约120亿）——<b>集运龙头+铁路公用事业双主线</b>。</li>
+      <li><b>近30年趋势</b>：占比从2005年约2.5%降至2020年约1.5%，2021-2022年集运超级周期推升，2025年回到约1.8%——航运周期弹性主导板块利润波动。</li>
+      <li><b>核心特征</b>：<b>周期（航运）与公用（铁路/港口）并存</b>——中远海控利润随运价大起大落，京沪高铁/大秦铁路提供稳定现金流；2025年航空业扭亏为盈（油价回落+出行恢复）。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">约950亿*</div><div class="label">交通运输2025年净利估算<br>（占A股约1.8%，新入榜第15）</div></div>
+    <div class="kpi"><div class="num">约309亿*</div><div class="label">中远海控2025年归母净利估算<br>（集运龙头，运价中枢下移）</div></div>
+    <div class="kpi"><div class="num">约250亿*</div><div class="label">京沪高铁+大秦铁路合计净利估算<br>（铁路公用事业压舱石）</div></div>
+    <div class="kpi"><div class="num">1.8%</div><div class="label">交通运输占A股利润比例<br>（2021-22集运周期峰值超2.5%）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年交通运输占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份，基于A股各行业净利润历史数据与行业事件推估</div>
+    <div id="trend" style="width:100%;height:320px;"></div>
+    <div class="note"><b>读图要点：</b>① 交运占比受航运周期主导：2005-2010年外贸高景气约2.5%；2015-2020年运价低迷+高铁建设期折旧高，降至约1.5%。<br>② 2021-2022年集运超级周期（运价暴涨）推升行业利润至2.5%+，2023-2025年运价回落但红海绕行等扰动仍托底，2025年约1.8%——<b>航运（中远海控）的利润弹性可致板块占比±1pct波动</b>。</div>
+  </div>
+
+  <div class="card">
+    <h2>二、交通运输龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报及公开数据 · 标*为估算值</div>
+    <div id="companies" style="width:100%;height:340px;"></div>
+    <table class="plain">
+      <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+      <tr class="hl"><td>1</td><td><b>中远海控</b></td><td>601919</td><td><b>约309*</b></td><td><span class="tag-red">-37%*</span></td><td>集运龙头，运价中枢较2024峰值回落</td></tr>
+      <tr class=""><td>2</td><td><b>京沪高铁</b></td><td>601816</td><td><b>约130*</b></td><td><span class="tag-green">+2%*</span></td><td>高铁黄金线路，客流创历史新高</td></tr>
+      <tr class=""><td>3</td><td><b>大秦铁路</b></td><td>601006</td><td><b>约120*</b></td><td><span class="tag-green">+4%*</span></td><td>煤炭运输大动脉，高分红</td></tr>
+      <tr class=""><td>4</td><td><b>上港集团</b></td><td>600018</td><td><b>约120*</b></td><td><span class="tag-red">-18%*</span></td><td>上海港龙头，投资收益波动</td></tr>
+      <tr class=""><td>5</td><td><b>顺丰控股</b></td><td>002352</td><td><b>约100*</b></td><td><span class="tag-red">-1%*</span></td><td>快递龙头，降本增效</td></tr>
+      <tr class=""><td>6</td><td><b>招商轮船</b></td><td>601872</td><td><b>约60*</b></td><td><span class="tag-green">+10%*</span></td><td>油运+干散，运价回升</td></tr>
+      <tr class=""><td>7</td><td><b>宁波港</b></td><td>601018</td><td><b>约45*</b></td><td><span class="tag-green">+3%*</span></td><td>集装箱枢纽港</td></tr>
+      <tr class=""><td>8</td><td><b>中远海能</b></td><td>600026</td><td><b>约35*</b></td><td><span class="tag-green">+5%*</span></td><td>油运龙头</td></tr>
+      <tr class=""><td>9</td><td><b>中国国航</b></td><td>601111</td><td><b>约40*</b></td><td><span class="tag-green">扭亏*</span></td><td>航空复苏，人民币升值+油价回落</td></tr>
+      <tr class=""><td>10</td><td><b>南方航空</b></td><td>600029</td><td><b>约30*</b></td><td><span class="tag-green">扭亏*</span></td><td>客运恢复，宽体机利用率提升</td></tr>
+    </table>
+    <div class="note"><b>读图要点：</b>① <b>结构三分</b>——集运（中远海控）贡献行业最大单公司利润，铁路双雄（京沪高铁+大秦铁路）合计约250亿提供稳定底盘，航空业2025年整体扭亏（国航/南航由亏转盈）。<br>② 利润波动源：中远海控净利随集运运价指数（CCFI）波动，2021年峰值约893亿→2025年约309亿，振幅巨大；上港集团受投资收益（航运公司分红）影响较大。<br>③ 2026年看点：油运（OPEC增产+俄油制裁）、集运供给约束、铁路票价市场化改革与分红提升、快递行业价格战出清。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、交通运输板块结构与核心逻辑</h2>
+    <div class="sub">子板块：航运（集运/油运/干散）/ 铁路 / 航空 / 港口 / 公路 / 快递物流</div>
+    <div class="note"><b>板块核心逻辑：</b>① <b>航运=利润放大器</b>——运价弹性极大（集运2021年利润可占A股交运板块80%+），关注供需（新船交付/红海绕行/贸易结构）；② <b>铁路与港口=公用事业化</b>——京沪高铁/大秦铁路/上港集团现金流稳定、分红确定，具类债属性；③ <b>航空=困境反转期权</b>——票价与油价/汇率双重敏感，2025年扭亏后弹性仍在；④ <b>快递物流=规模与出清</b>——顺丰时效件龙头，通达系价格战延续，行业集中度向头部提升。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note"><b>行业特征：</b>交运是A股中『周期与公用并存』的典型板块——航运利润随全球贸易与运价大起大落，铁路/港口提供稳定现金流，航空具备困境反转期权。<br><b>前瞻判断（观点）：</b>板块利润中枢2025年约950亿、占比1.8%；若油运景气上行+集运运价企稳，行业利润弹性向上；铁路高分红资产在低利率环境下估值持续修复。风险点：① 全球贸易放缓拖累集运/干散；② 航空油价与汇率波动；③ 快递价格战超预期。</div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>① 中国A股十五大行业利润格局分析（china-top10.html，2026-08-13）；② 各公司2025年年报与公开业绩数据（估算值标注*）；③ 上海航交所（CCFI/BDI）与行业媒体关于航运、铁路、航空的公开数据。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2025'];
+  var vals = [2.0, 2.0, 2.5, 2.5, 2.0, 1.5, 1.8];
+  var ch = echarts.init(document.getElementById('trend'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].value + '%'; } },
+    grid: { left:50, right:30, top:40, bottom:40 },
+    xAxis: { type:'category', data:years, name:'年份', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', min:0, name:'占比 %', nameTextStyle:{color:'#64748b'}, axisLabel:{formatter:'{value}%', color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ name:'交通运输占A股利润比重', type:'line', data:vals.map(function(v,i){ return { value:v, symbolSize:8, itemStyle:{ color: i===vals.length-1 ? '#059669' : '#94a3b8' }, label:{ show:i>0, formatter:v+'%', position:'top', fontSize:11, color:'#94a3b8' } }; }), lineStyle:{ width:3, color:'#059669' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+(function(){
+  var names = ['中远海控', '京沪高铁', '大秦铁路', '上港集团', '顺丰控股', '招商轮船', '宁波港', '中远海能', '中国国航', '南方航空'];
+  var vals = [309.0, 130.0, 120.0, 120.0, 100.0, 60.0, 45.0, 35.0, 40.0, 30.0];
+  var ch = echarts.init(document.getElementById('companies'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left:60, right:30, top:30, bottom:50 },
+    xAxis: { type:'category', data:names, name:'', axisLabel:{ fontSize:12, interval:0, rotate:35, color:'#94a3b8' }, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', name:'归母净利(亿元)', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ type:'bar', data:vals.map(function(v){ return { value:v, itemStyle:{ color:'#059669', borderRadius:[6,6,0,0] } }; }), barWidth:38, label:{ show:true, position:'top', formatter:function(p){return p.value;}, fontSize:10, color:'#cbd5e1' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+</script>
+</body>
+</html>

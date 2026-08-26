@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国医药生物利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#0ea5e9; --accent-2:#7dd3fc; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回 A股十五大行业利润格局</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国医药生物利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月13日 · 财务口径：A股医药生物上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>医药生物是A股第十大利润板块</b>：2025年净利润约 <b>1395亿元*、占A股总利润约2.6%</b>，新入榜前15（此前长期居第10-12位区间）。</li>
+      <li><b>2025年龙头利润排名（估算）</b>：药明康德（约110亿）＞ 迈瑞医疗（约95亿）＞ 恒瑞医药（约80亿）——CXO、器械、创新药三线分庭抗礼，<b>创新药企利润拐点初现</b>。</li>
+      <li><b>近30年趋势</b>：占比从2015年约3%缓降至2025年约2.6%——集采与医疗反腐持续压缩行业利润率，但2025年集采出清后板块盈利企稳。</li>
+      <li><b>核心特征</b>：<b>创新药出海（License-out）是最大增量</b>——2025年国产创新药对外授权交易金额创历史新高，恒瑞、百济、康方等药企的海外授权首付款直接兑现为利润；医疗器械受集采降价拖累但国产替代仍在推进。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">约1395亿*</div><div class="label">医药生物2025年净利估算<br>（占A股约2.6%，新入榜第10）</div></div>
+    <div class="kpi"><div class="num">约110亿*</div><div class="label">药明康德2025年归母净利估算<br>（CXO龙头，海外订单韧性）</div></div>
+    <div class="kpi"><div class="num">约95亿*</div><div class="label">迈瑞医疗2025年归母净利估算<br>（器械龙头，集采降价承压）</div></div>
+    <div class="kpi"><div class="num">2.6%</div><div class="label">医药生物占A股利润比例<br>（2015年约3%→2025年约2.6%）</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年医药生物占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份，基于A股各行业净利润历史数据与行业事件推估</div>
+    <div id="trend" style="width:100%;height:320px;"></div>
+    <div class="note"><b>读图要点：</b>① 医药占比在2005-2015年走高（2008-2015年新医改扩容+医保放量，峰值约3.5%），2018年集采试点后进入下行通道，2025年约2.6%。<br>② 2025年边际企稳：<b>集采出清（化学药+高值耗材降价趋缓）+ 创新药放量（新品收入占比提升）+ 医疗设备更新（以旧换新）</b>三因素支撑行业利润触底回升。</div>
+  </div>
+
+  <div class="card">
+    <h2>二、医药生物龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报及公开数据 · 标*为估算值</div>
+    <div id="companies" style="width:100%;height:340px;"></div>
+    <table class="plain">
+      <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+      <tr class="hl"><td>1</td><td><b>药明康德</b></td><td>603259</td><td><b>约110*</b></td><td><span class="tag-green">+15%*</span></td><td>CXO龙头，海外订单韧性，TIDES业务高增</td></tr>
+      <tr class=""><td>2</td><td><b>迈瑞医疗</b></td><td>300760</td><td><b>约95*</b></td><td><span class="tag-red">-18%*</span></td><td>器械龙头，集采降价+反腐影响2025年收入</td></tr>
+      <tr class=""><td>3</td><td><b>恒瑞医药</b></td><td>600276</td><td><b>约80*</b></td><td><span class="tag-green">+26%*</span></td><td>创新药放量，License-out首付款兑现利润</td></tr>
+      <tr class=""><td>4</td><td><b>云南白药</b></td><td>000538</td><td><b>约60*</b></td><td><span class="tag-green">+25%*</span></td><td>中药消费龙头，口腔+健康品稳定</td></tr>
+      <tr class=""><td>5</td><td><b>上海医药</b></td><td>601607</td><td><b>约45*</b></td><td><span class="tag-green">+10%*</span></td><td>工商业一体化，医药商业龙头</td></tr>
+      <tr class=""><td>6</td><td><b>新和成</b></td><td>002001</td><td><b>约40*</b></td><td><span class="tag-green">+40%*</span></td><td>维生素+蛋氨酸周期复苏</td></tr>
+      <tr class=""><td>7</td><td><b>片仔癀</b></td><td>600436</td><td><b>约31*</b></td><td><span class="tag-green">+2%*</span></td><td>稀缺中药，提价+渠道去库存</td></tr>
+      <tr class=""><td>8</td><td><b>华润三九</b></td><td>000999</td><td><b>约30*</b></td><td><span class="tag-green">+10%*</span></td><td>中药OTC+配方颗粒</td></tr>
+      <tr class=""><td>9</td><td><b>联影医疗</b></td><td>688271</td><td><b>约25*</b></td><td><span class="tag-green">+30%*</span></td><td>高端影像设备国产替代</td></tr>
+      <tr class=""><td>10</td><td><b>华东医药</b></td><td>000963</td><td><b>约20*</b></td><td><span class="tag-green">+10%*</span></td><td>医美+创新药转型</td></tr>
+    </table>
+    <div class="note"><b>读图要点：</b>① <b>三龙头分属三条赛道</b>——药明康德（CXO，海外需求）、迈瑞医疗（器械，国内龙头）、恒瑞医药（创新药，转型标杆），合计约285亿、占行业估算利润约20%。<br>② 2025年行业整体利润承压但结构分化：<b>创新药企业（恒瑞/百济/信达/康方）因BD出海与新品放量利润大幅改善，仿制药与高值耗材（集采品种）继续承压</b>；CXO订单自2024年低点修复。<br>③ 2026年看点：创新药出海交易兑现（首付款+里程碑）、GLP-1与ADC等热门赛道商业化放量、医疗设备更新政策落地。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、医药生物板块结构与核心逻辑</h2>
+    <div class="sub">子板块：化学制药 / 生物制品 / 医疗器械 / 中药 / 医疗服务 / 医药商业</div>
+    <div class="note"><b>板块三大核心逻辑：</b>① <b>创新药出海（License-out）</b>——2025年国产创新药对外授权（BD）交易数量与金额创历史新高，单笔首付款可达数亿美元，直接增厚当期利润并验证管线价值；② <b>集采出清</b>——化学药、高值耗材经历多轮集采后降价趋缓，部分品种见底回升，行业毛利率企稳；③ <b>医疗设备更新与国产替代</b>——设备更新政策带动CT/MRI/内镜等放量，联影等国产龙头份额提升。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note"><b>行业特征：</b>医药是A股少数同时具备『刚需消费+科技创新』属性的行业，但受政策（集采/反腐）扰动显著；2025年板块占比2.6%处于近十年低位，<b>利润企稳回升的拐点信号</b>来自创新药BD兑现与集采出清。<br><b>前瞻判断（观点）：</b>若创新药出海持续放量+医疗设备更新落地，医药利润占比有望止跌回升；结构性机会集中在『创新药+高端器械+中药资源品』三条主线。风险点：① 集采扩围超预期；② 创新药BD交易集中在少数头部公司；③ 海外政策（生物安全法案类）对CXO扰动。</div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>① 证券时报·数据宝《A股2025年业绩》（2026-04-30）；② 中国A股十五大行业利润格局分析（china-top10.html，2026-08-13）；③ 各公司2024年年报与公开业绩预告（估算值标注*）；④ 行业媒体关于创新药BD交易与集采的报道。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2025'];
+  var vals = [2.0, 2.5, 3.0, 3.5, 3.0, 2.5, 2.6];
+  var ch = echarts.init(document.getElementById('trend'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].value + '%'; } },
+    grid: { left:50, right:30, top:40, bottom:40 },
+    xAxis: { type:'category', data:years, name:'年份', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', min:0, name:'占比 %', nameTextStyle:{color:'#64748b'}, axisLabel:{formatter:'{value}%', color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ name:'医药生物占A股利润比重', type:'line', data:vals.map(function(v,i){ return { value:v, symbolSize:8, itemStyle:{ color: i===vals.length-1 ? '#0ea5e9' : '#94a3b8' }, label:{ show:i>0, formatter:v+'%', position:'top', fontSize:11, color:'#94a3b8' } }; }), lineStyle:{ width:3, color:'#0ea5e9' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+(function(){
+  var names = ['药明康德', '迈瑞医疗', '恒瑞医药', '云南白药', '上海医药', '新和成', '片仔癀', '华润三九', '联影医疗', '华东医药'];
+  var vals = [110.0, 95.0, 80.0, 60.0, 45.0, 40.0, 31.0, 30.0, 25.0, 20.0];
+  var ch = echarts.init(document.getElementById('companies'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left:60, right:30, top:30, bottom:50 },
+    xAxis: { type:'category', data:names, name:'', axisLabel:{ fontSize:12, interval:0, rotate:35, color:'#94a3b8' }, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', name:'归母净利(亿元)', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ type:'bar', data:vals.map(function(v){ return { value:v, itemStyle:{ color:'#0ea5e9', borderRadius:[6,6,0,0] } }; }), barWidth:38, label:{ show:true, position:'top', formatter:function(p){return p.value;}, fontSize:10, color:'#cbd5e1' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国家用电器利润格局分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#db2777; --accent-2:#f9a8d4; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-top10.html" class="nav-back">← 返回 A股十五大行业利润格局</a>
+</nav>
+
+<div class="wrap">
+  <h1>中国家用电器利润格局分析</h1>
+  <div class="meta">数据截至 2026年8月13日 · 财务口径：A股家用电器上市公司2025年年报归母净利润（亿元） · 估算值已标注* · 数据来源见文末</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>家用电器是A股第十四大利润板块</b>：2025年净利润约 <b>1050亿元*、占A股总利润约1.9%</b>，新入榜前15（以旧换新+出口双驱动）。</li>
+      <li><b>白电三巨头高度集中</b>：美的（439亿）＞ 格力（290亿）＞ 海尔（196亿），三家公司合计约925亿、<b>占行业估算利润约88%</b>——家电是A股利润集中度最高的板块之一。</li>
+      <li><b>近30年趋势</b>：占比长期在1.5%-2%区间——2015-2021年空调/厨电高景气支撑，2022-2023年地产下行拖累，2024-2025年以旧换新政策拉动重回约1.9%。</li>
+      <li><b>核心特征</b>：<b>全球化+高分红</b>——美的/海尔海外收入占比超40%，三巨头股息率长期3%-5%；2025年AI家电（智能家居）开启新一轮产品升级周期。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">约1050亿*</div><div class="label">家用电器2025年净利估算<br>（占A股约1.9%，新入榜第14）</div></div>
+    <div class="kpi"><div class="num">439亿</div><div class="label">美的集团2025年归母净利<br>（行业第一，全球化+ToB转型）</div></div>
+    <div class="kpi"><div class="num">~88%</div><div class="label">白电三巨头（美的+格力+海尔）<br>占行业估算利润比例</div></div>
+  </div>
+
+  <div class="card">
+    <h2>一、近30年家用电器占A股总利润比重趋势</h2>
+    <div class="sub">估算序列（%）：1995-2025年关键年份，基于A股各行业净利润历史数据与行业事件推估</div>
+    <div id="trend" style="width:100%;height:320px;"></div>
+    <div class="note"><b>读图要点：</b>① 家电占比长期稳定在1.5%-2%区间——2010-2015年地产后周期+空调普及支撑约2%；2018-2020年地产下行与原材料涨价拖累至约1.8%。<br>② 2024-2025年<strong>以旧换新政策+出口景气</strong>双驱动回升：2025年家电出口额创新高，内销以旧换新拉动空调/冰箱/洗衣机销量高个位数增长，行业利润重回约1.9%。</div>
+  </div>
+
+  <div class="card">
+    <h2>二、家用电器龙头上市公司净利润排名（2025年）</h2>
+    <div class="sub">单位：亿元 · 归母净利润 · 数据来源：2025年年报及公开数据 · 标*为估算值</div>
+    <div id="companies" style="width:100%;height:340px;"></div>
+    <table class="plain">
+      <tr><th>排名</th><th>公司</th><th>代码</th><th>2025年归母净利(亿元)</th><th>同比</th><th>看点</th></tr>
+      <tr class="hl"><td>1</td><td><b>美的集团</b></td><td>000333</td><td><b>439</b></td><td><span class="tag-green">+14%*</span></td><td>全球化+ToB（机器人/楼宇科技）第二曲线</td></tr>
+      <tr class=""><td>2</td><td><b>格力电器</b></td><td>000651</td><td><b>290</b></td><td><span class="tag-red">-10%*</span></td><td>空调龙头，渠道改革+多元化</td></tr>
+      <tr class=""><td>3</td><td><b>海尔智家</b></td><td>600690</td><td><b>196</b></td><td><span class="tag-green">+5%*</span></td><td>高端品牌（卡萨帝）+海外自主品牌</td></tr>
+      <tr class=""><td>4</td><td><b>三花智控</b></td><td>002050</td><td><b>约35*</b></td><td><span class="tag-green">+10%*</span></td><td>家电热管理+汽车热管理+机器人执行器</td></tr>
+      <tr class=""><td>5</td><td><b>海信视像</b></td><td>600060</td><td><b>约28*</b></td><td><span class="tag-green">+10%*</span></td><td>显示龙头，激光电视出海</td></tr>
+      <tr class=""><td>6</td><td><b>老板电器</b></td><td>002508</td><td><b>约15*</b></td><td><span class="tag-green">+5%*</span></td><td>厨电龙头，地产后周期</td></tr>
+      <tr class=""><td>7</td><td><b>苏泊尔</b></td><td>002032</td><td><b>约15*</b></td><td><span class="tag-green">+5%*</span></td><td>小家电+炊具，SEB协同</td></tr>
+      <tr class=""><td>8</td><td><b>石头科技</b></td><td>688169</td><td><b>约12*</b></td><td><span class="tag-red">-20%*</span></td><td>扫地机器人，海外收入占比高</td></tr>
+      <tr class=""><td>9</td><td><b>科沃斯</b></td><td>603486</td><td><b>约5*</b></td><td><span class="tag-green">扭亏*</span></td><td>扫地机器人+割草机器人</td></tr>
+      <tr class=""><td>10</td><td><b>九阳股份</b></td><td>002242</td><td><b>约6*</b></td><td><span class="tag-green">+5%*</span></td><td>豆浆机+破壁机，小家电</td></tr>
+    </table>
+    <div class="note"><b>读图要点：</b>① <b>三巨头碾压式集中</b>——美的439亿/格力290亿/海尔196亿合计约925亿，占行业估算利润约88%，其余公司规模显著偏小；家电是典型的『寡头格局+规模效应』行业。<br>② 结构看点：美的凭借全球化（海外收入占比40%+）与ToB业务实现持续增长；格力空调主业受价格竞争影响小幅回落；海尔高端化（卡萨帝）与海外自主品牌盈利改善。<br>③ 2026年看点：AI家电（智能家居/具身智能）、以旧换新政策延续、海外产能（墨西哥/东南亚）规避关税。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、家用电器板块结构与核心逻辑</h2>
+    <div class="sub">子板块：白电（空调/冰箱/洗衣机）/ 厨电 / 小家电 / 生活电器 / 上游零部件与热管理</div>
+    <div class="note"><b>板块核心逻辑：</b>① <b>以旧换新政策红利</b>——2024-2025年中央财政以旧换新补贴直接拉动内需，白电与厨电销量显著受益；② <b>全球化第二曲线</b>——美的/海尔/海信海外收入占比持续提升，自有品牌出海对冲国内地产下行；③ <b>高股息防御属性</b>——三巨头经营性现金流充沛、资本开支可控，股息率3%-5%，是A股低利率环境下的『类债券』资产；④ <b>AI+智能家居</b>——从单品智能到全屋智能，AI大模型赋能家电产品升级与客单价提升。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、总结与前瞻</h2>
+    <div class="sub">基于上文数据点与公开行业研究</div>
+    <div class="note"><b>行业特征：</b>家电是A股盈利确定性最强的消费板块之一——寡头格局（三巨头占88%）、全球化布局、高分红，且受地产周期影响边际减弱。<br><b>前瞻判断（观点）：</b>短期以旧换新政策延续支撑内销，中期全球化+AI家电提供增量，家电利润占比有望稳定在2%左右；白电龙头的『利润+分红』组合仍是稳健配置。风险点：① 地产持续下行拖累厨电/中央空调；② 海外关税与汇率波动；③ 以旧换新政策退坡后的需求回落。</div>
+  </div>
+
+  <div class="src">
+    <b>数据来源：</b>① 中国A股十五大行业利润格局分析（china-top10.html，2026-08-13）；② 各公司2025年年报与公开业绩数据（美的439亿/格力290亿/海尔196亿为2025年报数，其余标注*为估算）；③ 产业在线/奥维云网关于家电内销与出口的行业数据。
+  </div>
+</div>
+
+<script>
+(function(){
+  var years = ['1995','2000','2005','2010','2015','2020','2025'];
+  var vals = [1.5, 1.5, 1.5, 2.0, 2.0, 1.8, 1.9];
+  var ch = echarts.init(document.getElementById('trend'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].axisValue + '年：约 ' + p[0].value + '%'; } },
+    grid: { left:50, right:30, top:40, bottom:40 },
+    xAxis: { type:'category', data:years, name:'年份', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', min:0, name:'占比 %', nameTextStyle:{color:'#64748b'}, axisLabel:{formatter:'{value}%', color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ name:'家用电器占A股利润比重', type:'line', data:vals.map(function(v,i){ return { value:v, symbolSize:8, itemStyle:{ color: i===vals.length-1 ? '#db2777' : '#94a3b8' }, label:{ show:i>0, formatter:v+'%', position:'top', fontSize:11, color:'#94a3b8' } }; }), lineStyle:{ width:3, color:'#db2777' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+(function(){
+  var names = ['美的集团', '格力电器', '海尔智家', '三花智控', '海信视像', '老板电器', '苏泊尔', '石头科技', '科沃斯', '九阳股份'];
+  var vals = [439.0, 290.0, 196.0, 35.0, 28.0, 15.0, 15.0, 12.0, 5.0, 6.0];
+  var ch = echarts.init(document.getElementById('companies'));
+  ch.setOption({
+    backgroundColor:'transparent',
+    tooltip: { trigger:'axis', formatter: function(p){ return p[0].name + '：' + p[0].value + ' 亿元'; } },
+    grid: { left:60, right:30, top:30, bottom:50 },
+    xAxis: { type:'category', data:names, name:'', axisLabel:{ fontSize:12, interval:0, rotate:35, color:'#94a3b8' }, axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}} },
+    yAxis: { type:'value', name:'归母净利(亿元)', nameTextStyle:{color:'#64748b'}, axisLabel:{color:'#94a3b8'}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}} },
+    series: [{ type:'bar', data:vals.map(function(v){ return { value:v, itemStyle:{ color:'#db2777', borderRadius:[6,6,0,0] } }; }), barWidth:38, label:{ show:true, position:'top', formatter:function(p){return p.value;}, fontSize:10, color:'#cbd5e1' } }]
+  });
+  window.addEventListener('resize', function(){ ch.resize(); });
+})();
+</script>
+</body>
+</html>
