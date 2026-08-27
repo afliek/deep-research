@@ -40,10 +40,10 @@
     overflow-x: hidden;
     min-height: 100vh;
   }
-  /* 背景图层：国风水墨山水——固定覆盖全视口（滚动到底也有图），随滚动条进度缓慢位移产生视差 */
+  /* 背景图层：国风水墨山水——与滚动条 1:1 反向同步移动（位移=滚动像素），fixed 保证任何位置都有图 */
   .bg-photo {
-    position: fixed; top: -12vh; left: 0;
-    width: 100%; height: 124vh;
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100vh;
     z-index: 0; pointer-events: none;
     background: url(mountain-bg.jpeg) center top / cover no-repeat;
     will-change: transform;
@@ -482,27 +482,14 @@
 </footer>
 
 <script>
-  // 背景随滚动条滚动产生视差：页面越长位移越大，缓动跟随，滚到底部也有完整背景
+  // 背景与滚动条 1:1 同步：背景位移 = 滚动像素 × -1，零延时无插值
   (function () {
     var bg = document.querySelector('.bg-photo');
     if (!bg) return;
-    var current = 0, target = 0, raf = null;
 
     function onScroll() {
-      var doc = document.documentElement;
-      // 滚动进度 0→1 映射为背景向上位移 0→18vh（层高124vh、top-12vh，覆盖全程不露底）
-      var progress = doc.scrollHeight > window.innerHeight
-        ? (window.scrollY || doc.scrollTop) / (doc.scrollHeight - window.innerHeight)
-        : 0;
-      target = -progress * window.innerHeight * 0.18;
-      if (!raf) loop();
-    }
-
-    function loop() {
-      raf = requestAnimationFrame(loop);
-      current += (target - current) * 0.08;   // 缓动跟随，柔和不突兀
-      bg.style.transform = 'translateY(' + current.toFixed(2) + 'px)';
-      if (Math.abs(target - current) < 0.5 && raf) { cancelAnimationFrame(raf); raf = null; }
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      bg.style.transform = 'translate3d(0,' + (-y) + 'px,0)';
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
