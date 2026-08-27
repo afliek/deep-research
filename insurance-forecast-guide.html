@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保险行业业绩预测分析框架 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#0e9fae; --accent-2:#43d9ec; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .meta a { color:var(--accent-2); text-decoration:none; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:top; line-height:1.7; }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-amber { display:inline-block; background:rgba(14,159,174,0.18); color:#43d9ec; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-blue { display:inline-block; background:rgba(59,130,246,0.15); color:#60a5fa; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .dims { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:16px; margin-top:8px; }
+  .dim { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+  .dim-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .dim-num { width:26px; height:26px; border-radius:50%; background:rgba(14,159,174,0.28); color:var(--accent-2); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .dim-title { font-size:15px; font-weight:700; color:#f1f5f9; }
+  .dim-q { font-size:13px; color:var(--accent-2); margin-bottom:8px; line-height:1.6; }
+  .dim-body { font-size:13px; color:var(--text-secondary); line-height:1.85; }
+  .dim-body b { color:#cbd5e1; }
+  .dim-watch { margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.7; border-top:1px dashed var(--border); padding-top:8px; }
+  .dim-watch b { color:var(--accent-2); }
+  dt { font-size:13.5px; font-weight:700; color:#f1f5f9; margin-top:14px; }
+  dd { font-size:13px; color:var(--text-secondary); line-height:1.8; margin:4px 0 0 18px; }
+  dd b { color:var(--accent-2); }
+  .formula { background:rgba(14,159,174,0.08); border:1px solid rgba(14,159,174,0.3); border-radius:8px; padding:14px 18px; font-size:14px; color:#c8ecf2; line-height:2; margin:12px 0; }
+  .formula b { color:var(--accent-2); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="insurance.html" class="nav-back">← 返回 中国保险行业分析</a>
+</nav>
+
+<div class="wrap">
+  <h1>保险行业业绩预测分析框架</h1>
+  <div class="meta">写给保险小白的使用手册 · 口径：A股上市保险公司（人寿/平安/太保/新华/人保/友邦等） · 配套页：<a href="insurance.html">中国保险行业分析</a> · 编制日期 2026年8月27日 · 专业名词首次出现均加粗，可在此页「名词速查」区集中查阅</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>一句话框架：</b>保险公司是"先收钱、后兑现"的生意——<b>负债端</b>（卖保单收保费）决定未来利润的种子，<b>资产端</b>（拿保费去投资）决定种子能长多大。预测业绩 = 负债端看<b>新单增长与价值率</b>，资产端看<b>投资收益率与利差</b>。</li>
+      <li><b>八个预测维度：</b>① 新单保费与NBV增长；② NBV Margin（价值率）；③ 代理人队伍质态；④ 银保/多元渠道；⑤ 投资收益率与权益市场；⑥ 利差损风险；⑦ 准备金与利率环境；⑧ 分红险转型与产品结构。</li>
+      <li><b>与医药/有色框架的本质区别：</b>保险的利润是"<b>算出来的</b>"——准备金假设（折现率、发病率）一变，利润表立刻重估；且当期利润严重滞后于当期经营（一张期缴保单要贡献未来几十年的利润）。所以看保险<b>不能只看净利润</b>，要锚定<b>NBV（新业务价值）</b>这个先行指标。</li>
+      <li><b>实操三步法：</b>先看<b>NBV增速</b>（判断经营趋势）→ 再拆<b>量（新单保费）与价（Margin）</b>找增长动因 → 最后检验<b>投资收益率 vs 负债成本</b>（判断利差损风险）。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">8 个</div><div class="label">核心预测维度<br>负债端5个 + 资产端3个</div></div>
+    <div class="kpi"><div class="num">2 端</div><div class="label">商业模式拆解<br>负债端（卖保单）× 资产端（投资）</div></div>
+    <div class="kpi"><div class="num">40+</div><div class="label">专业名词速查解释<br>NBV/EV/IFRS17/利差损等</div></div>
+    <div class="kpi"><div class="num">3 步</div><div class="label">小白实操路径<br>NBV→量价拆解→利差检验</div></div>
+  </div>
+
+  <!-- ================= 一、商业模式 ================= -->
+  <div class="card">
+    <h2>一、动手前先搞懂：保险公司怎么赚钱？</h2>
+    <div class="sub">两端模式是理解一切的基础——负债端种种子，资产端收利息，"三差"是利润的最终来源</div>
+    <div class="formula">
+      利润来源「三差」= <b>利差</b>（投资收益率 − 预定利率）+ <b>死差</b>（实际死亡率 vs 假设）+ <b>费差</b>（实际费用 vs 预算）<br>
+      保单利润兑现节奏：期缴保单 → 首年亏损或微利 → 第2-3年起逐年释放利润（边收钱边兑现）
+    </div>
+    <table class="plain">
+      <tr><th>端</th><th>业务</th><th>赚钱逻辑</th><th>关键指标</th></tr>
+      <tr class="hl"><td rowspan="2"><b>负债端</b><br>（卖保单）</td><td>寿险（长期）</td><td>收几十年保费，用精算假设预留成本，剩余都是利润——NBV衡量每张新单的"含金量"</td><td>新单保费、NBV、Margin</td></tr>
+      <tr><td>财险（短期）</td><td>收一年保费，赔付+费用后剩的承保利润，垫资做投资再赚一笔</td><td>保费增速、综合成本率（COR）</td></tr>
+      <tr><td rowspan="2"><b>资产端</b><br>（做投资）</td><td>固收为主（约75-80%）</td><td>买债券吃票息，匹配保单负债的长久期</td><td>净投资收益率、利率环境</td></tr>
+      <tr><td>权益/另类（约20-25%）</td><td>股票+基金+非标，弹性大，直接放大或吞噬当期利润</td><td>总投资收益率、沪深300表现</td></tr>
+    </table>
+    <div class="note"><b>子公司视角：</b>上市险企多为集团——平安（寿险+财险+银行+资管）、人保（财险为主+寿险/健康险）。看集团业绩要先拆板块：寿险看NBV，财险看COR，其他板块看净利润贡献。纯寿险股（人寿/新华）股价对利率和股市最敏感。</div>
+  </div>
+
+  <!-- ================= 二、八维框架总览 ================= -->
+  <div class="card">
+    <h2>二、八维预测框架总览</h2>
+    <div class="sub">负债端五维决定"未来利润的种子质量"，资产端三维决定"种子发芽的土壤"</div>
+    <table class="plain">
+      <tr><th>组别</th><th>维度</th><th>回答的问题</th><th>数据在哪里找</th></tr>
+      <tr><td rowspan="5"><span class="tag-amber">负债端</span></td><td>① 新单保费与NBV增速</td><td>今年卖的新保单比去年多吗？价值高吗？</td><td>年报/季报NBV专项披露、业绩发布会</td></tr>
+      <tr><td>② NBV Margin（价值率）</td><td>每收100元保费，赚了多少"精算利润"？</td><td>NBV÷新单保费，公司披露或自行计算</td></tr>
+      <tr><td>③ 代理人队伍质态</td><td>卖保单的人是多了还是少了？产能呢？</td><td>年报代理人数量、人均NBV/人均收入</td></tr>
+      <tr><td>④ 银保与多元渠道</td><td>不靠代理人的渠道增长如何？</td><td>分渠道保费披露（个险/银保/团险/互联网）</td></tr>
+      <tr><td>⑤ 产品结构与分红险转型</td><td>卖的产品结构健康吗？利差损风险低吗？</td><td>产品类型披露（传统险/分红险/万能险占比）</td></tr>
+      <tr><td rowspan="3"><span class="tag-blue">资产端</span></td><td>⑥ 投资收益率与权益市场</td><td>投资赚了还是亏了？今年股市债市怎么样？</td><td>总投资收益率/综合投资收益率披露</td></tr>
+      <tr><td>⑦ 利率环境与准备金</td><td>利率变动对利润表和准备金的影响方向？</td><td>十年期国债收益率、准备金折现率假设</td></tr>
+      <tr><td>⑧ 利差损风险</td><td>存量保单的负债成本 vs 投资收益，倒挂了吗？</td><td>存量保单预定利率（3.5%/3.0%/2.5%时代）</td></tr>
+    </table>
+    <div class="note"><b>用法：</b>给每家公司逐维打分加权合成"业绩确定性分数"。研究纯寿险（人寿/新华）把⑥⑦⑧调高（投资与利率敏感），研究平安/太保把③④调高（渠道转型权重），研究人保把财险COR加进来。</div>
+  </div>
+
+  <!-- ================= 三、八维详解 ================= -->
+  <div class="card">
+    <h2>三、八维详解：每个维度看什么、在哪看、如何判断好坏</h2>
+    <div class="sub">每个维度都给出"好的信号 / 危险信号"，配2025-2026年行业实例</div>
+    <div class="dims">
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">1</span><span class="dim-title">新单保费与NBV增速</span></div>
+        <div class="dim-q">关键问题：未来利润的"种子"播得更多了吗？</div>
+        <div class="dim-body">
+          <b>NBV（新业务价值）</b>是保险行业最核心的先行指标——把今年卖的新保单未来全部利润折现到今天。NBV增速领先净利润2-3年（保单利润逐年释放）。<b>2025年行业实例：</b>五大上市险企NBV全线高增（人寿+35.7%、平安+29.3%、太保+40.1%、新华+57.4%），这意味着2027-2028年利润有保障。<b>注意口径：</b>对比增速要看"可比口径"（假设调整后），部分公司会重述基期。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>NBV连续多季双位数增长、新单保费与Margin同向改善（量价齐升）。<br><b>危险信号：</b>靠降价冲保费（Margin暴跌换NBV微增）、NBV增长全靠一次性趸交冲量。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">2</span><span class="dim-title">NBV Margin（价值率）</span></div>
+        <div class="dim-q">关键问题：收进来的保费"含金量"如何？</div>
+        <div class="dim-body">
+          Margin = NBV ÷新单保费，即每100元新保费创造的精算利润。<b>结构决定Margin：</b>个险渠道Margin 30-50%（代理人卖的长期期缴重疾/终身寿），银保渠道仅10-20%（储蓄型为主、要分渠道费），趸交更低。<b>行业趋势：</b>2023-2025年预定利率从3.5%一路下调至2.5%再到分红险主导，产品Margin被压薄但<b>利差损风险下降</b>—— Margin降低若换来"可持续的保费"，是健康交换；纯靠高Margin产品冲量反而不可持续。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>Margin企稳或降幅收窄、期缴占比提升、分红险占比有序提高。<br><b>危险信号：</b>Margin大滑坡且新单还下滑（量价双杀）、过度依赖趸交冲规模。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">3</span><span class="dim-title">代理人队伍质态</span></div>
+        <div class="dim-q">关键问题：销售铁军是企稳回升还是继续流失？</div>
+        <div class="dim-body">
+          代理人是个险渠道的命脉。行业2019年912万峰值→2024年264万，"清虚"基本收尾；2025年五大上市险企合计133.3万（仅-3.7%），平安逆势回升至35.1万——<b>队伍企稳是NBV可持续的核心前提</b>。比人数更重要的是<b>产能</b>：人均NBV、人均收入。行业逻辑已从"人海战术"转向"精英化"——100万个高产能代理人比300万个低产能更赚钱（佣金成本更低、Margin更高）。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>队伍人数企稳或回升、人均NBV持续提升、新人留存率改善。<br><b>危险信号：</b>队伍加速流失且人均产能停滞（量价双输）、高龄化断档。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">4</span><span class="dim-title">银保与多元渠道</span></div>
+        <div class="dim-q">关键问题：不依赖代理人的第二渠道起来了吗？</div>
+        <div class="dim-body">
+          银保渠道（银行网点代卖保险）是近年增长最快渠道——银行有客户有信任，保险公司借船出海。关键变量是<b>"报行合一"</b>政策：要求银保手续费的报告与实际执行一致，治理了费用黑箱，短期压低银保Margin、长期让竞争回归产品本身。此外<b>经代渠道</b>（专业中介）与<b>互联网渠道</b>也在分流。看银保要抓两点：保费占比变化 + 报行合一后Margin是否企稳。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>银保占比稳健提升且报行合一后Margin未恶化、多元渠道形成合力。<br><b>危险信号：</b>银保占比暴增但Margin腰斩（增收不增利）、过度依赖单一银行伙伴。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">5</span><span class="dim-title">产品结构与分红险转型</span></div>
+        <div class="dim-q">关键问题：卖的产品把利率风险留给了谁？</div>
+        <div class="dim-body">
+          传统险（保证3.0%收益）把利率风险全留给保险公司——利率下行时是利差损隐患；<b>分红险</b>（保证低+分红浮动）与客户共担风险，是行业2024-2026年转型的主战场。判断转型成色：分红险占新单比重（头部公司目标50%+）、分红实现率（承诺的分红是否兑现——影响口碑与续卖）。<b>对业绩预测的含义：</b>分红险Margin略低但当期费差损小、长期利差损风险显著下降，转型期NBV增速可能被拖累但质量在提高。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>分红险新单占比快速提升、分红实现率维持高位（80%+）。<br><b>危险信号：</b>分红实现率暴跌引发信任危机、传统高预定利率产品仍在冲量。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">6</span><span class="dim-title">投资收益率与权益市场</span></div>
+        <div class="dim-q">关键问题：保费拿去投资，赚没赚到大钱？</div>
+        <div class="dim-body">
+          险资约75-80%配置债券（吃票息、匹配负债久期），20-25%配权益与非标。<b>总投资收益率</b>（含买卖价差与公允价值变动）波动大——2025年权益牛市推动上市险企利润普遍暴增（新华+100%+级别）；<b>净投资收益率</b>（票息+分红）稳定但趋势下行（利率下行拖累）。<b>预测要点：</b>当期利润对沪深300高度敏感（平安/新华弹性最大）；长逻辑是险资加配高股息股票（新会计准则下股息计入利润、市价波动进OCI）。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>综合投资收益率&gt;5%、高股息策略兑现、权益仓位有节制的提升。<br><b>危险信号：</b>总投资收益率&lt;3.5%（低于负债成本）、为冲收益盲目加久期或信用下沉。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">7</span><span class="dim-title">利率环境与准备金</span></div>
+        <div class="dim-q">关键问题：利率一动，利润表为什么大起大落？</div>
+        <div class="dim-body">
+          寿险准备金用<b>折现率</b>（锚定750天国债收益率移动平均）计算——利率下行→折现率下调→准备金增提→利润被吃掉（反之增厚）。这就是2023-2024年利率下行期寿险利润被压制的主因，也是2025年750曲线走平后利润释放的技术原因之一。<b>IFRS17新准则</b>（2023年起实施）改变了准备金与利润的计量方式（CSM摊销机制平滑利润），对比历史利润要看是否同口径。<b>预测要点：</b>盯十年期国债收益率的方向与750天均线的滞后效应。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>利率企稳或回升、750天曲线走平上翘、折现率假设不再下调。<br><b>危险信号：</b>利率快速下行通道中、公司靠调低假设以外的手段"做"利润。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">8</span><span class="dim-title">利差损风险</span></div>
+        <div class="dim-q">关键问题：存量保单的成本，投资收益还覆盖得住吗？</div>
+        <div class="dim-body">
+          这是悬在寿险头上的达摩克利斯之剑：1990年代高预定利率（8%+）保单曾造成全行业利差损灾难。本轮 concern 是 2019-2022 年售出的 3.5% 预定利率传统险——若长期投资收益率降到 3% 以下，这些保单每年都在侵蚀价值。<b>缓解因素：</b>预定利率已降至2.5%并建立动态调整机制、分红险转型转移风险、监管持续"报行合一"降费。<b>评估方法：</b>看公司披露的存量负债成本与投资收益率之差——正值且收窄=风险可控，负值扩大=估值应打折。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>新产品预定利率跟随利率动态下调、存量高成本保单逐步到期。<br><b>危险信号：</b>长期投资收益率&lt;存量负债成本、监管被迫再降预定利率引发退保潮。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= 四、名词速查 ================= -->
+  <div class="card" id="glossary">
+    <h2>四、名词速查手册（按重要性排序）</h2>
+    <div class="sub">小白友好版 · 每条都有大白话类比 · 页内搜索 Ctrl+F 即查即用</div>
+    <dl>
+      <dt>▲ 价值体系（寿险独有）</dt>
+      <dd><b>NBV（新业务价值）</b>：今年卖出的新保单，未来全部利润折现到今天的总和。保险行业最重要的先行指标，相当于"今年的种子未来能长出多少粮食"。NBV增速领先净利润约2-3年。</dd>
+      <dd><b>NBV Margin（新业务价值率）</b>：NBV÷新单保费。每收100元新保费创造多少精算利润。个险长期期缴产品30-50%，银保储蓄型10-20%。</dd>
+      <dd><b>EV（内含价值）</b>：保险公司"家底"的精算估值=净资产+现有保单未来价值（VIF）。EV增速是寿险公司的长期价值锚——股价长期跟随EV增长。<span style="color:#64748b">类比：清算价值+存量生意的现值。</span></dd>
+      <dd><b>VIF（有效业务价值）</b>：存量有效保单未来利润的折现值，EV的主要组成部分。</dd>
+      <dd><b>CSM（合同服务边际）</b>：IFRS17新准则下的"利润蓄水池"——新单未来利润先存进CSM，再按服务逐年释放成利润，平滑了利润波动。</dd>
+      <dd><b>期缴 / 趸交</b>：期缴=每年交保费（持续现金流、Margin高、质量高）；趸交=一次性交清（冲规模利器但Margin极低）。<span style="color:#64748b">类比：订奶按月订 vs 一次囤十年的奶。</span></dd>
+
+      <dt>▲ 负债端经营类</dt>
+      <dd><b>代理人渠道 / 个险</b>：保险公司自己的销售队伍，卖高价值长险的主力，Margin最高。</dd>
+      <dd><b>银保渠道</b>：银行网点代销保险。客户信任度高、上量快，但Margin较低且受"报行合一"约束。</dd>
+      <dd><b>报行合一</b>：监管要求保险产品上报的手续费率与实际执行一致，治理银保费用竞争乱象——短期压利润、长期净化生态。</dd>
+      <dd><b>清虚 / 队伍提质</b>：清虚=清退低产能代理人；提质=提高人均产能。2019-2024年行业代理人从912万降到264万就是这个过程。</dd>
+      <dd><b>13个月/25个月继续率</b>：保单售出后第13/25个月仍正常缴费的比例。衡量销售质量——继续率低说明靠误导销售冲量，保单会大量退保。</dd>
+      <dd><b>预定利率</b>：寿险产品承诺给客户的收益率上限。3.5%→3.0%→2.5%一路下调，监管还建立了与市场利率挂钩的动态调整机制。预定利率越高，保险公司利差损风险越大。</dd>
+      <dd><b>分红险 / 万能险 / 传统险</b>：传统险=保证收益全自担（利差损风险在公司）；分红险=保底+浮动分红（与客户共担）；万能险=灵活账户型。当前监管导向是大力发展分红险。</dd>
+      <dd><b>分红实现率</b>：实际分红÷演示分红的比值。低于100%会伤害产品口碑，是分红险转型的生命线。</dd>
+
+      <dt>▲ 资产端与投资类</dt>
+      <dd><b>净投资收益率</b>：票息+存款利息+分红的稳定收益÷投资资产。反映"底仓赚钱能力"，波动小、趋势与利率同步下行。</dd>
+      <dd><b>总投资收益率</b>：净投资收益+已实现买卖价差+公允价值变动÷投资资产。受股市波动影响大——牛市暴涨熊市暴跌，是当期净利润的主要扰动源。</dd>
+      <dd><b>综合投资收益率</b>：总投资收益+计入OCI的浮盈浮亏。最全面的口径，平滑了会计分类的影响。</dd>
+      <dd><b>OCI / FVTPL / FVOCI</b>：金融资产会计分类。FVTPL=市价波动直接进利润表（弹性大）；FVOCI=市价波动进其他综合收益、股息进利润表——险资加配高股息股多用FVOCI以平滑利润。</dd>
+      <dd><b>利差损</b>：投资收益率低于存量保单预定利率时产生的亏损。1990年代8%+预定利率保单曾致全行业灾难，是寿险估值的最大折价因素。</dd>
+
+      <dt>▲ 利润表与准则类</dt>
+      <dd><b>准备金 / 折现率</b>：寿险为未来赔付计提的负债。折现率锚定750天国债收益率移动平均——利率下行期折现率下调→准备金增提→利润承压（滞后约2年）。</dd>
+      <dd><b>IFRS17 / IFRS9</b>：2023年起实施的新保险合同准则与新金融工具准则。IFRS17的CSM机制让利润更平滑；IFRS9让权益波动更多直达利润表（推动险资偏好高股息FVOCI策略）。对比历史利润必须注意准则切换。</dd>
+      <dd><b>三差（利差/死差/费差）</b>：利润三大来源——利差=投资收益超预定利率部分；死差=实际死亡率低于假设；费差=实际费用低于预算。当前行业利润中利差占比最高（60-80%），死差费差占比提升是质量改善信号。</dd>
+
+      <dt>▲ 财险专属（人保/平安财/太保财）</dt>
+      <dd><b>综合成本率（COR）</b>：赔付+费用÷保费收入。&lt;100%=承保盈利，&gt;100%=承保亏损。人保财险COR常年约97-99%，是财险行业的利润压舱石。</dd>
+      <dd><b>承保利润 / 浮存金</b>：COR&lt;100%产生的承保利润+先收保费后赔付形成的浮存金（可投资）——财险的双重盈利模式，巴菲特GEICO模式的本质。</dd>
+      <dd><b>车险综改</b>：2020年车险综合改革压降车均保费，行业车险承保利润先挫后稳——龙头凭规模与定价优势扩大份额。</dd>
+    </dl>
+  </div>
+
+  <!-- ================= 五、实战演示 ================= -->
+  <div class="card">
+    <h2>五、实战演示：用八维框架快速体检两家公司（中国人寿 vs 中国财险）</h2>
+    <div class="sub">演示框架用法 · 数值为公开资料整理* · 2026-08-27 视角</div>
+    <table class="plain">
+      <tr><th>维度</th><th>中国人寿（601628）——纯寿险代表</th><th>中国财险（人保集团旗下）——财险代表</th><th>共性评分</th></tr>
+      <tr><td>① 新单/NBV</td><td>2025年NBV+35.7%*，个险龙头修复强劲</td><td>不适用（财险看保费增速约+4-6%*）</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>② Margin/成本率</td><td>个险Margin随产品转型略降但企稳</td><td>COR约97-98%*，承保盈利稳固</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>③ 队伍/渠道</td><td>个险58.7万行业第一，人均产能提升</td><td>车险综改后份额稳定约32%*</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>④ 多元渠道</td><td>银保受报行合一短期压制、企稳中</td><td>非车险（农险/责任险/意健险）均衡发展</td><td><span class="tag-blue">中性</span></td></tr>
+      <tr><td>⑤ 产品结构</td><td>分红险转型推进中，占比快速提升</td><td>政策性业务占比高（农险受补贴影响）</td><td><span class="tag-blue">中性</span></td></tr>
+      <tr><td>⑥ 投资收益</td><td>权益弹性大（2025年利润暴增主因）</td><td>浮存金投资稳健、收益率居中</td><td><span class="tag-amber">分化</span></td></tr>
+      <tr><td>⑦ 利率/准备金</td><td>750天曲线企稳后准备金压力缓释，敏感度最高</td><td>短久期负债，利率敏感度低</td><td><span class="tag-amber">分化</span></td></tr>
+      <tr><td>⑧ 利差损</td><td>存量3.5%保单占比高，是长期核心风险</td><td>无此类问题（短期险无预定利率）</td><td><span class="tag-amber">分化</span></td></tr>
+    </table>
+    <div class="note"><b>结论演示：</b>纯寿险（人寿/新华）= 高弹性高波动——利率与股市的"杠杆股"，NBV反转+利率企稳+牛市三重共振时利润爆发力最强，但利差损是估值天花板；财险（中国财险）= 类债稳健——COR稳定+浮存金投资，成长性一般但确定性高。这就是为什么同涨同跌的保险板块内部，弹性排序通常是：新华 &gt; 人寿 &gt; 太保 &gt; 平安 &gt; 人保。</div>
+  </div>
+
+  <!-- ================= 六、常见陷阱 ================= -->
+  <div class="card">
+    <h2>六、小白最容易犯的六个错误</h2>
+    <div class="sub">每一个都是真实投资人反复踩过的坑</div>
+    <table class="plain">
+      <tr><th>#</th><th>错误做法</th><th>正确姿势</th></tr>
+      <tr class="hl"><td>1</td><td>只看净利润买保险股：利润暴增就追、下滑就杀</td><td>锚定NBV与EV增速（先行指标）；当期利润受股市与准备金假设扰动极大，不代表经营趋势</td></tr>
+      <tr><td>2</td><td>把保费增速当业绩增速：保费涨=公司赚更多？</td><td>区分保费（收入）与利润；趸交冲量的保费增长是虚胖，要看NBV与期缴占比</td></tr>
+      <tr><td>3</td><td>跨准则比较利润：拿IFRS17后的利润和2019年的比</td><td>同口径对比；准则切换年份（2023）前后利润不可直接比，用EV与NBV跨越切换</td></tr>
+      <tr><td>4</td><td>忽视利率：以为保险股是纯消费股</td><td>寿险本质是"利率+股市"的杠杆品种；利率下行期系统性压制估值与利润</td></tr>
+      <tr><td>5</td><td>用PE给寿险估值：利润波动大导致PE失真</td><td>寿险用PEV（股价÷每股内含价值）估值——0.5倍PEV=市场定价了利差损；财险用PB-ROE</td></tr>
+      <tr><td>6</td><td>认为分红险转型拖累NBV就是利空</td><td>看"质量调整后"的增长：Margin降一点换利差损风险大降+可持续性提升，是健康交换</td></tr>
+    </table>
+    <div class="note"><b>最后提醒：</b>本框架用于理解与筛选，不构成投资建议。保险会计准则复杂、精算假设专业性强，本页为简化框架；使用前请以公司最新定期报告与精算披露为准。</div>
+  </div>
+
+  <div class="src">
+    <b>数据与资料来源：</b>① 各上市险企2025年年报、2026年中报及NBV专项披露（标注*为估算/四舍五入）；② 此前专题：<a href="insurance.html">中国保险行业：转型复苏与代理人重构</a>（2025年行业数据：保费6.12万亿、代理人133.3万、五大险企NBV增速等）；③ 国家金融监督管理总局、中国保险行业协会公开数据；④ 各券商非银金融行业研究框架报告。
+  </div>
+</div>
+
+<script>
+  // 八维雷达图：纯寿险 vs 财险 权重差异
+  const radarChart = echarts.init(document.getElementById('radar'));
+  radarChart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {},
+    legend: { bottom: 0, textStyle: { color: '#94a3b8', fontSize: 12 }, itemWidth: 14 },
+    radar: {
+      indicator: [
+        { name: '① NBV增速', max: 10 }, { name: '② Margin', max: 10 },
+        { name: '③ 代理人/渠道', max: 10 }, { name: '④ 银保多元', max: 10 },
+        { name: '⑤ 产品结构', max: 10 }, { name: '⑥ 投资收益', max: 10 },
+        { name: '⑦ 利率准备金', max: 10 }, { name: '⑧ 利差损', max: 10 }
+      ],
+      radius: '62%',
+      splitNumber: 4,
+      axisName: { color: '#cbd5e1', fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+      splitArea: { areaStyle: { color: ['rgba(255,255,255,0.02)','rgba(255,255,255,0.04)'] } },
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          name: '纯寿险（人寿/新华）权重',
+          value: [8.5, 7.5, 7, 5, 6, 8.5, 9.5, 9.5],
+          lineStyle: { color: '#43d9ec', width: 2 },
+          itemStyle: { color: '#43d9ec' },
+          areaStyle: { color: 'rgba(67,217,236,0.18)' }
+        },
+        {
+          name: '财险（中国财险）权重',
+          value: [4, 8, 6, 5, 4, 6, 2, 1.5],
+          lineStyle: { color: '#fbbf24', width: 2 },
+          itemStyle: { color: '#fbbf24' },
+          areaStyle: { color: 'rgba(251,191,36,0.15)' }
+        }
+      ]
+    }]
+  });
+  window.addEventListener('resize', () => radarChart.resize());
+</script>
+
+</body>
+</html>
