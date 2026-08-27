@@ -280,6 +280,9 @@
   .site-nav .nav-count { color: var(--light-text-2); }
   .nav-brand .dot { background: #c22a45; box-shadow: 0 0 12px rgba(194,42,69,0.5); }
   .site-nav .nav-links a, .site-nav a { color: var(--light-text-2); }
+  .site-nav .nav-stats { color: var(--light-text-2); }
+  .site-nav .nav-stats .stat-chip { background: rgba(0,0,0,0.035); border-color: rgba(0,0,0,0.09); }
+  .site-nav .nav-stats .stat-num { color: #c22a45; }
   .tile {
     background: rgba(255,255,255,0.72);
     border: 1px solid rgba(0,0,0,0.06);
@@ -293,6 +296,23 @@
   .about { background: rgba(255,255,255,0.65); border: 1px solid rgba(0,0,0,0.06); color: var(--light-text-2); }
   .about b { color: var(--light-text); }
   .footer { color: var(--light-text-2); border-top: 1px solid rgba(0,0,0,0.06); }
+  .nav-stats {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--text-2);
+    white-space: nowrap;
+  }
+  .nav-stats .stat-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .2s, color .2s;
+  }
+  .site-nav .nav-stats .stat-chip:hover { border-color: var(--gold); }
+  .site-nav .nav-stats .stat-num { font-weight: 700; color: var(--gold); font-size: 13px; }
+  .site-nav .nav-stats .stat-label { opacity: .75; }
 </style>
 </head>
 <body>
@@ -304,6 +324,10 @@
     <span class="dot"></span>
     深层研究 <span class="nav-count">· 28 个研究专题</span>
   </a>
+  <div class="nav-stats">
+    <span class="stat-chip" title="今日访问量（GoatCounter 实时统计）"><span class="stat-label">今日</span><span class="stat-num" id="gc-today">…</span></span>
+    <span class="stat-chip" title="总访问量（GoatCounter 实时统计）"><span class="stat-label">总量</span><span class="stat-num" id="gc-total">…</span></span>
+  </div>
 </nav>
 
 <section class="hero">
@@ -533,5 +557,23 @@
   <p>深层研究 · Deep Research · © 2026 · 基于公开数据 · 独立研究</p>
 </footer>
 
+<script>
+(function() {
+  function setNum(id, val) {
+    var el = document.getElementById(id);
+    if (el && val) el.textContent = val;
+  }
+  fetch('https://afliek.goatcounter.com/counter/TOTAL.json')
+    .then(function(r) { if (!r.ok) throw r.status; return r.json(); })
+    .then(function(d) { setNum('gc-total', d.count || d.count_unique); })
+    .catch(function() { setNum('gc-total', '-'); });
+  var t = new Date();
+  var iso = t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+  fetch('https://afliek.goatcounter.com/counter/TOTAL.json?start=' + iso)
+    .then(function(r) { if (!r.ok) throw r.status; return r.json(); })
+    .then(function(d) { setNum('gc-today', d.count || d.count_unique); })
+    .catch(function() { setNum('gc-today', '-'); });
+})();
+</script>
 </body>
 </html>
