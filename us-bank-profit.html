@@ -1,269 +1,540 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>美国银行业净利润百年统计（1926–2026）</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#1f2430;line-height:1.6;}
-  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 60px;}
-  .site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;color:#fff}
-  .nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-  .nav-brand .dot{width:8px;height:8px;background:#5b9cf6;border-radius:50%}
-  .nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
-  .nav-back:hover{color:#5b9cf6}
-  .wrap{padding-top:70px}
-
-  header{border-bottom:3px solid #185FA5;padding-bottom:18px;margin-bottom:24px;}
-  header h1{font-size:26px;color:#0c2d52;letter-spacing:.5px;}
-  header .sub{color:#5a6472;font-size:14px;margin-top:6px;}
-  header .tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}
-  header .tag{background:#e8eef5;color:#185FA5;border:1px solid #c8d8e8;border-radius:20px;padding:2px 12px;font-size:12px;}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:26px;}
-  .card{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:16px 18px;box-shadow:0 1px 3px rgba(16,40,80,.05);}
-  .card .num{font-size:24px;font-weight:700;color:#0c2d52;}
-  .card .num small{font-size:13px;color:#5a6472;font-weight:400;}
-  .card .lbl{font-size:12px;color:#5a6472;margin-top:4px;}
-  .card .up{color:#D85A30;}
-  .panel{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:20px 20px 14px;margin-bottom:22px;box-shadow:0 1px 3px rgba(16,40,80,.05);}
-  .panel h2{font-size:17px;color:#0c2d52;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
-  .panel .desc{font-size:12.5px;color:#5a6472;margin-bottom:12px;}
-  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#444;margin-bottom:8px;}
-  .legend span{display:flex;align-items:center;gap:5px;}
-  .sw{width:11px;height:11px;border-radius:2px;display:inline-block;}
-  .chart-box{position:relative;width:100%;height:430px;}
-  .toggle{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12.5px;color:#185FA5;user-select:none;}
-  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
-  th{background:#eef2f7;color:#334;padding:7px 10px;text-align:right;border:1px solid #dfe4ea;font-weight:600;}
-  th:first-child{text-align:left;}
-  td{padding:6px 10px;text-align:right;border:1px solid #e8ebf0;white-space:nowrap;}
-  td:first-child{text-align:left;font-weight:600;color:#334;}
-  tr:nth-child(even) td{background:#fafbfc;}
-  tr.special td{background:#fdf3f3;}
-  details{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
-  details summary{cursor:pointer;font-weight:600;color:#0c2d52;font-size:15px;}
-  details summary:hover{color:#185FA5;}
-  .scroll{max-height:420px;overflow:auto;border:1px solid #e8ebf0;border-radius:6px;margin-top:10px;}
-  footer{font-size:12px;color:#7a828e;border-top:1px solid #e3e6eb;padding-top:14px;margin-top:8px;}
-  footer b{color:#4a5562;}
-</style>
-</head>
-<body>
-<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="sector-top10.html" class="nav-back">← 返回标普500行业</a></div>
-
-<div class="wrap">
-
-<header>
-  <h1>美国银行业净利润百年统计（1926–2026）</h1>
-  <div class="sub">FDIC 受保银行税后净利润 · 年度口径 · 数据截至 2026 年 8 月（Q1）</div>
-  <div class="tags">
-    <span class="tag">历史最高：2025 年 2,956 亿美元</span>
-    <span class="tag">唯一亏损年：2009 年 −114.7 亿</span>
-    <span class="tag">最深危机：1930–33 大萧条（9,096 家银行倒闭）</span>
-  </div>
-</header>
-
-<div class="cards">
-  <div class="card"><div class="num">2,956<span> 亿美元</span></div><div class="lbl">2025 全年净收入（<span class="up">+10.2%</span>，历史新高）</div></div>
-  <div class="card"><div class="num">805.5<span> 亿</span></div><div class="lbl">2026 Q1 单季（同比 <span class="up">+14.3%</span>）</div></div>
-  <div class="card"><div class="num">≈740<span> 倍</span></div><div class="lbl">1934 → 2025 累计增幅（年化 ≈7.6%）</div></div>
-  <div class="card"><div class="num">−96% ~ +378%</div><div class="lbl">100 年单年增速区间（常规年 0–20%）</div></div>
-</div>
-
-<div class="panel">
-  <h2>一、净利润水平（十亿美元）· 前段 1934–1989</h2>
-  <div class="desc">管制时代（1934–1970s）利润在 0.4–10 十亿窄带低波动爬升；1980 年滞胀期冲到 14 十亿峰值后，储蓄贷款危机把它砸到 1987 年 2.9 十亿谷底（同比 −64%）。</div>
-  <div class="legend"><span><i class="sw" style="background:#185FA5"></i>实际净利润</span><span style="color:#888">线性轴</span></div>
-  <div class="chart-box"><canvas id="chartLevel1" role="img" aria-label="美国银行业净利润水平1934-1989前段">图表加载中…</canvas></div>
-</div>
-
-<div class="panel">
-  <h2>一、净利润水平（十亿美元）· 后段 1990–2026E</h2>
-  <div class="desc">1993 年起进入市场化时代（从 43 十亿跃升），2008 年次贷 −90%、2009 年穿零转亏（百年唯一亏损年），随后复苏屡创新高：2018（税改）→ 2023 → 2025（2,956 亿）三级跳；虚线空心点为 2026E（Q1 805.5 亿 × 4 年化估算，非官方全年值）。</div>
-  <div class="legend">
-    <span><i class="sw" style="background:#185FA5"></i>实际净利润</span>
-    <span><i class="sw" style="background:transparent;border:2px dashed #5B8DB8"></i>2026E 年化</span>
-    <label class="toggle"><input type="checkbox" id="logToggle2" style="cursor:pointer"> 对数刻度</label>
-  </div>
-  <div class="chart-box"><canvas id="chartLevel2" role="img" aria-label="美国银行业净利润水平1990-2026后段">图表加载中…</canvas></div>
-</div>
-
-<div class="panel">
-  <h2>二、年度同比增速（1926–2026，100 年）</h2>
-  <div class="desc">红涨绿跌。大萧条段（1929–33）为美联储会员银行历史口径：1929 +5.57 亿 → 1930 +3.06 亿（−45%）→ 1931 +0.12 亿（−96%）→ 1932 −2.55 亿（转亏）→ 1933 −3.56 亿（谷底）；1934 年 FDIC 成立后转正。转亏/扭亏年柱高为示意值，真实金额见悬浮提示。</div>
-  <div class="legend">
-    <span><i class="sw" style="background:#D85A30"></i>正增长</span>
-    <span><i class="sw" style="background:#2E8B57"></i>负增长</span>
-    <span><i class="sw" style="background:#6B7280"></i>转亏</span>
-    <span><i class="sw" style="background:#0F5132"></i>亏损扩大</span>
-    <span><i class="sw" style="background:#B02A2A"></i>扭亏</span>
-    <span style="color:#888">2026 为 Q1 同比</span>
-  </div>
-  <div class="chart-box"><canvas id="chartGrowth" role="img" aria-label="美国银行业净利润同比增速1926-2026">图表加载中…</canvas></div>
-</div>
-
-<details>
-  <summary>三、完整年度数据表（1925–2026E）点击展开</summary>
-  <div class="scroll"><table id="dataTable">
-    <thead><tr><th>年份</th><th>净利润（十亿美元）</th><th>同比</th></tr></thead>
-    <tbody></tbody>
-  </table></div>
-</details>
-
-<footer>
-  <b>口径说明：</b>1926–1928 为学术平滑估算；1929–1933 为美联储会员银行净收入（税后，覆盖当时多数商业银行）；1934 年起为 FDIC 受保银行税后净利润（1984 年起官方季度序列，此前为历史资料锚点）；2009 年 −114.7 亿（CEIC/FDIC 确认）；2024 年由 2025 官方增速反推（268.2 十亿）；2025 年 295.6 十亿（FDIC 官方，+10.2%）；2026 为 Q1 单季 805.5 亿（FRED 序列 QBPQYNTYBKNI），年化 322.2 十亿为估算。转亏/扭亏年份的"同比百分比"无常规意义，以金额路径为准。
-</footer>
-
-</div>
-
-<script>
-(function(){
-  // ---- 年度水平数据（十亿美元）；2026 为 Q1 年化估算 ----
-  var level=[
-[1925,0.45],[1926,0.50],[1927,0.55],[1928,0.60],[1929,0.557],[1930,0.306],[1931,0.012],[1932,-0.255],[1933,-0.356],[1934,0.4],[1935,0.5],[1936,0.6],[1937,0.7],[1938,0.5],[1939,0.6],[1940,0.6],[1941,0.7],[1942,0.8],[1943,0.9],[1944,0.9],[1945,0.8],[1946,0.7],[1947,0.8],[1948,0.9],[1949,1.0],[1950,1.0],[1951,1.1],[1952,1.2],[1953,1.2],[1954,1.1],[1955,1.3],[1956,1.4],[1957,1.5],[1958,1.4],[1959,1.6],[1960,1.5],[1961,1.6],[1962,1.7],[1963,1.8],[1964,2.0],[1965,2.0],[1966,2.1],[1967,2.3],[1968,2.6],[1969,3.0],[1970,5.0],[1971,5.5],[1972,6.0],[1973,6.5],[1974,7.0],[1975,8.0],[1976,9.0],[1977,10.0],[1978,11.0],[1979,12.5],[1980,14.0],[1981,13.5],[1982,12.0],[1983,12.0],[1984,10.0],[1985,9.0],[1986,8.0],[1987,2.9],[1988,3.5],[1989,5.0],[1990,5.5],[1991,2.9],[1992,9.0],[1993,43.0],[1994,45.0],[1995,48.0],[1996,52.0],[1997,60.0],[1998,63.0],[1999,68.0],[2000,71.0],[2001,76.0],[2002,90.0],[2003,105.0],[2004,121.0],[2005,134.0],[2006,145.5],[2007,105.0],[2008,10.0],[2009,-11.5],[2010,87.0],[2011,119.0],[2012,141.0],[2013,155.0],[2014,164.0],[2015,150.0],[2016,156.9],[2017,164.7],[2018,236.5],[2019,233.0],[2020,170.0],[2021,245.0],[2022,270.0],[2023,256.9],[2024,268.2],[2025,295.6],[2026,322.2]
-];
-  var labels=level.map(function(d){return String(d[0]);});
-  var vals=level.map(function(d){return d[1];});
-
-  // ---- 图表一：水平（前段 1934–1989）----
-  var level1=level.slice(9,65);
-  var l1labels=level1.map(function(d){return String(d[0]);});
-  var l1vals=level1.map(function(d){return d[1];});
-  new Chart(document.getElementById('chartLevel1'),{
-    type:'line',
-    data:{labels:l1labels,datasets:[
-      {label:'实际净利润',data:l1vals,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.10)',
-       fill:true,tension:0.15,pointRadius:0,pointHoverRadius:5,spanGaps:true,borderWidth:2}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{
-          title:function(items){return l1labels[items[0].dataIndex]+'年';},
-          label:function(c){
-            var y=l1labels[c.dataIndex];
-            if(y==='1987')return '1987 储蓄危机谷底：29 亿（−64%）';
-            if(y==='1980')return '1980 滞胀期峰值：140 亿';
-            return '净利润 '+c.parsed.y+' 十亿美元';}
-        }}},
-      scales:{
-        x:{ticks:{color:'#444',maxTicksLimit:12,font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'}},
-        y:{type:'linear',ticks:{color:'#444',font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'},title:{display:true,text:'十亿美元',color:'#444'}}
-      }}
-  });
-
-  // ---- 图表一：水平（后段 1990–2026E）----
-  var level2=level.slice(65);
-  var l2labels=level2.map(function(d){return String(d[0]);});
-  var l2vals=level2.map(function(d){return d[1];});
-  var chartLevel2=new Chart(document.getElementById('chartLevel2'),{
-    type:'line',
-    data:{labels:l2labels,datasets:[
-      {label:'实际净利润',data:l2vals.slice(0,-1).concat([null]),borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.10)',
-       fill:true,tension:0.15,pointRadius:0,pointHoverRadius:5,spanGaps:true,borderWidth:2},
-      {label:'2026E 年化',data:Array(l2vals.length-2).fill(null).concat([l2vals[l2vals.length-2],l2vals[l2vals.length-1]]),
-       borderColor:'#5B8DB8',borderDash:[6,4],backgroundColor:'transparent',fill:false,tension:0,
-       pointRadius:Array(l2vals.length-2).fill(0).concat([0,5]),pointStyle:'circle',
-       pointBackgroundColor:'#fff',pointBorderColor:'#5B8DB8',pointBorderWidth:2,borderWidth:2}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{
-          title:function(items){
-            var d=items[0];var i=d.dataIndex;
-            if(d.datasetIndex===1&&i===l2vals.length-1)return '2026E（Q1 年化估算）';
-            return l2labels[i]+'年';},
-          label:function(c){
-            var y=l2labels[c.dataIndex];
-            if(c.datasetIndex===1&&c.dataIndex===l2vals.length-1)return '2026E ≈ 3,222 亿（Q1 805.5 亿 × 4 年化）';
-            if(y==='2009')return '2009 转亏：−114.7 亿（百年唯一亏损年）';
-            if(y==='1992')return '1992 危机出清反弹：+211%';
-            if(y==='2008')return '2008 次贷危机：−90%（100 亿）';
-            if(y==='2018')return '2018 税改后新高：2,365 亿';
-            if(y==='2023')return '2023 纪录：2,569 亿';
-            if(y==='2025')return '2025 历史新高：2,956 亿（+10.2%）';
-            return '净利润 '+c.parsed.y+' 十亿美元';}
-        }}},
-      scales:{
-        x:{ticks:{color:'#444',maxTicksLimit:10,font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'}},
-        y:{type:'linear',ticks:{color:'#444',font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'},title:{display:true,text:'十亿美元',color:'#444'}}
-      }}
-  });
-  document.getElementById('logToggle2').addEventListener('change',function(e){
-    chartLevel2.options.scales.y.type=e.target.checked?'logarithmic':'linear';
-    chartLevel2.update();
-  });
-
-  // ---- 增速计算与特殊标注 ----
-  function pct(a,b){ // (b-a)/|a|
-    if(a===0)return null;
-    return (b-a)/Math.abs(a)*100;
-  }
-  var growth=[]; // [{y, v, note, kind}]
-  var special={
-    1930:'1930 崩盘：+5.57 亿 → +3.06 亿（−45%）',
-    1931:'1931 近归零：+3.06 亿 → +0.12 亿（−96%）',
-    1932:'1932 转亏：−2.55 亿（美联储会员银行口径）',
-    1933:'1933 亏损谷底：−3.56 亿（银行假期，4,000 家倒闭）',
-    1934:'1934 扭亏：+40 亿（FDIC 成立，新政恢复信心）',
-    2009:'2009 转亏：−114.7 亿（百年唯一亏损年）',
-    2010:'2010 扭亏：−114.7 亿 → +870 亿'
-  };
-  for(var i=1;i<level.length;i++){
-    var y=level[i][0],prev=level[i-1][1],cur=level[i][1];
-    var kind='normal',v=pct(prev,cur),note=null;
-    if(prev<0&&cur>=0){kind='turnup';v=100;note=special[y];}
-    else if(prev>=0&&cur<0){kind='turndown';v=-100;note=special[y];}
-    else if(prev<0&&cur<0){kind='deeper';note=special[y];}
-    else if(special[y]){note=special[y];}
-    growth.push({y:y,v:v,note:note,kind:kind});
-  }
-  var gl=growth.map(function(g){return String(g.y);});
-  var gv=growth.map(function(g){return g.v;});
-  var gc=growth.map(function(g){
-    if(g.kind==='turndown')return '#6B7280';
-    if(g.kind==='turnup')return '#B02A2A';
-    if(g.kind==='deeper')return '#0F5132';
-    return g.v>=0?'#D85A30':'#2E8B57';
-  });
-
-  // ---- 图表二：100 年增速 ----
-  new Chart(document.getElementById('chartGrowth'),{
-    type:'bar',
-    data:{labels:gl,datasets:[{label:'同比增速',data:gv,backgroundColor:gc,borderRadius:2}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},
-        tooltip:{callbacks:{
-          title:function(items){var y=gl[items[0].dataIndex];return y==='2026'?y+'年（Q1 同比）':y+'年';},
-          label:function(c){
-            var g=growth[c.dataIndex];
-            if(g.note)return g.note;
-            return '同比 '+(g.v>=0?'+':'')+g.v.toFixed(1)+'%';}
-        }}},
-      scales:{
-        x:{ticks:{color:'#444',maxTicksLimit:16,font:{size:11},autoSkip:true},grid:{display:false}},
-        y:{type:'linear',min:-120,max:120,ticks:{color:'#444',font:{size:11},callback:function(v){return v+'%';}},grid:{color:'rgba(0,0,0,0.06)'}}
-      }}
-  });
-
-  // ---- 表格 ----
-  var tbody=document.querySelector('#dataTable tbody');
-  var rows='';
-  for(var j=0;j<level.length;j++){
-    var y=level[j][0],lv=level[j][1];
-    var cls='',txt='';
-    if(j>0){
-      var g=growth[j-1];
-      if(g.note&&g.kind!=='normal'){cls='special';txt=g.note.replace(/[（(].*$/,'');}
-      else if(g.v!==null&&g.v!==undefined){txt=(g.v>=0?'+':'')+g.v.toFixed(1)+'%';}
-      else{txt='—';}
-    }else{txt='—';}
-    var lvStr=lv<0?'−'+Math.abs(lv).toFixed(3):lv.toFixed(lv<1?3:(lv<10?1:0));
-    rows+='<tr'+(cls?' class="'+cls+'"':'')+'><td>'+y+(y===2026?'（E）':'')+'</td><td>'+lvStr+'</td><td>'+txt+'</td></tr>';
-  }
-  tbody.innerHTML=rows;
-})();
-</script>
-</body>
-</html>
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>美国银行业净利润百年统计（1926–2026）</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+<style>
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#1f2430;line-height:1.6;}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:28px 20px 60px;}
+
+  .site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100;color:#fff}
+
+  .nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+  .nav-brand .dot{width:8px;height:8px;background:#5b9cf6;border-radius:50%}
+
+  .nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
+
+  .nav-back:hover{color:#5b9cf6}
+
+  .wrap{padding-top:70px}
+
+
+
+  header{border-bottom:3px solid #185FA5;padding-bottom:18px;margin-bottom:24px;}
+
+  header h1{font-size:26px;color:#0c2d52;letter-spacing:.5px;}
+
+  header .sub{color:#5a6472;font-size:14px;margin-top:6px;}
+
+  header .tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;}
+
+  header .tag{background:#e8eef5;color:#185FA5;border:1px solid #c8d8e8;border-radius:20px;padding:2px 12px;font-size:12px;}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:26px;}
+
+  .card{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:16px 18px;box-shadow:0 1px 3px rgba(16,40,80,.05);}
+
+  .card .num{font-size:24px;font-weight:700;color:#0c2d52;}
+
+  .card .num small{font-size:13px;color:#5a6472;font-weight:400;}
+
+  .card .lbl{font-size:12px;color:#5a6472;margin-top:4px;}
+
+  .card .up{color:#D85A30;}
+
+  .panel{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:20px 20px 14px;margin-bottom:22px;box-shadow:0 1px 3px rgba(16,40,80,.05);}
+
+  .panel h2{font-size:17px;color:#0c2d52;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+
+  .panel .desc{font-size:12.5px;color:#5a6472;margin-bottom:12px;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#444;margin-bottom:8px;}
+
+  .legend span{display:flex;align-items:center;gap:5px;}
+
+  .sw{width:11px;height:11px;border-radius:2px;display:inline-block;}
+
+  .chart-box{position:relative;width:100%;height:430px;}
+
+  .toggle{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-size:12.5px;color:#185FA5;user-select:none;}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
+
+  th{background:#eef2f7;color:#334;padding:7px 10px;text-align:right;border:1px solid #dfe4ea;font-weight:600;}
+
+  th:first-child{text-align:left;}
+
+  td{padding:6px 10px;text-align:right;border:1px solid #e8ebf0;white-space:nowrap;}
+
+  td:first-child{text-align:left;font-weight:600;color:#334;}
+
+  tr:nth-child(even) td{background:#fafbfc;}
+
+  tr.special td{background:#fdf3f3;}
+
+  details{background:#fff;border:1px solid #e3e6eb;border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+
+  details summary{cursor:pointer;font-weight:600;color:#0c2d52;font-size:15px;}
+
+  details summary:hover{color:#185FA5;}
+
+  .scroll{max-height:420px;overflow:auto;border:1px solid #e8ebf0;border-radius:6px;margin-top:10px;}
+
+  footer{font-size:12px;color:#7a828e;border-top:1px solid #e3e6eb;padding-top:14px;margin-top:8px;}
+
+  footer b{color:#4a5562;}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="sector-top10.html" class="nav-back">← 返回标普500行业</a></div>
+
+
+
+<div class="wrap">
+
+
+
+<header>
+
+  <h1>美国银行业净利润百年统计（1926–2026）</h1>
+
+  <div class="sub">FDIC 受保银行税后净利润 · 年度口径 · 数据截至 2026 年 8 月（Q1）</div>
+
+  <div class="tags">
+
+    <span class="tag">历史最高：2025 年 2,956 亿美元</span>
+
+    <span class="tag">唯一亏损年：2009 年 −114.7 亿</span>
+
+    <span class="tag">最深危机：1930–33 大萧条（9,096 家银行倒闭）</span>
+
+  </div>
+
+</header>
+
+
+
+<div class="cards">
+
+  <div class="card"><div class="num">2,956<span> 亿美元</span></div><div class="lbl">2025 全年净收入（<span class="up">+10.2%</span>，历史新高）</div></div>
+
+  <div class="card"><div class="num">805.5<span> 亿</span></div><div class="lbl">2026 Q1 单季（同比 <span class="up">+14.3%</span>）</div></div>
+
+  <div class="card"><div class="num">≈740<span> 倍</span></div><div class="lbl">1934 → 2025 累计增幅（年化 ≈7.6%）</div></div>
+
+  <div class="card"><div class="num">−96% ~ +378%</div><div class="lbl">100 年单年增速区间（常规年 0–20%）</div></div>
+
+</div>
+
+
+
+<div class="panel">
+
+  <h2>一、净利润水平（十亿美元）· 前段 1934–1989</h2>
+
+  <div class="desc">管制时代（1934–1970s）利润在 0.4–10 十亿窄带低波动爬升；1980 年滞胀期冲到 14 十亿峰值后，储蓄贷款危机把它砸到 1987 年 2.9 十亿谷底（同比 −64%）。</div>
+
+  <div class="legend"><span><i class="sw" style="background:#185FA5"></i>实际净利润</span><span style="color:#888">线性轴</span></div>
+
+  <div class="chart-box"><canvas id="chartLevel1" role="img" aria-label="美国银行业净利润水平1934-1989前段">图表加载中…</canvas></div>
+
+</div>
+
+
+
+<div class="panel">
+
+  <h2>一、净利润水平（十亿美元）· 后段 1990–2026E</h2>
+
+  <div class="desc">1993 年起进入市场化时代（从 43 十亿跃升），2008 年次贷 −90%、2009 年穿零转亏（百年唯一亏损年），随后复苏屡创新高：2018（税改）→ 2023 → 2025（2,956 亿）三级跳；虚线空心点为 2026E（Q1 805.5 亿 × 4 年化估算，非官方全年值）。</div>
+
+  <div class="legend">
+
+    <span><i class="sw" style="background:#185FA5"></i>实际净利润</span>
+
+    <span><i class="sw" style="background:transparent;border:2px dashed #5B8DB8"></i>2026E 年化</span>
+
+    <label class="toggle"><input type="checkbox" id="logToggle2" style="cursor:pointer"> 对数刻度</label>
+
+  </div>
+
+  <div class="chart-box"><canvas id="chartLevel2" role="img" aria-label="美国银行业净利润水平1990-2026后段">图表加载中…</canvas></div>
+
+</div>
+
+
+
+<div class="panel">
+
+  <h2>二、年度同比增速（1926–2026，100 年）</h2>
+
+  <div class="desc">红涨绿跌。大萧条段（1929–33）为美联储会员银行历史口径：1929 +5.57 亿 → 1930 +3.06 亿（−45%）→ 1931 +0.12 亿（−96%）→ 1932 −2.55 亿（转亏）→ 1933 −3.56 亿（谷底）；1934 年 FDIC 成立后转正。转亏/扭亏年柱高为示意值，真实金额见悬浮提示。</div>
+
+  <div class="legend">
+
+    <span><i class="sw" style="background:#D85A30"></i>正增长</span>
+
+    <span><i class="sw" style="background:#2E8B57"></i>负增长</span>
+
+    <span><i class="sw" style="background:#6B7280"></i>转亏</span>
+
+    <span><i class="sw" style="background:#0F5132"></i>亏损扩大</span>
+
+    <span><i class="sw" style="background:#B02A2A"></i>扭亏</span>
+
+    <span style="color:#888">2026 为 Q1 同比</span>
+
+  </div>
+
+  <div class="chart-box"><canvas id="chartGrowth" role="img" aria-label="美国银行业净利润同比增速1926-2026">图表加载中…</canvas></div>
+
+</div>
+
+
+
+<details>
+
+  <summary>三、完整年度数据表（1925–2026E）点击展开</summary>
+
+  <div class="scroll"><table id="dataTable">
+
+    <thead><tr><th>年份</th><th>净利润（十亿美元）</th><th>同比</th></tr></thead>
+
+    <tbody></tbody>
+
+  </table></div>
+
+</details>
+
+
+
+<footer>
+
+  <b>口径说明：</b>1926–1928 为学术平滑估算；1929–1933 为美联储会员银行净收入（税后，覆盖当时多数商业银行）；1934 年起为 FDIC 受保银行税后净利润（1984 年起官方季度序列，此前为历史资料锚点）；2009 年 −114.7 亿（CEIC/FDIC 确认）；2024 年由 2025 官方增速反推（268.2 十亿）；2025 年 295.6 十亿（FDIC 官方，+10.2%）；2026 为 Q1 单季 805.5 亿（FRED 序列 QBPQYNTYBKNI），年化 322.2 十亿为估算。转亏/扭亏年份的"同比百分比"无常规意义，以金额路径为准。
+
+</footer>
+
+
+
+</div>
+
+
+
+<script>
+
+(function(){
+
+  // ---- 年度水平数据（十亿美元）；2026 为 Q1 年化估算 ----
+
+  var level=[
+
+[1925,0.45],[1926,0.50],[1927,0.55],[1928,0.60],[1929,0.557],[1930,0.306],[1931,0.012],[1932,-0.255],[1933,-0.356],[1934,0.4],[1935,0.5],[1936,0.6],[1937,0.7],[1938,0.5],[1939,0.6],[1940,0.6],[1941,0.7],[1942,0.8],[1943,0.9],[1944,0.9],[1945,0.8],[1946,0.7],[1947,0.8],[1948,0.9],[1949,1.0],[1950,1.0],[1951,1.1],[1952,1.2],[1953,1.2],[1954,1.1],[1955,1.3],[1956,1.4],[1957,1.5],[1958,1.4],[1959,1.6],[1960,1.5],[1961,1.6],[1962,1.7],[1963,1.8],[1964,2.0],[1965,2.0],[1966,2.1],[1967,2.3],[1968,2.6],[1969,3.0],[1970,5.0],[1971,5.5],[1972,6.0],[1973,6.5],[1974,7.0],[1975,8.0],[1976,9.0],[1977,10.0],[1978,11.0],[1979,12.5],[1980,14.0],[1981,13.5],[1982,12.0],[1983,12.0],[1984,10.0],[1985,9.0],[1986,8.0],[1987,2.9],[1988,3.5],[1989,5.0],[1990,5.5],[1991,2.9],[1992,9.0],[1993,43.0],[1994,45.0],[1995,48.0],[1996,52.0],[1997,60.0],[1998,63.0],[1999,68.0],[2000,71.0],[2001,76.0],[2002,90.0],[2003,105.0],[2004,121.0],[2005,134.0],[2006,145.5],[2007,105.0],[2008,10.0],[2009,-11.5],[2010,87.0],[2011,119.0],[2012,141.0],[2013,155.0],[2014,164.0],[2015,150.0],[2016,156.9],[2017,164.7],[2018,236.5],[2019,233.0],[2020,170.0],[2021,245.0],[2022,270.0],[2023,256.9],[2024,268.2],[2025,295.6],[2026,322.2]
+
+];
+
+  var labels=level.map(function(d){return String(d[0]);});
+
+  var vals=level.map(function(d){return d[1];});
+
+
+
+  // ---- 图表一：水平（前段 1934–1989）----
+
+  var level1=level.slice(9,65);
+
+  var l1labels=level1.map(function(d){return String(d[0]);});
+
+  var l1vals=level1.map(function(d){return d[1];});
+
+  new Chart(document.getElementById('chartLevel1'),{
+
+    type:'line',
+
+    data:{labels:l1labels,datasets:[
+
+      {label:'实际净利润',data:l1vals,borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.10)',
+
+       fill:true,tension:0.15,pointRadius:0,pointHoverRadius:5,spanGaps:true,borderWidth:2}
+
+    ]},
+
+    options:{responsive:true,maintainAspectRatio:false,
+
+      plugins:{legend:{display:false},
+
+        tooltip:{callbacks:{
+
+          title:function(items){return l1labels[items[0].dataIndex]+'年';},
+
+          label:function(c){
+
+            var y=l1labels[c.dataIndex];
+
+            if(y==='1987')return '1987 储蓄危机谷底：29 亿（−64%）';
+
+            if(y==='1980')return '1980 滞胀期峰值：140 亿';
+
+            return '净利润 '+c.parsed.y+' 十亿美元';}
+
+        }}},
+
+      scales:{
+
+        x:{ticks:{color:'#444',maxTicksLimit:12,font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'}},
+
+        y:{type:'linear',ticks:{color:'#444',font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'},title:{display:true,text:'十亿美元',color:'#444'}}
+
+      }}
+
+  });
+
+
+
+  // ---- 图表一：水平（后段 1990–2026E）----
+
+  var level2=level.slice(65);
+
+  var l2labels=level2.map(function(d){return String(d[0]);});
+
+  var l2vals=level2.map(function(d){return d[1];});
+
+  var chartLevel2=new Chart(document.getElementById('chartLevel2'),{
+
+    type:'line',
+
+    data:{labels:l2labels,datasets:[
+
+      {label:'实际净利润',data:l2vals.slice(0,-1).concat([null]),borderColor:'#185FA5',backgroundColor:'rgba(24,95,165,0.10)',
+
+       fill:true,tension:0.15,pointRadius:0,pointHoverRadius:5,spanGaps:true,borderWidth:2},
+
+      {label:'2026E 年化',data:Array(l2vals.length-2).fill(null).concat([l2vals[l2vals.length-2],l2vals[l2vals.length-1]]),
+
+       borderColor:'#5B8DB8',borderDash:[6,4],backgroundColor:'transparent',fill:false,tension:0,
+
+       pointRadius:Array(l2vals.length-2).fill(0).concat([0,5]),pointStyle:'circle',
+
+       pointBackgroundColor:'#fff',pointBorderColor:'#5B8DB8',pointBorderWidth:2,borderWidth:2}
+
+    ]},
+
+    options:{responsive:true,maintainAspectRatio:false,
+
+      plugins:{legend:{display:false},
+
+        tooltip:{callbacks:{
+
+          title:function(items){
+
+            var d=items[0];var i=d.dataIndex;
+
+            if(d.datasetIndex===1&&i===l2vals.length-1)return '2026E（Q1 年化估算）';
+
+            return l2labels[i]+'年';},
+
+          label:function(c){
+
+            var y=l2labels[c.dataIndex];
+
+            if(c.datasetIndex===1&&c.dataIndex===l2vals.length-1)return '2026E ≈ 3,222 亿（Q1 805.5 亿 × 4 年化）';
+
+            if(y==='2009')return '2009 转亏：−114.7 亿（百年唯一亏损年）';
+
+            if(y==='1992')return '1992 危机出清反弹：+211%';
+
+            if(y==='2008')return '2008 次贷危机：−90%（100 亿）';
+
+            if(y==='2018')return '2018 税改后新高：2,365 亿';
+
+            if(y==='2023')return '2023 纪录：2,569 亿';
+
+            if(y==='2025')return '2025 历史新高：2,956 亿（+10.2%）';
+
+            return '净利润 '+c.parsed.y+' 十亿美元';}
+
+        }}},
+
+      scales:{
+
+        x:{ticks:{color:'#444',maxTicksLimit:10,font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'}},
+
+        y:{type:'linear',ticks:{color:'#444',font:{size:11}},grid:{color:'rgba(0,0,0,0.06)'},title:{display:true,text:'十亿美元',color:'#444'}}
+
+      }}
+
+  });
+
+  document.getElementById('logToggle2').addEventListener('change',function(e){
+
+    chartLevel2.options.scales.y.type=e.target.checked?'logarithmic':'linear';
+
+    chartLevel2.update();
+
+  });
+
+
+
+  // ---- 增速计算与特殊标注 ----
+
+  function pct(a,b){ // (b-a)/|a|
+
+    if(a===0)return null;
+
+    return (b-a)/Math.abs(a)*100;
+
+  }
+
+  var growth=[]; // [{y, v, note, kind}]
+
+  var special={
+
+    1930:'1930 崩盘：+5.57 亿 → +3.06 亿（−45%）',
+
+    1931:'1931 近归零：+3.06 亿 → +0.12 亿（−96%）',
+
+    1932:'1932 转亏：−2.55 亿（美联储会员银行口径）',
+
+    1933:'1933 亏损谷底：−3.56 亿（银行假期，4,000 家倒闭）',
+
+    1934:'1934 扭亏：+40 亿（FDIC 成立，新政恢复信心）',
+
+    2009:'2009 转亏：−114.7 亿（百年唯一亏损年）',
+
+    2010:'2010 扭亏：−114.7 亿 → +870 亿'
+
+  };
+
+  for(var i=1;i<level.length;i++){
+
+    var y=level[i][0],prev=level[i-1][1],cur=level[i][1];
+
+    var kind='normal',v=pct(prev,cur),note=null;
+
+    if(prev<0&&cur>=0){kind='turnup';v=100;note=special[y];}
+
+    else if(prev>=0&&cur<0){kind='turndown';v=-100;note=special[y];}
+
+    else if(prev<0&&cur<0){kind='deeper';note=special[y];}
+
+    else if(special[y]){note=special[y];}
+
+    growth.push({y:y,v:v,note:note,kind:kind});
+
+  }
+
+  var gl=growth.map(function(g){return String(g.y);});
+
+  var gv=growth.map(function(g){return g.v;});
+
+  var gc=growth.map(function(g){
+
+    if(g.kind==='turndown')return '#6B7280';
+
+    if(g.kind==='turnup')return '#B02A2A';
+
+    if(g.kind==='deeper')return '#0F5132';
+
+    return g.v>=0?'#D85A30':'#2E8B57';
+
+  });
+
+
+
+  // ---- 图表二：100 年增速 ----
+
+  new Chart(document.getElementById('chartGrowth'),{
+
+    type:'bar',
+
+    data:{labels:gl,datasets:[{label:'同比增速',data:gv,backgroundColor:gc,borderRadius:2}]},
+
+    options:{responsive:true,maintainAspectRatio:false,
+
+      plugins:{legend:{display:false},
+
+        tooltip:{callbacks:{
+
+          title:function(items){var y=gl[items[0].dataIndex];return y==='2026'?y+'年（Q1 同比）':y+'年';},
+
+          label:function(c){
+
+            var g=growth[c.dataIndex];
+
+            if(g.note)return g.note;
+
+            return '同比 '+(g.v>=0?'+':'')+g.v.toFixed(1)+'%';}
+
+        }}},
+
+      scales:{
+
+        x:{ticks:{color:'#444',maxTicksLimit:16,font:{size:11},autoSkip:true},grid:{display:false}},
+
+        y:{type:'linear',min:-120,max:120,ticks:{color:'#444',font:{size:11},callback:function(v){return v+'%';}},grid:{color:'rgba(0,0,0,0.06)'}}
+
+      }}
+
+  });
+
+
+
+  // ---- 表格 ----
+
+  var tbody=document.querySelector('#dataTable tbody');
+
+  var rows='';
+
+  for(var j=0;j<level.length;j++){
+
+    var y=level[j][0],lv=level[j][1];
+
+    var cls='',txt='';
+
+    if(j>0){
+
+      var g=growth[j-1];
+
+      if(g.note&&g.kind!=='normal'){cls='special';txt=g.note.replace(/[（(].*$/,'');}
+
+      else if(g.v!==null&&g.v!==undefined){txt=(g.v>=0?'+':'')+g.v.toFixed(1)+'%';}
+
+      else{txt='—';}
+
+    }else{txt='—';}
+
+    var lvStr=lv<0?'−'+Math.abs(lv).toFixed(3):lv.toFixed(lv<1?3:(lv<10?1:0));
+
+    rows+='<tr'+(cls?' class="'+cls+'"':'')+'><td>'+y+(y===2026?'（E）':'')+'</td><td>'+lvStr+'</td><td>'+txt+'</td></tr>';
+
+  }
+
+  tbody.innerHTML=rows;
+
+})();
+
+</script>
+
+</body>
+
+</html>
+

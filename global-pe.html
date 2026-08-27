@@ -1,264 +1,530 @@
-<!DOCTYPE html>
-
-<html lang="zh-CN">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>全球股市市盈率 · 各国指数估值总览（2026.08）</title>
-
-<style>
-
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:linear-gradient(135deg,#0a0e1a 0%,#141829 50%,#0e1420 100%);color:#e0e6f0;min-height:100vh;padding:20px}
-
-.container{max-width:1280px;margin:0 auto}
-
-.site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
-
-.nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-
-.nav-brand .dot{width:8px;height:8px;background:#5b9cf6;border-radius:50%}
-
-.nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
-
-.nav-back:hover{color:#5b9cf6}
-
-.header{text-align:center;padding:70px 0 16px}
-
-.header h1{font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:8px}
-
-.header .subtitle{font-size:13px;color:#7a90b0;letter-spacing:0.5px}
-
-.kpi-row{display:flex;gap:14px;margin:18px 0 26px;flex-wrap:wrap;justify-content:center}
-
-.kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 22px;text-align:center;flex:1;min-width:150px;max-width:230px}
-
-.kpi-card .label{font-size:11px;color:#7a90b0;margin-bottom:6px}
-
-.kpi-card .value{font-size:22px;font-weight:700}
-
-.kpi-card .sub{font-size:11px;color:#7a90b0;margin-top:3px}
-
-.value.green{color:#3dd68c}.value.red{color:#ff6b6b}.value.yellow{color:#ffd966}.value.blue{color:#5b9cf6}
-
-.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-
-.tile{position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 20px 16px;background:linear-gradient(180deg,rgba(232,207,143,0.05),rgba(255,255,255,0) 45%),linear-gradient(150deg,rgba(16,22,36,0.5),rgba(10,14,26,0.6));border:1px solid rgba(201,162,75,0.14);border-radius:16px;text-decoration:none;color:var(--text-primary,#e2e8f0);overflow:hidden;transition:all 0.25s ease}
-
-.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#b992ff,#8b5cf6)}
-
-.tile:hover{border-color:rgba(232,207,143,0.4);transform:translateY(-3px)}
-
-.tile-top{display:flex;align-items:center;justify-content:space-between}
-
-.tile-title{font-size:16px;font-weight:600;color:#eef2f8}
-
-.tile-pe{font-size:22px;font-weight:700}
-
-.pe-low{color:#3dd68c}.pe-mid{color:#ffd966}.pe-high{color:#ff6b6b}
-
-.tile-desc{font-size:12.5px;color:#8a9ab8;line-height:1.6}
-
-.tile-period{font-size:11.5px;color:#5a6a8a;margin-top:4px}
-
-.footer{text-align:center;font-size:11px;color:#3a4a6a;margin-top:26px;padding-bottom:16px;line-height:1.8}
-
-.note{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:12.5px;color:#94a3b8;line-height:1.8}
-
-.note b{color:#e8cf8f}
-
-@media (max-width:760px){.topic-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}}
-
-.tile-chart{margin-top:8px;background:rgba(255,255,255,0.03);border-radius:10px;padding:6px 4px 2px}
-.tile-chart-legend{display:flex;gap:14px;justify-content:center;font-size:10px;color:#7a90b0;padding:2px 0 4px}
-.tile-chart-legend span{display:flex;align-items:center;gap:4px}
-
-</style>
-
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-
-</head>
-
-<body>
-
-<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="index.html" class="nav-back">← 返回首页</a></div>
-
-<div class="container">
-
-<div class="header">
-
-<h1>🌍 全球股市市盈率</h1>
-
-<div class="subtitle">7 个主要市场 · 自成立以来市盈率（P/E）走势总览 · 数据截至 2026 年 8 月</div>
-
-</div>
-
-<div class="kpi-row">
-
-<div class="kpi-card"><div class="label">估值最低</div><div class="value green">12.26x</div><div class="sub">恒生指数</div></div>
-
-<div class="kpi-card"><div class="label">估值最高</div><div class="value red">34.1x</div><div class="sub">纳斯达克综合</div></div>
-
-<div class="kpi-card"><div class="label">全球估值中位</div><div class="value yellow">~20x</div><div class="sub">台/印/日接近</div></div>
-
-<div class="kpi-card"><div class="label">本系列跨度</div><div class="value blue">130年</div><div class="sub">道琼斯1896-2026</div></div>
-
-</div>
-
-<div class="note">
-
-<b>读法提示：</b>① <b>美股最贵</b>——纳斯达克 34.1x、道琼斯 25.4x，处各自历史高位；② <b>港股全球最便宜</b>——恒生 12.26x 仍处历史低位，2026 年估值修复中；③ <b>亚洲分化的两类</b>——日经/台湾/KOSPI 靠 AI 盈利驱动（估值仅 17-21x），印度靠"增长溢价"长牛（20.9x）；④ 各国完整历史周期解读点击进入。
-
-</div>
-
-<div class="topic-grid">
-
-<a href="korea-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇰🇷 韩国 KOSPI</span><span class="tile-pe pe-mid">17.1x</span></div>
-
-<div class="tile-desc">2026年7月史诗级崩盘-22.2%后回落；50年均值16x，6月AI杠杆泡沫冲至33.5x历史新高，盈利暴增下远期PE创2009年来新低</div>
-
-<div class="tile-period">1976-2026 · 50年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparkkorea" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#f87171">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="nasdaq-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇺🇸 纳斯达克综合</span><span class="tile-pe pe-high">34.1x</span></div>
-
-<div class="tile-desc">55年均值约30x，处近10年64%分位；2000年互联网泡沫峰值95x+、2021年45x、当前AI超级周期33-38x高位震荡</div>
-
-<div class="tile-period">1971-2026 · 55年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparknasdaq" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#3dd68c">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="dow-jones-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇺🇸 道琼斯工业</span><span class="tile-pe pe-mid">25.4x</span></div>
-
-<div class="tile-desc">130年均值约16.5x，处历史偏高区间；1929年大崩盘前峰值约30x、2000年科网泡沫、2020年疫情，全球最长指数历史</div>
-
-<div class="tile-period">1896-2026 · 130年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparkdowjones" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#ffd966">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="nikkei-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇯🇵 日经225</span><span class="tile-pe pe-mid">21.0x</span></div>
-
-<div class="tile-desc">76年均值约24x；1989年泡沫峰值70x、失去的三十年估值中枢下移、2012年安倍经济学、2026年AI行情盈利驱动创新高</div>
-
-<div class="tile-period">1950-2026 · 76年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparknikkei" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#ff6b6b">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="taiwan-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇹🇼 台湾加权</span><span class="tile-pe pe-mid">~20x*</span></div>
-
-<div class="tile-desc">60年均值约22x，处中位区间；1989年全民炒股泡沫峰值约90x、1990年暴跌80%、当前AI牛市台积电领涨创新高44,226点</div>
-
-<div class="tile-period">1966-2026 · 60年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparktaiwan" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#c084fc">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="hk-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇭🇰 恒生指数</span><span class="tile-pe pe-low">12.26x</span></div>
-
-<div class="tile-desc">62年均值约15x，全球主要市场最低；1973年港股泡沫峰值约40x、1998年亚洲金融危机最低约8x、2026年AI与南向资金估值修复</div>
-
-<div class="tile-period">1964-2026 · 62年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparkhk" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#f97316">━ 指数(右轴)</span></div></div>
-</a>
-
-<a href="india-pe.html" class="tile">
-
-<div class="tile-top"><span class="tile-title">🇮🇳 印度 Sensex</span><span class="tile-pe pe-mid">20.9x</span></div>
-
-<div class="tile-desc">47年均值约19x，新兴市场长期溢价；1992年改革泡沫峰值约44x、2010年代长牛溢价成常态、当前78,581点牛市新高</div>
-
-<div class="tile-period">1979-2026 · 47年走势 · 季度/月度双图</div>
-
-<div class="tile-chart"><canvas id="sparkindia" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#22d3ee">━ 指数(右轴)</span></div></div>
-</a>
-
-</div>
-
-<div class="footer">
-
-数据来源：各市场交易所 · 中国证券报《市场运行统计日报》(2026.08.06) · Siblis Research 等 | 台湾2026年PE为估算值(标注*)<br>
-
-免责声明：各国统计口径与数据时点略有差异，数据仅供参考，不构成投资建议
-
-</div>
-
-</div>
-
-<script>
-(function(){
-var IDX_ANNUAL = {
-  'korea-pe.html': {cn:'🇰🇷 韩国 KOSPI',color:'#f87171',years:[1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],pe:[4.2,5.1,6.8,8.5,5.2,4.8,3.4,3.8,4.5,6.0,9.2,13.5,17.8,15.2,12.8,14.2,13.5,15.8,17.2,17.9,19.4,19.3,27.8,34.6,15.34,29.29,15.61,12.5,13.8,14.5,13.8,16.2,8.99,23.68,14.2,11.2,10.8,14.95,15.32,15.07,11.4,11.8,11.5,11.6,22.5,29.7,12.5,15.6,14.1,17.06],idx:[104.0,137.0,144.9,119.0,106.9,131.4,127.3,121.2,142.5,163.4,272.6,525.1,907.2,909.7,696.1,610.9,678.4,866.2,1027.4,882.9,651.2,376.3,562.5,1028.1,504.6,693.7,627.6,810.7,895.9,1379.4,1434.5,1897.1,1124.5,1682.8,2041.7,1825.7,1997.1,2011.3,1915.6,1961.3,2026.5,2467.5,2041.0,2197.7,2873.5,2977.7,2236.2,2655.3,2399.5,4214.2]},
-  'nasdaq-pe.html': {cn:'🇺🇸 纳斯达克综合',color:'#3dd68c',years:[1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],pe:[18.0,19.0,17.0,11.0,12.0,14.0,14.0,15.0,16.0,18.0,16.0,15.0,20.0,17.0,18.0,20.0,22.0,21.0,19.0,18.0,23.0,23.0,22.0,20.0,22.0,25.0,28.0,35.0,62.0,95.0,55.0,40.0,33.0,31.0,30.0,31.0,33.0,35.0,24.0,27.0,26.0,27.0,29.0,30.0,30.0,29.0,30.0,28.0,31.0,42.0,45.0,28.0,33.0,35.0,38.0],idx:[114.1,133.7,92.2,59.8,77.6,97.9,105.1,118.0,151.1,202.3,195.8,232.4,278.6,247.1,324.9,348.8,330.5,381.4,454.8,373.8,586.3,677.0,776.8,752.0,1052.1,1291.0,1570.4,2192.7,4069.3,2470.5,1950.4,1335.5,2003.4,2175.4,2205.3,2415.3,2652.3,1577.0,2269.2,2652.9,2605.2,3019.5,4176.6,4736.1,5007.4,5383.1,6903.4,6635.3,8972.6,12888.3,15645.0,10466.5,15011.4,19310.8,25300.0]},
-  'dow-jones-pe.html': {cn:'🇺🇸 道琼斯工业',color:'#ffd966',years:[1929,1932,1935,1940,1945,1950,1955,1960,1965,1970,1974,1977,1980,1982,1985,1987,1990,1995,1999,2000,2002,2005,2007,2008,2010,2013,2015,2018,2020,2021,2022,2023,2024,2025],pe:[32.0,10.0,15.0,14.0,16.0,11.0,14.0,17.0,19.0,16.0,7.0,10.0,9.0,8.0,13.0,22.0,15.0,16.0,28.0,30.0,22.0,18.0,18.0,12.0,16.0,16.0,17.0,20.0,26.0,30.0,21.0,24.0,26.0,25.0],idx:[248.5,59.9,144.1,131.1,192.9,235.4,488.4,615.9,969.3,838.9,616.2,831.2,964.0,1046.5,1546.7,1938.8,2633.7,5117.1,11497.1,10786.9,8341.6,10717.5,13264.8,8776.4,11577.5,16576.7,17425.0,23327.5,30606.5,36338.3,33147.3,37689.5,42544.2,48063.3]},
-  'nikkei-pe.html': {cn:'🇯🇵 日经225',color:'#ff6b6b',years:[1950,1952,1955,1958,1960,1963,1965,1968,1970,1973,1975,1978,1980,1983,1985,1987,1989,1991,1993,1995,1998,2000,2002,2003,2005,2008,2010,2011,2013,2015,2018,2020,2021,2022,2023,2024,2025],pe:[12.0,13.0,15.0,14.0,18.0,17.0,15.0,19.0,22.0,28.0,20.0,21.0,22.0,25.0,30.0,45.0,80.0,50.0,48.0,60.0,45.0,35.0,40.0,15.0,20.0,12.8,18.0,17.5,20.0,18.0,16.0,25.0,26.0,18.0,20.0,21.0,22.0],idx:[101.9,362.6,425.7,666.5,1356.7,1225.1,1417.8,1714.9,1987.1,4306.8,4358.6,6001.9,7116.4,9893.8,13113.3,21564.0,38915.9,22983.8,17417.2,19868.2,13842.2,13785.7,8579.0,10676.6,16111.4,8859.6,10228.9,8455.4,16291.3,19033.7,20014.8,27444.2,28791.7,26094.5,33464.2,39894.5,70062.0]},
-  'taiwan-pe.html': {cn:'🇹🇼 台湾加权',color:'#c084fc',years:[1966,1970,1975,1980,1985,1987,1989,1990,1992,1995,1997,2000,2001,2003,2005,2007,2008,2010,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[20.0,22.0,18.0,25.0,20.0,35.0,90.0,80.0,20.0,25.0,30.0,20.0,10.0,18.0,15.0,17.0,10.0,16.0,16.0,14.0,16.0,null,18.0,22.0,24.0,10.0,18.0,20.0,21.0,20.0],idx:[100.0,123.4,330.1,558.5,835.1,2339.9,9624.2,4530.2,3377.1,5158.7,8187.3,4743.9,5551.2,5890.7,6548.3,8506.3,4591.2,8972.5,8611.5,8338.1,10642.9,9727.4,11997.1,14732.5,18218.8,14137.7,17930.8,23035.1,33500.0,null]},
-  'hk-pe.html': {cn:'🇭🇰 恒生指数',color:'#f97316',years:[1964,1970,1972,1973,1975,1980,1985,1987,1989,1990,1993,1995,1997,1998,2000,2003,2005,2007,2008,2010,2011,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[15.0,20.0,30.0,40.0,18.0,25.0,19.0,20.0,19.0,16.0,25.0,15.0,25.0,8.0,18.0,15.0,16.0,24.0,12.0,15.0,10.0,11.0,10.0,14.0,11.0,null,13.0,11.0,9.0,11.0,10.0,11.0,12.26],idx:[100.0,211.6,843.4,433.7,350.0,1473.6,1752.5,2302.8,null,3024.6,11888.4,10073.4,10722.8,null,15095.5,12575.9,14876.4,27812.7,14387.5,23035.5,null,23306.4,21914.4,29919.2,25845.7,28189.8,27231.1,23397.7,19781.4,17047.4,20059.9,25000.0,null]},
-  'india-pe.html': {cn:'🇮🇳 印度 Sensex',color:'#22d3ee',years:[1979,1980,1985,1989,1990,1991,1992,1993,1995,1997,1998,2000,2001,2003,2005,2007,2008,2010,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[12.0,13.0,18.0,20.0,22.0,24.0,44.0,30.0,22.0,18.0,15.0,25.0,15.0,15.0,20.0,25.0,15.0,22.0,17.0,21.0,24.0,22.0,null,25.0,28.0,23.0,22.0,22.0,21.5,20.9],idx:[100.0,148.3,527.4,778.6,1048.3,1908.9,2615.4,3346.1,3110.5,3659.0,null,3972.1,3262.3,5839.0,9397.9,20287.0,9647.3,20509.1,21170.7,26117.5,34056.8,36068.3,41253.7,47751.3,58253.8,60840.7,72240.3,78139.0,76000.0,null]},
-};
-
-var order = ['korea-pe.html','nasdaq-pe.html','dow-jones-pe.html','nikkei-pe.html','taiwan-pe.html','hk-pe.html','india-pe.html'];
-order.forEach(function(mkt){
-  var d = IDX_ANNUAL[mkt];
-  var cid = 'spark' + mkt.replace('-pe.html','').replace('-','');
-  var el = document.getElementById(cid);
-  if (!el) return;
-  var ch = echarts.init(el);
-  ch.setOption({
-    grid: { left: 8, right: 8, top: 10, bottom: 4, containLabel: false },
-    tooltip: {
-      trigger: 'axis',
-      backgroundColor: 'rgba(15,20,35,0.92)', borderColor: 'rgba(255,255,255,0.12)',
-      textStyle: { color: '#e2e8f0', fontSize: 11 },
-      formatter: function(ps){
-        var y = ps[0].axisValue;
-        var pe = d.pe[ps[0].dataIndex], ix = d.idx[ps[0].dataIndex];
-        var s = '<b>' + y + '年</b><br/>PE: ' + (pe!=null?pe.toFixed(1)+'x':'—') + '<br/>指数: ' + (ix!=null?Math.round(ix):'—');
-        return s;
-      }
-    },
-    xAxis: { type: 'category', data: d.years, show: false },
-    yAxis: [
-      { type: 'value', show: false, min: function(v){return Math.floor(v.min*0.9);}, max: function(v){return Math.ceil(v.max*1.1);} },
-      { type: 'value', show: false, min: function(v){return Math.floor(v.min*0.9);}, max: function(v){return Math.ceil(v.max*1.1);} }
-    ],
-    series: [
-      { name: 'PE', type: 'line', data: d.pe, showSymbol: false, yAxisIndex: 0,
-        lineStyle: { width: 1.5, color: '#5b9cf6' },
-        areaStyle: { color: 'rgba(91,156,246,0.12)' } },
-      { name: '指数', type: 'line', data: d.idx, showSymbol: false, yAxisIndex: 1,
-        lineStyle: { width: 1.3, color: d.color, type: 'dashed' } }
-    ]
-  });
-  ch.on('click', function(){ location.href = mkt; });
-  window.addEventListener('resize', function(){ ch.resize(); });
-});
-})();
-</script>
-
-</body>
-
-</html>
-
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+
+
+<head>
+
+
+
+<meta charset="UTF-8">
+
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<title>全球股市市盈率 · 各国指数估值总览（2026.08）</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+
+
+<style>
+
+
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+
+
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:linear-gradient(135deg,#0a0e1a 0%,#141829 50%,#0e1420 100%);color:#e0e6f0;min-height:100vh;padding:20px}
+
+
+
+.container{max-width:1280px;margin:0 auto}
+
+
+
+.site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+
+
+
+.nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+
+
+
+.nav-brand .dot{width:8px;height:8px;background:#5b9cf6;border-radius:50%}
+
+
+
+.nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
+
+
+
+.nav-back:hover{color:#5b9cf6}
+
+
+
+.header{text-align:center;padding:70px 0 16px}
+
+
+
+.header h1{font-size:26px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:8px}
+
+
+
+.header .subtitle{font-size:13px;color:#7a90b0;letter-spacing:0.5px}
+
+
+
+.kpi-row{display:flex;gap:14px;margin:18px 0 26px;flex-wrap:wrap;justify-content:center}
+
+
+
+.kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:14px 22px;text-align:center;flex:1;min-width:150px;max-width:230px}
+
+
+
+.kpi-card .label{font-size:11px;color:#7a90b0;margin-bottom:6px}
+
+
+
+.kpi-card .value{font-size:22px;font-weight:700}
+
+
+
+.kpi-card .sub{font-size:11px;color:#7a90b0;margin-top:3px}
+
+
+
+.value.green{color:#3dd68c}.value.red{color:#ff6b6b}.value.yellow{color:#ffd966}.value.blue{color:#5b9cf6}
+
+
+
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+
+
+
+.tile{position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 20px 16px;background:linear-gradient(180deg,rgba(232,207,143,0.05),rgba(255,255,255,0) 45%),linear-gradient(150deg,rgba(16,22,36,0.5),rgba(10,14,26,0.6));border:1px solid rgba(201,162,75,0.14);border-radius:16px;text-decoration:none;color:var(--text-primary,#e2e8f0);overflow:hidden;transition:all 0.25s ease}
+
+
+
+.tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#b992ff,#8b5cf6)}
+
+
+
+.tile:hover{border-color:rgba(232,207,143,0.4);transform:translateY(-3px)}
+
+
+
+.tile-top{display:flex;align-items:center;justify-content:space-between}
+
+
+
+.tile-title{font-size:16px;font-weight:600;color:#eef2f8}
+
+
+
+.tile-pe{font-size:22px;font-weight:700}
+
+
+
+.pe-low{color:#3dd68c}.pe-mid{color:#ffd966}.pe-high{color:#ff6b6b}
+
+
+
+.tile-desc{font-size:12.5px;color:#8a9ab8;line-height:1.6}
+
+
+
+.tile-period{font-size:11.5px;color:#5a6a8a;margin-top:4px}
+
+
+
+.footer{text-align:center;font-size:11px;color:#3a4a6a;margin-top:26px;padding-bottom:16px;line-height:1.8}
+
+
+
+.note{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 18px;margin:18px 0;font-size:12.5px;color:#94a3b8;line-height:1.8}
+
+
+
+.note b{color:#e8cf8f}
+
+
+
+@media (max-width:760px){.topic-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}}
+
+
+
+.tile-chart{margin-top:8px;background:rgba(255,255,255,0.03);border-radius:10px;padding:6px 4px 2px}
+
+.tile-chart-legend{display:flex;gap:14px;justify-content:center;font-size:10px;color:#7a90b0;padding:2px 0 4px}
+
+.tile-chart-legend span{display:flex;align-items:center;gap:4px}
+
+
+
+</style>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="index.html" class="nav-back">← 返回首页</a></div>
+
+
+
+<div class="container">
+
+
+
+<div class="header">
+
+
+
+<h1>🌍 全球股市市盈率</h1>
+
+
+
+<div class="subtitle">7 个主要市场 · 自成立以来市盈率（P/E）走势总览 · 数据截至 2026 年 8 月</div>
+
+
+
+</div>
+
+
+
+<div class="kpi-row">
+
+
+
+<div class="kpi-card"><div class="label">估值最低</div><div class="value green">12.26x</div><div class="sub">恒生指数</div></div>
+
+
+
+<div class="kpi-card"><div class="label">估值最高</div><div class="value red">34.1x</div><div class="sub">纳斯达克综合</div></div>
+
+
+
+<div class="kpi-card"><div class="label">全球估值中位</div><div class="value yellow">~20x</div><div class="sub">台/印/日接近</div></div>
+
+
+
+<div class="kpi-card"><div class="label">本系列跨度</div><div class="value blue">130年</div><div class="sub">道琼斯1896-2026</div></div>
+
+
+
+</div>
+
+
+
+<div class="note">
+
+
+
+<b>读法提示：</b>① <b>美股最贵</b>——纳斯达克 34.1x、道琼斯 25.4x，处各自历史高位；② <b>港股全球最便宜</b>——恒生 12.26x 仍处历史低位，2026 年估值修复中；③ <b>亚洲分化的两类</b>——日经/台湾/KOSPI 靠 AI 盈利驱动（估值仅 17-21x），印度靠"增长溢价"长牛（20.9x）；④ 各国完整历史周期解读点击进入。
+
+
+
+</div>
+
+
+
+<div class="topic-grid">
+
+
+
+<a href="korea-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇰🇷 韩国 KOSPI</span><span class="tile-pe pe-mid">17.1x</span></div>
+
+
+
+<div class="tile-desc">2026年7月史诗级崩盘-22.2%后回落；50年均值16x，6月AI杠杆泡沫冲至33.5x历史新高，盈利暴增下远期PE创2009年来新低</div>
+
+
+
+<div class="tile-period">1976-2026 · 50年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparkkorea" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#f87171">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="nasdaq-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇺🇸 纳斯达克综合</span><span class="tile-pe pe-high">34.1x</span></div>
+
+
+
+<div class="tile-desc">55年均值约30x，处近10年64%分位；2000年互联网泡沫峰值95x+、2021年45x、当前AI超级周期33-38x高位震荡</div>
+
+
+
+<div class="tile-period">1971-2026 · 55年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparknasdaq" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#3dd68c">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="dow-jones-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇺🇸 道琼斯工业</span><span class="tile-pe pe-mid">25.4x</span></div>
+
+
+
+<div class="tile-desc">130年均值约16.5x，处历史偏高区间；1929年大崩盘前峰值约30x、2000年科网泡沫、2020年疫情，全球最长指数历史</div>
+
+
+
+<div class="tile-period">1896-2026 · 130年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparkdowjones" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#ffd966">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="nikkei-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇯🇵 日经225</span><span class="tile-pe pe-mid">21.0x</span></div>
+
+
+
+<div class="tile-desc">76年均值约24x；1989年泡沫峰值70x、失去的三十年估值中枢下移、2012年安倍经济学、2026年AI行情盈利驱动创新高</div>
+
+
+
+<div class="tile-period">1950-2026 · 76年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparknikkei" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#ff6b6b">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="taiwan-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇹🇼 台湾加权</span><span class="tile-pe pe-mid">~20x*</span></div>
+
+
+
+<div class="tile-desc">60年均值约22x，处中位区间；1989年全民炒股泡沫峰值约90x、1990年暴跌80%、当前AI牛市台积电领涨创新高44,226点</div>
+
+
+
+<div class="tile-period">1966-2026 · 60年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparktaiwan" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#c084fc">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="hk-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇭🇰 恒生指数</span><span class="tile-pe pe-low">12.26x</span></div>
+
+
+
+<div class="tile-desc">62年均值约15x，全球主要市场最低；1973年港股泡沫峰值约40x、1998年亚洲金融危机最低约8x、2026年AI与南向资金估值修复</div>
+
+
+
+<div class="tile-period">1964-2026 · 62年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparkhk" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#f97316">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+<a href="india-pe.html" class="tile">
+
+
+
+<div class="tile-top"><span class="tile-title">🇮🇳 印度 Sensex</span><span class="tile-pe pe-mid">20.9x</span></div>
+
+
+
+<div class="tile-desc">47年均值约19x，新兴市场长期溢价；1992年改革泡沫峰值约44x、2010年代长牛溢价成常态、当前78,581点牛市新高</div>
+
+
+
+<div class="tile-period">1979-2026 · 47年走势 · 季度/月度双图</div>
+
+
+
+<div class="tile-chart"><canvas id="sparkindia" style="width:100%;height:110px;"></canvas><div class="tile-chart-legend"><span style="color:#5b9cf6">━ PE(左轴)</span><span style="color:#22d3ee">━ 指数(右轴)</span></div></div>
+
+</a>
+
+
+
+</div>
+
+
+
+<div class="footer">
+
+
+
+数据来源：各市场交易所 · 中国证券报《市场运行统计日报》(2026.08.06) · Siblis Research 等 | 台湾2026年PE为估算值(标注*)<br>
+
+
+
+免责声明：各国统计口径与数据时点略有差异，数据仅供参考，不构成投资建议
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+<script>
+
+(function(){
+
+var IDX_ANNUAL = {
+
+  'korea-pe.html': {cn:'🇰🇷 韩国 KOSPI',color:'#f87171',years:[1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],pe:[4.2,5.1,6.8,8.5,5.2,4.8,3.4,3.8,4.5,6.0,9.2,13.5,17.8,15.2,12.8,14.2,13.5,15.8,17.2,17.9,19.4,19.3,27.8,34.6,15.34,29.29,15.61,12.5,13.8,14.5,13.8,16.2,8.99,23.68,14.2,11.2,10.8,14.95,15.32,15.07,11.4,11.8,11.5,11.6,22.5,29.7,12.5,15.6,14.1,17.06],idx:[104.0,137.0,144.9,119.0,106.9,131.4,127.3,121.2,142.5,163.4,272.6,525.1,907.2,909.7,696.1,610.9,678.4,866.2,1027.4,882.9,651.2,376.3,562.5,1028.1,504.6,693.7,627.6,810.7,895.9,1379.4,1434.5,1897.1,1124.5,1682.8,2041.7,1825.7,1997.1,2011.3,1915.6,1961.3,2026.5,2467.5,2041.0,2197.7,2873.5,2977.7,2236.2,2655.3,2399.5,4214.2]},
+
+  'nasdaq-pe.html': {cn:'🇺🇸 纳斯达克综合',color:'#3dd68c',years:[1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],pe:[18.0,19.0,17.0,11.0,12.0,14.0,14.0,15.0,16.0,18.0,16.0,15.0,20.0,17.0,18.0,20.0,22.0,21.0,19.0,18.0,23.0,23.0,22.0,20.0,22.0,25.0,28.0,35.0,62.0,95.0,55.0,40.0,33.0,31.0,30.0,31.0,33.0,35.0,24.0,27.0,26.0,27.0,29.0,30.0,30.0,29.0,30.0,28.0,31.0,42.0,45.0,28.0,33.0,35.0,38.0],idx:[114.1,133.7,92.2,59.8,77.6,97.9,105.1,118.0,151.1,202.3,195.8,232.4,278.6,247.1,324.9,348.8,330.5,381.4,454.8,373.8,586.3,677.0,776.8,752.0,1052.1,1291.0,1570.4,2192.7,4069.3,2470.5,1950.4,1335.5,2003.4,2175.4,2205.3,2415.3,2652.3,1577.0,2269.2,2652.9,2605.2,3019.5,4176.6,4736.1,5007.4,5383.1,6903.4,6635.3,8972.6,12888.3,15645.0,10466.5,15011.4,19310.8,25300.0]},
+
+  'dow-jones-pe.html': {cn:'🇺🇸 道琼斯工业',color:'#ffd966',years:[1929,1932,1935,1940,1945,1950,1955,1960,1965,1970,1974,1977,1980,1982,1985,1987,1990,1995,1999,2000,2002,2005,2007,2008,2010,2013,2015,2018,2020,2021,2022,2023,2024,2025],pe:[32.0,10.0,15.0,14.0,16.0,11.0,14.0,17.0,19.0,16.0,7.0,10.0,9.0,8.0,13.0,22.0,15.0,16.0,28.0,30.0,22.0,18.0,18.0,12.0,16.0,16.0,17.0,20.0,26.0,30.0,21.0,24.0,26.0,25.0],idx:[248.5,59.9,144.1,131.1,192.9,235.4,488.4,615.9,969.3,838.9,616.2,831.2,964.0,1046.5,1546.7,1938.8,2633.7,5117.1,11497.1,10786.9,8341.6,10717.5,13264.8,8776.4,11577.5,16576.7,17425.0,23327.5,30606.5,36338.3,33147.3,37689.5,42544.2,48063.3]},
+
+  'nikkei-pe.html': {cn:'🇯🇵 日经225',color:'#ff6b6b',years:[1950,1952,1955,1958,1960,1963,1965,1968,1970,1973,1975,1978,1980,1983,1985,1987,1989,1991,1993,1995,1998,2000,2002,2003,2005,2008,2010,2011,2013,2015,2018,2020,2021,2022,2023,2024,2025],pe:[12.0,13.0,15.0,14.0,18.0,17.0,15.0,19.0,22.0,28.0,20.0,21.0,22.0,25.0,30.0,45.0,80.0,50.0,48.0,60.0,45.0,35.0,40.0,15.0,20.0,12.8,18.0,17.5,20.0,18.0,16.0,25.0,26.0,18.0,20.0,21.0,22.0],idx:[101.9,362.6,425.7,666.5,1356.7,1225.1,1417.8,1714.9,1987.1,4306.8,4358.6,6001.9,7116.4,9893.8,13113.3,21564.0,38915.9,22983.8,17417.2,19868.2,13842.2,13785.7,8579.0,10676.6,16111.4,8859.6,10228.9,8455.4,16291.3,19033.7,20014.8,27444.2,28791.7,26094.5,33464.2,39894.5,70062.0]},
+
+  'taiwan-pe.html': {cn:'🇹🇼 台湾加权',color:'#c084fc',years:[1966,1970,1975,1980,1985,1987,1989,1990,1992,1995,1997,2000,2001,2003,2005,2007,2008,2010,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[20.0,22.0,18.0,25.0,20.0,35.0,90.0,80.0,20.0,25.0,30.0,20.0,10.0,18.0,15.0,17.0,10.0,16.0,16.0,14.0,16.0,null,18.0,22.0,24.0,10.0,18.0,20.0,21.0,20.0],idx:[100.0,123.4,330.1,558.5,835.1,2339.9,9624.2,4530.2,3377.1,5158.7,8187.3,4743.9,5551.2,5890.7,6548.3,8506.3,4591.2,8972.5,8611.5,8338.1,10642.9,9727.4,11997.1,14732.5,18218.8,14137.7,17930.8,23035.1,33500.0,null]},
+
+  'hk-pe.html': {cn:'🇭🇰 恒生指数',color:'#f97316',years:[1964,1970,1972,1973,1975,1980,1985,1987,1989,1990,1993,1995,1997,1998,2000,2003,2005,2007,2008,2010,2011,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[15.0,20.0,30.0,40.0,18.0,25.0,19.0,20.0,19.0,16.0,25.0,15.0,25.0,8.0,18.0,15.0,16.0,24.0,12.0,15.0,10.0,11.0,10.0,14.0,11.0,null,13.0,11.0,9.0,11.0,10.0,11.0,12.26],idx:[100.0,211.6,843.4,433.7,350.0,1473.6,1752.5,2302.8,null,3024.6,11888.4,10073.4,10722.8,null,15095.5,12575.9,14876.4,27812.7,14387.5,23035.5,null,23306.4,21914.4,29919.2,25845.7,28189.8,27231.1,23397.7,19781.4,17047.4,20059.9,25000.0,null]},
+
+  'india-pe.html': {cn:'🇮🇳 印度 Sensex',color:'#22d3ee',years:[1979,1980,1985,1989,1990,1991,1992,1993,1995,1997,1998,2000,2001,2003,2005,2007,2008,2010,2013,2015,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],pe:[12.0,13.0,18.0,20.0,22.0,24.0,44.0,30.0,22.0,18.0,15.0,25.0,15.0,15.0,20.0,25.0,15.0,22.0,17.0,21.0,24.0,22.0,null,25.0,28.0,23.0,22.0,22.0,21.5,20.9],idx:[100.0,148.3,527.4,778.6,1048.3,1908.9,2615.4,3346.1,3110.5,3659.0,null,3972.1,3262.3,5839.0,9397.9,20287.0,9647.3,20509.1,21170.7,26117.5,34056.8,36068.3,41253.7,47751.3,58253.8,60840.7,72240.3,78139.0,76000.0,null]},
+
+};
+
+
+
+var order = ['korea-pe.html','nasdaq-pe.html','dow-jones-pe.html','nikkei-pe.html','taiwan-pe.html','hk-pe.html','india-pe.html'];
+
+order.forEach(function(mkt){
+
+  var d = IDX_ANNUAL[mkt];
+
+  var cid = 'spark' + mkt.replace('-pe.html','').replace('-','');
+
+  var el = document.getElementById(cid);
+
+  if (!el) return;
+
+  var ch = echarts.init(el);
+
+  ch.setOption({
+
+    grid: { left: 8, right: 8, top: 10, bottom: 4, containLabel: false },
+
+    tooltip: {
+
+      trigger: 'axis',
+
+      backgroundColor: 'rgba(15,20,35,0.92)', borderColor: 'rgba(255,255,255,0.12)',
+
+      textStyle: { color: '#e2e8f0', fontSize: 11 },
+
+      formatter: function(ps){
+
+        var y = ps[0].axisValue;
+
+        var pe = d.pe[ps[0].dataIndex], ix = d.idx[ps[0].dataIndex];
+
+        var s = '<b>' + y + '年</b><br/>PE: ' + (pe!=null?pe.toFixed(1)+'x':'—') + '<br/>指数: ' + (ix!=null?Math.round(ix):'—');
+
+        return s;
+
+      }
+
+    },
+
+    xAxis: { type: 'category', data: d.years, show: false },
+
+    yAxis: [
+
+      { type: 'value', show: false, min: function(v){return Math.floor(v.min*0.9);}, max: function(v){return Math.ceil(v.max*1.1);} },
+
+      { type: 'value', show: false, min: function(v){return Math.floor(v.min*0.9);}, max: function(v){return Math.ceil(v.max*1.1);} }
+
+    ],
+
+    series: [
+
+      { name: 'PE', type: 'line', data: d.pe, showSymbol: false, yAxisIndex: 0,
+
+        lineStyle: { width: 1.5, color: '#5b9cf6' },
+
+        areaStyle: { color: 'rgba(91,156,246,0.12)' } },
+
+      { name: '指数', type: 'line', data: d.idx, showSymbol: false, yAxisIndex: 1,
+
+        lineStyle: { width: 1.3, color: d.color, type: 'dashed' } }
+
+    ]
+
+  });
+
+  ch.on('click', function(){ location.href = mkt; });
+
+  window.addEventListener('resize', function(){ ch.resize(); });
+
+});
+
+})();
+
+</script>
+
+
+
+</body>
+
+
+
+</html>
+
+
+
