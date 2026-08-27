@@ -39,14 +39,14 @@
     line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
+    position: relative;
   }
-  /* 背景图层：国风水墨山水——与滚动条 1:1 反向同步移动（位移=滚动像素），fixed 保证任何位置都有图 */
+  /* 背景图层：国风水墨山水——锚定文档本体（absolute 高度=全页），天然与滚动条 1:1 同步移动且全页覆盖不露底 */
   .bg-photo {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100vh;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 0; pointer-events: none;
-    background: url(mountain-bg.jpeg) center top / cover no-repeat;
-    will-change: transform;
+    background: url(mountain-bg.jpeg) center top / 100% auto repeat-y;
   }
 
     .site-nav {
@@ -480,23 +480,6 @@
 <footer class="footer">
   <p>深层研究 · Deep Research · © 2026 · 基于公开数据 · 独立研究</p>
 </footer>
-
-<script>
-  // 背景与滚动条 1:1 同步：背景位移 = 滚动像素 × -1，零延时无插值
-  (function () {
-    var bg = document.querySelector('.bg-photo');
-    if (!bg) return;
-
-    function onScroll() {
-      var y = window.scrollY || document.documentElement.scrollTop || 0;
-      bg.style.transform = 'translate3d(0,' + (-y) + 'px,0)';
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    onScroll();
-  })();
-</script>
 
 </body>
 </html>
