@@ -27,6 +27,8 @@
     --cat-finance-bg: rgba(139, 92, 246, 0.12);
     --cat-health: #10b981;
     --cat-health-bg: rgba(16, 185, 129, 0.12);
+    --cat-method: #38bdf8;
+    --cat-method-bg: rgba(56, 189, 248, 0.10);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -172,6 +174,7 @@
   .tile.finance::before { background: linear-gradient(180deg, #b992ff, var(--cat-finance)); }
   .tile.health::before { background: linear-gradient(180deg, #55e6ba, var(--cat-health)); }
   .tile.company::before { background: linear-gradient(180deg, #f0b356, #c97706); }
+  .tile.method::before { background: linear-gradient(180deg, #7dd3fc, var(--cat-method)); }
 
   /* hover 箭头 */
   .tile::after {
@@ -260,7 +263,7 @@
 <nav class="site-nav">
   <a href="index.html" class="nav-brand">
     <span class="dot"></span>
-    深层研究 <span class="nav-count">· 24 个研究专题</span>
+    深层研究 <span class="nav-count">· 25 个研究专题</span>
   </a>
 </nav>
 
@@ -373,7 +376,20 @@
     </div>
   </section>
 
-  <!-- ===== 分组六：全球股市研究 ===== -->
+  <!-- ===== 分组六：行业研究方法 ===== -->
+  <section class="group">
+    <div class="group-head">行业研究方法</div>
+    <div class="topic-grid">
+
+      <a href="pharma-forecast-guide.html" class="tile method" title="药企业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
+        <span class="tile-title">药企业绩预测分析框架</span>
+        <span class="tile-tags">七维模型 · 名词速查 · 集采/BD/CXO · 实战演示 · 报告2026-08</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ===== 分组七：全球股市研究 ===== -->
   <section class="group">
     <div class="group-head">全球股市研究</div>
     <div class="topic-grid">
