@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>药企业绩预测分析框架 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#059669; --accent-2:#34d399; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .card h3 { font-size:15px; color:var(--accent-2); margin:16px 0 8px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  .src a:hover { text-decoration:underline; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:top; line-height:1.7; }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-amber { display:inline-block; background:rgba(217,119,6,0.15); color:#fbbf24; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-blue { display:inline-block; background:rgba(14,165,233,0.15); color:#38bdf8; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  /* 七维卡片 */
+  .dims { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:16px; margin-top:8px; }
+  .dim { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+  .dim-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .dim-num { width:26px; height:26px; border-radius:50%; background:rgba(5,150,105,0.25); color:var(--accent-2); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .dim-title { font-size:15px; font-weight:700; color:#f1f5f9; }
+  .dim-q { font-size:13px; color:var(--accent-2); margin-bottom:8px; line-height:1.6; }
+  .dim-body { font-size:13px; color:var(--text-secondary); line-height:1.85; }
+  .dim-body b { color:#cbd5e1; }
+  .dim-watch { margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.7; border-top:1px dashed var(--border); padding-top:8px; }
+  .dim-watch b { color:var(--accent-2); }
+  dt { font-size:13.5px; font-weight:700; color:#f1f5f9; margin-top:14px; }
+  dd { font-size:13px; color:var(--text-secondary); line-height:1.8; margin:4px 0 0 18px; }
+  dd b { color:var(--accent-2); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="china-pharma-profit.html" class="nav-back">← 返回 中国医药生物利润格局分析</a>
+</nav>
+
+<div class="wrap">
+  <h1>药企未来业绩预测分析框架</h1>
+  <div class="meta">写给药企分析小白的使用手册 · 口径：A股医药生物上市公司（申万一级） · 配套页：<a href="china-pharma-profit.html" style="color:var(--accent-2)">利润格局分析</a> · 编制日期 2026年8月27日 · 专业名词首次出现均加粗并可在此页<b>「名词速查」</b>区集中查阅</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>一句话框架：</b>药企业绩 = <b>存量产品赚钱能力</b> × <b>增量管线兑现概率</b> − <b>研发烧钱速度</b>，再叠加<b>政策变量</b>（集采压价 / 医保放量）。预测业绩就是给这四项分别打分。</li>
+      <li><b>七个预测维度：</b>① 存量产品收入结构；② 在研管线梯队；③ BD对外授权（首付款+里程碑）；④ 集采与医保准入影响；⑤ 研发投入与费用处理方式；⑥ 现金流与在手订单；⑦ 政策与外部环境。</li>
+      <li><b>小白最容易忽略的两点：</b>一是<b>收入的"含金量"不同</b>——仿制药收入会随集采缩水，创新药和授权收入才是高质量增长；二是<b>研发费用"计入方式"不同</b>——有的公司费用化直接吃掉当期利润，有的资本化递延到未来，导致账面净利不可直接对比。</li>
+      <li><b>实操三步法：</b>先看年报里"分产品收入表"找出现金牛 → 再翻"研发管线进度表"数一数III期和已申报品种 → 最后核对BD订单的付款节奏表（什么时间到账多少钱），即可搭出一个粗略的未来三年业绩模型。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">7 个</div><div class="label">核心预测维度<br>覆盖存量→增量→减项→环境</div></div>
+    <div class="kpi"><div class="num">6 类</div><div class="label">药企商业模式（子板块）<br>不同类型侧重的维度不同</div></div>
+    <div class="kpi"><div class="num">30+</div><div class="label">专业名词速查解释<br>按重要性排序、附大白话类比</div></div>
+    <div class="kpi"><div class="num">3 步</div><div class="label">小白实操路径<br>年报三张关键表定位法</div></div>
+  </div>
+
+  <!-- ================= 一、先搞懂商业模式 ================= -->
+  <div class="card">
+    <h2>一、动手前先分清：这家药企靠什么赚钱？</h2>
+    <div class="sub">同样是"医药股"，六类公司的赚钱逻辑完全不同，预测侧重点也不同 —— 这是最容易踩的坑</div>
+    <table class="plain">
+      <tr><th>类型</th><th>典型A股公司</th><th>赚钱逻辑（一句话）</th><th>预测未来业绩最该看的维度</th></tr>
+      <tr class="hl"><td><b>创新药企</b></td><td>恒瑞医药、百济神州*、信达生物*</td><td>自研新药上市后放量销售 + 把海外权益授权出去收钱</td><td>②管线梯队 + ③BD授权 + ④医保谈判</td></tr>
+      <tr><td><b>CXO（卖铲人）</b></td><td>药明康德、凯莱英、泰格医药</td><td>不自己造药，替全球药厂做研发/生产外包服务，赚服务费</td><td>⑥在手订单 + 海外客户融资/政策环境⑦</td></tr>
+      <tr><td><b>医疗器械</b></td><td>迈瑞医疗、联影医疗</td><td>卖设备+耗材，设备像剃须刀架、耗材是长期刀片</td><td>①存量装机量 + 设备更新政策⑦ + 集采④</td></tr>
+      <tr><td><b>仿制药/原料药</b></td><td>华海药业、健友股份、新和成</td><td>专利过期后大批量生产化学药或原料，赚成本优势的钱</td><td>④集采中标/丢标情况 + 原料药价格周期</td></tr>
+      <tr><td><b>中药消费</b></td><td>片仔癀、云南白药、同仁堂</td><td>品牌溢价 + 稀缺药材资源，更像消费品</td><td>①提价能力 + 渠道库存 + OTC终端动销</td></tr>
+      <tr><td><b>医药流通/服务</b></td><td>上海医药、爱尔眼科、药明系部分业务</td><td>批发配送赚薄利差（高收入低利润率）或医疗服务现金流</td><td>①规模效应 + 应收账款周转 + 现金流⑥</td></tr>
+    </table>
+    <div class="note"><b>*注：</b>百济神州、信达生物主要在港股/美股上市（百济也有A股CDR）；本页框架适用于A股全部医药生物标的。<br><b>为什么这张表最重要：</b>新手常拿中药公司的估值去比创新药、拿流通商的高收入误判成高利润——先归类，再选维度，误差就少一半。</div>
+  </div>
+
+  <!-- ================= 二、七维框架总览图 ================= -->
+  <div class="card">
+    <h2>二、七维预测框架总览</h2>
+    <div class="sub">七个维度分为两组：「驱动力」（推动利润向上的引擎）× 3 、「约束项」（决定天花板和质量的变量）× 4</div>
+    <div id="radar" style="width:100%;height:380px;"></div>
+    <table class="plain">
+      <tr><th>组别</th><th>维度</th><th>回答的问题</th><th>数据在哪里找</th></tr>
+      <tr><td rowspan="3"><span class="tag-green">驱动引擎</span></td><td>① 存量产品收入结构</td><td>现在每年稳定赚多少？谁贡献大头？</td><td>年报"主营业务分产品"表</td></tr>
+      <tr><td>② 在研管线梯队</td><td>未来3-5年有什么新品种接力放量？</td><td>年报研发管线章节 / 公司公告</td></tr>
+      <tr><td>③ BD对外授权（License-out）</td><td>卖出去的海外权益什么时候到账多少？</td><td>BD公告里的首付款+里程碑条款拆解</td></tr>
+      <tr><td rowspan="4"><span class="tag-blue">约束校验</span></td><td>④ 集采与医保准入</td><td>降价压力多大？放量空间多大？</td><td>历次国家/省级集采中标结果、医保目录</td></tr>
+      <tr><td>⑤ 研发投入与费用化口径</td><td>每年烧多少研发费？资本化了多少？</td><td>利润表"研发费用"+"开发支出"科目</td></tr>
+      <tr><td>⑥ 现金流与在手订单</td><td>利润是不是真收到了钱？（CXO核心）</td><td>现金流量表 + 合同负债/存货指标</td></tr>
+      <tr><td>⑦ 政策与外部环境</td><td>反腐、支付改革、地缘政治的影响方向</td><td>卫健委/医保局文件、行业新闻</td></tr>
+    </table>
+    <div class="note"><b>用法：</b>给每家公司逐维打分（好=加分，差=扣分），加权合成一个"业绩确定性分数"。雷达图给出的是一个通用权重参考——研究CXO时把⑥⑦调高，研究创新药时把②③调高。</div>
+  </div>
+
+  <!-- ================= 三、七维详解 ================= -->
+  <div class="card">
+    <h2>三、七维详解：每个维度看什么、在哪看、如何判断好坏</h2>
+    <div class="sub">点击任意维度可对照上文雷达图 · 每个维度都给出"好的信号 / 危险信号"</div>
+    <div class="dims">
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">1</span><span class="dim-title">存量产品收入结构</span></div>
+        <div class="dim-q">关键问题：今天的利润从哪来？这些来源还稳吗？</div>
+        <div class="dim-body">
+          打开年报"分产品收入明细"，回答三个问题：<b>（a）最大单品占收入比多少？</b>超过30%要警惕单一依赖；<b>（b）第二、第三增长曲线是否已经成型？</b>比如泽布替尼之于百济，2025年全球销售额39.3亿美元（+49%）撑起了整个公司；<b>（c）各产品的增速梯度。</b>老品种个位数增长没关系，只要有+40%以上的新品种在补位。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>Top3单品占比逐步下降（更分散）、新增收入&gt;存量流失。<br><b>危险信号：</b>收入全靠1-2个面临集采的老品种，新品种迟迟不上量。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">2</span><span class="dim-title">在研管线梯队</span></div>
+        <div class="dim-q">关键问题：未来的第二曲线在哪里？能不能接上？</div>
+        <div class="dim-body">
+          医药特有的"期货属性"：今天买的其实是3年后的管线。重点数两个数字——<b>处于III期临床+已提交上市的品种数量</b>（大概率1-2年内变成真实收入），以及<b>II期品种有没有进入热门赛道</b>（ADC、GLP-1、双抗）。判断管线质量看三点：适应症市场空间、竞品数量（me-too太多没价值）、公司此前管线兑现的历史成功率。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>III期+上市申请品种≥3个且适应症互补。<br><b>危险信号：</b>"管线丰富"但全停在I期——离赚钱还有5年以上不确定性。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">3</span><span class="dim-title">BD对外授权与里程碑</span></div>
+        <div class="dim-q">关键问题：签了的协议，钱按什么节奏到账？</div>
+        <div class="dim-body">
+          License-out交易的合同金额≠利润。以百利天恒与BMS的84亿美元大单为例：其中<b>8亿美元首付款</b>签约即到账（可直接兑现为当期收入），其余76亿要靠<b>里程碑</b>（完成临床节点、获批上市等）逐年触发，实际兑现率和时间点都不确定。<b>实操要点：</b>把每家公司已签BD的首付款+已触发里程碑列一张"到账日历"，只有确定性到账的部分才能放进明年业绩预测。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>首付款体量大、对手方是全球头部MNC（如艾伯维、BMS）。<br><b>危险信号：</b>总额巨大但全部依赖远期里程碑、未披露首付款占比。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">4</span><span class="dim-title">集采与医保准入</span></div>
+        <div class="dim-q">关键问题：降价砍掉的利润 vs 进医保放量的收入，谁更大？</div>
+        <div class="dim-body">
+          这是A股医药独有的核心变量。<b>集采</b>是量价齐换：中标意味着单价可能腰斩（降幅常见50%-90%）但拿到全国公立医院份额；丢标则份额归零。<b>医保谈判</b>对创新药相对温和：降价换来进院资格、以价换量。判断方法：查目标公司每个主要品种的"集采状态"（已纳集采几轮/即将纳入/独家的暂缓）＋纳入医保后的销量爬坡数据。2025年以来的行业共识：集采出清后存量品种利空钝化，反而是创新药入医保后的放量开始主导业绩。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>主力品种已完成集采出清（基数低了）、新品正处医保放量初期。<br><b>危险信号：</b>核心利润品种今年刚被纳入集采、独家品种护城河是行政性的（随时可能被特殊审评破局）。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">5</span><span class="dim-title">研发投入与费用化口径</span></div>
+        <div class="dim-q">关键问题：烧钱的速度可控吗？账面利润有多少水分/隐藏？</div>
+        <div class="dim-body">
+          医药公司的净利率没法跟其他行业直接比，因为<b>研发费用全部当期扣除</b>。还要注意：A股允许符合条件的项目将开发支出<b>资本化</b>（不计入当期费用，以后年度摊销），费用化比例低的公司当年报表更好看，但把亏损推迟了。<b>实操：</b>① 看研发费用率（研发费用÷收入）：创新药企20%-35%正常；② 对比"资本化率"，突然升高要小心；③ 用「净利润 + 当期研发费用」还原成一个"研发前利润"再看趋势，更能看清盈利改善是真是假。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>收入增速＞研发费用增速（经营杠杆显现）、资本化率保持低位透明。<br><b>危险信号：</b>研发资本化率飙升 + 净利靠非经常项目撑起。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">6</span><span class="dim-title">现金流与在手订单</span></div>
+        <div class="dim-q">关键问题：报表利润是真金白银吗？明年的活儿排满了吗？</div>
+        <div class="dim-body">
+          两层检查：<b>（a）经营现金流 ÷ 净利润 ≥ 1</b> 为健康，说明利润都收到了钱（医药商业和器械尤需检查应收账款）；<b>（b）对CXO这类"订单驱动型"公司，在手订单就是未来收入的先行指标</b>——药明康德披露在手订单数百亿元，订单同比增速大致领先收入增速2-4个季度。辅助观察合同负债（客户预付款，越多越好）和存货中"在建项目"的变化。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>在手订单连续多季环比增加、大客户预付提升。<br><b>危险信号：</b>净利为正但经营现金流常年为负、应收账款暴增（可能是压货或回款恶化）。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">7</span><span class="dim-title">政策与外部环境</span></div>
+        <div class="dim-q">关键问题：有哪些公司层面无法控制、却足以改变行业格局的变量？</div>
+        <div class="dim-body">
+          A股医药的四大政策风向标：<b>① 医保控费节奏</b>（DRG/DIP按病种付费改变医生用药选择）；<b>② 创新药支持政策</b>（丙类目录、商保支付探索利好创新）；<b>③ 医疗反腐与设备更新</b>（压制短期入院、拉动设备采购）；<b>④ 地缘政治</b>（生物安全法案类立法扰动CXO海外订单，关税与FDA审评变化影响出海）。这些变量不可精确预测，但可以列为情景：把乐观/中性/悲观的政策假设代入模型，观察业绩区间而非单点。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>公司收入分散于多个市场/支付方，单一政策冲击敞口小。<br><b>危险信号：</b>CXO收入80%来自美国且无产能备份、主营高度依赖某省集采规则。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= 四、名词速查 ================= -->
+  <div class="card" id="glossary">
+    <h2>四、名词速查手册（按重要性排序）</h2>
+    <div class="sub">小白友好版 · 每条都有大白话类比 · 页内搜索 Ctrl+F 即查即用</div>
+    <dl>
+      <dt>▲ 收入与授权类</dt>
+      <dd><b>创新药</b>：拥有自主知识产权的新药，有专利保护期（约20年，从申请起算），保护期内可享受定价权。<span style="color:#64748b">类比：自己开的旗舰店。</span></dd>
+      <dd><b>仿制药</b>：原研药专利到期后复制的同类药，疗效相同但没有定价权，靠成本竞争。<span style="color:#64748b">类比：专利过期的平替款。</span></dd>
+      <dd><b>生物类似药</b>：模仿的生物大分子药（如抗体），因分子结构复杂无法100%复制，审批要求介于创新与仿制之间。</dd>
+      <dd><b>License-out（对外授权）</b>：把自家药物的海外开发/销售权卖给外国药企，换取现金。中国创新药近年最大的变现渠道。<b>License-in</b> 则相反（买入权益）。</dd>
+      <dd><b>BD（Business Development）</b>：商务拓展的简称，日常语境里特指公司间的资产交易（授权合作）行为。"双BD"指同时敲定两笔大的对外授权交易，如恒瑞2025年连签两单。</dd>
+      <dd><b>首付款（Upfront）</b>：签约时就到账的部分，确定性最高、通常一次性确认收入。<b>里程碑款（Milestone）</b>：达成约定事件（临床推进、获批上市、销售达标）后才支付的款项，有不确定性。<b>销售分成（Royalty）</b>：药物上市后按销售额提取固定比例提成，是长尾利润。</dd>
+      <dd><b>MNC</b>：跨国制药巨头（Multi-National Corporation），如辉瑞、默沙东、艾伯维、BMS。能否被MNC选中是对国产管线质量的背书。</dd>
+
+      <dt>▲ 研发与临床类</dt>
+      <dd><b>研发管线（Pipeline）</b>：公司在研的所有药物项目的集合。管线的宽度（数量）与深度（阶段）决定未来收入弹性。</dd>
+      <dd><b>临床试验分期</b>：<b>I期</b>（几十人，测安全性，成功率高约65%起始）→ <b>II期</b>（上百人，初步验证有效性）→ <b>III期</b>（数千人，确证性试验，花费最大）→ 提交上市申请（NDA/BLA）。III期及以后的品种兑现确定性显著更高，是管线打分的重点。</dd>
+      <dd><b>适应症</b>：药物获准治疗的疾病范围。同一药物可拓展多个适应症从而扩大市场（"适应症拓展"是创新药的第二增长曲线）。</dd>
+      <dd><b>靶点</b>：药物在人体内作用的"开关"（通常是某个蛋白）。同一个靶点上多家公司赛跑，跑得最快的是First-in-class，跟随者为Fast-follow / me-too（同质化严重则价值打折）。</dd>
+      <dd><b>ADC（抗体偶联药物）</b>："生物导弹"——抗体导航+细胞毒弹头，近年来全球最热赛道之一。荣昌的维迪西妥、百利的BL-B01D1都是ADC。</dd>
+      <dd><b>双抗（双特异性抗体）</b>：能同时抓住两个靶点的工程抗体，设计难度高于普通单抗。百利的BL-B01D1即为EGFR×HER3双抗ADC。</dd>
+      <dd><b>GLP-1</b>：减肥/降糖神药赛道（司美格鲁肽所属类别），全球市场规模可达千亿美元级，布局该靶点的药企易受资金追捧。</dd>
+      <dd><b>PoC / RFS 等里程碑术语</b>：PoC＝概念验证（Proof of Concept）；交易公告常见"HRS-AI"式内部代号＝公司自主AI平台产出的候选分子（如恒瑞HRS系列）。</dd>
+
+      <dt>▲ CXO专属</dt>
+      <dd><b>CXO</b>：医药外包服务统称，含 <b>CRO</b>（研发外包，替药企做临床试验等）与 <b>CDMO</b>（生产外包，替药企代工生产）。<span style="color:#64748b">类比：淘金热里卖铲子和开冶炼厂的。</span></dd>
+      <dd><b>TIDES（多肽业务）</b>：药明康德披露的分部，主攻多肽类药物（如减肥针原料）的CDMO代工，2025年收入113.7亿元（+96%），是当前CXO最强增长极。</dd>
+      <dd><b>在手订单（Backlog）</b>：已签约尚未履行的合同总额，是预测CXO未来收入的先行指标，领先报表收入约2-4个季度。</dd>
+
+      <dt>▲ 政策与支付类</dt>
+      <dd><b>集采（带量采购）</b>：国家以"承诺采购量"换"大幅降价"的模式，主要针对过评仿制药和高值耗材，中标者以价换量、丢标者出局。是过去几年压制药企利润的最大变量。</dd>
+      <dd><b>医保谈判（国谈）</b>：每年一次，创新药降价换进国家医保目录，随后在医院快速放量。"以价换量"对独家创新药整体偏正面。</dd>
+      <dd><b>DRG/DIP</b>：住院按病种打包付费的支付改革，倒逼医院控制用药成本，相对利好性价比高的国产品种、压缩进口高价药空间。</dd>
+      <dd><b>OTC / 处方药</b>：OTC非处方药可在药店自行购买（中药消费龙头主战场）；处方药必须凭医生处方，走医院渠道为主。</dd>
+
+      <dt>▲ 财报科目类</dt>
+      <dd><b>归母净利润</b>：归属于母公司股东的净利润，看药企业绩默认看这个口径（扣除非经常性损益后叫"扣非净利润"，更能反映主业）。</dd>
+      <dd><b>毛利率 / 净利率</b>：毛利率=毛利÷收入（创新药普遍80%-95%，流通商仅5%-8%）；净利率=净利润÷收入。药企之间先比毛利结构再比净利才有意义。</dd>
+      <dd><b>研发费用化 vs 资本化</b>：研究阶段支出全部计入当期费用（费用化）；符合条件的项目性支出可记为无形资产逐年摊销（资本化）。资本化率高=当期利润更好看但压力后移。</dd>
+      <dd><b>经营现金流（OCF）</b>：经营活动实际收到/支出的现金净额。OCF/净利润≥1 说明利润含金量高，是识别"纸面利润"的核心指标。</dd>
+      <dd><b>里程碑确认收入</b>：会计上，BD交易的里程碑款项在"很可能收到"时才确认收入，因此BD兑现节奏直接影响季度间利润波动——这也是创新药企业绩"暴增暴跌"的技术原因之一。</dd>
+    </dl>
+  </div>
+
+  <!-- ================= 五、实战演示 ================= -->
+  <div class="card">
+    <h2>五、实战演示：用七维框架快速体检一家公司（以恒瑞医药为例）</h2>
+    <div class="sub">演示目的在于展示框架用法，数值为公开资料估算*，完整测算见后续专题页</div>
+    <table class="plain">
+      <tr><th>维度</th><th>恒瑞医药（600276）现状速览</th><th>评分</th></tr>
+      <tr><td>① 存量产品</td><td>2025年创新药收入约163亿元*、占比58%（首超仿制药），麻醉/肿瘤/造影剂线基本盘稳固</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>② 管线梯队</td><td>国内创新药管线厚度第一梯队，数十个进入后期阶段；自有AI平台HRS-AI持续产出候选分子</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>③ BD授权</td><td>2025年连签两笔对外授权（合计277亿美元总额级别），首付款已到账、里程碑分多年兑现</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>④ 集采/医保</td><td>存量仿制药基本完成集采出清，利空钝化；创新药国谈放量中</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>⑤ 研发费用</td><td>年研发投入约70亿元量级*，全额费用化为主，口径保守可信</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>⑥ 现金流</td><td>经营现金流长期健康，OCF/净利≈1；无重大商誉</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>⑦ 政策环境</td><td>创新药全产业链支持政策受益方；出海主打自主品牌，地缘暴露低于CXO</td><td><span class="tag-blue">中性偏正面</span></td></tr>
+    </table>
+    <div class="note"><b>把这个例子变出预测：</b>基准盘（163亿创新药×~15%年增速 + 仿制药持平）→ 加BD到账日历（首付款年份记账+里程碑按披露时点打折计入）→ 加管线期权（III期品种按获批成功率×峰值销售折现留出一档上行空间）→ 减集采残余影响。得到2028E净利约122.5亿元的区间估计（此前《A股药企2028业绩预测》专题已用同一路径做过详细测算）。</div>
+  </div>
+
+  <!-- ================= 六、常见陷阱 ================= -->
+  <div class="card">
+    <h2>六、小白最容易犯的六个错误</h2>
+    <div class="sub">每一个都是真实投资人反复踩过的坑</div>
+    <table class="plain">
+      <tr><th>#</th><th>错误做法</th><th>正确姿势</th></tr>
+      <tr class="hl"><td>1</td><td>看到"XX亿美元大单"就直接算进市值/利润</td><td>只认首付款+已触发里程碑，远期款项当期权而非收入</td></tr>
+      <tr><td>2</td><td>拿管线里所有项目当作"都会成功"</td><td>按临床阶段打折：III期~60%、II期~30%、I期~10%（经验值），乘起来再看剩余价值</td></tr>
+      <tr><td>3</td><td>比较市盈率时不区分商业模式</td><td>创新药看PS/管线价值，CXO看订单和PE，流通商看PB和ROE——错池子的比较毫无意义</td></tr>
+      <tr><td>4</td><td>认为集采落地=利空出尽万事大吉</td><td>还要看续约轮次降价、竞品进院分食，"出清"后仍需跟踪份额变化</td></tr>
+      <tr><td>5</td><td>只看净利润增速、不看现金流验证</td><td>OCF/净利连续&lt;1的公司，利润质量问题往往提前1-2年在现金流量表露出马脚</td></tr>
+      <tr><td>6</td><td>忽视研发资本化的会计自由裁量</td><td>横向对比先还原口径：统一加上研发费用再比较"研发前利润"增速</td></tr>
+    </table>
+    <div class="note"><b>最后提醒：</b>本框架用于理解与筛选，不构成投资建议。医药行业监管信息更新频繁（尤其是医保谈判每年一度），使用前请以公司最新公告为准。</div>
+  </div>
+
+  <div class="src">
+    <b>数据与资料来源：</b>① 各公司2025年年报、2026年中报及业绩预告（标注*为估算值）；② 国家医保局、国家药监局公开文件；③ 此前专题：<a href="china-pharma-profit.html">中国医药生物利润格局分析</a>、《A股药企2028年底业绩预测》（深研测算，含三因子模型）；④ 本页框架综合券商医药行业研究方法整理。
+  </div>
+</div>
+
+<script>
+  // 七维雷达图（驱动引擎 vs 约束校验）
+  const radarChart = echarts.init(document.getElementById('radar'));
+  radarChart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {},
+    legend: { bottom: 0, textStyle: { color: '#94a3b8', fontSize: 12 }, itemWidth: 14 },
+    radar: {
+      indicator: [
+        { name: '① 存量产品', max: 10 }, { name: '② 管线梯队', max: 10 },
+        { name: '③ BD授权', max: 10 }, { name: '④ 集采/医保', max: 10 },
+        { name: '⑤ 研发投入', max: 10 }, { name: '⑥ 现金流/订单', max: 10 },
+        { name: '⑦ 政策环境', max: 10 }
+      ],
+      radius: '62%',
+      splitNumber: 4,
+      axisName: { color: '#cbd5e1', fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+      splitArea: { areaStyle: { color: ['rgba(255,255,255,0.02)','rgba(255,255,255,0.04)'] } },
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          name: '创新药企参考权重',
+          value: [7, 9.5, 9, 6.5, 7, 5, 6],
+          lineStyle: { color: '#34d399', width: 2 },
+          itemStyle: { color: '#34d399' },
+          areaStyle: { color: 'rgba(52,211,153,0.18)' }
+        },
+        {
+          name: 'CXO公司参考权重',
+          value: [6, 3, 4, 3, 4, 9.5, 9],
+          lineStyle: { color: '#38bdf8', width: 2 },
+          itemStyle: { color: '#38bdf8' },
+          areaStyle: { color: 'rgba(56,189,248,0.15)' }
+        }
+      ]
+    }]
+  });
+  window.addEventListener('resize', () => radarChart.resize());
+</script>
+
+</body>
+</html>
