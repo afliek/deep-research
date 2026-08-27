@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有色金属行业业绩预测分析框架 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --bg-card:rgba(18,24,38,0.7); --text-primary:#e2e8f0; --text-secondary:#94a3b8; --text-muted:#64748b; --accent:#d97706; --accent-2:#fbbf24; --border:rgba(255,255,255,0.08); --radius:14px; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; background:linear-gradient(135deg,#0a0e1a 0%,#141a2e 100%); color:var(--text-primary); min-height:100vh; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.8); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text-primary); text-decoration:none; font-size:17px; font-weight:700; letter-spacing:1px; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; box-shadow:0 0 12px var(--accent); }
+  .nav-back { color:var(--text-secondary); text-decoration:none; font-size:13px; display:flex; align-items:center; gap:6px; transition:color .2s; }
+  .nav-back:hover { color:var(--accent-2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:26px; color:#f1f5f9; margin-bottom:6px; }
+  .meta { color:var(--text-muted); font-size:13px; margin-bottom:24px; line-height:1.7; }
+  .meta a { color:var(--accent-2); text-decoration:none; }
+  .tl-dr { background:var(--bg-card); border:1px solid var(--border); border-left:5px solid var(--accent); border-radius:var(--radius); padding:18px 22px; margin-bottom:24px; }
+  .tl-dr h2 { font-size:15px; color:var(--accent-2); margin-bottom:10px; }
+  .tl-dr ul { list-style:none; }
+  .tl-dr li { font-size:14px; line-height:1.9; padding-left:18px; position:relative; color:var(--text-secondary); }
+  .tl-dr li::before { content:"▸"; position:absolute; left:0; color:var(--accent); }
+  .tl-dr b { color:#f1f5f9; }
+  .kpis { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+  .kpi { flex:1; min-width:220px; background:var(--bg-card); border-radius:var(--radius); padding:18px 20px; border:1px solid var(--border); }
+  .kpi .num { font-size:24px; font-weight:700; color:var(--accent-2); }
+  .kpi .num small { font-size:14px; color:var(--text-muted); font-weight:400; }
+  .kpi .label { font-size:13px; color:var(--text-secondary); margin-top:6px; line-height:1.5; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; margin-bottom:24px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:4px; }
+  .card .sub { font-size:12px; color:var(--text-muted); margin-bottom:14px; }
+  .note { font-size:12px; color:var(--text-secondary); line-height:1.8; margin-top:12px; background:rgba(255,255,255,0.03); border-radius:6px; padding:10px 14px; }
+  .note b { color:#cbd5e1; }
+  .src { font-size:12px; color:var(--text-muted); margin-top:10px; line-height:1.9; }
+  .src a { color:var(--accent-2); text-decoration:none; }
+  table.plain { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+  table.plain th { background:#1e293b; color:#e2e8f0; padding:10px 12px; text-align:left; font-weight:600; }
+  table.plain td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:top; line-height:1.7; }
+  table.plain tr:hover td { background:rgba(255,255,255,0.04); }
+  .hl td { color:#f1f5f9; }
+  .tag-green { display:inline-block; background:rgba(22,163,74,0.15); color:#4ade80; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-red { display:inline-block; background:rgba(220,38,38,0.15); color:#f87171; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-amber { display:inline-block; background:rgba(217,119,6,0.18); color:#fbbf24; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .tag-blue { display:inline-block; background:rgba(14,165,233,0.15); color:#38bdf8; border-radius:4px; padding:2px 8px; font-size:12px; font-weight:600; white-space:nowrap; }
+  .dims { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:16px; margin-top:8px; }
+  .dim { background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+  .dim-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .dim-num { width:26px; height:26px; border-radius:50%; background:rgba(217,119,6,0.28); color:var(--accent-2); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .dim-title { font-size:15px; font-weight:700; color:#f1f5f9; }
+  .dim-q { font-size:13px; color:var(--accent-2); margin-bottom:8px; line-height:1.6; }
+  .dim-body { font-size:13px; color:var(--text-secondary); line-height:1.85; }
+  .dim-body b { color:#cbd5e1; }
+  .dim-watch { margin-top:10px; font-size:12px; color:var(--text-muted); line-height:1.7; border-top:1px dashed var(--border); padding-top:8px; }
+  .dim-watch b { color:var(--accent-2); }
+  dt { font-size:13.5px; font-weight:700; color:#f1f5f9; margin-top:14px; }
+  dd { font-size:13px; color:var(--text-secondary); line-height:1.8; margin:4px 0 0 18px; }
+  dd b { color:var(--accent-2); }
+  .formula { background:rgba(217,119,6,0.08); border:1px solid rgba(217,119,6,0.3); border-radius:8px; padding:14px 18px; font-size:14px; color:#e9dcc0; line-height:2; margin:12px 0; font-family:Consolas,monospace; }
+  .formula b { color:var(--accent-2); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="nonferrous-profit.html" class="nav-back">← 返回 有色金属利润格局分析</a>
+</nav>
+
+<div class="wrap">
+  <h1>有色金属行业业绩预测分析框架</h1>
+  <div class="meta">写给行业分析小白的使用手册 · 口径：A股有色金属上市公司（申万一级：工业金属/贵金属/能源金属/小金属/金属新材料） · 配套页：<a href="nonferrous-profit.html">利润格局分析</a> · <a href="a-share-nonferrous-48.html">48家双情景测算</a> · 编制日期 2026年8月27日 · 专业名词首次出现均加粗，可在此页「名词速查」区集中查阅</div>
+
+  <div class="tl-dr">
+    <h2>核心结论（TL;DR）</h2>
+    <ul>
+      <li><b>一句话框架：</b>有企业绩 = <b>（金属价格 − 成本）× 产量</b>，再叠加<b>扩张项目投产进度</b>与<b>减值/套保扰动</b>。它是最"物理"的行业——利润几乎完全由量价成本三要素决定，没有医药那么复杂的管线期权。</li>
+      <li><b>八个预测维度：</b>① 金属价格判断（量价利的第一因子）；② 矿产产量与产能释放节奏；③ 成本曲线位置；④ 资源储量与增储前景；⑤ 扩产项目投产时间表；⑥ 减值、套保与一次性损益；⑦ 产业链位置（矿端/冶炼/加工）；⑧ 宏观与政策环境。</li>
+      <li><b>与医药框架的本质区别：</b>医药看"研发管线的概率"，有色看"商品价格的周期"。有企业绩的波动核心是<b>价格弹性</b>——金价涨1倍，纯金矿公司的利润可以涨3-5倍（经营杠杆放大），这在医药行业不存在。</li>
+      <li><b>实操三步法：</b>先从年报"分产品收入表"算出<b>业务结构</b>（铜/金/锂各占多少）→ 再用"（价格−成本）×产量"分别测算各业务的利润弹性 → 最后叠加扩产项目投产时间表做未来三年的量的预测。</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">8 个</div><div class="label">核心预测维度<br>价格→量→成本→项目→扰动</div></div>
+    <div class="kpi"><div class="num">5 类</div><div class="label">子板块商业模式<br>工业/贵金属/能源/小金属/新材料</div></div>
+    <div class="kpi"><div class="num">40+</div><div class="label">专业名词速查解释<br>按重要性排序、附大白话类比</div></div>
+    <div class="kpi"><div class="num">3 步</div><div class="label">小白实操路径<br>结构→弹性→时间表</div></div>
+  </div>
+
+  <!-- ================= 一、先分清子板块 ================= -->
+  <div class="card">
+    <h2>一、动手前先分清：这家公司挖的是什么矿？</h2>
+    <div class="sub">申万口径下有色金属分五个子板块，商业模式差异极大——最容易被小白混淆的是"有矿的"和"加工的"</div>
+    <table class="plain">
+      <tr><th>子板块</th><th>典型A股公司</th><th>赚钱逻辑（一句话）</th><th>预测业绩最该看的维度</th></tr>
+      <tr class="hl"><td><b>贵金属（金/银）</b></td><td>紫金矿业*、山东黄金、赤峰黄金、中金黄金</td><td>挖金矿石提炼出售，利润≈（金价−开采成本）×产量，金价弹性极大</td><td>①金价 + ②矿产金产量 + ③成本</td></tr>
+      <tr><td><b>工业金属（铜/铝/锌/铅）</b></td><td>紫金矿业、洛阳钼业、江西铜业、云铝股份</td><td>铜跟随全球电气化与AI算力需求，铝叠加国内产能天花板逻辑</td><td>①铜铝价 + 全球供需 + ⑦矿/冶炼位置</td></tr>
+      <tr><td><b>能源金属（锂/钴/镍）</b></td><td>天齐锂业、赣锋锂业、华友钴业</td><td>新能源电池原料，强周期+高波动，2022顶→2024深亏→2025出清回升</td><td>①锂价周期位置 + ⑥低价库存减值</td></tr>
+      <tr><td><b>小金属（钨/钼/锡/锑/稀土）</b></td><td>北方稀土、厦门钨业、湖南黄金(锑)</td><td>体量小但战略属性强，供给受限时价格弹性惊人（如锑）</td><td>①价格 + ⑧出口管制/收储政策</td></tr>
+      <tr><td><b>金属新材料/加工</b></td><td>宝钛股份、博威合金、铂科新材</td><td>不靠矿，靠把金属加工成高附加值材料赚加工费——<b>看的是订单不是价格</b></td><td>下游订单 + 毛利率稳定（更像制造业）</td></tr>
+    </table>
+    <div class="note"><b>*注：</b>紫金矿业是铜金双轮驱动，跨贵金属与工业金属两栏。<br><b>为什么这张表最重要：</b>小白最大的误区是把"江西铜业"当"铜矿股"——它实际上大部分收入是冶炼费赚加工钱的，铜价涨它赚得远比纯矿企少。先看清楚公司处在产业链哪一环，再看维度。</div>
+  </div>
+
+  <!-- ================= 二、八维框架总览 ================= -->
+  <div class="card">
+    <h2>二、八维预测框架总览</h2>
+    <div class="sub">前四个维度决定利润的大小与弹性（乘法关系），后四个维度决定利润的节奏与真实性</div>
+    <div class="formula">
+      未来业绩 ≈ Σ <b>[ ( 金属价格<sub>①</sub> − 单位成本<sub>③</sub> ) × 矿产产量<sub>②</sub> ]</b><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + 新项目投产贡献<sub>⑤</sub> − 减值与一次性损益<sub>⑥</sub>
+    </div>
+    <table class="plain">
+      <tr><th>组别</th><th>维度</th><th>回答的问题</th><th>数据在哪里找</th></tr>
+      <tr><td rowspan="4"><span class="tag-amber">利润引擎</span></td><td>① 金属价格判断</td><td>铜/金/锂未来一两年往哪走？涨跌幅多少？</td><td>机构供需平衡表、LME/SHFE价格、美联储与美元周期</td></tr>
+      <tr><td>② 矿产产量与释放节奏</td><td>公司自己挖多少矿？自产矿占比多少？</td><td>年报"经营情况讨论"中的产量表、季度经营公告</td></tr>
+      <tr><td>③ 成本曲线位置</td><td>一吨矿采出来成本多少？在全行业排第几？</td><td>年报披露的单位销售成本/C1成本、券商成本曲线图</td></tr>
+      <tr><td>④ 资源储量与增储前景</td><td>矿还能挖多少年？有没有新探明资源？</td><td>年报资源储量章节（权益储量）、并购公告</td></tr>
+      <tr><td rowspan="4"><span class="tag-blue">节奏校验</span></td><td>⑤ 扩产项目投产时间表</td><td>哪些新矿/冶炼产线什么时候投产？爬坡多快？</td><td>公司公告的项目进度表、券商深度报告项目梳理</td></tr>
+      <tr><td>⑥ 减值、套保与一次性损益</td><td>低价库存跌价、期货套保浮亏会不会吃掉利润？</td><td>资产减值损失科目、公允价值变动、衍生品明细</td></tr>
+      <tr><td>⑦ 产业链位置</td><td>赚的是矿的钱、冶炼的钱还是加工的钱？</td><td>分产品毛利率结构（矿山毛利80%+ vs 冶炼毛利3-5%）</td></tr>
+      <tr><td>⑧ 宏观与政策环境</td><td>美元/利率、出口管制、产能天花板的影响方向</td><td>美联储议息、国内电解铝产能红线、出口管制清单</td></tr>
+    </table>
+    <div class="note"><b>用法：</b>给每家公司逐维打分加权合成"业绩确定性分数"。研究金矿股把①③调高，研究锂企把①⑥调高，研究加工材企业把下游订单调高（价格维度权重调低）。</div>
+  </div>
+
+  <!-- ================= 三、八维详解 ================= -->
+  <div class="card">
+    <h2>三、八维详解：每个维度看什么、在哪看、如何判断好坏</h2>
+    <div class="sub">每个维度都给出"好的信号 / 危险信号"，配公司实例</div>
+    <div class="dims">
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">1</span><span class="dim-title">金属价格判断</span></div>
+        <div class="dim-q">关键问题：这个矿挖出来的东西，未来一两年会更贵还是更便宜？</div>
+        <div class="dim-body">
+          有企业绩第一因子，占预测工作量的60%。三种分析流派：<b>（a）宏观派</b>——金看美元与实际利率（美元弱则金强）、铜看全球制造业周期与中国电网投资；<b>（b）供需派</b>——看机构供需平衡表（如铜2025-2027年矿端缺口持续），供给矿山品位下滑+新矿稀缺是长期逻辑；<b>（c）事件派</b>——出口管制（锑、镓）、矿山罢工、资源国政策扰动。散户实用做法：跟踪各大券商年度策略的<b>价格中枢预测</b>，取平均做基准情景，±20%做乐观/悲观情景。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>供需平衡表连续3年短缺、矿端资本开支不足（未来供给少）。<br><b>危险信号：</b>价格已涨至历史90%分位以上、下游开始减产对抗高价。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">2</span><span class="dim-title">矿产产量与自产率</span></div>
+        <div class="dim-q">关键问题：利润表里有多少是"自己挖的矿"贡献的？</div>
+        <div class="dim-body">
+          必须区分<b>矿产产量</b>（自己挖矿，吃价格弹性）与<b>冶炼/加工量</b>（代工赚加工费，不吃价格弹性）。紫金矿业2025年矿产铜108.5万吨、矿产金90吨——这些"矿产"开头的数字才是利润引擎；江西铜业收入三千亿但矿端自产铜只有二十来万吨。<b>实操：</b>年报"主要产品产量表"逐项抄下来，标出哪些是矿产、哪些是冶炼；未来产量预测看公司自己的"三年产量规划公告"（矿企一般会披露），打折80%更稳妥。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>矿产产量年增10%+、自产矿占收入比例上升。<br><b>危险信号：</b>产量停滞、靠冶炼规模撑收入（增收不增利）。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">3</span><span class="dim-title">成本曲线位置</span></div>
+        <div class="dim-q">关键问题：同样的价格，谁的利润厚？</div>
+        <div class="dim-body">
+          矿业是"同品竞争"——大家卖一样的金属，<b>成本低者恒强</b>。关键指标是<b>单位销售成本</b>（元/克金、元/吨铜）与<b>C1成本</b>（现金成本，行业比较通用口径）。看两个数：①公司自身成本变化趋势——地下矿转露天、品位下降、人工通胀都在推高成本；②公司在全球<b>成本曲线</b>上的分位——90分位成本决定了"价格底"：价格跌到90分位时，最差的10%矿山亏损停产，价格获得支撑。<b>量化弹性示例：</b>金价600元/克、某矿完全成本300元/克，金价涨20%到720元，单克利润从300涨到420——<b>利润涨40%，弹性是价格的2倍</b>（这就是杠杆公式：放大倍数=1+价格涨幅×价格/(价-本)的关系，直觉理解为"利润基数小所以翻倍快"）。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>单位成本持平或下降（新矿品位高、规模化）、成本处全球前1/4分位。<br><b>危险信号：</b>成本逐年爬升（老矿品位下降）、高价收购的低品位矿拖累。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">4</span><span class="dim-title">资源储量与增储前景</span></div>
+        <div class="dim-q">关键问题：这是门能做多少年的生意？</div>
+        <div class="dim-body">
+          矿是会挖完的。看<b>权益储量</b>（注意"权益"二字——参股矿山的储量按持股比例折算）与<b>储采比</b>（储量÷年产量=还能挖多少年，一般&gt;20年算资源雄厚）。但比静态储量更重要的是<b>增储能力</b>：紫金过去十年储量产量双增靠的是持续并购（卡莫阿铜矿、Timok铜金矿等世界级项目）。对小白，看公司"资源储量"章节的三年变化趋势即可：储量在涨的公司才有长期产量故事。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>储采比&gt;20年且持续通过勘探/并购增储。<br><b>危险信号：</b>储采比&lt;10年、资本开支全部用于维持现有产量。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">5</span><span class="dim-title">扩产项目投产时间表</span></div>
+        <div class="dim-q">关键问题：明后年的"量增"从哪里来、什么时候来？</div>
+        <div class="dim-body">
+          有色行业"未来业绩"最确定的部分是<b>在建项目的投产节奏</b>——不像药企管线有成败概率，矿建好了就会出矿。要收集的信息：项目名称、设计产能、投产/达产时间、权益比例。<b>注意两个坑：</b>①<b>投产≠达产</b>——投产后通常要1-2年爬坡到设计产能，预测时按爬坡曲线（首年50%、次年80%、第三年满产）折算；②<b>权益比例</b>——持股51%的项目利润只有51%并表。海外项目还要关注所在国政策（税收、出口、国有化风险）。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>未来2年有多个大项目接力投产、爬坡进度符合公告指引。<br><b>危险信号：</b>项目一再延期（尤其海外项目）、达产后成本显著高于预期。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">6</span><span class="dim-title">减值、套保与一次性损益</span></div>
+        <div class="dim-q">关键问题：账面利润里有多少"噪音"，会不会突然暴雷？</div>
+        <div class="dim-body">
+          有色公司利润表的三颗雷：<b>（a）存货跌价减值</b>——锂价暴跌时，锂盐厂高价囤的锂精矿要计提跌价（天齐锂业2024年巨亏主因之一）；<b>（b）套保浮亏</b>——公司在期货市场做空套保锁价，价格暴涨时套保端亏损会抵消现货利润；<b>（c）商誉与资产减值</b>——高价并购的矿山在价格下行期计提减值。<b>实操：</b>对比"扣非净利润"与"归母净利润"差异，差异大的年份翻公告找原因；看存货余额与原材料价格走势的背离。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>扣非与归母差异小、减值计提充分（洗澡后轻装上阵）。<br><b>危险信号：</b>存货随价格下跌而增加、多年未计提减值的老矿企。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">7</span><span class="dim-title">产业链位置（矿/冶炼/加工）</span></div>
+        <div class="dim-q">关键问题：这家公司吃的哪一段利润？</div>
+        <div class="dim-body">
+          同一条产业链三种生意：①<b>矿山</b>——毛利率70-90%，吃价格弹性，周期股本色；②<b>冶炼</b>——赚<b>加工费（TC/RC）</b>，铜冶炼费近年因矿端紧张被压到历史低位，铜价再涨冶炼厂也难受益，毛利率仅3-5%；③<b>加工材</b>——把金属做成板材/箔材/合金，赚加工费+技术溢价，毛利率稳定，估值更像制造业（如铜箔、铝箔、钛材）。<b>快速鉴别：</b>看分产品毛利率——毛利率与金属价格高度同步的是矿，毛利率常年个位数稳定的是冶炼，毛利率30%+且稳定的是高端加工。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>矿端自给率高、或加工端有独特技术壁垒（高端钛材/高温合金）。<br><b>危险信号：</b>纯冶炼企业遇上加工费下行周期（收入涨利润不涨）。</div>
+      </div>
+
+      <div class="dim">
+        <div class="dim-head"><span class="dim-num">8</span><span class="dim-title">宏观与政策环境</span></div>
+        <div class="dim-q">关键问题：有哪些"天上的变量"会改变整个行业的剧本？</div>
+        <div class="dim-body">
+          四大宏观变量：<b>①美元与利率</b>——美元弱+降息周期利好金银铜（以美元计价）；<b>②中国需求</b>——全球铜铝一半以上需求在中国，电网投资、地产链、新能源车决定边际增量；<b>③供给端政策</b>——国内电解铝4500万吨产能天花板（供给锁死→利润率抬升）、小金属出口管制（锑/镓/锗管制后价格暴涨）；<b>④资源国政治</b>——智利铜矿国有化、非洲矿业税、印尼镍出口政策。这些变量不能精确预测，但必须写进情景分析：同样的公司，在"美元走弱+中国电网加码"情景与"美元走强+地产下滑"情景下的业绩可以差一倍。
+        </div>
+        <div class="dim-watch"><b>好信号：</b>资源分布多国、业务同时受益于新能源与电网两大趋势。<br><b>危险信号：</b>单一矿山占比过高（地缘黑天鹅一击致命）、全押注单一价格情景。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= 四、名词速查 ================= -->
+  <div class="card" id="glossary">
+    <h2>四、名词速查手册（按重要性排序）</h2>
+    <div class="sub">小白友好版 · 每条都有大白话类比 · 页内搜索 Ctrl+F 即查即用</div>
+    <dl>
+      <dt>▲ 量价成本核心类</dt>
+      <dd><b>矿产产量（自产矿）</b>：公司自己矿山采出的金属量（吨/万吨）。有企业绩的"量"只算这个——外购矿再冶炼不算。紫金"矿产铜/矿产金"即此口径。<span style="color:#64748b">类比：自己家母鸡下的蛋。</span></dd>
+      <dd><b>选矿/冶炼</b>：把矿石加工成纯金属的过程。冶炼厂赚<b>加工费</b>，不赚金属涨价的钱。<span style="color:#64748b">类比：把别人家的麦子磨成面粉，赚磨面钱。</span></dd>
+      <dd><b>TC/RC（粗炼/精炼费）</b>：冶炼厂处理铜精矿收取的加工费（美元/吨）。矿少冶炼厂多时TC被压低——2025年铜TC跌至负值区间，冶炼厂普遍亏损。</dd>
+      <dd><b>单位销售成本 / C1成本</b>：每生产一吨（或一克）金属的经营现金成本。跨公司比较盈利能力用。C1＝采矿+选矿+管理现金成本，不含折旧。</dd>
+      <dd><b>成本曲线（Cost Curve）</b>：把全行业所有矿山的成本从低到高排成的曲线。价格跌破某矿山成本→它停产→供给收缩→价格获支撑。<b>90分位成本</b>常被视为长期价格底。</dd>
+      <dd><b>品位（Grade）</b>：矿石里含金属的比例（如铜矿0.5%品位=每吨矿石含5公斤铜）。品位越高越好采越赚钱；老矿山品位逐年下降→成本上升。</dd>
+      <dd><b>储采比（R/P）</b>：剩余储量÷年产量=按当前速度还能挖几年。&gt;20年资源雄厚，&lt;10年面临枯竭。</dd>
+      <dd><b>权益储量 / 权益产量</b>：按持股比例折算后的储量产量。持股51%的矿山，100万吨储量只算51万吨。"权益"口径才能反映真实归属。</dd>
+
+      <dt>▲ 项目与扩张类</dt>
+      <dd><b>投产 / 达产 / 爬坡</b>：投产=开始出矿；达产=达到设计产能；中间的逐步提升过程叫爬坡（通常1-2年：首年50%→次年80%→满产）。预测产量必须按爬坡折算。</dd>
+      <dd><b>绿地/褐地项目</b>：绿地=从零新建矿山（风险高周期长，5-10年）；褐地=现有矿山旁扩建（风险低见效快）。褐地项目兑现确定性更高。</dd>
+      <dd><b>JORC / NI 43-101</b>：澳洲/加拿大的矿产资源储量披露标准。海外并购项目的储量数据要认准这些标准认证，否则数字可能注水。</dd>
+
+      <dt>▲ 价格与市场类</dt>
+      <dd><b>LME / SHFE / COMEX</b>：伦敦金属交易所/上海期货交易所/纽约商品交易所——全球与国内金属定价中心。LME铜价是全球铜价基准。</dd>
+      <dd><b>内外价差 / 沪伦比</b>：国内价格÷国际价格的比值，反映进出口窗口与国内供需强弱。</dd>
+      <dd><b>价格分位数</b>：当前价格处于过去N年（通常10年）价格区间的百分位。90%分位=比过去十年90%的时间都贵——警惕但未必见顶。</dd>
+      <dd><b>Back / Contango（升水/贴水结构）</b>：期货近月合约比远月贵=Back（现货紧张信号）；反之为Contango（宽松信号）。看结构比看单日价格更能反映供需。</dd>
+      <dd><b>实际利率</b>：名义利率−通胀预期。实际利率下行→持有黄金的机会成本下降→金价涨。这是金价预测第一公式。</dd>
+
+      <dt>▲ 财报与交易类</dt>
+      <dd><b>归母净利润 / 扣非净利润</b>：归属母公司股东的净利润 / 剔除一次性损益后的净利润。有色公司两者差异常来自减值与套保，看趋势优先用扣非。</dd>
+      <dd><b>套期保值（套保/Hedge）</b>：在期货市场反向开仓锁定未来售价，防价格下跌。副作用：价格暴涨时套保端亏损、少赚涨价的钱。有些金矿公司因"不套保"在金价上行期利润弹性反而更大。</dd>
+      <dd><b>资产减值</b>：存货跌价、矿山资产贬值时在利润表中计提的损失。价格下行周期的"利润杀手"，但一次性计提后反而轻装上阵（市场称"洗澡"）。</dd>
+      <dd><b>经营杠杆（价格弹性）</b>：利润变动幅度÷价格变动幅度的倍数。因成本相对固定，价格涨20%利润可涨40-60%——弹性大小取决于"价−本"的利差基数。利差越薄弹性越大。</dd>
+      <dd><b>PE（市盈率）/ 周期股PE陷阱</b>：股价÷每股利润。周期股在利润巅峰时PE最低，看似便宜实则是卖点；利润谷底时PE最高，看似贵实则是买点——<b>周期股要用"周期平均利润"或PB看估值</b>。</dd>
+      <dd><b>PB（市净率）</b>：股价÷每股净资产。矿业公司资产主要是矿山，PB是周期股更可靠的估值锚。</dd>
+
+      <dt>▲ 宏观与政策类</dt>
+      <dd><b>美联储 / 美元指数</b>：美国央行/美元对一篮子货币的强弱指数。降息+弱美元=金银铜的顺风环境。</dd>
+      <dd><b>央行购金</b>：各国央行增持黄金储备。2022年起全球央行年购金超1000吨，是本轮金价牛市的核心买盘。</dd>
+      <dd><b>电解铝产能天花板</b>：国内电解铝产能红线约4500万吨，已接近封顶——供给锁死+需求增长=行业利润率中枢抬升，是铝板块的长期逻辑。</dd>
+      <dd><b>出口管制</b>：对战略金属限制出口（锑/镓/锗2024-2025年管制后国际价格暴涨）。持有被管制品种的公司直接受益。</dd>
+      <dd><b>资源民族主义</b>：资源国政府提高矿业税、强令国有化、限制原矿出口（如印尼镍矿禁止出口倒逼本土建厂）。海外矿占比高的公司必须评估此风险。</dd>
+    </dl>
+  </div>
+
+  <!-- ================= 五、实战演示 ================= -->
+  <div class="card">
+    <h2>五、实战演示：用八维框架快速体检一家公司（以紫金矿业为例）</h2>
+    <div class="sub">演示框架用法 · 数值为公开资料整理*，完整测算见 <a href="a-share-nonferrous-48.html" style="color:var(--accent-2)">48家双情景测算</a></div>
+    <table class="plain">
+      <tr><th>维度</th><th>紫金矿业（601899）现状速览</th><th>评分</th></tr>
+      <tr><td>① 金属价格</td><td>铜金双轮：2025-2026年金价新高+铜供需缺口扩大，双价格周期共振上行</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>② 产量与自产率</td><td>2025年矿产铜108.5万吨（全球前四）、矿产金90吨（全球前六），矿端利润占比高</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>③ 成本位置</td><td>矿产金成本处于全球成本曲线前1/4，铜成本中位偏下且规模效应递减中</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>④ 储量增储</td><td>权益铜金储量国内第一，卡莫阿、Timok等世界级矿持续增储</td><td><span class="tag-green">优</span></td></tr>
+      <tr><td>⑤ 扩产节奏</td><td>卡莫阿三期、巨龙二期等陆续投产，公司三年产量规划明确（铜150万吨/金100吨方向）</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>⑥ 减值套保</td><td>基本不做金价套保（上行期弹性足）；历史并购多，需跟踪商誉减值</td><td><span class="tag-blue">中性</span></td></tr>
+      <tr><td>⑦ 产业链位置</td><td>矿端为主+冶炼板块托底，冶炼占比持续下降</td><td><span class="tag-green">良</span></td></tr>
+      <tr><td>⑧ 宏观政策</td><td>资产遍布17国（地缘分散化是优点也是管理难点）；受益弱美元+央行购金</td><td><span class="tag-blue">中性偏正面</span></td></tr>
+    </table>
+    <div class="note"><b>把这个例子变出预测：</b>量（产量规划×爬坡折算）× 价（机构铜金价格中枢预测）− 成本（单位成本×产量，按通胀2-3%上调）＝ 分板块利润 → 加总即公司利润，再对价格做 ±15% 情景敏感性（正是《48家双情景测算》的方法：黄金2年×2/4年×4 等情景假设）。此前测算显示：极端金价情景下赤峰黄金弹性第一，紫金因"铜金双轮+量增"成为压舱石——<b>弹性选弹性矿企，确定性选龙头</b>。</div>
+  </div>
+
+  <!-- ================= 六、常见陷阱 ================= -->
+  <div class="card">
+    <h2>六、小白最容易犯的六个错误</h2>
+    <div class="sub">每一个都是真实投资人反复踩过的坑</div>
+    <table class="plain">
+      <tr><th>#</th><th>错误做法</th><th>正确姿势</th></tr>
+      <tr class="hl"><td>1</td><td>把冶炼厂当矿企：看到铜价暴涨就买江西铜业</td><td>先看分产品毛利率区分矿/冶炼/加工，价格弹性只属于矿端</td></tr>
+      <tr><td>2</td><td>用市盈率（PE）判断周期股贵贱：利润巅峰PE=5觉得"便宜"</td><td>周期股用PB+周期平均利润估值；低PE+价格高位=典型的周期顶部特征</td></tr>
+      <tr><td>3</td><td>把设计产能当实际产量：项目公告"年产50万吨"直接计入明年业绩</td><td>按投产→爬坡→达产的节奏折算（首年50%），海外项目再打八折</td></tr>
+      <tr><td>4</td><td>只看收入增长：冶炼收入随金属价格水涨船高</td><td>看矿产产量与扣非利润——"增收不增利"是冶炼/加工企业的常态</td></tr>
+      <tr><td>5</td><td>忽视权益比例：把参股大矿山的储量产量全部算进公司</td><td>统一换算成权益口径；跨国项目另计税收汇出与地缘风险折扣</td></tr>
+      <tr><td>6</td><td>单点预测价格：押注"金价必到XXX元"的单一路径</td><td>用基准/乐观/悲观三情景测算业绩区间，仓位按悲观情景的承受力配置</td></tr>
+    </table>
+    <div class="note"><b>最后提醒：</b>本框架用于理解与筛选，不构成投资建议。金属价格波动剧烈，历史弹性不代表未来表现；使用前请以公司最新经营公告为准。</div>
+  </div>
+
+  <div class="src">
+    <b>数据与资料来源：</b>① 各公司2025年年报、2026年中报及产量经营公告（标注*为跨板块口径）；② 申万有色金属行业分类；③ 此前专题：<a href="nonferrous-profit.html">有色金属利润格局分析</a>、<a href="a-share-nonferrous-48.html">A股有色金属48家双情景测算</a>、<a href="gold-stock-scenario.html">黄金股双金属情景测算</a>；④ IEA、USGS、各券商年度金属策略供需平衡表。
+  </div>
+</div>
+
+<script>
+  // 八维雷达图：金矿股 vs 加工材企业 权重差异
+  const radarChart = echarts.init(document.getElementById('radar'));
+  radarChart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {},
+    legend: { bottom: 0, textStyle: { color: '#94a3b8', fontSize: 12 }, itemWidth: 14 },
+    radar: {
+      indicator: [
+        { name: '① 金属价格', max: 10 }, { name: '② 产量自产率', max: 10 },
+        { name: '③ 成本位置', max: 10 }, { name: '④ 储量增储', max: 10 },
+        { name: '⑤ 扩产节奏', max: 10 }, { name: '⑥ 减值套保', max: 10 },
+        { name: '⑦ 产业链位置', max: 10 }, { name: '⑧ 宏观政策', max: 10 }
+      ],
+      radius: '62%',
+      splitNumber: 4,
+      axisName: { color: '#cbd5e1', fontSize: 12 },
+      splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } },
+      splitArea: { areaStyle: { color: ['rgba(255,255,255,0.02)','rgba(255,255,255,0.04)'] } },
+      axisLine: { lineStyle: { color: 'rgba(255,255,255,0.1)' } }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          name: '矿企（金/铜）参考权重',
+          value: [9.5, 8, 8, 6.5, 6, 5, 4, 6],
+          lineStyle: { color: '#fbbf24', width: 2 },
+          itemStyle: { color: '#fbbf24' },
+          areaStyle: { color: 'rgba(251,191,36,0.18)' }
+        },
+        {
+          name: '加工材企业参考权重',
+          value: [4, 3, 5, 2, 4, 4, 9.5, 7],
+          lineStyle: { color: '#38bdf8', width: 2 },
+          itemStyle: { color: '#38bdf8' },
+          areaStyle: { color: 'rgba(56,189,248,0.15)' }
+        }
+      ]
+    }]
+  });
+  window.addEventListener('resize', () => radarChart.resize());
+</script>
+
+</body>
+</html>
