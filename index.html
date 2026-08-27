@@ -31,7 +31,7 @@
     --cat-method-bg: rgba(56, 189, 248, 0.10);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; position: relative; }
   body {
     font-family: "FangSong", "FangSong_GB2312", "仿宋", "STFangsong", "华文仿宋", "SimSun", serif;
     background: var(--bg);
@@ -40,11 +40,13 @@
     overflow-x: hidden;
     min-height: 100vh;
   }
-  /* 固定背景图层：国风水墨山水（滚动不动，全浏览器兼容） */
+  /* 背景图层：国风水墨山水（随鼠标上下移动产生视差，比页面大留出移动余量） */
   .bg-photo {
-    position: fixed; inset: 0;
+    position: absolute; top: -6vh; left: 0;
+    width: 100%; height: 112vh;
     z-index: 0; pointer-events: none;
     background: url(mountain-bg.jpeg) center top / cover no-repeat;
+    will-change: transform;
   }
 
     .site-nav {
@@ -381,8 +383,8 @@
     <div class="group-head">行业研究方法</div>
     <div class="topic-grid">
 
-      <a href="pharma-forecast-guide.html" class="tile method" title="药企业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
-        <span class="tile-title">药企业绩预测分析框架</span>
+      <a href="pharma-forecast-guide.html" class="tile method" title="生物医药行业业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
+        <span class="tile-title">生物医药行业业绩预测分析框架</span>
         <span class="tile-tags">七维模型 · 名词速查 · 集采/BD/CXO · 实战演示 · 报告2026-08</span>
       </a>
 
@@ -478,6 +480,27 @@
 <footer class="footer">
   <p>深层研究 · Deep Research · © 2026 · 基于公开数据 · 独立研究</p>
 </footer>
+
+<script>
+  // 背景随鼠标上下移动产生视差
+  (function () {
+    var bg = document.querySelector('.bg-photo');
+    if (!bg) return;
+    var current = 0, target = 0, raf = null;
+
+    window.addEventListener('mousemove', function (e) {
+      // 鼠标纵向位置映射为背景位移：顶部→-3vh，底部→+3vh（层高112vh留有余量）
+      target = (e.clientY / window.innerHeight - 0.5) * 2 * window.innerHeight * 0.03;
+      if (!raf) loop();
+    });
+
+    function loop() {
+      raf = requestAnimationFrame(loop);
+      current += (target - current) * 0.08;   // 缓动跟随，柔和不突兀
+      bg.style.transform = 'translateY(' + current.toFixed(2) + 'px)';
+    }
+  })();
+</script>
 
 </body>
 </html>
