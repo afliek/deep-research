@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三大模型同题对比：A股有色矿产品种全景报告 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root { --bg:#0a0d14; --card:rgba(18,24,38,0.72); --gold:#c9a24b; --gold2:#e8cf8f; --text:#e8e4da; --muted:#9a948a; --line:#2a2a32;
+    --qw:#7c5cff; --zp:#d97706; --ds:#0e9fae; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.7; padding:24px; }
+  .site-nav { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(10,13,20,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 28px; z-index:100; }
+  .nav-brand { color:var(--text); text-decoration:none; font-size:17px; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .nav-brand .dot { width:8px; height:8px; background:var(--gold); border-radius:50%; box-shadow:0 0 12px var(--gold); }
+  .nav-back { color:var(--muted); text-decoration:none; font-size:13px; }
+  .nav-back:hover { color:var(--gold2); }
+  .wrap { max-width:1180px; margin:0 auto; padding-top:72px; }
+  h1 { font-size:25px; margin-bottom:6px; }
+  .meta { color:var(--muted); font-size:13px; margin-bottom:20px; line-height:1.8; }
+  .meta b { color:var(--gold2); }
+  .prompt-box { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:22px; font-size:13px; color:var(--muted); line-height:1.85; }
+  .prompt-box b { color:var(--gold2); }
+  .score-cards { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
+  .sc { flex:1; min-width:280px; border-radius:14px; padding:18px 20px; border:1px solid var(--line); }
+  .sc h3 { font-size:16px; margin-bottom:2px; display:flex; align-items:center; gap:8px; }
+  .sc .vname { font-size:13px; color:var(--muted); margin-bottom:10px; }
+  .sc .row { font-size:13px; color:var(--text-secondary, #b7c0cc); margin:4px 0; display:flex; justify-content:space-between; }
+  .sc .row b { font-variant-numeric: tabular-nums; }
+  .sc-qw { border-top:4px solid var(--qw); } .sc-zp { border-top:4px solid var(--zp); } .sc-ds { border-top:4px solid var(--ds); }
+  .dot-q { width:10px; height:10px; border-radius:50%; background:var(--qw); } .dot-z { width:10px; height:10px; border-radius:50%; background:var(--zp); } .dot-d { width:10px; height:10px; border-radius:50%; background:var(--ds); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:20px; }
+  .card h2 { font-size:17px; color:#f1f5f9; margin-bottom:6px; }
+  .card .sub { font-size:12px; color:var(--muted); margin-bottom:10px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  th { background:#1e1a12; color:var(--gold); font-weight:400; text-align:left; padding:9px 11px; border:1px solid var(--line); white-space:nowrap; }
+  td { padding:9px 11px; border:1px solid var(--line); color:#b7c0cc; vertical-align:top; line-height:1.65; }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+  .good { color:#4ade80; } .bad { color:#f87171; } .mid { color:#fbbf24; }
+  .qw-col { color:var(--qw); font-weight:600; } .zp-col { color:var(--zp); font-weight:600; } .ds-col { color:var(--ds); font-weight:600; }
+  .btn { display:inline-block; padding:7px 16px; border-radius:8px; text-decoration:none; font-size:13px; margin:4px 6px 4px 0; border:1px solid; transition:all .2s; }
+  .btn-q { color:var(--qw); border-color:var(--qw); } .btn-q:hover { background:rgba(124,92,255,0.15); }
+  .btn-z { color:var(--zp); border-color:var(--zp); } .btn-z:hover { background:rgba(217,119,6,0.15); }
+  .btn-d { color:var(--ds); border-color:var(--ds); } .btn-d:hover { background:rgba(14,159,174,0.15); }
+  .foot { margin-top:30px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.9; }
+  .foot b { color:var(--gold2); }
+  .chart-row { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+  .chart-box { flex:1; min-width:320px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .chart-box h4 { font-size:13px; color:#cbd5e1; font-weight:600; margin-bottom:2px; }
+  .chart-box .csub { font-size:11px; color:var(--muted); margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>三大模型同题对比：A股有色矿产品种全景报告</h1>
+  <div class="meta">同一提示词 · 三个模型独立执行 · 对比日期 <b>2026-08-28</b> ｜ 归属：临时研究</div>
+
+  <div class="prompt-box">
+    <b>统一提示词：</b>针对A股有色金属行业上市公司，梳理其涉及的全部矿产品种（如铜、铝、铅、锌、镍、锡、锂、钴、稀土、黄金、白银等），并完成以下任务：1. 查询各矿产品种的当前市场价格；2. 分析并说明各矿产品种对对应上市公司业绩（营收或利润）的贡献占比，标注占比最高的主要品种；3. 收集最近10年各矿产品种的周度价格历史数据；4. 按周线为每种矿产绘制价格走势曲线图，标注关键价格高低点，并将所有图表与占比分析整理成结构清晰、便于查阅的报告形式输出。数据需注明来源与更新时间，确保准确性与可追溯性。
+  </div>
+
+  <!-- ====== 计费与成绩卡 ====== -->
+  <div class="score-cards">
+    <div class="sc sc-qw">
+      <h3><span class="dot-q"></span>千问 3.8 Flash</h3>
+      <div class="vname">QwenCloud · 阿里云百炼</div>
+      <div class="row"><span>用时</span><b>24分37秒</b></div>
+      <div class="row"><span>费用</span><b>0.83 元</b></div>
+      <div class="row"><span>官方价格</span><b>输入0.8元 / 输出2.7元 每百万tokens</b></div>
+      <div class="row"><span>缓存命中</span><b>0.1元</b></div>
+      <div class="row"><span>质量排名</span><b class="bad">第三（报告中）</b></div>
+    </div>
+    <div class="sc sc-zp">
+      <h3><span class="dot-z"></span>智谱 5.3 Flash</h3>
+      <div class="vname">BigModel · 智谱开放平台</div>
+      <div class="row"><span>用时</span><b>16分13秒</b></div>
+      <div class="row"><span>费用</span><b>0.59 元</b></div>
+      <div class="row"><span>官方价格</span><b class="mid">限时优惠价，后续将上调</b></div>
+      <div class="row"><span>缓存命中</span><b>—</b></div>
+      <div class="row"><span>质量排名</span><b class="good">第一（报告中）</b></div>
+    </div>
+    <div class="sc sc-ds">
+      <h3><span class="dot-d"></span>DeepSeek V4 Flash</h3>
+      <div class="vname">DeepSeek 开放平台</div>
+      <div class="row"><span>用时</span><b>6分59秒</b></div>
+      <div class="row"><span>费用</span><b>0.74 元</b></div>
+      <div class="row"><span>官方价格</span><b>输入（命中/未命中）、输出分档计费</b></div>
+      <div class="row"><span>缓存命中</span><b>命中价更低</b></div>
+      <div class="row"><span>质量排名</span><b class="good">第二（报告中）</b></div>
+    </div>
+  </div>
+
+  <!-- ====== 核心对比表 ====== -->
+  <div class="card">
+    <h2>一、核心对比总表</h2>
+    <div class="sub">✅=完成得好 ｜ ⚠️=部分完成 ｜ ❌=未完成或质量弱</div>
+    <table>
+      <tr><th>评估维度</th><th class="qw-col">千问 3.8 Flash</th><th class="zp-col">智谱 5.3 Flash</th><th class="ds-col">DeepSeek V4 Flash</th></tr>
+      <tr><td><b>任务用时</b></td><td>24m37s（最慢）</td><td>16m13s</td><td><b>6m59s（最快，约为千问的1/3.5）</b></td></tr>
+      <tr><td><b>任务费用</b></td><td>0.83 元（最贵）</td><td><b>0.59 元（最便宜，限时优惠价）</b></td><td>0.74 元</td></tr>
+      <tr><td><b>① 当前价格</b></td><td>✅ 有现价与来源</td><td>✅ 现价+来源+同比涨幅</td><td>✅ 有现价与来源</td></tr>
+      <tr><td><b>② 业绩贡献占比</b></td><td class="good">✅ <b>最强项</b>：覆盖上市公司数量最多，营收占比数据最实、最细</td><td class="bad">⚠️ 覆盖公司较少，占比信息相对简略</td><td class="mid">⚠️ 基本有占比描述但较笼统，只有大概区间</td></tr>
+      <tr><td><b>③ 10年周线数据</b></td><td class="good">✅ 覆盖完整</td><td class="good">✅ 覆盖完整，<b>额外找到部分冷门金属（如锑、钨等）的K线数据</b></td><td class="good">✅ 覆盖主流品种</td></tr>
+      <tr><td><b>④ 周线图表</b></td><td class="bad">❌ K线为<b>静态图片</b>，不可交互、不能缩放查看细节</td><td class="good">✅ <b>ECharts 交互式K线</b>：可滚动缩放、悬浮十字轴、红涨绿跌+高低点标注</td><td class="good">✅ 交互式图表，基本要求达标</td></tr>
+      <tr><td><b>⑤ 来源与可追溯性</b></td><td>✅ 标注来源</td><td class="good">✅ 标注最完整（期货合约代码+现货机构+日期）</td><td>✅ 标注来源</td></tr>
+      <tr><td><b>报告综合质量</b></td><td><b class="bad">第三</b></td><td><b class="good">第一</b></td><td><b class="mid">第二</b></td></tr>
+    </table>
+  </div>
+
+  <!-- ====== 优缺点 ====== -->
+  <div class="card">
+    <h2>二、各模型优缺点分析</h2>
+    <table>
+      <tr><th>模型</th><th>优点 ✅</th><th>缺点 ❌</th></tr>
+      <tr>
+        <td class="qw-col">千问 3.8 Flash</td>
+        <td>
+          • <b>最实在</b>：把大量上市公司的营收/利润占比都查实了，覆盖公司数量最多<br>
+          • 数据颗粒度细，来源标注齐全<br>
+          • 1M超长上下文对文档型任务有天然优势
+        </td>
+        <td>
+          • <b>K线是静态图片，不能点击交互</b>——无法缩放看细节、无法悬浮查值，是本报告最大硬伤<br>
+          • 用时最长（24分37秒）且费用最高（0.83元），性价比最差<br>
+          • 综合质量排名第三
+        </td>
+      </tr>
+      <tr>
+        <td class="zp-col">智谱 5.3 Flash</td>
+        <td>
+          • <b>报告质量第一</b>：ECharts交互K线+数据可缩放，用户体验最好<br>
+          • <b>找到了冷门金属的K线数据</b>（其他模型没做到）<br>
+          • 来源标注最完整（合约代码+机构+日期），可追溯性最强<br>
+          • <b>费用最低且限时优惠</b>（0.59元，官方明确后续涨价）
+        </td>
+        <td>
+          • 覆盖的上市公司数量偏少，占比信息相对简略<br>
+          • 若能补上千问级的公司覆盖度，报告将接近完美
+        </td>
+      </tr>
+      <tr>
+        <td class="ds-col">DeepSeek V4 Flash</td>
+        <td>
+          • <b>速度王者</b>：6分59秒完成，效率是千问的3.5倍<br>
+          • 基本要求全部达标，交付质量稳定<br>
+          • 交互式图表合格
+        </td>
+        <td>
+          • <b>主营占比完成度不高</b>：只有大概区间，颗粒度不足<br>
+          • 冷门金属数据覆盖不如智谱
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ====== 价格对比图 ====== -->
+  <div class="card">
+    <h2>三、三维度可视化对比</h2>
+    <div class="sub">用时（分钟）· 费用（元）· 综合质量排名（1=最优）</div>
+    <div class="chart-row">
+      <div class="chart-box"><h4>⏱ 用时（分钟，越短越好）</h4><div class="csub">DS 6:59 < ZP 16:13 < QW 24:37</div><div id="c1" style="width:100%;height:180px"></div></div>
+      <div class="chart-box"><h4>💰 费用（元，越低越好）</h4><div class="csub">智谱限时优惠价，后续涨价</div><div id="c2" style="width:100%;height:180px"></div></div>
+      <div class="chart-box"><h4>🏆 综合质量排名（1=最优）</h4><div class="csub">智谱>DeepSeek>千问（本报告结论）</div><div id="c3" style="width:100%;height:180px"></div></div>
+    </div>
+  </div>
+
+  <!-- ====== 报告入口 ====== -->
+  <div class="card">
+    <h2>四、三份原始报告入口</h2>
+    <div class="sub">点击查看各模型生成的完整报告（新标签页打开）</div>
+    <a class="btn btn-q" href="compare/report-qwen.html">📄 千问 3.8 Flash 报告（含静态K线图）</a>
+    <a class="btn btn-z" href="compare/report-zhipu.html">📄 智谱 5.3 Flash 报告（交互式K线，推荐）</a>
+    <a class="btn btn-d" href="compare/report-deepseek.html">📄 DeepSeek V4 Flash 报告</a>
+  </div>
+
+  <div class="foot">
+    <b>对比方法：</b>同一提示词、同一时间窗口内独立运行，互不可见。三份原始报告均未做人工修改，评分基于交付质量与任务完成度的客观差异。<br>
+    <b>价格说明：</b>各模型费用为实际账单口径；智谱 5.3 Flash 当前为限时优惠价，官方已公告后续将上调，届时性价比排名可能变化。<br>
+    本对比仅反映本次任务的实测结果，不构成对模型能力的普适性评价。
+  </div>
+</div>
+
+<script>
+function bar(id, cats, vals, colors, unit, inv) {
+  var c = echarts.init(document.getElementById(id));
+  c.setOption({
+    backgroundColor: 'transparent',
+    grid: { left: 90, right: 40, top: 10, bottom: 24 },
+    xAxis: { type: 'value', show: false },
+    yAxis: { type: 'category', data: cats, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: '#cbd5e1', fontSize: 13 } },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    series: [{
+      type: 'bar', data: vals, barWidth: 22,
+      label: { show: true, position: 'right', color: '#e8e4da', fontSize: 13, formatter: function(p){ return p.value + (unit||''); } },
+      itemStyle: { borderRadius: [0,6,6,0], color: function(p){ return colors[p.dataIndex]; } }
+    }]
+  });
+}
+bar('c1', ['千问','智谱','DeepSeek'], [24.6, 16.2, 7.0], ['#7c5cff','#d97706','#0e9fae'], ' 分钟');
+bar('c2', ['千问','智谱','DeepSeek'], [0.83, 0.59, 0.74], ['#7c5cff','#d97706','#0e9fae'], ' 元');
+bar('c3', ['千问(第3)','智谱(第1)','DeepSeek(第2)'], [3, 1, 2], ['#7c5cff','#d97706','#0e9fae'], '');
+window.addEventListener('resize', function(){ ['c1','c2','c3'].forEach(function(id){ var i = echarts.getInstanceByDom(document.getElementById(id)); if(i) i.resize(); }); });
+</script>
+</body>
+</html>
