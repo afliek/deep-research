@@ -155,6 +155,26 @@
     box-shadow: 0 0 10px rgba(201, 162, 75, 0.65);
     flex-shrink: 0;
   }
+  /* 行业研究小节标题 */
+  .sub-group {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--gold2);
+    margin: 22px 0 4px;
+    padding-left: 10px;
+    border-left: 3px solid var(--gold);
+    display: flex; align-items: center;
+    text-shadow: 0 0 12px rgba(201, 162, 75, 0.2);
+  }
+  .sub-group::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #f7e7b3, var(--gold));
+    margin-right: 8px;
+    box-shadow: 0 0 8px rgba(201, 162, 75, 0.6);
+    flex-shrink: 0;
+  }
 
   /* 分类小徽标 */
   .tile {
@@ -293,6 +313,7 @@
   .tile-tags b { color: #c22a45; }
   .tile:hover { border-color: rgba(194,42,69,0.35); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
   .group-head { color: var(--light-text); }
+  .sub-group { color: var(--light-text-2); }
   .about { background: rgba(255,255,255,0.65); border: 1px solid rgba(0,0,0,0.06); color: var(--light-text-2); }
   .about b { color: var(--light-text); }
   .footer { color: var(--light-text-2); border-top: 1px solid rgba(0,0,0,0.06); }
@@ -398,10 +419,12 @@
     </div>
   </section>
 
-  <!-- ===== 分组四：行业研究 ===== -->
+    <!-- ===== 分组四：行业研究 ===== -->
   <section class="group">
     <div class="group-head">行业研究</div>
     <div class="topic-grid">
+
+      <div class="sub-group">总体研究</div>
 
       <a href="global-mining-top10.html" class="tile finance" title="全球前十大矿业巨头对比分析（2026-08）：必和必拓/力拓/淡水河谷/嘉能可/自由港/纽蒙特/巴里克/南方铜业/英美资源/紫金矿业——近10年营收与产品结构、净利与利润率、成本与资产负债、新能源布局/产能扩张/并购/ESG 四维潜力分析；综合竞争力排名：BHP>紫金>Rio>纽蒙特>自由港>Vale>南方铜业>巴里克>嘉能可>英美">
         <span class="tile-title">全球前十大矿业巨头对比分析</span>
@@ -413,10 +436,14 @@
         <span class="tile-tags">A股 · 银行主导 · 有色入榜 · 中美对比 · 数据2026-08</span>
       </a>
 
+      <div class="sub-group">保险</div>
+
       <a href="insurance.html" class="tile finance" title="2025年保费收入6.12万亿（+7.4%）、总资产41.3万亿；五大险企NBV全线高增29%-65%，代理人企稳">
         <span class="tile-title">中国保险行业：转型复苏与代理人重构</span>
         <span class="tile-tags">保险 · 代理人 · 保费收入 · 中外对比 · 数据2025</span>
       </a>
+
+      <div class="sub-group">有色金属</div>
 
       <a href="a-share-nonferrous-48.html" class="tile finance" title="A股有色金属全板块 48 家研报：量能释放 × 价格双情景模型（2028），铜/铝/锂/金/稀土各子板块产能与利润情景测算">
         <span class="tile-title">A股有色金属 48 家 · 双情景模型（2028）</span>
@@ -426,6 +453,11 @@
       <a href="minerals-panorama.html" class="tile finance" title="A股有色上市公司矿产品种全景报告：13个矿种（铜铝锌铅镍锡金银碳酸锂+钴稀土锑钨钼）当前价格与来源、28家上市公司分矿种业绩贡献占比（标注主要品种）、9个期货品种近10年周线走势图（2016-2026，标注高低点）——数据可溯源">
         <span class="tile-title">A股有色 · 矿产品种全景报告</span>
         <span class="tile-tags">13矿种 · 价格+占比 · 十年周线 · 28家公司 · 数据2026-08</span>
+      </a>
+
+      <a href="gold-stock-scenario.html" class="tile finance" title="A股六家黄金股双金属价格情景测算（2026-08）：黄金 2年×2/4年×4 + 其他金属 2年×1.5/4年×2，2030E 利润/5年CAGR/前瞻PE 对比；基准→只涨金→双金属×2→×3 四档敏感性，2026-08-26 市值口径——赤峰弹性第一、紫金压舱">
+        <span class="tile-title">A股黄金股双金属情景测算</span>
+        <span class="tile-tags">黄金股 · 金价弹性 · 情景测算 · 前瞻PE · 数据2026-08</span>
       </a>
 
     </div>
@@ -444,11 +476,6 @@
       <a href="cambricon-analysis.html" class="tile company" title="寒武纪（688256）深度研报：千亿激励的底气、产能天花板与三情景测算，国产AI算力芯片龙头">
         <span class="tile-title">寒武纪深度研报（688256）</span>
         <span class="tile-tags">AI算力芯片 · 千亿激励 · 产能天花板 · 三情景测算 · 数据2026-08</span>
-      </a>
-
-      <a href="gold-stock-scenario.html" class="tile company" title="A股六家黄金股双金属价格情景测算（2026-08）：黄金 2年×2/4年×4 + 其他金属 2年×1.5/4年×2，2030E 利润/5年CAGR/前瞻PE 对比；基准→只涨金→双金属×2→×3 四档敏感性，2026-08-26 市值口径——赤峰弹性第一、紫金压舱">
-        <span class="tile-title">A股黄金股双金属情景测算</span>
-        <span class="tile-tags">黄金股 · 金价弹性 · 情景测算 · 前瞻PE · 数据2026-08</span>
       </a>
 
     </div>
