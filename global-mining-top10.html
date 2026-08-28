@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球前十大矿业巨头对比分析 · 深层研究</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{--bg:#0d0b08;--card:#1a1712;--gold:#d4b06a;--gold2:#e8c98a;--gold-dim:#9a814f;--text:#e8e2d5;--muted:#a89f8d;--line:#3a332a;--red:#e05a4e;--green:#3fa66a;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:"FangSong","仿宋","STFangsong",Georgia,serif;line-height:1.8;padding:0 0 80px;}
+  .site-nav{position:sticky;top:0;z-index:100;background:rgba(13,11,8,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:12px 24px;}
+  .site-nav a{color:var(--gold);text-decoration:none;font-size:14px;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  header{padding:52px 0 30px;border-bottom:1px solid var(--line);margin-bottom:34px;}
+  .kicker{color:var(--gold-dim);letter-spacing:6px;font-size:13px;margin-bottom:12px;}
+  h1{font-size:32px;color:var(--gold2);font-weight:600;letter-spacing:.04em;}
+  .meta{color:var(--muted);font-size:13px;margin-top:12px;line-height:1.9;}
+  .meta b{color:var(--gold2);}
+  h2{font-size:21px;color:var(--gold2);margin:44px 0 6px;padding-left:14px;border-left:4px solid var(--gold);}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:14px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0 8px;}
+  th{background:rgba(212,176,106,.12);color:var(--gold2);font-weight:400;text-align:left;padding:9px 11px;border:1px solid var(--line);white-space:nowrap;}
+  td{padding:9px 11px;border:1px solid var(--line);color:#cfc8b8;vertical-align:top;line-height:1.7;}
+  tr:nth-child(even) td{background:rgba(255,255,255,.018);}
+  .num{color:var(--gold2);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .main{color:var(--gold2);font-weight:600;}
+  .up{color:#e05a4e;} .dn{color:#3fa66a;}
+  .callout{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:16px 20px;margin:16px 0;font-size:14px;color:#cfc8b8;line-height:1.9;}
+  .callout b{color:var(--gold2);}
+  .rank-badge{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#14110c;font-weight:700;align-items:center;justify-content:center;font-size:13px;font-family:"Microsoft YaHei",sans-serif;margin-right:8px;}
+  .src{color:var(--muted);font-size:12px;line-height:2;margin-top:30px;padding-top:14px;border-top:1px solid var(--line);}
+  .chart-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;}
+  @media(max-width:760px){body{padding:0 0 60px;}.wrap{padding:0 14px;}table{font-size:12px;}}
+</style>
+</head>
+<body>
+<nav class="site-nav"><a href="index.html">← 深层研究</a><a href="nonferrous-profit.html">A股有色利润格局 →</a></nav>
+<div class="wrap">
+<header>
+  <div class="kicker">GLOBAL MINING MAJORS</div>
+  <h1>全球前十大矿业巨头对比分析</h1>
+  <div class="meta">覆盖：必和必拓 / 力拓 / 淡水河谷 / 嘉能可 / 自由港 / 纽蒙特 / 巴里克 / 南方铜业 / 英美资源 / 紫金矿业 ｜ 财务基准：2025 财年（各公司财年口径见注）· 十年区间 2016–2026 ｜ 数据更新：<b>2026-08-28</b> · 单位：美元</div>
+</header>
+
+<h2>〇、总览：一句话画像</h2>
+<table>
+<tr><th style="width:130px">公司</th><th>总部/上市地</th><th>2025 营收</th><th>2025 净利</th><th>一句话画像</th></tr>
+<tr><td class="main">必和必拓 BHP</td><td>澳/英 · ASX</td><td class="num">≈558亿*</td><td class="num">≈113亿*</td><td>全球市值矿业一哥：铁矿石现金牛 + <b>铜已超越铁矿成第一大利润驱动</b>（历史首次）</td></tr>
+<tr><td class="main">力拓 Rio Tinto</td><td>英/澳 · LSE</td><td class="num">576亿</td><td class="num">99.7亿（-14%）</td><td>铁矿皮尔巴拉现金牛 + Oyu Tolgoi 铜放量 + 西芒杜投产 + 收购 Arcadium 切入锂</td></tr>
+<tr><td class="main">淡水河谷 Vale</td><td>巴西 · NYSE</td><td class="num">384亿</td><td class="num">78.0亿（+28%）</td><td>全球铁矿石双雄之一（占营收78.5%）+ 镍/铜基本金属转型（Vale Base Metals）</td></tr>
+<tr><td class="main">嘉能可 Glencore</td><td>瑞士 · LSE</td><td class="num">2,475亿（含贸易）</td><td class="num">3.6亿（扭亏）</td><td>全球最大大宗商品贸易商+生产商，煤/铜/钴/锌；盈利受贸易与煤价波动剧烈</td></tr>
+<tr><td class="main">自由港 FCX</td><td>美国 · NYSE</td><td class="num">259亿</td><td class="num">22.0亿</td><td>全球最大上市铜生产商：印尼 Grasberg（25年+储量）+ 美洲；2025 泥浆事故短期减产</td></tr>
+<tr><td class="main">纽蒙特 Newmont</td><td>美国 · NYSE</td><td class="num">221亿</td><td class="num">72亿</td><td>全球最大黄金商：2025 FCF 73亿创纪录、净现金21亿、非核心资产剥离45亿</td></tr>
+<tr><td class="main">巴里克 Barrick</td><td>加拿大 · NYSE</td><td class="num">170亿（+31%）</td><td class="num">≈50亿</td><td>金+铜双轮：非洲/拉美资产，北美金资产 IPO 计划；马里危机解决后重拾增长</td></tr>
+<tr><td class="main">南方铜业 SCCO</td><td>美国 · NYSE</td><td class="num">134亿</td><td class="num">43.3亿（净利率32%全场最高）</td><td>秘鲁/墨西哥纯铜标的（+钼银锌），成本最低档，扩张项目（Tía María）有社区争议</td></tr>
+<tr><td class="main">英美资源 Anglo</td><td>英国 · LSE</td><td class="num">185亿</td><td class="dn">净亏损37.4亿</td><td>深度重组中：卖煤炭/镍/铂资产瘦身，聚焦铁矿石+铜；2025 减值致亏损</td></tr>
+<tr><td class="main">紫金矿业</td><td>中国 · A+H</td><td class="num">≈490亿（3491亿元）</td><td class="num">≈73亿（518亿元，+62%）</td><td><b>成长性第一</b>：ROE 31.8% 全球矿企之冠；金铜锂全球布局，市值已进全球矿业前3-4</td></tr>
+</table>
+<p style="font-size:12px;color:var(--muted)">* BHP 财年截止 6 月：表中为 FY26H1（2025.7–12）营收 279 亿年化估算；其余公司为 2025 自然年。紫金按 2025 年报人民币折算。</p>
+
+<h2>壹、近十年营收规模、增长趋势与产品结构</h2>
+<div class="sub">十年四个锚点年（2015 谷底 / 2020 疫情 / 2022 上一轮峰值 / 2025 最新），观察周期位置</div>
+<table>
+<tr><th>公司</th><th>2015（谷底）</th><th>2020（疫情）</th><th>2022（上轮峰值）</th><th>2025（最新）</th><th>十年趋势判断</th><th>产品结构（2025）</th></tr>
+<tr><td class="main">必和必拓</td><td class="num">≈446亿</td><td class="num">≈429亿</td><td class="num">≈651亿（峰值）</td><td class="num">≈558亿*</td><td>峰值回落但铜接棒：铁矿利润占比历史首次让位铜</td><td>铜≈40%+ · 铁矿石≈35% · 煤炭≈20% · 钾肥起步</td></tr>
+<tr><td class="main">力拓</td><td class="num">≈448亿</td><td class="num">≈447亿</td><td class="num">≈555亿</td><td class="num">576亿（新高）</td><td>营收创新高但净利-14%：铁矿价格跌6%由铜铝对冲</td><td>铁矿石≈60% · 铜≈27%（EBITDA口径）· 铝≈17% · 锂起步</td></tr>
+<tr><td class="main">淡水河谷</td><td class="num">≈259亿</td><td class="num">≈335亿</td><td class="num">≈438亿</td><td class="num">384亿</td><td>铁矿量稳价波动；基本金属（镍铜）占比提升中</td><td>铁矿石方案 78.5% · 基本金属（镍铜）21.5%</td></tr>
+<tr><td class="main">嘉能可</td><td class="num">≈1,709亿</td><td class="num">≈1,424亿</td><td class="num">≈2,540亿（峰值）</td><td class="num">2,475亿</td><td>贸易营收波动大；生产端 EBITDA 连续两年下滑，煤转型压力最大</td><td>贸易（铜/油/煤/谷）+ 自产：煤、铜、钴、锌、镍</td></tr>
+<tr><td class="main">自由港</td><td class="num">≈183亿</td><td class="num">≈154亿</td><td class="num">≈227亿</td><td class="num">259亿</td><td>稳步上行；2025 Grasberg 事故减产但金价+42%/铜价+13%对冲</td><td>铜≈75% · 金≈20% · 钼≈5%</td></tr>
+<tr><td class="main">纽蒙特</td><td class="num">≈69亿</td><td class="num">≈115亿</td><td class="num">≈119亿</td><td class="num">221亿（Newcrest 并表）</td><td>2024 并购 Newcrest 后体量跃升；金价上涨+资产剥离双重驱动</td><td>黄金≈90% · 铜/银/锌副产</td></tr>
+<tr><td class="main">巴里克</td><td class="num">≈96亿</td><td class="num">≈97亿</td><td class="num">≈114亿</td><td class="num">170亿（+31%）</td><td>金价驱动营收新高；金产量 -17%（出售/枯竭）由价格对冲</td><td>黄金≈85% · 铜≈15%</td></tr>
+<tr><td class="main">南方铜业</td><td class="num">≈72亿</td><td class="num">≈83亿</td><td class="num">≈101亿</td><td class="num">134亿</td><td>十年营收近乎翻倍；秘鲁/墨西哥低成本矿山稳步扩产</td><td>铜≈75% · 钼≈15% · 银锌≈10%</td></tr>
+<tr><td class="main">英美资源</td><td class="num">≈363亿</td><td class="num">≈309亿</td><td class="num">≈418亿（峰值）</td><td class="num">185亿（资产剥离后）</td><td>十年腰斩（主动瘦身）：卖煤炭/镍/铂，聚焦铁矿石+铜+作物营养</td><td>铁矿石 · 铜 · 作物营养（转型后）</td></tr>
+<tr><td class="main">紫金矿业</td><td class="num">≈117亿</td><td class="num">≈171亿</td><td class="num">≈409亿</td><td class="num">≈490亿（3491亿元）</td><td><b>十年营收增长 4 倍，全球前十中成长最快</b>：并购+自主勘查双轮，金铜锂全线放量</td><td>黄金 44.4% · 铜 27.6%（抵销后）· 锂/锌/银/钼为增量</td></tr>
+</table>
+
+<h2>贰、净利润、利润率与盈利能力</h2>
+<table>
+<tr><th>公司</th><th>2025 净利</th><th>同比</th><th>净利率</th><th>盈利能力评注</th></tr>
+<tr><td class="main">必和必拓</td><td class="num">≈113亿*</td><td class="up">+28%（H1）</td><td class="num">≈20%</td><td>铜 EBITDA 80亿成第一大利润源；分红率 50-60% 政策稳定</td></tr>
+<tr><td class="main">力拓</td><td class="num">99.7亿</td><td class="dn">-14%</td><td class="num">17.3%</td><td>五年最弱盈利；EBITDA +9% 但折旧/税费侵蚀；派息率 60% 十年高位</td></tr>
+<tr><td class="main">淡水河谷</td><td class="num">78.0亿</td><td class="up">+28%</td><td class="num">20.3%</td><td>铁矿价格下行中靠降本对冲；EBITDA 154.6亿 +4%</td></tr>
+<tr><td class="main">嘉能可</td><td class="num">3.6亿</td><td class="up">扭亏</td><td class="num">0.1%</td><td>贸易巨头利润口径特殊（EBITDA 135亿）；上年亏 16.3亿，波动极大</td></tr>
+<tr><td class="main">自由港</td><td class="num">22.0亿</td><td class="dn">-48%≈</td><td class="num">8.5%</td><td>Grasberg 事故减产+capex 高峰（43亿）；净利率从峰值 35% 回落至 23% 营业口径</td></tr>
+<tr><td class="main">纽蒙特</td><td class="num">72亿</td><td class="up">大幅+</td><td class="num">32.6%</td><td>调整后净利 76亿、EBITDA 135亿；<b>FCF 73亿创公司纪录</b>，净现金 21亿</td></tr>
+<tr><td class="main">巴里克</td><td class="num">≈50亿</td><td class="up">EPS+140%</td><td class="num">≈29%</td><td>调整后 EPS +92%；FCF 3.87亿→…；经营现金流 +71%</td></tr>
+<tr><td class="main">南方铜业</td><td class="num">43.3亿</td><td class="up">+</td><td class="num">32.3%（全场第一）</td><td>全球成本曲线最左侧；秘鲁扩产+钼价格共振</td></tr>
+<tr><td class="main">英美资源</td><td class="dn">-37.4亿</td><td class="dn">亏损扩大</td><td class="dn">负</td><td>减值主导的账面亏损；剥离后轻装，EBITDA 64亿微增</td></tr>
+<tr><td class="main">紫金矿业</td><td class="num">≈73亿（518亿元）</td><td class="up">+62%</td><td class="num">14.8%（营收含贸易）</td><td><b>ROE 31.8% 全球矿企第一</b>；矿山企业毛利率 60.6%；十年净利 CAGR 约 37%</td></tr>
+</table>
+
+<h2>叁、成本控制与资产负债状况</h2>
+<table>
+<tr><th>公司</th><th>成本控制</th><th>资产负债</th><th>股东回报</th></tr>
+<tr><td class="main">必和必拓</td><td>铁矿/铜单位成本行业第一梯队；Escondida 品位下滑为长期成本压力</td><td>净负债约120亿，稳健</td><td>分红率 50-60%，上市以来持续派息</td></tr>
+<tr><td class="main">力拓</td><td>皮尔巴拉 SP10 折价管控+自动化；管理层定位数亿美元级年化降本</td><td>净负债升至约 130-150亿（Simandou/capex 峰值），杠杆可控</td><td>派息 60%（十年高位区间），普通股息 65亿</td></tr>
+<tr><td class="main">淡水河谷</td><td>C1 现金成本持续压降；Brumadinho 后安全资本开支大</td><td>净负债约 120-140亿区间，去杠杆目标持续</td><td>分红+回购，股息率行业前列</td></tr>
+<tr><td class="main">嘉能可</td><td>贸易+生产双模式，成本透明度低；煤炭资产转型（出售/限产）进行中</td><td>净负债约 40-100亿波动（贸易占款）</td><td>回购+股息灵活</td></tr>
+<tr><td class="main">自由港</td><td>C1 成本约 $1.6/lb 行业低位；Grasberg 井下过渡推高成本</td><td>净债务 23亿（不含下游冶炼负债），健康</td><td>股息+50%利润可变回购</td></tr>
+<tr><td class="main">纽蒙特</td><td>副产 AISC $1,358/oz（2025）；组合优化摊薄固定成本</td><td><b>净现金 21亿</b>（降债 34亿），全场最强</td><td>分红+回购 34亿（2025）</td></tr>
+<tr><td class="main">巴里克</td><td>金 AISC $1,637/oz（+7%税费）；铜 AISC $3.20/lb 逆势下降</td><td>现金流+71%，负债中性</td><td>季度股息 +40%、FCF 50% 派付新政策；回购 15亿</td></tr>
+<tr><td class="main">南方铜业</td><td><b>现金成本全球最低档</b>；秘鲁/墨西哥矿区一体化</td><td>净债务低，资产负债表干净</td><td>高分红率</td></tr>
+<tr><td class="main">英美资源</td><td>铁矿 AISC 中游；铜资产成本优（Quellaveco 爬坡）</td><td>重组后净负债下降，信用评级承压后企稳</td><td>股息政策重置（下调后重建）</td></tr>
+<tr><td class="main">紫金矿业</td><td><b>逆周期并购+自主勘查使资源获取成本极低</b>；矿石流五环归一模式，问题矿山接管即扭亏</td><td>资产负债率 51.6%，经营现金流 754亿元（+44%），可控</td><td>分红率约 30%（偏低，成长优先）+ 藏格/金矿国际资本运作</td></tr>
+</table>
+
+<h2>肆、未来发展潜力：新能源布局 / 产能扩张 / 并购 / ESG</h2>
+<table>
+<tr><th>公司</th><th>新能源金属布局</th><th>产能扩张与项目储备</th><th>并购动态</th><th>ESG 转型</th></tr>
+<tr><td class="main">必和必拓</td><td>铜（Escondida/铜代铁矿）+ 钾肥（Jansen 一期2027投产）+ 镍（West Musgrave）</td><td>Jansen 钾肥、Escondida 增产、Copper South Australia 整合</td><td>收购 OZ Minerals（2023）；对 Anglo 491亿收购要约被拒后退出（2024）</td><td>运营减排目标2030；水风险治理（Chile）领先</td></tr>
+<tr><td class="main">力拓</td><td><b>收购 Arcadium Lithium（67亿，2025 完成）+ 控股 Nemaska（52.9%）</b>，三大板块之一即"铝与锂"</td><td>Oyu Tolgoi 地下满产爬坡、Simandou 西芒杜（全球最大绿地铁矿）投产、铜当量 CAGR 3% 至 2030</td><td>与嘉能可 3,000 亿合并谈判破裂（2026.2）；Arcadium 交割为近十年最大锂并购</td><td>净零 2050；皮尔巴拉绿电替代；ESG 评级修复中（Juukan 事件后）</td></tr>
+<tr><td class="main">淡水河谷</td><td>Vale Base Metals（镍铜）独立运营、寻求战略投资者；加拿大镍钴进入电池链</td><td铁矿扩产至 3.4-3.6 亿吨（Vargem Grande/S11D）；铜镍中型扩产</td><td>分拆基本金属引战投；出售非核心铁矿资产</td><td>Brumadinho 尾矿治理；亚马逊流域生态承诺；Scope1/2 减排路线明确</td></tr>
+<tr><td class="main">嘉能可</td><td>铜钴（刚果金 Katanga/Mutanda）为电池金属核心资产；镍产能收缩</td><td>Mutanda 复产爬坡；Nordsol 等小项目；无大型绿地</td><td>与力拓合并流产后表态继续推动行业整合；煤炭资产处置方案（回购替代出售）</td><td>煤炭封顶（2026 上限）但被批"回购式退出"；钴供应链 ESG（刚果金手采）争议</td></tr>
+<tr><td class="main">自由港</td><td>铜为核心（AI 电网/电气化）；湿法浸出技术增产 3 亿磅/年（2026）；钼副产</td><td>Grasberg Block Cave 复产爬坡（2026Q2）、Kucing Liar、El Abra 扩建可再造一个 FCX、Bagdad 扩产</td><td>专注内生增长，并购克制</td><td>美国本土生产+税收立场；印尼冶炼下游（Manyar）投产合规</td></tr>
+<tr><td class="main">纽蒙特</td><td>金为核心，铜 12.5 百万吨储量+银 4.4 亿盎司为隐藏期权</td><td>Cadia Panel Caves、Tanami Expansion 2、Red Chris、Lihir 延寿至 2040</td><td>完成 Newcrest 并购整合与非核心 9 资产剥离（45亿）——行业最教科书级组合优化</td><td>净零 2050；尾矿管理（GISTM）整改推进</td></tr>
+<tr><td class="main">巴里克</td><td>铜（Lumwana 扩建至 24 万吨/年）+ 金，Reko Diq（巴基斯坦，全球最大未开发铜金矿）一期 2028</td><td>Reko Diq、Fourmile（内华达资源翻倍）、Pueblo Viejo 扩产、北美金资产 IPO</td><td>出售 Donlin/Hemlo 等非核心；马里谈判收尾资产保留</td><td>安全绩效仍需改善（2025 事故）；水资源与原住民合作改善中</td></tr>
+<tr><td class="main">南方铜业</td><td>铜扩产：Cuajone/Toquepala 改造 + El Pilar + Tía María（2027 投产，+12万吨）</td><td>Tía María、El Pilar、Buenavista 锌矿——十年铜当量 +47% 管道</td><td>内生为主，几乎不并购</td><td>Tía María 社区冲突历史包袱；海水淡化厂投建缓解水争议</td></tr>
+<tr><td class="main">英美资源</td><td>聚焦铜（Quellaveco 满产爬坡、Collahuasi 扩产）：转型后的"铜+优质铁矿"双核</td><td>Collahuasi 扩产（与嘉能可合资）、Minas-Rio 增产、作物营养（Verdigris）技术变现</td><td>重组风暴：卖煤炭（2024 完成）、镍业务售予 MMG、铂金业务分拆独立上市（2025）</td><td>重组后 ESG 叙事重置；安全记录历史包袱（巴西）逐步消化</td></tr>
+<tr><td class="main">紫金矿业</td><td><b>锂"两湖两矿"（3Q/拉果错/藏格/马诺诺）全面投产，当量碳酸锂资源超1,800万吨</b>；铜 1.1 亿吨资源全球前四；金 4,600吨全球前五</td><td>巨龙二期（全球最大采选）、卡莫阿三期、朱诺铜矿、沙坪沟钼矿（全球最大单体）、海域金矿；2028 目标铜金产量全球前3</td><td><b>逆周期并购教科书</b>：控股藏格（最大单笔）、分拆紫金黄金国际H股上市、哈萨克瑞果多金矿等；"紫金系"资本版图成型</td><td>碳排总量 -17.96%（2025）；国际主流 ESG 评级进入矿业前列；海外社区关系为持续课题</td></tr>
+</table>
+
+<h2>伍、综合竞争力排名与前景评价</h2>
+<div class="chart-box"><div id="radar" style="width:100%;height:420px"></div></div>
+<div class="sub" style="margin-top:-8px">六维雷达：规模 / 盈利 / 成长 / 成本 / 转型（新能源+ESG）/ 资产负债 —— 取五家代表对比（分值 0-10，本报告主观赋值）</div>
+
+<table>
+<tr><th style="width:56px">排名</th><th>公司</th><th>综合评分（10分制）</th><th>发展前景评价</th></tr>
+<tr><td><span class="rank-badge">1</span></td><td class="main">必和必拓 BHP</td><td class="num">8.8</td><td><b>全能冠军</b>：规模+盈利+铜转型+分红四者兼得，Jansen 钾肥打开第二曲线；短板是成长弹性弱于紫金、铁矿长期需求见顶风险。</td></tr>
+<tr><td><span class="rank-badge">2</span></td><td class="main">紫金矿业</td><td class="num">8.6</td><td><b>成长冠军</b>：十年营收4倍、ROE 全球第一、金铜锂储产比全面跃升，2028 铜金进全球前3 目标路径清晰；折价因素：负债率51.6%偏高、海外资产政治风险敞口大、分红率低。若兑现规划，五年内有望冲击全球矿业前三。</td></tr>
+<tr><td><span class="rank-badge">3</span></td><td class="main">力拓 Rio Tinto</td><td class="num">8.4</td><td><b>转型深水区</b>：铜+114% EBITDA 验证多元化，Arcadium 锂并购卡位新能源；Simandou 是十年级期权。风险：铁矿基本盘承压、净利下滑、西芒杜执行风险。</td></tr>
+<tr><td><span class="rank-badge">4</span></td><td class="main">纽蒙特 Newmont</td><td class="num">8.2</td><td><b>金王现金机器</b>：净现金+FCF 创纪录+资产组合优化最彻底；金价维持高位则持续超预期。风险：单一金价依赖。</td></tr>
+<tr><td><span class="rank-badge">5</span></td><td class="main">自由港 FCX</td><td class="num">7.8</td><td><b>铜的终极押注</b>：Grasberg 储量25年+全球品位最高铜矿组合；事故与 capex 峰值压制当期报表，铜价 $5+ 情景下利润弹性全场最大。</td></tr>
+<tr><td><span class="rank-badge">6</span></td><td class="main">淡水河谷 Vale</td><td class="num">7.5</td><td><b>现金流稳健器</b>：铁矿+镍铜双轮，降本扎实；成长故事偏平淡，巴西宏观与尾矿遗留成本是长期折价。</td></tr>
+<tr><td><span class="rank-badge">7</span></td><td class="main">南方铜业 SCCO</td><td class="num">7.4</td><td><b>利润率之王</b>：净利率32%全场第一、十年铜当量+47%管道；单一国别（秘鲁社区关系）与品种集中是主要约束。</td></tr>
+<tr><td><span class="rank-badge">8</span></td><td class="main">巴里克 Barrick</td><td class="num">7.2</td><td><b>困境反转进行时</b>：马里危机解除+北美 IPO+Reko Diq 巨型项目，管理层改革激进；产量下滑与安全记录拖累评分。</td></tr>
+<tr><td><span class="rank-badge">9</span></td><td class="main">嘉能可 Glencore</td><td class="num">6.6</td><td><b>高波动贸易巨舰</b>：煤炭转型最纠结、钴资产受益电池链但价格低迷；盈利波动全场最大，适合周期交易者而非长期持有。</td></tr>
+<tr><td><span class="rank-badge">10</span></td><td class="main">英美资源 Anglo</td><td class="num">6.2</td><td><b>瘦身求生→轻装上阵</b>：账面亏损为重组减值；Quellaveco 铜矿质量高，若重组兑现 2027-28 年排名有望回升——当前是"深度价值+事件驱动"型标的。</td></tr>
+</table>
+
+<div class="callout">
+<b>三点总结：</b>① <b>行业重心正从"铁矿石+煤炭"迁往"铜+锂+金"</b>——BHP 铜首超铁矿、Rio 三大板块重组、紫金金铜锂三线放量，是本轮周期最重要的结构信号；② <b>中国因素双重存在</b>：需求端（AI/电网/新能源）拉动巨头利润，供给端紫金已跻身全球矿业第一梯队（市值前3-4、ROE 第1）；③ <b>2026-2028 的胜负手在项目执行</b>：Simandou、Reko Diq、Grasberg 复产、巨龙二期、紫金锂板块——谁的管线如期兑现，谁就能在下一轮周期顶部拿到最大份额。
+</div>
+
+<div class="src">
+<b>数据来源与更新：</b>① 各公司 2025 年报/财报公告（BHP FY26H1 公告 2026-02、力拓年报 2026-02-18、淡水河谷 2026 年初、嘉能可 2026 年业绩、自由港 10-K 2026-02-12、纽蒙特 2026-02、巴里克 2026-02-05、紫金 2025 年报 2026-03-21）；② 新浪财经《16家矿企2025年财报汇总》（2026-04-01）；③ Forbes（2026-03-06）、Investor Daily、TickerXray 对比分析；④ 紫金矿业官网/年报（ROE 31.8%、资源量：金4600吨/铜1.1亿吨/锂1800万吨LCE）。<br>
+<b>口径说明：</b>各公司财年不同（BHP 6月截止，其余多为自然年）；紫金按人民币折算美元（≈7.15）；净利/净利率为归属股东口径。本报告为公开数据整理，不构成投资建议。<b>更新时间：2026-08-28</b>
+</div>
+</div>
+
+<script>
+var r = echarts.init(document.getElementById('radar'));
+r.setOption({
+  backgroundColor:'transparent',
+  legend:{bottom:0,textStyle:{color:'#a89f8d',fontSize:11},itemWidth:12},
+  tooltip:{},
+  radar:{indicator:[{name:'规模',max:10},{name:'盈利',max:10},{name:'成长',max:10},{name:'成本',max:10},{name:'转型',max:10},{name:'负债',max:10}],
+  radius:'62%',splitNumber:4,
+  axisName:{color:'#cfc8b8',fontSize:12},
+  splitLine:{lineStyle:{color:'rgba(212,176,106,0.12)'}},
+  splitArea:{areaStyle:{color:['rgba(255,255,255,0.02)','rgba(255,255,255,0.04)']}},
+  axisLine:{lineStyle:{color:'rgba(255,255,255,0.1)'}}},
+  series:[{type:'radar',
+    data:[
+      {name:'必和必拓',value:[9.5,8.5,6.5,8.5,7.5,8.5],lineStyle:{color:'#d4b06a'},itemStyle:{color:'#d4b06a'},areaStyle:{color:'rgba(212,176,106,0.10)'}},
+      {name:'紫金矿业',value:[7.5,9,9.5,9,8.5,7],lineStyle:{color:'#e05a4e'},itemStyle:{color:'#e05a4e'},areaStyle:{color:'rgba(224,90,78,0.10)'}},
+      {name:'力拓',value:[9,7.5,7,8,8,7.5],lineStyle:{color:'#3fa66a'},itemStyle:{color:'#3fa66a'},areaStyle:{color:'rgba(63,166,106,0.08)'}},
+      {name:'纽蒙特',value:[7,8.5,7.5,7.5,6.5,9.5],lineStyle:{color:'#8fb8ff'},itemStyle:{color:'#8fb8ff'},areaStyle:{color:'rgba(143,184,255,0.08)'}}
+    ]}]
+});
+window.addEventListener('resize',function(){r.resize();});
+</script>
+</body>
+</html>
