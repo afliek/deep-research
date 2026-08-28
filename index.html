@@ -136,8 +136,8 @@
   /* 分组区块 */
   .group { margin-bottom: 24px; }
   .group-head {
-    font-size: 19px; font-weight: 700;
-    letter-spacing: 3px;
+    font-size: 22px; font-weight: 800;
+    letter-spacing: 4px;
     color: #f3e3b3;
     margin-bottom: 12px;
     padding-bottom: 10px;
@@ -148,33 +148,31 @@
   }
   .group-head::before {
     content: '';
-    width: 10px; height: 10px;
+    width: 13px; height: 13px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, #f7e7b3, var(--gold));
-    margin-right: 10px;
-    box-shadow: 0 0 10px rgba(201, 162, 75, 0.65);
+    margin-right: 12px;
+    box-shadow: 0 0 14px rgba(201, 162, 75, 0.85);
     flex-shrink: 0;
   }
   /* 行业研究小节：标题独占一行 + 各自网格（标题不与卡片同排） */
   .sub-block { margin-top: 6px; }
   .sub-block + .sub-block { margin-top: 10px; }
   .sub-group {
-    font-size: 14px; font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--gold2);
-    margin: 14px 0 8px;
-    padding-left: 9px;
-    border-left: 3px solid var(--gold);
+    font-size: 12.5px; font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin: 12px 0 7px;
+    padding-left: 8px;
+    border-left: 2px solid rgba(201, 162, 75, 0.55);
     display: flex; align-items: center;
-    text-shadow: 0 0 12px rgba(201, 162, 75, 0.2);
   }
   .sub-group::before {
     content: '';
-    width: 7px; height: 7px;
+    width: 5px; height: 5px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #f7e7b3, var(--gold));
-    margin-right: 8px;
-    box-shadow: 0 0 8px rgba(201, 162, 75, 0.6);
+    background: rgba(201, 162, 75, 0.75);
+    margin-right: 7px;
     flex-shrink: 0;
   }
 
@@ -429,10 +427,7 @@
         <div class="sub-group">总体研究</div>
         <div class="topic-grid">
 
-      <a href="global-mining-top10.html" class="tile finance" title="全球前十大矿业巨头对比分析（2026-08）：必和必拓/力拓/淡水河谷/嘉能可/自由港/纽蒙特/巴里克/南方铜业/英美资源/紫金矿业——近10年营收与产品结构、净利与利润率、成本与资产负债、新能源布局/产能扩张/并购/ESG 四维潜力分析；综合竞争力排名：BHP>紫金>Rio>纽蒙特>自由港>Vale>南方铜业>巴里克>嘉能可>英美">
-        <span class="tile-title">全球前十大矿业巨头对比分析</span>
-        <span class="tile-tags">必和必拓 · 力拓 · 紫金 · 竞争力排名 · 数据2026-08</span>
-        </a>
+      
 
       <a href="china-top10.html" class="tile finance" title="银行占A股净利润40.4%（2.17万亿）、非银金融12.5%，前十五大行业合计约92%；含中美利润格局对比与30年趋势">
         <span class="tile-title">中国A股十五大行业利润格局分析</span>
@@ -458,7 +453,12 @@
         <div class="sub-group">有色金属</div>
         <div class="topic-grid">
 
-      <a href="a-share-nonferrous-48.html" class="tile finance" title="A股有色金属全板块 48 家研报：量能释放 × 价格双情景模型（2028），铜/铝/锂/金/稀土各子板块产能与利润情景测算">
+      <a href="global-mining-top10.html" class="tile finance" title="全球前十大矿业巨头对比分析（2026-08）：必和必拓/力拓/淡水河谷/嘉能可/自由港/纽蒙特/巴里克/南方铜业/英美资源/紫金矿业——近10年营收与产品结构、净利与利润率、成本与资产负债、新能源布局/产能扩张/并购/ESG 四维潜力分析；综合竞争力排名：BHP>紫金>Rio>纽蒙特>自由港>Vale>南方铜业>巴里克>嘉能可>英美">
+        <span class="tile-title">全球前十大矿业巨头对比分析</span>
+        <span class="tile-tags">必和必拓 · 力拓 · 紫金 · 竞争力排名 · 数据2026-08</span>
+        </a>
+
+<a href="a-share-nonferrous-48.html" class="tile finance" title="A股有色金属全板块 48 家研报：量能释放 × 价格双情景模型（2028），铜/铝/锂/金/稀土各子板块产能与利润情景测算">
         <span class="tile-title">A股有色金属 48 家 · 双情景模型（2028）</span>
         <span class="tile-tags">全板块48家 · 量能释放 · 价格情景 · 2028预测 · 报告2026-08</span>
         </a>
@@ -476,7 +476,24 @@
         </div>
       </div>
 
-      <div class="sub-block">
+            <div class="sub-block">
+        <div class="sub-group">AI与存储芯片</div>
+        <div class="topic-grid">
+
+<a href="ai-chip-memory-supply-demand.html" class="tile finance" title="AI芯片与存储芯片供需全景分析（2026-08）：需求端 AI 算力驱动大幅增长，供给端扩张追不上需求，含 2026 年当期供需缺口量化、HBM 主导的结构变化、价格历史级涨幅与持续节奏判断">
+        <span class="tile-title">AI芯片与存储芯片供需全景分析</span>
+        <span class="tile-tags">AI芯片 · 存储芯片 · HBM · 供需缺口 · 数据2026-08</span>
+        </a>
+
+<a href="ai-chip-demand.html" class="tile finance" title="AI时代芯片需求与算力增长量化分析：2021-2026E芯片需求与算力增长量化曲线（交互式SVG图表，可悬浮查看数据点），NVIDIA/AMD/Intel算力路线图、数据中心GPU需求测算、单位算力成本下降与需求弹性分析">
+        <span class="tile-title">AI时代芯片需求与算力增长量化分析</span>
+        <span class="tile-tags">AI芯片 · 算力增长 · 量化曲线 · 交互图表 · 数据2026-08</span>
+        </a>
+
+        </div>
+      </div>
+
+<div class="sub-block">
         <div class="sub-group">行业研究方法</div>
         <div class="topic-grid">
 
@@ -575,14 +592,6 @@
         <span class="tile-title">第十六届证券业分析师金牛奖全景解读</span>
         <span class="tile-tags">金牛奖 · 获奖机构 · 归因分析 · 数据2025-12</span>
       </a>
-        <a href="ai-chip-memory-supply-demand.html" class="tile finance" title="AI芯片与存储芯片供需全景分析（2026-08）：需求端 AI 算力驱动大幅增长，供给端扩张追不上需求，含 2026 年当期供需缺口量化、HBM 主导的结构变化、价格历史级涨幅与持续节奏判断">
-          <span class="tile-title">AI芯片与存储芯片供需全景分析</span>
-          <span class="tile-tags">AI芯片 · 存储芯片 · HBM · 供需缺口 · 数据2026-08</span>
-        </a>
-        <a href="ai-chip-demand.html" class="tile finance" title="AI时代芯片需求与算力增长量化分析：2021-2026E芯片需求与算力增长量化曲线（交互式SVG图表，可悬浮查看数据点），NVIDIA/AMD/Intel算力路线图、数据中心GPU需求测算、单位算力成本下降与需求弹性分析">
-          <span class="tile-title">AI时代芯片需求与算力增长量化分析</span>
-          <span class="tile-tags">AI芯片 · 算力增长 · 量化曲线 · 交互图表 · 数据2026-08</span>
-        </a>
       </div>
     </section>
 
