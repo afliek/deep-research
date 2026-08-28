@@ -155,13 +155,15 @@
     box-shadow: 0 0 10px rgba(201, 162, 75, 0.65);
     flex-shrink: 0;
   }
-  /* 行业研究小节标题 */
+  /* 行业研究小节：标题独占一行 + 各自网格（标题不与卡片同排） */
+  .sub-block { margin-top: 6px; }
+  .sub-block + .sub-block { margin-top: 10px; }
   .sub-group {
     font-size: 14px; font-weight: 700;
     letter-spacing: 2px;
     color: var(--gold2);
-    margin: 22px 0 4px;
-    padding-left: 10px;
+    margin: 14px 0 8px;
+    padding-left: 9px;
     border-left: 3px solid var(--gold);
     display: flex; align-items: center;
     text-shadow: 0 0 12px rgba(201, 162, 75, 0.2);
@@ -419,51 +421,86 @@
     </div>
   </section>
 
-    <!-- ===== 分组四：行业研究 ===== -->
+      <!-- ===== 分组四：行业研究 ===== -->
   <section class="group">
     <div class="group-head">行业研究</div>
-    <div class="topic-grid">
 
-      <div class="sub-group">总体研究</div>
+      <div class="sub-block">
+        <div class="sub-group">总体研究</div>
+        <div class="topic-grid">
 
       <a href="global-mining-top10.html" class="tile finance" title="全球前十大矿业巨头对比分析（2026-08）：必和必拓/力拓/淡水河谷/嘉能可/自由港/纽蒙特/巴里克/南方铜业/英美资源/紫金矿业——近10年营收与产品结构、净利与利润率、成本与资产负债、新能源布局/产能扩张/并购/ESG 四维潜力分析；综合竞争力排名：BHP>紫金>Rio>纽蒙特>自由港>Vale>南方铜业>巴里克>嘉能可>英美">
         <span class="tile-title">全球前十大矿业巨头对比分析</span>
         <span class="tile-tags">必和必拓 · 力拓 · 紫金 · 竞争力排名 · 数据2026-08</span>
-      </a>
+        </a>
 
       <a href="china-top10.html" class="tile finance" title="银行占A股净利润40.4%（2.17万亿）、非银金融12.5%，前十五大行业合计约92%；含中美利润格局对比与30年趋势">
         <span class="tile-title">中国A股十五大行业利润格局分析</span>
         <span class="tile-tags">A股 · 银行主导 · 有色入榜 · 中美对比 · 数据2026-08</span>
-      </a>
+        </a>
 
-      <div class="sub-group">保险</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-group">保险</div>
+        <div class="topic-grid">
 
       <a href="insurance.html" class="tile finance" title="2025年保费收入6.12万亿（+7.4%）、总资产41.3万亿；五大险企NBV全线高增29%-65%，代理人企稳">
         <span class="tile-title">中国保险行业：转型复苏与代理人重构</span>
         <span class="tile-tags">保险 · 代理人 · 保费收入 · 中外对比 · 数据2025</span>
-      </a>
+        </a>
 
-      <div class="sub-group">有色金属</div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-group">有色金属</div>
+        <div class="topic-grid">
 
       <a href="a-share-nonferrous-48.html" class="tile finance" title="A股有色金属全板块 48 家研报：量能释放 × 价格双情景模型（2028），铜/铝/锂/金/稀土各子板块产能与利润情景测算">
         <span class="tile-title">A股有色金属 48 家 · 双情景模型（2028）</span>
         <span class="tile-tags">全板块48家 · 量能释放 · 价格情景 · 2028预测 · 报告2026-08</span>
-      </a>
+        </a>
 
       <a href="minerals-panorama.html" class="tile finance" title="A股有色上市公司矿产品种全景报告：13个矿种（铜铝锌铅镍锡金银碳酸锂+钴稀土锑钨钼）当前价格与来源、28家上市公司分矿种业绩贡献占比（标注主要品种）、9个期货品种近10年周线走势图（2016-2026，标注高低点）——数据可溯源">
         <span class="tile-title">A股有色 · 矿产品种全景报告</span>
         <span class="tile-tags">13矿种 · 价格+占比 · 十年周线 · 28家公司 · 数据2026-08</span>
-      </a>
+        </a>
 
       <a href="gold-stock-scenario.html" class="tile finance" title="A股六家黄金股双金属价格情景测算（2026-08）：黄金 2年×2/4年×4 + 其他金属 2年×1.5/4年×2，2030E 利润/5年CAGR/前瞻PE 对比；基准→只涨金→双金属×2→×3 四档敏感性，2026-08-26 市值口径——赤峰弹性第一、紫金压舱">
         <span class="tile-title">A股黄金股双金属情景测算</span>
         <span class="tile-tags">黄金股 · 金价弹性 · 情景测算 · 前瞻PE · 数据2026-08</span>
-      </a>
+        </a>
 
-    </div>
+        </div>
+      </div>
+
+      <div class="sub-block">
+        <div class="sub-group">行业研究方法</div>
+        <div class="topic-grid">
+
+      <a href="pharma-forecast-guide.html" class="tile method" title="生物医药行业业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
+        <span class="tile-title">生物医药行业业绩预测分析框架</span>
+        <span class="tile-tags">七维模型 · 名词速查 · 集采/BD/CXO · 实战演示 · 报告2026-08</span>
+        </a>
+
+      <a href="nonferrous-forecast-guide.html" class="tile method" title="有色金属行业业绩预测分析框架（2026-08）：八维预测模型——金属价格判断、矿产产量与自产率、成本曲线位置、储量增储、扩产项目时间表、减值套保扰动、产业链位置（矿/冶炼/加工）、宏观政策；五类子板块区分表 + 40+专业名词速查（C1成本/品位/储采比/TC加工费/成本曲线/套保/周期股PE陷阱等）+ 紫金矿业八维体检实战演示 + 小白六大常见错误">
+        <span class="tile-title">有色金属行业业绩预测分析框架</span>
+        <span class="tile-tags">八维模型 · 量价成本 · 成本曲线 · 周期股估值 · 报告2026-08</span>
+        </a>
+
+      <a href="insurance-forecast-guide.html" class="tile method" title="保险行业业绩预测分析框架（2026-08）：八维预测模型——负债端（新单NBV增速、价值率Margin、代理人队伍、银保多元渠道、分红险转型）+ 资产端（投资收益率、利率与准备金、利差损风险）；寿险/财险双模式区分表 + 40+专业名词速查（NBV/EV/IFRS17/CSM/利差损/报行合一/PEV估值等）+ 人寿vs财险对比实战演示 + 小白六大常见错误">
+        <span class="tile-title">保险行业业绩预测分析框架</span>
+        <span class="tile-tags">八维模型 · NBV/EV · 利差损 · IFRS17 · 报告2026-08</span>
+        </a>
+
+        </div>
+      </div>
+
   </section>
 
-  <!-- ===== 分组五：上市公司研究 ===== -->
+<!-- ===== 分组五：上市公司研究 ===== -->
   <section class="group">
     <div class="group-head">上市公司研究</div>
     <div class="topic-grid">
@@ -481,30 +518,7 @@
     </div>
   </section>
 
-  <!-- ===== 分组六：行业研究方法 ===== -->
-  <section class="group">
-    <div class="group-head">行业研究方法</div>
-    <div class="topic-grid">
-
-      <a href="pharma-forecast-guide.html" class="tile method" title="生物医药行业业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
-        <span class="tile-title">生物医药行业业绩预测分析框架</span>
-        <span class="tile-tags">七维模型 · 名词速查 · 集采/BD/CXO · 实战演示 · 报告2026-08</span>
-      </a>
-
-      <a href="nonferrous-forecast-guide.html" class="tile method" title="有色金属行业业绩预测分析框架（2026-08）：八维预测模型——金属价格判断、矿产产量与自产率、成本曲线位置、储量增储、扩产项目时间表、减值套保扰动、产业链位置（矿/冶炼/加工）、宏观政策；五类子板块区分表 + 40+专业名词速查（C1成本/品位/储采比/TC加工费/成本曲线/套保/周期股PE陷阱等）+ 紫金矿业八维体检实战演示 + 小白六大常见错误">
-        <span class="tile-title">有色金属行业业绩预测分析框架</span>
-        <span class="tile-tags">八维模型 · 量价成本 · 成本曲线 · 周期股估值 · 报告2026-08</span>
-      </a>
-
-      <a href="insurance-forecast-guide.html" class="tile method" title="保险行业业绩预测分析框架（2026-08）：八维预测模型——负债端（新单NBV增速、价值率Margin、代理人队伍、银保多元渠道、分红险转型）+ 资产端（投资收益率、利率与准备金、利差损风险）；寿险/财险双模式区分表 + 40+专业名词速查（NBV/EV/IFRS17/CSM/利差损/报行合一/PEV估值等）+ 人寿vs财险对比实战演示 + 小白六大常见错误">
-        <span class="tile-title">保险行业业绩预测分析框架</span>
-        <span class="tile-tags">八维模型 · NBV/EV · 利差损 · IFRS17 · 报告2026-08</span>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ===== 分组七：全球股市研究 ===== -->
+    <!-- ===== 分组六：全球股市研究 ===== -->
   <section class="group">
     <div class="group-head">全球股市研究</div>
     <div class="topic-grid">
