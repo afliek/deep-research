@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长鑫科技（688825.SH）深度分析报告 · DRAM国产替代 / 盈利预测 / 估值</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root{
+    --navy:#16213e;
+    --navy-2:#1f2b4d;
+    --gold:#c8a04b;
+    --gold-2:#e3c277;
+    --copper:#b06a3b;
+    --ink:#1d2433;
+    --muted:#5b6678;
+    --line:#e6e9ef;
+    --bg:#f5f6f9;
+    --card:#ffffff;
+    --green:#1f9d6b;
+    --red:#c0392b;
+    --blue:#2c6fbb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Segoe UI",system-ui,sans-serif;
+    line-height:1.75;font-size:15.5px;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px 80px;}
+  .hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 55%,#26345c 100%);
+    color:#fff;padding:46px 22px 40px;margin-bottom:30px;
+    border-bottom:4px solid var(--gold);
+  }
+  .hero-inner{max-width:1040px;margin:0 auto;}
+  .hero .tag{
+    display:inline-block;font-size:12.5px;letter-spacing:2px;color:var(--gold-2);
+    border:1px solid rgba(227,194,119,.5);border-radius:20px;padding:3px 14px;margin-bottom:16px;
+  }
+  .hero h1{font-size:30px;margin:0 0 8px;font-weight:800;letter-spacing:1px;}
+  .hero .sub{font-size:15px;color:#c7d0e0;margin:0;}
+  .hero .meta{margin-top:18px;font-size:13px;color:#aab4c8;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-46px auto 34px;max-width:1040px;padding:0 22px;position:relative;z-index:2;}
+  .kpi{background:var(--card);border-radius:12px;padding:18px 16px;box-shadow:0 6px 22px rgba(20,30,60,.10);border-top:3px solid var(--gold);}
+  .kpi .v{font-size:25px;font-weight:800;color:var(--navy);line-height:1.1;}
+  .kpi .v small{font-size:14px;font-weight:600;}
+  .kpi .l{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .kpi.alt{border-top-color:var(--copper);}
+  .kpi.alt2{border-top-color:var(--blue);}
+  .kpi.alt3{border-top-color:var(--green);}
+  section{background:var(--card);border-radius:14px;padding:30px 32px;margin-bottom:26px;box-shadow:0 3px 14px rgba(20,30,60,.06);}
+  .sec-h{display:flex;align-items:center;gap:12px;margin:0 0 18px;}
+  .sec-h .num{
+    width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--navy);color:var(--gold-2);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
+  }
+  .sec-h h2{font-size:21px;margin:0;color:var(--navy);font-weight:800;}
+  h3{font-size:17px;color:var(--copper);margin:26px 0 10px;font-weight:700;}
+  h4{font-size:15px;color:var(--navy);margin:18px 0 8px;font-weight:700;}
+  p{margin:10px 0;}
+  .lead{font-size:15.5px;color:#333c4d;}
+  .accent{color:var(--copper);font-weight:700;}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+  th,td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--line);}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{background:#f0f2f7;color:var(--navy);font-weight:700;border-bottom:2px solid #d7dcea;}
+  tbody tr:hover{background:#fafbfd;}
+  .pos{color:var(--green);font-weight:600;}
+  .neg{color:var(--red);font-weight:600;}
+  .hl{background:#fff8e8 !important;}
+  .chart-box{background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:16px;margin:18px 0;}
+  .chart-box .cap{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center;}
+  canvas{width:100%;height:auto;display:block;}
+  .drivers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .drv{background:#fafbff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;}
+  .drv h4{margin:0 0 6px;color:var(--navy);}
+  .drv p{margin:4px 0;font-size:13.5px;color:#3a4456;}
+  .callout{background:linear-gradient(135deg,#fff8e8,#fffdf6);border:1px solid #f0e2bd;border-left:5px solid var(--gold);border-radius:10px;padding:16px 18px;margin:18px 0;}
+  .callout.warn{background:linear-gradient(135deg,#fdf0ee,#fffaf9);border-color:#f3cfc8;border-left-color:var(--red);}
+  .callout.blue{background:linear-gradient(135deg,#eef4fc,#fafcff);border-color:#cfe0f3;border-left-color:var(--blue);}
+  .callout b{color:var(--navy);}
+  ul.tight{margin:8px 0;padding-left:20px;}
+  ul.tight li{margin:6px 0;}
+  .foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:30px;line-height:1.9;}
+  .pill{display:inline-block;background:#eef1f6;color:var(--navy);font-size:12px;padding:2px 10px;border-radius:12px;margin:2px 4px 2px 0;}
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .drivers{grid-template-columns:1fr;}
+    section{padding:22px 18px;}
+    .hero h1{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="tag">长鑫科技 · 688825.SH · 投资分析</span>
+    <h1>长鑫科技深度分析报告</h1>
+    <p class="sub">公司概况 · DRAM行业格局与国产替代 · 核心竞争力 · 财务分析 · 盈利预测 · 估值 · 风险提示</p>
+    <p class="meta">报告日期：2026-08-28　|　数据来源：招股说明书、2026 半年报（8-28 晚披露）、TrendForce / Omdia / Counterpoint、东北/华西/国金/国联民生等券商研报、公开行情（8-28 收盘）</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">776<small>亿</small></div><div class="l">2026H1 归母净利润<br>去年同期 −23.3 亿</div></div>
+    <div class="kpi alt"><div class="v">84.8<small>%</small></div><div class="l">2026H1 主营业务毛利率<br>（2025 全年 41.0%）</div></div>
+    <div class="kpi alt2"><div class="v">8<small>%</small></div><div class="l">全球 DRAM 份额<br>（2026Q1，全球第四）</div></div>
+    <div class="kpi alt3"><div class="v">3.98<small>万亿</small></div><div class="l">总市值（8-28 收盘 58.6 元）<br>A 股第一</div></div>
+  </div>
+
+  <!-- ============ 1 公司概况 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">1</div><h2>公司概况：中国最大、全球第四的 DRAM IDM 龙头</h2></div>
+    <p class="lead">长鑫科技集团股份有限公司（688825.SH）成立于 2016 年，总部合肥，是<span class="accent">中国规模最大、技术最先进、布局最全的 DRAM 研发设计制造一体化（IDM）企业</span>。2026 年 7 月 27 日科创板上市（发行价 8.66 元，募资净额约 576 亿元，超募约 281 亿），上市首日涨 465.8%，现以约 3.98 万亿元市值位列 A 股第一。公司无控股股东、无实际控制人；前五大股东为清辉集电（21.67%）、长鑫集成（11.71%）、大基金二期（8.73%）、合肥集鑫（8.37%，员工持股平台）、安徽省投（7.91%）；阿里巴巴合计持股约 5%。董事长朱一明同时是兆易创新实控人，两者构成"Fabless 设计 + IDM 制造"的国产存储闭环（2025 年关联交易 12 亿元以上）。</p>
+
+    <h3>① DRAM 产品布局：从 DDR4 全面转轨 DDR5/LPDDR5X</h3>
+    <table>
+      <thead><tr><th>产品系列</th><th>2025 收入占比</th><th>应用场景</th><th>进展</th></tr></thead>
+      <tbody>
+        <tr><td>LPDDR 系列（LPDDR4X/5/5X）</td><td class="hl"><b>65.9%（407 亿）</b></td><td>手机/平板等移动终端</td><td>LPDDR5X 速率 10,667Mbps；已进入小米、荣耀、OPPO、vivo、传音供应链；<b>LPDDR6 峰值 12,800Mbps 已送样</b></td></tr>
+        <tr><td>DDR 系列（DDR4→DDR5）</td><td>31.6%（195 亿）</td><td>服务器/PC/AI 算力</td><td>2024 年底停产 DDR4；DDR5 速率 8,000Mbps、单颗最大 24Gb；批量供货阿里云、腾讯云、字节、浪潮</td></tr>
+        <tr><td>其他产品及服务（含代工）</td><td>1.7%</td><td>利基市场</td><td>兆易创新 Fabless 模式的代工与直销合作</td></tr>
+      </tbody>
+    </table>
+
+    <h3>② 产能规模：三厂布局，扩产全球最快</h3>
+    <table>
+      <thead><tr><th>指标</th><th>2025</th><th>2026E</th><th>2027E</th><th>2028E</th><th>远期</th></tr></thead>
+      <tbody>
+        <tr><td>月产能（12 英寸晶圆投片）</td><td>27~30 万片</td><td class="pos">35 万片（年底）</td><td class="pos">45 万片</td><td class="hl"><b>50 万片</b></td><td>60 万片（~2030，规模可比美光）</td></tr>
+        <tr><td>产能利用率</td><td>&gt;95%</td><td>&gt;95%</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>全球 DRAM 产能占比</td><td>~14%</td><td>—</td><td class="pos">~17%</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：合肥两座 + 北京一座 12 英寸厂；东北证券预计产能 2025→2027 年从 27 万片/月扩至 45 万片/月。公司远期规划月产 60 万片，约在 2030 年前后于整体规模上接近美光（当前约 38.5 万片/月）。</p>
+
+    <h3>③ 客户结构：内需大单锁定 + 高集中度</h3>
+    <ul class="tight">
+      <li><b>核心客户</b>：阿里云、腾讯（2026-06 签逾 30 亿美元供货协议）、字节跳动（2026-07 签 5 年逾 70 亿美元协议）、联想、浪潮、小米、荣耀、OPPO、vivo、传音；2023–2025 年前五大客户收入占比 67%~74%。</li>
+      <li><b>议价能力质变</b>：2026-08 媒体报道苹果寻求低价采购被拒——公司要求报价不低于三星/海力士，反映供给紧缺下定价权上移；华为、小米以长协锁定产能。</li>
+      <li><b>风险面</b>：公司自身提示客户集中度偏高。</li>
+    </ul>
+  </section>
+
+  <!-- ============ 2 行业分析 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">2</div><h2>行业分析：AI 重塑 DRAM 超级周期，供给挤出是核心变量</h2></div>
+    <p class="lead">本轮 DRAM 周期与历史消费电子驱动的周期有本质区别：<b>AI 服务器成为需求最大增量，而三大原厂将新增产能系统性转向 HBM</b>——HBM 单位比特耗晶圆约为 DDR5 的 2.5–3 倍，"每多一片 HBM 就挤出数片普通 DRAM"。这使 2026 年的涨价不是需求单边驱动，而是供给结构被重新分配的结果。</p>
+
+    <h3>① 市场规模：一年翻近 1.5 倍</h3>
+    <table>
+      <thead><tr><th>指标（Omdia/TrendForce 口径）</th><th>2025</th><th>2026E</th><th>2027E</th><th>2030E</th></tr></thead>
+      <tbody>
+        <tr><td>全球 DRAM 市场规模（亿美元）</td><td>1,505（+54%）</td><td class="pos">3,722（+147%）</td><td class="pos">4,634</td><td class="hl">5,710</td></tr>
+        <tr><td>普通 DRAM 供给产能（万片/月）</td><td>188.5</td><td>238</td><td>265</td><td>—</td></tr>
+        <tr><td>三大原厂资本开支（亿美元）</td><td>—</td><td>583（三星210/海力士219/美光154）</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>② 价格周期：26Q1 合约价环比暴涨 93–98%</h3>
+    <ul class="tight">
+      <li><b>2023 上半年</b>：深度下行，产品价格跌幅达 50%（长鑫当年计提存货跌价近 115 亿元）。</li>
+      <li><b>2025Q2 起</b>：涨价周期开启，25Q4 Server DRAM 单季涨 50–65%。</li>
+      <li><b>26Q1</b>：一般型 DRAM 合约价环比 +93~98%，远超双位数预期，全品类扩散。</li>
+      <li><b>展望</b>：东北证券预计缺口延续至 2027 年，2026 年价格维持高位、2027 年涨幅收窄但中枢不回落；三大原厂新建产能（三星 P4L/P5L、海力士 M15X、美光纽约厂）以 HBM 为主，大规模量产在 2027 年及以后。</li>
+    </ul>
+
+    <h3>③ 竞争格局与国产替代空间</h3>
+    <table>
+      <thead><tr><th>厂商</th><th>2026Q2 份额</th><th>战略重心</th><th>与长鑫的相对位置</th></tr></thead>
+      <tbody>
+        <tr><td>三星电子</td><td>39%（重回第一）</td><td>1c 制程 HBM、P4L 扩产</td><td>技术代差仍存（1c vs 长鑫 G4≈17nm 级）</td></tr>
+        <tr><td>SK 海力士</td><td>26%</td><td>HBM4（M15X/龙恩园区）</td><td>HBM 生态领先（HBM4E 26H2 样品）</td></tr>
+        <tr><td>美光科技</td><td>25%</td><td>1-gamma 制程、纽约新厂</td><td>月产能约 38.5 万片，长鑫 2026 底逼近</td></tr>
+        <tr class="hl"><td><b>长鑫科技</b></td><td class="hl"><b>~8%（Q1）</b></td><td class="hl">DDR5/LPDDR5X 放量 + LPDDR6 + HBM 布局</td><td class="hl">全球第四、中国第一；成熟制程不受 EUV 管制约束</td></tr>
+      </tbody>
+    </table>
+    <p>国产替代空间：国内 AI 算力链（阿里云/腾讯/字节）服务器 DRAM 需求高增而海外原厂优先供给 HBM 与海外大客户，国产化诉求刚性。Counterpoint 研究总监判断："问题不在于长鑫能否跻身存储三巨头之列，而在于何时实现"。2026–27 年国内 DRAM 设备资本开支从 45 亿美元增至 160 亿美元，长鑫是核心承载者。</p>
+  </section>
+
+  <!-- ============ 3 核心竞争力 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">3</div><h2>核心竞争力：跳代研发、DUV 换道超车与成本优势</h2></div>
+
+    <div class="drivers">
+      <div class="drv"><h4>① 跳代研发 + DUV 换道超车</h4><p>已完成 G1→G4 四代工艺平台量产，采取"跳代研发"策略；依托 DUV 深紫外光刻实现 10nm 级（17nm 级）制程优化，<b>绕开 EUV 出口管制壁垒</b>——海外三大厂先进产能受设备管制影响的空间，反而成为长鑫的"合规产能优势"。</p></div>
+      <div class="drv"><h4>② 良率与产品力进入第一梯队</h4><p>17nm 级 DDR5 良率突破 <b>90%</b>（三星同代 92~93%）；LPDDR5X 10,667Mbps 进入主流安卓旗舰供应链；LPDDR6 12,800Mbps 已送样。产品性能"部分接近国际主流水平"（招股书口径）。</p></div>
+      <div class="drv"><h4>③ 单位成本优势 15–20%</h4><p>行业专家口径：长鑫单位晶圆成本比韩国厂商<b>低 15~20%</b>——这解释了其在"报价不低于三星"的同时仍能保持 84.8% 的主营业务毛利率（2026H1）。IDM 模式 + 合肥产业集群配套进一步摊薄成本。</p></div>
+      <div class="drv"><h4>④ 产业链协同闭环</h4><p>与兆易创新形成"IDM+Fabless"互补闭环；合肥国资 + 大基金二期 + 阿里/腾讯产业资本的股东结构，天然绑定国内最大算力需求方；募资 576 亿元（超募 281 亿）+ 账面货币资金 1,434 亿元（2026H1），资本开支弹药充足。</p></div>
+    </div>
+
+    <div class="callout blue">
+      <b>HBM 是下一张牌桌门票：</b>公司当前尚无量产 HBM 产品（HBM 需 TSV/2.5D 封装能力，与三大厂存在代差），但"布局后 HBM 时代全新技术赛道"已写入战略；Counterpoint 认为若 HBM 技术落地，将开辟全新增长曲线。这是估值分歧的最大来源。
+    </div>
+  </section>
+
+  <!-- ============ 4 财务分析 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">4</div><h2>财务分析：从"亏损无底洞"到"日均盈利 4 亿"的 V 型反转</h2></div>
+
+    <h3>① 营收与盈利：三年半累计亏损 409 亿后，半年净赚 776 亿</h3>
+    <table>
+      <thead><tr><th>指标</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026H1</th></tr></thead>
+      <tbody>
+        <tr><td>营业收入（亿元）</td><td>82.87</td><td>90.87</td><td>241.78</td><td>618.0</td><td class="pos"><b>1,503.1</b></td></tr>
+        <tr><td>同比</td><td>—</td><td>+9.7%</td><td>+166%</td><td>+156%</td><td class="pos">+873.6%</td></tr>
+        <tr><td>归母净利润（亿元）</td><td>−83.28</td><td>−163.40</td><td>−71.45</td><td>18.75</td><td class="pos"><b>776.05</b></td></tr>
+        <tr><td>综合毛利率</td><td>−3.1%</td><td class="neg">−1.9%</td><td>5.6%</td><td>41.0%</td><td class="pos"><b>84.8%（主营）</b></td></tr>
+        <tr><td>经营现金流净额（亿元）</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="pos">1,311.6（+2,986%）</td></tr>
+        <tr><td>单季度拆分</td><td>—</td><td>—</td><td>—</td><td>25Q4 毛利率 35%</td><td class="pos">Q1 净利 247.6 → Q2 <b>528.4</b>（环比 +113%）</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：少数股东损益结构值得注意——2025 年合并净利润的近 74% 归少数股东（合肥长鑫各产线平台的少数股权），2026Q1 该比例已改善至约 25%（归母 247.6 亿 / 合并 330.1 亿）。展望后续，归母占比的趋势是估值的关键变量之一。</p>
+
+    <div class="chart-box">
+      <canvas id="finChart" width="960" height="400"></canvas>
+      <div class="cap">图 1　营业收入（柱）与归母净利润（点线，右轴）：2022–2025 实绩 + 2026–2028E 中性预测</div>
+    </div>
+
+    <h3>② 毛利率驱动拆解：量价齐升 + 结构升级 + 规模效应三力叠加</h3>
+    <table>
+      <thead><tr><th>2025 变动因素</th><th>DDR 系列</th><th>LPDDR 系列</th></tr></thead>
+      <tbody>
+        <tr><td>单位售价同比</td><td class="pos">+61.0%</td><td class="pos">+24.5%</td></tr>
+        <tr><td>单位成本同比</td><td class="pos">−26.3%</td><td class="pos">−22.9%</td></tr>
+        <tr class="hl"><td><b>系列毛利率（2025）</b></td><td><b>41.9%</b></td><td><b>37.3%</b></td></tr>
+      </tbody>
+    </table>
+    <ul class="tight">
+      <li><b>价格</b>：DRAM 供不应求，合约价 26Q1 环比 +93~98%（行业口径），2026H1 主营毛利率升至 84.8%。</li>
+      <li><b>结构</b>：2024 年底停产 DDR4，DDR5/24Gb 大容量占比提升；LPDDR5/5X 占比 66%。</li>
+      <li><b>成本</b>：产能利用率 &gt;95% + 制程升级（G3→G4）带来单位成本 20%+ 的年降。</li>
+    </ul>
+
+    <h3>③ 研发与资本开支：强度为行业两倍</h3>
+    <table>
+      <thead><tr><th>指标</th><th>2023</th><th>2024</th><th>2025</th><th>2026H1</th></tr></thead>
+      <tbody>
+        <tr><td>研发投入（亿元）</td><td>46.7</td><td>63.4</td><td>95.9</td><td>68.6（+87%）</td></tr>
+        <tr><td>研发费用率</td><td>51%+</td><td>26%</td><td>15.5%</td><td>4.6%（收入基数膨胀所致）</td></tr>
+        <tr><td>资本开支（估算口径）</td><td>—</td><td>—</td><td>—</td><td>总资产 4,681 亿（+39%），在建产线持续扩张</td></tr>
+      </tbody>
+    </table>
+    <p>截至 2026H1：研发人员 7,491 人（占 33.4%），境内专利 4,484 项 + 境外 3,400 项。募资净额 576 亿元投向三条线：DRAM 存储器技术升级（130 亿）、前瞻技术研发（90 亿）、量产线升级改造（75 亿），剩余超募资金用途待披露。公司曾测算未来三年尚有约 408 亿元资金缺口（2025 年末口径，当时未盈利；当前盈利水平下资金压力已大幅缓解）。</p>
+
+    <div class="chart-box">
+      <canvas id="capChart" width="960" height="380"></canvas>
+      <div class="cap">图 2　月产能（柱，万片/月）与综合毛利率（蓝线，%）路径：2025 实绩 + 2026–2028E 假设</div>
+    </div>
+
+    <div class="callout">
+      <b>财务结论：</b>长鑫的报表是全球存储周期最好的"晴雨表"——2023 年毛利率 −112.7%（剔存货跌价）到 2026H1 主营毛利率 84.8%，跨越了 197 个百分点的周期。当前盈利质量极高（净现比 1.69、货币资金 1,434 亿），但<span class="accent">84.8% 的毛利率本身就是周期极值</span>，这是盈利预测必须回答的问题（见第 5 章）。
+    </div>
+  </section>
+
+  <!-- ============ 5 盈利预测 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">5</div><h2>盈利预测：2026–2028 年关键假设与三档情景</h2></div>
+    <p class="lead">以 2026H1 实绩（营收 1,503 亿 / 归母 776 亿）为锚，构建<b>"产能 × 价格 × 毛利率"三因子模型</b>。核心争议点在 2027 年之后：价格中枢是否回落、扩产释放节奏如何。本报告给出保守 / 中性 / 乐观三档，中性档为本报告主判断。</p>
+
+    <h3>关键假设</h3>
+    <table>
+      <thead><tr><th>假设项</th><th>2026E</th><th>2027E</th><th>2028E</th><th>依据</th></tr></thead>
+      <tbody>
+        <tr><td>月产能（万片）</td><td>30→35</td><td>40→45</td><td>45→50</td><td>公司规划 + 东北证券（2027 年 45 万片）</td></tr>
+        <tr><td>产能利用率</td><td>&gt;95%</td><td>&gt;95%</td><td>&gt;95%</td><td>供不应求 + 长协锁定（历史 95%+）</td></tr>
+        <tr><td>DRAM 价格路径（中性）</td><td>高位续涨（26Q1 +93~98% 已兑现）</td><td>涨幅收窄、中枢不回落（约为 26 均价 85%）</td><td>温和回落至 26 均价 ~75%</td><td>东北证券"缺口延续至 2027"；保守/乐观档 ±15~25%</td></tr>
+        <tr><td>综合毛利率（中性）</td><td>80%（H2 略低于 H1 的 84.8%）</td><td>70%</td><td>60%</td><td>2025 年 41% → 2026H1 84.8% 的周期极值回归路径；保守/乐观 ±8pct</td></tr>
+        <tr><td>归母净利占比（合并净利）</td><td>~75%</td><td>~78%</td><td>~80%</td><td>2025 年 26% → 26Q1 75% 的持续改善趋势（假设*）</td></tr>
+        <tr><td>总股本（亿股）</td><td>679</td><td>679</td><td>679</td><td>上市后股本，假设无增发*</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：* 标注项为公开信息缺失下的合理假设——归母占比按 26Q1 实绩外推；股本按当前市值/股价反推（3.98 万亿 / 58.6 元）。毛利率假设隐含"2027 年起价格涨幅收窄但成本随新厂折旧上升"的双向挤压，符合 DRAM 历史周期规律（2018、2021 年周期顶部后毛利率均回落 30~50pct）。</p>
+
+    <h3>盈利预测结果（中性档）</h3>
+    <table>
+      <thead><tr><th>指标</th><th>2025A</th><th>2026E</th><th>2027E</th><th>2028E</th></tr></thead>
+      <tbody>
+        <tr><td>营业收入（亿元）</td><td>618.0</td><td class="pos"><b>3,050</b></td><td class="pos"><b>4,150</b></td><td class="pos"><b>5,300</b></td></tr>
+        <tr><td>同比</td><td>+156%</td><td>+394%</td><td>+36%</td><td>+28%</td></tr>
+        <tr><td>综合毛利率</td><td>41.0%</td><td>80%</td><td>70%</td><td>60%</td></tr>
+        <tr><td>归母净利润（亿元）</td><td>18.75</td><td class="pos"><b>1,380</b></td><td class="pos"><b>1,760</b></td><td class="pos"><b>1,950</b></td></tr>
+        <tr><td>同比</td><td>扭亏</td><td>~74 倍</td><td>+28%</td><td>+11%</td></tr>
+        <tr><td>净利率</td><td>3.0%</td><td>45%</td><td>42%</td><td>37%</td></tr>
+        <tr><td>EPS（元）</td><td>0.05*</td><td class="pos"><b>2.03</b></td><td class="pos"><b>2.59</b></td><td class="pos"><b>2.87</b></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：2025 年 EPS 按现股本折算仅为示意（上市前股本不同）。中性档 2026E 归母 1,380 亿 = H1 实绩 776 亿 + H2 约 604 亿（H2 价格假设与 H1 持平略高、产能增至 35 万片，但费用与新厂折旧上升）。落于国金（1,518 亿）与华西（1,244 亿）预测之间。</p>
+
+    <h3>三档情景对比（归母净利润，亿元）</h3>
+    <table>
+      <thead><tr><th>情景</th><th>核心假设</th><th>2026E</th><th>2027E</th><th>2028E</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><b>保守：价格 2027 年显著回落</b></td><td>2027 均价为 2026 的 65%、毛利率降至 55%；产能爬坡正常</td><td>1,250</td><td>1,100</td><td>1,050</td></tr>
+        <tr class="hl"><td><b>中性：缺口延续至 2027</b></td><td>如上表——2027 价格中枢不回落，2028 温和回落</td><td><b>1,380</b></td><td><b>1,760</b></td><td><b>1,950</b></td></tr>
+        <tr class="hl"><td><b>乐观：超级周期 + HBM 突破</b></td><td>价格高位再涨 15% + HBM/LPDDR6 高毛利放量（对齐国金）</td><td>1,520</td><td>2,520</td><td>3,510</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">保守档与华西隐含假设对齐（扩产节奏谨慎 + 价格弹性低）；乐观档对齐国金（DDR 毛利率 83%）。三档差异的本质：DRAM 价格 2027 年见顶回落的时点与幅度。</p>
+
+    <div class="callout">
+      <b>模型交叉验证：</b>①中性档 2026E = 1,380 亿，介于国金 1,518 亿与华西 1,244 亿之间，且与 H1 实绩占比匹配（H1 通常占全年 40~55%）；②隐含 2026E 净利率 45%，高于海力士周期顶部的 ~40%，反映长鑫成本优势 + 后发产品结构，方向合理但已近天花板；③2027 年增速放缓（+28%）来自价格假设而非产能——产能仍在 +29%/年增长，若 2027 价格不落，模型自动切换到乐观档。
+    </div>
+  </section>
+
+  <!-- ============ 6 估值分析 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">6</div><h2>估值分析：可比公司法下的合理区间</h2></div>
+    <p class="lead">以 8-28 收盘价 58.6 元 / 总市值 3.98 万亿元为基准。可比公司：全球 DRAM 三巨头（三星、海力士、美光，周期股估值锚）+ 中芯国际（A 股半导体制造稀缺性溢价锚）。</p>
+
+    <table>
+      <thead><tr><th>可比公司</th><th>周期位置</th><th>PE 口径</th><th>估值特征</th></tr></thead>
+      <tbody>
+        <tr><td>三星电子 / SK 海力士 / 美光</td><td>上行周期顶部区域</td><td>周期高点 PE 通常 5~10x（前瞻）</td><td>市场给周期股"高利润低倍数"</td></tr>
+        <tr><td>中芯国际（A）</td><td>成长期</td><td>2026E 一致预期约 150x</td><td>国产替代稀缺性溢价</td></tr>
+        <tr><td>南亚科技（台股）</td><td>利基 DRAM</td><td>周期弹性高波动</td><td>参考性较弱</td></tr>
+      </tbody>
+    </table>
+
+    <h3>三法交叉估值（基于本报告中性档盈利预测）</h3>
+    <table>
+      <thead><tr><th>估值方法</th><th>参数</th><th>隐含市值</th><th>对应股价</th><th>较现价（3.98 万亿）</th></tr></thead>
+      <tbody>
+        <tr class="neg"><td>PE（周期股锚）</td><td>2026E 净利 1,380 亿 × 8x（三巨头周期顶部水平）</td><td>约 1.10 万亿</td><td>约 16.2 元</td><td class="neg">−72%</td></tr>
+        <tr class="hl"><td><b>PE（成长溢价锚）</b></td><td>2026E × 25x（成长期折中：介于周期股 8x 与中芯 150x 之间）</td><td class="hl"><b>约 3.45 万亿</b></td><td class="hl"><b>约 51 元</b></td><td class="neg">−13%</td></tr>
+        <tr><td>PE（国金乐观锚）</td><td>2027E 净利 2,522 亿 × 20x（野村口径）</td><td>约 5.04 万亿</td><td>约 74 元</td><td class="pos">+27%</td></tr>
+        <tr><td>PS（半导体 IDM 锚）</td><td>2026E 营收 3,050 亿 × 1.3x（三星/海力士上行期 PS 1~1.5x）</td><td>约 3.97 万亿</td><td>约 58 元</td><td>±0%</td></tr>
+        <tr><td>PB（资产重估锚）</td><td>2026E 归母净资产约 2,200 亿 × 1.6~1.8x（可比均值 8.17x 大幅折价，考虑折旧周期）</td><td>约 3.5~4.0 万亿</td><td>52~59 元</td><td>±0%</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout blue">
+      <b>估值结论：</b>当前 3.98 万亿市值 ≈ 2026E 中性盈利的 <b>28.8 倍 PE / 1.3 倍 PS</b>——PS 已处全球 DRAM 同业上行期合理区间上限，PE 则隐含"2027 年利润继续增长 30%+ 且周期不反转"的乐观定价。合理估值区间：<span class="accent">中性情景 3.4~4.0 万亿（当前价已进入区间上沿）；若 2027 年价格如期维持（乐观情景兑现），市值看 5 万亿+；若 2027 年价格显著回落（保守情景），1.1~2.2 万亿</span>。当前股价实际是在为"乐观情景"付定金。
+    </div>
+  </section>
+
+  <!-- ============ 7 风险提示 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">7</div><h2>风险提示</h2></div>
+    <table>
+      <thead><tr><th>风险类别</th><th>具体内容</th><th>影响程度</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><b>存储价格周期反转</b></td><td>公司自身提示"价格持续大幅上涨不具备可持续性"；2027 年三大原厂新产能集中释放 + AI 资本开支若放缓，价格可能重演 2018/2021 年周期见顶回落（历史跌幅 50%+）；84.8% 毛利率不可持续</td><td>★★★★★</td></tr>
+        <tr><td>技术迭代风险</td><td>HBM 量产能力尚未建立（TSV/2.5D 封装代差）；若 HBM 成为 DRAM 价值量主导形态而长鑫无法切入，将在 AI 存储主赛道缺席；1c/1d 制程代差若拉大，成本优势收敛</td><td>★★★★★</td></tr>
+        <tr><td>地缘政治风险</td><td>美国出口管制升级可能限制设备/材料获取（当前 DUV 路线规避了 EUV，但光刻胶、刻蚀等环节仍有依赖）；海外市场准入与关税不确定性</td><td>★★★★</td></tr>
+        <tr><td>产能建设不及预期</td><td>2027 年 45 万片/2028 年 50 万片为规划口径；华西提示空港三期 2028 下半年才爬坡、新厂 2029 年量产；设备交付、洁净室建设周期均可能延后</td><td>★★★★</td></tr>
+        <tr><td>客户集中度风险</td><td>前五大客户占比 67~74%；互联网大厂资本开支若放缓，长协执行存在不确定性</td><td>★★★</td></tr>
+        <tr><td>少数股东损益结构</td><td>2025 年近 74% 合并净利归少数股东（2026Q1 改善至 25%）；产线平台股权结构若未持续优化，归母利润弹性受稀释</td><td>★★★</td></tr>
+        <tr><td>估值与流动性风险</td><td>3.98 万亿市值为 A 股第一，显著透支乐观预期；次新股波动极大（上市一个月最高涨近 6 倍、最大回撤约 19%）；若周期信号转弱，戴维斯双杀风险高</td><td>★★★★</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <b>核心矛盾：</b>长鑫的"中国第一、全球第四、产能扩张最快"是产业事实，但 84.8% 的毛利率与 28.8 倍的前瞻 PE 意味着市场已按"超级周期延续 + HBM 突破 + 份额跃升"三重乐观情景定价。投资的胜负手在于对<b> 2027 年 DRAM 价格中枢</b>的判断——这是本报告三档情景之间最大差异（1,100 亿 vs 2,520 亿）的唯一来源。
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告覆盖公司概况、行业分析、核心竞争力、财务分析、盈利预测、估值分析、风险提示七大部分。盈利预测以 2026H1 实绩为锚构建"产能×价格×毛利率"三因子模型，关键缺失数据（归母占比趋势、股本变动、分产品 ASP 明细）已标注为合理假设并给出推导逻辑。<br>
+    数据来源：长鑫科技招股说明书、2026 年半年度报告（2026-08-28）、上市公告书；Omdia / TrendForce / Counterpoint / CFM 行业数据；东北证券、华西证券、国金证券、国联民生、中泰证券、华金证券、天风证券研报；上海证券报、证券时报、每日经济新闻公开报道；行情数据截至 2026-08-28 收盘。<br>
+    <span class="pill">仅供研究参考</span><span class="pill">非投资建议</span><span class="pill">不构成买卖依据</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  function setup(canvas){
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = canvas.clientWidth || canvas.width;
+    var ratio = canvas.height / canvas.width;
+    var cssH = cssW * ratio;
+    canvas.style.height = cssH + 'px';
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return {ctx:ctx, w:cssW, h:cssH};
+  }
+
+  /* ---- 图1：营收与归母净利润 2022-2028E ---- */
+  var c1 = document.getElementById('finChart');
+  if(c1){
+    var d=setup(c1); var ctx=d.ctx, W=d.w, H=d.h;
+    var rev=[82.9,90.9,241.8,618,3050,4150,5300];
+    var np=[-83.3,-163.4,-71.5,18.8,1380,1760,1950];
+    var labels=['22','23','24','25','26E','27E','28E'];
+    var padL=54,padR=54,padT=24,padB=34;
+    var plotW=W-padL-padR, plotH=H-padT-padB;
+    var maxR=5600, minN=-200, maxN=2100;
+    ctx.strokeStyle='#eef1f6'; ctx.fillStyle='#9aa4b6'; ctx.font='10.5px sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
+    for(var g=0;g<=5;g++){
+      var v=maxR*g/5; var y=padT+plotH-(v/maxR)*plotH;
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+      ctx.fillText(v.toFixed(0), padL-6, y);
+    }
+    var n=rev.length; var step=plotW/n;
+    ctx.textAlign='center';
+    for(var i=0;i<n;i++){
+      var x=padL+step*i+step/2;
+      var h=(rev[i]/maxR)*plotH; var y0=padT+plotH-h;
+      var grad=ctx.createLinearGradient(0,y0,0,padT+plotH);
+      if(i>=4){grad.addColorStop(0,'#e3c277');grad.addColorStop(1,'#c8a04b');}
+      else if(i===3){grad.addColorStop(0,'#c47e4f');grad.addColorStop(1,'#b06a3b');}
+      else {grad.addColorStop(0,'#9bb7d8');grad.addColorStop(1,'#7d9cc0');}
+      ctx.fillStyle=grad; ctx.fillRect(x-16,y0,32,h);
+      ctx.fillStyle='#1d2433'; ctx.font='bold 10.5px sans-serif'; ctx.textBaseline='bottom';
+      ctx.fillText(rev[i]>=1000?(rev[i]/1000).toFixed(2)+'万亿':rev[i].toFixed(0), x, y0-4);
+      // NP point
+      var ny=(np[i]-minN)/(maxN-minN)*plotH; var yN=padT+plotH-ny;
+      ctx.beginPath(); ctx.arc(x+22,yN,4,0,Math.PI*2);
+      ctx.fillStyle=i>=4?'#1f9d6b':'#c0392b'; ctx.fill();
+      ctx.fillStyle=i>=4?'#1f9d6b':'#c0392b'; ctx.font='10px sans-serif'; ctx.textBaseline='middle'; ctx.textAlign='left';
+      ctx.fillText(np[i].toFixed(0), x+30, yN);
+      ctx.fillStyle='#5b6678'; ctx.font='11px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillText(labels[i], x, padT+plotH+6);
+    }
+    ctx.fillStyle='#9aa4b6'; ctx.font='10.5px sans-serif'; ctx.textAlign='left'; ctx.textBaseline='bottom';
+    ctx.fillText('营收（亿元）', padL-44, padT-8);
+    ctx.fillStyle='#1f9d6b'; ctx.fillText('● 归母净利（亿元，右轴）', W-170, padT-8);
+  }
+
+  /* ---- 图2：产能与毛利率双轴 ---- */
+  var c2 = document.getElementById('capChart');
+  if(c2){
+    var d2=setup(c2); var ctx2=d2.ctx, W2=d2.w, H2=d2.h;
+    var yrs=['2025','2026E','2027E','2028E'];
+    var cap=[28,35,45,50];
+    var gm=[41,80,70,60];
+    var pL=50,pR=50,pT=26,pB=32;
+    var pw=W2-pL-pR, ph=H2-pT-pB;
+    ctx2.strokeStyle='#eef1f6'; ctx2.fillStyle='#9aa4b6'; ctx2.font='10.5px sans-serif'; ctx2.textAlign='right'; ctx2.textBaseline='middle';
+    for(var g2=0;g2<=5;g2++){
+      var v2=60*g2/5; var y2=pT+ph-(v2/60)*ph;
+      ctx2.beginPath(); ctx2.moveTo(pL,y2); ctx2.lineTo(W2-pR,y2); ctx2.stroke();
+      ctx2.fillText(v2.toFixed(0), pL-6, y2);
+    }
+    var n2=4; var st2=pw/n2;
+    ctx2.textAlign='center';
+    for(var j=0;j<n2;j++){
+      var x2=pL+st2*j+st2/2;
+      var h2=(cap[j]/60)*ph; var yb=pT+ph-h2;
+      var gr2=ctx2.createLinearGradient(0,yb,0,pT+ph);
+      gr2.addColorStop(0,'#c8a04b'); gr2.addColorStop(1,'#b06a3b');
+      ctx2.fillStyle=gr2; ctx2.fillRect(x2-22,yb,44,h2);
+      ctx2.fillStyle='#1d2433'; ctx2.font='bold 11px sans-serif'; ctx2.textBaseline='bottom';
+      ctx2.fillText(cap[j]+'万片', x2, yb-4);
+      // GM line point
+      var gy=pT+ph-(gm[j]/100)*ph;
+      ctx2.beginPath(); ctx2.arc(x2,gy,5,0,Math.PI*2); ctx2.fillStyle='#2c6fbb'; ctx2.fill();
+      ctx2.fillStyle='#2c6fbb'; ctx2.font='bold 11px sans-serif'; ctx2.textBaseline='bottom'; ctx2.textAlign='center';
+      ctx2.fillText(gm[j]+'%', x2, gy-8);
+      ctx2.fillStyle='#5b6678'; ctx2.font='11px sans-serif'; ctx2.textBaseline='top'; 
+      ctx2.fillText(yrs[j], x2, pT+ph+6);
+    }
+    // connect GM line
+    ctx2.strokeStyle='#2c6fbb'; ctx2.lineWidth=2; ctx2.beginPath();
+    for(var k=0;k<n2;k++){
+      var gx=pL+st2*k+st2/2; var gyy=pT+ph-(gm[k]/100)*ph;
+      if(k===0)ctx2.moveTo(gx,gyy); else ctx2.lineTo(gx,gyy);
+    }
+    ctx2.stroke(); ctx2.lineWidth=1;
+    ctx2.fillStyle='#9aa4b6'; ctx2.font='10.5px sans-serif'; ctx2.textAlign='left'; ctx2.textBaseline='bottom';
+    ctx2.fillText('月产能（万片/月）', pL-40, pT-8);
+    ctx2.fillStyle='#2c6fbb'; ctx2.fillText('— 综合毛利率（%）', W2-150, pT-8);
+  }
+})();
+</script>
+
+</body>
+</html>
