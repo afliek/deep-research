@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赤峰黄金（600988.SH）深度分析报告 · 资源跃升 / 产能扩张 / 紫金入主 / 情景预测</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root{
+    --navy:#16213e;
+    --navy-2:#1f2b4d;
+    --gold:#c8a04b;
+    --gold-2:#e3c277;
+    --copper:#b06a3b;
+    --ink:#1d2433;
+    --muted:#5b6678;
+    --line:#e6e9ef;
+    --bg:#f5f6f9;
+    --card:#ffffff;
+    --green:#1f9d6b;
+    --red:#c0392b;
+    --blue:#2c6fbb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB","Segoe UI",system-ui,sans-serif;
+    line-height:1.75;font-size:15.5px;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px 80px;}
+  /* Hero */
+  .hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy-2) 55%,#26345c 100%);
+    color:#fff;padding:46px 22px 40px;margin-bottom:30px;
+    border-bottom:4px solid var(--gold);
+  }
+  .hero-inner{max-width:1040px;margin:0 auto;}
+  .hero .tag{
+    display:inline-block;font-size:12.5px;letter-spacing:2px;color:var(--gold-2);
+    border:1px solid rgba(227,194,119,.5);border-radius:20px;padding:3px 14px;margin-bottom:16px;
+  }
+  .hero h1{font-size:30px;margin:0 0 8px;font-weight:800;letter-spacing:1px;}
+  .hero .sub{font-size:15px;color:#c7d0e0;margin:0;}
+  .hero .meta{margin-top:18px;font-size:13px;color:#aab4c8;}
+  /* KPI cards */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-46px auto 34px;max-width:1040px;padding:0 22px;position:relative;z-index:2;}
+  .kpi{background:var(--card);border-radius:12px;padding:18px 16px;box-shadow:0 6px 22px rgba(20,30,60,.10);border-top:3px solid var(--gold);}
+  .kpi .v{font-size:25px;font-weight:800;color:var(--navy);line-height:1.1;}
+  .kpi .v small{font-size:14px;font-weight:600;}
+  .kpi .l{font-size:12.5px;color:var(--muted);margin-top:6px;}
+  .kpi.alt{border-top-color:var(--copper);}
+  .kpi.alt2{border-top-color:var(--blue);}
+  .kpi.alt3{border-top-color:var(--green);}
+  /* Sections */
+  section{background:var(--card);border-radius:14px;padding:30px 32px;margin-bottom:26px;box-shadow:0 3px 14px rgba(20,30,60,.06);}
+  .sec-h{display:flex;align-items:center;gap:12px;margin:0 0 18px;}
+  .sec-h .num{
+    width:34px;height:34px;flex:0 0 34px;border-radius:9px;background:var(--navy);color:var(--gold-2);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;
+  }
+  .sec-h h2{font-size:21px;margin:0;color:var(--navy);font-weight:800;}
+  h3{font-size:17px;color:var(--copper);margin:26px 0 10px;font-weight:700;}
+  h4{font-size:15px;color:var(--navy);margin:18px 0 8px;font-weight:700;}
+  p{margin:10px 0;}
+  .lead{font-size:15.5px;color:#333c4d;}
+  .accent{color:var(--copper);font-weight:700;}
+  .gold-t{color:var(--gold);font-weight:700;}
+  /* Tables */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+  th,td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--line);}
+  th:first-child,td:first-child{text-align:left;}
+  thead th{background:#f0f2f7;color:var(--navy);font-weight:700;border-bottom:2px solid #d7dcea;}
+  tbody tr:hover{background:#fafbfd;}
+  .pos{color:var(--green);font-weight:600;}
+  .neg{color:var(--red);font-weight:600;}
+  .hl{background:#fff8e8 !important;}
+  /* Chart box */
+  .chart-box{background:#fbfcfe;border:1px solid var(--line);border-radius:10px;padding:16px;margin:18px 0;}
+  .chart-box .cap{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center;}
+  canvas{width:100%;height:auto;display:block;}
+  /* Driver cards */
+  .drivers{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .drv{background:#fafbff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;}
+  .drv h4{margin:0 0 6px;color:var(--navy);}
+  .drv p{margin:4px 0;font-size:13.5px;color:#3a4456;}
+  .drv .big{font-size:18px;font-weight:800;color:var(--copper);}
+  /* Production bars */
+  .pbar{display:flex;align-items:center;gap:10px;margin:8px 0;}
+  .pbar .name{width:118px;font-size:13.5px;color:var(--ink);flex:0 0 118px;}
+  .pbar .track{flex:1;background:#eef1f6;border-radius:6px;height:22px;position:relative;overflow:hidden;}
+  .pbar .fill{height:100%;border-radius:6px;}
+  .pbar .fill.g{background:linear-gradient(90deg,#d9b25a,#c8a04b);}
+  .pbar .fill.c{background:linear-gradient(90deg,#c47e4f,#b06a3b);}
+  .pbar .fill.l{background:linear-gradient(90deg,#6fae8f,#1f9d6b);}
+  .pbar .val{width:104px;flex:0 0 104px;font-size:12.5px;font-weight:700;color:var(--ink);text-align:left;}
+  /* Callout */
+  .callout{background:linear-gradient(135deg,#fff8e8,#fffdf6);border:1px solid #f0e2bd;border-left:5px solid var(--gold);border-radius:10px;padding:16px 18px;margin:18px 0;}
+  .callout.warn{background:linear-gradient(135deg,#fdf0ee,#fffaf9);border-color:#f3cfc8;border-left-color:var(--red);}
+  .callout.blue{background:linear-gradient(135deg,#eef4fc,#fafcff);border-color:#cfe0f3;border-left-color:var(--blue);}
+  .callout b{color:var(--navy);}
+  ul.tight{margin:8px 0;padding-left:20px;}
+  ul.tight li{margin:6px 0;}
+  .foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:30px;line-height:1.9;}
+  .pill{display:inline-block;background:#eef1f6;color:var(--navy);font-size:12px;padding:2px 10px;border-radius:12px;margin:2px 4px 2px 0;}
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .drivers{grid-template-columns:1fr;}
+    section{padding:22px 18px;}
+    .hero h1{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <span class="tag">赤峰黄金 · 600988.SH / 06693.HK · 投资分析</span>
+    <h1>赤峰黄金深度分析报告</h1>
+    <p class="sub">公司沿革与矿山资产布局 · 资源储量跃升 · 财务拆解与金价研判 · 成长驱动与估值逻辑 · 与紫金矿业等龙头横向对比</p>
+    <p class="meta">报告日期：2026-08-28　|　数据来源：公司 2025 年年报、2026 半年度业绩预增公告、上交所/港交所公告、机构调研纪要、华创/民生/财信/申万宏源等券商研报　|　分析框架：参照《紫金矿业深度分析报告》论文框架</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="kpis">
+    <div class="kpi"><div class="v">30.82<small>亿</small></div><div class="l">2025 归母净利润<br>（+74.7% YoY）</div></div>
+    <div class="kpi alt"><div class="v">105.76<small>吨</small></div><div class="l">黄金资源量（2025 年末）<br>同比 +41%</div></div>
+    <div class="kpi alt2"><div class="v">182.58<small>亿</small></div><div class="l">紫金矿业收购对价<br>取得 25.85% 控制权</div></div>
+    <div class="kpi alt3"><div class="v">260<small>吨</small></div><div class="l">塞班 SND 项目金当量<br>（2026-07 更新，+143%）</div></div>
+  </div>
+
+  <!-- ============ 1 公司概况与历史沿革 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">1</div><h2>公司概况与历史沿革：从赤峰民营金矿到国际化黄金集团</h2></div>
+    <p class="lead">赤峰吉隆黄金矿业集团股份有限公司（600988.SH / 06693.HK，下称"赤峰黄金"）成立于 1998 年 6 月，总部位于内蒙古赤峰市。其证券化路径颇为独特：2004 年 4 月，前身之一"东方宝龙"在上交所上市；<b>2012 年赵美光旗下吉隆矿业借壳上市，更名"赤峰黄金"</b>；此后通过一系列收购完成从区域民营金矿到横跨中国、东南亚、西非三洲的国际化黄金生产商的跃迁。2025 年 3 月 10 日 H 股在港交所主板上市（募资净额约 31 亿港元），2026 年又迎来<b>紫金矿业 182.58 亿元入主</b>的里程碑式股权变革——公司当前正处在"民营创业期 → 国际化扩张期 → 紫金赋能期"三段式演进的关键节点。</p>
+
+    <table>
+      <thead><tr><th>时间</th><th>事件</th><th>战略意义</th></tr></thead>
+      <tbody>
+        <tr><td>1998-06</td><td>赤峰吉隆黄金矿业成立</td><td>立足内蒙古赤峰黄金成矿带</td></tr>
+        <tr><td>2004-04</td><td>前身"东方宝龙"上交所上市（600988）</td><td>获得证券化平台</td></tr>
+        <tr><td>2012</td><td>吉隆矿业借壳东方宝龙，更名"赤峰黄金"</td><td>黄金主业登台</td></tr>
+        <tr><td>2013</td><td>收购五龙矿业 100% 股权</td><td>东北核心矿山入列</td></tr>
+        <tr><td>2018-11</td><td>完成收购老挝万象矿业 Sepon（塞班）金铜矿 90% 权益</td><td class="hl">国际化第一步：从铜转金</td></tr>
+        <tr><td>2022-12</td><td>收购加纳金星资源（瓦萨金矿 90% 权益）</td><td class="hl">西非大型在产金矿并表</td></tr>
+        <tr><td>2023-01</td><td>收购昆明新恒河 51% 股权；2024 年获取老挝勐康稀土矿</td><td>多金属与稀土延伸</td></tr>
+        <tr><td>2025-03-10</td><td>H 股港交所上市（06693.HK），募资净额约 31 亿港元</td><td>A+H 双平台、全球化融资网络</td></tr>
+        <tr><td>2025-10</td><td>董事会换届，王建华连任董事长，高波任总裁</td><td>管理层国际化升级</td></tr>
+        <tr><td>2026-03-22</td><td>紫金矿业子公司紫金黄金受让 A 股 + 认购 H 股定增，对价合计 182.58 亿元</td><td class="hl">控制权变更为紫金系，持股 25.85% 并表</td></tr>
+        <tr><td>2026-05</td><td>更名"赤峰吉隆黄金矿业<b>集团</b>股份有限公司"</td><td>集团化运营架构落地</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>一句话画像：</b>赤峰黄金是 A 股黄金板块中<span class="accent">成长斜率最陡峭</span>的公司——矿产金产量从 2019 年的 2.07 吨增至 2025 年的 14.51 吨，<b>六年 7 倍、CAGR≈38%</b>；归母净利润从 1.88 亿元增至 30.82 亿元，<b>六年 16 倍、CAGR≈60%</b>。其成长模式 = "跨境并购优质在产矿 + 探矿增储 + 技改扩产"三箭齐发，如今叠加紫金矿业的资金与全球化运营赋能。
+    </div>
+  </section>
+
+  <!-- ============ 2 主营业务与矿山资产布局 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">2</div><h2>主营业务与黄金矿山资产布局：三洲七矿的全球化矩阵</h2></div>
+    <p class="lead">公司主营黄金的采、选、销，副产品包括电解铜、铅、锌、钼精粉及稀土产品。2025 年营收结构高度聚焦：<b>矿产金收入 113.39 亿元，占 89.7%</b>；境外收入 89.88 亿元，占 71.1%（老挝 Sepon + 加纳 Wassa 两大海外矿贡献主要利润）。公司直接或通过子公司运营 <b>7 个矿业项目 + 1 个资源综合回收项目</b>（合肥广源科技）。</p>
+
+    <table>
+      <thead><tr><th>矿山 / 项目</th><th>区位</th><th>权益</th><th>类型与规模</th><th>2025 核心子公司净利</th></tr></thead>
+      <tbody>
+        <tr><td>吉隆矿业（撰山子金矿）</td><td>内蒙古赤峰</td><td>100%</td><td>高品位地下金矿；新建 6 万吨/年地采项目 2025-07 取得采矿证</td><td>8.22 亿（+4%）</td></tr>
+        <tr><td>五龙矿业（五龙金矿）</td><td>辽宁丹东</td><td>100%</td><td>国内主力：3000t/d+1000t/d 选厂全系列投产；尾矿库 26Q4 完成</td><td>5.87 亿（−2%）</td></tr>
+        <tr><td>华泰矿业（红花沟金矿）</td><td>内蒙古赤峰</td><td>100%</td><td>6 宗采矿权，250t/d 选厂；新增 3 万吨/年地采扩建推进中</td><td>—</td></tr>
+        <tr><td>锦泰矿业（溪灯坪金矿）</td><td>内蒙古</td><td>控股</td><td>二期建设推进（探转采已完成）</td><td>—</td></tr>
+        <tr><td>瀚丰矿业（天宝山矿）</td><td>吉林延边</td><td>100%</td><td>锌铅铜钼多金属矿，立山千米竖井、选厂改扩建推进</td><td>1.27 亿（+69%）</td></tr>
+        <tr><td>万象矿业（Sepon 塞班金铜矿）</td><td>老挝沙湾拿吉省</td><td>90%</td><td class="hl">老挝最大有色矿：金铜兼采；卡农铜矿区 130 万吨/年设计产能；SND 斑岩铜金矿重大发现</td><td>14.32 亿（+165%）</td></tr>
+        <tr><td>金星资源（Wassa 瓦萨金矿）</td><td>加纳西部省</td><td>90%</td><td class="hl">阿散蒂金矿带大型在产金矿，270 万吨/年选厂，地下+卫星露采</td><td>4.39 亿（+90%）</td></tr>
+        <tr><td>新恒河（昆明）</td><td>云南</td><td>51%</td><td>资源综合利用</td><td>1.86 亿（+155%）</td></tr>
+        <tr><td>广源科技（合肥）</td><td>安徽</td><td>控股</td><td>废弃电器电子产品回收利用</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2025 年产品结构：金为绝对核心</h3>
+    <table>
+      <thead><tr><th>产品</th><th>2025 产量</th><th>同比</th><th>收入占比</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><b>矿产金</b></td><td><b>14.51 吨</b></td><td class="neg">−4.3%</td><td><b>89.7%</b></td><td>国内 7 吨级 + 老挝 + 加纳合计</td></tr>
+        <tr><td>电解铜</td><td>6,754.57 吨</td><td class="pos">+9.1%</td><td>4.0%</td><td>Sepon 铜矿</td></tr>
+        <tr><td>铜精粉</td><td>3,160.15 吨</td><td class="pos">+129%</td><td>—</td><td>瀚丰等</td></tr>
+        <tr><td>铅精粉</td><td>3,680.12 吨</td><td class="neg">−9.2%</td><td>—</td><td>瀚丰等</td></tr>
+        <tr><td>锌精粉</td><td>2.95 万吨</td><td class="pos">+98%</td><td>—</td><td>瀚丰等</td></tr>
+        <tr><td>钼精粉</td><td>675.53 吨</td><td>—</td><td>—</td><td>瀚丰等</td></tr>
+        <tr><td>稀土产品</td><td>999 吨</td><td>—</td><td>—</td><td>Sepon 稀土（与厦门钨业合作）+ 勐康</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout blue">
+      <b>布局逻辑：</b>境内五矿（吉隆、五龙、华泰、锦泰、瀚丰）提供<b>高品位、低成本的现金流压舱石</b>（国内金矿全维持成本仅 277.83 元/克，处行业最优区间）；海外两矿（Sepon、Wassa）提供<b>产量规模与增长弹性</b>——2025 年境外收入占比已达 71%。紫金入主后明确表态："紫金与赤峰的海外版图高度互补，未来将海外资源协同、供应链共享、渠道互通"（2026-03-26 调研纪要）。
+    </div>
+  </section>
+
+  <!-- ============ 3 资源储量与产能分析 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">3</div><h2>核心矿脉资源储量与产能分析：SND 发现改写资源版图</h2></div>
+    <p class="lead">2025 年是赤峰黄金的"资源大年"：集团黄金资源量从 74.85 吨跃升至 <b>105.76 吨（+41%）</b>；黄金储量 106 吨（+41%），其中瓦萨储量 43 吨（+152%）。更重磅的是 2026 年 7 月塞班 SND 斑岩铜金矿资源量更新——<b>金当量金属量从 107 吨增至 260 吨（+143%）</b>，被公司定义为"近年东南亚最重要的金铜发现之一"。</p>
+
+    <table>
+      <thead><tr><th>资产</th><th>黄金资源量</th><th>关键说明</th></tr></thead>
+      <tbody>
+        <tr><td>中国境内五矿</td><td>约 53 吨</td><td>高品位地下矿，探矿增储持续推进</td></tr>
+        <tr><td>老挝 Sepon</td><td>约 58 吨</td><td>含卡林型+造山型金矿；另含铜资源量 24.4 万吨（+179%）</td></tr>
+        <tr><td>加纳 Wassa</td><td>约 360 吨*</td><td>*含 2026 新增口径调整；储量 43.06 吨（+152%），平均品位 1.41g/t；Benso 地下矿可研完成</td></tr>
+        <tr class="hl"><td><b>Sepon SND 斑岩矿</b></td><td class="hl"><b>金当量 260 吨（2026-07）</b></td><td class="hl">Indicated 170Mt @0.55g/t Au + 0.26% Cu（含金 96 吨、铜 45 万吨）；Inferred 190Mt @0.39g/t Au + 0.19% Cu（含金 76 吨、铜 36 万吨）；JORC 口径</td></tr>
+        <tr class="hl"><td><b>集团合计</b></td><td class="hl"><b>105.76 吨（2025 年末）</b></td><td class="hl">未含 SND 更新增量 153 吨金当量的并入口径；若并入则资源量逼近 260 吨量级</td></tr>
+      </tbody>
+    </table>
+
+    <h3>产量与产能轨迹</h3>
+    <div class="chart-box">
+      <div class="pbar"><div class="name">矿产金 (吨)</div><div class="track"><div class="fill g" style="width:12%"></div></div><div class="val">2.07 · 2019</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:26%"></div></div><div class="val">4.59 · 2020</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:46%"></div></div><div class="val">8.10 · 2021</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:77%"></div></div><div class="val">13.57 · 2022</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:80%"></div></div><div class="val">14.04 · 2023</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:82%"></div></div><div class="val">14.51 · 2025</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill g" style="width:83%"></div></div><div class="val">14.7 · 2026E</div></div>
+      <div class="pbar"><div class="name">电解铜 (万吨)</div><div class="track"><div class="fill c" style="width:30%"></div></div><div class="val">0.68 · 2025</div></div>
+      <div class="pbar"><div class="name"></div><div class="track"><div class="fill c" style="width:50%"></div></div><div class="val">1.1 · 2026E</div></div>
+      <div class="cap">图 1　矿产金与电解铜产量轨迹及 2026 年指引（条形长度按各自最大值归一化）</div>
+    </div>
+
+    <h3>成本结构：国内矿是全球成本曲线左端，瓦萨是主要拖累</h3>
+    <table>
+      <thead><tr><th>口径（2025）</th><th>克金销售成本</th><th>全维持成本 AISC</th><th>同比</th><th>点评</th></tr></thead>
+      <tbody>
+        <tr><td>国内矿山</td><td>180.5 元/克</td><td class="pos">277.83 元/克</td><td class="neg">+23.7%</td><td>全球成本曲线前段，显著优于行业均值</td></tr>
+        <tr><td>老挝 Sepon</td><td>1,472 美元/盎司</td><td class="pos">1,596 美元/盎司</td><td class="neg">+20.6%</td><td>成本稳定，品位下行可控</td></tr>
+        <tr><td>加纳 Wassa</td><td>1,860 美元/盎司</td><td>1,973 美元/盎司</td><td class="neg">+51.3%</td><td class="hl">可持续发展税率 1%→3%、新增作业单元、品位下降、雨季提前四因素叠加</td></tr>
+        <tr class="hl"><td><b>公司整体</b></td><td>326.3 元/克（+17.3%）</td><td><b>372.6 元/克</b></td><td class="neg">+32.5%</td><td>2026Q1 国内 AISC 370.7、老挝 2,109、加纳 2,509 美元/盎司</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>要点：</b>产量 2025 年小幅下滑（−4.3%）非资源瓶颈，而是<b>瓦萨雨季提前 + 入选品位下降</b>的暂时性扰动；管理层 2026 年将"布置大量掘进工程、平衡生产与工程建设"。真正的看点在<b>资源端</b>：SND 项目金当量 260 吨 + 铜超 80 万吨，一旦进入预可研并投产，将再造一个"塞班"，是 2028–2030 产量跃升的核心筹码。
+    </div>
+  </section>
+
+  <!-- ============ 4 行业背景与金价研判 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">4</div><h2>行业背景与金价走势研判：黄金长牛的基本面支撑</h2></div>
+    <p class="lead">黄金矿业公司的利润本质 = <b>产量 ×（金价 − 成本）</b>。当前金价处于历史高位区间：伦敦金 2025 年全年上涨 64.6%（1980 年以来最大年度涨幅），2026 年延续高位震荡。驱动因素呈现"央行购金 + 美元信用弱化 + 降息周期 + 地缘避险"四力叠加。</p>
+
+    <div class="drivers">
+      <div class="drv"><h4>① 央行持续净购金（结构性）</h4><p>全球央行连续多年净购金超千吨量级，去美元化与储备多元化是长期趋势。中信证券、国金证券 2026 年 8 月研报均确认"央行持续净购金 + 降息预期回暖"支撑金价。</p></div>
+      <div class="drv"><h4>② 美联储降息周期（周期性）</h4><p>2026 年美国核心通胀平稳（3 月核心 CPI 2.6%），实际利率下行通道打开。中信证券预计"美联储货币政策可能比市场预期更乐观，年内金价回到上行通道"。</p></div>
+      <div class="drv"><h4>③ 美元信用长期弱化（趋势性）</h4><p>美国财政赤字与债务规模持续扩张，美元购买力稀释逻辑未变——这与本站《黄金研究》专题（1970 年 38 → 2026 年 4401 美元，117 倍）的长周期框架一致。</p></div>
+      <div class="drv"><h4>④ 供给端刚性（产业逻辑）</h4><p>全球金矿品位下滑、资本开支不足、新增大型矿山稀缺；中国黄金集团产量增速长期低于需求增速，头部矿企的存量资源价值系统性重估。</p></div>
+    </div>
+
+    <div class="callout">
+      <b>对赤峰的含义：</b>2026H1 公司黄金销售均价同比 <b>+43%</b>，直接推动净利润 +54~61%。参考本站黄金研究框架——黄金占全球广义货币代理序列比例目前约 11.5%，仍低于 1980 年 24% 的历史峰值，<span class="accent">中期金价中枢仍有上行空间</span>；但短期需警惕高位波动（2026 年内沪金价格波动显著放大，板块 6 月曾深度回调）。
+    </div>
+  </section>
+
+  <!-- ============ 5 财务分析 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">5</div><h2>财务状况分析：营收、盈利、现金流与负债全景</h2></div>
+    <p class="lead">赤峰黄金过去六年的财务曲线是"量价齐升"的标准教科书：营收从 2020 年 45.6 亿增至 2025 年 126.4 亿（+40.0%），归母净利润从 7.84 亿增至 30.82 亿（+74.7%），且<b>经营现金流（55.56 亿，+70%）大幅超过净利润</b>，盈利质量极高。</p>
+
+    <h3>① 营收结构与增长</h3>
+    <table>
+      <thead><tr><th>指标</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026H1E</th></tr></thead>
+      <tbody>
+        <tr><td>营业收入（亿元）</td><td>62.67</td><td>72.21</td><td>90.26</td><td>126.39</td><td>—（Q1:35.54）</td></tr>
+        <tr><td>同比</td><td>+3.2%</td><td>+15.2%</td><td>+25.0%</td><td class="pos">+40.0%</td><td>Q1 +49%</td></tr>
+        <tr><td>归母净利润（亿元）</td><td>4.51</td><td>8.04</td><td>17.64</td><td>30.82</td><td class="pos">17.0~17.8（预告）</td></tr>
+        <tr><td>同比</td><td>−25%</td><td>+78%</td><td>+119%</td><td class="pos">+74.7%</td><td class="pos">+54%~61%</td></tr>
+        <tr><td>矿产金收入（亿元）</td><td>—</td><td>—</td><td>79.8</td><td>113.39</td><td>—</td></tr>
+        <tr><td>矿产金毛利率</td><td>—</td><td>—</td><td>46.4%</td><td class="pos">58.51%</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="chart-box">
+      <canvas id="npChart" width="960" height="380"></canvas>
+      <div class="cap">图 2　归母净利润年度走势（亿元，2019–2025；2026H1 为预告中值）</div>
+    </div>
+
+    <h3>② 盈利能力：毛利率、净利率、ROE 全面抬升</h3>
+    <table>
+      <thead><tr><th>指标（2025 年报）</th><th>数值</th><th>同比</th><th>行业参照</th></tr></thead>
+      <tbody>
+        <tr><td>综合毛利率</td><td class="pos">52.46%</td><td>+8.6pct</td><td>山东黄金 2025 毛利率约 25%*（含外购金贸易，口径不可比）；四川黄金 62.8%、招金 56.1%</td></tr>
+        <tr><td>销售净利率</td><td class="pos">27.28%</td><td>+5.3pct</td><td>板块内领先（湖南黄金约 3%，贸易占比高所致）</td></tr>
+        <tr><td>加权 ROE</td><td class="pos">27.14%</td><td>+4.2pct</td><td>申万贵金属板块 2026Q1 均值 8.34%</td></tr>
+        <tr><td>总资产回报率 ROA</td><td class="pos">15.22%</td><td>大幅抬升</td><td>轻负债高周转下的高回报</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：* 山东黄金收入含大量外购金/小金条（41%+10%），摊薄毛利率，与赤峰"纯矿产金"口径不可直接对比；此处仅列示说明口径差异。</p>
+
+    <h3>③ 现金流与负债：资产负债表已进入"进攻状态"</h3>
+    <table>
+      <thead><tr><th>指标（2025 年末）</th><th>数值</th><th>同比 / 变动</th><th>含义</th></tr></thead>
+      <tbody>
+        <tr><td>经营活动现金流净额</td><td class="pos">55.56 亿元</td><td class="pos">+69.97%</td><td>净现比 1.61，利润含金量高</td></tr>
+        <tr><td>投资活动现金流净额</td><td>−23.10 亿元</td><td>—</td><td>扩产与勘探投入期</td></tr>
+        <tr><td>自由现金流</td><td class="pos">约 28.8 亿元</td><td>—</td><td>扩产期仍为正</td></tr>
+        <tr><td>资产负债率</td><td class="pos">33.91%</td><td class="pos">−13.34pct</td><td>H 股募资+利润留存驱动降杠杆</td></tr>
+        <tr><td>有息负债余额</td><td class="pos">约 8.78 亿元</td><td class="pos">−67.45%</td><td>几乎无有息负债压力</td></tr>
+        <tr><td>货币资金</td><td>68.21 亿元</td><td>+148%</td><td>并购弹药充足</td></tr>
+        <tr><td>每股派息（2025 年度）</td><td>0.32 元/股</td><td>分红率 19.73%</td><td>首次大方分红；2026 拟授权中期分红</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>财务结论：</b>2025 年末公司处于<span class="accent">"低杠杆 + 高现金 + 高 ROE + 强现金流"</span>的理想状态——账面 68 亿现金 + 几乎清零的有息负债，意味着未来海外并购（紫金入主后并购管线打开）完全具备资本能力。这是从"稳健运营"切换到"战略攻坚"的财务前提。
+    </div>
+  </section>
+
+  <!-- ============ 6 成长驱动 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">6</div><h2>成长驱动因素与产能扩张规划：2028–2030 产量跃升的五个引擎</h2></div>
+    <p class="lead">与紫金矿业"锂+铜+金"三极驱动不同，赤峰黄金的驱动链条更纯粹：<b>金为主、铜为辅、稀土期权</b>。公司明确提出"为 2028–2030 年产量跃升奠定基础"，具体拆解为五个引擎：</p>
+
+    <div class="drivers">
+      <div class="drv"><h4>① 境内五矿"建大矿、上规模"</h4><p>五龙尾矿库 26Q4 完成 + 竖井技改完工；吉隆 6 万吨/年地采项目 2025-07 取证、扩能推进；华泰 3 万吨/年地采扩建、锦泰二期、瀚丰选厂改扩建全部按计划推进——境内产量与品位双升。</p></div>
+      <div class="drv"><h4>② Sepon 卡农铜矿区：电解铜 63% 增长极</h4><p>130 万吨/年设计产能，2025 年中启动剥离、已开采氧化矿，<b>2027Q2 开始开采原生矿</b>；2026 年电解铜目标 1.1 万吨（+63%）。铜业务从"配角"变"第二曲线"。</p></div>
+      <div class="drv"><h4>③ SND 斑岩铜金矿：最大的远期期权</h4><p>金当量 260 吨（Indicated 96 吨金+45 万吨铜；Inferred 76 吨金+36 万吨铜），矿化向西南和深部开放，公司拟聘请国际工程咨询启动<b>预可研</b>——这是再造一个塞班量级的战略筹码。</p></div>
+      <div class="drv"><h4>④ 瓦萨修复 + Benso / 布朗神父扩产</h4><p>破碎系统升级改造（工期 13 个月）实施后品位与成本有望显著修复；Benso 地下矿可研完成、新增 4 个采坑；F-Shoot 开拓工程收尾；布朗神父项目前期推进。</p></div>
+      <div class="drv"><h4>⑤ 紫金赋能：并购管线 + 技术管理输出</h4><p>紫金承诺"通过资产重组解决同业竞争"，双方将联合海外勘探与并购；紫金在矿山运营、国际化管理上的经验直接注入；定增 82.52 亿元到账后资本实力跃升。</p></div>
+      <div class="drv"><h4>⑥ 稀土期权（低成本副线）</h4><p>Sepon 稀土资源量 31,920 吨 TREO（与厦门钨业合作开发，试采阶段）+ 老挝勐康离子型稀土 29,680 吨 SREO——尚未贡献收入，但构成免费的长尾期权。</p></div>
+    </div>
+
+    <h3>产量指引与跃升路径</h3>
+    <table>
+      <thead><tr><th>品种</th><th>2025 实际</th><th>2026 目标</th><th>2028–2030 展望</th><th>核心支撑</th></tr></thead>
+      <tbody>
+        <tr><td>矿产金</td><td>14.51 吨</td><td>14.7 吨（+1.3%）</td><td class="hl"><b>跃升期（公司口径）</b></td><td>SND 投产 + 瓦萨扩产 + 境内技改</td></tr>
+        <tr><td>电解铜</td><td>0.68 万吨</td><td>1.1 万吨（+63%）</td><td class="pos">原生矿投产后再上台阶</td><td>卡农 130 万吨/年选厂</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：公司未披露 2027 年后具体产量数字，仅定性表述"2028–2030 年产量跃升"（2025 年报、2026-03-26/05-21 调研纪要）。2026 年产量目标仅 +1.3%，系矿山平均品位下降与掘进工程占用的过渡性安排。</p>
+
+    <div class="callout warn">
+      <b>清醒提示：</b>2026 年是<b>过渡年</b>——产量几乎零增长（+1.3%），利润增长几乎完全靠金价（H1 售价 +43%）。而金价已在历史高位，"价格红利"边际递减；<span class="accent">2027 年后的估值锚必须依赖 SND 预可研落地与瓦萨修复的兑现</span>，这恰是当前股价分歧的来源。
+    </div>
+  </section>
+
+  <!-- ============ 7 同业对比 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">7</div><h2>同业横向对比：与紫金矿业、山东黄金、招金矿业等同业龙头</h2></div>
+    <p class="lead">将赤峰黄金放入 A 股/H 股黄金板块坐标系，其定位清晰：<b>体量小于紫金/山东黄金，但成长斜率、盈利质量与资源增速均处第一梯队</b>；2026 年 3 月紫金入主后，两者从"竞争关系"变为"母子公司协同"。</p>
+
+    <table>
+      <thead><tr><th>指标</th><th>赤峰黄金</th><th>紫金矿业</th><th>山东黄金</th><th>招金矿业</th><th>湖南黄金</th></tr></thead>
+      <tbody>
+        <tr><td>2025 矿产金产量（吨）</td><td>14.51</td><td>90</td><td>约 46（集团口径更高）</td><td>约 25</td><td>约 5</td></tr>
+        <tr><td>2025 营收（亿元）</td><td>126.4</td><td>3,490.8</td><td>1,042.9</td><td>—（H股）</td><td>501.8</td></tr>
+        <tr><td>2025 归母净利（亿元）</td><td>30.82</td><td>517.77</td><td>47.39</td><td>36.1</td><td>14.88</td></tr>
+        <tr><td>净利 2025 同比</td><td class="pos">+74.7%</td><td>+62%</td><td>+60.9%</td><td>—</td><td>+75.7%</td></tr>
+        <tr><td>净利率</td><td class="pos">27.3%</td><td>~15%</td><td>~4.5%（贸易摊薄）</td><td>—</td><td>~3%</td></tr>
+        <tr><td>毛利率（2025）</td><td>52.5%</td><td>61.6%（矿产品）</td><td>~25%（含外购金）</td><td>56.1%</td><td>—</td></tr>
+        <tr class="hl"><td><b>市值（2026-08-28）</b></td><td><b>932.9 亿（A）</b></td><td>—</td><td>1,636 亿（A）</td><td>848 亿（H）</td><td>451.9 亿</td></tr>
+        <tr><td>PE-TTM</td><td>26.0</td><td>—</td><td>31.7</td><td>19.6</td><td>25.3</td></tr>
+        <tr><td>2026E 归母净利（券商一致预期，亿元）</td><td>50.1~51.4</td><td>—</td><td>93.7</td><td>48.9</td><td>21.6</td></tr>
+        <tr><td>PE-2026E</td><td class="pos">18.2~18.6</td><td>—</td><td>17.5</td><td>17.3</td><td>20.9</td></tr>
+        <tr><td>2019→2025 净利 CAGR</td><td class="pos">约 60%（6年16倍）</td><td>约 41%（10年31倍）</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">数据来源：各公司 2025 年报、Wind/东方财富行情（2026-08-28）、申万宏源/华创证券盈利预测。山东黄金"约46吨"为境内自产金口径；紫金 2026E 净利一致预期约 912~1,134 亿（本站紫金报告模型区间）。</p>
+
+    <h3>与紫金矿业的对照：小体量高斜率 vs 大体量全平台</h3>
+    <div class="drivers">
+      <div class="drv"><h4>成长模式对照</h4><p>紫金：逆周期并购世界级铜金矿+自主建设，金铜锂多轮驱动，10 年净利 31 倍。赤峰：中等规模在产矿收购+探矿增储，纯金弹性，6 年净利 16 倍——<b>赤峰单位市值的产量成长弹性更高</b>。</p></div>
+      <div class="drv"><h4>成本对照</h4><p>赤峰国内金矿 AISC 278 元/克（≈1,100 美元/盎司级别）显著优于紫金矿产金 231 元/克销售成本的国际口径差异需注意，但国内矿成本处于全球曲线前段是不争事实。</p></div>
+      <div class="drv"><h4>协同关系（2026 起）</h4><p>紫金以 25.85% 控股并表，赤峰成为紫金黄金板块的"第二上市平台"（紫金黄金国际 2259.HK + 赤峰 600988/6693）。紫金承诺资产重组解决同业竞争，赤峰获得并购、技术、资金三重赋能。</p></div>
+      <div class="drv"><h4>估值溢价逻辑</h4><p>赤峰 A 股 PE-TTM 26 倍 vs 招金 19.6 倍——溢价来自：①纯金矿弹性最大化；②SND 资源期权；③紫金入主后的治理与并购预期。若 SND 预可研落地，资源量口径跃升或触发重估。</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 8 估值与投资逻辑 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">8</div><h2>估值分析与投资逻辑：三情景推演</h2></div>
+    <p class="lead">以 2026-08-28 A 股收盘价 49.09 元、总市值 932.9 亿元为基准。券商 2026–2028 归母净利预测区间：华创 50.1/59.3/70.9 亿，民生系 51.4/58.0/60.1 亿，申万宏源 50.6/59.7/74.7 亿——一致预期中枢约 <b>50.7 / 59.0 / 68.6 亿元</b>，对应 PE 约 <b>18.4 / 15.8 / 13.6 倍</b>。</p>
+
+    <h3>情景估值（以 2026E 净利 50.7 亿、2028E 净利 68.6 亿为锚）</h3>
+    <table>
+      <thead><tr><th>情景</th><th>假设</th><th>估值倍数</th><th>隐含市值 / 股价</th><th>较现价空间</th></tr></thead>
+      <tbody>
+        <tr class="neg"><td>悲观：金价深调 20%</td><td>金价回落至 2024 水平，瓦萨成本居高</td><td>2026E ×13x</td><td>约 660 亿 / 34.7 元</td><td class="neg">−29%</td></tr>
+        <tr><td>中性：金价高位震荡</td><td>沪金维持 2026 均价，SND 2027 启动预可研、2028 后贡献</td><td>2026E ×20x</td><td class="pos">约 1,014 亿 / 53.4 元</td><td class="pos">+9%</td></tr>
+        <tr class="hl"><td><b>乐观：金价续涨 + SND 兑现</b></td><td>金价再上台阶 + SND 2028 投产预期计入 + 紫金注入资产</td><td>2028E ×20x（净利 85 亿+）</td><td class="pos"><b>约 1,700 亿 / 89 元</b></td><td class="pos"><b>+82%</b></td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12.5px;color:var(--muted)">注：情景为静态敏感性推演，非盈利预测；乐观情景中 85 亿口径 = 券商 2028E 上限 74.7 亿 × SND 提前投产/金价超预期上修系数，仅供参考。</p>
+
+    <h3>投资逻辑的三层结构</h3>
+    <div class="drivers">
+      <div class="drv"><h4>第一层：金价的"贝塔"</h4><p>2026H1 售价 +43% → 净利 +54~61%。只要金价维持高位，全年 50 亿+ 净利、18 倍 PE 具备安全边际（板块历史 PE 中位数 24.2 倍，当前前瞻折价约 28%）。</p></div>
+      <div class="drv"><h4>第二层：产量的"阿尔法"</h4><p>2027 卡农原生矿投产 + 瓦萨破碎改造完成 + 境内技改收尾；2028–2030 SND 若落地，金当量 260 吨资源支撑的产量跃升将再造增长曲线。</p></div>
+      <div class="drv"><h4>第三层：紫金赋能的"治理溢价"</h4><p>A/H 定增资金到位 + 紫金并购管线共享 + 资产注入预期（解决同业竞争）——这是 2025 年之前不存在的新变量。</p></div>
+      <div class="drv"><h4>股东回报改善</h4><p>2025 年度分红率 19.73%（6.08 亿元，每股 0.32 元），并授权 2026 中期分红 + H 股回购授权；管理层调研中明示"考虑在资本开支较大情况下提升分红比例"。</p></div>
+    </div>
+
+    <div class="callout blue">
+      <b>一句话逻辑：</b>赤峰黄金 = <span class="accent">"高金价贝塔 + 2027 后产量阿尔法 + 紫金赋能期权"</span>的三重叠加。当前 18~19 倍 2026E PE 处于板块中位偏下，若 SND 预可研如期启动，市场将从"金价弹性股"向"成长性资源股"切换估值范式。
+    </div>
+  </section>
+
+  <!-- ============ 9 风险提示 ============ -->
+  <section>
+    <div class="sec-h"><div class="num">9</div><h2>主要风险提示</h2></div>
+    <table>
+      <thead><tr><th>风险类别</th><th>具体内容</th><th>影响程度</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><b>金价波动风险</b></td><td>公司利润对金价高度敏感（2026H1 净利增长几乎全部来自价格 +43%）；金价若高位回落 20%，净利或腰斩</td><td>★★★★★</td></tr>
+        <tr><td>项目进度不及预期</td><td>SND 预可研/建设周期长，卡农原生矿 2027Q2、瓦萨改造 13 个月工期均可能延后</td><td>★★★★</td></tr>
+        <tr><td>海外地缘与政策风险</td><td>老挝、加纳资产占比高（境外收入 71%）；加纳可持续发展税率已从 1% 上调至 3%，不排除续涨；两国汇率波动侵蚀利润</td><td>★★★★</td></tr>
+        <tr><td>成本上行风险</td><td>2025 全维持成本 +32.5%；2026Q1 三地 AISC 继续上行（资源税增加+品位下降）；若金价滞涨而成本续升，利润率将被双向挤压</td><td>★★★★</td></tr>
+        <tr><td>紫金整合不确定性</td><td>25.85% 控制权交易尚需反垄断审查等先决条件；同业竞争解决方案、管理融合、文化磨合均需时间验证</td><td>★★★</td></tr>
+        <tr><td>品位下滑与资源接续</td><td>2026 年产量目标仅 +1.3% 即因平均品位下降；境内矿山资源禀赋偏中型，长期依赖勘探与外延并购</td><td>★★★</td></tr>
+        <tr><td>治理与关联交易关注</td><td>国资控股与民营管理层混合架构下的公司治理有效性、员工持股与激励相容性需持续观察</td><td>★★</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <b>核心矛盾：</b>赤峰黄金的高估值本质上是<b>对 2028–2030 产量跃升的预付</b>。若 SND 与瓦萨扩产兑现不及预期，而金价同步回落，估值与盈利将遭遇"戴维斯双杀"——这是本报告认为最需要盯住的核心风险变量。
+    </div>
+  </section>
+
+  <div class="foot">
+    本报告参照《紫金矿业（601899.SH）深度分析报告》论文框架撰写，覆盖公司概况与历史沿革、主营业务与矿山资产布局、资源储量与产能、行业背景与金价研判、财务分析、成长驱动与产能扩张、同业对比、估值与投资逻辑、风险提示九大部分。<br>
+    数据来源：赤峰黄金 2025 年年度报告及审计报告（安永华明）、2026 半年度业绩预增公告（2026-07-14）、2026Q1 季报、HKEX 年度业绩公告、上交所公告、公司机构调研纪要（2026-03-26 / 05-21）、紫金矿业并购中期票据募集说明书（2026）、中国证券报/上海证券报、华创证券/民生证券/财信证券/申万宏源/天风证券研报、东方财富/Wind 行情数据（截至 2026-08-28）。<br>
+    <span class="pill">仅供研究参考</span><span class="pill">非投资建议</span><span class="pill">不构成买卖依据</span>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  function setup(canvas){
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = canvas.clientWidth || canvas.width;
+    var ratio = canvas.height / canvas.width;
+    var cssH = cssW * ratio;
+    canvas.style.height = cssH + 'px';
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    return {ctx:ctx, w:cssW, h:cssH};
+  }
+  function fmt(v){ return v>=100? v.toFixed(0) : v.toFixed(1); }
+
+  /* ---- Net profit chart ---- */
+  var npCanvas = document.getElementById('npChart');
+  if(npCanvas){
+    var d = setup(npCanvas); var ctx=d.ctx, W=d.w, H=d.h;
+    var data=[1.88,7.84,5.83,4.51,8.04,17.64,30.82,17.4];
+    var labels=['19','20','21','22','23','24','25','26H1E'];
+    var padL=46,padR=16,padT=24,padB=34;
+    var plotW=W-padL-padR, plotH=H-padT-padB;
+    var maxV=35;
+    ctx.strokeStyle='#eef1f6'; ctx.fillStyle='#9aa4b6'; ctx.font='11px sans-serif'; ctx.textAlign='right'; ctx.textBaseline='middle';
+    for(var g=0; g<=5; g++){
+      var val=maxV*g/5; var y=padT+plotH-(val/maxV)*plotH;
+      ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+      ctx.fillText(val.toFixed(0), padL-6, y);
+    }
+    var n=data.length; var bw=plotW/n*0.62; var step=plotW/n;
+    ctx.textAlign='center';
+    for(var i=0;i<n;i++){
+      var x=padL+step*i+ (step-bw)/2;
+      var h=(data[i]/maxV)*plotH; var y=padT+plotH-h;
+      var grad=ctx.createLinearGradient(0,y,0,padT+plotH);
+      if(i===n-1){grad.addColorStop(0,'#cfe0f3');grad.addColorStop(1,'#a8c4e2');}
+      else if(data[i]>=20){grad.addColorStop(0,'#e3c277');grad.addColorStop(1,'#c8a04b');}
+      else if(data[i]>=8){grad.addColorStop(0,'#c47e4f');grad.addColorStop(1,'#b06a3b');}
+      else {grad.addColorStop(0,'#9bb7d8');grad.addColorStop(1,'#7d9cc0');}
+      ctx.fillStyle=grad;
+      ctx.fillRect(x,y,bw,h);
+      ctx.fillStyle='#1d2433'; ctx.font='10.5px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='bottom';
+      ctx.fillText(fmt(data[i]), x+bw/2, y-3);
+      ctx.fillStyle='#5b6678'; ctx.font='11px sans-serif'; ctx.textBaseline='top';
+      ctx.fillText(labels[i], x+bw/2, padT+plotH+6);
+    }
+    ctx.fillStyle='#9aa4b6'; ctx.font='11px sans-serif'; ctx.textAlign='left'; ctx.textBaseline='bottom';
+    ctx.fillText('归母净利润（亿元）', padL-40, padT-8);
+  }
+})();
+</script>
+</body>
+</html>
