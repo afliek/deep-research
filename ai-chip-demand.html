@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI时代芯片需求与算力增长量化分析</title>
+<style>
+  :root{
+    --bg:#0D0D10; --panel:#141418; --card:#151519;
+    --gold:#D4AF37; --gold-dim:#C9A227; --gold-line:rgba(212,175,55,.22);
+    --txt:#E8E4DA; --muted:#9A968C; --dim:#6F6B60;
+    --red:#E2574C; --blue:#8FB8FF; --grid:#2A2A32;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:"FangSong","仿宋","STFangsong","KaiTi",serif;
+    font-size:16px; line-height:1.85; letter-spacing:.02em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:56px 32px 80px;}
+
+  /* ---------- 头部 ---------- */
+  header{border-bottom:1px solid var(--gold-line);padding-bottom:28px;margin-bottom:44px;}
+  .kicker{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .kicker .bar{width:34px;height:3px;background:var(--gold);border-radius:2px;}
+  .kicker span{color:var(--gold-dim);font-size:13px;letter-spacing:.35em;font-family:"Microsoft YaHei",sans-serif;}
+  h1{font-size:34px;font-weight:600;letter-spacing:.05em;margin-bottom:14px;line-height:1.4;}
+  h1 em{font-style:normal;color:var(--gold);}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .tag{
+    font-family:"Microsoft YaHei",sans-serif;font-size:12px;letter-spacing:.08em;
+    color:var(--gold);border:1px solid var(--gold-line);border-radius:999px;
+    padding:3px 14px;background:rgba(212,175,55,.06);
+  }
+  .tag.plain{color:var(--muted);border-color:var(--grid);background:transparent;}
+  .lead{margin-top:20px;color:var(--muted);font-size:16px;max-width:820px;}
+
+  /* ---------- 章节 ---------- */
+  section{margin-bottom:52px;}
+  h2{
+    display:flex;align-items:center;gap:12px;
+    font-size:23px;font-weight:600;letter-spacing:.06em;margin-bottom:8px;
+  }
+  h2 .m{
+    width:20px;height:20px;flex:0 0 20px;display:inline-block;
+    transform:rotate(45deg);border:1.5px solid var(--gold);
+  }
+  h2 .no{color:var(--gold);font-family:"Microsoft YaHei",sans-serif;font-size:15px;margin-right:2px;}
+  .sub{color:var(--muted);font-size:14px;margin-bottom:22px;letter-spacing:.06em;font-family:"Microsoft YaHei",sans-serif;}
+  h3{font-size:17px;font-weight:600;color:var(--gold);margin:26px 0 12px;letter-spacing:.05em;}
+  h3 .dot{color:var(--gold-dim);margin-right:8px;}
+
+  /* ---------- 卡片 ---------- */
+  .card{
+    background:var(--card);border:1px solid rgba(212,175,55,.14);
+    border-radius:14px;padding:26px 30px;margin:18px 0;
+  }
+  .card.flat{border-color:var(--grid);background:var(--panel);}
+
+  /* ---------- 表格 ---------- */
+  .tbl-wrap{overflow-x:auto;margin:16px 0;}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;}
+  th{
+    font-family:"Microsoft YaHei",sans-serif;font-weight:500;letter-spacing:.05em;
+    color:var(--gold);text-align:left;padding:11px 14px;
+    border-bottom:1px solid var(--gold-line);white-space:nowrap;
+  }
+  td{padding:10px 14px;border-bottom:1px solid rgba(42,42,50,.8);color:var(--txt);}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:rgba(212,175,55,.045);}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  td .hl{color:var(--gold);font-weight:600;}
+  td .hlr{color:var(--red);font-weight:600;}
+  .src{color:var(--dim);font-size:12px;font-family:"Microsoft YaHei",sans-serif;}
+
+  /* ---------- 公式 ---------- */
+  .formula{
+    text-align:center;font-size:19px;color:var(--gold);
+    background:var(--panel);border:1px dashed var(--gold-line);
+    border-radius:12px;padding:22px 18px;margin:18px 0;letter-spacing:.04em;
+  }
+  .formula small{display:block;color:var(--muted);font-size:13px;margin-top:10px;font-family:"Microsoft YaHei",sans-serif;letter-spacing:.05em;}
+
+  /* ---------- 列表 ---------- */
+  ul.clean{list-style:none;}
+  ul.clean li{padding:9px 0 9px 26px;position:relative;border-bottom:1px dashed rgba(42,42,50,.7);}
+  ul.clean li:last-child{border-bottom:none;}
+  ul.clean li::before{
+    content:"";position:absolute;left:4px;top:19px;width:8px;height:8px;
+    transform:rotate(45deg);background:var(--gold);opacity:.8;
+  }
+  ul.clean li b{color:var(--gold);font-weight:600;}
+  .note{color:var(--muted);font-size:14px;}
+
+  /* ---------- 图表 ---------- */
+  .fig{
+    background:var(--panel);border:1px solid var(--grid);border-radius:14px;
+    padding:18px;margin:18px 0;
+  }
+  .fig img{width:100%;height:auto;display:block;border-radius:8px;}
+  .fig-caption{color:var(--muted);font-size:13px;margin-top:12px;text-align:center;font-family:"Microsoft YaHei",sans-serif;}
+
+  /* ---------- 结论 ---------- */
+  .concl{
+    border-left:3px solid var(--gold);padding:6px 0 6px 22px;margin:14px 0;
+  }
+  .concl .idx{color:var(--gold);font-family:"Microsoft YaHei",sans-serif;font-weight:600;margin-right:10px;}
+  .concl p{color:var(--txt);font-size:15.5px;}
+  .concl .tagline{color:var(--muted);font-size:13.5px;margin-top:4px;}
+
+  /* ---------- 代码 ---------- */
+  pre{
+    background:#101014;border:1px solid var(--grid);border-radius:12px;
+    padding:20px 22px;overflow-x:auto;font-family:Consolas,"Courier New",monospace;
+    font-size:12.5px;line-height:1.65;color:#D8D4C8;margin:14px 0;
+  }
+  pre .cm{color:#6F6B60;}
+  pre .kw{color:#C9A227;}
+  pre .st{color:#8FB8FF;}
+
+  /* ---------- 页脚 ---------- */
+  footer{
+    border-top:1px solid var(--gold-line);margin-top:60px;padding-top:22px;
+    color:var(--dim);font-size:12px;line-height:2;
+    font-family:"Microsoft YaHei",sans-serif;
+  }
+  @media(max-width:720px){
+    .wrap{padding:36px 18px 60px;}
+    h1{font-size:26px;}
+    h2{font-size:19px;}
+    .card{padding:20px;}
+  }
+
+  /* ---------- 交互图表 ---------- */
+  .chart-box{position:relative;background:var(--panel);border:1px solid var(--grid);border-radius:14px;padding:18px 18px 8px;margin:18px 0;}
+  .chart-controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:10px;font-family:"Microsoft YaHei",sans-serif;}
+  .ctl-btn{cursor:pointer;font-size:12px;letter-spacing:.08em;color:var(--muted);border:1px solid var(--grid);border-radius:999px;padding:4px 16px;background:transparent;transition:all .2s;font-family:inherit;}
+  .ctl-btn:hover{color:var(--gold);border-color:var(--gold-line);}
+  .ctl-btn.on{color:#141414;background:var(--gold);border-color:var(--gold);font-weight:600;}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:10px;}
+  .legend-chip{cursor:pointer;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);padding:4px 13px;border:1px solid var(--grid);border-radius:999px;transition:all .2s;user-select:none;}
+  .legend-chip .sw{width:14px;height:3px;border-radius:2px;flex:0 0 14px;}
+  .legend-chip.off{opacity:.32;text-decoration:line-through;}
+  .legend-chip:hover{border-color:var(--gold-line);color:var(--txt);}
+  .chart-svg{width:100%;height:auto;display:block;cursor:crosshair;}
+  .chart-panel-title{font-size:12px;color:var(--muted);letter-spacing:.08em;margin:8px 0 2px;font-family:"Microsoft YaHei",sans-serif;}
+  .chart-tt{position:absolute;pointer-events:none;background:rgba(18,18,22,.97);border:1px solid var(--gold-line);border-radius:9px;padding:10px 14px;font-size:12px;line-height:1.95;color:var(--txt);opacity:0;transition:opacity .12s;z-index:30;min-width:230px;font-family:"Microsoft YaHei",sans-serif;box-shadow:0 8px 28px rgba(0,0,0,.45);}
+  .chart-tt .tt-y{color:var(--gold);font-weight:600;margin-bottom:3px;letter-spacing:.05em;}
+  .chart-tt .row{display:flex;justify-content:space-between;gap:16px;white-space:nowrap;}
+  .chart-tt .row .nm{color:var(--muted);}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= 头部 ================= -->
+  <header>
+    <div class="kicker"><div class="bar"></div><span>DATA-DRIVEN ANALYSIS</span></div>
+    <h1>AI时代芯片需求量与算力增长<br><em>量化关系分析</em></h1>
+    <div class="meta">
+      <span class="tag">2026-08-28</span>
+      <span class="tag">口径: 全球数据中心AI加速器</span>
+      <span class="tag plain">核心假设: 今年token计算量 = 去年×10</span>
+    </div>
+    <p class="lead">
+      以公开披露的 token 调用量、GPU/ASIC 出货量与总算力为校准基准，建立"token 增长 → 算力需求 → 芯片需求"三层传导模型，
+      量化 <b style="color:var(--gold)">token×10 时物理芯片需求仅 ×1.5-3</b> 的非线性脱钩规律，并绘制 2021-2026E 归一化发展曲线。
+    </p>
+  </header>
+
+  <!-- ================= 一、基准数据 ================= -->
+  <section id="s1">
+    <h2><span class="m"></span><span class="no">壹</span>基准数据设定</h2>
+    <p class="sub">近 3-5 年全球 AI 训练/推理 token、GPU/ASIC 出货、总算力的公开校准锚点</p>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>锚点</th><th>公开口径</th><th class="num">数值</th><th>来源</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>训练算力增长速率</td><td>前沿模型训练 FLOPs</td><td class="num"><span class="hl">5×/年</span>（CI 4-6×）</td><td class="src">Epoch AI 2025-26</td></tr>
+          <tr><td>预训练算力效率</td><td>同等能力所需 FLOPs</td><td class="num"><span class="hl">3×/年</span>（CI 2.8-4.4×）</td><td class="src">Epoch AI / Ho et al. 2024</td></tr>
+          <tr><td>全球总算力容量</td><td>累计 H100e 当量</td><td class="num">约每 7 个月翻倍</td><td class="src">Epoch AI</td></tr>
+          <tr><td>单位美元算力</td><td>FLOP/s per $</td><td class="num">1.37×/年</td><td class="src">Epoch AI（20+加速器）</td></tr>
+          <tr><td>数据中心 GPU 出货</td><td>2022 → 2023</td><td class="num">264 → 376 万颗</td><td class="src">Omdia</td></tr>
+          <tr><td>数据中心 GPU 出货</td><td>2023 → 2024</td><td class="num">297 → <span class="hl">644 万颗（+117%）</span></td><td class="src">DIGITIMES</td></tr>
+          <tr><td>NVIDIA 数据中心出货</td><td>2025E</td><td class="num">约 650-700 万颗</td><td class="src">财报拆分 / lesswrong</td></tr>
+          <tr><td>TSMC CoWoS 产能</td><td>2024 → 2026E</td><td class="num">35K → 120-140K 片/月</td><td class="src">TrendForce</td></tr>
+          <tr><td>谷歌日均 token</td><td>2024.4 → 2025.10</td><td class="num">0.3 → 41.9 万亿（<span class="hl">17个月×140</span>）</td><td class="src">谷歌官方披露</td></tr>
+          <tr><td>OpenAI 日均 token</td><td>2025.6 → 2025.10</td><td class="num">4.4 → 70 万亿</td><td class="src">Omdia 2025-10</td></tr>
+          <tr><td>火山引擎豆包 token</td><td>2024.12 → 2025.12</td><td class="num">5 → 50 万亿（<span class="hl">×10</span>）</td><td class="src">火山引擎 Force 大会</td></tr>
+          <tr><td>全球推理 token 量</td><td>2024 中 → 2025 末</td><td class="num">≈10¹² → 10¹³-10¹⁴ /天</td><td class="src">arXiv 2603.06630</td></tr>
+          <tr><td>最大单次训练</td><td>Grok 4（2025）</td><td class="num">≈5×10²⁶ FLOP（≈GPT-4×24）</td><td class="src">Epoch AI</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card flat">
+      <h3><span class="dot">◆</span>核心输入锚定</h3>
+      <p>以"<b>今年 token 计算量 = 去年 ×10</b>"作为 2025→2026E 的核心假设。公开数据完全支持这一量级：</p>
+      <ul class="clean">
+        <li>谷歌 17 个月 ×140（0.3→41.9 万亿/天）——年化约 <b>×33</b></li>
+        <li>火山引擎豆包 12 个月 <b>×10</b>（5→50 万亿/天）</li>
+        <li>OpenAI 4 个月 ×16（4.4→70 万亿/天）——年化约 <b>×60</b></li>
+      </ul>
+      <p class="note">→ "年化 ×10" 是 2025-2026 头部厂商实测区间的<b>中位水平</b>，作为核心假设稳健可信。</p>
+    </div>
+  </section>
+
+  <!-- ================= 二、模型推导 ================= -->
+  <section id="s2">
+    <h2><span class="m"></span><span class="no">贰</span>算力与芯片需求关系建模</h2>
+    <p class="sub">从芯片性能增长推导"支撑 10× token 所需的芯片倍数"，区分训练/推理，考虑库存、利用率与存算一体</p>
+
+    <div class="formula">
+      N(t+1) / N(t) &nbsp;=&nbsp; [ T(t+1)/T(t) × c(t+1)/c(t) ] ÷ [ S(t+1)/S(t) × U(t+1)/U(t) ]
+      <small>T: token 计算量　c: 每 token 算力需求(算法效率拉低)　S: 单卡算力　U: 系统利用率</small>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot">◆</span>三个效率杠杆（年同比）</h3>
+      <table>
+        <thead><tr><th>杠杆</th><th>年化倍数</th><th>驱动因素</th></tr></thead>
+        <tbody>
+          <tr><td>单卡算力增长 S</td><td class="num"><span class="hl">1.4-1.5×</span></td><td>工艺（1.2×）+ 架构（1.15×）+ HBM 带宽</td></tr>
+          <tr><td>算法/架构效率 1/c</td><td class="num"><span class="hl">2.0-3.0×</span></td><td>MoE 激活 1/3-1/8、量化 FP8→FP4→FP2、蒸馏、投机解码、KV 缓存</td></tr>
+          <tr><td>系统利用率 U</td><td class="num"><span class="hl">1.1-1.3×</span></td><td>调度优化、机柜级集成（GB200/Rubin）、存算一体、良率</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot">◆</span>敏感性分析：token ×10 → 芯片需求倍数</h3>
+      <table>
+        <thead><tr><th>场景</th><th class="num">算法效率</th><th class="num">单卡算力</th><th class="num">利用率</th><th class="num">芯片需求倍数</th></tr></thead>
+        <tbody>
+          <tr><td>乐观（算法主导）</td><td class="num">3.0×</td><td class="num">1.5×</td><td class="num">1.3×</td><td class="num"><span class="hl">≈1.7×</span></td></tr>
+          <tr><td><b>中性（基准）</b></td><td class="num">2.0×</td><td class="num">1.4×</td><td class="num">1.2×</td><td class="num"><span class="hlr">≈3.0×</span></td></tr>
+          <tr><td>保守（硬件主导）</td><td class="num">1.4×</td><td class="num">1.3×</td><td class="num">1.1×</td><td class="num">≈5.0×</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">
+        <b style="color:var(--gold)">基准结论：芯片需求倍数区间 1.5-3×</b>（中性下沿约 1.7×、上沿约 3×；保守上沿可达 5×）。
+        加入库存周期（2023-2024 超卖 → 2025-2026 消化）后，实测出货倍数可能低于模型值。
+      </p>
+    </div>
+
+    <div class="card flat">
+      <h3><span class="dot">◆</span>训练 vs 推理拆分</h3>
+      <table>
+        <thead><tr><th>场景</th><th>token 增长</th><th>主要效率杠杆</th><th class="num">芯片倍数</th></tr></thead>
+        <tbody>
+          <tr><td>训练</td><td>约 5×/年（前沿跑线；GPT-5 已现后训练 RL 替代）</td><td>预训练效率 3×/年</td><td class="num"><span class="hl">1.2-2.5×</span></td></tr>
+          <tr><td>推理</td><td>约 10-30×/年（小模型+蒸馏稀释每 token FLOP）</td><td>MoE+量化+投机解码+缓存</td><td class="num"><span class="hl">1.5-4×</span></td></tr>
+          <tr><td><b>合计</b></td><td><b>≈10×</b></td><td>三层叠加</td><td class="num"><span class="hlr">1.5-3×</span></td></tr>
+        </tbody>
+      </table>
+      <p class="note">训练侧需求"硬"（绑定最先进卡），推理侧"软"（可用旧卡/边缘机柜），合并后区间被训练侧拉低、被推理侧拉高。</p>
+    </div>
+  </section>
+
+  <!-- ================= 三、规律提炼 ================= -->
+  <section id="s3">
+    <h2><span class="m"></span><span class="no">叁</span>规律提炼：token 与芯片的非线性脱钩</h2>
+    <p class="sub">历史数据归纳 + MoE/稀疏化推动的"算力/芯片脱钩"趋势</p>
+
+    <div class="card">
+      <h3><span class="dot">◆</span>历史对应（实测归纳）</h3>
+      <table>
+        <thead><tr><th>时间窗</th><th class="num">token/算力增长</th><th class="num">芯片需求增长</th><th class="num">比率（算力:芯片）</th></tr></thead>
+        <tbody>
+          <tr><td>2022 → 2023</td><td class="num">2.5-3×</td><td class="num">1.4×</td><td class="num">1.8-2.1×</td></tr>
+          <tr><td>2023 → 2024</td><td class="num">5×</td><td class="num">1.7×</td><td class="num">2.9×</td></tr>
+          <tr><td>2024 → 2025</td><td class="num"><span class="hlr">10-13×</span></td><td class="num"><span class="hl">1.3×</span></td><td class="num"><span class="hlr">8-10×</span></td></tr>
+          <tr><td>2025 → 2026E</td><td class="num">10×（假设）</td><td class="num">1.3×</td><td class="num">7.7×</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:12px">
+        <b style="color:var(--gold)">核心非线性：算力增长对芯片增长的"溢价"已从 2× 上升至 8-10×</b>——同样一组芯片，每年服务/产出的 token 已翻 5-7 倍。
+      </p>
+    </div>
+
+    <div class="card flat">
+      <h3><span class="dot">◆</span>推动"脱钩"的四股力量</h3>
+      <ul class="clean">
+        <li><b>算法效率（最大杠杆）</b>：预训练 3×/年（Epoch），推理侧叠加 MoE+量化+投机解码 → 综合 3-5×/年。</li>
+        <li><b>硬件利用率</b>：机柜级（NVL72/GB200）、推理专用卡、存算一体（SRAM/NAND PIM 量产中）→ 1.1-1.3×/年。</li>
+        <li><b>库存与超卖周期</b>：2024 上半年缺货、渠道囤货，2025 进入消化 → 出货"虚低"于实际需求。</li>
+        <li><b>模型路由与小模型化</b>：约 80% 简单请求由 7B/13B 小模型承担，仅长尾请求上 Frontier → 单 token 平均 FLOP 显著下降。</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="dot">◆</span>历史规律归纳</h3>
+      <ul class="clean">
+        <li><b>token 算力增长 ≈ 2-10×/年</b>（训练 5×、推理 30×、全球混合 5-10×）</li>
+        <li><b>芯片需求增长 ≈ 1.3-2×/年</b>（出货量口径；营收 2-3× 含单卡价格因子）</li>
+        <li><b>比率 3-8× 并随算法效率改善呈单调扩大</b>——这就是"算力/芯片脱钩"的量化定义</li>
+      </ul>
+      <p class="note" style="margin-top:14px">
+        <b style="color:var(--gold)">规律：</b>"token 算力 10× 与芯片需求 1.5-3× 不是同向放大，而是非线性脱钩——中间被 3-5× 算法效率、
+        1.2-1.5× 单卡性能、1.1-1.3× 系统效率三重除数吸收；余下的 1.5-3× 即为物理芯片需求。"
+      </p>
+    </div>
+  </section>
+
+  <!-- ================= 四、曲线绘制 ================= -->
+  <section id="s4">
+    <h2><span class="m"></span><span class="no">肆</span>归一化发展曲线（2021-2026E）</h2>
+    <p class="sub">Token计算量 / 总算力 / 芯片出货量 三曲线 + 年同比增速双面板</p>
+
+        <div class="chart-box" id="chartBox">
+      <div class="chart-controls">
+        <button class="ctl-btn on" id="modeBtn">对数轴</button>
+        <div class="chart-legend">
+          <div class="legend-chip" data-key="token"><span class="sw" style="background:#D4AF37"></span>Token计算量</div>
+          <div class="legend-chip" data-key="compute"><span class="sw" style="background:#E2574C"></span>总算力</div>
+          <div class="legend-chip" data-key="chip"><span class="sw" style="background:#8FB8FF"></span>芯片出货量</div>
+        </div>
+      </div>
+      <div class="chart-panel-title">图1　归一化指数（2021 = 100）· 悬停查看数值 · 点击图例可开关曲线</div>
+      <svg class="chart-svg" id="svgMain" viewBox="0 0 940 420"></svg>
+      <div class="chart-panel-title">图2　年同比增速（%）· 金色底区 = 算力/芯片脱钩区（2023→2026E）</div>
+      <svg class="chart-svg" id="svgYoy" viewBox="0 0 940 250"></svg>
+      <div class="chart-tt" id="chartTT"></div>
+      <div class="fig-caption">交互：移动鼠标显示逐点数值与同比；点击图例开关曲线；点击「对数轴/线性轴」切换坐标刻度。数据来源见页脚。</div>
+    </div>
+
+    <div class="card flat">
+      <h3><span class="dot">◆</span>图表解读</h3>
+      <ul class="clean">
+        <li><b>三曲线严重发散</b>：2021→2026E 五年内 token ×4,000、总算力 ×180、芯片 ×7.3——<b>token 涨幅约是芯片的 550 倍</b>，这是脱钩最直接的视觉证据。</li>
+        <li><b>log 轴斜率差异</b>：token 曲线最陡（≈0.8 OOM/年），算力次之（≈0.45 OOM/年），芯片最缓（≈0.17 OOM/年）。</li>
+        <li><b>2026E 预测段</b>：以"token×10"为锚，芯片仅需补 1.3×，远低于 token 端 10× 涨幅——假设若成立，脱钩延续。</li>
+        <li><b>2024→2025 是历史性脱钩节点</b>：token +1233%、算力 +200%、<b>芯片仅 +32%</b>，三者首次出现数量级鸿沟。</li>
+        <li><b>芯片曲线持续下压</b>：同比从 +76%（2021→22）降至 +29%（2025→26E）——CoWoS 产能见顶、库存消化、单卡价值密度提升的多重作用。</li>
+      </ul>
+    </div>
+
+</section>
+
+  <!-- ================= 五、核心结论 ================= -->
+  <section id="s5">
+    <h2><span class="m"></span><span class="no">伍</span>核心结论</h2>
+    <p class="sub">数据驱动的五条关键判断</p>
+
+    <div class="card">
+      <div class="concl"><span class="idx">01</span><p><b style="color:var(--gold)">基准倍数区间 1.5-3×</b>——以 token×10 为输入、中性参数组合下芯片需求倍数落在 1.7-3×；乐观 1.7×、保守可达 5×。给出区间而非定值是关键，因为算法效率参数仍在快速变化。</p></div>
+      <div class="concl"><span class="idx">02</span><p><b style="color:var(--gold)">三重除数贡献量化</b>——算法效率 ≈2-3× 是最大杠杆，单卡算力 1.4-1.5× 次之，系统利用率 1.1-1.3× 居末；三者相乘方使 token×10 收敛到芯片×1.5-3×。</p></div>
+      <div class="concl"><span class="idx">03</span><p><b style="color:var(--gold)">训练/推理分流</b>——训练侧 1.2-2.5×（前沿跑线绑定最先进卡）、推理侧 1.5-4×（小模型+缓存摊薄每 token FLOP）；聚焦训练卡则更靠近 1.5-2×，泛指全集（含 L40S、ASIC）可上探 3-4×。</p></div>
+      <div class="concl"><span class="idx">04</span><p><b style="color:var(--gold)">脱钩是结构性而非周期性的</b>——2022→2025 算力/芯片比率从 1.8 扩大至 8-10× 且仍上升，意味着 AI 行业<b>单位算力资本开支强度持续下降</b>；芯片估值宜引入"每 token 收入"口径替代"每瓦/每美元 FLOPs"。</p></div>
+      <div class="concl"><span class="idx">05</span><p><b style="color:var(--gold)">2026E 最大不确定性项是算法效率</b>——MoE 与投机解码渗透若超预期，倍数可下探 1.2-1.5×；HBM4/CoWoS-L 良率不及预期则可上探 4-5×。追踪指标：每 token 平均 FLOPs、CoWoS 月度产能、头部厂商季度 token 披露。</p></div>
+    </div>
+
+    <div class="formula">
+      当 token×10 时，物理芯片需求仅 ×1.5-3 —— 中间被 MoE、量化、缓存、机柜级、存算一体五重效率杠杆吸收
+      <small>AI 资本开支"算力通胀但芯片通缩"的结构性原因</small>
+    </div>
+  </section>
+
+  <footer>
+    数据来源：Epoch AI（2026）前沿训练算力 5×/年、全球算力容量约 7 个月翻倍 ｜ DIGITIMES / Omdia（2023-2024）数据中心 GPU 出货量 ｜
+    NVIDIA FY25/FY26 财报与市场估算 ｜ 谷歌 / OpenAI / 火山引擎 token 披露 ｜ arXiv 2603.06630 全球推理量估算 ｜ TSMC CoWoS 产能（TrendForce）
+    <br>2026E 为作者基于公开数据的估算与假设。本报告为数据研究，不构成投资建议。生成于 2026-08-28。
+  </footer>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+var YEARS=["2021","2022","2023","2024","2025","2026E"];
+var SERIES={
+  token:  {label:"Token计算量",color:"#D4AF37",unit:"T tokens/天",  idx:[100,250,750,3000,40000,400000], real:[0.2,0.5,1.5,6,80,800]},
+  compute:{label:"总算力",    color:"#E2574C",unit:"EFLOPS当量",    idx:[100,250,700,2000,6000,18000],   real:[1,2.5,7,20,60,180]},
+  chip:   {label:"芯片出货量", color:"#8FB8FF",unit:"百万颗/年",     idx:[100,176,251,429,567,733],       real:[1.5,2.64,3.76,6.44,8.5,11]}
+};
+var ORDER=["token","compute","chip"];
+var visible={token:true,compute:true,chip:true};
+var logMode=true, hover=null;
+var W=940,H1=420,H2=250,M={l:62,r:22,t:26,b:38};
+var PW=W-M.l-M.r;
+var NS="http://www.w3.org/2000/svg";
+var box=document.getElementById("chartBox");
+var svgM=document.getElementById("svgMain");
+var svgY=document.getElementById("svgYoy");
+var tt=document.getElementById("chartTT");
+
+function xp(i){return M.l+PW*i/(YEARS.length-1);}
+function visibleKeys(){return ORDER.filter(function(k){return visible[k];});}
+function domain(){
+  var keys=visibleKeys(),lo=Infinity,hi=-Infinity;
+  keys.forEach(function(k){SERIES[k].idx.forEach(function(v){if(v<lo)lo=v;if(v>hi)hi=v;});});
+  if(keys.length===0){lo=100;hi=1000;}
+  return {lo:lo,hi:hi};
+}
+function niceStep(raw){
+  var mag=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/mag;
+  return (n<=1?1:n<=2?2:n<=5?5:10)*mag;
+}
+function axisTicks(){
+  var dom=domain(),t=[];
+  if(logMode){
+    var p0=Math.floor(Math.log10(dom.lo)),p1=Math.ceil(Math.log10(dom.hi)),wide=(p1-p0)>2;
+    for(var p=p0;p<=p1;p++){
+      var base=Math.pow(10,p);
+      if(!wide){t.push(base*2);t.push(base*5);}
+      t.push(base);
+    }
+    t=t.filter(function(v){return v>=dom.lo*0.72&&v<=dom.hi*1.42;});
+  }else{
+    var max=dom.hi*1.18,step=niceStep(max/5);
+    for(var v=0;v<=max+1e-9;v+=step)t.push(v);
+  }
+  t.sort(function(a,b){return a-b;});
+  var out=[];
+  t.forEach(function(v){if(out.indexOf(v)<0)out.push(v);});
+  return out;
+}
+function yp(v){
+  var top=M.t,bot=H1-M.b;
+  var dom=domain();
+  if(logMode){var lo=Math.log10(dom.lo*0.72),hi=Math.log10(dom.hi*1.42);return top+(bot-top)*(1-(Math.log10(v)-lo)/(hi-lo));}
+  return top+(bot-top)*(1-v/(dom.hi*1.18));
+}
+function ypy(v){var top=M.t,bot=H2-M.b;return top+(bot-top)*(1-v/1550);}
+function yoyArr(key){var s=SERIES[key],r=[];for(var i=1;i<s.idx.length;i++)r.push((s.idx[i]/s.idx[i-1]-1)*100);return r;}
+function el(tag,attrs,parent){var n=document.createElementNS(NS,tag);for(var k in attrs)n.setAttribute(k,attrs[k]);parent.appendChild(n);return n;}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+function fmt(v){return v>=1000?(v/1000).toFixed(1)+"k":String(Math.round(v));}
+function fmtReal(s,i){var v=s.real[i];return s.unit.indexOf("百万")===0?v.toFixed(2):(v>=100?v.toFixed(0):v.toFixed(1));}
+
+function renderMain(){
+  clear(svgM);
+  svgM.setAttribute("viewBox","0 0 "+W+" "+H1);
+  var defs=el("defs",{},svgM);
+  var mk=el("marker",{id:"arrG",markerWidth:9,markerHeight:9,refX:7,refY:3.5,orient:"auto"},defs);
+  el("path",{d:"M0,0 L7,3.5 L0,7 Z",fill:"#D4AF37"},mk);
+  // y grid + ticks
+  var ticks=axisTicks();
+  ticks.forEach(function(v){
+    var y=yp(v);
+    el("line",{x1:M.l,y1:y,x2:W-M.r,y2:y,stroke:"#2A2A32","stroke-width":0.8,opacity:0.6},svgM);
+    var t=el("text",{x:M.l-8,y:y+4,"text-anchor":"end","font-size":10,fill:"#9A968C","font-family":"Microsoft YaHei"},svgM);
+    t.textContent=v>=1000?(v/1000)+"k":String(v);
+  });
+  // x labels
+  YEARS.forEach(function(yr,i){
+    var t=el("text",{x:xp(i),y:H1-10,"text-anchor":"middle","font-size":12,fill:"#E8E4DA","font-family":"Microsoft YaHei"},svgM);
+    t.textContent=yr;
+    if(i===5)t.setAttribute("font-weight","bold");
+  });
+  // hover crosshair
+  if(hover!==null){
+    el("line",{x1:xp(hover),y1:M.t,x2:xp(hover),y2:H1-M.b,stroke:"#D4AF37","stroke-width":1,opacity:0.55,"stroke-dasharray":"3,3"},svgM);
+  }
+  // series
+  ORDER.forEach(function(key){
+    if(!visible[key])return;
+    var s=SERIES[key],d1="",d2="";
+    for(var i=0;i<5;i++)d1+=(i?"L":"M")+xp(i)+" "+yp(s.idx[i]);
+    d2="M"+xp(4)+" "+yp(s.idx[4])+"L"+xp(5)+" "+yp(s.idx[5]);
+    el("path",{d:d1,fill:"none",stroke:s.color,"stroke-width":2.6,opacity:0.95},svgM);
+    el("path",{d:d2,fill:"none",stroke:s.color,"stroke-width":2.6,"stroke-dasharray":"6,5",opacity:0.75},svgM);
+    for(var j=0;j<6;j++){
+      var c=el("circle",{cx:xp(j),cy:yp(s.idx[j]),r:3.4,fill:s.color},svgM);
+      if(j===5)c.setAttribute("opacity","0.6");
+    }
+    if(hover!==null){
+      var vt=el("text",{x:xp(hover)+7,y:yp(s.idx[hover])-7,"font-size":11,fill:s.color,"font-family":"Microsoft YaHei"},svgM);
+      vt.textContent=fmt(s.idx[hover]);
+    }
+  });
+  // annotations
+  if(visible.token&&visible.chip){
+    var ax=xp(5)+16, yT=yp(SERIES.token.idx[5]), yC=yp(SERIES.chip.idx[5]);
+    el("line",{x1:ax,y1:yT,x2:ax,y2:yC,stroke:"#7A6A35","stroke-width":2,opacity:0.9},svgM);
+    var t1=el("text",{x:ax+6,y:(yT+yC)/2-5,"font-size":11,fill:"#B89A3E","font-family":"Microsoft YaHei","font-weight":"bold"},svgM);
+    t1.textContent="token ×10";
+    var t2=el("text",{x:ax+6,y:(yT+yC)/2+12,"font-size":11,fill:"#8FB8FF","font-family":"Microsoft YaHei","font-weight":"bold"},svgM);
+    t2.textContent="芯片 ×1.3";
+  }
+  if(visible.token&&logMode){
+    el("line",{x1:xp(3.25),y1:yp(280000),x2:xp(4),y2:yp(40000),stroke:"#D4AF37","stroke-width":1,"marker-end":"url(#arrG)"},svgM);
+    var a=el("text",{x:xp(3.08),y:yp(340000),"font-size":11,fill:"#B89A3E","font-family":"Microsoft YaHei"},svgM);
+    a.textContent="谷歌 token 17个月 ×140";
+  }
+}
+
+function renderYoy(){
+  clear(svgY);
+  svgY.setAttribute("viewBox","0 0 "+W+" "+H2);
+  // 脱钩区
+  var xa=xp(2.5),xb=xp(4.5);
+  el("rect",{x:xa,y:M.t,width:xb-xa,height:H2-M.t-M.b,fill:"#B89A3E",opacity:0.08},svgY);
+  for(var v=0;v<=1500;v+=300){
+    var y=ypy(v);
+    el("line",{x1:M.l,y1:y,x2:W-M.r,y2:y,stroke:"#2A2A32","stroke-width":0.8,opacity:0.6},svgY);
+    var t=el("text",{x:M.l-8,y:y+4,"text-anchor":"end","font-size":10,fill:"#9A968C","font-family":"Microsoft YaHei"},svgY);
+    t.textContent=String(v);
+  }
+  el("line",{x1:M.l,y1:ypy(100),x2:W-M.r,y2:ypy(100),stroke:"#2A2A32","stroke-width":1,"stroke-dasharray":"4,4",opacity:0.8},svgY);
+  ["2021→22","2022→23","2023→24","2024→25","2025→26E"].forEach(function(lb,j){
+    var t=el("text",{x:M.l+PW*(j+0.5)/(YEARS.length-1),y:H2-10,"text-anchor":"middle","font-size":11,fill:"#9A968C","font-family":"Microsoft YaHei"},svgY);
+    t.textContent=lb;
+  });
+  ORDER.forEach(function(key){
+    if(!visible[key])return;
+    var s=SERIES[key],arr=yoyArr(key),d="";
+    for(var j=0;j<5;j++){
+      var x=M.l+PW*(j+0.5)/(YEARS.length-1);
+      d+=(j?"L":"M")+x+" "+ypy(arr[j]);
+    }
+    el("path",{d:d,fill:"none",stroke:s.color,"stroke-width":2.2,opacity:0.95},svgY);
+    for(var j2=0;j2<5;j2++){
+      var x2=M.l+PW*(j2+0.5)/(YEARS.length-1);
+      el("circle",{cx:x2,cy:ypy(arr[j2]),r:3.2,fill:s.color},svgY);
+    }
+  });
+  if(hover!==null&&hover>0){
+    var hx=(xp(hover-1)+xp(hover))/2;
+    el("line",{x1:hx,y1:M.t,x2:hx,y2:H2-M.b,stroke:"#D4AF37","stroke-width":1,opacity:0.5,"stroke-dasharray":"3,3"},svgY);
+  }
+  var lb=el("text",{x:xp(3.1),y:ypy(1430),"font-size":11,fill:"#C9B458","font-family":"Microsoft YaHei"},svgY);
+  lb.textContent="算力/芯片脱钩区（token ×10~13 vs 芯片 ×1.3~1.7）";
+}
+
+function onMove(e){
+  var rect=svgM.getBoundingClientRect();
+  if(!rect.width)return;
+  var x=(e.clientX-rect.left)/rect.width*W;
+  var i=Math.round((x-M.l)/PW*(YEARS.length-1));
+  i=Math.max(0,Math.min(5,i));
+  hover=i;
+  renderMain();renderYoy();
+  var bx=box.getBoundingClientRect();
+  var tx=e.clientX-bx.left+16, ty=e.clientY-bx.top+6;
+  if(tx+250>bx.width)tx=tx-250-28;
+  var html='<div class="tt-y">'+YEARS[i]+(i===5?'（预测段）':'')+'</div>';
+  ORDER.forEach(function(key){
+    if(!visible[key])return;
+    var s=SERIES[key];
+    html+='<div class="row"><span class="nm" style="color:'+s.color+'">● '+s.label+'</span><span>'+fmtReal(s,i)+' '+s.unit+'（指数 '+fmt(s.idx[i])+'）</span></div>';
+  });
+  if(i>0){
+    html+='<div class="tt-y" style="margin-top:4px;font-size:11px;">同比（vs '+YEARS[i-1]+'）</div>';
+    ORDER.forEach(function(key){
+      if(!visible[key])return;
+      var pct=yoyArr(key)[i-1],s=SERIES[key];
+      html+='<div class="row"><span class="nm" style="color:'+s.color+'">'+s.label+'</span><span style="color:'+(pct>=100?'#E2574C':'#8FB8FF')+'">+'+(pct>=100?Math.round(pct):pct.toFixed(1))+'%</span></div>';
+    });
+  }
+  tt.innerHTML=html;
+  tt.style.opacity=1;
+  tt.style.left=tx+"px";
+  tt.style.top=ty+"px";
+}
+function onLeave(){hover=null;renderMain();renderYoy();tt.style.opacity=0;}
+box.addEventListener("mousemove",onMove);
+box.addEventListener("mouseleave",onLeave);
+
+document.querySelectorAll(".legend-chip").forEach(function(chip){
+  chip.addEventListener("click",function(){
+    var k=chip.getAttribute("data-key");
+    visible[k]=!visible[k];
+    chip.classList.toggle("off",!visible[k]);
+    renderMain();renderYoy();
+  });
+});
+document.getElementById("modeBtn").addEventListener("click",function(){
+  logMode=!logMode;
+  var b=document.getElementById("modeBtn");
+  b.textContent=logMode?"对数轴":"线性轴";
+  b.classList.toggle("on",logMode);
+  renderMain();renderYoy();
+});
+renderMain();renderYoy();
+})();
+</script>
+
+</body>
+</html>
