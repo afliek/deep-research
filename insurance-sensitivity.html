@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股上市险企业绩敏感性测算表 · 市场涨幅 × 利率变动</title>
+<style>
+:root{
+  --bg:#0D0D10;
+  --bg-alt:#101014;
+  --panel:#141418;
+  --panel-2:#191920;
+  --panel-3:#1F1F28;
+  --gold:#D4AF37;
+  --gold-soft:#E8CE7A;
+  --gold-dim:#8C7330;
+  --gold-line:rgba(212,175,55,0.20);
+  --gold-line-2:rgba(212,175,55,0.38);
+  --tx:#EDEDF0;
+  --tx-2:#B4B4BE;
+  --tx-3:#7C7C88;
+  --up:#FF5A5F;
+  --up-bg:rgba(255,90,95,0.16);
+  --dn:#12B76A;
+  --dn-bg:rgba(18,183,106,0.16);
+  --num:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Consolas,"Courier New",monospace;
+  --serif:"FangSong","STFangsong","仿宋","Songti SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(900px 520px at 12% -6%, rgba(212,175,55,0.055), transparent 62%),
+    radial-gradient(760px 460px at 92% 4%, rgba(212,175,55,0.032), transparent 60%);
+  background-attachment:fixed;
+  color:var(--tx);
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1360px;margin:0 auto;padding:0 26px 90px;}
+
+/* ---------- Header ---------- */
+.topbar{
+  border-bottom:1px solid var(--gold-line);
+  padding:38px 0 26px;
+  margin-bottom:30px;
+  position:relative;
+}
+.topbar::after{
+  content:"";position:absolute;left:0;bottom:-1px;width:120px;height:2px;background:var(--gold);
+}
+.eyebrow{
+  font-family:var(--num);font-size:11px;letter-spacing:.22em;color:var(--gold);
+  text-transform:uppercase;margin-bottom:14px;
+}
+h1{
+  font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:.06em;
+  color:#fff;line-height:1.35;margin-bottom:12px;
+}
+h1 .accent{color:var(--gold);}
+.subtitle{font-family:var(--serif);font-size:15px;color:var(--tx-2);letter-spacing:.03em;max-width:900px;}
+.metaline{
+  margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;
+}
+.chip{
+  font-family:var(--num);font-size:11px;letter-spacing:.05em;
+  border:1px solid var(--gold-line);border-radius:2px;padding:4px 11px;
+  color:var(--tx-2);background:rgba(212,175,55,0.045);
+}
+.chip b{color:var(--gold-soft);font-weight:600;}
+
+/* ---------- Section ---------- */
+section{margin-top:44px;}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+.sec-num{
+  font-family:var(--num);font-size:11px;color:var(--gold);letter-spacing:.16em;
+  border:1px solid var(--gold-line);padding:2px 8px;border-radius:2px;
+}
+h2{
+  font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:.07em;color:#fff;
+  display:flex;align-items:center;gap:10px;
+}
+h2::before{content:"◆";color:var(--gold);font-size:11px;transform:translateY(-2px);}
+.sec-desc{font-family:var(--serif);font-size:13.5px;color:var(--tx-3);margin:6px 0 20px;max-width:960px;}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--panel);
+  border:1px solid var(--gold-line);
+  border-radius:3px;
+  padding:20px 22px;
+}
+.card.tight{padding:15px 17px;}
+.card-h{
+  font-family:var(--serif);font-size:15px;letter-spacing:.06em;color:var(--gold-soft);
+  margin-bottom:14px;display:flex;align-items:center;gap:9px;
+}
+.card-h::before{content:"◇";font-size:9px;color:var(--gold);}
+.grid{display:grid;gap:16px;}
+.g2{grid-template-columns:repeat(2,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g5{grid-template-columns:repeat(5,1fr);}
+.g23{grid-template-columns:1.15fr 1fr;}
+
+/* ---------- Inputs ---------- */
+label.fl{display:block;font-size:11.5px;color:var(--tx-3);letter-spacing:.06em;margin-bottom:6px;font-family:var(--num);}
+.inp{
+  width:100%;background:var(--bg-alt);border:1px solid var(--gold-line);
+  color:var(--tx);font-family:var(--num);font-size:13.5px;padding:7px 10px;border-radius:2px;
+  transition:border-color .15s,background .15s;
+}
+.inp:focus{outline:none;border-color:var(--gold);background:#0A0A0D;}
+.inp.gold{color:var(--gold-soft);}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+.unit{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:var(--num);font-size:11px;color:var(--tx-3);pointer-events:none;}
+.rel{position:relative;}
+
+.scen-row{display:flex;flex-wrap:wrap;gap:9px;align-items:flex-end;}
+.scen-item{flex:1 1 92px;min-width:92px;}
+.preset-bar{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;}
+.btn{
+  background:transparent;border:1px solid var(--gold-line);color:var(--tx-2);
+  font-family:var(--num);font-size:11.5px;letter-spacing:.05em;padding:4px 11px;
+  border-radius:2px;cursor:pointer;transition:all .15s;
+}
+.btn:hover{border-color:var(--gold);color:var(--gold-soft);background:rgba(212,175,55,0.06);}
+.btn.on{border-color:var(--gold);color:#0D0D10;background:var(--gold);font-weight:600;}
+.btn.sm{padding:3px 9px;font-size:11px;}
+.btn.danger:hover{border-color:var(--up);color:var(--up);}
+.rowline{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.tiny{font-size:11px;color:var(--tx-3);font-family:var(--num);letter-spacing:.04em;}
+
+/* ---------- Tables ---------- */
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+thead th{
+  font-weight:600;font-size:11px;letter-spacing:.07em;color:var(--gold-soft);
+  text-align:right;padding:9px 10px;border-bottom:1px solid var(--gold-line-2);
+  white-space:nowrap;background:rgba(212,175,55,0.035);
+  font-family:var(--sans);
+}
+thead th:first-child,tbody td:first-child{text-align:left;}
+tbody td{
+  padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.045);
+  text-align:right;font-family:var(--num);color:var(--tx-2);white-space:nowrap;
+}
+tbody td:first-child{font-family:var(--sans);color:var(--tx);}
+tbody tr:hover td{background:rgba(212,175,55,0.035);}
+td.name{color:var(--tx);font-family:var(--sans);}
+td.name small{color:var(--tx-3);font-family:var(--num);font-size:10.5px;margin-left:6px;}
+td.hi{color:var(--gold-soft);}
+.num-in{width:82px;text-align:right;}
+
+/* ---------- Matrix ---------- */
+.mx-tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.mx-wrap{overflow-x:auto;}
+table.mx{border-collapse:separate;border-spacing:2px;font-family:var(--num);}
+table.mx th{
+  font-family:var(--num);font-size:11px;letter-spacing:.04em;color:var(--tx-2);
+  padding:6px 9px;background:transparent;border:none;text-align:center;white-space:nowrap;
+}
+table.mx th.rh{text-align:right;color:var(--gold-soft);}
+table.mx td{
+  padding:9px 8px;text-align:center;font-size:12.5px;min-width:92px;
+  border-radius:2px;border:none;font-family:var(--num);
+  transition:transform .1s;
+}
+table.mx td:hover{outline:1px solid var(--gold);}
+table.mx td .pct{font-size:13px;font-weight:600;display:block;line-height:1.35;}
+table.mx td .amt{font-size:10px;opacity:.72;display:block;line-height:1.3;}
+table.mx td.base{outline:1px solid var(--gold-line-2);}
+table.mx td:first-child{background:transparent!important;}
+.pos{color:#FF8A8E;} .neg{color:#4FD89B;} .zer{color:var(--tx-3);}
+
+/* ---------- Ranking bars ---------- */
+.rank-row{display:grid;grid-template-columns:132px 1fr 96px;gap:12px;align-items:center;margin-bottom:9px;}
+.rank-name{font-size:12.5px;color:var(--tx);font-family:var(--sans);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-track{background:rgba(255,255,255,0.045);height:16px;border-radius:2px;position:relative;overflow:hidden;}
+.bar-fill{height:100%;border-radius:2px;transition:width .3s ease;}
+.bar-val{font-family:var(--num);font-size:12px;color:var(--tx-2);}
+.bar-val b{color:var(--gold-soft);font-weight:600;}
+
+/* ---------- Findings ---------- */
+.finding{
+  border-left:2px solid var(--gold-dim);padding:2px 0 2px 15px;margin-bottom:15px;
+}
+.finding b{color:var(--gold-soft);font-family:var(--serif);font-size:14px;letter-spacing:.04em;display:block;margin-bottom:3px;}
+.finding p{font-family:var(--serif);font-size:13.5px;color:var(--tx-2);line-height:1.75;}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:12.5px;}
+.kv dt{color:var(--tx-3);font-family:var(--sans);}
+.kv dd{font-family:var(--num);color:var(--tx);text-align:right;}
+
+/* ---------- Formula ---------- */
+.formula{
+  background:var(--bg-alt);border:1px solid var(--gold-line);border-radius:2px;
+  padding:14px 16px;font-family:var(--num);font-size:12.5px;color:var(--tx-2);
+  line-height:2.0;overflow-x:auto;white-space:pre;
+}
+.formula .g{color:var(--gold-soft);}
+.formula .c{color:var(--tx-3);}
+.note{
+  font-family:var(--serif);font-size:12.5px;color:var(--tx-3);line-height:1.8;
+  border-left:2px solid var(--gold-line-2);padding-left:13px;margin-top:12px;
+}
+.warn{
+  border-left-color:var(--up);color:#E8B4B6;
+}
+ul.assume{list-style:none;font-family:var(--serif);font-size:13px;color:var(--tx-2);line-height:1.85;}
+ul.assume li{padding-left:17px;position:relative;margin-bottom:7px;}
+ul.assume li::before{content:"▸";position:absolute;left:0;color:var(--gold-dim);font-size:10px;top:1px;}
+.src{font-family:var(--num);font-size:11px;color:var(--tx-3);letter-spacing:.03em;}
+
+footer{
+  margin-top:56px;padding-top:22px;border-top:1px solid var(--gold-line);
+  font-family:var(--num);font-size:11px;color:var(--tx-3);letter-spacing:.05em;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+}
+.badge-est{color:var(--up);font-size:10px;border:1px solid rgba(255,90,95,.3);border-radius:2px;padding:0 4px;margin-left:4px;}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:12px;}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:5px;vertical-align:-1px;}
+@media(max-width:1080px){
+  .g5{grid-template-columns:repeat(2,1fr);}
+  .g3,.g23,.g2{grid-template-columns:1fr;}
+  h1{font-size:26px;}
+  .wrap{padding:0 16px 70px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <div class="eyebrow">A-Share Listed Insurers · Earnings Sensitivity Model</div>
+  <h1>A股上市险企业绩敏感性测算表<br><span class="accent">市场涨幅 × 利率变动</span> 双驱动情景引擎</h1>
+  <p class="subtitle">以 2025 年报披露的投资组合结构、会计分类与资产负债久期特征为基准，测算在给定「权益市场涨跌幅 × 利率变动幅度」组合下，各家险企归母净利润与净资产的变动。所有参数均可手动改写，结果实时重算。</p>
+  <div class="metaline">
+    <span class="chip">数据基准 <b>2025 年报</b></span>
+    <span class="chip">覆盖 <b>5 家</b> A股上市险企</span>
+    <span class="chip">情景维度 <b>市场 × 利率</b></span>
+    <span class="chip">输出 <b>净利润 / 净资产 / 综合收益</b></span>
+    <span class="chip">引擎 <b>纯前端实时计算</b></span>
+  </div>
+</header>
+
+<!-- ============ 1. 核心结论 ============ -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">01</span><h2>核心结论速览</h2></div>
+  <p class="sec-desc">以下结论由当前参数实时生成。修改下方任意输入框后，本区域自动刷新。</p>
+  <div class="card">
+    <div class="grid g3" id="tldrCards"></div>
+    <div id="tldrText" style="margin-top:18px;"></div>
+  </div>
+</section>
+<!-- ============ 2. 驱动变量输入 ============ -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">02</span><h2>驱动变量输入区</h2></div>
+  <p class="sec-desc">设定情景矩阵的行（权益市场涨跌幅，以沪深300为基准）与列（利率平行移动幅度）。可直接改写数值、增删情景，或使用预设一键套用。</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-h">驱动变量 ① · A股市场涨跌幅（行）</div>
+      <div class="scen-row" id="mktInputs"></div>
+      <div class="preset-bar">
+        <span class="tiny" style="align-self:center;margin-right:4px;">预设</span>
+        <button class="btn sm" data-preset-mkt="[-0.20,-0.10,0,0.10,0.20]">±10/±20%</button>
+        <button class="btn sm" data-preset-mkt="[-0.30,-0.15,-0.05,0.05,0.15,0.30]">±5/±15/±30%</button>
+        <button class="btn sm" data-preset-mkt="[-0.10,-0.05,0,0.05,0.10]">小幅 ±5/±10%</button>
+        <button class="btn sm" data-add-mkt="1">+ 添加情景</button>
+        <button class="btn sm danger" data-del-mkt="1">− 删除末列</button>
+      </div>
+      <div class="note">口径：沪深300 指数区间涨跌幅。险企权益组合相对指数的偏离由「组合 Beta」参数修正。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">驱动变量 ② · 利率平行移动幅度（列）</div>
+      <div class="scen-row" id="rateInputs"></div>
+      <div class="preset-bar">
+        <span class="tiny" style="align-self:center;margin-right:4px;">预设</span>
+        <button class="btn sm" data-preset-rate="[-50,-25,0,25,50]">±25/±50bp</button>
+        <button class="btn sm" data-preset-rate="[-100,-50,-25,0,25,50,100]">±25/±50/±100bp</button>
+        <button class="btn sm" data-preset-rate="[-20,-10,0,10,20]">微调 ±10/±20bp</button>
+        <button class="btn sm" data-add-rate="1">+ 添加情景</button>
+        <button class="btn sm danger" data-del-rate="1">− 删除末列</button>
+      </div>
+      <div class="note">口径：收益率曲线平行移动，单位 bp（1bp = 0.01%）。正值 = 利率上行。</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">全局计算参数</div>
+    <div class="grid g5" id="globalInputs"></div>
+    <div class="note">这些参数对所有公司生效。若需逐公司差异化设置，请在下方「公司参数表」中调整各公司的独立字段。</div>
+  </div>
+</section>
+
+<!-- ============ 3. 公司参数表 ============ -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><h2>公司参数表（可编辑）</h2></div>
+  <p class="sec-desc">下表为测算的全部输入。数值取自各公司 2025 年年度报告及业绩发布会披露，带 <span class="badge-est">估</span> 标记者为依据行业研报与评级报告推算的估算值，请按需要自行修正。</p>
+  <div class="card">
+    <div class="tbl-scroll">
+      <table id="paramTable">
+        <thead>
+          <tr>
+            <th style="text-align:left;">公司 / 代码</th>
+            <th>投资资产<br><span style="font-weight:400;color:#7C7C88;">亿元</span></th>
+            <th>归母净利润<br><span style="font-weight:400;color:#7C7C88;">亿元</span></th>
+            <th>归母净资产<br><span style="font-weight:400;color:#7C7C88;">亿元</span></th>
+            <th>股票+基金<br><span style="font-weight:400;color:#7C7C88;">占比 %</span></th>
+            <th>FVOCI股票<br><span style="font-weight:400;color:#7C7C88;">占权益 %</span></th>
+            <th>组合<br>Beta</th>
+            <th>债券<br><span style="font-weight:400;color:#7C7C88;">占比 %</span></th>
+            <th>固收<br>久期</th>
+            <th>FVTPL债券<br><span style="font-weight:400;color:#7C7C88;">占债券 %</span></th>
+            <th>FVOCI债券<br><span style="font-weight:400;color:#7C7C88;">占债券 %</span></th>
+            <th>准备金/<br>投资资产</th>
+            <th>负债<br>久期</th>
+          </tr>
+        </thead>
+        <tbody id="paramBody"></tbody>
+      </table>
+    </div>
+    <div class="preset-bar">
+      <button class="btn" id="btnReset">恢复年报默认值</button>
+      <button class="btn" id="btnClear">清除本地保存</button>
+      <button class="btn" id="btnExport">导出参数 CSV</button>
+      <span class="tiny" style="align-self:center;margin-left:auto;">参数自动保存于浏览器本地</span>
+    </div>
+    <div class="note warn" style="margin-top:14px;">
+      <b>口径提示：</b>中国平安的净利润与净资产为集团合并口径（含银行、资管、科技等非保险板块），而投资资产 6.49 万亿仅为保险资金投资组合，因此平安的测算弹性会被非保险业务稀释。若需纯寿险口径，请将「归母净利润」改填寿险及健康险分部利润，并相应下调投资资产。
+    </div>
+  </div>
+</section>
+<!-- ============ 4. 二维敏感性矩阵 ============ -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><h2>二维敏感性矩阵</h2></div>
+  <p class="sec-desc">行 = 市场涨跌幅，列 = 利率变动幅度。每格显示该情景组合下的业绩变动：上方百分比为相对基准的变动幅度，下方为变动绝对额（亿元）。</p>
+  <div class="card">
+    <div class="rowline" style="flex-wrap:wrap;gap:14px;margin-bottom:16px;">
+      <div class="mx-tabs" id="metricTabs" style="margin:0;"></div>
+      <div class="mx-tabs" id="companyTabs" style="margin:0;"></div>
+    </div>
+    <div class="mx-wrap"><table class="mx" id="matrix"></table></div>
+    <div class="legend">
+      <span class="tiny"><i style="background:var(--up-bg);border:1px solid rgba(255,90,95,.35);"></i>业绩改善（红）</span>
+      <span class="tiny"><i style="background:var(--dn-bg);border:1px solid rgba(18,183,106,.35);"></i>业绩承压（绿）</span>
+      <span class="tiny" style="color:var(--tx-3);">颜色深浅 ∝ 变动幅度；描边格 = 双变量均为零的基准情景</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">五家横向对比 · 当前所选情景下各公司业绩变动</div>
+    <div class="rowline" style="flex-wrap:wrap;gap:16px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="tiny">市场</span>
+        <input type="number" step="1" class="inp num-in gold" id="cmpMkt" value="0">
+        <span class="tiny">%</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="tiny">利率</span>
+        <input type="number" step="5" class="inp num-in gold" id="cmpRate" value="-50">
+        <span class="tiny">bp</span>
+      </div>
+    </div>
+    <div class="tbl-scroll"><table id="cmpTable"></table></div>
+  </div>
+</section>
+
+<!-- ============ 5. 弹性排序 ============ -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">05</span><h2>业绩弹性测算与横向排序</h2></div>
+  <p class="sec-desc">弹性 = 业绩变动幅度 ÷ 驱动变量变动幅度。市场弹性单位为「每 1% 指数涨跌 → 归母净利润变动 %」；利率弹性单位为「利率<b>上行</b> 10bp → 归母净利润变动 %」，即数值为正代表利率上行受益、利率下行受损。分别按净利润口径与净资产口径排序。</p>
+
+  <div class="grid g2">
+    <div class="card">
+      <div class="card-h">市场弹性 · 指数上涨 1% → 净利润变动 %</div>
+      <div id="rankMktPnl"></div>
+    </div>
+    <div class="card">
+      <div class="card-h">利率弹性 · 利率上行 10bp → 净利润变动 %</div>
+      <div id="rankRatePnl"></div>
+    </div>
+    <div class="card">
+      <div class="card-h">市场弹性 · 指数上涨 1% → 净资产变动 %</div>
+      <div id="rankMktNA"></div>
+    </div>
+    <div class="card">
+      <div class="card-h">利率弹性 · 利率上行 10bp → 净资产变动 %</div>
+      <div id="rankRateNA"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">弹性总表与相对敏感度归因</div>
+    <div class="tbl-scroll"><table id="elastTable"></table></div>
+    <div class="note">
+      <b>「敏感维度」判定：</b>取市场弹性与利率弹性的绝对值比较。｜<b>「等效利率当量」</b>= |市场弹性 ÷ 利率弹性| × 10，含义是「1% 指数波动对净利润的冲击，约等于利率变动多少 bp」；数值越小说明利率端越容易对冲权益敞口。<b>符号相反</b>时该 bp 数为可对冲量，<b>符号相同</b>时则为同向叠加量。
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">典型年度波动下的四象限情景对比</div>
+    <p style="font-family:var(--serif);font-size:13px;color:var(--tx-3);margin:0 0 14px;line-height:1.75;">「每 1% 市场」与「每 10bp 利率」量纲不同，直接比较无意义。这里改以<b>典型年度波动幅度</b>归一化，给出四种现实情景下的净利润变动。</p>
+    <div class="rowline" style="flex-wrap:wrap;gap:18px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="tiny">市场年度波动幅度 ±</span>
+        <input type="number" step="1" class="inp num-in gold" id="volMkt" value="20"><span class="tiny">%</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="tiny">利率年度波动幅度 ±</span>
+        <input type="number" step="5" class="inp num-in gold" id="volRate" value="50"><span class="tiny">bp</span>
+      </div>
+    </div>
+    <div class="tbl-scroll"><table id="volTable"></table></div>
+    <div class="note">「主导维度」= 在设定的年度波动幅度下，市场端与利率端<b>单独</b>作用时冲击更大的一方。通常市场端显著占优，但利率端的方向性（上行利好、下行利空）决定它是<strong>放大器</strong>还是<strong>缓冲垫</strong>——这正是「股债双杀」与「股债跷跷板」两种宏观环境的分野。</div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-h">谁对哪个维度更敏感 · 归因解读</div>
+    <div id="attribution"></div>
+  </div>
+</section>
+
+<!-- ============ 6. 模型校准 ============ -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">06</span><h2>模型回测校准</h2></div>
+  <p class="sec-desc">用 2025 年实际市场与利率环境驱动模型，将测算出的净利润增速与实际披露增速对照，用于检验参数合理性并反向校准 Beta 等关键假设。</p>
+  <div class="card">
+    <div class="grid g3" style="margin-bottom:16px;">
+      <div>
+        <label class="fl">2025 年沪深300 涨跌幅</label>
+        <div class="rel"><input type="number" step="0.1" class="inp gold" id="btMkt" value="17.7"><span class="unit">%</span></div>
+      </div>
+      <div>
+        <label class="fl">2025 年 10Y 国债收益率变动<span class="badge-est">待校</span></label>
+        <div class="rel"><input type="number" step="1" class="inp gold" id="btRate" value="15"><span class="unit">bp</span></div>
+      </div>
+      <div>
+        <label class="fl">回测 Beta 折减系数</label>
+        <div class="rel"><input type="number" step="0.05" class="inp" id="btBeta" value="0.8"><span class="unit">×</span></div>
+      </div>
+    </div>
+    <div class="tbl-scroll"><table id="btTable"></table></div>
+    <div class="note">对照基准为各公司 <b>2024 年归母净利润</b>：中国人寿 1,069.35 亿、中国平安 1,266.07 亿、中国太保 449.60 亿、中国人保 428.69 亿、新华保险 262.29 亿。</div>
+    <div class="note warn">
+      2025 年 10 年期国债收益率变动为示意值，请按实际数据修正后再做校准判断。另需注意：模型以<b>期末持仓结构</b>为静态起点，而 2025 年险企权益仓位在年内是<b>逐步加仓</b>的，年均持仓显著低于年末，因此模型测算值系统性高于实际值属正常现象——可通过下调各公司「组合 Beta」或降低权益占比来逼近。
+    </div>
+  </div>
+</section>
+<!-- ============ 7. 关键假设与计算依据 ============ -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">07</span><h2>关键假设与计算依据</h2></div>
+  <p class="sec-desc">测算采用「自下而上、分账户归因」的框架：把市场与利率冲击分别映射到资产端（权益、固收）与负债端（准备金折现率），再按新会计准则（IFRS 9 / IFRS 17）下的会计分类决定其计入损益还是其他综合收益。</p>
+
+  <div class="card">
+    <div class="card-h">计算逻辑</div>
+    <div class="formula">┌─ <span class="g">第一步 · 权益端</span>
+│   权益资产额        E  = 投资资产 A × 股票+基金占比 w<sub>eq</sub>
+│   市值变动          ΔV<sub>eq</sub> = E × 组合Beta β × 市场涨跌幅 r
+│   ├─ 进损益         ΔNI<sub>eq</sub> = ΔV<sub>eq</sub> × (1 − FVOCI股票占比)
+│   └─ 进OCI          ΔOCI<sub>eq</sub> = ΔV<sub>eq</sub> × FVOCI股票占比
+│
+├─ <span class="g">第二步 · 固收端</span>
+│   债券资产额        B  = A × 债券占比 w<sub>bond</sub>
+│   市值变动          ΔV<sub>bond</sub> = − B × 固收久期 D<sub>A</sub> × 利率变动 Δy   <span class="c">（利率↑→市值↓）</span>
+│   ├─ 进损益         ΔNI<sub>bond</sub> = ΔV<sub>bond</sub> × FVTPL债券占比
+│   ├─ 进OCI          ΔOCI<sub>bond</sub> = ΔV<sub>bond</sub> × FVOCI债券占比
+│   └─ 不进表         <span class="c">摊余成本类(AC)债券，市值变动不体现在报表上</span>
+│
+├─ <span class="g">第三步 · 负债端（准备金折现率）</span>
+│   准备金规模        R  = A × 准备金/投资资产比 L
+│   折现率变动        Δr = Δy × 传导系数 κ   <span class="c">（750日移动平均国债曲线，一年内仅部分传导）</span>
+│   负债现值变动      ΔV<sub>liab</sub> = − R × 负债久期 D<sub>L</sub> × Δr   <span class="c">（利率↑→准备金↓→利润释放）</span>
+│   ├─ 进损益         ΔNI<sub>liab</sub> = − ΔV<sub>liab</sub> × 计入损益比例 k<sub>pnl</sub>
+│   └─ 进OCI          ΔOCI<sub>liab</sub> = − ΔV<sub>liab</sub> × (k<sub>na</sub> − k<sub>pnl</sub>)
+│
+└─ <span class="g">第四步 · 汇总</span>
+     税前损益合计     ΔPBT  = ΔNI<sub>eq</sub> + ΔNI<sub>bond</sub> + ΔNI<sub>liab</sub>
+     净利润变动       ΔNI   = ΔPBT × (1 − 所得税率 τ)
+     净资产变动       ΔNA   = ΔNI + (ΔOCI<sub>eq</sub> + ΔOCI<sub>bond</sub> + ΔOCI<sub>liab</sub>) × (1 − τ)</div>
+
+    <ul class="assume" style="margin-top:20px;">
+      <li><b>静态起点假设：</b>以 2025 年末持仓结构为基准，衡量「自当前时点起、下一会计期间」的边际影响；不考虑期间仓位调整、资产减值、新单销售与保险服务业绩变化。</li>
+      <li><b>750 日移动平均传导（κ）：</b>人身险准备金折现率采用「750 日移动平均国债收益率曲线 + 综合溢价」。当长端利率一次性平行移动 Δy 时，一年内 750 日均线仅移动约 Δy × 365/750 ≈ 0.49Δy。默认取 <b>0.45</b>，可自行调整；若测算多年累积效应（如利率变动已持续两年以上），κ 可上调至 0.8–1.0。</li>
+      <li><b>负债端会计归属：</b>IFRS 17 下，传统险（BBA 模型）折现率变动通常选择计入 OCI，不经过利润表；分红/万能险（VFA 模型）负债与资产联动，波动在损益中对冲。默认「计入损益比例 k<sub>pnl</sub> = 0.25」、「计入净资产比例 k<sub>na</sub> = 0.70」。</li>
+      <li><b>会计分类决定弹性大小：</b>这是本模型最核心的机制——同样是加仓权益，分类为 FVTPL 则市值波动直接进净利润，分类为 FVOCI（高股息红利股为主）则只进净资产。2025 年这一差异已充分显现：FVOCI 股票占比最高的中国平安（56.5%）净利润仅增 6.5%，而占比最低的中国人寿（28%）净利润增 44.1%。</li>
+      <li><b>久期缺口决定利率方向性：</b>寿险业普遍「负债久期 &gt; 资产久期」，有效久期缺口为负。因此<b>利率下行时负债增提幅度大于资产增值幅度，净资产受损</b>；利率上行则相反。这是「利差损」担忧的量化表达。</li>
+      <li><b>组合 Beta：</b>险企权益以高股息、低波动的大盘价值股为主，相对沪深300 的 Beta 通常小于 1。默认按公司设定在 0.70–0.85 区间；若配置成长/科技板块较多（如新华、平安的新质生产力布局），Beta 应上调。</li>
+      <li><b>税收处理简化：</b>OCI 项目统一按所得税率折算，未区分 FVOCI 权益（递延所得税计入 OCI、处置不转损益）与 FVOCI 债券（相关递延税影响当期所得税费用）的差异。</li>
+      <li><b>未纳入的因素：</b>① 分红险/万能险保单红利与结算利率的动态调整（会吸收部分波动）；② 再投资收益率变化的长期累积效应；③ 信用利差变动与信用减值；④ 汇率与另类资产（不动产、非标、REITs、黄金）估值波动；⑤ 偿付能力与 EV 口径的传导；⑥ 国债期货等衍生品对冲。</li>
+    </ul>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-h">数据来源</div>
+      <ul class="assume">
+        <li>投资资产规模、归母净利润、总投资收益率：<b>各公司 2025 年年度报告</b>（截至 2026 年 3 月 27 日全部披露完毕）。</li>
+        <li>股票+基金配置比例、FVTPL/FVOCI 分类占比：<b>东吴证券、华创证券</b>对 2025 年报的统计梳理。</li>
+        <li>固收久期：中国太保 2025 年报披露固定收益类资产久期 <b>11.7 年</b>（较上年 +0.3 年）；其余为估算。</li>
+        <li>有效久期缺口：中国人寿业绩会披露<b>不到 1.5 年</b>；平安人寿规模调整后久期缺口收窄至<b>约 −2 年</b>；新华保险评级报告披露<b>约 −3 年</b>；人保寿险规模调整后久期缺口较上年缩短约 2 年。其余为估算。</li>
+        <li>负债现金流久期：参考行业口径（2024 年末寿险行业平均负债久期约 16.3 年、规模调整后久期缺口约 −9.2 年）。</li>
+        <li>准备金/投资资产比、FVOCI 债券占比、组合 Beta、折现率传导系数：<b>模型估算值</b>，为主要可校准参数。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-h">2025 年报关键事实（用于交叉验证）</div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th style="text-align:left;">公司</th><th>股票+基金占比</th><th>FVOCI股票占权益</th><th>2025净利增速</th></tr></thead>
+          <tbody>
+            <tr><td class="name">中国平安</td><td>19.2%</td><td class="hi">56.5%</td><td style="color:#4FD89B;">+6.5%</td></tr>
+            <tr><td class="name">中国人保</td><td>13.3%</td><td>42.4%</td><td style="color:#4FD89B;">+8.8%</td></tr>
+            <tr><td class="name">中国太保</td><td>13.4%</td><td>37.0%</td><td style="color:#4FD89B;">+19.0%</td></tr>
+            <tr><td class="name">新华保险</td><td>21.2%</td><td>~30%<span class="badge-est">估</span></td><td style="color:#4FD89B;">+38.3%</td></tr>
+            <tr><td class="name">中国人寿</td><td>16.9%</td><td>28.0%</td><td style="color:#4FD89B;">+44.1%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <b>强验证信号：</b>2025 年沪深300 上涨 17.7%，五家净利润增速与「FVOCI 股票占权益比重」呈显著<b>负相关</b>——FVOCI 占比越高，牛市中利润弹性被"锁"在净资产里越多。这直接印证了模型中「会计分类决定利润弹性」的核心机制。
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>A股上市险企业绩敏感性测算表 · 数据基准 2025 年报 · 生成于 2026-08-29</span>
+  <span>本表为情景测算工具，不构成任何投资建议</span>
+</footer>
+
+</div>
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   1. 基准数据（2025 年报口径）
+   ============================================================ */
+const LS_KEY = 'ins-sensitivity-v1';
+
+const DEFAULT_COS = [
+  {name:'中国人寿', code:'601628.SH', A:74200,  ni:1540.78, na:5952.1,  wEq:0.1689, fvociEq:0.280, beta:0.70, wBond:0.52, durA:9.0,  tplBond:0.11, fvociBond:0.55, lev:0.95, durL:12.0},
+  {name:'中国平安', code:'601318.SH', A:64900,  ni:1347.78, na:10004.19,wEq:0.1920, fvociEq:0.565, beta:0.75, wBond:0.48, durA:8.0,  tplBond:0.12, fvociBond:0.50, lev:0.85, durL:10.5},
+  {name:'中国太保', code:'601601.SH', A:30400,  ni:535.05,  na:3021.0,  wEq:0.1340, fvociEq:0.370, beta:0.70, wBond:0.53, durA:11.7, tplBond:0.15, fvociBond:0.55, lev:0.90, durL:11.5},
+  {name:'中国人保', code:'601319.SH', A:19000,  ni:466.46,  na:3000.0,  wEq:0.1330, fvociEq:0.424, beta:0.70, wBond:0.56, durA:7.0,  tplBond:0.15, fvociBond:0.55, lev:0.60, durL:6.0},
+  {name:'新华保险', code:'601336.SH', A:18400,  ni:362.84,  na:1200.0,  wEq:0.2120, fvociEq:0.300, beta:0.85, wBond:0.49, durA:8.5,  tplBond:0.15, fvociBond:0.50, lev:0.95, durL:11.0}
+];
+
+const DEFAULT_GLOBAL = {tau:0.25, kappa:0.45, kLiabPnl:0.25, kLiabNa:0.70};
+const DEFAULT_MKT  = [-0.20,-0.10,0,0.10,0.20];
+const DEFAULT_RATE = [-50,-25,0,25,50];
+const DEFAULT_BT   = {mkt:17.7, rate:15, betaAdj:0.80, baseNi:null};
+// 2024 年归母净利润（用于回测增速对照）
+const NI_2024 = {'中国人寿':1069.35,'中国平安':1266.07,'中国太保':449.60,'中国人保':428.69,'新华保险':262.29};
+
+const DEFAULT_STATE = {
+  cos: JSON.parse(JSON.stringify(DEFAULT_COS)),
+  g: Object.assign({}, DEFAULT_GLOBAL),
+  mkt: DEFAULT_MKT.slice(),
+  rate: DEFAULT_RATE.slice(),
+  bt: Object.assign({}, DEFAULT_BT),
+  metric:'dNIpct', company:0, cmpMkt:0, cmpRate:-50,
+  volMkt:20, volRate:50
+};
+
+let S = load() || JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return null;
+    const o = JSON.parse(raw);
+    if(!o || !Array.isArray(o.cos) || o.cos.length !== DEFAULT_COS.length) return null;
+    // 补齐字段
+    o.cos = o.cos.map(function(c,i){
+      return Object.assign({}, DEFAULT_COS[i], c);
+    });
+    o.g = Object.assign({}, DEFAULT_GLOBAL, o.g||{});
+    o.bt = Object.assign({}, DEFAULT_BT, o.bt||{});
+    if(!Array.isArray(o.mkt) || !o.mkt.length) o.mkt = DEFAULT_MKT.slice();
+    if(!Array.isArray(o.rate) || !o.rate.length) o.rate = DEFAULT_RATE.slice();
+    return o;
+  }catch(e){ return null; }
+}
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(S)); }catch(e){} }
+
+/* ============================================================
+   2. 计算引擎
+   ============================================================ */
+function calc(c, mkt, dyBp, g, betaAdj){
+  const dy   = dyBp / 10000;
+  const bA   = (betaAdj === undefined || betaAdj === null) ? 1 : betaAdj;
+  const A    = c.A;
+
+  // --- 权益端 ---
+  const eqAmt = A * c.wEq;
+  const dVeq  = eqAmt * c.beta * bA * mkt;
+  const dNIeq = dVeq * (1 - c.fvociEq);
+  const dOCIeq= dVeq * c.fvociEq;
+
+  // --- 固收端 ---
+  const bondAmt = A * c.wBond;
+  const dVbond  = -bondAmt * c.durA * dy;          // 利率↑ → 市值↓
+  const dNIbond = dVbond * c.tplBond;
+  const dOCIbond= dVbond * c.fvociBond;
+
+  // --- 负债端 ---
+  const R      = A * c.lev;
+  const drDisc = dy * g.kappa;                      // 750日移动平均传导
+  const dVliab = -R * c.durL * drDisc;              // 利率↑ → 准备金↓
+  const dNIliab = -dVliab * g.kLiabPnl;
+  const dOCIliab= -dVliab * Math.max(0, g.kLiabNa - g.kLiabPnl);
+
+  // --- 汇总 ---
+  const dPBT = dNIeq + dNIbond + dNIliab;
+  const dNI  = dPBT * (1 - g.tau);
+  const dOCI = (dOCIeq + dOCIbond + dOCIliab) * (1 - g.tau);
+  const dNA  = dNI + dOCI;
+
+  return {
+    eqAmt:eqAmt, bondAmt:bondAmt, R:R, dVeq:dVeq, dVbond:dVbond, dVliab:dVliab,
+    dNIeq:dNIeq, dNIbond:dNIbond, dNIliab:dNIliab,
+    dOCIeq:dOCIeq, dOCIbond:dOCIbond, dOCIliab:dOCIliab,
+    dPBT:dPBT, dNI:dNI, dOCI:dOCI, dNA:dNA,
+    dNIpct: c.ni ? dNI / c.ni * 100 : 0,
+    dNApct: c.na ? dNA / c.na * 100 : 0,
+    dNIamt: dNI, dNAamt: dNA
+  };
+}
+
+function aggregate(cos){
+  let A=0, ni=0, na=0, eq=0, bond=0, R=0;
+  let eqF=0, eqB=0, bdT=0, bdF=0, bdD=0, ld=0;
+  cos.forEach(function(c){
+    const e=c.A*c.wEq, b=c.A*c.wBond, r=c.A*c.lev;
+    A+=c.A; ni+=c.ni; na+=c.na;
+    eq+=e; bond+=b; R+=r;
+    eqF += e*c.fvociEq; eqB += e*c.beta;
+    bdT += b*c.tplBond; bdF += b*c.fvociBond; bdD += b*c.durA;
+    ld  += r*c.durL;
+  });
+  return {name:'五家合计', code:'—', A:A, ni:ni, na:na,
+    wEq: eq/A, fvociEq: eqF/eq, beta: eqB/eq,
+    wBond: bond/A, durA: bdD/bond, tplBond: bdT/bond, fvociBond: bdF/bond,
+    lev: R/A, durL: ld/R};
+}
+
+/* ============================================================
+   3. 工具函数
+   ============================================================ */
+const $  = function(s){ return document.querySelector(s); };
+const $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+function fmt(v,d){ 
+  if(!isFinite(v)) return '—';
+  return v.toLocaleString('zh-CN',{minimumFractionDigits:(d===undefined?1:d), maximumFractionDigits:(d===undefined?1:d)});
+}
+function pct(v,d){ 
+  if(!isFinite(v)) return '—';
+  const s = fmt(v, d===undefined?2:d);
+  return (v>0?'+':'') + s + '%';
+}
+function cls(v){ return v > 0.0001 ? 'pos' : (v < -0.0001 ? 'neg' : 'zer'); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// 红色=业绩改善，绿色=业绩承压（A股涨红跌绿）
+function heatColor(v, maxAbs){
+  if(Math.abs(v) < 1e-9) return 'rgba(255,255,255,0.035)';
+  const t = Math.min(1, Math.abs(v)/maxAbs);
+  const a = 0.08 + 0.42*t*t;
+  return v>0 ? 'rgba(255,90,95,'+a.toFixed(3)+')' : 'rgba(18,183,106,'+a.toFixed(3)+')';
+}
+
+/* ============================================================
+   4. 渲染：驱动变量输入区
+   ============================================================ */
+function renderScen(){
+  const mw = $('#mktInputs'); mw.innerHTML = S.mkt.map(function(v,i){
+    return '<div class="scen-item"><label class="fl">情景 '+(i+1)+'</label>'+
+      '<div class="rel"><input type="number" step="1" class="inp gold" data-mkt="'+i+'" value="'+(v*100).toFixed(2).replace(/\.?0+$/,'')+'"><span class="unit">%</span></div></div>';
+  }).join('');
+  const rw = $('#rateInputs'); rw.innerHTML = S.rate.map(function(v,i){
+    return '<div class="scen-item"><label class="fl">情景 '+(i+1)+'</label>'+
+      '<div class="rel"><input type="number" step="5" class="inp gold" data-rate="'+i+'" value="'+v+'"><span class="unit">bp</span></div></div>';
+  }).join('');
+}
+
+const GLOBAL_FIELDS = [
+  {k:'tau',     label:'所得税率 τ',        unit:'',   scale:100, hint:'保险主业名义税率 25%'},
+  {k:'kappa',   label:'折现率传导系数 κ',  unit:'',   scale:1,   hint:'750日移动平均，一年内约 0.45'},
+  {k:'kLiabPnl',label:'负债变动进损益比例',unit:'',   scale:100, hint:'IFRS17 下默认 25%'},
+  {k:'kLiabNa', label:'负债变动进净资产比例',unit:'', scale:100, hint:'含进损益部分，默认 70%'}
+];
+function renderGlobal(){
+  $('#globalInputs').innerHTML = GLOBAL_FIELDS.map(function(f){
+    const raw = S.g[f.k];
+    const shown = raw * f.scale;
+    return '<div><label class="fl">'+f.label+'</label>'+
+      '<div class="rel"><input type="number" step="'+(f.scale===100?1:0.05)+'" class="inp gold" data-global="'+f.k+'" value="'+(+shown.toFixed(4))+'"><span class="unit">'+(f.unit||(f.scale===100?'%':'')) +'</span></div>'+
+      '<div class="tiny" style="margin-top:5px;line-height:1.5;">'+f.hint+'</div></div>';
+  }).join('');
+}
+
+/* ============================================================
+   5. 渲染：公司参数表
+   ============================================================ */
+const PFIELDS = [
+  {k:'A',         pctv:false, step:100},
+  {k:'ni',        pctv:false, step:0.01},
+  {k:'na',        pctv:false, step:1},
+  {k:'wEq',       pctv:true,  step:0.1},
+  {k:'fvociEq',   pctv:true,  step:1},
+  {k:'beta',      pctv:false, step:0.05},
+  {k:'wBond',     pctv:true,  step:0.1},
+  {k:'durA',      pctv:false, step:0.1},
+  {k:'tplBond',   pctv:true,  step:1},
+  {k:'fvociBond', pctv:true,  step:1},
+  {k:'lev',       pctv:false, step:0.05},
+  {k:'durL',      pctv:false, step:0.5}
+];
+function renderParams(){
+  $('#paramBody').innerHTML = S.cos.map(function(c,i){
+    const tds = PFIELDS.map(function(f){
+      const val = f.pctv ? (c[f.k]*100) : c[f.k];
+      const shown = f.pctv ? (+val.toFixed(2)) : (+val.toFixed(f.k==='ni'||f.k==='na'||f.k==='A'?1:2));
+      return '<td><input type="number" step="'+f.step+'" class="inp num-in" data-co="'+i+'" data-f="'+f.k+'" value="'+shown+'"></td>';
+    }).join('');
+    return '<tr><td class="name">'+esc(c.name)+'<small>'+esc(c.code)+'</small></td>'+tds+'</tr>';
+  }).join('');
+}
+
+/* ============================================================
+   6. 渲染：二维敏感性矩阵
+   ============================================================ */
+const METRICS = [
+  {k:'dNIpct', label:'净利润变动 %'},
+  {k:'dNIamt', label:'净利润变动额（亿元）'},
+  {k:'dNApct', label:'净资产变动 %'},
+  {k:'dNAamt', label:'净资产变动额（亿元）'}
+];
+function renderTabs(){
+  $('#metricTabs').innerHTML = METRICS.map(function(m){
+    return '<button class="btn sm'+(S.metric===m.k?' on':'')+'" data-metric="'+m.k+'">'+m.label+'</button>';
+  }).join('');
+  $('#companyTabs').innerHTML = S.cos.map(function(c,i){
+    return '<button class="btn sm'+(S.company===i?' on':'')+'" data-co-tab="'+i+'">'+esc(c.name)+'</button>';
+  }).join('') + '<button class="btn sm'+(S.company===-1?' on':'')+'" data-co-tab="-1">五家合计</button>';
+}
+function currentCo(){
+  return S.company === -1 ? aggregate(S.cos) : S.cos[S.company];
+}
+function renderMatrix(){
+  const c = currentCo();
+  const m = S.metric;
+  const isPct = (m === 'dNIpct' || m === 'dNApct');
+  // 先算全部取值，取最大绝对值做色阶
+  let maxAbs = 0;
+  const grid = S.mkt.map(function(mk){
+    return S.rate.map(function(rr){
+      const r = calc(c, mk, rr, S.g);
+      const v = r[m];
+      if(Math.abs(v) > maxAbs) maxAbs = Math.abs(v);
+      return {r:r, v:v};
+    });
+  });
+  if(maxAbs < 1e-9) maxAbs = 1;
+
+  let h = '<thead><tr><th class="rh" style="text-align:left;">市场 ＼ 利率</th>';
+  h += S.rate.map(function(rr){
+    return '<th>'+(rr>0?'+':'')+rr+'bp<br><span style="font-weight:400;color:#7C7C88;">'+(rr>0?'上行':(rr<0?'下行':'不变'))+'</span></th>';
+  }).join('');
+  h += '</tr></thead><tbody>';
+
+  grid.forEach(function(row, i){
+    const mk = S.mkt[i];
+    h += '<tr><td class="rh" style="text-align:right;color:var(--gold-soft);font-family:var(--num);font-size:12px;padding-right:12px;white-space:nowrap;">'+
+         (mk>0?'+':'')+(mk*100).toFixed(0)+'%<span style="color:#7C7C88;font-size:10px;"> '+(mk>0?'涨':(mk<0?'跌':'平'))+'</span></td>';
+    row.forEach(function(cell, j){
+      const isBase = (Math.abs(S.mkt[i])<1e-9 && Math.abs(S.rate[j])<1e-9);
+      const sub = isPct
+        ? fmt(cell.r[m==='dNIpct'?'dNIamt':'dNAamt'],0)+' 亿元'
+        : '基准 ' + fmt(m==='dNIamt'?c.ni:c.na,0) + ' 亿';
+      h += '<td class="'+(isBase?'base':'')+'" style="background:'+heatColor(cell.v,maxAbs)+'" title="'+esc(c.name)+' 市场'+(mk*100).toFixed(1)+'% 利率'+S.rate[j]+'bp">'+
+           '<span class="pct '+cls(cell.v)+'">'+(isPct?pct(cell.v,1):(cell.v>0?'+':'')+fmt(cell.v,0))+'</span>'+
+           '<span class="amt" style="color:#9A9AA2;">'+sub+'</span></td>';
+    });
+    h += '</tr>';
+  });
+  $('#matrix').innerHTML = h + '</tbody>';
+}
+
+/* ============================================================
+   7. 渲染：横向对比表
+   ============================================================ */
+function renderCmp(){
+  const mk = S.cmpMkt/100, rr = S.cmpRate;
+  let h = '<thead><tr><th style="text-align:left;">公司</th><th>权益资产<br>亿元</th><th>债券资产<br>亿元</th>'+
+    '<th>权益端损益<br>亿元</th><th>固收端损益<br>亿元</th><th>负债端损益<br>亿元</th>'+
+    '<th>税前合计<br>亿元</th><th>净利润变动<br>亿元</th><th>净利润<br>变动 %</th>'+
+    '<th>净资产<br>变动 %</th></tr></thead><tbody>';
+  let tEq=0,tBd=0,tLi=0,tPBT=0,tNI=0,tNA=0,tni=0,tna=0;
+  S.cos.forEach(function(c){
+    const r = calc(c, mk, rr, S.g);
+    tEq+=r.dNIeq; tBd+=r.dNIbond; tLi+=r.dNIliab; tPBT+=r.dPBT; tNI+=r.dNI; tNA+=r.dNA; tni+=c.ni; tna+=c.na;
+    h += '<tr><td class="name">'+esc(c.name)+'<small>'+esc(c.code)+'</small></td>'+
+      '<td>'+fmt(r.eqAmt,0)+'</td><td>'+fmt(r.bondAmt,0)+'</td>'+
+      '<td class="'+cls(r.dNIeq)+'">'+pct(r.dNIeq,0).replace('%','')+'</td>'+
+      '<td class="'+cls(r.dNIbond)+'">'+pct(r.dNIbond,0).replace('%','')+'</td>'+
+      '<td class="'+cls(r.dNIliab)+'">'+pct(r.dNIliab,0).replace('%','')+'</td>'+
+      '<td class="'+cls(r.dPBT)+'">'+pct(r.dPBT,0).replace('%','')+'</td>'+
+      '<td class="'+cls(r.dNI)+'">'+pct(r.dNI,0).replace('%','')+'</td>'+
+      '<td class="hi '+cls(r.dNIpct)+'"><b>'+pct(r.dNIpct,1)+'</b></td>'+
+      '<td class="'+cls(r.dNApct)+'">'+pct(r.dNApct,1)+'</td></tr>';
+  });
+  h += '<tr style="border-top:1px solid var(--gold-line-2);"><td class="name" style="color:var(--gold-soft);">五家合计</td>'+
+    '<td colspan="2" style="color:var(--tx-3);">—</td>'+
+    '<td class="'+cls(tEq)+'">'+pct(tEq,0).replace('%','')+'</td>'+
+    '<td class="'+cls(tBd)+'">'+pct(tBd,0).replace('%','')+'</td>'+
+    '<td class="'+cls(tLi)+'">'+pct(tLi,0).replace('%','')+'</td>'+
+    '<td class="'+cls(tPBT)+'">'+pct(tPBT,0).replace('%','')+'</td>'+
+    '<td class="'+cls(tNI)+'">'+pct(tNI,0).replace('%','')+'</td>'+
+    '<td class="hi '+cls(tNI/tni*100)+'"><b>'+pct(tNI/tni*100,1)+'</b></td>'+
+    '<td class="'+cls(tNA/tna*100)+'">'+pct(tNA/tna*100,1)+'</td></tr>';
+  $('#cmpTable').innerHTML = h + '</tbody>';
+  $('#cmpTable').setAttribute('data-scen','市场'+(S.cmpMkt>0?'+':'')+S.cmpMkt+'% / 利率'+(S.cmpRate>0?'+':'')+S.cmpRate+'bp');
+}
+
+/* ============================================================
+   8. 渲染：弹性排序
+   ============================================================ */
+function elast(){
+  return S.cos.map(function(c){
+    const eM = calc(c, 0.01, 0, S.g);      // 每 +1% 市场
+    const eR = calc(c, 0, 10, S.g);        // 每 +10bp 利率
+    return {
+      name:c.name, code:c.code, c:c,
+      emPnl:eM.dNIpct,        erPnl:eR.dNIpct,
+      emNA:eM.dNApct,         erNA:eR.dNApct,
+      emPnlAmt:eM.dNI,        erPnlAmt:eR.dNI,
+      eqAmt:eM.eqAmt, tplEqShare:(1-c.fvociEq),
+      bondAmt:eM.bondAmt, R:eM.R, durA:c.durA, durL:c.durL
+    };
+  });
+}
+function renderBars(el, container, key, unit){
+  const sorted = el.slice().sort(function(a,b){ return b[key]-a[key]; });
+  let mx = 0;
+  sorted.forEach(function(x){ if(Math.abs(x[key])>mx) mx = Math.abs(x[key]); });
+  if(mx < 1e-9) mx = 1;
+  const rows = el.slice().sort(function(a,b){ return Math.abs(b[key]) - Math.abs(a[key]); });
+  $(container).innerHTML = rows.map(function(x){
+    const v = x[key];
+    const w = Math.abs(v)/mx*50;
+    const col = v>=0 ? 'linear-gradient(90deg,rgba(255,90,95,.35),rgba(255,90,95,.85))'
+                     : 'linear-gradient(270deg,rgba(18,183,106,.35),rgba(18,183,106,.85))';
+    const style = v>=0 ? ('left:50%;width:'+w+'%;') : ('right:50%;width:'+w+'%;');
+    return '<div class="rank-row"><div class="rank-name">'+esc(x.name)+'</div>'+
+      '<div class="bar-track" style="background:transparent;">'+
+        '<div style="position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--gold-line-2);"></div>'+
+        '<div style="position:absolute;top:0;height:100%;'+style+'background:'+col+';border-radius:2px;"></div>'+
+      '</div>'+
+      '<div class="bar-val"><b>'+(v>0?'+':'')+fmt(v,2)+'</b>'+unit+'</div></div>';
+  }).join('');
+}
+function renderElast(){
+  const el = elast();
+  renderBars(el, '#rankMktPnl',  'emPnl', '%');
+  renderBars(el, '#rankRatePnl', 'erPnl', '%');
+  renderBars(el, '#rankMktNA',   'emNA',  '%');
+  renderBars(el, '#rankRateNA',  'erNA',  '%');
+
+  let h = '<thead><tr><th style="text-align:left;">公司</th>'+
+    '<th>市场弹性<br>净利%/涨1%</th><th>利率弹性<br>净利%/上行10bp</th>'+
+    '<th>市场弹性<br>净资产%/涨1%</th><th>利率弹性<br>净资产%/上行10bp</th>'+
+    '<th>权益资产<br>亿元</th><th>其中FVTPL<br>比例</th><th>组合<br>Beta</th>'+
+    '<th>债券久期</th><th>负债久期</th><th>准备金杠杆</th>'+
+    '<th>敏感<br>维度</th><th>等效利率当量<br>bp</th></tr></thead><tbody>';
+  el.slice().sort(function(a,b){ return Math.abs(b.emPnl) - Math.abs(a.emPnl); }).forEach(function(x){
+    const emA = Math.abs(x.emPnl), erA = Math.abs(x.erPnl);
+    const dim = emA > erA ? '市场' : '利率';
+    const ratio = erA > 1e-9 ? (emA/erA*10) : NaN;   // 1%市场 相当于多少 bp
+    h += '<tr><td class="name">'+esc(x.name)+'<small>'+esc(x.code)+'</small></td>'+
+      '<td class="hi">'+pct(x.emPnl,2)+'</td>'+
+      '<td class="'+cls(x.erPnl)+'">'+pct(x.erPnl,2)+'</td>'+
+      '<td>'+pct(x.emNA,2)+'</td>'+
+      '<td class="'+cls(x.erNA)+'">'+pct(x.erNA,2)+'</td>'+
+      '<td>'+fmt(x.eqAmt,0)+'</td>'+
+      '<td>'+fmt(x.tplEqShare*100,0)+'%</td>'+
+      '<td>'+fmt(x.c.beta,2)+'</td>'+
+      '<td>'+fmt(x.durA,1)+'</td>'+
+      '<td>'+fmt(x.durL,1)+'</td>'+
+      '<td>'+fmt(x.c.lev,2)+'</td>'+
+      '<td><span style="color:'+(dim==='市场'?'var(--up)':'var(--gold-soft)')+';font-weight:600;">'+dim+'</span></td>'+
+      '<td>'+(isFinite(ratio)?fmt(ratio,0)+' bp':'—')+'</td></tr>';
+  });
+  $('#elastTable').innerHTML = h + '</tbody>';
+  renderAttribution(el);
+}
+
+/* ============================================================
+   8b. 四象限情景对比（按典型年度波动归一化）
+   ============================================================ */
+function renderVol(){
+  const vm = S.volMkt/100, vr = S.volRate;
+  let h = '<thead><tr><th style="text-align:left;">公司</th>'+
+    '<th>① 股债双牛<br>市场 +'+S.volMkt+'% ｜ 利率 +'+S.volRate+'bp</th>'+
+    '<th>② 股债双杀<br>市场 −'+S.volMkt+'% ｜ 利率 −'+S.volRate+'bp</th>'+
+    '<th>③ 股跌债强<br>市场 −'+S.volMkt+'% ｜ 利率 +'+S.volRate+'bp</th>'+
+    '<th>④ 股涨债弱<br>市场 +'+S.volMkt+'% ｜ 利率 −'+S.volRate+'bp</th>'+
+    '<th>市场单独<br>净利 %</th><th>利率单独<br>净利 %</th><th>主导<br>维度</th></tr></thead><tbody>';
+  S.cos.forEach(function(c){
+    const s1 = calc(c,  vm,  vr, S.g).dNIpct;
+    const s2 = calc(c, -vm, -vr, S.g).dNIpct;
+    const s3 = calc(c, -vm,  vr, S.g).dNIpct;
+    const s4 = calc(c,  vm, -vr, S.g).dNIpct;
+    const mOnly = calc(c, vm, 0, S.g).dNIpct;
+    const rOnly = calc(c, 0, vr, S.g).dNIpct;
+    const dim = Math.abs(mOnly) >= Math.abs(rOnly) ? '市场' : '利率';
+    const cell = function(v){ return '<td class="'+cls(v)+'">'+pct(v,1)+'</td>'; };
+    h += '<tr><td class="name">'+esc(c.name)+'<small>'+esc(c.code)+'</small></td>'+
+      cell(s1)+cell(s2)+cell(s3)+cell(s4)+
+      '<td class="'+cls(mOnly)+'">'+pct(mOnly,1)+'</td>'+
+      '<td class="'+cls(rOnly)+'">'+pct(rOnly,1)+'</td>'+
+      '<td><span style="color:'+(dim==='市场'?'var(--up)':'var(--gold-soft)')+';font-weight:600;">'+dim+'</span></td></tr>';
+  });
+  $('#volTable').innerHTML = h + '</tbody>';
+}
+
+/* ============================================================
+   9. 归因解读（数据驱动）
+   ============================================================ */
+// 以典型年度波动幅度归一化后的双维度冲击
+function volRows(el, vm, vr){
+  return el.map(function(x){
+    const m     = calc(x.c,  vm, 0,   S.g).dNIpct;
+    const r     = calc(x.c,  0,  vr,  S.g).dNIpct;
+    const mDown = calc(x.c, -vm, 0,   S.g).dNIpct;
+    const s2    = calc(x.c, -vm, -vr, S.g).dNIpct;   // 股债双杀
+    const s3    = calc(x.c, -vm,  vr, S.g).dNIpct;   // 股跌债强
+    const ma = Math.abs(m), ra = Math.abs(r);
+    return {name:x.name, m:m, r:r, mDown:mDown, s2:s2, s3:s3,
+            dim: ma >= ra ? '市场' : '利率',
+            ratio: ra > 1e-9 ? ma/ra : Infinity,
+            spread: Math.abs(s2 - s3)};
+  });
+}
+function renderAttribution(el){
+  const byMkt  = el.slice().sort(function(a,b){ return b.emPnl - a.emPnl; });
+  // erPnl 是「每 +10bp（利率上行）」口径：数值越大 = 利率上行受益越多 = 利率下行受损越重
+  const byRateUp = el.slice().sort(function(a,b){ return b.erPnl - a.erPnl; });
+  const rWorst = byRateUp[0];                       // 利率下行受损最重
+  const rBest  = byRateUp[byRateUp.length-1];       // 利率下行受损最轻 / 受益
+  const top = byMkt[0], bot = byMkt[byMkt.length-1];
+  const maxWEq = Math.max.apply(null, el.map(function(x){ return x.c.wEq; }));
+  const minWEq = Math.min.apply(null, el.map(function(x){ return x.c.wEq; }));
+
+  function f(name){ return '<b>'+esc(name)+'</b>'; }
+  function joinName(arr){ return arr.map(function(x){ return esc(x.name); }).join(' &gt; '); }
+  let h = '';
+
+  h += '<div class="finding"><b>① 权益弹性排序（由高到低）：'+joinName(byMkt)+'</b>'+
+    '<p>'+f(top.name)+'市场弹性最高（指数每涨 1% → 净利润 '+pct(top.emPnl,2)+'），驱动因素是三重叠加：'+
+    '权益资产占投资资产 '+fmt(top.c.wEq*100,1)+'%'+(top.c.wEq===maxWEq?'（业内最高）':'')+'、'+
+    '权益中 FVTPL 占比 '+fmt(top.tplEqShare*100,0)+'%、组合 Beta '+fmt(top.c.beta,2)+'。'+
+    '这意味着牛市中它的利润爆发力最强，熊市中回撤也最大——是典型的「高 beta 险企」。'+
+    f(bot.name)+'弹性最低（'+pct(bot.emPnl,2)+'/1%），'+
+    (bot.c.wEq===minWEq
+      ? '主因是权益敞口本身最小（'+fmt(bot.c.wEq*100,1)+'%），且净利润分母中非保险业务占比高，摊薄了投资端弹性。'
+      : '主因是权益中 FVOCI（高股息红利股）占比高达 '+fmt(bot.c.fvociEq*100,1)+'%，市值波动被"锁"在净资产里、不经过利润表——代价是牛市中利润弹性被牺牲。')+
+    '</p></div>';
+
+  const minDurL = Math.min.apply(null, el.map(function(x){ return x.durL; }));
+  h += '<div class="finding"><b>② 利率弹性排序（按「利率下行受损程度」由重到轻）：'+joinName(byRateUp)+'</b>'+
+    '<p>利率下行时受损最重的是 '+f(rWorst.name)+'（每下行 10bp → 净利润 '+pct(-rWorst.erPnl,2)+'），'+
+    '源头在负债端：准备金杠杆（准备金/投资资产）'+fmt(rWorst.c.lev,2)+'、负债久期 '+fmt(rWorst.durL,1)+' 年，'+
+    '利率下调时准备金增提规模最大，而债券浮盈中只有 '+fmt(rWorst.c.tplBond*100,0)+'% 计入损益，难以对冲。'+
+    (rBest.erPnl < 0
+      ? f(rBest.name)+'则逆势受益（每下行 10bp → 净利润 '+pct(-rBest.erPnl,2)+'）'+
+        (rBest.durL===minDurL? '，因其负债久期仅 '+fmt(rBest.durL,1)+' 年（为五家最短，财险业务占比较高），准备金增提压力小，而债券浮盈中计入损益的 TPL 部分形成净正贡献。'
+                            : '，因其债券浮盈计入损益的 TPL 部分超过了准备金增提的账面冲击。')
+      : f(rBest.name)+'受损最轻（每下行 10bp → 净利润 '+pct(-rBest.erPnl,2)+'），因其负债久期较短、固收久期管理更均衡。')+
+    '这一排序与各家披露的<b>有效久期缺口</b>方向一致——缺口越负（负债久期相对资产越长），利率下行的账面冲击越大。</p></div>';
+
+  // ③ 以典型年度波动归一化后再比较，避免「1% vs 10bp」量纲不可比
+  const vm = S.volMkt/100, vr = S.volRate;
+  const vr2 = volRows(el, vm, vr);
+  const mktDom  = vr2.filter(function(x){ return x.dim==='市场'; }).map(function(x){ return x.name; });
+  const rateDom = vr2.filter(function(x){ return x.dim==='利率'; }).map(function(x){ return x.name; });
+  const worst = vr2.slice().sort(function(a,b){ return b.spread - a.spread; })[0];
+
+  h += '<div class="finding"><b>③ 谁对"市场"更敏感，谁对"利率"更敏感</b><p>'+
+    '在「市场 ±'+S.volMkt+'% / 利率 ±'+S.volRate+'bp」的年度波动设定下，各公司市场端冲击是利率端的 '+
+    fmt(Math.min.apply(null, vr2.map(function(x){return x.ratio;})),1)+' – '+
+    fmt(Math.max.apply(null, vr2.filter(function(x){return isFinite(x.ratio);}).map(function(x){return x.ratio;})),1)+' 倍，'+
+    '因此<b>主导维度全部是「市场」</b>'+(rateDom.length?('，仅 '+f(rateDom.join('、'))+' 由利率主导'):'')+'。'+
+    '但利率端并非可有可无，它的作用是<b>方向性的</b>：'+
+    '在情景②（股债双杀）中，利率下行带来的准备金增提与股市下跌<b>同向叠加</b>，冲击达到最大；'+
+    '在情景③（股跌债强）中，利率上行释放准备金，成为股市下跌的<b>缓冲垫</b>。'+
+    '这一"叠加 vs 缓冲"的差额在'+f(worst.name)+'身上最显著——同样遭遇市场下跌 '+S.volMkt+'%，'+
+    '利率反向变动 '+S.volRate+'bp 与同向下行 '+S.volRate+'bp 之间，净利润结果相差 '+
+    fmt(worst.spread,1)+' 个百分点（占市场单独冲击的 '+fmt(worst.spread/Math.abs(worst.mDown)*100,0)+'%）。'+
+    '</p></div>';
+
+  h += '<div class="finding"><b>④ 净资产 vs 净利润：两个口径会给出相反的结论</b><p>'+
+    '本表刻意并列了净利润与净资产两个口径，因为新准则下二者的利率敏感性差异极大：'+
+    'FVOCI 债券与负债折现率变动大多计入 OCI，不经过利润表，却会显著冲击净资产。'+
+    '例如 '+f(el[0].name)+'：市场 +1% 时净利润 '+pct(el[0].emPnl,2)+'、净资产 '+pct(el[0].emNA,2)+'；'+
+    '利率 +10bp 时净利润 '+pct(el[0].erPnl,2)+'、净资产 '+pct(el[0].erNA,2)+'。'+
+    '评估偿付能力与分红能力应看净资产口径，评估短期业绩弹性则看净利润口径。</p></div>';
+
+  $('#attribution').innerHTML = h;
+}
+
+/* ============================================================
+   10. 回测校准
+   ============================================================ */
+function renderBacktest(){
+  const bt = S.bt;
+  let h = '<thead><tr><th style="text-align:left;">公司</th><th>模型测算<br>净利润变动 亿元</th>'+
+    '<th>模型测算<br>增速</th><th>实际披露<br>增速</th><th>差异<br>pct</th><th>差异归因提示</th></tr></thead><tbody>';
+  const notes = {
+    '中国人寿':'仓位提升幅度中等（+4.7pct），模型拟合度较好',
+    '中国平安':'年内权益占比从 9.9% 飙至 19.2%（+9.3pct），年均持仓远低于年末，模型系统性高估',
+    '中国太保':'权益占比 +2.2pct，另有 FVOCI 占比提升 7pct 锁住弹性',
+    '中国人保':'财险为主、权益占比 +4.3pct，且承保利润稀释了投资端弹性',
+    '新华保险':'权益占比最高但 FVOCI 分类为估算值，建议上调 FVOCI 股票占比或下调 Beta 再校准'
+  };
+  S.cos.forEach(function(c){
+    const base = NI_2024[c.name];
+    const r = calc(c, bt.mkt/100, bt.rate, S.g, bt.betaAdj);
+    if(!base){ h += '<tr><td class="name">'+esc(c.name)+'</td><td colspan="5" style="color:var(--tx-3);">缺基准年数据</td></tr>'; return; }
+    const model = r.dNI / base * 100;
+    const actual = (c.ni/base - 1) * 100;
+    h += '<tr><td class="name">'+esc(c.name)+'<small>'+esc(c.code)+'</small></td>'+
+      '<td class="'+cls(r.dNI)+'">'+pct(r.dNI,0).replace('%','')+'</td>'+
+      '<td class="hi">'+pct(model,1)+'</td>'+
+      '<td>'+pct(actual,1)+'</td>'+
+      '<td class="'+cls(actual-model)+'">'+fmt(model-actual,1)+'</td>'+
+      '<td style="text-align:left;font-family:var(--serif);font-size:11.5px;color:var(--tx-3);white-space:normal;max-width:330px;">'+esc(notes[c.name]||'—')+'</td></tr>';
+  });
+  $('#btTable').innerHTML = h + '</tbody>';
+}
+
+/* ============================================================
+   11. 核心结论 TL;DR
+   ============================================================ */
+function renderTLDR(){
+  const el = elast();
+  const byMkt = el.slice().sort(function(a,b){ return b.emPnl - a.emPnl; });
+  // erPnl 为「每 +10bp」口径：值越大 = 利率上行受益越多 = 利率下行受损越重
+  const byRate = el.slice().sort(function(a,b){ return b.erPnl - a.erPnl; });
+  const top = byMkt[0], bot = byMkt[byMkt.length-1];
+  const rWorst = byRate[0];                 // 利率下行受损最重
+  const rBest  = byRate[byRate.length-1];   // 利率下行受损最轻 / 受益
+  const shortDur = el.slice().sort(function(a,b){ return a.durL - b.durL; })[0];
+
+  const cards = [
+    {t:'权益弹性之王', v:top.name, s:'每 1% 指数 → 净利润 '+pct(top.emPnl,2),
+     d:'权益占投资资产 '+fmt(top.c.wEq*100,1)+'%，其中 FVTPL 占 '+fmt(top.tplEqShare*100,0)+'%，牛市利润弹性最强'},
+    {t:'权益弹性最钝', v:bot.name, s:'每 1% 指数 → 净利润 '+pct(bot.emPnl,2),
+     d:'FVOCI 股票占权益 '+fmt(bot.c.fvociEq*100,1)+'%，市值波动被锁在净资产、不进利润表'},
+    (rBest.erPnl < 0
+      ? {t:'利率维度 · 逆势受益', v:rBest.name, s:'每 10bp 下行 → 净利润 '+pct(-rBest.erPnl,2),
+         d:'负债久期仅 '+fmt(rBest.durL,1)+' 年（财险主导），准备金增提压力小于债券浮盈'}
+      : {t:'利率维度 · 最不受伤', v:rBest.name, s:'每 10bp 下行 → 净利润 '+pct(-rBest.erPnl,2),
+         d:'负债久期 '+fmt(rBest.durL,1)+' 年，久期缺口管理相对均衡'})
+  ];
+  $('#tldrCards').innerHTML = cards.map(function(c){
+    return '<div class="card tight" style="background:var(--panel-2);">'+
+      '<div class="tiny" style="color:var(--gold);letter-spacing:.14em;margin-bottom:6px;">'+esc(c.t)+'</div>'+
+      '<div style="font-family:var(--serif);font-size:22px;color:#fff;letter-spacing:.05em;margin-bottom:4px;">'+esc(c.v)+'</div>'+
+      '<div style="font-family:var(--num);font-size:13px;color:var(--gold-soft);margin-bottom:6px;">'+esc(c.s)+'</div>'+
+      '<div class="tiny" style="line-height:1.6;">'+esc(c.d)+'</div></div>';
+  }).join('');
+
+  $('#tldrText').innerHTML =
+    '<div class="finding" style="border-left-color:var(--gold);">'+
+    '<b>一句话结论</b><p>五家险企的利润弹性差异，本质上不是"谁买的股票多"，而是'+
+    '<b style="color:var(--gold-soft);">买了多少 × 记在哪本账上</b>。'+
+    esc(top.name)+'以 '+fmt(top.c.wEq*100,1)+'% 的权益占比配 '+fmt(top.tplEqShare*100,0)+'% 的 FVTPL 比例，'+
+    '构成最高的利润弹性；'+esc(bot.name)+'权益占比 '+fmt(bot.c.wEq*100,1)+'% 并不算最低，'+
+    '但 '+fmt(bot.c.fvociEq*100,1)+'% 归入 FVOCI，牛市中利润只释放一小部分——这正是 2025 年'+
+    esc(bot.name)+'净利增速（'+fmt((bot.c.ni/NI_2024[bot.c.name]-1)*100,1)+'%）显著落后于'+esc(top.name)+
+    '（'+fmt((top.c.ni/NI_2024[top.c.name]-1)*100,1)+'%）的直接原因。'+
+    '利率维度上，'+esc(rWorst.name)+'负债久期 '+fmt(rWorst.durL,1)+' 年、准备金杠杆 '+fmt(rWorst.c.lev,2)+'，'+
+    '是利率下行中受损最重的一家（每 10bp 下行 → 净利润 '+pct(-rWorst.erPnl,2)+'）；'+
+    '而负债久期最短的'+esc(shortDur.name)+'（'+fmt(shortDur.durL,1)+' 年）'+
+    (shortDur.erPnl<0 ? '反而受益于债券浮盈' : '受冲击最小')+'。'+
+    '所有结论均可通过上方参数实时改写验证。</p></div>';
+}
+
+/* ============================================================
+   12. 主渲染 & 事件绑定
+   ============================================================ */
+function renderAll(){
+  renderScen(); renderGlobal(); renderParams(); renderTabs();
+  renderMatrix(); renderCmp(); renderElast(); renderVol(); renderBacktest(); renderTLDR();
+  save();
+}
+
+document.addEventListener('input', function(e){
+  const t = e.target;
+  if(t.dataset.mkt !== undefined){
+    const i = +t.dataset.mkt; const v = parseFloat(t.value);
+    if(isFinite(v)){ S.mkt[i] = v/100; renderMatrix(); renderTLDR(); save(); }
+  } else if(t.dataset.rate !== undefined){
+    const i = +t.dataset.rate; const v = parseFloat(t.value);
+    if(isFinite(v)){ S.rate[i] = v; renderMatrix(); renderTLDR(); save(); }
+  } else if(t.dataset.global){
+    const f = GLOBAL_FIELDS.filter(function(x){ return x.k===t.dataset.global; })[0];
+    const v = parseFloat(t.value);
+    if(isFinite(v) && f){ S.g[f.k] = v / f.scale; renderMatrix(); renderCmp(); renderElast(); renderVol(); renderBacktest(); renderTLDR(); save(); }
+  } else if(t.dataset.co !== undefined && t.dataset.f){
+    const i = +t.dataset.co, k = t.dataset.f;
+    const f = PFIELDS.filter(function(x){ return x.k===k; })[0];
+    const v = parseFloat(t.value);
+    if(isFinite(v) && f){ S.cos[i][k] = f.pctv ? v/100 : v; renderMatrix(); renderCmp(); renderElast(); renderVol(); renderBacktest(); renderTLDR(); save(); }
+  } else if(t.id === 'cmpMkt'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.cmpMkt = v; renderCmp(); save(); }
+  } else if(t.id === 'cmpRate'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.cmpRate = v; renderCmp(); save(); }
+  } else if(t.id === 'volMkt'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.volMkt = v; renderVol(); renderElast(); save(); }
+  } else if(t.id === 'volRate'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.volRate = v; renderVol(); renderElast(); save(); }
+  } else if(t.id === 'btMkt'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.bt.mkt = v; renderBacktest(); save(); }
+  } else if(t.id === 'btRate'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.bt.rate = v; renderBacktest(); save(); }
+  } else if(t.id === 'btBeta'){
+    const v = parseFloat(t.value); if(isFinite(v)){ S.bt.betaAdj = v; renderBacktest(); save(); }
+  }
+});
+
+document.addEventListener('click', function(e){
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.presetMkt){
+    S.mkt = JSON.parse(b.dataset.presetMkt); renderScen(); renderMatrix(); save();
+  } else if(b.dataset.presetRate){
+    S.rate = JSON.parse(b.dataset.presetRate); renderScen(); renderMatrix(); save();
+  } else if(b.dataset.addMkt){
+    const last = S.mkt[S.mkt.length-1]; S.mkt.push(+(last+0.05).toFixed(4)); renderScen(); renderMatrix(); save();
+  } else if(b.dataset.addRate){
+    const last = S.rate[S.rate.length-1]; S.rate.push(last+25); renderScen(); renderMatrix(); save();
+  } else if(b.dataset.delMkt){
+    if(S.mkt.length>2){ S.mkt.pop(); renderScen(); renderMatrix(); save(); }
+  } else if(b.dataset.delRate){
+    if(S.rate.length>2){ S.rate.pop(); renderScen(); renderMatrix(); save(); }
+  } else if(b.dataset.metric){
+    S.metric = b.dataset.metric; renderTabs(); renderMatrix(); save();
+  } else if(b.dataset.coTab !== undefined){
+    S.company = +b.dataset.coTab; renderTabs(); renderMatrix(); save();
+  } else if(b.id === 'btnReset'){
+    S.cos = JSON.parse(JSON.stringify(DEFAULT_COS));
+    S.g = Object.assign({}, DEFAULT_GLOBAL);
+    S.mkt = DEFAULT_MKT.slice(); S.rate = DEFAULT_RATE.slice();
+    renderAll();
+  } else if(b.id === 'btnClear'){
+    try{ localStorage.removeItem(LS_KEY); }catch(err){}
+    location.reload();
+  } else if(b.id === 'btnExport'){
+    exportCSV();
+  }
+});
+
+function exportCSV(){
+  const head = ['公司','代码','投资资产(亿元)','归母净利润(亿元)','归母净资产(亿元)','股票+基金占比%','FVOCI股票占权益%','组合Beta','债券占比%','固收久期','FVTPL债券%','FVOCI债券%','准备金/投资资产','负债久期'];
+  const lines = [head.join(',')];
+  S.cos.forEach(function(c){
+    lines.push([c.name,c.code,c.A,c.ni,c.na,(c.wEq*100).toFixed(2),(c.fvociEq*100).toFixed(1),c.beta,(c.wBond*100).toFixed(1),c.durA,(c.tplBond*100).toFixed(0),(c.fvociBond*100).toFixed(0),c.lev,c.durL].join(','));
+  });
+  const blob = new Blob(['\ufeff'+lines.join('\n')], {type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '险企敏感性测算参数_2025年报.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// 初始化：补齐回测区控件
+(function init(){
+  $('#cmpMkt').value = S.cmpMkt;
+  $('#cmpRate').value = S.cmpRate;
+  $('#btMkt').value = S.bt.mkt;
+  $('#btRate').value = S.bt.rate;
+  if($('#btBeta')) $('#btBeta').value = S.bt.betaAdj;
+  if($('#volMkt')) $('#volMkt').value = S.volMkt;
+  if($('#volRate')) $('#volRate').value = S.volRate;
+  renderAll();
+})();
+
+})();
+</script>
+</body>
+</html>
