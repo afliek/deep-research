@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股保险行业全景认知指南 · 从零开始（六维度系统拆解）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:linear-gradient(135deg,#0a0e1a 0%,#141829 50%,#0e1420 100%);color:#e0e6f0;min-height:100vh;padding:20px;padding-top:72px}
+.container{max-width:1280px;margin:0 auto}
+.site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+.nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-brand .dot{width:8px;height:8px;background:#d4af37;border-radius:50%;display:inline-block}
+.nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
+.header{text-align:center;padding:24px 0 16px}
+.header h1{font-size:25px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:6px}
+.header .subtitle{font-size:12px;color:#7a90b0;letter-spacing:0.5px;line-height:1.9}
+.update-badge{display:inline-block;background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);color:#ff8a8a;font-size:11px;padding:3px 10px;border-radius:20px;margin-left:8px;letter-spacing:0.5px}
+.kpi-row{display:flex;gap:12px;margin:18px 0;flex-wrap:wrap;justify-content:center}
+.kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 18px;text-align:center;flex:1;min-width:150px;max-width:210px}
+.kpi-card .label{font-size:11px;color:#7a90b0;margin-bottom:6px;letter-spacing:0.6px}
+.kpi-card .value{font-size:21px;font-weight:700}
+.kpi-card .sub{font-size:11px;color:#7a90b0;margin-top:3px;line-height:1.5}
+.value.green{color:#3dd68c}.value.red{color:#ff6b6b}.value.yellow{color:#ffd966}.value.blue{color:#5b9cf6}.value.orange{color:#ff9f40}.value.gold{color:#d4af37}
+.tldr{background:linear-gradient(135deg,rgba(212,175,55,0.10),rgba(255,107,107,0.06));border:1px solid rgba(212,175,55,0.3);border-radius:16px;padding:22px 26px;margin:18px 0}
+.tldr h2{font-size:16px;color:#d4af37;margin-bottom:12px;letter-spacing:1px}
+.tldr ol{margin-left:18px}
+.tldr li{font-size:13px;color:#c8d4e8;line-height:1.95;margin-bottom:5px}
+.tldr li b{color:#fff}
+.chart-container{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;margin:16px 0}
+.chart-title{font-size:15px;font-weight:600;color:#b8c8e8;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chart-title::before{content:'';width:4px;height:18px;background:linear-gradient(180deg,#d4af37,#ff6b6b);border-radius:2px;display:inline-block}
+.chart-note{font-size:11px;color:#5a6a8a;margin-top:10px;line-height:1.75}
+.section-title{font-size:17px;font-weight:700;color:#fff;margin:32px 0 12px;padding-left:12px;border-left:4px solid #d4af37;letter-spacing:0.5px}
+.sub-title{font-size:14px;font-weight:600;color:#d4af37;margin:20px 0 8px;letter-spacing:0.5px}
+h3.sub{font-size:13.5px;font-weight:600;color:#b8c8e8;margin:16px 0 8px;padding-left:10px;border-left:3px solid rgba(212,175,55,0.6)}
+p{font-size:13px;color:#a8b8d4;line-height:1.95;margin:8px 0}
+p b,li b{color:#fff}
+ul.plain{margin:8px 0 8px 20px}
+ul.plain li{font-size:13px;color:#a8b8d4;line-height:1.95;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+th{background:rgba(255,255,255,0.07);color:#b8c8e8;padding:9px 8px;text-align:center;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.12);white-space:nowrap}
+td{padding:8px;text-align:center;color:#a8b8d4;border-bottom:1px solid rgba(255,255,255,0.06);line-height:1.65}
+td.l,th.l{text-align:left}
+tr:hover td{background:rgba(255,255,255,0.03)}
+.up{color:#ff6b6b;font-weight:600}.down{color:#3dd68c;font-weight:600}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;margin-right:4px}
+.tag.life{background:rgba(91,156,246,0.16);color:#8ab8ff}
+.tag.pc{background:rgba(255,159,64,0.16);color:#ffb570}
+.tag.pol{background:rgba(212,175,55,0.16);color:#ffd966}
+.tag.mkt{background:rgba(61,214,140,0.16);color:#6ee0a8}
+.tag.acc{background:rgba(255,107,107,0.16);color:#ff8a8a}
+.term{background:rgba(212,175,55,0.055);border-left:3px solid #d4af37;border-radius:0 10px 10px 0;padding:13px 16px;margin:12px 0}
+.term .t{color:#d4af37;font-size:13px;font-weight:700;margin-bottom:6px;letter-spacing:0.4px}
+.term .d{font-size:12.5px;color:#aab9d6;line-height:1.9}
+.term .d b{color:#fff}
+.term .ex{font-size:11.5px;color:#7f8fa8;margin-top:8px;padding-top:7px;border-top:1px dashed rgba(255,255,255,0.12);line-height:1.8}
+.term .ex i{color:#ffd966;font-style:normal}
+.termgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:12px;margin:12px 0}
+.termgrid .term{margin:0}
+.boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:12px 0}
+.box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px}
+.box h4{font-size:13px;margin-bottom:8px;letter-spacing:0.4px}
+.box p{font-size:12px;color:#8a9ab8;line-height:1.8}
+.box .big{font-size:20px;font-weight:700;margin:6px 0}
+.chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:14px 0}
+.chain .node{flex:1;min-width:150px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px}
+.chain .node .t{font-size:12px;color:#d4af37;font-weight:600;margin-bottom:6px}
+.chain .node .d{font-size:11.5px;color:#8a9ab8;line-height:1.75}
+.chain .arrow{display:flex;align-items:center;color:#3a4a6a;font-size:18px}
+.warn{border:1px solid rgba(255,107,107,0.3);background:rgba(255,107,107,0.07);border-radius:12px;padding:14px 16px;margin:12px 0}
+.warn h4{color:#ff8a8a;font-size:13px;margin-bottom:7px}
+.warn p{font-size:12px;color:#c8b0b8;line-height:1.85}
+.calc{background:rgba(91,156,246,0.07);border:1px solid rgba(91,156,246,0.22);border-radius:12px;padding:14px 16px;margin:12px 0}
+.calc h4{color:#8ab8ff;font-size:13px;margin-bottom:8px}
+.calc .line{font-size:12.5px;color:#b8c8e8;line-height:2;font-family:'Consolas',monospace}
+.calc .line b{color:#ffd966}
+.footer{text-align:center;font-size:11px;color:#3a4a6a;margin-top:28px;padding:18px 0 12px;line-height:1.9;border-top:1px solid rgba(255,255,255,0.06)}
+.disclaimer{background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.22);border-radius:12px;padding:16px 20px;margin:20px 0;font-size:11.5px;color:#b89aa0;line-height:1.9}
+.disclaimer b{color:#ff8a8a}
+@media(max-width:640px){.chain .arrow{display:none}.kpi-card{min-width:120px}}
+</style>
+</head>
+<body>
+<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="index.html" class="nav-back">← 返回首页</a></div>
+
+<div class="container">
+<div class="header">
+<h1>🛡️ A股保险行业全景认知指南 · 从零开始 <span class="update-badge">2026.08.29</span></h1>
+<div class="subtitle">六维度系统拆解：行业概况与市场规模 · 人身险与财产险业务分类 · 产业链与参与主体 · 监管与政策 · 经营模式与盈利逻辑 · 竞争格局与趋势<br>
+40+ 专业术语白话解释（每个配示例） &nbsp;|&nbsp; 面向零基础读者，由浅入深 &nbsp;|&nbsp; 数据来源：金融监管总局 · 中国保险行业协会 · 上市公司中报，数据截至 2026 年上半年</div>
+</div>
+
+<div class="kpi-row">
+<div class="kpi-card"><div class="label">2025 年原保费收入</div><div class="value gold">6.12 万亿</div><div class="sub">同比 +7.4%，全球第二大市场</div></div>
+<div class="kpi-card"><div class="label">行业总资产（2026Q2）</div><div class="value blue">43.9 万亿</div><div class="sub">较年初 +6.2%，人身险占 88%</div></div>
+<div class="kpi-card"><div class="label">保险资金运用余额</div><div class="value orange">40.82 万亿</div><div class="sub">首破 40 万亿，同比 +12.7%</div></div>
+<div class="kpi-card"><div class="label">五大险企 2026H1 净利</div><div class="value red">3173.87 亿</div><div class="sub">同比 +78.1%，日赚 17.5 亿</div></div>
+<div class="kpi-card"><div class="label">行业综合偿付能力</div><div class="value green">180.6%</div><div class="sub">核心 133.5%，监管线 100%/50%</div></div>
+<div class="kpi-card"><div class="label">保险深度 / 密度</div><div class="value yellow">4.4% / 4043 元</div><div class="sub">渗透率仍低于发达市场</div></div>
+</div>
+
+<div class="tldr">
+<h2>◆ 核心结论（先看这 7 条）</h2>
+<ol>
+<li><b>保险的本质是"凑份子分摊风险"</b>——大家把确定的小钱（保费）交给保险公司，谁遇到倒霉事（出险）就从池子里拿一大笔（赔付）。保险公司不是慈善机构，它赚的是"收进来的钱"和"赔出去的钱 + 花掉的费用"之间的差额，外加"收钱到赔钱这段时间拿去投资赚的收益"。</li>
+<li><b>中国是全球第二大保险市场</b>，2025 年原保费收入 6.12 万亿元（同比 +7.4%），行业总资产 43.9 万亿元。但保险深度仅 4.4%，明显低于发达市场水平——<b>未来的空间在"渗透率"而不在"增速"</b>。</li>
+<li><b>人身险（占保费 76%）和财产险（占 24%）是两门完全不同的生意</b>：人身险像"超长期储蓄 + 保障"，一卖就是二三十年，利润主要来自投资（利差）；财产险像"一年期服务合同"，一年一签，利润主要来自承保（少赔、少花钱）。<b>不要用同一套指标去看它们。</b></li>
+<li><b>2026 年上半年五大险企净利暴增 78%，主因不是卖保险更赚钱，而是股市涨了</b>。国寿一季度净利同比 -32.3%（创业板指 -0.57%），二季度创业板指 +36.35%，半年报就变成 +228.6%。这是新会计准则（IFRS17/9）把大量资产按市价计量的结果——<b>险企利润现在会像基金净值一样随股市剧烈波动</b>。</li>
+<li><b>财险赚的是"手艺钱"：综合成本率（COR）每降低 1 个百分点都是真金白银。</b>2026H1 人保财险 COR 94.0%（同比 -0.8pct）、平安产险 95.1%（-0.1pct），意味着每收 100 元保费，承保环节就赚 6 元和 4.9 元，再加投资收益。</li>
+<li><b>监管是行业的第一变量</b>：四条政策线同时收紧——①预定利率动态调整（压降负债成本）②报行合一（压降渠道费用）③偿二代二期过渡期结束（抬高资本要求）④IFRS17 全行业切换（利润波动放大）。<b>看懂保险股，先要懂监管在压什么。</b></li>
+<li><b>行业最大的长期风险是"利差损"</b>：保单承诺客户 2.0% 的保证收益，但市场利率持续下行、好资产越来越少。解法是两条——产品端从"保证收益"转向<b>分红险</b>（与客户共担，2026H1 分红险保费 1.01 万亿、同比 +94.4%）；资产端<b>增配权益</b>（2026Q2 股票+基金占比 16.23%，创历史新高）。</li>
+</ol>
+</div>
+
+<div class="section-title">第一章 · 保险到底是什么：先用三个故事讲清底层逻辑</div>
+
+<h3 class="sub">1.1 没有保险的世界：一个车主群的自救实验</h3>
+<p>假设你住的小区有 1000 个车主，每年大概有 10 辆车会出事故，平均修车花 5 万元。如果不买保险，这 10 个人就得自己掏 5 万元——对多数家庭是一笔不小的意外支出。</p>
+<p>于是有人提议：<b>每人每年先交 500 元，凑成 50 万元的"修车基金"，谁出事了就从里面拿钱修车。</b>这样每个车主的损失从"不确定地可能损失 5 万元"变成了"确定地损失 500 元"。<b>这就是保险的全部秘密。</b></p>
+<div class="calc">
+<h4>◆ 算一遍：保险公司在这笔生意里怎么赚钱</h4>
+<div class="line">收入端：1000 人 × 500 元 = <b>50 万元</b>（保费收入）</div>
+<div class="line">支出端①：实际出险 8 辆 × 5 万元 = <b>40 万元</b>（赔付支出，比预期少 2 辆）</div>
+<div class="line">支出端②：雇 2 个人接电话、定损、跑腿 = <b>6 万元</b>（业务及管理费/手续费）</div>
+<div class="line">承保结果：50 − 40 − 6 = <b>+4 万元</b>（承保利润，即"保费收得划算"）</div>
+<div class="line">收入端②：这笔钱平均在账上趴 6 个月，拿去买债券/存款赚了 <b>1.2 万元</b>（投资收益）</div>
+<div class="line">最终利润：4 + 1.2 = <b>5.2 万元</b>，利润率 10.4%</div>
+</div>
+<p>从这个算式里，你已经看到了保险公司利润的<b>两个来源</b>：<b>承保利润</b>（收得多、赔得少、花得少）和<b>投资收益</b>（拿客户的钱去投资赚钱）。后面讲人身险和财产险的区别时，你会发现——<b>财产险主要靠前者，人身险主要靠后者</b>。这就是整个行业最重要的一处分野。</p>
+
+<h3 class="sub">1.2 保险公司凭什么敢承诺？两个前提</h3>
+<div class="boxes">
+<div class="box"><h4 style="color:#ffd966">① 大数法则：样本够多，意外就变确定</h4>
+<p>单个车主今年出不出车祸，谁也说不准；但 1000 个、100 万个车主里会有多少辆出事故，<b>统计上非常稳定</b>。保险公司卖的保单越多，实际赔付就越接近精算预期。这也是为什么保险公司拼命做大规模——<b>规模本身就能降低风险</b>。</p>
+<p style="margin-top:6px;color:#5a6a8a;font-size:11.5px">反过来，只卖 100 张保单的小公司，一次大事故就可能亏穿——所以监管要求保险公司必须留足资本金（见"偿付能力"）。</p></div>
+<div class="box"><h4 style="color:#8ab8ff">② 时间差：先收钱，后赔钱</h4>
+<p>保费是<b>年初交</b>，赔付是<b>出险才给</b>。这笔"暂时用不到的钱"就成了保险公司的投资本金。财产险短（几个月到一年），人身险极长（二三十年）。<b>人身险的资金可以投长期资产赚更高收益，但也因此背上了长期兑付承诺</b>——利差损风险就源于此。</p>
+<p style="margin-top:6px;color:#5a6a8a;font-size:11.5px">行业总资产 43.9 万亿中，人身险公司占 38.7 万亿（88%）。</p></div>
+</div>
+
+<h3 class="sub">1.3 一张保单里的"人物表"和"六个关键词"</h3>
+<div class="termgrid">
+<div class="term"><div class="t">📌 投保人 / 被保险人 / 受益人</div>
+<div class="d"><b>投保人</b>：掏钱签合同的人（比如爸爸）。<b>被保险人</b>：这份保险保的是谁的命/身体/车（比如孩子）。<b>受益人</b>：出事后钱赔给谁（比如妈妈）。三个人可以是同一个人，也可以完全不同。</div>
+<div class="ex"><i>示例</i>：爸爸给上大学的儿子买一份医疗险，投保人=爸爸，被保险人=儿子，受益人=儿子（医疗费报销）或妈妈（身故赔付）。买保险时最容易搞错的就是"谁签字"和"谁拿钱"——<b>投保人有权退保拿回现金价值，这一点非常关键。</b></div></div>
+<div class="term"><div class="t">📌 保费 与 保额</div>
+<div class="d"><b>保费</b>：你交给保险公司的钱（成本）。<b>保额</b>：出事后保险公司最多赔给你的钱（保障额度）。保额 ÷ 保费 = <b>杠杆倍数</b>。</div>
+<div class="ex"><i>示例</i>：30 岁男性买一份 100 万保额的定期寿险，一年交 1500 元，杠杆约 667 倍。这就是保险"用小钱撬大保障"的含义。反过来，<b>如果一份产品保费接近保额（比如交 10 万保 10.5 万），那它的本质是储蓄理财，不是保障</b>——市面上大量"年金险""增额终身寿"属于这一类。</div></div>
+<div class="term"><div class="t">📌 免赔额</div>
+<div class="d">保险公司<b>不赔</b>的门槛金额。损失在免赔额以下你自己扛，超过部分才报销。设置免赔额可以大幅降低保费，因为省去了大量小额理赔的处理成本。</div>
+<div class="ex"><i>示例</i>：百万医疗险常见"1 万元免赔额"。住院花了 8 万，社保报了 3 万，剩下 5 万，扣掉 1 万免赔额，保险公司赔 4 万。<b>所以百万医疗险不是"花多少报多少"，日常小病基本用不上，它的价值在于防大病。</b></div></div>
+<div class="term"><div class="t">📌 等待期（观察期）</div>
+<div class="d">买完保险后的一段时间内出险，保险公司<b>不赔</b>（通常退还保费）。目的是防止"已经生病了才临时买保险"的逆选择。医疗险一般 30 天，重疾险 90-180 天。</div>
+<div class="ex"><i>示例</i>：1 月 1 日买了重疾险，等待期 90 天，3 月 20 日确诊癌症——差 10 天没过等待期，不赔。<b>结论：保险要趁健康时买，别等体检出问题再买。</b></div></div>
+<div class="term"><div class="t">📌 现金价值</div>
+<div class="d">长期保单中途退保时，保险公司退给你的钱。它等于"你交的保费 − 保险公司已承担的风险成本 − 已付给代理人的佣金 − 管理费"再加上一点利息。<b>长期保单前几年现金价值极低</b>，因为首年佣金很高。</div>
+<div class="ex"><i>示例</i>：年交 1 万、交 10 年的增额终身寿，第一年末退保可能只拿回 1000 元（现金价值 1 千），亏 9000 元。到第 8-9 年现金价值才可能超过累计保费。<b>这就是为什么"退保"是买保险最大的坑——长期险千万别用短期要用的钱买。</b></div></div>
+<div class="term"><div class="t">📌 犹豫期</div>
+<div class="d">签收保单后的一段时间内（通常 10-15 天）可以无条件退保，只扣 10 元工本费、全额退还保费。这是消费者的"后悔药"。</div>
+<div class="ex"><i>示例</i>：被代理人劝着买了一份不合适的保单，只要在犹豫期内退保，几乎零损失。<b>超过犹豫期再退，就只能按现金价值退，损失可能高达本金的 80-90%。</b></div></div>
+</div>
+
+<div class="section-title">第二章 · 行业概况与市场规模：中国保险业有多大</div>
+
+<h3 class="sub">2.1 6.12 万亿是什么概念</h3>
+<p>2025 年，中国保险业<b>原保险保费收入 6.12 万亿元</b>，同比增长 7.43%。做个对比帮你建立量级感：这个数字约相当于同期中国 GDP 的 4.4%（即保险深度），是贵州省全年 GDP 的 2 倍多，摊到 14 亿人头上，<b>人均一年交 4043 元保费（保险密度）</b>。中国自 2017 年起稳居<b>全球第二大保险市场</b>。</p>
+
+<div class="chart-container">
+<div class="chart-title">图 1 · 中国保险业原保费收入与增速（2013–2025）</div>
+<div id="chart1" style="width:100%;height:360px;"></div>
+<div class="chart-note"><b>三个拐点值得记住</b>：①<b>2016 年 +27.5% 的历史顶峰</b>——中短期理财型保险大爆发（万能险狂飙）；②<b>2018 年骤降至 +3.9%</b>——监管叫停快返型产品、134 号文落地，"保险姓保"回归本源；③<b>2021 年 -0.8% 的罕见负增长</b>——车险综合改革 + 疫情冲击 + 代理人大撤退。<br>
+<b>口径提示</b>：2021 年以后监管公布的原保费数据<b>不含处于风险处置阶段的机构</b>，增速为可比口径。2026 年上半年保费 3.86 万亿元，同比 +3.2%。</div>
+</div>
+
+<h3 class="sub">2.2 新手第一个坑：同一个"保费"，两个不同口径</h3>
+<p>看保险新闻时你一定会遇到一个困惑：一会儿说"财产险 1.47 万亿、人身险 4.65 万亿"，一会儿又说"财产险公司 1.76 万亿、人身险公司 4.36 万亿"。<b>两个数字都对，只是口径不同</b>——这是入门第一个必须分清的概念。</p>
+<div class="chart-container">
+<div class="chart-title">图 2 · 双口径对比：按"险种"统计 vs 按"公司类型"统计（2025 年）</div>
+<div id="chart2" style="width:100%;height:340px;"></div>
+<div class="chart-note"><b>为什么会不一样？</b>因为财产险公司也能卖意外险、短期健康险（属于人身险业务），人身险公司也能卖一点意外险（属于财产险业务）。<b>按"险种"统计</b>是把所有保单按保障内容分类；<b>按"公司类型"统计</b>是按牌照主体分类。<br>
+<b>实用结论</b>：分析"寿险公司赚不赚钱"用公司口径；分析"老百姓买的是保障还是储蓄"用险种口径。<b>混用口径是券商研报和财经媒体最常见的错误之一。</b></div>
+</div>
+
+<h3 class="sub">2.3 三个"规模"指标，别再搞混了</h3>
+<div class="termgrid">
+<div class="term"><div class="t">📌 原保费收入（最常用）</div>
+<div class="d">保险公司卖保单收的钱中，<b>属于"保险"部分的钱</b>。像分红险、万能险里客户额外追加的"投资款"不计入原保费，而计入"保户投资款新增交费"。这是监管和媒体引用最多的口径。</div>
+<div class="ex"><i>示例</i>：2025 年原保费 6.12 万亿，其中保户投资款新增交费 6009 亿元（以万能险为主，同比 +3.84%）<b>并不在 6.12 万亿之内</b>。</div></div>
+<div class="term"><div class="t">📌 规模保费</div>
+<div class="d">原保费 + 保户投资款新增交费 + 投连险独立账户交费，即<b>保险公司从客户手里收到的所有钱</b>。上市公司业绩发布会常用（听起来更大）。</div>
+<div class="ex"><i>示例</i>：中国太保 2026H1 寿险"规模保费"1903.51 亿元（同比 -1.6%），与人保"原保险保费收入"口径不同，<b>跨公司比较时务必确认是否同口径</b>。</div></div>
+<div class="term"><div class="t">📌 标准保费 / 新单标准保费</div>
+<div class="d">把不同缴费期限的保单<b>折算成"趸交（一次性交清）"的可比口径</b>，用来衡量真实业务规模。因为一份"年交 1 万交 20 年"的保单，和一份"一次性交 20 万"的保单，首年收入天差地别，但业务价值接近。</div>
+<div class="ex"><i>示例</i>：10 年期缴保单，年交 1 万元，折算系数约 0.1×10=1 → 标准保费约 1 万元；而首年实收保费也是 1 万元，看起来一样，但<b>续期还有 9 万元的确定性收入</b>——这就是为什么险企拼命做"期交"而非"趸交"。</div></div>
+</div>
+
+<h3 class="sub">2.4 保险密度与保险深度：衡量渗透率的两把尺</h3>
+<div class="boxes">
+<div class="box"><h4 style="color:#ffd966">保险密度 = 保费 ÷ 人口</h4>
+<div class="big value gold">4043.27 元/人</div>
+<p>平均每人每年花多少钱买保险（2025 年）。这是<b>绝对量</b>指标，反映消费能力。中国从 2013 年的约 1200 元涨到 2025 年的 4043 元，12 年翻了 3 倍多。</p></div>
+<div class="box"><h4 style="color:#8ab8ff">保险深度 = 保费 ÷ GDP</h4>
+<div class="big value blue">约 4.4%</div>
+<p>保费占国民经济的比重。这是<b>相对量</b>指标，剔除经济规模影响。中国长期在 4% 上下波动，<b>明显低于主要发达市场水平</b>——这是判断"行业还有多少空间"的核心依据。</p></div>
+<div class="box"><h4 style="color:#6ee0a8">总资产 / 净资产</h4>
+<div class="big value green">41.31 / 3.66 万亿</div>
+<p>2025 年末行业总资产 41.31 万亿（同比 +15.1%），净资产仅 3.66 万亿（+10.2%）。<b>净资产占总资产不到 9%</b>——保险公司是高杠杆经营，资产端只要跌 9% 就能把净资产亏光，这是理解保险股"高贝塔"的钥匙。</p></div>
+</div>
+<div class="warn">
+<h4>⚠️ 一个必须建立的直觉：保险公司的资产负债表是"倒过来"的</h4>
+<p>普通制造业公司：资产（厂房设备）→ 负债（银行贷款）。保险公司：<b>先有负债（准备金，即未来要赔给客户的钱），再去配资产（债券、股票）去覆盖它</b>。所以分析险企要从负债端（卖了什么产品、承诺了多少收益）倒推资产端（该投什么、能投什么）。这个思路贯穿全文，也是所有保险公司区别于其他行业的核心特征。</p>
+</div>
+
+<div class="section-title">第三章 · 人身险与财产险：名字像兄弟，生意是两行</div>
+
+<p>这是全篇<b>最重要的一章</b>。很多人把"保险公司"当成一类公司，其实人身险和财产险的商业模式差异，比"银行和券商"的差异还要大。用一句话概括：<b>人身险赚的是"时间的钱 + 投资的钱"，财产险赚的是"定价的钱 + 管理的钱"。</b></p>
+
+<h3 class="sub">3.1 一张表看懂两套生意</h3>
+<table>
+<thead><tr><th class="l" style="width:15%">对比维度</th><th class="l" style="width:42%">🏥 人身险（寿险公司）</th><th class="l" style="width:43%">🚗 财产险（财险公司）</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>保的是什么</b></td><td class="l">人的生命、健康、寿命。寿险、健康险、意外险、年金险</td><td class="l">物和责任。车险、企财险、家财险、责任险、农险、信用保证保险</td></tr>
+<tr><td class="l"><b>合同期限</b></td><td class="l"><b>长期，10-30 年甚至终身</b>。客户一旦投保，退保损失巨大</td><td class="l"><b>短期，多为 1 年</b>（车险、企财险等），一年一签、随时换公司</td></tr>
+<tr><td class="l"><b>保费规模（2025）</b></td><td class="l">人身险公司原保费 <b>4.36 万亿</b>，占全行业约 76%</td><td class="l">财产险公司原保费 <b>1.76 万亿</b>，占全行业约 24%</td></tr>
+<tr><td class="l"><b>总资产（2026Q2）</b></td><td class="l"><b>38.7 万亿</b>（占行业 88%）</td><td class="l"><b>3.4 万亿</b>（占行业约 8%）</td></tr>
+<tr><td class="l"><b>利润从哪来</b></td><td class="l"><b>主要靠投资收益（利差）</b>。承保本身利润薄，靠资产端放大</td><td class="l"><b>主要靠承保利润</b>（COR&lt;100%），投资收益是锦上添花</td></tr>
+<tr><td class="l"><b>核心指标</b></td><td class="l">新业务价值 NBV、内含价值 EV、<b>利差损</b>、预定利率、代理人产能</td><td class="l"><b>综合成本率 COR</b>、赔付率、费用率、车险/非车结构</td></tr>
+<tr><td class="l"><b>利润波动性</b></td><td class="l"><b>极大</b>。2026H1 国寿 +228.6%，而 2026Q1 还是 -32.3%</td><td class="l"><b>较小</b>。2026H1 人保财险净利 +32%，主要来自投资收益而非承保大起大落</td></tr>
+<tr><td class="l"><b>客户黏性</b></td><td class="l">强。长期险退保成本高，续期保费自动到账</td><td class="l">弱。一年一签，价格敏感，比价容易</td></tr>
+<tr><td class="l"><b>最大风险</b></td><td class="l"><b>利差损</b>：承诺客户的收益太高，而投资端赚不到</td><td class="l"><b>巨灾与费用战</b>：一场台风吃掉的利润，可能等于全年承保利润</td></tr>
+<tr><td class="l"><b>估值方法</b></td><td class="l"><b>PEV / P/EV</b>（市值÷内含价值）</td><td class="l"><b>PB / PE</b>（更接近普通公司）</td></tr>
+<tr><td class="l"><b>代表标的</b></td><td class="l">中国人寿、新华保险、平安寿险、太保寿险</td><td class="l">中国人保（人保财险）、平安产险、太保产险</td></tr>
+</tbody>
+</table>
+<div class="chart-note" style="margin-top:10px"><b>记忆口诀</b>：人身险 = 长钱 + 长债 + 靠投资；财产险 = 短钱 + 精算 + 靠管理。<b>所以判断一家寿险公司好不好，先看它承诺了多少收益、投资端能不能覆盖；判断一家财险公司好不好，直接看综合成本率。</b></div>
+
+<h3 class="sub">3.2 人身险：四类险种，两种属性</h3>
+<div class="chart-container">
+<div class="chart-title">图 3 · 人身险公司保费结构（2025 年，原保费口径）</div>
+<div id="chart3" style="width:100%;height:330px;"></div>
+<div class="chart-note">寿险独占 81.6%，健康险 17.6%，意外险不到 1%。<b>注意：这里的"寿险"是会计口径，包含大量实质上属于储蓄理财的增额终身寿、年金险</b>——它们之所以被归为寿险，只是因为"以人的寿命为给付条件"。<br>
+<b>增速分化（2025 年）</b>：寿险 +11.4%（储蓄需求驱动）、健康险 -0.41%、意外险 -9.8%。<b>保障型产品卖不动、储蓄型产品热销</b>，是当前人身险最大的结构性特征，也是"利差损"压力的来源。</div>
+</div>
+
+<div class="termgrid">
+<div class="term"><div class="t">📌 寿险（人寿保险）</div>
+<div class="d">以被保险人的<b>身故或生存</b>为给付条件。分为<b>定期寿险</b>（保一段时间，纯保障，便宜）和<b>终身寿险</b>（保一辈子，必然赔付，所以贵、储蓄成分高）。市面上热销的"增额终身寿"属于后者——保额和现金价值按约定利率逐年复利增长，本质是<b>一份锁定长期利率的储蓄单</b>。</div>
+<div class="ex"><i>示例</i>：30 岁女性年交 10 万、交 5 年买增额终身寿，现金价值按约 2% 复利增长，第 8 年现金价值约 55 万，第 20 年约 70 万。<b>她买的不是"死了赔多少"，而是"20 年后账户里有多少钱"。</b></div></div>
+<div class="term"><div class="t">📌 健康险</div>
+<div class="d">保障<b>疾病和医疗费用</b>。两大类：<b>医疗险</b>（报销型，花多少报多少，一年期，如百万医疗险）和<b>重疾险</b>（给付型，确诊即一次性赔付保额，长期，如保 50 万确诊癌症直接给 50 万）。</div>
+<div class="ex"><i>示例</i>：2025 年人身险公司健康险保费 7699 亿元，同比 -0.41%；但 2026 年上半年全行业健康险保费同比 <b>+15.2%</b>，重新加速。<b>健康险是中国保险业公认的最大长期赛道</b>——医保只保基本，商业健康险填补缺口，但目前渗透率仍很低。</div></div>
+<div class="term"><div class="t">📌 年金险 / 商业养老金</div>
+<div class="d">活着就能按年/月领钱，本质是<b>把一笔钱变成终身现金流</b>，对冲"人活着、钱花完了"的长寿风险。属于养老保险第三支柱（第一支柱=基本养老金，第二支柱=企业/职业年金，第三支柱=个人养老金+商业养老金融）。</div>
+<div class="ex"><i>示例</i>：45 岁一次性交 100 万养老年金，约定 60 岁起每年领 7 万元、领终身。<b>它解决的不是"收益率"问题，而是"活太久"的风险</b>——这是其他金融产品无法替代的功能。</div></div>
+<div class="term"><div class="t">📌 分红险 / 万能险 / 投连险</div>
+<div class="d">三种"收益结构不同"的新型寿险：<br>
+<b>分红险</b>：保底收益（预定利率）+ 浮动分红，与客户共担风险，<b>当前监管主推方向</b>。<br>
+<b>万能险</b>：有最低保证利率，实际结算利率每月公布，灵活追加领取。<br>
+<b>投连险</b>：无保底，盈亏全由客户承担，类似买基金，风险最高。</div>
+<div class="ex"><i>示例</i>：2025 年 9 月起普通型人身险预定利率上限从 2.5% 降至 <b>2.0%</b>，分红型降至 1.75%。这之后<b>分红险成为绝对主力</b>：2026H1 分红险原保费 1.01 万亿元，同比 <b>+94.4%</b>；平安寿险新业务中分红险占比已超九成。<b>原因：保证利率低了，产品必须靠"浮动分红"才有吸引力，同时险企也把利率风险转嫁给了客户。</b></div></div>
+</div>
+
+<h3 class="sub">3.3 财产险：车险是基本盘，非车险已反超</h3>
+<div class="chart-container">
+<div class="chart-title">图 4 · 财产险公司保费结构（2025 年）</div>
+<div id="chart4" style="width:100%;height:330px;"></div>
+<div class="chart-note"><b>结构性变化</b>：非车险（企财、责任、农险、意健、信用保证等）占财产险公司保费的比重已从十年前的约 25% 升至 <b>2026 年上半年的 54%</b>，<b>首次超过车险</b>。同期车险原保费 4503.73 亿元，基本零增长、车均保费持续下降。<br>
+<b>为什么重要</b>：车险是"存量博弈"（汽车保有量增速放缓 + 车险综改压降价格），非车险是"增量空间"（责任险、农险、健康险随经济发展自然增长）。<b>财险公司的成长性，越来越取决于非车险能不能做起来、且能不能承保盈利。</b></div>
+</div>
+
+<h3 class="sub">3.4 人身险的四个高频术语</h3>
+<div class="termgrid">
+<div class="term"><div class="t">📌 期交 vs 趸交</div>
+<div class="d"><b>期交</b>：分期缴费（如年交 1 万交 20 年）。<b>趸交</b>：一次性交清（如一次交 20 万）。同样 20 万总保费，<b>期交的价值远高于趸交</b>——因为期交锁定了客户未来 19 年的续期保费，且代理人佣金按年期发放，队伍更稳定。</div>
+<div class="ex"><i>示例</i>：险企"开门红"考核为什么看"期交新单"？因为趸交是"一锤子买卖"，今年冲完明年归零；期交则形成<b>滚雪球式的续期保费池</b>，是险企最稳定的现金流。</div></div>
+<div class="term"><div class="t">📌 新单 vs 续期</div>
+<div class="d"><b>新单保费</b>：今年新卖出的保单。<b>续期保费</b>：往年卖出的保单今年继续交的钱。健康险企的续期保费占比通常超过 60%，这是<b>护城河</b>——即使今年一张新单不卖，收入也不会崩。</div>
+<div class="ex"><i>示例</i>：2026 年上半年人身险公司保费增速从 Q1 的 +7.3% 回落到 H1 的 +3.6%，6 月单月甚至同比 -2.5%，主因是<b>2025 年 5-8 月"预定利率下调前的停售抢购"</b>形成高基数。<b>读保费数据时，一定要问一句"去年同期是什么特殊情况"。</b></div></div>
+<div class="term"><div class="t">📌 保障型 vs 储蓄型</div>
+<div class="d"><b>保障型</b>：杠杆高（重疾、定寿、医疗），死差/费差贡献大，价值率高。<b>储蓄型</b>：保费大但价值率低（年金、增额终身寿、万能险），主要赚利差。<b>产品结构 = 利润结构</b>。</div>
+<div class="ex"><i>示例</i>：同样 100 亿元保费，重疾险可能创造 40 亿元新业务价值（价值率 40%），储蓄型年金可能只有 10 亿元（价值率 10%）。<b>所以"保费增长"不等于"价值增长"</b>——这是看懂险企报表最关键的一层。</div></div>
+<div class="term"><div class="t">📌 预定利率 vs 演示利率 vs 实际分红</div>
+<div class="d"><b>预定利率</b>：保险公司承诺给客户的<b>保证收益率上限</b>（写在合同里的刚性成本）。<b>演示利率</b>：销售时展示的<b>假定</b>收益（分红险的中/高档演示）。<b>实际分红实现率</b>：最终兑现比例。</div>
+<div class="ex"><i>示例</i>：普通型人身险预定利率上限 2025 年 9 月起为 <b>2.0%</b>；分红险演示利率上限已由 3.9% 下调至 <b>3.5%</b>；2025 年度实际分红水平监管指导为 <b>3.2%</b>。<b>买分红险时看的"演示利益"通常按中高档测算，实际大概率低于演示，务必看合同保证部分。</b></div></div>
+</div>
+
+<div class="section-title">第四章 · 产业链与参与主体：钱是怎么流动的</div>
+
+<h3 class="sub">4.1 产业链五环：从客户口袋到资本市场</h3>
+<div class="chain">
+<div class="node"><div class="t">① 客户（投保人）</div><div class="d">个人 / 企业，把风险转移出去。2026H1 新增保单 <b>668 亿件</b>（同比 +27.4%）</div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">② 销售渠道</div><div class="d">个险代理人、银保渠道、经纪代理公司、互联网直销。2023 年寿险经中介展业占比 <b>95.52%</b></div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">③ 直保公司</div><div class="d">卖保单、收保费、定损理赔。<b>全行业法人机构 238 家</b></div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">④ 再保险公司</div><div class="d">"保险的保险"，替直保公司分担大额风险。总资产 <b>8790 亿元</b></div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">⑤ 保险资管 / 投资</div><div class="d">把 40.82 万亿保费投出去，赚收益覆盖负债成本</div></div>
+</div>
+<p>同时还有三条"横向支撑线"贯穿始终：<b>监管</b>（金融监管总局及派出机构）、<b>行业基础设施</b>（中国保险行业协会、中国精算师协会、保险保障基金、中保登、上海保交所/国际再保险中心）、<b>服务机构</b>（保险公估、体检机构、TPA 健康管理公司、再保经纪人）。</p>
+
+<h3 class="sub">4.2 参与主体全景表</h3>
+<table>
+<thead><tr><th class="l" style="width:14%">主体类型</th><th class="l" style="width:26%">角色定位</th><th class="l" style="width:24%">规模 / 数量</th><th class="l">代表机构</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>保险集团（控股）</b></td><td class="l">持有多张牌照的母公司，统筹资本与资源</td><td class="l">法人机构合计 238 家（2025.6）</td><td class="l">中国人寿集团、人保集团、平安集团、太保集团、太平集团、中再集团</td></tr>
+<tr><td class="l"><b>人身险公司</b></td><td class="l">卖寿险/健康险/意外险/年金，长期负债</td><td class="l">总资产 38.7 万亿（2026Q2）</td><td class="l">国寿、平安寿、太保寿、新华、人保寿、泰康、友邦人寿</td></tr>
+<tr><td class="l"><b>财产险公司</b></td><td class="l">卖车险/非车险，短期负债</td><td class="l">总资产 3.4 万亿；保费 9846 亿（2026H1）</td><td class="l">人保财险、平安产险、太保产险、国寿财险、阳光财险、众安</td></tr>
+<tr><td class="l"><b>再保险公司</b></td><td class="l">承接直保公司分出的风险，也做分入</td><td class="l">总资产 8790 亿元（2026Q2）</td><td class="l">中国再保险集团（1508.HK）、人保再保、前海再保、瑞士再保/慕尼黑再保分公司</td></tr>
+<tr><td class="l"><b>保险资管公司</b></td><td class="l">受托管理保险资金，发行资管产品</td><td class="l">总资产 1491 亿元；受托管理 40.82 万亿</td><td class="l">国寿资产、平安资管、太保资产、人保资产、泰康资产</td></tr>
+<tr><td class="l"><b>专业中介机构</b></td><td class="l">经纪、代理、公估，连接客户与险企</td><td class="l">法人机构 <b>2513 家</b>（2025 年末，连续 6 年下滑）</td><td class="l">泛华、大童、明亚、永达理；公估：民太安等</td></tr>
+<tr><td class="l"><b>互联网险企</b></td><td class="l">纯线上持牌保险公司</td><td class="l">仅 4 家</td><td class="l">众安在线、泰康在线、安心保险、易安保险</td></tr>
+<tr><td class="l"><b>监管与自律</b></td><td class="l">准入、偿付能力、产品、资金运用、消保</td><td class="l">总局直管法人由 116 家降至 <b>65 家</b>（属地放权）</td><td class="l">国家金融监督管理总局、中国保险行业协会、中国精算师协会</td></tr>
+<tr><td class="l"><b>风险处置机制</b></td><td class="l">险企破产时保护保单持有人</td><td class="l">—</td><td class="l">中国保险保障基金、保险保障基金公司参与风险处置（如富泽人寿承接君康人寿）</td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">4.3 A股保险标的清单（投资视角）</h3>
+<table>
+<thead><tr><th class="l">公司</th><th>代码</th><th class="l">主业属性</th><th>2026H1 归母净利</th><th>同比</th><th class="l">一句话特征</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>中国人寿</b></td><td>601628</td><td class="l">纯寿险</td><td>1344.89 亿</td><td class="up">+228.6%</td><td class="l">寿险龙头，代理人 58.7 万行业第一，<b>权益弹性最大的巨头</b></td></tr>
+<tr><td class="l"><b>中国平安</b></td><td>601318</td><td class="l">综合金融</td><td>925.85 亿</td><td class="up">+36.1%</td><td class="l">寿险+产险+银行+资管，<b>唯一"全牌照"综合金融</b>，分红险占比超九成</td></tr>
+<tr><td class="l"><b>中国人保</b></td><td>601319</td><td class="l">财险为主</td><td>367.45 亿</td><td class="up">+38.0%</td><td class="l">人保财险市场份额 <b>33.3%</b>，财险龙头，COR 94.0% 最优</td></tr>
+<tr><td class="l"><b>中国太保</b></td><td>601601</td><td class="l">寿险+产险</td><td>307.75 亿</td><td class="up">+10.4%</td><td class="l">均衡型，2026 年<b>首次实施中期分红</b></td></tr>
+<tr><td class="l"><b>新华保险</b></td><td>601336</td><td class="l">纯寿险</td><td>227.93 亿</td><td class="up">+54.0%</td><td class="l">规模最小、<b>权益仓位最高、利润弹性最大</b>，年化总投资收益率 6.7%</td></tr>
+</tbody>
+</table>
+<div class="chart-note"><b>A股保险"纯血"标的只有这 5 家</b>（均为 A+H 两地上市）。港股可选标的更多：友邦保险（1299.HK）、中国财险（2328.HK，即人保财险）、中国太平（0966.HK）、众安在线（6060.HK）、阳光保险（6963.HK）、中国再保险（1508.HK，A股稀缺的纯再保标的）。<b>A股还有一些参股险企的多元金融/实业公司，但保险业务占比与并表口径差异很大，需逐一核实，不宜简单类比。</b></div>
+
+<h3 class="sub">4.4 三个容易被忽略的参与者</h3>
+<div class="termgrid">
+<div class="term"><div class="t">📌 再保险（Reinsurance）</div>
+<div class="d">保险公司也需要"买保险"。当单一风险太大（如一颗卫星、一次台风、一笔巨额寿险保单），直保公司会把它的一部分<b>分给再保险公司</b>，称为"分出"；再保公司承接，称为"分入"。两种主要形式：<b>比例再保</b>（按比例分保费和赔款，如分出 30%）、<b>超额赔款再保（超赔）</b>（赔款超过约定额度以上的部分由再保承担）。</div>
+<div class="ex"><i>示例</i>：某财险公司承保一批台风风险，总保额 100 亿。它自留 70 亿，把 30 亿分给再保公司；同时买一份超赔合约，单次灾害损失超过 20 亿的部分由再保赔付。<b>结果是：一场大灾最多亏 20 亿，而不是 100 亿。</b>这就是为什么 2025 年香港大埔火灾等巨灾后，"再保险机制迅速启动"——它决定了损失最终由全球资本共同承担。</div></div>
+<div class="term"><div class="t">📌 保险中介与"产销分离"</div>
+<div class="d">中介包括<b>保险经纪人</b>（代表客户利益，帮客户挑产品）和<b>保险代理人/代理机构</b>（代表保险公司卖产品），以及<b>保险公估人</b>（出险后独立定损、判定赔多少）。"产销分离"指保险公司专注产品与风控，销售交给专业渠道。</div>
+<div class="ex"><i>示例</i>：2023 年寿险业通过中介渠道实现的保费占总保费 <b>95.52%</b>，产销分离已成定局。但中介行业正在剧烈出清：2024—2025 年累计吊销注销中介集团 3 家、专业中介法人机构 57 家，清退分支机构 3730 家；专业中介法人数量降至 2513 家，<b>连续 6 年下滑</b>。原因是"报行合一"压掉了靠费用差套利的生存空间。</div></div>
+<div class="term"><div class="t">📌 银保渠道（银行代销保险）</div>
+<div class="d">银行利用网点与客户信任代销保险产品，保险公司支付手续费。<b>过去被视为"低价值冲规模"渠道，现在因"报行合一"压降费用而价值重估</b>，成为 2025—2026 年最重要的增长引擎。</div>
+<div class="ex"><i>示例</i>：2025 年银保渠道保费增速——太保寿险 <b>+46.4%</b>（616.18 亿）、中国人寿 <b>+45.5%</b>（1108.74 亿，首破千亿）、新华 <b>+39.5%</b>（721.02 亿）、人保寿险 <b>+33.5%</b>（682.78 亿）。<b>同期个险代理人队伍仍在缩减</b>——钱从"人海战术"流向了银行网点。</div></div>
+</div>
+
+<div class="section-title">第五章 · 经营模式与盈利逻辑：保险公司到底怎么赚钱</div>
+
+<h3 class="sub">5.1 财产险：一个公式看懂全部 —— 综合成本率（COR）</h3>
+<p>财产险的生意非常朴素：<b>收进来的保费，减去赔出去的钱和花掉的费用，剩下的就是承保利润</b>。把这套逻辑浓缩成一个指标，就是<b>综合成本率（Combined Ratio，简称 COR）</b>。</p>
+<div class="calc">
+<h4>◆ COR = 赔付率 + 费用率，记住这个公式就够</h4>
+<div class="line"><b>赔付率</b> = 赔款支出 ÷ 已赚保费　→　赔出去多少</div>
+<div class="line"><b>费用率</b> = (手续费佣金 + 业务管理费 + 税金) ÷ 保费收入　→　花掉多少</div>
+<div class="line"><b>COR &lt; 100% = 承保盈利；COR &gt; 100% = 承保亏损</b></div>
+</div>
+<div class="term">
+<div class="t">📌 综合成本率（COR）· 举例</div>
+<div class="d">某财险公司今年收了 <b>100 亿元</b>保费：赔出去 <b>62 亿元</b>（赔付率 62%），付给中介和代理人的手续费 <b>14 亿元</b>、自己的管理费 <b>18 亿元</b>（费用率 32%）。</div>
+<div class="ex"><i>算一下</i>：COR = 62% + 32% = <b>94%</b>。每收 100 元保费，承保环节赚 <b>6 元</b>，即承保利润 6 亿元。<br>
+这时如果它还能把保费拿去投资赚 3%（3 亿元），<b>总利润就是 9 亿元，利润率 9%</b>。<br>
+<i>反过来</i>：如果 COR = 104%（承保亏 4 元），投资端必须赚回 4% 以上才能不亏钱。<b>这就是为什么财险公司说"承保是生命线"——投资收益再高，也架不住承保一直亏。</b></div>
+</div>
+
+<div class="chart-container">
+<div class="chart-title">图 5 · 主要财险公司综合成本率（COR）对比</div>
+<div id="chart5" style="width:100%;height:330px;"></div>
+<div class="chart-note"><b>关键读数</b>：三家公司 COR 全部低于 100% 且同比改善——2026H1 人保财险 94.0%（-0.8pct，承保利润 153.76 亿元、同比 +18.1%）、平安产险 95.1%（-0.1pct，承保利润 84.20 亿元）。<b>太保产险 H1 为行业预计值，待公司正式披露。</b><br>
+<b>改善的两个来源</b>：①<b>赔得少了</b>——2026 年上半年自然灾害直接经济损失同比下降约 22%，大灾赔付压力显著小于去年同期；②<b>管得好了</b>——人保财险凭借约 1/3 的市场份额和海量历史数据，车险承保成本比最接近的对手低约 1 个百分点。<b>COR 每改善 1 个百分点，对头部财险公司就是数十亿元的利润。</b></div>
+</div>
+
+<h3 class="sub">5.2 人身险：利润来自"三差"</h3>
+<p>寿险公司卖一张 20 年期的保单时，会先做出三个估计：<b>客户大概什么时候身故/患病（发生率）、运营要花多少钱（费用）、这笔钱能赚多少投资收益（利率）</b>。等真正执行时，实际值和估计值之间的差额，就是利润——对应<b>死差、费差、利差</b>。</p>
+<div class="boxes">
+<div class="box"><h4 style="color:#8ab8ff">① 死差（发生率差）</h4>
+<div class="big value blue">实际赔付 &lt; 预期</div>
+<p>定价时假设 1000 人中每年有 2 人身故，实际只赔了 1.5 人，省下的就是死差益。重疾险、定期寿险的利润主要来自这里。<b>注意：死差还包括疾病发生率</b>，所以叫"发生率差"更准确。</p>
+<p style="margin-top:6px;color:#5a6a8a;font-size:11.5px">反向风险：疫情、新型传染病、寿命延长（年金险）都会造成死差损。</p></div>
+<div class="box"><h4 style="color:#6ee0a8">② 费差（费用差）</h4>
+<div class="big value green">实际花费 &lt; 预定费用</div>
+<p>定价时预留了 12% 的佣金和营运成本，实际只花了 10%，省下的就是费差益。<b>"报行合一"政策压的正是这一块</b>——把渠道手续费从账外"小账"压回账内真实水平。</p>
+<p style="margin-top:6px;color:#5a6a8a;font-size:11.5px">反向风险：为了冲规模抢市场，费用超支会造成费差损。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">③ 利差（利率差）· 最重要</h4>
+<div class="big value red">实际投资收益 &gt; 承诺客户收益</div>
+<p>定价时假设每年能赚 2.5%（预定利率），实际投出了 4.5%，多赚的 2 个点就是利差益。<b>对中国寿险公司，利差通常贡献利润的绝大部分</b>——这也是为什么寿险利润对股市如此敏感。</p>
+<p style="margin-top:6px;color:#5a6a8a;font-size:11.5px">反向风险：<b>利差损</b>——见下方红色警示框，这是行业头号风险。</p></div>
+</div>
+
+<div class="warn">
+<h4>⚠️ 头号风险：利差损（Negative Spread）—— 请先记住这个词</h4>
+<p><b>利差损 = 保险公司承诺给客户的收益（负债成本）高于实际投资能赚到的收益（资产收益），且这种倒挂是长期的、刚性的。</b><br>
+为什么现在很危险？中国寿险公司在 2019—2024 年卖出了大量预定利率 3.5%、3.0% 的长期保单，<b>这些承诺是写在合同里、不可撤销的，期限长达二三十年</b>。而同期 10 年期国债收益率持续下行，优质非标资产到期后难以找到同等收益的替代品。<b>"负债成本刚性 + 资产收益下行"= 利差损。</b><br>
+监管的四步应对：①2023 年起连续下调预定利率（3.5%→3.0%→2.5%→<b>2.0%</b>）；②建立<b>预定利率与市场利率挂钩的动态调整机制</b>；③大力推动<b>分红险</b>（保底低、浮动部分与客户共担，把利率风险转嫁出去）；④资产端<b>放开权益配置</b>提升长期收益。<br>
+<b>投资含义</b>：判断一家寿险公司的长期质地，核心就是看它的<b>负债成本（打平收益率）有多低、分红险转型有多快</b>。</p>
+</div>
+
+<h3 class="sub">5.3 准备金：保险公司最大的一笔"欠账"</h3>
+<div class="term">
+<div class="t">📌 保险责任准备金</div>
+<div class="d">客户交了保费，但赔付还没发生——这笔钱<b>不是保险公司的收入，而是它对客户的负债</b>，必须提前计提出来放在账上，这就是准备金。它通常占保险公司总负债的 <b>70%—85%</b>，是资产负债表上最大的科目。</div>
+<div class="ex"><i>示例</i>：客户一次性交 100 万元买一份终身年金，约定 60 岁起每年领 7 万元。保险公司不能把这 100 万当成"今年的收入"，而要在账上记一笔"未来要给客户多少钱"的负债（比如 130 万元，因为还要考虑投资收益和寿命预期）。<b>保险公司每卖一张新保单，负债就增加一分；它需要配套持有相应资产，并预留资本金来吸收波动——这就是为什么寿险公司卖得越多、资本消耗越大。</b></div>
+</div>
+<div class="termgrid">
+<div class="term"><div class="t">📌 偿付能力充足率（C-ROSS / 偿二代）</div>
+<div class="d">"万一发生极端情况，保险公司赔得起吗？"监管用<b>偿付能力充足率</b>来回答：<b>实际资本 ÷ 最低资本</b>。数值越高，抗风险能力越强。<br>
+监管红线：<b>综合偿付能力充足率 ≥ 100%</b>、<b>核心偿付能力充足率 ≥ 50%</b>、风险综合评级 B 类及以上。</div>
+<div class="ex"><i>示例</i>：2026 年二季度末，行业平均综合偿付能力充足率 <b>180.6%</b>、核心 <b>133.5%</b>。分类型看：财产险公司 247.0%/214.3%（最充足）、人身险公司 169.7%/119.6%、再保险公司 213.2%/188.2%。<br>
+<b>为什么人身险的充足率最低？</b>因为长期负债对利率和资本市场的敏感度更高。<b>利率每下行一点，准备金就要多提、资本就要被消耗——这是理解寿险股对利率高度敏感的关键。</b></div></div>
+<div class="term"><div class="t">📌 新业务价值（NBV）与内含价值（EV）</div>
+<div class="d"><b>NBV（New Business Value）</b>：今年新卖出的保单，在<b>未来整个保险期间</b>能创造多少利润，折算成今天的现值。<b>它是衡量寿险公司经营质量最重要的指标</b>——比保费收入重要得多。<br>
+<b>EV（Embedded Value）</b>：公司现有有效业务未来利润的现值 + 净资产，即"把公司现在清算值多少钱"。<b>PEV = 市值 ÷ EV</b>，是寿险股的核心估值指标。</div>
+<div class="ex"><i>示例</i>：A 公司保费增长 20% 但 NBV 只增长 5%，B 公司保费零增长但 NBV 增长 25%。<b>B 更优秀</b>——它卖的是高价值率的保障型/分红型产品，而不是低价值的短期储蓄险。<br>
+2026H1 五大险企 NBV <b>全部正增长</b>：国寿 381.7 亿（+33.7%）、平安 248.5 亿（+11.2%）、太保 107.6 亿（+12.7%）、新华 69.2 亿（+11.9%）、人保可比口径 +5.2%。</div></div>
+</div>
+
+<div class="chart-container">
+<div class="chart-title">图 6 · A股五大险企 2026 年上半年归母净利润与增速</div>
+<div id="chart6" style="width:100%;height:350px;"></div>
+<div class="chart-note"><b>合计 3173.87 亿元，同比 +78.12%（2025 年同期 1781.93 亿元），日均净赚 17.54 亿元</b>；五大险企合计投资收益 6413.3 亿元，同比 +74.57%；拟派发中期股息合计 390.47 亿元（中国太保首次实施中期分红）。<br>
+<b>但请务必看清利润的来源</b>：中国人寿总投资收益 3145.04 亿元（同比多赚 1870 亿元），总投资收益率 5.58%、同比 +229 个基点；新华年化总投资收益率 6.7%。<b>利润暴增的主因是权益市场上涨，而不是卖保险更赚钱。</b></div>
+</div>
+
+<div class="chart-container">
+<div class="chart-title">图 7 · 新业务价值（NBV）与增速：比保费更重要的"含金量"指标</div>
+<div id="chart7" style="width:100%;height:320px;"></div>
+<div class="chart-note">中国人保仅披露可比口径增速（+5.2%），未披露绝对金额，故未列入柱状图。太保、新华 NBV 价值率同比提升 2 个百分点以上，主要受益于<b>分红险转型 + 银保渠道"报行合一"后费用压降</b>。</div>
+</div>
+
+<h3 class="sub">5.4 资产端：40.82 万亿怎么投</h3>
+<p>保险公司收上来的保费最终要投出去赚收益，用来覆盖给客户的承诺。截至 2026 年二季度末，保险资金运用余额达 <b>40.82 万亿元</b>（同比 +12.7%），<b>首次突破 40 万亿</b>。十年间连续跨越台阶：2015 年破 10 万亿 → 2020Q2 破 20 万亿 → 2024Q2 破 30 万亿 → 2026Q2 破 40 万亿。</p>
+<div class="chart-container">
+<div class="chart-title">图 8 · 保险资金大类资产配置结构（2026 年二季度末）</div>
+<div id="chart8" style="width:100%;height:380px;"></div>
+<div class="chart-note">口径为"人身险公司 + 财产险公司"合计（合计余额 39.4 万亿元）。<b>三个趋势</b>：①<b>债券仍是压舱石</b>，占比 50.5%，与一季度持平；②<b>权益配置创历史新高</b>——股票 + 基金合计 6.39 万亿元、占比 <b>16.23%</b>（股票 4.10 万亿/10.41%，基金 2.29 万亿/5.82%），二季度单季净增约 4900 亿元，<b>股票配置余额已连续 8 个季度环比提升</b>；③<b>存款与非标持续下降</b>——银行存款占比降至 7.70%（近 4 年低位），其他投资（以非标为主）占比降至 17.9%，主因是存量资产到期、新增资产收益率下滑与"资产荒"。</div>
+</div>
+<table>
+<thead><tr><th class="l">资产类别</th><th>余额（万亿元）</th><th>占比</th><th>较年初变化</th><th class="l">作用与特点</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>债券</b></td><td>19.91</td><td>50.52%</td><td>+0.1pct</td><td class="l">压舱石。长久期国债/地方债用于<b>匹配长期负债久期</b>，降低利率风险</td></tr>
+<tr><td class="l"><b>股票</b></td><td>4.10</td><td>10.41%</td><td class="up">+0.3pct</td><td class="l">收益弹性来源。偏好高股息（股息率约 5% 的银行、公用事业等）+ 新质生产力</td></tr>
+<tr><td class="l"><b>证券投资基金</b></td><td>2.29</td><td>5.82%</td><td class="up">+0.5pct</td><td class="l">以权益类基金为主，委外投资的重要形式</td></tr>
+<tr><td class="l"><b>长期股权投资</b></td><td>3.00</td><td>7.62%</td><td>持平</td><td class="l">战略持股（如举牌同业、投资银行股），按权益法核算、可稳定利润</td></tr>
+<tr><td class="l"><b>银行存款</b></td><td>3.03</td><td>7.70%</td><td class="down">-0.5pct</td><td class="l">流动性管理，但存款利率下行使其吸引力持续下降</td></tr>
+<tr><td class="l"><b>其他投资（非标为主）</b></td><td>7.07</td><td>17.90%</td><td class="down">-0.4pct</td><td class="l">信托计划、债权投资计划、REITs 等，收益较高但流动性差、供给收缩</td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">5.5 为什么险企利润现在像基金净值：新会计准则 IFRS17 / IFRS9</h3>
+<div class="term">
+<div class="t">📌 新会计准则（IFRS17 保险合同准则 / IFRS9 金融工具准则）</div>
+<div class="d">2023 年上市险企率先切换，<b>2026 年 1 月 1 日起全行业（含非上市险企）全面切换</b>。核心变化有两条：<br>
+① <b>保险收入改为"保险服务收入"</b>——把保费中的储蓄成分（投资部分）剥离，只确认服务部分为收入，收入规模看起来变小；<br>
+② <b>大量金融资产被归入 FVTPL（以公允价值计量且变动计入当期损益）</b>——股价涨跌<b>直接冲进当期利润表</b>。</div>
+<div class="ex"><i>示例（真实发生）</i>：2026 年一季度创业板指累计下跌 0.57%，中国人寿归母净利润同比 <b>-32.3%</b>、平安 -7.4%；二季度创业板指上涨 <b>36.35%</b>，半年报就变成国寿 <b>+228.6%</b>、平安 +36.1%。<br>
+<b>这是理解当前保险股最重要的认知</b>：新准则下利润的"放大器"效应极强，<b>看到险企季报利润暴涨/暴跌，先问一句"这个季度股市涨了还是跌了"</b>，而不要急着判断公司经营好坏。这也是为什么市场说"寿险开始看天吃饭"。</div>
+</div>
+
+<div class="section-title">第六章 · 监管环境与政策：在中国做保险，监管是最大的变量</div>
+
+<h3 class="sub">6.1 监管的"五条线"</h3>
+<div class="chain">
+<div class="node"><div class="t">① 偿付能力监管</div><div class="d">"偿二代"（C-ROSS II）：核心/综合充足率、风险综合评级 1-5 级 + S 级</div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">② 负债端（产品与定价）</div><div class="d">预定利率动态调整、产品备案、<b>报行合一</b></div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">③ 资产端（资金运用）</div><div class="d">大类比例上限、风险因子、长期股票投资试点</div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">④ 公司治理与准入</div><div class="d">股东资质、并表监管、集中度风险、机构监管评级</div></div>
+<div class="arrow">▶</div>
+<div class="node"><div class="t">⑤ 消费者权益保护</div><div class="d">适当性管理、销售行为可回溯、金融消保评价</div></div>
+</div>
+
+<h3 class="sub">6.2 政策时间线（2024—2026）：密度之高，史上罕见</h3>
+<table>
+<thead><tr><th style="width:12%">时间</th><th class="l" style="width:32%">政策 / 事件</th><th class="l">对行业的实质影响</th></tr></thead>
+<tbody>
+<tr><td>2024.08</td><td class="l">《关于健全人身保险产品定价机制的通知》</td><td class="l">下调预定利率，并<b>首次建立预定利率与市场利率挂钩的动态调整机制</b></td></tr>
+<tr><td>2024.09</td><td class="l">国务院《关于加强监管防范风险推动保险业高质量发展的若干意见》（新"国十条"）</td><td class="l">继 2006、2014 年后第三版"国十条"。从"加快发展"转向"<b>严格监管 + 高质量发展</b>"，定调未来 5-10 年</td></tr>
+<tr><td>2025.01</td><td class="l">《关于建立预定利率与市场利率挂钩及动态调整机制有关事项的通知》</td><td class="l">中国保险行业协会<b>每季度发布预定利率研究值</b>，公司据此调整，告别"一刀切"</td></tr>
+<tr><td>2025.01</td><td class="l">《保险公司监管评级办法》</td><td class="l">覆盖集团/财险/人身险/再保，评级 1-5 级 + S 级，作为监管措施与市场准入依据</td></tr>
+<tr><td>2025.01</td><td class="l">《关于推动中长期资金入市工作的实施方案》（六部门）</td><td class="l">引导大型国有保险公司<b>增加 A 股投资规模和比例</b>、调整长周期考核</td></tr>
+<tr><td>2025.04</td><td class="l">《关于推动深化人身保险行业个人营销体制改革的通知》</td><td class="l">推动销售队伍<b>专业化、职业化</b>转型，配合资质分级</td></tr>
+<tr><td>2025.04</td><td class="l">《关于加强万能型人身保险监管有关事项的通知》</td><td class="l">允许对最低保证利率<b>设置保证期间</b>，缓解刚性负债成本</td></tr>
+<tr><td>2025.07</td><td class="l">《金融机构产品适当性管理办法》</td><td class="l"><b>首次将保险产品纳入适当性管理</b>：卖给合适的人，产品与渠道分级、客户分类</td></tr>
+<tr><td>2025.09</td><td class="l">预定利率上限下调落地（普通型 2.5% → <b>2.0%</b>）</td><td class="l">引发停售抢购潮，形成 2025 年 5-8 月高基数，压制 2026 年同期保费增速</td></tr>
+<tr><td>2025.09.30</td><td class="l">《关于加强非车险业务监管有关事项的通知》</td><td class="l"><b>"报行合一"扩展至非车险</b>（企财、责任、意健等），要求"见费出单"、费率上限报备</td></tr>
+<tr><td>2025.10</td><td class="l">《中国人身保险业经验生命表（2025）》发布</td><td class="l">定价基础工具更新。寿命延长 → 年金险/养老年金成本上升，重疾发生率变化影响健康险定价</td></tr>
+<tr><td>2025.12</td><td class="l">下调沪深300、中证红利低波100、科创板股票<b>风险因子</b></td><td class="l">为险资权益配置<b>释放资本空间</b>，直接推动 2026 年权益占比创新高</td></tr>
+<tr><td>2026.01.01</td><td class="l">新会计准则 CAS25（IFRS17）全行业切换</td><td class="l">非上市险企同步实施，<b>利润与净资产波动显著放大</b></td></tr>
+<tr><td>2026.01.01</td><td class="l">偿二代二期过渡期结束</td><td class="l">非上市险企全面适用规则Ⅱ正式期，<b>资本认定趋严</b>，部分中小险企资本压力上升</td></tr>
+<tr><td>2026.03</td><td class="l">银保渠道"65 号文"（7 月 1 日执行）</td><td class="l">费用<b>拆项报送</b>，封堵费用腾挪，银保"报行合一"进一步深化</td></tr>
+<tr><td>2026.06.23</td><td class="l">商务部等 9 部门：培育壮大汽车后市场</td><td class="l">建立<b>保险车型综合分级制度</b>（与保费挂钩）、探索<b>"车电分离"保险</b>、提供"基本+变动"组合产品</td></tr>
+<tr><td>2026.08.05</td><td class="l">四部门《关于健全金融机构治理的实施意见》</td><td class="l">严禁股东越位干预经营、违规输送利益，严防虚假出资、循环注资、抽逃资本</td></tr>
+</tbody>
+</table>
+<div class="chart-note"><b>2026 年监管工作主线</b>（金融监管总局 2026 年监管工作会议）：持续推进保险业"<b>报行合一</b>"和<b>预定利率调整</b>，进一步发挥保险"经济减震器和社会稳定器"功能。陆家嘴论坛上监管负责人明确：<b>坚定推行"报行合一"、加快推动保险法修订</b>。</div>
+
+<h3 class="sub">6.3 四个关键词，读懂当前监管逻辑</h3>
+<div class="termgrid">
+<div class="term"><div class="t">📌 报行合一</div>
+<div class="d">字面意思：<b>报给监管的，和实际执行的，必须是同一套</b>。保险公司向监管报备产品时承诺的费率、费用率、手续费，在实际销售中必须严格执行，<b>严禁"备案一套、执行一套"</b>，堵死通过虚列费用、拆分保费、隐性降价抢市场的路子。</div>
+<div class="ex"><i>示例</i>：过去银保渠道为抢银行网点，账面上报 3% 手续费、实际给到 5%（"小账"）。报行合一后，多出的 2% 无处遁形——<b>险企负债成本下降、价值率提升、中介靠费用差套利的模式终结</b>。<br>
+<i>推进节奏</i>：2023.08 银保渠道 → 车险深化 → 个险/经代 → <b>2025.09 非车险</b> → 2026.07 银保费用拆项报送。<b>效果：2026H1 非车险手续费率下降，专业中介法人连续 6 年减少。</b></div></div>
+<div class="term"><div class="t">📌 预定利率动态调整机制</div>
+<div class="d">过去预定利率由监管"一刀切"宣布调整（往往滞后）；现在由中国保险行业协会<b>每季度发布"预定利率研究值"</b>（参考 LPR、定存利率、10 年期国债收益率等），当在售产品预定利率与研究值偏离达到阈值时，公司须<b>主动下调或上调</b>。</div>
+<div class="ex"><i>示例</i>：研究值经历连续四个季度下行后，<b>2026Q1 为 1.93%、2026Q2 升至 1.94%（连续第二个季度回升）</b>。当前普通型人身险预定利率上限 <b>2.0%</b>、分红型 1.75%，上半年保持不变。<b>含义：利率若企稳，产品定价环境就稳定；利率若继续下行，预定利率还会被压降。</b></div></div>
+<div class="term"><div class="t">📌 偿二代二期（C-ROSS II）</div>
+<div class="d">中国的偿付能力监管体系，国际通行的"三支柱"框架：<b>定量资本要求</b>（算得出资本够不够）+ <b>定性监管要求</b>（风险管理好不好）+ <b>市场约束</b>（信息披露）。二期规则大幅提高了<b>长期股权投资、投资性房地产、信托计划</b>等的风险资本占用，并要求<b>穿透计量</b>。</div>
+<div class="ex"><i>示例</i>：同样买 100 亿元的未上市股权，在一期规则下可能只占用 10 亿元资本，二期穿透后可能要占用 30-40 亿元——<b>资本成本大幅上升，倒逼险企把资产配置转向资本占用低的方向（如高股息股票、利率债）</b>。<br>
+<b>2026 年起过渡期结束、全面正式实施</b>，叠加新会计准则，中小险企资本压力明显上升（如个别公司核心偿付能力充足率已不达标）。</div></div>
+<div class="term"><div class="t">📌 风险因子 与 长期股票投资试点</div>
+<div class="d"><b>风险因子</b>：某类资产需要占用多少资本的系数。因子越低，同样资本能买的资产越多。<b>长期股票投资试点</b>：监管批准部分险企以"长期持有"为目的投资股票，考核周期拉长、资本占用更优。</div>
+<div class="ex"><i>示例</i>：2025 年 12 月监管下调沪深300 成分股、中证红利低波100 成分股、科创板股票的<b>风险因子</b>——相当于给险资"松绑资本"，直接结果是 2026Q2 股票+基金配置占比冲到 <b>16.23% 的历史新高</b>，二季度单季净增约 4900 亿元。<b>中泰证券测算，中性假设下 2026 年全年险资股票、基金增量配置资金约 6248 亿元。</b></div></div>
+</div>
+
+<div class="section-title">第七章 · 竞争格局：谁在赚钱，靠什么赚钱</div>
+
+<h3 class="sub">7.1 财险：三分天下，强者恒强</h3>
+<div class="chart-container">
+<div class="chart-title">图 9 · 财产保险市场份额（2026 年上半年，按财险公司保费 9846 亿元测算）</div>
+<div id="chart9" style="width:100%;height:360px;"></div>
+<div class="chart-note"><b>测算口径</b>：各公司财险原保费 ÷ 全行业财产险公司原保费 9846 亿元。人保财险官方披露市场份额 <b>33.3%</b>，与测算吻合。<br>
+<b>格局特征</b>：财险是典型的<b>规模效应 + 数据壁垒</b>生意——谁的历史赔付数据多，谁的定价模型就准，就能把高风险的客户让给对手（逆向选择）、留下优质客户。人保财险凭借约三分之一的份额，车险承保成本比最接近的对手低约 1 个百分点，且这个差距是多年积累的结果，<b>短期难以被复制</b>。</div>
+</div>
+<table>
+<thead><tr><th class="l">公司</th><th>2026H1 原保费</th><th>份额</th><th>COR</th><th>承保利润</th><th class="l">竞争壁垒</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>人保财险</b>（中国人保）</td><td>3275.29 亿（+1.3%）</td><td><b>33.3%</b></td><td class="down">94.0%</td><td>153.76 亿（+18.1%）</td><td class="l">规模最大、定价数据最全、网点最深；<b>承保盈利能力行业第一</b></td></tr>
+<tr><td class="l"><b>平安产险</b>（中国平安）</td><td>1787.51 亿（+4.0%）</td><td>18.2%</td><td class="down">95.1%</td><td>84.20 亿</td><td class="l">科技与客服体验、<b>新能源车险份额 28.0%</b>；车险品质连续十六年"双优"</td></tr>
+<tr><td class="l"><b>太保产险</b>（中国太保）</td><td>1143.58 亿（+1.4%）</td><td>11.6%</td><td class="down">95.4%（行业预计）</td><td>承保利润同比 +35.7%</td><td class="l">农险、责任险特色；非车险结构优化</td></tr>
+<tr><td class="l">其余约 80 余家</td><td>—</td><td>约 37%</td><td>—</td><td>—</td><td class="l">中小公司普遍承保亏损，依赖投资与股东输血，<b>出清与并购持续进行</b></td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">7.2 人身险：双寡头 + 长尾，集中度低于财险</h3>
+<table>
+<thead><tr><th class="l">维度</th><th class="l">格局</th><th class="l">说明</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>市场份额（2024）</b></td><td class="l">中国人寿 <b>21.88%</b>、平安人寿 <b>16.15%</b></td><td class="l">CR2 约 38%，CR5 约 55%。<b>低于财险 CR3 的 63%</b>，因寿险进入门槛相对低、银保渠道让中小公司也能快速起量</td></tr>
+<tr><td class="l"><b>综合竞争力 TOP5</b></td><td class="l">平安人寿、友邦人寿、中国人寿、太保寿险、泰康人寿</td><td class="l">《2025 中国保险竞争力研究报告》（清华五道口《清华金融评论》）。<b>注意"竞争力"与"份额"排序不同</b>——友邦份额不高但价值率与服务质量领先</td></tr>
+<tr><td class="l"><b>代理人规模（2025 年末）</b></td><td class="l">国寿 58.7 万 &gt; 平安寿 35.1 万 &gt; 太保寿 18.5 万 &gt; 新华 13.34 万 &gt; 人保寿 7.7 万</td><td class="l">五家合计 133.34 万人，同比 -3.7%（减少 5.18 万人），<b>降幅显著收窄、队伍基本筑底</b></td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">7.3 渠道格局：从"人海"到"提质 + 换轨"</h3>
+<div class="chart-container">
+<div class="chart-title">图 10 · 保险代理人规模的十年兴衰</div>
+<div id="chart10" style="width:100%;height:330px;"></div>
+<div class="chart-note"><b>口径说明（重要）</b>：前三根柱为<b>全行业人身险公司营销员</b>（471 万 → 912 万 → 264 万），第四根为<b>A股五大上市险企个险代理人</b>合计 133.34 万人，<b>口径不同、不可直接连比</b>，仅用于呈现趋势：从"人海战术"转向"精英化"。<br>
+<b>转折点</b>：2015 年取消保险营销员资格考试 → 队伍从 471 万飙至 2019 年 912 万的峰值 → 2020 年起进入下降通道 → 2025 年末全行业降至 264 万人（较峰值缩水超七成）。<b>减员不等于衰退</b>：2025 年新华个险月均人均综合产能 1.12 万元（同比 +43%），太保寿核心人力月人均首年规模保费 63605 元（+17.1%），平安人均 NBV +17.2%。</div>
+</div>
+<table>
+<thead><tr><th class="l">渠道</th><th class="l">2025—2026 变化</th><th class="l">驱动因素</th></tr></thead>
+<tbody>
+<tr><td class="l"><b>个险（代理人）</b></td><td class="l">人数 -3.7%，但<b>保费正增长、NBV 双位数增长</b>（国寿个险 NBV +25.5%、人保寿 +30.4%、新华 +19.4%）</td><td class="l">"清虚提质"：淘汰低产能，人均产能大幅提升；个人营销体制改革推动职业化</td></tr>
+<tr><td class="l"><b>银保（银行代销）</b></td><td class="l">2025 年增速 <b>+33.5% ~ +46.4%</b>；国寿银保首破千亿（1108.74 亿）</td><td class="l">"报行合一"压降手续费 → 银保从"低价值冲规模"变成"高价值渠道"；居民存款搬家至保险</td></tr>
+<tr><td class="l"><b>专业中介</b></td><td class="l">法人机构 2513 家，<b>连续 6 年下滑</b>；2024-2025 清退分支机构 3730 家</td><td class="l">费用透明化后"靠费用差套利"模式终结，低价值中介出清</td></tr>
+<tr><td class="l"><b>互联网 / 直销</b></td><td class="l">纯互联网险企仅 4 家（众安、泰康在线、安心、易安）</td><td class="l">流量成本高、复杂产品难线上转化；但标准化险种（车险、百万医疗、退货运费险）渗透率持续提升</td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">7.4 估值位置：便宜，但要明白便宜在哪</h3>
+<div class="boxes">
+<div class="box"><h4 style="color:#ffd966">PEV 估值</h4>
+<div class="big value gold">0.43 – 0.64×</div>
+<p>2026 年 8 月 18 日收盘价对应 A 股保险股 <b>PEV</b>（市值÷内含价值）处于 0.43-0.64 倍区间，<b>仍处历史低位</b>。PEV &lt; 1 意味着市场认为公司未来连内含价值都实现不了。</p></div>
+<div class="box"><h4 style="color:#8ab8ff">股息率</h4>
+<div class="big value blue">约 5%</div>
+<p>2026 年上半年五大险企拟派发中期股息合计 <b>390.47 亿元</b>，中国太保首次实施中期分红。在低利率环境下，<b>高股息是保险股最实在的吸引力</b>。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">股价波动</h4>
+<div class="big value red">年内最大跌幅 22%</div>
+<p>2026 年上半年保险板块最大跌幅达 22%，7 月 20 日出现普涨（太保 +6.32%、平安 +4.99%）。<b>原因</b>：中报业绩超预期 + 前期超跌 + 资金从科技板块回流高股息 + 险企"互买潮"（举牌同业）。</p></div>
+</div>
+
+<div class="section-title">第八章 · 发展趋势：未来 3-5 年，行业往哪走</div>
+<div class="boxes">
+<div class="box"><h4 style="color:#ffd966">① 分红险成为绝对主力</h4>
+<div class="big value gold">2026H1 +94.4%</div>
+<p>分红险原保费 1.01 万亿元。保证利率 2.0% 时代，纯固定收益产品吸引力下降，<b>"保底 + 浮动"成为唯一解</b>。平安寿险新业务中分红险占比已超九成。<b>本质：险企把利率风险部分转嫁给客户</b>。</p></div>
+<div class="box"><h4 style="color:#8ab8ff">② 银保渠道价值重估</h4>
+<div class="big value blue">增速 33%–46%</div>
+<p>报行合一压降手续费后，银保从"亏本赚吆喝"变成高价值渠道。叠加居民<b>"存款搬家"</b>（存款利率持续下调），银行有动力卖、客户有动力买。<b>短期风险：2026 年 7 月起费用拆项报送，三季度新单增速面临压力。</b></p></div>
+<div class="box"><h4 style="color:#6ee0a8">③ 非车险超车险</h4>
+<div class="big value green">份额 54%</div>
+<p>非车险占比从十年前约 25% 升至 2026H1 的 54%。责任险、农险、健康险随经济发展自然增长；车险进入存量博弈（2026H1 车险保费 4503.73 亿元基本持平，车均保费下降）。</p></div>
+<div class="box"><h4 style="color:#ff9f40">④ 新能源车险：从包袱到机会</h4>
+<div class="big value orange">份额 28.0%（平安）</div>
+<p>2025 年新能源车险整体承保亏损 56 亿元、143 个车系赔付率超 100%（动力电池单件零整比均值 49.59%）。<b>解法</b>：车型综合分级定价、"车电分离"保险（重庆试点保费降约 30%）、"基本+变动"组合产品。平安新能源车险保费 264.15 亿元（+21.5%）。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">⑤ 险资入市常态化</h4>
+<div class="big value red">股基占比 16.23%</div>
+<p>创历史新高，股票配置连续 8 个季度环比提升。中长期资金入市方案、风险因子下调、长周期考核、长期股票投资试点共同驱动。<b>影响：险企利润与股市绑定更深，"高贝塔"属性强化。</b></p></div>
+<div class="box"><h4 style="color:#a78bfa">⑥ 康养生态成为第二增长曲线</h4>
+<div class="big value gold">"保险 + 医养"</div>
+<p>平安臻颐年康养社区已布局 5 城 6 项目，居家养老服务资格客户超 32 万；太保家园、国寿康养同步推进。<b>逻辑：老龄化带来的不是"赔付"而是"服务需求"</b>，险企用保单锁定客户、用服务提高黏性与客单价。</p></div>
+<div class="box"><h4 style="color:#2dd4bf">⑦ AI 与风险减量</h4>
+<div class="big value blue">从理赔到预防</div>
+<p>行业角色从"被动理赔"转向"主动风险管理"：卫星遥感 + 物联网监测农业与洪涝风险，AI 大模型用于核保理赔客服。2025 年行业投入防灾减灾资金 4.53 亿元、发送预警信息 2.10 亿条、排查企业客户风险 19.18 万次。</p></div>
+<div class="box"><h4 style="color:#7a90b0">⑧ 对外开放与机构出清并行</h4>
+<div class="big value yellow">外资份额 9.7%</div>
+<p>全球 40 家最大保险公司近半数已进入中国，外资份额从 2013 年 4% 升至 2026H1 的 9.7%（2026Q1 外资保费约 2126 亿元、同比 +12.5%）。同时中小问题机构加速出清：富泽人寿承接君康人寿、东吴财险接手安心财险。<b>保险法修订也在推进中。</b></p></div>
+</div>
+
+<div class="section-title">第九章 · 新手观察清单：6 个指标与 6 个错误</div>
+<h3 class="sub">9.1 看一家险企，按顺序看这 6 个指标</h3>
+<table>
+<thead><tr><th style="width:6%">#</th><th class="l" style="width:20%">指标</th><th class="l" style="width:30%">看什么</th><th class="l">怎么算好 / 坏</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="l"><b>NBV 增速</b></td><td class="l">新业务价值增长，而非保费增长</td><td class="l">持续双位数增长为佳；<b>增速远高于保费增速 = 产品结构在改善</b></td></tr>
+<tr><td>2</td><td class="l"><b>价值率 / 产品结构</b></td><td class="l">分红险占比、保障型占比、新业务价值率</td><td class="l">分红险占比高 = 负债成本刚性低 = 利差损风险小</td></tr>
+<tr><td>3</td><td class="l"><b>COR（财险）</b></td><td class="l">综合成本率及其同比变化</td><td class="l">&lt;100% 承保盈利；<b>同比改善 + 规模增长 = 双击</b></td></tr>
+<tr><td>4</td><td class="l"><b>偿付能力充足率</b></td><td class="l">核心 + 综合，以及风险综合评级</td><td class="l">核心 &gt;100%、综合 &gt;150% 较安全；评级 B 类及以上</td></tr>
+<tr><td>5</td><td class="l"><b>投资收益率 + 权益仓位</b></td><td class="l">净/总投资收益率、股基配置占比</td><td class="l">收益率高是好事，但<b>权益仓位越高 → 利润波动越大</b>（看你能不能承受）</td></tr>
+<tr><td>6</td><td class="l"><b>估值与股息</b></td><td class="l">PEV（寿险）/ PB（财险）、股息率</td><td class="l">PEV &lt;0.6× + 股息率 5% = 安全边际较足（历史低位不等于马上涨）</td></tr>
+</tbody>
+</table>
+
+<h3 class="sub">9.2 新手最常犯的 6 个错误</h3>
+<div class="warn">
+<h4>❌ 错误清单（逐条对照自查）</h4>
+<p><b>① 用保费增速判断公司好坏。</b>保费增长 20% 但 NBV 只增长 3%，说明卖的全是低价值储蓄险——<b>规模虚胖、价值没涨</b>。<br>
+<b>② 把净利暴增当成经营改善。</b>2026H1 五大险企净利 +78%，主因是权益市场上涨（新准则下 FVTPL 资产市价变动直接进利润表）。<b>先问"这个季度股市涨了多少"。</b><br>
+<b>③ 混用口径。</b>"原保费"与"规模保费"不同、"按险种"与"按公司类型"不同、季度累计与单月不同。跨公司、跨时期比较前先确认口径一致。<br>
+<b>④ 用 PE 看寿险股。</b>寿险利润被新准则放大后波动剧烈，PE 严重失真，应看 <b>PEV / PB</b>。<br>
+<b>⑤ 忽视利率这个"地心引力"。</b>利率下行 → 准备金多提 → 资本消耗 → 偿付能力下降 + 利差损风险上升。<b>寿险股是利率的"久期多头"。</b><br>
+<b>⑥ 只看行业数据不看公司。</b>财险 CR3 达 63% 但尾部公司普遍承保亏损；寿险 CR2 仅 38%。<b>行业增长不等于每家公司都增长。</b></p>
+</div>
+
+<div class="section-title">第十章 · 术语速查总表（40+ 词条）</div>
+<table>
+<thead><tr><th class="l" style="width:14%">分类</th><th class="l" style="width:16%">术语</th><th class="l">白话解释</th></tr></thead>
+<tbody>
+<tr><td class="l" rowspan="7"><span class="tag life">基础</span></td><td class="l">保费</td><td class="l">交给保险公司的钱</td></tr>
+<tr><td class="l">保额</td><td class="l">出事后最多赔多少</td></tr>
+<tr><td class="l">免赔额</td><td class="l">低于这个数不赔，超过才赔</td></tr>
+<tr><td class="l">等待期</td><td class="l">买完一段时间内出险不赔</td></tr>
+<tr><td class="l">现金价值</td><td class="l">中途退保能拿回的钱（前期极低）</td></tr>
+<tr><td class="l">犹豫期</td><td class="l">10-15 天内可无条件全额退保</td></tr>
+<tr><td class="l">保险密度 / 深度</td><td class="l">人均保费 / 保费占 GDP 比重（中国：4043 元 / 4.4%）</td></tr>
+<tr><td class="l" rowspan="6"><span class="tag life">产品</span></td><td class="l">寿险</td><td class="l">以身故或生存为给付条件，含大量储蓄型产品</td></tr>
+<tr><td class="l">健康险</td><td class="l">医疗险（报销型）+ 重疾险（给付型）</td></tr>
+<tr><td class="l">年金险</td><td class="l">活着就能按年/月领钱，对冲"活太久"风险</td></tr>
+<tr><td class="l">分红险</td><td class="l">保底 + 浮动分红，与客户共担利率风险（当前主力）</td></tr>
+<tr><td class="l">万能险</td><td class="l">有最低保证利率，结算利率每月公布</td></tr>
+<tr><td class="l">投连险</td><td class="l">无保底，盈亏自负，等同买基金</td></tr>
+<tr><td class="l" rowspan="8"><span class="tag acc">财务与价值</span></td><td class="l">原保费 / 规模保费</td><td class="l">是否含客户追加的投资款</td></tr>
+<tr><td class="l">期交 / 趸交</td><td class="l">分期交 / 一次性交清（期交价值更高）</td></tr>
+<tr><td class="l">新单 / 续期</td><td class="l">今年新卖的 / 往年保单今年继续交的（护城河）</td></tr>
+<tr><td class="l">准备金</td><td class="l">未来要赔给客户的钱，是险企最大负债</td></tr>
+<tr><td class="l"> NBV 新业务价值</td><td class="l">今年新单未来利润折现到今天（最重要指标）</td></tr>
+<tr><td class="l">EV 内含价值</td><td class="l">现有业务未来利润现值 + 净资产（"清算价值"）</td></tr>
+<tr><td class="l">三差（死差/费差/利差）</td><td class="l">实际与预期的发生率、费用、投资收益之差</td></tr>
+<tr><td class="l">利差损</td><td class="l">承诺客户的收益 &gt; 实际投资收益（行业头号风险）</td></tr>
+<tr><td class="l" rowspan="7"><span class="tag pol">监管与资本</span></td><td class="l">偿付能力充足率</td><td class="l">实际资本 ÷ 最低资本（红线：综合 100%、核心 50%）</td></tr>
+<tr><td class="l">偿二代（C-ROSS II）</td><td class="l">中国的偿付能力监管体系，2026 年起全面正式实施</td></tr>
+<tr><td class="l">报行合一</td><td class="l">报给监管的费率费用 = 实际执行的，禁"账外小账"</td></tr>
+<tr><td class="l">预定利率</td><td class="l">承诺给客户的保证收益率上限（当前普通型 2.0%）</td></tr>
+<tr><td class="l">预定利率研究值</td><td class="l">中保协每季度发布，作为定价参考（2026Q2：1.94%）</td></tr>
+<tr><td class="l">风险因子</td><td class="l">某类资产占用多少资本的系数，越低越省资本</td></tr>
+<tr><td class="l">监管评级</td><td class="l">1-5 级 + S 级（S 级为风险处置/被接管机构）</td></tr>
+<tr><td class="l" rowspan="6"><span class="tag pc">经营与渠道</span></td><td class="l">COR 综合成本率</td><td class="l">赔付率 + 费用率，&lt;100% 即承保盈利</td></tr>
+<tr><td class="l">赔付率 / 费用率</td><td class="l">赔出去多少 / 花掉多少（含手续费佣金）</td></tr>
+<tr><td class="l">个险 / 银保 / 经代</td><td class="l">代理人渠道 / 银行代销 / 经纪代理公司</td></tr>
+<tr><td class="l">再保险（分出/分入）</td><td class="l">保险公司给自己买的保险</td></tr>
+<tr><td class="l">产销分离</td><td class="l">险企做产品、中介做销售（寿险中介占比 95.52%）</td></tr>
+<tr><td class="l">保险公估</td><td class="l">出险后独立定损的第三方</td></tr>
+<tr><td class="l" rowspan="5"><span class="tag mkt">投资与估值</span></td><td class="l">IFRS17 / IFRS9</td><td class="l">新会计准则，2026 年全行业切换，利润波动放大</td></tr>
+<tr><td class="l">FVTPL</td><td class="l">以公允价值计量且变动计入当期损益（股价波动直接进利润表）</td></tr>
+<tr><td class="l">PEV</td><td class="l">市值 ÷ 内含价值，寿险股核心估值指标</td></tr>
+<tr><td class="l">资金运用余额</td><td class="l">险企拿去投资的全部资金（2026Q2：40.82 万亿）</td></tr>
+<tr><td class="l">久期缺口</td><td class="l">资产与负债的期限错配程度，越小越抗利率风险</td></tr>
+</tbody>
+</table>
+
+<div class="section-title">数据来源</div>
+<p style="font-size:12px">国家金融监督管理总局（2026 年二季度银行业保险业主要监管指标、2026 年二季度保险资金运用情况表、2025 年全年保险业经营情况）；中国保险行业协会（2026 年度第一/二次例行新闻发布会、2025 年度十件大事）；中国精算师协会（《中国人身保险业经验生命表（2025）》）；A股五大上市险企 2026 年半年度报告及港交所业绩公告；中国财产再保险、上海国际再保险中心公开数据；清华大学五道口金融学院《清华金融评论》2025 中国保险竞争力研究报告；券商研究报告（华西证券、中泰证券、国盛证券、招商证券、东吴证券、国泰海通、高盛）。</p>
+
+<div class="disclaimer">
+<b>免责声明</b>　本页面为行业认知学习材料，所有数据均来自公开渠道，已尽力标注口径与时点，但不保证完整准确；文中对术语的解释做了大量简化，具体权利义务以保险合同条款与监管文件原文为准。<b>本页不构成任何投资建议、保险产品推荐或销售引导</b>。市场有风险，决策需独立判断。
+</div>
+
+<div class="footer">深层研究 · A股保险行业全景认知指南　|　生成日期 2026-08-29　|　数据截至 2026 年上半年<br>
+相关阅读：<a href="insurance.html" style="color:#5a6a8a">中国保险行业：转型复苏与代理人重构</a> · <a href="insurance-forecast-guide.html" style="color:#5a6a8a">保险行业业绩预测分析框架（八维模型）</a></div>
+</div>
+
+<script>
+var GOLD='#d4af37', RED='#ff6b6b', BLUE='#5b9cf6', GREEN='#3dd68c', ORANGE='#ff9f40', YELLOW='#ffd966', PURPLE='#a78bfa', TEAL='#2dd4bf';
+var AXIS={axisLine:{lineStyle:{color:'rgba(255,255,255,0.18)'}},axisLabel:{color:'#7a90b0',fontSize:11},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}};
+function base(){return{backgroundColor:'transparent',textStyle:{color:'#a8b8d4',fontFamily:'Microsoft YaHei'},
+ tooltip:{trigger:'axis',backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(212,175,55,0.4)',textStyle:{color:'#e0e6f0',fontSize:12}},
+ legend:{textStyle:{color:'#8a9ab8',fontSize:11},top:0}};}
+
+// 图1 保费与增速
+var c1=echarts.init(document.getElementById('chart1'));
+c1.setOption(Object.assign(base(),{
+ legend:{data:['原保费收入（万亿元）','同比增速（%）'],textStyle:{color:'#8a9ab8',fontSize:11},top:0},
+ grid:{left:60,right:60,top:44,bottom:34},
+ xAxis:Object.assign({type:'category',data:['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025']},AXIS),
+ yAxis:[Object.assign({type:'value',name:'万亿元',nameTextStyle:{color:'#7a90b0',fontSize:11},min:0,max:7},AXIS),
+        Object.assign({type:'value',name:'%',nameTextStyle:{color:'#7a90b0',fontSize:11},min:-5,max:30},AXIS)],
+ series:[{name:'原保费收入（万亿元）',type:'bar',data:[1.72,2.02,2.43,3.10,3.66,3.80,4.26,4.53,4.49,4.70,5.12,5.70,6.12],
+   itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#d4af37'},{offset:1,color:'rgba(212,175,55,0.25)'}]),borderRadius:[4,4,0,0]},barWidth:'52%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:10}},
+  {name:'同比增速（%）',type:'line',yAxisIndex:1,data:[11.2,17.5,20.0,27.5,18.2,3.9,12.2,6.1,-0.8,4.6,9.1,11.2,7.4],
+   lineStyle:{color:RED,width:2},itemStyle:{color:RED},symbolSize:6}]
+}));
+
+// 图2 双口径
+var c2=echarts.init(document.getElementById('chart2'));
+c2.setOption(Object.assign(base(),{
+ legend:{data:['按险种统计','按公司类型统计'],textStyle:{color:'#8a9ab8',fontSize:11},top:0},
+ grid:{left:70,right:30,top:44,bottom:34},
+ xAxis:Object.assign({type:'category',data:['财产险 / 财产险公司','人身险 / 人身险公司']},AXIS),
+ yAxis:Object.assign({type:'value',name:'万亿元',nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS),
+ series:[{name:'按险种统计',type:'bar',data:[1.47,4.65],itemStyle:{color:GOLD,borderRadius:[4,4,0,0]},barWidth:'24%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:11,formatter:'{c} 万亿'}},
+  {name:'按公司类型统计',type:'bar',data:[1.76,4.36],itemStyle:{color:BLUE,borderRadius:[4,4,0,0]},barWidth:'24%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:11,formatter:'{c} 万亿'}}]
+}));
+
+// 图3 人身险险种结构
+var c3=echarts.init(document.getElementById('chart3'));
+c3.setOption({backgroundColor:'transparent',textStyle:{color:'#a8b8d4'},
+ tooltip:{trigger:'item',backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(212,175,55,0.4)',textStyle:{color:'#e0e6f0',fontSize:12},formatter:'{b}<br/>{c} 亿元（{d}%）'},
+ legend:{bottom:0,textStyle:{color:'#8a9ab8',fontSize:11}},
+ series:[{type:'pie',radius:['38%','62%'],center:['50%','46%'],avoidLabelOverlap:true,
+  itemStyle:{borderColor:'#0e1420',borderWidth:2},
+  label:{color:'#c8d4e8',fontSize:11,formatter:'{b}\n{d}%'},
+  data:[{value:35600,name:'寿险（含增额终身寿/年金）',itemStyle:{color:GOLD}},
+        {value:7699,name:'健康险',itemStyle:{color:TEAL}},
+        {value:368,name:'意外险',itemStyle:{color:ORANGE}}]}]
+});
+
+// 图4 财险险种结构
+var c4=echarts.init(document.getElementById('chart4'));
+c4.setOption({backgroundColor:'transparent',textStyle:{color:'#a8b8d4'},
+ tooltip:{trigger:'item',backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(212,175,55,0.4)',textStyle:{color:'#e0e6f0',fontSize:12},formatter:'{b}<br/>{c} 亿元（{d}%）'},
+ legend:{bottom:0,textStyle:{color:'#8a9ab8',fontSize:11}},
+ series:[{type:'pie',radius:['34%','58%'],center:['50%','45%'],
+  itemStyle:{borderColor:'#0e1420',borderWidth:2},
+  label:{color:'#c8d4e8',fontSize:11,formatter:'{b}\n{d}%'},
+  data:[{value:9409,name:'车险',itemStyle:{color:BLUE}},
+        {value:2274,name:'健康险',itemStyle:{color:GREEN}},
+        {value:1555,name:'农险',itemStyle:{color:YELLOW}},
+        {value:1428,name:'责任险',itemStyle:{color:ORANGE}},
+        {value:593,name:'意外险',itemStyle:{color:PURPLE}},
+        {value:2341,name:'其他（企财/信用保证/工程等）',itemStyle:{color:'#5a6a8a'}}]}]
+});
+
+// 图5 COR
+var c5=echarts.init(document.getElementById('chart5'));
+c5.setOption(Object.assign(base(),{
+ legend:{data:['2026Q1','2026H1'],textStyle:{color:'#8a9ab8',fontSize:11},top:0},
+ grid:{left:60,right:30,top:44,bottom:34},
+ xAxis:Object.assign({type:'category',data:['人保财险','平安产险','太保产险']},AXIS),
+ yAxis:Object.assign({type:'value',name:'%',min:90,max:102,nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS),
+ series:[{name:'2026Q1',type:'bar',data:[94.2,95.8,96.4],itemStyle:{color:'#5a6a8a',borderRadius:[4,4,0,0]},barWidth:'22%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:10,formatter:'{c}%'}},
+  {name:'2026H1',type:'bar',data:[94.0,95.1,95.4],itemStyle:{color:GOLD,borderRadius:[4,4,0,0]},barWidth:'22%',
+   label:{show:true,position:'top',color:'#ffd966',fontSize:10,formatter:'{c}%'},
+   markLine:{silent:true,symbol:'none',data:[{yAxis:100,lineStyle:{color:RED,type:'dashed'},label:{formatter:'盈亏平衡线 100%',color:'#ff8a8a',fontSize:10,position:'insideEndTop'}}]}}]
+}));
+
+// 图6 净利
+var c6=echarts.init(document.getElementById('chart6'));
+c6.setOption(Object.assign(base(),{
+ legend:{data:['归母净利润（亿元）','同比增速（%）'],textStyle:{color:'#8a9ab8',fontSize:11},top:0},
+ grid:{left:64,right:60,top:44,bottom:34},
+ xAxis:Object.assign({type:'category',data:['中国人寿','中国平安','中国人保','中国太保','新华保险']},AXIS),
+ yAxis:[Object.assign({type:'value',name:'亿元',nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS),
+        Object.assign({type:'value',name:'%',nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS)],
+ series:[{name:'归母净利润（亿元）',type:'bar',data:[1344.89,925.85,367.45,307.75,227.93],
+   itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#ff8a8a'},{offset:1,color:'rgba(255,107,107,0.25)'}]),borderRadius:[4,4,0,0]},barWidth:'46%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:10}},
+  {name:'同比增速（%）',type:'line',yAxisIndex:1,data:[228.6,36.1,38.0,10.4,54.0],
+   lineStyle:{color:YELLOW,width:2},itemStyle:{color:YELLOW},symbolSize:7,
+   label:{show:true,color:'#ffd966',fontSize:10,formatter:'{c}%'}}]
+}));
+
+// 图7 NBV
+var c7=echarts.init(document.getElementById('chart7'));
+c7.setOption(Object.assign(base(),{
+ legend:{data:['新业务价值 NBV（亿元）','同比增速（%）'],textStyle:{color:'#8a9ab8',fontSize:11},top:0},
+ grid:{left:64,right:60,top:44,bottom:34},
+ xAxis:Object.assign({type:'category',data:['中国人寿','中国平安','中国太保','新华保险']},AXIS),
+ yAxis:[Object.assign({type:'value',name:'亿元',nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS),
+        Object.assign({type:'value',name:'%',nameTextStyle:{color:'#7a90b0',fontSize:11},min:0,max:40},AXIS)],
+ series:[{name:'新业务价值 NBV（亿元）',type:'bar',data:[381.7,248.5,107.6,69.2],
+   itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#8ab8ff'},{offset:1,color:'rgba(91,156,246,0.25)'}]),borderRadius:[4,4,0,0]},barWidth:'46%',
+   label:{show:true,position:'top',color:'#c8d4e8',fontSize:10}},
+  {name:'同比增速（%）',type:'line',yAxisIndex:1,data:[33.7,11.2,12.7,11.9],
+   lineStyle:{color:GREEN,width:2},itemStyle:{color:GREEN},symbolSize:7,
+   label:{show:true,color:'#6ee0a8',fontSize:10,formatter:'{c}%'}}]
+}));
+
+// 图8 险资配置
+var c8=echarts.init(document.getElementById('chart8'));
+c8.setOption({backgroundColor:'transparent',textStyle:{color:'#a8b8d4'},
+ tooltip:{trigger:'item',backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(212,175,55,0.4)',textStyle:{color:'#e0e6f0',fontSize:12},formatter:'{b}<br/>{c} 万亿元（{d}%）'},
+ legend:{orient:'vertical',right:10,top:'center',textStyle:{color:'#8a9ab8',fontSize:11}},
+ series:[{type:'pie',radius:['32%','58%'],center:['36%','50%'],
+  itemStyle:{borderColor:'#0e1420',borderWidth:2},
+  label:{color:'#c8d4e8',fontSize:10.5,formatter:'{b}\n{d}%'},
+  data:[{value:19.91,name:'债券 50.5%',itemStyle:{color:BLUE}},
+        {value:4.10,name:'股票 10.4%',itemStyle:{color:RED}},
+        {value:2.29,name:'基金 5.8%',itemStyle:{color:ORANGE}},
+        {value:3.00,name:'长期股权投资 7.6%',itemStyle:{color:PURPLE}},
+        {value:3.03,name:'银行存款 7.7%',itemStyle:{color:TEAL}},
+        {value:7.07,name:'其他（非标为主）17.9%',itemStyle:{color:'#5a6a8a'}}]}]
+});
+
+// 图9 财险份额
+var c9=echarts.init(document.getElementById('chart9'));
+c9.setOption({backgroundColor:'transparent',textStyle:{color:'#a8b8d4'},
+ tooltip:{trigger:'item',backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(212,175,55,0.4)',textStyle:{color:'#e0e6f0',fontSize:12},formatter:'{b}<br/>{d}%'},
+ legend:{bottom:0,textStyle:{color:'#8a9ab8',fontSize:11}},
+ series:[{type:'pie',radius:['36%','60%'],center:['50%','45%'],
+  itemStyle:{borderColor:'#0e1420',borderWidth:2},
+  label:{color:'#c8d4e8',fontSize:11.5,formatter:'{b}\n{d}%'},
+  data:[{value:33.3,name:'人保财险',itemStyle:{color:GOLD}},
+        {value:18.2,name:'平安产险',itemStyle:{color:BLUE}},
+        {value:11.6,name:'太保产险',itemStyle:{color:TEAL}},
+        {value:36.9,name:'其他财险公司',itemStyle:{color:'#4a5a7a'}}]}]
+});
+
+// 图10 代理人
+var c10=echarts.init(document.getElementById('chart10'));
+c10.setOption(Object.assign(base(),{
+ grid:{left:70,right:30,top:34,bottom:52},
+ xAxis:Object.assign({type:'category',data:['2015\n全行业','2019 峰值\n全行业','2024 年末\n全行业','2025 年末\n五大上市险企*'],
+  axisLabel:{color:'#7a90b0',fontSize:10.5,lineHeight:15}},AXIS),
+ yAxis:Object.assign({type:'value',name:'万人',nameTextStyle:{color:'#7a90b0',fontSize:11}},AXIS),
+ series:[{type:'bar',barWidth:'42%',
+  data:[{value:471,itemStyle:{color:'#5b9cf6',borderRadius:[4,4,0,0]}},
+        {value:912,itemStyle:{color:RED,borderRadius:[4,4,0,0]}},
+        {value:264,itemStyle:{color:'#ff9f40',borderRadius:[4,4,0,0]}},
+        {value:133.34,itemStyle:{color:'rgba(212,175,55,0.45)',borderColor:GOLD,borderWidth:1.5,borderRadius:[4,4,0,0]}}],
+  label:{show:true,position:'top',color:'#c8d4e8',fontSize:11,formatter:'{c} 万'}}]
+}));
+window.addEventListener('resize',function(){[c1,c2,c3,c4,c5,c6,c7,c8,c9,c10].forEach(function(c){c.resize();});});
+</script>
+</body>
+</html>

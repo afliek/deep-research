@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小金属五品种（稀土·钨·锑·钼·锗）供需格局与 2028 年底价格展望</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:linear-gradient(135deg,#0a0e1a 0%,#141829 50%,#0e1420 100%);color:#e0e6f0;min-height:100vh;padding:20px;padding-top:72px}
+.container{max-width:1280px;margin:0 auto}
+.site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(10,14,26,0.88);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+.nav-brand{color:#fff;text-decoration:none;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.nav-brand .dot{width:8px;height:8px;background:#d4af37;border-radius:50%;display:inline-block}
+.nav-back{color:#7a90b0;text-decoration:none;font-size:12px}
+.header{text-align:center;padding:24px 0 16px}
+.header h1{font-size:25px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:6px}
+.header .subtitle{font-size:12px;color:#7a90b0;letter-spacing:0.5px;line-height:1.8}
+.update-badge{display:inline-block;background:rgba(255,107,107,0.15);border:1px solid rgba(255,107,107,0.3);color:#ff8a8a;font-size:11px;padding:3px 10px;border-radius:20px;margin-left:8px;letter-spacing:0.5px}
+.kpi-row{display:flex;gap:12px;margin:18px 0;flex-wrap:wrap;justify-content:center}
+.kpi-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 18px;text-align:center;flex:1;min-width:140px;max-width:210px}
+.kpi-card .label{font-size:11px;color:#7a90b0;margin-bottom:6px;letter-spacing:0.6px}
+.kpi-card .value{font-size:22px;font-weight:700}
+.kpi-card .sub{font-size:11px;color:#7a90b0;margin-top:3px;line-height:1.5}
+.value.green{color:#3dd68c}.value.red{color:#ff6b6b}.value.yellow{color:#ffd966}.value.blue{color:#5b9cf6}.value.orange{color:#ff9f40}.value.gold{color:#d4af37}
+.tldr{background:linear-gradient(135deg,rgba(212,175,55,0.10),rgba(255,107,107,0.06));border:1px solid rgba(212,175,55,0.3);border-radius:16px;padding:22px 26px;margin:18px 0}
+.tldr h2{font-size:16px;color:#d4af37;margin-bottom:12px;letter-spacing:1px}
+.tldr ol{margin-left:18px}
+.tldr li{font-size:13px;color:#c8d4e8;line-height:1.95;margin-bottom:4px}
+.tldr li b{color:#fff}
+.chart-container{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px;margin:16px 0}
+.chart-title{font-size:15px;font-weight:600;color:#b8c8e8;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chart-title::before{content:'';width:4px;height:18px;background:linear-gradient(180deg,#d4af37,#ff6b6b);border-radius:2px;display:inline-block}
+.chart-note{font-size:11px;color:#5a6a8a;margin-top:10px;line-height:1.7}
+.section-title{font-size:17px;font-weight:700;color:#fff;margin:30px 0 12px;padding-left:12px;border-left:4px solid #d4af37;letter-spacing:0.5px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+th{background:rgba(255,255,255,0.07);color:#b8c8e8;padding:9px 8px;text-align:center;font-weight:600;border-bottom:1px solid rgba(255,255,255,0.12);white-space:nowrap}
+td{padding:8px;text-align:center;color:#a8b8d4;border-bottom:1px solid rgba(255,255,255,0.06);line-height:1.6}
+tr:hover td{background:rgba(255,255,255,0.03)}
+.up{color:#ff6b6b;font-weight:600}.down{color:#3dd68c;font-weight:600}
+.tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;margin-right:4px}
+.tag.sb{background:rgba(255,107,107,0.16);color:#ff8a8a}
+.tag.w{background:rgba(255,159,64,0.16);color:#ffb570}
+.tag.ge{background:rgba(255,217,102,0.16);color:#ffe08a}
+.tag.re{background:rgba(91,156,246,0.16);color:#8ab8ff}
+.tag.mo{background:rgba(61,214,140,0.16);color:#6ee0a8}
+.toggle{display:flex;gap:0;margin-left:auto;border:1px solid rgba(255,255,255,0.15);border-radius:8px;overflow:hidden}
+.toggle button{background:transparent;border:0;color:#7a90b0;font-size:11px;padding:5px 14px;cursor:pointer;font-family:inherit}
+.toggle button.on{background:rgba(212,175,55,0.22);color:#ffd966;font-weight:600}
+.hide{display:none}
+.boxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:12px 0}
+.box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px}
+.box h4{font-size:13px;margin-bottom:8px;letter-spacing:0.4px}
+.box p{font-size:12px;color:#8a9ab8;line-height:1.75}
+.box .big{font-size:20px;font-weight:700;margin:6px 0}
+.warn{border:1px solid rgba(255,107,107,0.3);background:rgba(255,107,107,0.07);border-radius:12px;padding:14px 16px;margin:12px 0}
+.warn h4{color:#ff8a8a;font-size:13px;margin-bottom:7px}
+.warn p{font-size:12px;color:#c8b0b8;line-height:1.8}
+.chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin:14px 0}
+.chain .node{flex:1;min-width:150px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px}
+.chain .node .t{font-size:12px;color:#d4af37;font-weight:600;margin-bottom:6px}
+.chain .node .d{font-size:11.5px;color:#8a9ab8;line-height:1.7}
+.chain .arrow{display:flex;align-items:center;color:#3a4a6a;font-size:18px}
+.footer{text-align:center;font-size:11px;color:#3a4a6a;margin-top:28px;padding:18px 0 12px;line-height:1.9;border-top:1px solid rgba(255,255,255,0.06)}
+.disclaimer{background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.22);border-radius:12px;padding:16px 20px;margin:20px 0;font-size:11.5px;color:#b89aa0;line-height:1.9}
+.disclaimer b{color:#ff8a8a}
+@media(max-width:640px){.chain .arrow{display:none}.kpi-card{min-width:120px}}
+</style>
+</head>
+<body>
+<div class="site-nav"><a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a><a href="index.html" class="nav-back">← 返回首页</a></div>
+
+<div class="container">
+<div class="header">
+<h1>⚙️ 小金属五品种 · 供需格局与 2028 年底价格展望 <span class="update-badge">2026.08.29</span></h1>
+<div class="subtitle">稀土（氧化镨钕）· 钨 · 锑 · 钼 · 锗 &nbsp;|&nbsp; 供需平衡 · 政策管制 · 下游需求 · 库存水平 · 涨幅排序<br>
+数据来源：中信证券 · 国盛证券 · 中金公司 · 国金证券 · 五矿证券 · 安泰科 · SMM · USGS · 公司公告，数据截至 2026-08-28</div>
+</div>
+
+<div class="kpi-row">
+<div class="kpi-card"><div class="label">涨幅冠军（基准情形）</div><div class="value red">锑 +71%</div><div class="sub">10.25 → 17.5 万元/吨</div></div>
+<div class="kpi-card"><div class="label">确定性最高</div><div class="value gold">锗 +27%</div><div class="sub">库存仅够 1.5 个月</div></div>
+<div class="kpi-card"><div class="label">最紧的库存</div><div class="value yellow">锗 1.5 月</div><div class="sub">钼 2.5 月 · 锑 2.5 月</div></div>
+<div class="kpi-card"><div class="label">最大缺口率（2028E）</div><div class="value orange">锗 ~36%</div><div class="sub">锑 ~31%（口径分歧大）</div></div>
+<div class="kpi-card"><div class="label">板块估值分位</div><div class="value blue">PB 88.7%</div><div class="sub">PE-TTM 43.9x（64.2%分位）</div></div>
+</div>
+
+<div class="tldr">
+<h2>◆ 核心结论（TL;DR）</h2>
+<ol>
+<li><b>涨幅最大的品种是锑</b>，基准情形 2028 年底 17.5 万元/吨，较当前 10.25 万元/吨 <span class="up">+71%</span>。但这是<b>「条件性第一」</b>——其核心驱动不是需求爆发，而是<b>出口管制边际放松带来的内外价差收敛</b>（海外较国内长期溢价 60–70%）。若管制维持现状，锑的涨幅会压缩至 +17%，被钨反超。</li>
+<li><b>确定性最高的是锗</b>（+27%）：供给弹性近乎为零（90% 为铅锌伴生，扩产周期 5–8 年）、社会库存仅 30 余吨（够全球 1.5 个月）、需求侧光通信 + 卫星光伏双擎（增速 25–40%）。代价是年内已涨 83%，<b>部分预期已被 price in</b>。</li>
+<li><b>性价比最均衡的是钨</b>（+33%）：配额刚性 + 工厂库存历史低位（黑钨精矿仅 329 吨）+ 机构新中枢 45–70 万元/标吨，且当前价 41.3 万正处于 2026 年内区间下沿（年内高低点 102.3 / 40.6 万），<b>位置比锑锗更有利</b>。</li>
+<li><b>基准情形涨幅排序（2026-08 现价 → 2028 年底）</b>：锑 +71% &gt; 钨 +33% &gt; 锗 +27% &gt; 稀土 +19% &gt; 钼 +14%。</li>
+<li><b>最大的数据陷阱</b>：锑的内盘现货（10.25 万元/吨，2026-08-21）与机构目标价（2027–2028 年 25–35 万元/吨）差 2–3 倍，<b>二者并非同一口径</b>——机构目标隐含了出口放开与内外并轨。本报告以「内盘价向海外等价收敛」为基准假设，并单列悲观/乐观情景。</li>
+</ol>
+</div>
+
+<div class="section-title">一、近年价格走势与当前位置</div>
+<div class="chart-container">
+<div class="chart-title">图 1 · 五品种 2026 年以来价格变动（%）</div>
+<div id="chart1" style="width:100%;height:340px;"></div>
+<div class="chart-note"><b>口径不统一，读图请注意</b>：锗、钼、钨为「年初至今」真实可比涨幅（有明确年初基准价）；稀土为「2026H1 均价同比」（缺精确年初价）；锑仅有「近一个月涨幅」（缺年初基准），故以灰色系外的独立色标出，<b>不可与前三者直接横比</b>。<br>
+<b>关键读数</b>：锗年内已涨 82%、稀土同比 +74%，二者当前价格位置最不利；钨是当前唯一「年内下跌」的品种（-19%，从 3 月高点 102.3 万回落至 41.3 万），<b>位置最有利</b>；锑缺乏可比数据本身即是信息——市场对其定价分歧极大。</div>
+</div>
+
+<table>
+<thead><tr><th>品种</th><th>代表报价</th><th>2026 年初</th><th>2026 年内高点</th><th>2026 年内低点</th><th>当前（2026-08）</th><th>年初至今</th></tr></thead>
+<tbody>
+<tr><td><span class="tag re">稀土</span>氧化镨钕</td><td>SMM 现货（万元/吨）</td><td>约 42（2025H1 均价）</td><td>约 75（Q2）</td><td>约 60</td><td><b>71.8–73.6</b></td><td class="up">+73.6%（H1 均价同比）</td></tr>
+<tr><td><span class="tag re">稀土</span>氧化镝 / 氧化铽</td><td>SMM 现货（万元/吨）</td><td>—</td><td>—</td><td>—</td><td>141–144 / 667–675</td><td class="down">环比 -1.5% / -1.2%</td></tr>
+<tr><td><span class="tag w">钨</span>65% 黑钨精矿</td><td>万元/标吨</td><td>51.06（1 月）</td><td><b>102.30</b>（3 月）</td><td>40.6（5 月）</td><td><b>41.0–41.65</b></td><td class="down">较年内高点 -59%</td></tr>
+<tr><td><span class="tag sb">锑</span>锑锭 99.65%</td><td>SMM 现货（万元/吨）</td><td>—</td><td>—</td><td>—</td><td><b>10.25</b>（08-21）</td><td class="up">月内 +15%</td></tr>
+<tr><td><span class="tag sb">锑</span>锑精矿 50%</td><td>万元/吨</td><td>—</td><td>—</td><td>—</td><td>8.75（08-21）</td><td>—</td></tr>
+<tr><td><span class="tag mo">钼</span>钼精矿</td><td>元/吨度</td><td>3,895</td><td>5,470（7 月）</td><td>3,895</td><td><b>5,415</b>（8 月中）</td><td class="up">+39%</td></tr>
+<tr><td><span class="tag mo">钼</span>钼铁</td><td>万元/吨</td><td>—</td><td>—</td><td>—</td><td>34.1–34.5</td><td class="up">年内新高</td></tr>
+<tr><td><span class="tag ge">锗</span>锗锭</td><td>万元/千克</td><td>1.00–1.36</td><td>—</td><td>—</td><td><b>2.48</b></td><td class="up">+76%~83%</td></tr>
+<tr><td><span class="tag ge">锗</span>二氧化锗</td><td>万元/千克</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="up">+85.8%</td></tr>
+</tbody>
+</table>
+<div class="section-title">二、供需格局：2026–2028 年缺口测算</div>
+
+<div class="chart-container">
+<div class="chart-title">图 2 · 供需缺口率（缺口 / 需求）2026–2028E
+  <span class="toggle"><button id="btn-g2c" class="on" onclick="showG2('c')">图</button><button id="btn-g2t" onclick="showG2('t')">表</button></span>
+</div>
+<div id="g2c"><div id="chart2" style="width:100%;height:380px;"></div></div>
+<div id="g2t" class="hide">
+<table>
+<thead><tr><th>品种</th><th>口径</th><th>2026E</th><th>2027E</th><th>2028E</th><th>绝对缺口（2028E）</th></tr></thead>
+<tbody>
+<tr><td><span class="tag re">稀土</span>氧化镨钕</td><td>国盛（国内，万吨）</td><td>5.5%</td><td>8.8%</td><td>12.6%</td><td>-1.94 万吨（供 13.5 / 需 15.4）</td></tr>
+<tr><td><span class="tag re">稀土</span>氧化镨钕</td><td>中信（全球，万吨）</td><td>—</td><td>—</td><td>—</td><td>-2.1 万吨（2025 仅 -0.5）</td></tr>
+<tr><td><span class="tag w">钨</span></td><td>中金（金属吨，占使用量比）</td><td>14.6%</td><td>14.8%</td><td>13.9%</td><td>-2.4 万吨</td></tr>
+<tr><td><span class="tag sb">锑</span></td><td>国盛（含再生，万吨）</td><td>14.2%</td><td>14.4%</td><td>—</td><td>-1.98 ~ -2.14 万吨</td></tr>
+<tr><td><span class="tag sb">锑</span></td><td>安泰科 / USGS（原生口径）</td><td>36~43%</td><td>42%+</td><td>—</td><td>2026 供 13.2 / 需 20.8，缺口 7.6 万吨</td></tr>
+<tr><td><span class="tag mo">钼</span></td><td>国金（金属吨）</td><td>—</td><td>—</td><td>—</td><td>-3.9 万吨（2025 仅 -1.0）</td></tr>
+<tr><td><span class="tag mo">钼</span></td><td>安泰科 / IMOA（缺口率）</td><td>13.5%</td><td>—</td><td>15.5%</td><td>2026 缺口 4.43 万吨</td></tr>
+<tr><td><span class="tag ge">锗</span></td><td>五矿 / SMM（吨）</td><td>~20%</td><td>30.6%</td><td>~36%</td><td>-100 ~ -160 吨（供 190–210，需 320–370）</td></tr>
+</tbody>
+</table>
+</div>
+<div class="chart-note"><b>口径提示（关键）</b>：同一品种不同机构差异极大，主因是①是否计入再生金属；②原生 vs 总供给；③氧化物 vs 金属吨；④是否计入「隐形库存再建」。锑的分歧最极端：国盛含再生口径仅 14%，安泰科/USGS 原生口径高达 36–43%。本报告折中取锑 2028E 约 31%，并以此为前提做价格假设——<b>这是全篇最大的单点不确定性</b>。</div>
+</div>
+
+<div class="boxes">
+<div class="box"><h4 style="color:#8ab8ff">稀土 · 供给「配额刚性 + 海外放量」对冲</h4>
+<div class="big value blue">缺口 5.5% → 12.6%</div>
+<p>国内开采总量控制指标严格执行，2024–2025 连续两年配额增速放缓，工信部全产业链常态化监管压缩私挖盗采空间；中国稀土集团与北方稀土双雄格局形成。对冲项是海外：美国 MP Materials、澳洲 Lynas 产能仍在爬坡，缅甸矿进口波动。缺口扩大但速率温和，决定了稀土是<b>中枢上移而非暴涨</b>。</p></div>
+<div class="box"><h4 style="color:#ffb570">钨 · 中国占全球 80–85%，行政供给锁</h4>
+<div class="big value orange">缺口 ~14%，三年稳定</div>
+<p>2026 年开采指标同比再收紧，<b>出口许可制构成第二道行政供给锁</b>；2026 年全球新增有效供给不足 5,000 吨。需求端硬质合金占国内消费约 59% 为基本盘，增量来自光伏钨丝（渗透率已超 40–60%）、AI 服务器 PCB 微钻、六氟化钨、军工。缺口率三年基本持平，<b>价格弹性来自库存而非缺口本身</b>。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">锑 · 资源枯竭 + 配额连降 8 年</h4>
+<div class="big value red">缺口 14%~43%（分歧最大）</div>
+<p>2026 年开采配额同比下调 12% 至 2.8 万吨，为<b>连续第 8 年下调</b>，且禁止新建 10 万吨/年以下冶炼项目。全球探明可采储量约 210 万吨，静态储采比仅 18–24 年。海外更差：俄罗斯极地黄金奥林匹亚锑矿段已采完（2025 产量 -45.5%），玻利维亚政局动荡停产。再生锑回收量不足 1 万吨/年，无法弥补缺口。</p></div>
+<div class="box"><h4 style="color:#6ee0a8">钼 · 70% 为铜矿伴生，无法独立扩产</h4>
+<div class="big value green">缺口 1.0 → 3.9 万吨</div>
+<p>全球约 70% 钼来自铜矿副产品，<b>铜不扩产钼就无法扩产</b>，2028 年前几乎无大型原生钼矿投产，供给年增速仅 0–2%（2027 年甚至 -0.2%）。需求端钢铁是基本盘（2026H1 国内钢厂钼铁招标 8.2 万吨，同比 +6%），增量来自半导体「以钼代钨」（3D NAND 超 300 层后三星、SK 海力士转向钼互连）、风电、军工。<b>供给刚性最强，但需求弹性最弱</b>。</p></div>
+<div class="box"><h4 style="color:#ffe08a">锗 · 供给弹性几乎为零</h4>
+<div class="big value yellow">缺口 20% → 36%</div>
+<p>90% 以上为铅锌矿伴生副产品，扩产周期长达 5–8 年；中国产量占全球约 68–72%，2026 年 6 月纳入国家级战略性矿产目录，出口管制全链条。全球已探明储量约 8,600 吨，静态开采年限 30–43 年。<b>五品种中「缺口/产量比」最高</b>，且没有任何快速扩产路径。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">⚠️ 数据打架：锑的现货 vs 目标价</h4>
+<div class="big value red">10.25 万 vs 25–35 万</div>
+<p>内盘现货（2026-08-21）仅 10.25 万元/吨，而多家机构给出 2027–2028 年 25–35 万元/吨中枢。二者并非同一口径：机构目标隐含<b>出口管制放开 + 内外价差收敛</b>（海外长期溢价 60–70%，等价约 16–18 万元/吨）。若管制不放开，内盘永远收不到这个价。这是锑投资逻辑的<b>全部胜负手</b>。</p></div>
+</div>
+
+<div class="section-title">三、库存水平：五品种均在历史低位，锗最极端</div>
+<div class="chart-container">
+<div class="chart-title">图 3 · 显性库存可支撑消费月数（越低越紧张）</div>
+<div id="chart3" style="width:100%;height:320px;"></div>
+<div class="chart-note">注：稀土缺乏公开的「库存消费比」量化数据，仅有定性描述（产业链库存低位、海外补库需求旺盛），故不入图（空值不入图原则）。锑为全产业链显性库存；钼为全球社会总库存约 1.8 万吨；钨为国内工厂库存（黑钨精矿 329 吨、APT 205 吨，行业库存周期 3–5 个月，下游库存约 4–5 个月）；锗为全球社会库存 30 余吨（国内企业端 20–30 吨 + 贸易商 15–20 吨）。<b>锗 1.5 个月为五品种最极端水位，冶炼厂普遍惜售挺价。</b></div>
+</div>
+
+<div class="boxes">
+<div class="box"><h4 style="color:#ffe08a">锗 · 1.5 个月</h4><p>社会库存仅 30 余吨，海外基本无库存。在「缺口 20% + 库存 1.5 个月 + 供给零弹性」三重条件下，锗是<b>理论上最容易出现逼仓行情</b>的品种。国内企业端 20–30 吨、贸易商 15–20 吨，任何一次集中采购都会直接击穿库存。</p></div>
+<div class="box"><h4 style="color:#6ee0a8">钼 · 2.5 个月</h4><p>全球社会总库存约 1.8 万吨，库存消费比约 5.7%，<b>近五年最低</b>；中国社会显性库存消费比不足 1 个月（约 22–23 天）。2026-07-31 国内样本钼精矿库存 4,800 吨（较年初回落），钼铁库存 4,400 吨（平缓去库）。</p></div>
+<div class="box"><h4 style="color:#ff8a8a">锑 · 2–3 个月</h4><p>全产业链显性库存处于历史绝对低位。截至 2026 年 5 月底，国内主要冶炼厂及贸易商锑锭库存<b>不足 5,000 吨</b>。国家已启动万吨级战略收储（首批 5,000 吨招标完成），收储本身即抽走流通盘，进一步加剧现货紧张。</p></div>
+<div class="box"><h4 style="color:#ffb570">钨 · 3–5 个月</h4><p>国内工厂库存维持历史低位，截至 2026-08-14 黑钨精矿工厂库存<b>仅 329 吨</b>、APT 库存 205 吨——绝对量极小。海外补库需求迫切，美欧加大战略备库。这是钨价在 5 月探底 40.6 万后能快速企稳的核心原因。</p></div>
+</div>
+
+<div class="section-title">四、政策变量：从「出口管制」到「全链条监管」</div>
+<div class="chain">
+<div class="node"><div class="t">① 法律基础</div><div class="d">2026-06-15《矿产资源法实施条例》落地，明确 <b>36 种关键矿产</b>清单与保护性开采制度</div></div>
+<div class="arrow">→</div>
+<div class="node"><div class="t">② 品类扩容</div><div class="d">2026 年 6 月起，<b>钼、锗相继纳入国家级战略性矿产目录</b>，此前稀土、钨、锑已在列</div></div>
+<div class="arrow">→</div>
+<div class="node"><div class="t">③ 监管升级</div><div class="d">2026-07-01 起出口管制由「单项许可」升级为<b>全供应链网络化监管</b>，覆盖开采—冶炼—加工—贸易全环节</div></div>
+<div class="arrow">→</div>
+<div class="node"><div class="t">④ 双向影响</div><div class="d">对内：压制内盘价格（供给锁在国内）→ 利空短期<br>对外：抬升海外价格与溢价 → <b>埋下内外价差收敛的期权</b></div></div>
+</div>
+<div class="warn">
+<h4>⚠️ 政策是最强的价格变量，也是最难预测的</h4>
+<p>出口管制对内盘价格的作用<b>方向是双向且当前为负</b>：它把国内供给锁在国内市场，短期内盘反而因"出不去"而承压——这正是锗、锑内盘价显著低于海外价、锑内盘价较 2025 年底高点大幅回落的结构性原因。因此，<b>锑的 +71% 基准涨幅本质上是在赌"管制边际放松"</b>。反过来，若管制进一步收紧（如配额再降、出口配额归零），内盘价格会继续被压制，锑的悲观情景（+17%）就会兑现。政策是本报告中唯一无法用供需模型外推的变量。</p>
+</div>
+<div class="section-title">五、下游需求结构：谁在拉动增量</div>
+<div class="chart-container">
+<div class="chart-title">图 4 · 锑 / 锗 下游需求结构（2025 年实测占比）</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<div id="chart4a" style="flex:1;min-width:300px;height:320px;"></div>
+<div id="chart4b" style="flex:1;min-width:300px;height:320px;"></div>
+</div>
+<div class="chart-note">仅锑、锗有可信的量化下游拆分（数据来源：北京研精毕智、五矿证券 / SMM）。<b>锑</b>：阻燃剂（52.7%）是第一大但增速已放缓（+2.1%），光伏玻璃（24.8%）是第一增长引擎（+35.6%，焦锑酸钠为光伏玻璃唯一商业化澄清剂、无成熟替代），半导体（11.6%）+28.3%（锑化镓、锑化铟为第三代半导体核心材料）。<b>锗</b>：光通信 40%（2026–2027 增速约 25%）、卫星光伏 20%（2026 增速 40%），二者合计占 2027 年需求增量的 <b>90%</b>。</div>
+</div>
+
+<table>
+<thead><tr><th>品种</th><th>第一大应用（占比）</th><th>第一增长引擎</th><th>新能源 / 半导体 / 军工 增量贡献</th><th>需求 CAGR 判断</th></tr></thead>
+<tbody>
+<tr><td><span class="tag re">稀土</span></td><td>钕铁硼永磁（新能源车、风电、工业电机）</td><td>人形机器人、低空经济、新能源车</td><td>新能源车 + 风电为主；机器人为期权；MLCC 拉动镝铽</td><td class="up">高（8–12%）</td></tr>
+<tr><td><span class="tag w">钨</span></td><td>硬质合金（约 59%）</td><td>光伏钨丝（渗透率 &gt;40–60%）</td><td>AI 服务器 PCB 微钻（半导体链）、六氟化钨、军工</td><td>中（5–8%）</td></tr>
+<tr><td><span class="tag sb">锑</span></td><td>阻燃剂（52.7%）</td><td>光伏玻璃（24.8%，+35.6%）</td><td>光伏 4.87–5.44 万吨；锑化镓/锑化铟（AI 芯片、红外、激光雷达）；液态锑储能电池</td><td>高但分歧大（5–19%）</td></tr>
+<tr><td><span class="tag mo">钼</span></td><td>钢铁（合金添加剂）</td><td>半导体「以钼代钨」</td><td>3D NAND 超 300 层后三星、SK 海力士转向钼互连；风电、军工</td><td>低（3–4.6%）</td></tr>
+<tr><td><span class="tag ge">锗</span></td><td>光通信（40%）</td><td>卫星光伏（20%，+40%）</td><td>SiGe、四氟化锗（半导体）；红外探测（军工）</td><td class="up">最高（25–40%）</td></tr>
+</tbody>
+</table>
+
+<div class="section-title">六、上市公司业务映射与业绩验证</div>
+<div class="chart-container">
+<div class="chart-title">图 5 · 主要上市公司 2026H1 归母净利同比增速（%）</div>
+<div id="chart5" style="width:100%;height:360px;"></div>
+<div class="chart-note">注：翔鹭钨业增速 2,348%–3,436% 为低基数效应（上年同期接近盈亏平衡），量级远超同业，已单独着色；该值压缩了其他标的的视觉高度，读图时请以数值标签为准。</div>
+</div>
+
+<table>
+<thead><tr><th>品种</th><th>上市公司</th><th>代码</th><th>业务定位</th><th>2026H1 归母净利同比</th></tr></thead>
+<tbody>
+<tr><td rowspan="4"><span class="tag re">稀土</span></td><td>北方稀土</td><td>600111</td><td>轻稀土龙头，全球最大稀土冶炼分离产能</td><td class="up">+120.5%（净利 20.53 亿）</td></tr>
+<tr><td>盛和资源</td><td>600392</td><td>稀土冶炼分离 + 海外矿（美国 MP 包销）</td><td class="up">+135%</td></tr>
+<tr><td>中国稀土</td><td>000831</td><td>中重稀土整合平台（中国稀土集团旗下）</td><td>龙头之一，整合持续推进</td></tr>
+<tr><td>金力永磁</td><td>300748</td><td>高性能钕铁硼磁材（下游加工，非资源端）</td><td>受益磁材涨价传导</td></tr>
+<tr><td rowspan="3"><span class="tag w">钨</span></td><td>中钨高新</td><td>000657</td><td>硬质合金龙头（中国五矿旗下）</td><td class="up">+280.5%</td></tr>
+<tr><td>厦门钨业</td><td>600549</td><td>钨钼 + 稀土 + 能源新材料三大板块</td><td class="up">+127%</td></tr>
+<tr><td>翔鹭钨业</td><td>002842</td><td>钨精矿—APT—碳化钨粉全产业链</td><td class="up">+2,348%~3,436%（低基数）</td></tr>
+<tr><td rowspan="3"><span class="tag sb">锑</span></td><td>湖南黄金</td><td>002155</td><td>黄金 + 锑双主业，国内锑资源第一梯队</td><td class="up">+46%</td></tr>
+<tr><td>华钰矿业</td><td>601020</td><td>塔铝金业锑矿（年产能 1.5 万吨），<b>独享海外高价</b></td><td>海外溢价受益者</td></tr>
+<tr><td>华锡有色</td><td>600301</td><td>广西战略金属整合平台，锑锌锡多金属</td><td>未来 5 年权益锑产量年增约 25%</td></tr>
+<tr><td rowspan="2"><span class="tag mo">钼</span></td><td>金钼股份</td><td>601958</td><td>A 股纯钼龙头，原生钼矿 + 钼化工</td><td>钼价上行直接受益</td></tr>
+<tr><td>洛阳钼业</td><td>603993</td><td>铜钴钼铌综合矿业巨头（钼为伴生）</td><td class="up">+86.3%（净利 161.52 亿）</td></tr>
+<tr><td rowspan="2"><span class="tag ge">锗</span></td><td>云南锗业</td><td>002428</td><td>A 股最纯锗标的，锗全产业链</td><td class="up">+235%</td></tr>
+<tr><td>驰宏锌锗</td><td>600497</td><td>铅锌主业 + 锗为伴生副产品</td><td class="up">+70.6%</td></tr>
+</tbody>
+</table>
+<div class="chart-note"><b>业绩验证结论</b>：价格上行已充分传导至利润表——五品种代表公司 2026H1 净利同比全部为正，且资源端（北方稀土 +120.5%、中钨高新 +280.5%、云南锗业 +235%）弹性显著大于加工端。<b>但需注意：股价与估值已提前反应</b>——申万二级小金属板块 PE-TTM 43.9x（10 年 64.2% 分位）、PB 5.55x（10 年 <b>88.7% 分位</b>），PB 分位显著高于 PE 分位，说明市场已按「周期高点盈利」给估值，这是当前最主要的估值风险。</div>
+<div class="section-title">七、2028 年底价格预测与涨幅排序（核心）</div>
+
+<div class="chart-container">
+<div class="chart-title">图 6 · 五品种 2028 年底预期涨幅（三情景，相对 2026-08 现价）
+  <span class="toggle"><button id="btn-g6c" class="on" onclick="showG6('c')">图</button><button id="btn-g6t" onclick="showG6('t')">表</button></span>
+</div>
+<div id="g6c"><div id="chart6" style="width:100%;height:400px;"></div></div>
+<div id="g6t" class="hide">
+<table>
+<thead><tr><th>品种</th><th>当前价（2026-08）</th><th>2028E 悲观</th><th>2028E 基准</th><th>2028E 乐观</th><th>基准涨幅</th><th>排序</th></tr></thead>
+<tbody>
+<tr><td><span class="tag sb">锑</span>锑锭 99.65%</td><td>10.25 万元/吨</td><td>12.0（+17%）</td><td><b>17.5（+71%）</b></td><td>28.0（+173%）</td><td class="up">+71%</td><td><b>①</b></td></tr>
+<tr><td><span class="tag w">钨</span>65% 黑钨精矿</td><td>41.3 万元/标吨</td><td>45.5（+10%）</td><td><b>55.0（+33%）</b></td><td>69.5（+68%）</td><td class="up">+33%</td><td>②</td></tr>
+<tr><td><span class="tag ge">锗</span>锗锭</td><td>2.48 万元/千克</td><td>2.68（+8%）</td><td><b>3.15（+27%）</b></td><td>3.50（+41%）</td><td class="up">+27%</td><td>③</td></tr>
+<tr><td><span class="tag re">稀土</span>氧化镨钕</td><td>72.5 万元/吨</td><td>74.5（+3%）</td><td><b>86.0（+19%）</b></td><td>105.0（+45%）</td><td class="up">+19%</td><td>④</td></tr>
+<tr><td><span class="tag mo">钼</span>钼精矿</td><td>5,415 元/吨度</td><td>5,525（+2%）</td><td><b>6,200（+14%）</b></td><td>7,050（+30%）</td><td class="up">+14%</td><td>⑤</td></tr>
+</tbody>
+</table>
+</div>
+<div class="chart-note"><b>情景假设</b>：悲观 = 出口管制维持现状 + 全球制造业走弱；基准 = 管制边际放松、内外价差部分收敛 + 需求平稳兑现；乐观 = 管制显著放开 + 光伏/AI/军工需求超预期 + 无大型新矿投产。价格为 2028 年底时点的中枢判断，非年度均价。锗、稀土的乐观情景已参考五矿证券（锗 2028 年 2.8–3.5 万元/千克）与历史价格区间（氧化镨钕 2022 年曾达约 110 万元/吨）。</div>
+</div>
+
+<div class="chart-container">
+<div class="chart-title">图 7 · 五维景气度评分（1–5 分，越外越强）</div>
+<div id="chart7" style="width:100%;height:400px;"></div>
+<div class="chart-note">评分为本报告基于公开数据的主观打分，用于横向对比，非精确定量指标。<b>读图要点</b>：锗五维最均衡且「供给刚性 / 需求增速 / 库存紧张」三项满分——这是它确定性最高的原因；锑的「政策强度」满分意味着<b>它的价格几乎完全由政策摆布</b>，是弹性来源也是风险来源；钼「供给刚性 5 分、需求增速 2 分」的典型错配，决定了它是<b>慢牛而非快牛</b>；稀土五维均居中，对应「中枢上移、弹性一般」。</div>
+</div>
+
+<div class="section-title">八、涨幅冠军：锑 —— 核心驱动与不确定性</div>
+<div class="boxes">
+<div class="box" style="border-color:rgba(255,107,107,0.35)"><h4 style="color:#ff8a8a">核心驱动 ①：内外价差收敛（最主要）</h4><p>出口管制把中国供给锁在国内，造成<b>内盘 10.25 万元/吨 vs 海外长期溢价 60–70%（等价 16–18 万元/吨）</b>的巨大裂口。基准情形的 17.5 万元/吨，本质就是假设内盘向海外等价水平收敛。这是锑 +71% 涨幅中<b>最大、也最脆弱的一块</b>。</p></div>
+<div class="box" style="border-color:rgba(255,107,107,0.35)"><h4 style="color:#ff8a8a">核心驱动 ②：光伏刚需且无替代</h4><p>焦锑酸钠是光伏玻璃<b>唯一商业化澄清剂</b>，无成熟替代材料。2026 年光伏装机对应锑需求 4.2–5.44 万吨，同比 +35.6%，2028 年随装机突破 1,000GW 将进一步上行。单吨光伏玻璃耗锑约 0.21kg，需求刚性且随装机线性增长。</p></div>
+<div class="box" style="border-color:rgba(255,107,107,0.35)"><h4 style="color:#ff8a8a">核心驱动 ③：供给永久收缩</h4><p>中国开采配额<b>连续 8 年下调</b>（2026 年再降 12% 至 2.8 万吨），禁止新建 10 万吨/年以下冶炼项目；海外主力矿同步退出（俄罗斯极地黄金 -45.5%、玻利维亚停产）。全球静态储采比仅 18–24 年。再生锑年回收不足 1 万吨，无法补位。</p></div>
+<div class="box" style="border-color:rgba(255,107,107,0.35)"><h4 style="color:#ff8a8a">核心驱动 ④：库存 + 收储双击</h4><p>国内冶炼厂及贸易商锑锭库存<b>不足 5,000 吨</b>（够全球 2–3 个月），国家已启动万吨级战略收储（首批 5,000 吨已完成）——收储直接从流通盘抽货，在极低库存基数上放大价格弹性。</p></div>
+</div>
+
+<div class="warn">
+<h4>⚠️ 锑的主要不确定性（按影响程度排序）</h4>
+<p><b>1. 出口管制政策方向（致命变量，决定 +17% 还是 +173%）</b>：管制维持 → 内盘持续承压，涨幅压缩至 +17%；管制放开 → 内外并轨，涨幅可冲击 +173%。这是本报告全部结论中不确定性最大的一项，无法用供需模型外推。<br>
+<b>2. 缺口口径的分歧高达 3 倍</b>：国盛含再生口径仅 14%，安泰科/USGS 原生口径 36–43%。若真实缺口接近保守口径，当前 10.25 万元的定价可能已属合理甚至偏高，而非低估。<br>
+<b>3. 现货价格与机构目标价的巨大背离尚未收敛</b>：机构 2027–2028 年 25–35 万元/吨的目标，与 2026-08 现货 10.25 万元/吨差 2–3 倍。这种背离本身说明市场对锑的定价存在严重分歧，也可能意味着机构目标已系统性高估。<br>
+<b>4. 高价负反馈</b>：阻燃剂占需求 52.7%，价格过高会加速无卤阻燃剂等替代方案渗透；光伏玻璃亦有低锑/无锑澄清剂研发。<br>
+<b>5. 海外新矿投产</b>：塔吉克斯坦安佐布（2025 年 1.6 万吨，+6.7%）、澳大利亚、美国 Stibnite 等项目 2027–2028 年产能释放将部分缓解缺口。</p>
+</div>
+
+<div class="section-title">九、全品种共性风险</div>
+<div class="boxes">
+<div class="box"><h4 style="color:#ff8a8a">估值已在高位</h4><p>申万二级小金属 PE-TTM 43.9x（10 年 64.2% 分位）、PB 5.55x（10 年 <b>88.7% 分位</b>）。PB 分位远高于 PE 分位，说明市场已按周期高点盈利给估值。<b>商品价格继续上涨是估值维持的前提</b>，一旦价格见顶，PB 的均值回归杀伤力大于 PE。</p></div>
+<div class="box"><h4 style="color:#ff9f40">小盘高波动属性</h4><p>小金属市场体量小、流通盘薄，价格与股价波动天然被放大。钨价 2026 年在 40.6–102.3 万元/标吨区间剧烈震荡（振幅 152%）即为明证——<b>基本面正确不等于短期不回撤 50%</b>。</p></div>
+<div class="box"><h4 style="color:#ffd966">数据的可靠性问题</h4><p>本报告涉及的部分数据来自券商纪要、自媒体整理与第三方咨询机构，<b>同一品种不同来源差异可达数倍</b>（如锑缺口率 14% vs 43%）。已尽量标注口径与来源，但仍建议以 USGS、SMM、安泰科等一手数据及公司公告为最终准绳。</p></div>
+<div class="box"><h4 style="color:#5b9cf6">宏观与需求端</h4><p>全球经济衰退将同时压制光伏装机、消费电子、汽车与半导体资本开支。稀土、钨的下游（新能源车、硬质合金）顺周期属性更强，锗（光通信 + 卫星）、锑（军工 + 光伏）相对逆周期，<b>衰退情景下锗、锑的防御性好于稀土、钨、钼</b>。</p></div>
+</div>
+
+<div class="disclaimer">
+<b>⚠️ 免责声明</b><br>
+本报告为基于公开信息的研究整理与情景推演，<b>不构成任何投资建议或买卖推荐</b>。所有价格预测均为特定假设下的情景判断，实际结果可能与之存在重大差异，甚至方向相反。<br>
+文中涉及的供需平衡、库存、价格数据来自中信证券、国盛证券、中金公司、国金证券、五矿证券、安泰科、SMM、USGS 等公开研报与市场报价，<b>不同机构口径差异极大（部分差异达数倍），本报告已尽量标注但无法完全消除</b>。上市公司业绩数据来自 2026 年半年报/业绩预告，截至 2026-08-28。<br>
+小金属品种市场规模小、流通盘薄、政策敏感度高，价格与相关股票波动剧烈。投资者应独立思考、独立决策，并自行承担投资风险与后果。
+</div>
+
+<div class="footer">
+数据整合自：中信证券 · 国盛证券 · 中金公司 · 国金证券 · 五矿证券 · 安泰科 · SMM · USGS · 北京研精毕智 · 东方财富研究中心 · 各公司 2026 年半年报<br>
+价格数据截至 2026-08-28 &nbsp;|&nbsp; 生成时间：2026-08-29 &nbsp;|&nbsp; 生成模型：HY4 Preview<br>
+注：文中「基准 / 乐观 / 悲观」三情景为本报告基于公开供需数据的自建假设，非任何机构的正式预测。
+</div>
+</div>
+
+<script>
+function showG2(k){
+  var c=document.getElementById('g2c'), t=document.getElementById('g2t');
+  var bc=document.getElementById('btn-g2c'), bt=document.getElementById('btn-g2t');
+  if(k==='c'){c.classList.remove('hide');t.classList.add('hide');bc.classList.add('on');bt.classList.remove('on');}
+  else{c.classList.add('hide');t.classList.remove('hide');bt.classList.add('on');bc.classList.remove('on');}
+}
+function showG6(k){
+  var c=document.getElementById('g6c'), t=document.getElementById('g6t');
+  var bc=document.getElementById('btn-g6c'), bt=document.getElementById('btn-g6t');
+  if(k==='c'){c.classList.remove('hide');t.classList.add('hide');bc.classList.add('on');bt.classList.remove('on');}
+  else{c.classList.add('hide');t.classList.remove('hide');bt.classList.add('on');bc.classList.remove('on');}
+}
+var AX={axisLine:{lineStyle:{color:'rgba(255,255,255,0.25)'}},axisLabel:{color:'#7a90b0',fontSize:11},splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}};
+var BASE={backgroundColor:'transparent',textStyle:{fontFamily:'Microsoft YaHei'},tooltip:{backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(255,255,255,0.15)',textStyle:{color:'#e0e6f0',fontSize:12}}};
+function mk(id,opt){var el=document.getElementById(id);if(!el)return;var ch=echarts.init(el);ch.setOption(Object.assign({},BASE,opt));window.addEventListener('resize',function(){ch.resize();});}
+
+// 图1 2026年以来价格变动
+mk('chart1',{
+  tooltip:Object.assign({trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){var d=p[0];return d.name+'<br/>'+d.value+'%<br/><span style="color:#7a90b0;font-size:11px">口径：'+(d.data.note||'')+'</span>';}},{}),
+  grid:{left:60,right:30,top:40,bottom:50},
+  xAxis:Object.assign({type:'category',data:['锗','稀土','钼','锑','钨']},AX),
+  yAxis:Object.assign({type:'value',name:'价格变动 (%)',nameTextStyle:{color:'#7a90b0',fontSize:11},axisLabel:{color:'#7a90b0',fontSize:11,formatter:'{value}%'}},{splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}}),
+  series:[{
+    type:'bar',barWidth:'46%',
+    label:{show:true,position:'top',color:'#e0e6f0',fontSize:12,formatter:function(p){return (p.value>0?'+':'')+p.value+'%';}},
+    data:[
+      {value:82.4,itemStyle:{color:'#ffd966'},note:'年初至今（1.36→2.48 万元/千克）'},
+      {value:73.6,itemStyle:{color:'#5b9cf6'},note:'2026H1 均价同比（无精确年初价）'},
+      {value:39.0,itemStyle:{color:'#3dd68c'},note:'年初至今（3,895→5,415 元/吨度）'},
+      {value:15.0,itemStyle:{color:'#ff6b6b'},note:'近一个月涨幅（无年初基准）'},
+      {value:-19.1,itemStyle:{color:'#8a9ab8'},note:'年初至今（51.06→41.3 万元/标吨）'}
+    ]
+  }]
+});
+
+// 图2 供需缺口率
+mk('chart2',{
+  tooltip:Object.assign({trigger:'axis',valueFormatter:function(v){return v+'%';}},{}),
+  legend:{data:['稀土','钨','锑','钼','锗'],textStyle:{color:'#a8b8d4',fontSize:11},top:0},
+  grid:{left:60,right:30,top:50,bottom:40},
+  xAxis:Object.assign({type:'category',boundaryGap:false,data:['2026E','2027E','2028E']},AX),
+  yAxis:Object.assign({type:'value',name:'缺口率 (%)',nameTextStyle:{color:'#7a90b0',fontSize:11},axisLabel:{color:'#7a90b0',fontSize:11,formatter:'{value}%'}},{splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}}),
+  series:[
+    {name:'稀土',type:'line',smooth:true,symbolSize:7,itemStyle:{color:'#5b9cf6'},data:[5.5,8.8,12.6]},
+    {name:'钨',type:'line',smooth:true,symbolSize:7,itemStyle:{color:'#ff9f40'},data:[14.6,14.8,13.9]},
+    {name:'锑',type:'line',smooth:true,symbolSize:7,lineStyle:{type:'dashed',width:3},itemStyle:{color:'#ff6b6b'},data:[25,28,31]},
+    {name:'钼',type:'line',smooth:true,symbolSize:7,itemStyle:{color:'#3dd68c'},data:[13.5,14.5,15.5]},
+    {name:'锗',type:'line',smooth:true,symbolSize:7,itemStyle:{color:'#ffd966'},data:[20,30.6,36]}
+  ]
+});
+
+// 图3 库存可消费月数
+mk('chart3',{
+  tooltip:Object.assign({trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:function(v){return v+' 个月';}},{}),
+  grid:{left:80,right:60,top:30,bottom:40},
+  xAxis:Object.assign({type:'value',name:'可支撑消费月数',nameTextStyle:{color:'#7a90b0',fontSize:11},axisLabel:{color:'#7a90b0',fontSize:11}},{splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}}),
+  yAxis:Object.assign({type:'category',data:['钨','锑','钼','锗']},AX),
+  series:[{
+    type:'bar',barWidth:'48%',
+    label:{show:true,position:'right',color:'#e0e6f0',fontSize:12,formatter:'{c} 个月'},
+    data:[
+      {value:4.0,itemStyle:{color:'#ff9f40'}},
+      {value:2.5,itemStyle:{color:'#ff6b6b'}},
+      {value:2.5,itemStyle:{color:'#3dd68c'}},
+      {value:1.5,itemStyle:{color:'#ffd966'}}
+    ]
+  }]
+});
+
+// 图4 需求结构
+mk('chart4a',{
+  title:{text:'锑 · 下游需求结构',textStyle:{color:'#b8c8e8',fontSize:13},left:'center',top:0},
+  tooltip:Object.assign({trigger:'item',formatter:'{b}: {c}%'},{}),
+  legend:{bottom:0,textStyle:{color:'#a8b8d4',fontSize:11},itemWidth:12,itemHeight:8},
+  series:[{type:'pie',radius:['38%','62%'],center:['50%','52%'],
+    label:{color:'#e0e6f0',fontSize:11,formatter:'{b}\n{c}%'},
+    data:[
+      {name:'阻燃剂',value:52.7,itemStyle:{color:'#ff6b6b'}},
+      {name:'光伏玻璃',value:24.8,itemStyle:{color:'#ffd966'}},
+      {name:'半导体',value:11.6,itemStyle:{color:'#5b9cf6'}},
+      {name:'铅锑合金及其他',value:10.9,itemStyle:{color:'#8a9ab8'}}
+    ]}]
+});
+mk('chart4b',{
+  title:{text:'锗 · 下游需求结构',textStyle:{color:'#b8c8e8',fontSize:13},left:'center',top:0},
+  tooltip:Object.assign({trigger:'item',formatter:'{b}: {c}%'},{}),
+  legend:{bottom:0,textStyle:{color:'#a8b8d4',fontSize:11},itemWidth:12,itemHeight:8},
+  series:[{type:'pie',radius:['38%','62%'],center:['50%','52%'],
+    label:{color:'#e0e6f0',fontSize:11,formatter:'{b}\n{c}%'},
+    data:[
+      {name:'光通信',value:40,itemStyle:{color:'#ffd966'}},
+      {name:'卫星光伏',value:20,itemStyle:{color:'#ff9f40'}},
+      {name:'红外光学',value:15,itemStyle:{color:'#5b9cf6'}},
+      {name:'半导体',value:10,itemStyle:{color:'#3dd68c'}},
+      {name:'其他',value:15,itemStyle:{color:'#8a9ab8'}}
+    ]}]
+});
+
+// 图5 半年报净利增速
+mk('chart5',{
+  tooltip:Object.assign({trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:function(v){return v+'%';}},{}),
+  grid:{left:70,right:30,top:40,bottom:80},
+  xAxis:Object.assign({type:'category',data:['翔鹭钨业','中钨高新','云南锗业','盛和资源','北方稀土','厦门钨业','洛阳钼业','驰宏锌锗','湖南黄金'],axisLabel:{color:'#7a90b0',fontSize:11,interval:0,rotate:32}},{axisLine:{lineStyle:{color:'rgba(255,255,255,0.25)'}}}),
+  yAxis:Object.assign({type:'value',name:'归母净利同比 (%)',nameTextStyle:{color:'#7a90b0',fontSize:11},axisLabel:{color:'#7a90b0',fontSize:11,formatter:'{value}%'}},{splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}}),
+  series:[{
+    type:'bar',barWidth:'52%',
+    label:{show:true,position:'top',color:'#e0e6f0',fontSize:11,formatter:function(p){return '+'+p.value+'%';}},
+    data:[
+      {value:2348,itemStyle:{color:'#ff6b6b'}},
+      {value:280.5,itemStyle:{color:'#ff9f40'}},
+      {value:235,itemStyle:{color:'#ffd966'}},
+      {value:135,itemStyle:{color:'#5b9cf6'}},
+      {value:120.5,itemStyle:{color:'#5b9cf6'}},
+      {value:127,itemStyle:{color:'#ff9f40'}},
+      {value:86.3,itemStyle:{color:'#3dd68c'}},
+      {value:70.6,itemStyle:{color:'#ffd966'}},
+      {value:46,itemStyle:{color:'#ff6b6b'}}
+    ]
+  }]
+});
+
+// 图6 2028E 涨幅三情景
+mk('chart6',{
+  tooltip:Object.assign({trigger:'axis',axisPointer:{type:'shadow'},valueFormatter:function(v){return v+'%';}},{}),
+  legend:{data:['悲观','基准','乐观'],textStyle:{color:'#a8b8d4',fontSize:11},top:0},
+  grid:{left:70,right:30,top:50,bottom:45},
+  xAxis:Object.assign({type:'category',data:['锑','钨','锗','稀土','钼']},AX),
+  yAxis:Object.assign({type:'value',name:'相对现价涨幅 (%)',nameTextStyle:{color:'#7a90b0',fontSize:11},axisLabel:{color:'#7a90b0',fontSize:11,formatter:'{value}%'}},{splitLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}}),
+  series:[
+    {name:'悲观',type:'bar',barWidth:'22%',itemStyle:{color:'rgba(138,154,184,0.55)'},label:{show:true,position:'top',color:'#8a9ab8',fontSize:10,formatter:'{c}%'},
+      data:[17,10,8,3,2]},
+    {name:'基准',type:'bar',barWidth:'22%',
+      label:{show:true,position:'top',color:'#fff',fontSize:12,fontWeight:'bold',formatter:'+{c}%'},
+      data:[
+        {value:71,itemStyle:{color:'#ff6b6b'}},
+        {value:33,itemStyle:{color:'#ff9f40'}},
+        {value:27,itemStyle:{color:'#ffd966'}},
+        {value:19,itemStyle:{color:'#5b9cf6'}},
+        {value:14,itemStyle:{color:'#3dd68c'}}
+      ]},
+    {name:'乐观',type:'bar',barWidth:'22%',itemStyle:{color:'rgba(212,175,55,0.45)'},label:{show:true,position:'top',color:'#d4af37',fontSize:10,formatter:'{c}%'},
+      data:[173,68,41,45,30]}
+  ]
+});
+
+// 图7 五维雷达
+mk('chart7',{
+  tooltip:{backgroundColor:'rgba(16,22,38,0.94)',borderColor:'rgba(255,255,255,0.15)',textStyle:{color:'#e0e6f0',fontSize:12}},
+  legend:{data:['锑','锗','钨','稀土','钼'],textStyle:{color:'#a8b8d4',fontSize:11},top:0},
+  radar:{center:['50%','56%'],radius:'66%',
+    indicator:[{name:'供需缺口',max:5},{name:'库存紧张',max:5},{name:'供给刚性',max:5},{name:'需求增速',max:5},{name:'政策强度',max:5}],
+    axisName:{color:'#a8b8d4',fontSize:12},
+    splitLine:{lineStyle:{color:'rgba(255,255,255,0.12)'}},
+    splitArea:{areaStyle:{color:['rgba(255,255,255,0.02)','rgba(255,255,255,0.05)']}},
+    axisLine:{lineStyle:{color:'rgba(255,255,255,0.15)'}}},
+  series:[{
+    type:'radar',symbolSize:5,
+    data:[
+      {name:'锑',value:[4.5,4.5,4.5,3.5,5],itemStyle:{color:'#ff6b6b'},areaStyle:{color:'rgba(255,107,107,0.12)'}},
+      {name:'锗',value:[4.5,5,5,5,4.5],itemStyle:{color:'#ffd966'},areaStyle:{color:'rgba(255,217,102,0.12)'}},
+      {name:'钨',value:[3.5,3.5,4,3,5],itemStyle:{color:'#ff9f40'},areaStyle:{color:'rgba(255,159,64,0.10)'}},
+      {name:'稀土',value:[3,3,3.5,3.5,5],itemStyle:{color:'#5b9cf6'},areaStyle:{color:'rgba(91,156,246,0.10)'}},
+      {name:'钼',value:[3.5,4.5,5,2,3.5],itemStyle:{color:'#3dd68c'},areaStyle:{color:'rgba(61,214,140,0.10)'}}
+    ]
+  }]
+});
+</script>
+</body>
+</html>
