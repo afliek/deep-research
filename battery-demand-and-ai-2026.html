@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>电池的需求来自哪些行业 · AI 到底需不需要电池</title><script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#fff; --ink:#1a1d24; --ink2:#4a5160; --ink3:#8a92a3;
+    --line:#e5e8ee; --red:#d63a2f; --green:#0f9960; --blue:#2563c9; --amber:#c8811a; --purple:#6b4fa8;
+    --shadow:0 1px 3px rgba(20,28,46,.07),0 6px 20px rgba(20,28,46,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:15px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 24px 80px;}
+  header.hero{margin-bottom:24px;}
+  .kicker{font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:700;text-transform:uppercase;}
+  h1{font-size:29px;line-height:1.32;margin:8px 0 10px;letter-spacing:-.01em;}
+  .sub{color:var(--ink2);font-size:15px;margin:0;}
+  .meta{color:var(--ink3);font-size:12.5px;margin-top:12px;}
+
+  section{margin-top:34px;}
+  h2{font-size:21px;margin:0 0 4px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  h2 .num{font-size:13px;color:#fff;background:var(--ink);border-radius:5px;padding:2px 8px;font-weight:700;}
+  h2 .en{font-size:12px;color:var(--ink3);font-weight:500;letter-spacing:.04em;}
+  h3{font-size:16.5px;margin:26px 0 6px;letter-spacing:-.01em;}
+  .lead{color:var(--ink2);margin:6px 0 16px;font-size:14.5px;}
+
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px;}
+  .tldr .c{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--blue);
+    border-radius:10px;padding:16px 18px;box-shadow:var(--shadow);}
+  .tldr .c.r{border-left-color:var(--red);}
+  .tldr .c.g{border-left-color:var(--green);}
+  .tldr .c .t{font-size:13px;color:var(--ink3);font-weight:600;}
+  .tldr .c .v{font-size:24px;font-weight:750;margin:6px 0 2px;letter-spacing:-.02em;}
+  .tldr .c .d{font-size:13px;color:var(--ink2);line-height:1.6;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);}
+  .chartbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 12px;box-shadow:var(--shadow);margin-top:14px;}
+  .chartbox .ch{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .chartbox .ch .ttl{font-size:15px;font-weight:700;}
+  .tabs{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+  .tabs button{border:0;background:#fff;padding:4px 13px;font-size:12.5px;cursor:pointer;color:var(--ink2);font-family:inherit;}
+  .tabs button.on{background:var(--ink);color:#fff;font-weight:600;}
+  .src{font-size:11.5px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .hide{display:none;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);}
+  th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:#f2f4f7;font-weight:700;font-size:12.5px;color:var(--ink2);white-space:nowrap;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  tbody tr:last-child td{border-bottom:0;}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin-top:14px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px;}
+  .why{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px;box-shadow:var(--shadow);}
+  .why .h{font-size:14.5px;font-weight:750;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .why .h .n{font-size:11px;font-weight:800;background:var(--blue);color:#fff;border-radius:50%;width:19px;height:19px;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 19px;}
+  .why p{margin:6px 0 0;font-size:13.5px;color:var(--ink2);}
+  .why .q{font-size:12.5px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+
+  .note{background:#fffaf0;border:1px solid #f0dfbc;border-left:3px solid var(--amber);border-radius:10px;
+    padding:14px 18px;font-size:13.5px;color:#6b5423;margin-top:14px;}
+  .note b{color:#8a6414;}
+  .key{background:#eef4fd;border:1px solid #cddff5;border-left:3px solid var(--blue);border-radius:10px;
+    padding:14px 18px;font-size:13.5px;color:#1f3f6e;margin-top:14px;}
+  .key b{color:#12386e;}
+  .yes{background:#eef7f1;border:1px solid #c9e5d6;border-left:3px solid var(--green);border-radius:10px;
+    padding:14px 18px;font-size:13.5px;color:#1c5540;margin-top:14px;}
+  .yes b{color:#0d6b45;}
+
+  /* 占比条 */
+  .pb{margin:14px 0 4px;}
+  .pb .lab{display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;margin-bottom:5px;}
+  .pb .lab span.r{font-weight:600;color:var(--ink2);font-size:12.5px;}
+  .track{height:26px;background:#f0f2f6;border-radius:5px;overflow:hidden;}
+  .fill{height:100%;border-radius:5px;}
+
+  .disc{background:#f2f4f7;border:1px solid var(--line);border-radius:10px;padding:16px 20px;
+    font-size:12.5px;color:var(--ink2);margin-top:34px;line-height:1.8;}
+  @media(max-width:860px){ .tldr,.grid2,.grid3{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">锂电池 · 需求结构 · AIDC</div>
+  <h1>电池的需求来自哪些行业？AI 需要吗？</h1>
+  <p class="sub">需要，而且是增速最快的一块。但把数字摊开算，AI 现在拉动的锂还不到全球需求的 1% —— 它的意义不在"量"，在"需求性质"。</p>
+  <p class="meta">数据截至 2026-08-29 · 需求口径 2026 年全球锂电池约 2,629GWh · 锂单耗按 1GWh 储能电池 = 600 吨 LCE</p>
+</header>
+
+<section>
+  <div class="tldr">
+    <div class="c">
+      <div class="t">2026 年电池需求结构</div>
+      <div class="v">动力 64% / 储能 30%</div>
+      <div class="d">全球锂电池需求约 <b>2,629GWh</b>（+28%）：动力 1,678GWh、储能 795GWh、消费 119GWh、电动工具 37GWh。储能增速 +47%，是动力的两倍多。</div>
+    </div>
+    <div class="c g">
+      <div class="t">AI 需要电池吗</div>
+      <div class="v">需要，且是刚需</div>
+      <div class="d">AI 机柜功率从传统 6–8kW 跳到 <b>120kW 以上</b>，且毫秒级功率跳变。传统"铅酸 + 柴油发电机"扛不住，锂电池从可选项变成必选项。</div>
+    </div>
+    <div class="c r">
+      <div class="t">但对锂的拉动（2026）</div>
+      <div class="v">约 0.8%</div>
+      <div class="d">2026 年 AIDC 储能出货约 30GWh → 折算碳酸锂约 <b>1.8 万吨</b>，占全球需求约 222 万吨的 <b>0.8%</b>。到 2030 年才升到 5–6%。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 01 电池需求结构 -->
+<section>
+  <h2><span class="num">01</span>电池需求来自哪些行业 <span class="en">Demand Breakdown</span></h2>
+  <p class="lead">2026 年全球锂电池需求约 2,629GWh，四大下游里储能是唯一在加速的引擎。</p>
+
+  <div class="grid2">
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">2026 年全球锂电池需求结构</div></div>
+      <div id="chart1" style="width:100%;height:330px;"></div>
+      <div class="src">来源：东吴 / 中金口径，经机构汇总转引，<b>需核实原文</b>。另一口径（浙商证券）预计 2026 年全球锂电池出货 3,037GWh（+33%），机构间总量口径存在差异。</div>
+    </div>
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">锂需求的动力 / 储能占比演变</div></div>
+      <div id="chart2" style="width:100%;height:330px;"></div>
+      <div class="src">来源：摩根士丹利（J.P. Morgan 口径表述），转引自 Discovery Alert（2026）。2030 年储能占比预计进一步升至 36%。<b>机构测算口径为锂需求占比，非电池出货占比，两者数值不同。</b></div>
+    </div>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr>
+        <th>下游领域</th><th class="num">2026 需求（GWh）</th><th class="num">同比</th><th class="num">占比</th><th>细分与驱动</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><b>动力电池</b></td><td class="num">1,678</td><td class="num">+22%</td><td class="num">63.8%</td>
+          <td>新能源乘用车、商用车（重卡/客车）、两轮车、船舶、低空经济。增速已从 50%+ 回落到 20% 出头，进入存量替代期。</td>
+        </tr>
+        <tr>
+          <td><b>储能电池</b></td><td class="num">795</td><td class="num">+47%</td><td class="num">30.2%</td>
+          <td>源网侧大储、工商业储能、户用储能、<b>AIDC 算力配储</b>。驱动逻辑已从"强制配储"转向经济性驱动 + AI 算力基建。</td>
+        </tr>
+        <tr>
+          <td>消费电池</td><td class="num">119</td><td class="num">+10%</td><td class="num">4.5%</td>
+          <td>手机、笔记本、平板、可穿戴、AR/VR。成熟市场，个位数增长。</td>
+        </tr>
+        <tr>
+          <td>电动工具</td><td class="num">37</td><td class="num">+10%</td><td class="num">1.4%</td>
+          <td>无绳电动工具、园林工具、吸尘器等小动力。</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="src">来源：东吴 / 中金口径，经机构汇总转引，<b>需核实原文</b>。国内口径更能看出切换速度：储能锂电占我国锂电出货比例已从 2025 年的 33.6% 升至 2026Q1 的 42.86%（中国化学与物理电源行业协会 / 券商月报）。</div>
+
+  <h3>储能内部再拆：谁在拉车</h3>
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>区域</th><th class="num">2026 储能电池需求（GWh）</th><th class="num">同比</th><th>主要驱动</th></tr></thead>
+      <tbody>
+        <tr><td>中国</td><td class="num">464</td><td class="num">+22%</td><td>容量电价补偿机制落地、独立储能经济性跑通</td></tr>
+        <tr><td>美国</td><td class="num">99</td><td class="num">+26%</td><td><b>AIDC 算力配储 + 电网阻塞</b>，数据中心相关占比快速抬升</td></tr>
+        <tr><td>欧洲</td><td class="num">90</td><td class="num">+56%</td><td>电网调峰、户储修复</td></tr>
+        <tr><td>其他地区</td><td class="num">142</td><td class="num">+182%</td><td>中东、澳洲、拉美大项目集中落地</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="src">来源：东吴 / 中金口径，经机构汇总转引，<b>需核实原文</b>。全球储能新增装机另有口径为 2026 年约 438GWh（+62%，国金证券）与约 425GWh，机构间存在分歧。</div>
+</section>
+
+<!-- 02 AI 为什么需要电池 -->
+<section>
+  <h2><span class="num">02</span>AI 为什么需要电池：四个技术原因 <span class="en">Why AI Needs Batteries</span></h2>
+  <p class="lead">不是"备用电"这么简单。AI 把数据中心从一个平缓的用电户，变成了电网眼里最凶险的那类负载。</p>
+
+  <div class="chartbox">
+    <div class="ch"><div class="ttl">单机柜功率密度的跃升（kW/柜）</div></div>
+    <div id="chart5" style="width:100%;height:300px;"></div>
+    <div class="src">来源：行业公开参数与雪球研究贴整理（2026），<b>来源层级较低，需核实原文</b>；GB200 NVL72 满载功耗、昇腾 384 超节点功率密度均为厂商公开规格。600kW 为部分场景极值，非普遍水平。</div>
+  </div>
+
+  <div class="grid2">
+    <div class="why">
+      <div class="h"><span class="n">1</span>功率密度暴涨 15–20 倍</div>
+      <p>传统 IDC 机柜 6–8kW，AI 训练机柜满载超过 <b>120kW</b>，部分场景突破 600kW。一个大型 AI 训练集群的功耗相当于一座小城市。原来的供电与备电架构是按 6–8kW 设计的，物理上装不下、也扛不住。</p>
+    </div>
+    <div class="why">
+      <div class="h"><span class="n">2</span>毫秒级功率跳变，柴发追不上</div>
+      <p>AI 芯片高频开关，算力负载瞬时跳变，产生高频脉冲负载与毫秒级功率波动。传统方案是"铅酸电池撑十几分钟，等柴油发电机启动"——<b>柴油发电机的响应时间是秒到分钟级，而 AI 负载的波动是毫秒级</b>。只有电池能补上这个缺口。</p>
+    </div>
+    <div class="why">
+      <div class="h"><span class="n">3</span>GW 级负载不能"说断就断"</div>
+      <p>传统做法：电网故障 → 数据中心断开自建备电。小负载时电网能承受这种"消失"，但一个 <b>GW 级的数据中心突然脱网，会引发电网连锁失稳</b>。所以需要中压 UPS —— 用 BESS 支撑电压穿越，故障期间保持并网不掉线。这是全新的电池需求场景。</p>
+      <p class="q">中压 UPS 的部署规模"尚未被上游锂与电池的需求测算充分捕捉"（ON.energy，Fastmarkets）。</p>
+    </div>
+    <div class="why">
+      <div class="h"><span class="n">4</span>铅酸换锂电 + 绿电刚性约束</div>
+      <p>锂电池在数据中心电池中的渗透率：2021 年约 1.7% → 2024 年约 7.0% → 2025 年预计超 35%，UPS 配套电池中锂电比例 2025 年已达 <b>58%</b>。同时政策端要求"东数西算"枢纽节点新建数据中心绿电消费比例 <b>≥80%</b>，配储从市场化可选项变成审批刚需。</p>
+      <p class="q">渗透率数据来源为雪球研究贴（2026），<b>来源层级较低，需核实原文</b>。</p>
+    </div>
+  </div>
+
+  <div class="yes">
+    <b>结论：AI 不仅需要电池，而且对电池的要求比电动车更高。</b>
+    它要的是毫秒级响应、高频次循环、高倍率充放电、长寿命、液冷、与 HVDC 配电系统深度耦合 —— 这套要求把铅酸电池直接淘汰出局，
+    也让"算力+储能"从可选项变成智算中心建设里的<b>刚性必选项</b>。这是继动力、电网储能之后，锂电需求的"第三台发动机"。
+  </div>
+</section>
+
+<!-- 03 AIDC 规模 -->
+<section>
+  <h2><span class="num">03</span>AIDC 储能到底有多大：多机构测算对照 <span class="en">Sizing the AIDC Storage Market</span></h2>
+  <p class="lead">机构分歧很大（2030 年从 63.7GWh 到 607GWh），但方向和量级一致：五年十倍到二十倍。</p>
+
+  <div class="chartbox">
+    <div class="ch">
+      <div class="ttl">AIDC 储能锂电池出货量预测（GWh）</div>
+      <div class="tabs"><button class="on" data-t="c3">图</button><button data-t="t3">表</button></div>
+    </div>
+    <div id="c3"><div id="chart3" style="width:100%;height:360px;"></div></div>
+    <div id="t3" class="hide">
+      <table>
+        <thead><tr><th>机构</th><th class="num">2025</th><th class="num">2027</th><th class="num">2030</th><th>口径说明</th></tr></thead>
+        <tbody>
+          <tr><td>GGII（高工产研）</td><td class="num">15</td><td class="num">69</td><td class="num">&gt;300</td><td>20 倍扩张，CAGR &gt;60%；2030 年大储电芯占 90%</td></tr>
+          <tr><td>Fastmarkets</td><td class="num">—</td><td class="num">—</td><td class="num">约 300（美国 160）</td><td>AI 数据中心 ESS 需求（Q2 2026 Outlook）</td></tr>
+          <tr><td>宁德时代（招股书）</td><td class="num">—</td><td class="num">—</td><td class="num">约 300</td><td>2024 年 10GWh 起算，CAGR 76.3%</td></tr>
+          <tr><td>EVTank（中性）</td><td class="num">14.6</td><td class="num">—</td><td class="num">新增 63.7 / 存量 247.1</td><td>20–50% 配比、3–5h 时长、数据中心用电占比 3%</td></tr>
+          <tr><td>EVTank（乐观）</td><td class="num">14.6</td><td class="num">—</td><td class="num">新增 267 / 存量 607</td><td>数据中心用电占比 6%</td></tr>
+          <tr><td>亚马逊云科技</td><td class="num">—</td><td class="num">—</td><td class="num">2028 年约 150</td><td>2026 年订单 30–50GWh，2027 年钠电 50–100GWh</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="src">来源：GGII《2025 年中国 AIDC 储能行业发展蓝皮书》（2025-12-10 发布）、Fastmarkets ESS Outlook Q2 2026、宁德时代港股招股书、EVTank《中国 AIDC 储能电池行业发展白皮书（2026 年）》、亚马逊云科技公开表态（2026）。<b>各机构口径不同（出货 vs 新增 vs 存量），差异显著。</b></div>
+  </div>
+
+  <div class="note">
+    <b>一个交叉验证点：</b>2026 年前 5 个月 AIDC 储能出货已超 10GWh，超过 2025 年全年水平。
+    这个"实际交付数据"比任何 2030 年预测都更值得盯 —— 它是唯一能被证伪、能每月更新的数字。
+    <b>如果 2026 全年真能做到 30GWh，那么"五年二十倍"的叙事至少在起步阶段是兑现的。</b>
+  </div>
+</section>
+
+<!-- 04 换算成锂 -->
+<section>
+  <h2><span class="num">04</span>换算成锂：现在还不到 1% <span class="en">What It Means For Lithium</span></h2>
+  <p class="lead">这是最关键的一步。把所有关于 AI 的兴奋感，都除以全球锂需求的总盘子。</p>
+
+  <div class="card">
+    <h3 style="margin-top:0;">测算链条</h3>
+    <p style="margin:6px 0 0;font-size:14px;color:var(--ink2);">
+      1 GWh 储能电池 ≈ <b>600 吨碳酸锂（LCE）</b>（天齐锂业口径；与 LFP 单耗 0.5875 kg/kWh 基本吻合）<br>
+      2026 年 AIDC 储能出货约 <b>30 GWh</b> → 30 × 600 吨 = <b>1.8 万吨 LCE</b><br>
+      2030 年 AIDC 储能出货约 <b>300 GWh</b> → 300 × 600 吨 = <b>18 万吨 LCE</b>
+    </p>
+    <div class="pb">
+      <div class="lab"><span>2026 年：AIDC 占全球碳酸锂需求</span><span class="r">1.8 万吨 / 222 万吨 ≈ 0.8%</span></div>
+      <div class="track"><div class="fill" style="width:0.8%;background:#c8811a;"></div></div>
+    </div>
+    <div class="pb">
+      <div class="lab"><span>2030 年：AIDC 占全球碳酸锂需求</span><span class="r">18 万吨 / 332 万吨 ≈ 5.4%</span></div>
+      <div class="track"><div class="fill" style="width:5.4%;background:#d63a2f;"></div></div>
+    </div>
+    <p class="src">测算口径：1GWh = 600 吨 LCE（天齐锂业）；2026 年全球碳酸锂需求约 222 万吨 LCE（东吴 / 中金口径，转引，需核实）；2030 年全球锂需求约 332 万吨 LCE（东吴）/ 340 万吨 LCE（瑞银）。中金等机构直接测算 2030 年 AIDC 对应碳酸锂需求 16.5–18 万吨，与本测算一致。</p>
+  </div>
+
+  <div class="note">
+    <b>把话说白：</b>AI 在 2026 年拉动的锂需求，<b>不到全球的 1%</b>。即便到 2030 年按最乐观路径走，也只有 <b>5–6%</b>。
+    今天锂价从 13.4 万反弹到 16 万，靠的是库存去化、枧下窝复产延后、储能整体排产创新高 —— <b>不是 AI 买的</b>。
+    AI 在当下扮演的是<b>叙事与估值</b>的角色，不是现货需求的角色。
+  </div>
+</section>
+
+<!-- 05 真正的意义 -->
+<section>
+  <h2><span class="num">05</span>但 AI 的真正意义不在量，在"需求性质" <span class="en">It Changes Demand Quality</span></h2>
+  <p class="lead">这是我认为最被低估的一点，也是回答"AI 需要吗"时更值得讲的部分。</p>
+
+  <div class="tblwrap">
+    <table>
+      <thead><tr><th>维度</th><th>电动车（传统主导需求）</th><th>AI 数据中心（新增需求）</th></tr></thead>
+      <tbody>
+        <tr><td>决策主体</td><td>个人消费者</td><td>企业资本开支（多年期、已锁定）</td></tr>
+        <tr><td><b>可推迟性</b></td><td><b>高</b> —— 补贴退坡、利率上行、经济走弱时，购车可以直接延后或改买燃油车</td><td><b>低</b> —— 算力基建是已公布的多年期投资计划，交付与并网节点刚性</td></tr>
+        <tr><td>对锂价的敏感度</td><td>极低（锂占整车售价 1%–10%）</td><td>极低（锂占数据中心总投资比例更小）</td></tr>
+        <tr><td>宏观敏感性</td><td>高（利率、消费信心、补贴政策）</td><td>中（受电力审批、并网排队、变压器交期制约）</td></tr>
+        <tr><td>需求的连续性</td><td>顺周期，会随消费波动大起大落</td><td>与算力资本开支周期绑定，计划性强</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="key">
+    <b>这对锂意味着什么：</b>过去锂价的巨震，很大程度上来自需求端的"可推迟性" —— 锂贵了，车企推迟采购、消费者推迟购车，需求瞬间消失；锂便宜了又集中补库，需求瞬间放大。这是牛鞭效应的根源。
+    而 <b>AI 数据中心的储能采购绑定的是已经锁定的资本开支计划，不会因为锂价涨跌而推迟或加速</b>。
+    这意味着：随着储能在锂需求中的占比从 8%（2022）升到 30%（2026）再到 36%（2030），
+    <b>锂需求整体的可预测性会提升，由消费情绪驱动的极端波动可能会减弱</b> —— 这对锂价的长期中枢稳定，比多出 18 万吨需求更重要。
+  </div>
+</section>
+
+<!-- 06 反向声音 -->
+<section>
+  <h2><span class="num">06</span>三个不能忽略的冷水 <span class="en">Reality Checks</span></h2>
+  <div class="grid3">
+    <div class="why">
+      <div class="h"><span class="n">1</span>钠电正在分走这块蛋糕</div>
+      <p>钠电池倍率特性天然适配算力负载的高频波动。2026 年已在集中式投标中获得 <b>10%–20% 配额</b>；亚马逊预计 2027 年钠电在该场景规模达 <b>50–100GWh</b>。这意味着 AIDC 储能的增量不会 100% 变成锂需求。</p>
+      <p class="q">宁德时代"纳新Ⅱ" + 海博思创 60GWh 订单（媒体报道，需核实原文）。</p>
+    </div>
+    <div class="why">
+      <div class="h"><span class="n">2</span>托不住动力电池的失速</div>
+      <p>美国 2026 年 Q2 电动车销量同比下滑超 20%（补贴退坡）。动力电池占锂需求仍有约 64%，<b>它掉 10 个百分点腾出的缺口，AIDC 到 2030 年都填不满</b>。把 AI 当成锂需求的救命稻草，是算错了量级。</p>
+    </div>
+    <div class="why">
+      <div class="h"><span class="n">3</span>商业模式还没定型</div>
+      <p>AIDC 储能要同时承担不间断供电、削峰填谷、绿电消纳三重职能，前期设备投入高，收益模型仍在打磨。并网排队、变压器交期已拉长到 3–5 年，<b>交付节奏可能显著慢于出货预测</b>。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 07 结论 -->
+<section>
+  <div class="card" style="border-left:3px solid var(--ink);">
+    <h2 style="margin-bottom:12px;"><span class="num">07</span>一句话回答 <span class="en">Bottom Line</span></h2>
+    <p style="margin:0 0 12px;font-size:15px;">
+      <b>电池的需求来自四个行业：动力（64%）、储能（30%）、消费电子（4.5%）、电动工具（1.4%）。</b>
+      其中储能是唯一在加速的引擎（+47%），而储能内部增速最快的那一段，就是 AI 数据中心配储。
+    </p>
+    <p style="margin:0 0 12px;">
+      <b>AI 确实需要电池，而且是刚性需求</b> —— 因为 AI 机柜功率密度涨了 15–20 倍、负载毫秒级跳变、GW 级负载不能随便脱网，传统"铅酸+柴发"方案在物理上已经失效。这块需求五年有十到二十倍的空间。
+    </p>
+    <p style="margin:0 0 12px;">
+      <b>但把它换算成锂，2026 年只占全球需求的 0.8%，2030 年也只有 5–6%。</b>
+      如果你是因为"AI 要用锂"而看多锂价，那你在交易的是一个 2030 年的故事，不是 2026 年的现货。
+    </p>
+    <p style="margin:0;padding-top:12px;border-top:1px solid var(--line);">
+      <b>它真正的价值在别处：</b>AI 配储把锂需求的一部分，从"消费者可推迟的购车决策"换成了"企业已锁定的资本开支"。
+      随着储能占比从 8% 升到 30%、再到 36%，<b>锂需求的能见度和可预测性在上升</b>。
+      这对一个过去十年靠恐慌和囤货定价的商品来说，可能是比多出 18 万吨需求更重要的结构性变化 —— 它压低的不是价格中枢，而是价格的波动率。
+    </p>
+  </div>
+</section>
+
+<div class="disc">
+  <b>免责声明</b>：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。
+  <br><br>
+  <b>数据说明</b>：本文 2026 年需求拆分、区域数据、AIDC 锂需求测算引自券商研报与第三方机构（GGII、EVTank、Fastmarkets、国金、东吴、中金、天齐锂业口径），多数经公开媒体或机构汇总转引，已标注"需核实原文"，与公司公告、交易所数据不同等处理。AIDC 出货预测分歧极大（2030 年 63.7–607GWh），本文取约 300GWh 作为中性参考。功率密度与渗透率数据来源层级较低，已单独标注。数据截至 2026-08-29。
+</div>
+
+</div>
+
+<script>
+var opt1 = {
+  tooltip: { trigger: 'item', formatter: '{b}<br/>{c} GWh（{d}%）' },
+  legend: { bottom: 0, itemWidth: 12, itemHeight: 12, textStyle: { color: '#4a5160', fontSize: 12 } },
+  series: [{
+    name: '2026 年全球锂电池需求',
+    type: 'pie',
+    radius: ['40%', '68%'],
+    center: ['50%', '44%'],
+    itemStyle: { borderColor: '#fff', borderWidth: 2 },
+    label: { formatter: '{b}\n{c} GWh · {d}%', fontSize: 11.5, color: '#4a5160' },
+    data: [
+      { name: '动力电池', value: 1678, itemStyle: { color: '#2563c9' } },
+      { name: '储能电池', value: 795, itemStyle: { color: '#d63a2f' } },
+      { name: '消费电池', value: 119, itemStyle: { color: '#c8811a' } },
+      { name: '电动工具', value: 37, itemStyle: { color: '#9db2cc' } }
+    ]
+  }]
+};
+
+var opt2 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['电动车', '储能', '工业及其他'], top: 0, textStyle: { fontSize: 12, color: '#4a5160' } },
+  grid: { left: 56, right: 30, top: 46, bottom: 46 },
+  xAxis: {
+    type: 'category', data: ['2022', '2026E', '2030E'],
+    axisLabel: { fontSize: 13, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  yAxis: {
+    type: 'value', name: '占锂需求比重（%）', max: 100, nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+  },
+  series: [
+    {
+      name: '电动车', type: 'bar', stack: 'a', barWidth: '46%',
+      itemStyle: { color: '#2563c9' },
+      data: [85, 64, 58],
+      label: { show: true, fontSize: 11.5, color: '#fff', formatter: '{c}%' }
+    },
+    {
+      name: '储能', type: 'bar', stack: 'a',
+      itemStyle: { color: '#d63a2f' },
+      data: [8, 30, 36],
+      label: { show: true, fontSize: 11.5, color: '#fff', formatter: '{c}%' }
+    },
+    {
+      name: '工业及其他', type: 'bar', stack: 'a',
+      itemStyle: { color: '#c3cad6' },
+      data: [7, 6, 6],
+      label: { show: true, fontSize: 11, color: '#4a5160', formatter: '{c}%' }
+    }
+  ]
+};
+
+var opt3 = {
+  tooltip: { trigger: 'axis', formatter: '{b}<br/>{a0}: {c0} GWh' },
+  legend: { data: ['GGII', 'EVTank 中性（新增）', 'EVTank 乐观（新增）'], top: 0, textStyle: { fontSize: 11.5, color: '#4a5160' } },
+  grid: { left: 66, right: 30, top: 52, bottom: 50 },
+  xAxis: {
+    type: 'category', data: ['2025', '2026E', '2027E', '2030E'],
+    axisLabel: { fontSize: 13, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  yAxis: {
+    type: 'value', name: 'GWh', nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+  },
+  series: [
+    {
+      name: 'GGII', type: 'bar', barWidth: '22%',
+      itemStyle: { color: '#2563c9', borderRadius: [4, 4, 0, 0] },
+      data: [15, 30, 69, 300],
+      label: { show: true, position: 'top', fontSize: 11, color: '#2563c9', formatter: '{c}' }
+    },
+    {
+      name: 'EVTank 中性（新增）', type: 'bar', barWidth: '22%',
+      itemStyle: { color: '#c8811a', borderRadius: [4, 4, 0, 0] },
+      data: [14.6, null, null, 63.7],
+      label: { show: true, position: 'top', fontSize: 11, color: '#c8811a', formatter: '{c}' }
+    },
+    {
+      name: 'EVTank 乐观（新增）', type: 'bar', barWidth: '22%',
+      itemStyle: { color: '#d63a2f', borderRadius: [4, 4, 0, 0] },
+      data: [null, null, null, 267],
+      label: { show: true, position: 'top', fontSize: 11, color: '#d63a2f', formatter: '{c}' }
+    }
+  ]
+};
+
+var opt5 = {
+  tooltip: { trigger: 'axis', formatter: '{b}<br/>{c} kW/柜' },
+  grid: { left: 130, right: 60, top: 30, bottom: 46 },
+  xAxis: {
+    type: 'value', name: 'kW / 机柜', nameLocation: 'middle', nameGap: 30,
+    nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+  },
+  yAxis: {
+    type: 'category',
+    data: ['部分场景极值', 'GB200 NVL72 满载', '昇腾 384 超节点整机柜', '传统 IDC 机柜'],
+    axisLabel: { fontSize: 12, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  series: [{
+    name: '机柜功率密度', type: 'bar', barWidth: '52%',
+    itemStyle: { color: '#d63a2f', borderRadius: [0, 4, 4, 0] },
+    data: [600, 120, 35, 7],
+    label: { show: true, position: 'right', fontSize: 12, color: '#4a5160', formatter: '{c} kW' }
+  }]
+};
+
+echarts.init(document.getElementById('chart1')).setOption(opt1);
+echarts.init(document.getElementById('chart2')).setOption(opt2);
+echarts.init(document.getElementById('chart3')).setOption(opt3);
+echarts.init(document.getElementById('chart5')).setOption(opt5);
+
+document.querySelectorAll('.tabs').forEach(function (box) {
+  var btns = box.querySelectorAll('button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      btns.forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      var key = b.getAttribute('data-t');
+      var partner = key.charAt(0) === 'c' ? 't' + key.slice(1) : 'c' + key.slice(1);
+      document.getElementById(key).classList.remove('hide');
+      document.getElementById(partner).classList.add('hide');
+    });
+  });
+});
+
+window.addEventListener('resize', function () {
+  ['chart1', 'chart2', 'chart3', 'chart5'].forEach(function (id) {
+    var inst = echarts.getInstanceByDom(document.getElementById(id));
+    if (inst) { inst.resize(); }
+  });
+});
+</script>
+</body>
+</html>

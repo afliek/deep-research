@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>锂都用在哪 + 为什么能跌 90%：机制拆解</title><script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#fff; --ink:#1a1d24; --ink2:#4a5160; --ink3:#8a92a3;
+    --line:#e5e8ee; --red:#d63a2f; --green:#0f9960; --blue:#2563c9; --amber:#c8811a; --purple:#6b4fa8;
+    --shadow:0 1px 3px rgba(20,28,46,.07),0 6px 20px rgba(20,28,46,.05);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:15px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:36px 24px 80px;}
+  header.hero{margin-bottom:24px;}
+  .kicker{font-size:12px;letter-spacing:.14em;color:var(--blue);font-weight:700;text-transform:uppercase;}
+  h1{font-size:29px;line-height:1.32;margin:8px 0 10px;letter-spacing:-.01em;}
+  .sub{color:var(--ink2);font-size:15px;margin:0;}
+  .meta{color:var(--ink3);font-size:12.5px;margin-top:12px;}
+
+  section{margin-top:34px;}
+  h2{font-size:21px;margin:0 0 4px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  h2 .num{font-size:13px;color:#fff;background:var(--ink);border-radius:5px;padding:2px 8px;font-weight:700;}
+  h2 .en{font-size:12px;color:var(--ink3);font-weight:500;letter-spacing:.04em;}
+  h3{font-size:16.5px;margin:26px 0 6px;letter-spacing:-.01em;}
+  .lead{color:var(--ink2);margin:6px 0 16px;font-size:14.5px;}
+
+  .answer{background:#fff;border:1px solid var(--line);border-left:4px solid var(--ink);border-radius:12px;
+    padding:22px 26px;box-shadow:var(--shadow);}
+  .answer .big{font-size:17px;font-weight:700;line-height:1.7;margin-bottom:12px;}
+  .answer p{margin:8px 0;font-size:14.5px;color:var(--ink2);}
+  .answer b{color:var(--ink);}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;box-shadow:var(--shadow);}
+  .chartbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 18px 12px;box-shadow:var(--shadow);margin-top:14px;}
+  .chartbox .ch{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .chartbox .ch .ttl{font-size:15px;font-weight:700;}
+  .tabs{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden;}
+  .tabs button{border:0;background:#fff;padding:4px 13px;font-size:12.5px;cursor:pointer;color:var(--ink2);font-family:inherit;}
+  .tabs button.on{background:var(--ink);color:#fff;font-weight:600;}
+  .src{font-size:11.5px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+  .hide{display:none;}
+
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--card);}
+  th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;}
+  th{background:#f2f4f7;font-weight:700;font-size:12.5px;color:var(--ink2);white-space:nowrap;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  tbody tr:last-child td{border-bottom:0;}
+  .tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin-top:14px;}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px;}
+  .amp{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:16px 18px;box-shadow:var(--shadow);}
+  .amp .h{font-size:14.5px;font-weight:750;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+  .amp .h .n{font-size:11px;font-weight:800;background:var(--ink);color:#fff;border-radius:50%;width:19px;height:19px;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 19px;}
+  .amp p{margin:6px 0 0;font-size:13.5px;color:var(--ink2);}
+  .amp .q{font-size:12.5px;color:var(--ink3);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+
+  .note{background:#fffaf0;border:1px solid #f0dfbc;border-left:3px solid var(--amber);border-radius:10px;
+    padding:14px 18px;font-size:13.5px;color:#6b5423;margin-top:14px;}
+  .note b{color:#8a6414;}
+  .key{background:#eef4fd;border:1px solid #cddff5;border-left:3px solid var(--blue);border-radius:10px;
+    padding:14px 18px;font-size:13.5px;color:#1f3f6e;margin-top:14px;}
+  .key b{color:#12386e;}
+
+  .usegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px;}
+  .u{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:14px 16px;box-shadow:var(--shadow);border-top:3px solid var(--ink3);}
+  .u.big{border-top-color:var(--red);}
+  .u.mid{border-top-color:var(--amber);}
+  .u .p{font-size:20px;font-weight:800;letter-spacing:-.02em;}
+  .u .n{font-size:14px;font-weight:700;margin:2px 0 6px;}
+  .u .d{font-size:12.5px;color:var(--ink2);line-height:1.6;}
+
+  .disc{background:#f2f4f7;border:1px solid var(--line);border-radius:10px;padding:16px 20px;
+    font-size:12.5px;color:var(--ink2);margin-top:34px;line-height:1.8;}
+  @media(max-width:860px){
+    .grid2,.grid3,.usegrid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="kicker">大宗商品 · 锂 · 机制拆解</div>
+  <h1>锂都用在哪？以及——它为什么能跌 90%</h1>
+  <p class="sub">上一篇讲的是"发生了什么"。这一篇讲"为什么这种跌幅是结构性的必然"，以及锂的真实需求盘子里到底装了什么。</p>
+  <p class="meta">数据截至 2026-08-28 · 用途结构口径 USGS 2024 · 成本测算口径 国金证券 · 价格口径 广期所 / SMM</p>
+</header>
+
+<!-- 一句话答案 -->
+<section>
+  <div class="answer">
+    <div class="big">锂价能跌 90%，根本原因不在需求端，而在<b>需求对价格几乎完全不敏感</b>。</div>
+    <p>锂价从 5 万涨到 60 万（12 倍），一辆 22.61 万元的电动车里，锂的成本只从约 1,905 元涨到约 22,842 元 —— <b>占整车售价从 0.84% 涨到 10.10%</b>。</p>
+    <p>这意味着：锂价涨 12 倍，终端消费者只多付约 2 万元，<b>车照样买</b>；锂价跌 90%，也只省下约 2 万元，<b>也不会因此多买一辆</b>。需求曲线几乎是垂直的。</p>
+    <p>需求曲线垂直的商品，价格不负责调节"买多少"，只由供给端单方面决定。而锂的供给端开发周期 3–5 年、成本曲线从盐湖的 5 万跨到外购矿的 16 万（跨度 3 倍）—— <b>一旦过剩，价格必须一路砸穿大部分产能的成本线才能出清。跌 90% 是这个结构的必然结果，不是意外。</b></p>
+  </div>
+</section>
+
+<!-- 01 用途 -->
+<section>
+  <h2><span class="num">01</span>锂都用在哪 <span class="en">Where Does Lithium Go</span></h2>
+  <p class="lead">先回答第二个问题。锂的需求高度集中在一个引擎上，这个结构本身就是价格巨震的放大器。</p>
+
+  <div class="grid2">
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">全球锂终端用途结构（2024）</div></div>
+      <div id="chart2" style="width:100%;height:330px;"></div>
+      <div class="src">来源：USGS《2025 年矿产品概要》（2024 年数据），经加拿大自然资源部、S&amp;P Global 交叉印证。电池占比已从 2015 年的 31% 升至 2024 年的 87%。</div>
+    </div>
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">87% 的电池里再拆一层（2024 出货）</div></div>
+      <div id="chart3" style="width:100%;height:330px;"></div>
+      <div class="src">来源：EVTank《中国锂离子电池行业发展白皮书（2025 年）》，2024 年全球锂电池出货 1,545.1GWh。储能电池同比 +64.9%，动力电池 +21.5%。</div>
+    </div>
+  </div>
+
+  <div class="usegrid">
+    <div class="u big">
+      <div class="p" style="color:var(--red)">87%</div>
+      <div class="n">电池</div>
+      <div class="d">可充电锂电池：新能源车动力电池、储能电站、3C 消费电子、电动工具、两轮车。几乎全部需求增量都来自这里。</div>
+    </div>
+    <div class="u mid">
+      <div class="p" style="color:var(--amber)">5%</div>
+      <div class="n">陶瓷与玻璃</div>
+      <div class="d">作助熔剂：降低熔融温度与热膨胀系数，提升抗热冲击性。用于微晶玻璃灶台面板、手机/平板抗跌落玻璃、玻璃容器、玻纤、建筑陶瓷。中国 2024 年玻璃耗锂约 3.2 万吨 LCE、陶瓷约 1.6 万吨 LCE。</div>
+    </div>
+    <div class="u mid">
+      <div class="p" style="color:var(--amber)">2%</div>
+      <div class="n">润滑脂</div>
+      <div class="d">锂基润滑脂是全球润滑脂主流，胜在热稳定性、抗水性、机械稳定性。用于汽车轮毂轴承、底盘、电动机构及工业高温润滑。</div>
+    </div>
+    <div class="u">
+      <div class="p">1%</div>
+      <div class="n">空气处理</div>
+      <div class="d">溴化锂溶液作吸收式制冷工质与干燥剂，用于大型中央空调与工业除湿。</div>
+    </div>
+    <div class="u">
+      <div class="p">1%</div>
+      <div class="n">连铸保护渣</div>
+      <div class="d">钢铁连铸的冶金助熔剂，改善结晶器润滑与传热。</div>
+    </div>
+    <div class="u">
+      <div class="p">1%</div>
+      <div class="n">医疗</div>
+      <div class="d">碳酸锂是治疗双相情感障碍的经典心境稳定剂，属不可替代的专科用药。</div>
+    </div>
+    <div class="u">
+      <div class="p">3%</div>
+      <div class="n">其他</div>
+      <div class="d">铝锂合金（航空航天轻量化）、有机锂化合物（橡胶与热塑性材料的聚合引发剂）、原铝电解添加剂、原子能工业等。</div>
+    </div>
+  </div>
+  <div class="src">来源：USGS（2024 年全球口径）。中国口径更极端——电池约占锂消费的 95%（中国有色金属工业协会锂业分会，2024）；按碳酸锂品种分，67% 用于磷酸铁锂正极、12% 用于三元正极（SMM）。不同机构因口径（锂资源 vs 碳酸锂、出货量 vs 锂盐消耗量）不同略有出入。</div>
+
+  <div class="key">
+    <b>用途结构对价格的含义 —— 这是理解"跌这么多"的第二块拼图：</b>
+    87% 的需求压在电池上，而电池需求本身又由补贴政策、渗透率曲线、装机节奏驱动，波动巨大。
+    这意味着锂<b>没有"需求缓冲垫"</b>：传统工业那 13%（陶瓷、玻璃、润滑脂、医药）体量稳定、增速缓慢，在电池需求失速时完全托不住盘。
+    对比之下，铜的下游是电力、建筑、家电、交通多点分散，某个领域下滑会被其他领域对冲；<b>锂把所有鸡蛋放在了电池这一个篮子里</b>。
+  </div>
+</section>
+
+<!-- 02 机制 -->
+<section>
+  <h2><span class="num">02</span>核心机制：需求弹性近乎为零 <span class="en">Near-Zero Demand Elasticity</span></h2>
+  <p class="lead">这是全部答案的地基。下面的数字来自产业链真实测算，不是估计。</p>
+
+  <div class="chartbox">
+    <div class="ch">
+      <div class="ttl">锂价 → 单车锂成本 → 占整车售价比重</div>
+      <div class="tabs"><button class="on" data-t="c1">图</button><button data-t="t1">表</button></div>
+    </div>
+    <div id="c1"><div id="chart1" style="width:100%;height:380px;"></div></div>
+    <div id="t1" class="hide">
+      <table>
+        <thead><tr><th class="num">碳酸锂价格<br>（万元/吨）</th><th class="num">单车锂成本<br>（元）</th><th class="num">占整车售价<br>（22.61 万元）</th><th>对照</th></tr></thead>
+        <tbody>
+          <tr><td class="num">5（2025 年谷底附近）</td><td class="num">1,905</td><td class="num">0.84%</td><td>约等于一次保养的钱</td></tr>
+          <tr><td class="num">10</td><td class="num">3,807</td><td class="num">1.68%</td><td>—</td></tr>
+          <tr><td class="num">20</td><td class="num">7,614</td><td class="num">3.37%</td><td>—</td></tr>
+          <tr><td class="num">30</td><td class="num">11,421</td><td class="num">5.05%</td><td>—</td></tr>
+          <tr><td class="num">40</td><td class="num">15,228</td><td class="num">6.73%</td><td>—</td></tr>
+          <tr><td class="num">50</td><td class="num">19,035</td><td class="num">8.42%</td><td>—</td></tr>
+          <tr><td class="num">60（2022 峰值）</td><td class="num">22,842</td><td class="num">10.10%</td><td>仍不足车价的一个零头</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="src">测算口径：比亚迪汉 EV 标准续航版豪华型，电池 64.8kWh 磷酸铁锂，售价 22.61 万元；碳酸锂单耗取 0.5875 kg/kWh（1GWh 需磷酸铁锂正极 2,200–2,500 吨，每吨正极耗 0.25 吨碳酸锂），单车耗锂 38.07kg。来源：国金证券《金属材料行业锂系列深度（七）：需求对价格敏感度几何？》，转引自格隆汇、虎嗅，<b>需核实原文</b>。60 万元档为按同一线性关系外推。</div>
+  </div>
+
+  <div class="note">
+    <b>把这张图读成一句话：</b>锂价从 5 万涨到 60 万 —— 涨了 12 倍，一辆 22 万元的车成本只增加约 2.1 万元。
+    反过来，从 60 万跌到 6 万 —— 跌了 90%，一辆车也只省下约 2.1 万元。
+    <b>省 2 万元不会让任何人多买一辆车，多付 2 万元也不会让任何人放弃买车。</b>
+    需求是刚性的、由电池容量和技术路线决定的"配比需求"，不由价格决定。这就是需求价格弹性趋近于 0 的含义。
+  </div>
+
+  <div class="chartbox">
+    <div class="ch"><div class="ttl">弹性错配：为什么供需的小错配 = 价格的大崩塌</div></div>
+    <div id="chart4" style="width:100%;height:400px;"></div>
+    <div class="src"><b>示意图，非实证数据</b>。用于说明弹性结构：需求曲线近乎垂直（价格从 60 跌到 5，需求量仅增约 10%），供给曲线在产能释放后大幅右移且变平坦。两条曲线交点从 P₁ 直落到 P₂ —— 价格暴跌，成交量的变化却很小。这正是锂价 2022→2025 走势的几何解释。</div>
+  </div>
+
+  <div class="key">
+    <b>几何直觉：</b>把需求想象成一根竖直的管子，供给是一把水平的刀。刀往上抬一点，价格暴涨；刀往下降一点，价格暴跌 —— 而管子里流过的量（需求）几乎不变。
+    对弹性正常的商品，价格下跌会刺激出大量新需求来吸收过剩；<b>对锂，没有这个自动稳定器</b>。过剩只能靠"把高成本产能杀死"来消化，而杀产能需要把价格打到它们的成本线以下 —— 这是跌幅必须巨大的全部原因。
+  </div>
+</section>
+
+<!-- 03 供给跑赢需求 -->
+<section>
+  <h2><span class="num">03</span>供给跑赢需求，且甩开了 <span class="en">Supply Outran Demand</span></h2>
+  <p class="lead">需求一直在增长 —— 从来没崩过。问题是供给跑得更快。</p>
+
+  <div class="grid2">
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">需求增速 vs 供给增速</div></div>
+      <div id="chart5" style="width:100%;height:310px;"></div>
+      <div class="src">来源：需求增速取 S&amp;P Global（2020–2024 全球锂消费年均近 +32%）；供给为<b>有效产能</b>口径，按"2025 年全球锂有效产能 140 万吨 LCE、较 2022 年增长近两倍"倒推 2022 年约 47 万吨、年化约 +44%（上海钢联，转引自媒体，<b>需核实原文</b>，且为倒推值）。2026E 组为 Fitch 预测（产量 +13.2% / 需求 +5.8%）。<b>两组数据口径与时段不同，仅作量级对比。</b></div>
+    </div>
+    <div class="chartbox">
+      <div class="ch"><div class="ttl">需求从未崩塌，崩的是价格</div></div>
+      <div id="chart6" style="width:100%;height:310px;"></div>
+      <div class="src">全球锂需求：2022 年约 86 万吨 LCE（+53.7%，SMM/新湖期货）、2024 年约 117 万吨 LCE（USGS）、2026E 约 220 万吨（东吴电新，<b>预测值且口径为碳酸锂需求</b>）。价格：2022 年底电池级约 57 万元/吨、2024 年底约 7.8 万元/吨、2026-08-28 广期所 LC2701 收盘 15.96 万元/吨。<b>三个时点口径不完全可比，仅展示方向性背离。</b></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>这张组合图是全篇最重要的一张：</b>全球锂需求从 2022 年的 86 万吨一路涨到 2026 年预期的 220 万吨，<b>需求翻了 1.5 倍以上，价格却从 57 万跌到 7.8 万</b>。
+    如果只看价格曲线，会以为这个行业完了；看需求曲线，它其实一直在高速增长。
+    <b>锂价崩塌不是需求的故事，是供给的故事。</b>
+  </div>
+</section>
+
+<!-- 04 五个放大器 -->
+<section>
+  <h2><span class="num">04</span>五个放大器：为什么波动被放大到极端 <span class="en">Five Amplifiers</span></h2>
+  <p class="lead">弹性错配是"能跌这么多"的前提，这五个机制决定了它跌得有多快、多狠。</p>
+
+  <div class="grid3">
+    <div class="amp">
+      <div class="h"><span class="n">1</span>市场太小</div>
+      <p>2024 年全球锂需求约 117 万吨 LCE，按当前 15.96 万元/吨换算，市场规模仅约 <b>1,867 亿元人民币</b>。这个体量在大宗商品里属于小盘 —— 相对少量的囤货或抛售资金，就足以把价格推向极端。盘子越小，同样的资金冲击造成的价格位移越大。</p>
+      <p class="q">换算：117 万吨 × 15.96 万元/吨 ≈ 1,867 亿元（按当前价换算，非当年实际规模）。</p>
+    </div>
+    <div class="amp">
+      <div class="h"><span class="n">2</span>3–5 年开发周期 = 蛛网模型</div>
+      <p>锂矿从勘探到出矿要 3–5 年，盐湖更长。2021–2022 年的天价信号，对应的产能要到 <b>2023–2025 年才落地</b>；而等到产能落地时，需求增速已经从 50%+ 降到 30%。信号与响应之间隔着整个周期，这是教科书级的蛛网（Cobweb）—— 高价格必然催生过剩，过剩必然砸穿价格。</p>
+    </div>
+    <div class="amp">
+      <div class="h"><span class="n">3</span>牛鞭效应：库存是放大器</div>
+      <p>涨价时全产业链恐慌性囤货（每个环节多备 1–2 个月），<b>表观需求被放大</b>；跌价时全链去库、只保持刚需采购，<b>表观需求被压缩</b>。一正一反，产业链看到的"需求"波动幅度是真实消耗波动的 2–3 倍。2022 年的 60 万里，有相当一部分是囤货堆出来的假需求。</p>
+    </div>
+    <div class="amp">
+      <div class="h"><span class="n">4</span>替代品是阈值开关，不是连续曲线</div>
+      <p>锂价 60 万时，钠离子电池、磷酸锰铁锂、低锂/无钴路线全部变得经济可行；跌到 6 万，这些替代全部不划算。<b>高价会自己"召唤"出替代品，形成价格软顶</b>；低价则把它们全部关掉。这意味着 60 万在结构上就不可能长期维持 —— 它自己触发了需求的天花板。</p>
+    </div>
+    <div class="amp">
+      <div class="h"><span class="n">5</span>期货把"囤货"变成"套保抛售"</div>
+      <p>2023 年 7 月 21 日广期所碳酸锂期货上市（全球首个实物交割锂期货）。上市首日主力 LC2401 跌超 12%，其余 6 个合约全部跌停。它提供了做空与套保工具，把过去只能"囤货待涨"的产业链资金，变成了可以提前锁定价格的卖方。<b>它不制造下跌，但让下跌更快、更彻底地完成。</b></p>
+      <p class="q">期现相关性上市后一月达 0.88、后续达 0.97（券商研报口径，需核实原文）。</p>
+    </div>
+    <div class="amp">
+      <div class="h"><span class="n">6</span>成本曲线跨度 3 倍</div>
+      <p>盐湖完全成本 <b>5–8 万元/吨</b>，国内云母现金成本 <b>10–12 万</b>，外购辉石/云母约 <b>16 万</b>才进入亏损区。成本分布极宽意味着出清必须"分层进行"：价格每跌破一层，才淘汰一批产能。<b>要从 60 万跌到 6 万，本质是把价格打到最低成本产能（盐湖）之上、把其余全部挤出去。</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 总结 -->
+<section>
+  <div class="card" style="border-left:3px solid var(--ink);">
+    <h2 style="margin-bottom:12px;"><span class="num">05</span>把逻辑串起来 <span class="en">Putting It Together</span></h2>
+    <p style="margin:0 0 12px;font-size:15px;">用一条因果链复述整个暴跌：</p>
+    <p style="margin:0 0 12px;">
+      <b>①</b> 2020–2022 需求爆发（新能源车年均 +50%）+ 供给刚性（开发周期 3–5 年）→ 严重短缺。<br>
+      <b>②</b> 由于需求对价格不敏感（锂只占整车成本个位数%），短缺<b>无法通过涨价抑制需求来缓解</b> → 价格一路失控涨到 60 万，涨到"恐慌溢价"为止。<br>
+      <b>③</b> 60 万的价格信号触发全球资本开支狂潮，同时<b>自身召唤出替代品</b>（钠电等）和回收产能 → 埋下自我毁灭的种子。<br>
+      <b>④</b> 2023–2025 产能集中落地（有效产能三年增近两倍），同期需求增速降至 30% → 过剩形成。<br>
+      <b>⑤</b> 同样因为需求对价格不敏感，过剩<b>无法通过降价刺激需求来消化</b> → 唯一出路是杀死供给。<br>
+      <b>⑥</b> 杀供给必须把价格打到高成本产能的现金成本以下；成本曲线跨度 3 倍 → 价格要从 60 万一路砸到 6 万，才能把云母、外购矿、高成本辉石依次清出场。<br>
+      <b>⑦</b> 库存牛鞭 + 小市场 + 期货做空工具，把这个过程放大、加速。
+    </p>
+    <p style="margin:0 0 0;padding-top:12px;border-top:1px solid var(--line);">
+      <b>所以，跌 90% 不是"锂的需求消失了"，恰恰相反 —— 需求一直在涨。跌 90% 是因为这个商品的需求端失去了自我调节能力，所有失衡都必须由供给端的产能出清来承担，而出清的代价就是价格必须跌穿绝大多数产能的成本线。</b>
+    </p>
+  </div>
+</section>
+
+<div class="disc">
+  <b>免责声明</b>：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。
+  <br><br>
+  <b>数据说明</b>：用途结构为 USGS 2024 年全球口径；成本测算引自国金证券研报并经媒体转引，已标注"需核实原文"；供给有效产能增速为按公开表述倒推，非原始数据；图 4（弹性错配）为示意图，不含实证数值。数据截至 2026-08-28。
+</div>
+
+</div>
+
+<script>
+var opt1 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['单车锂成本（元）', '占整车售价比重（%）'], top: 0, textStyle: { fontSize: 12, color: '#4a5160' } },
+  grid: { left: 70, right: 66, top: 46, bottom: 56 },
+  xAxis: {
+    type: 'category',
+    name: '碳酸锂价格（万元/吨）',
+    nameLocation: 'middle', nameGap: 34, nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    data: ['5', '10', '20', '30', '40', '50', '60'],
+    axisLabel: { fontSize: 12, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  yAxis: [
+    {
+      type: 'value', name: '单车锂成本（元）', nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+    },
+    {
+      type: 'value', name: '占整车售价', max: 12, nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+      splitLine: { show: false }, axisLabel: { formatter: '{value}%', color: '#4a5160' }
+    }
+  ],
+  series: [
+    {
+      name: '单车锂成本（元）', type: 'bar', barWidth: '44%',
+      itemStyle: { color: '#9db2cc', borderRadius: [4, 4, 0, 0] },
+      data: [1905, 3807, 7614, 11421, 15228, 19035, 22842]
+    },
+    {
+      name: '占整车售价比重（%）', type: 'line', yAxisIndex: 1, smooth: true, symbolSize: 8,
+      lineStyle: { width: 3, color: '#d63a2f' }, itemStyle: { color: '#d63a2f' },
+      data: [0.84, 1.68, 3.37, 5.05, 6.73, 8.42, 10.10],
+      label: { show: true, formatter: '{c}%', fontSize: 11, color: '#d63a2f', position: 'top' }
+    }
+  ]
+};
+
+var opt2 = {
+  tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
+  legend: { bottom: 0, itemWidth: 12, itemHeight: 12, textStyle: { color: '#4a5160', fontSize: 12 } },
+  series: [{
+    name: '全球锂终端用途 2024',
+    type: 'pie',
+    radius: ['40%', '68%'],
+    center: ['50%', '44%'],
+    itemStyle: { borderColor: '#fff', borderWidth: 2 },
+    label: { formatter: '{b}\n{c}%', fontSize: 11.5, color: '#4a5160' },
+    data: [
+      { name: '电池', value: 87, itemStyle: { color: '#d63a2f' } },
+      { name: '陶瓷和玻璃', value: 5, itemStyle: { color: '#c8811a' } },
+      { name: '润滑脂', value: 2, itemStyle: { color: '#6b4fa8' } },
+      { name: '空气处理', value: 1, itemStyle: { color: '#9db2cc' } },
+      { name: '连铸保护渣', value: 1, itemStyle: { color: '#7fb3a8' } },
+      { name: '医疗', value: 1, itemStyle: { color: '#e0a3a3' } },
+      { name: '其他', value: 3, itemStyle: { color: '#c3cad6' } }
+    ]
+  }]
+};
+
+var opt3 = {
+  tooltip: { trigger: 'item', formatter: '{b}<br/>{c} GWh（{d}%）' },
+  legend: { bottom: 0, itemWidth: 12, itemHeight: 12, textStyle: { color: '#4a5160', fontSize: 12 } },
+  series: [{
+    name: '2024 全球锂电池出货',
+    type: 'pie',
+    radius: ['40%', '68%'],
+    center: ['50%', '44%'],
+    itemStyle: { borderColor: '#fff', borderWidth: 2 },
+    label: { formatter: '{b}\n{d}%', fontSize: 11.5, color: '#4a5160' },
+    data: [
+      { name: '动力电池', value: 1051.2, itemStyle: { color: '#d63a2f' } },
+      { name: '储能电池', value: 369.8, itemStyle: { color: '#0f9960' } },
+      { name: '小型电池（3C 等）', value: 124.1, itemStyle: { color: '#9db2cc' } }
+    ]
+  }]
+};
+
+var opt4 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['需求曲线 D（近乎垂直）', '供给曲线 S1（2022，产能刚性）', '供给曲线 S2（2025，产能释放）'], top: 0, textStyle: { fontSize: 11.5, color: '#4a5160' } },
+  grid: { left: 62, right: 40, top: 52, bottom: 52 },
+  xAxis: {
+    type: 'value', name: '数量', min: 8, max: 14, nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160', formatter: '{value}' }
+  },
+  yAxis: {
+    type: 'value', name: '价格', max: 66, nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+  },
+  series: [
+    {
+      name: '需求曲线 D（近乎垂直）', type: 'line', symbol: 'none',
+      lineStyle: { width: 3, color: '#2563c9' },
+      data: [[10, 66], [10.25, 40], [10.5, 20], [10.75, 10], [11, 4]]
+    },
+    {
+      name: '供给曲线 S1（2022，产能刚性）', type: 'line', symbol: 'none',
+      lineStyle: { width: 3, color: '#d63a2f', type: 'dashed' },
+      data: [[9.6, 4], [10, 20], [10.3, 50], [10.45, 66]]
+    },
+    {
+      name: '供给曲线 S2（2025，产能释放）', type: 'line', symbol: 'none',
+      lineStyle: { width: 3, color: '#0f9960' },
+      data: [[9.2, 2], [10.5, 6], [12, 12], [13.6, 20]],
+      markPoint: {
+        symbolSize: 40,
+        data: [
+          { name: 'P1', coord: [10.3, 48], value: 'P₁', itemStyle: { color: '#d63a2f' } },
+          { name: 'P2', coord: [10.5, 6], value: 'P₂', itemStyle: { color: '#0f9960' } }
+        ]
+      }
+    }
+  ]
+};
+
+var opt5 = {
+  tooltip: { trigger: 'axis', formatter: '{b}<br/>{a0}: {c0}%' },
+  legend: { data: ['需求增速', '供给增速'], top: 0, textStyle: { fontSize: 12, color: '#4a5160' } },
+  grid: { left: 62, right: 30, top: 46, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: ['2020–2024 年均（历史）', '2026E（Fitch 预测）'],
+    axisLabel: { fontSize: 12, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  yAxis: {
+    type: 'value', name: '同比增速（%）', nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+    splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+  },
+  series: [
+    {
+      name: '需求增速', type: 'bar', barWidth: '26%',
+      itemStyle: { color: '#2563c9', borderRadius: [4, 4, 0, 0] },
+      data: [32, 5.8],
+      label: { show: true, position: 'top', fontSize: 11.5, color: '#2563c9', formatter: '{c}%' }
+    },
+    {
+      name: '供给增速', type: 'bar', barWidth: '26%',
+      itemStyle: { color: '#c8811a', borderRadius: [4, 4, 0, 0] },
+      data: [44, 13.2],
+      label: { show: true, position: 'top', fontSize: 11.5, color: '#c8811a', formatter: '{c}%' }
+    }
+  ]
+};
+
+var opt6 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['全球锂需求（万吨 LCE）', '电池级碳酸锂价格（万元/吨）'], top: 0, textStyle: { fontSize: 12, color: '#4a5160' } },
+  grid: { left: 62, right: 66, top: 46, bottom: 50 },
+  xAxis: {
+    type: 'category', data: ['2022', '2024', '2026E'],
+    axisLabel: { fontSize: 13, color: '#4a5160' },
+    axisLine: { lineStyle: { color: '#d5dae3' } }
+  },
+  yAxis: [
+    {
+      type: 'value', name: '需求（万吨 LCE）', nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eef1f5' } }, axisLabel: { color: '#4a5160' }
+    },
+    {
+      type: 'value', name: '锂价（万元/吨）', nameTextStyle: { color: '#8a92a3', fontSize: 11 },
+      splitLine: { show: false }, axisLabel: { color: '#4a5160' }
+    }
+  ],
+  series: [
+    {
+      name: '全球锂需求（万吨 LCE）', type: 'bar', barWidth: '40%',
+      itemStyle: { color: '#0f9960', borderRadius: [4, 4, 0, 0] },
+      data: [86, 117, 220],
+      label: { show: true, position: 'top', fontSize: 11.5, color: '#0f9960', formatter: '{c}' }
+    },
+    {
+      name: '电池级碳酸锂价格（万元/吨）', type: 'line', yAxisIndex: 1, symbolSize: 10,
+      lineStyle: { width: 3, color: '#d63a2f' }, itemStyle: { color: '#d63a2f' },
+      data: [57, 7.8, 15.96],
+      label: { show: true, fontSize: 11.5, color: '#d63a2f', formatter: '{c}' }
+    }
+  ]
+};
+
+echarts.init(document.getElementById('chart1')).setOption(opt1);
+echarts.init(document.getElementById('chart2')).setOption(opt2);
+echarts.init(document.getElementById('chart3')).setOption(opt3);
+echarts.init(document.getElementById('chart4')).setOption(opt4);
+echarts.init(document.getElementById('chart5')).setOption(opt5);
+echarts.init(document.getElementById('chart6')).setOption(opt6);
+
+document.querySelectorAll('.tabs').forEach(function (box) {
+  var btns = box.querySelectorAll('button');
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      btns.forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      var key = b.getAttribute('data-t');
+      var partner = key.charAt(0) === 'c' ? 't' + key.slice(1) : 'c' + key.slice(1);
+      document.getElementById(key).classList.remove('hide');
+      document.getElementById(partner).classList.add('hide');
+    });
+  });
+});
+
+window.addEventListener('resize', function () {
+  ['chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6'].forEach(function (id) {
+    var inst = echarts.getInstanceByDom(document.getElementById(id));
+    if (inst) { inst.resize(); }
+  });
+});
+</script>
+</body>
+</html>
