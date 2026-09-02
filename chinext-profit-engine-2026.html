@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>创业板指的利润从哪来 · 三大行业与两条引擎（2026中报深拆）</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root{
+    --bg:#0d0d0f; --panel:#15151a; --panel2:#1a1a21; --gold:#d4b06a; --gold-dim:#9c854e;
+    --text:#e8e4da; --muted:#a09a8c; --line:#2a2a32; --red:#e06c5f; --green:#7fb37f;
+    --blue:#7fa8c9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"FangSong","仿宋","STFangsong",serif;
+    line-height:1.9; font-size:17px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:64px 48px 96px}
+  h1{
+    font-family:"FangSong","仿宋",serif;font-size:34px;font-weight:400;color:var(--gold);
+    letter-spacing:2px;margin-bottom:10px;line-height:1.4;
+  }
+  .sub{color:var(--muted);font-size:15px;margin-bottom:6px}
+  .tagline{display:inline-block;border:1px solid var(--gold-dim);color:var(--gold);font-size:13px;
+    padding:2px 12px;border-radius:999px;margin:14px 0 40px;letter-spacing:1px}
+  h2{
+    font-size:24px;color:var(--gold);font-weight:400;margin:56px 0 18px;padding-left:14px;
+    border-left:3px solid var(--gold);letter-spacing:1px;
+  }
+  h3{font-size:19px;color:#e9dcc0;font-weight:400;margin:30px 0 10px}
+  h4{font-size:16.5px;color:var(--gold);font-weight:400;margin:20px 0 8px}
+  p{margin-bottom:14px;text-align:justify}
+  .lead{color:var(--muted);font-size:16px}
+  table{
+    width:100%;border-collapse:collapse;margin:18px 0 26px;font-size:15px;line-height:1.7;
+  }
+  th{
+    background:#1e1a12;color:var(--gold);font-weight:400;text-align:left;
+    padding:10px 12px;border:1px solid var(--line);letter-spacing:.5px;white-space:nowrap;
+  }
+  td{padding:10px 12px;border:1px solid var(--line);vertical-align:top;background:var(--panel)}
+  tr:nth-child(even) td{background:var(--panel2)}
+  td.c,th.c{text-align:center}
+  td.r,th.r{text-align:right}
+  .num{color:#eec987}
+  .hl{color:var(--gold)}
+  .neg{color:var(--red)}
+  .pos{color:var(--green)}
+  .callout{
+    border:1px solid var(--line);background:linear-gradient(135deg,#16141a,#14161a);
+    padding:22px 26px;border-radius:10px;margin:22px 0;
+  }
+  .callout b{color:var(--gold);font-weight:400}
+  .warn{border-left:3px solid var(--red)}
+  .warn b{color:#eaa39a}
+  .key{border-left:3px solid var(--gold)}
+  ul,ol{margin:0 0 16px 26px}
+  li{margin-bottom:8px}
+  .chain{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0 6px;font-size:14.5px;
+  }
+  .chain span.node{background:#1c1810;border:1px solid var(--gold-dim);color:#eadfc4;
+    padding:5px 14px;border-radius:6px;white-space:nowrap}
+  .chain i.arrow{color:var(--gold-dim);font-style:normal}
+  .foot{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px;line-height:1.8}
+  .metric-row{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0 8px}
+  .metric{
+    flex:1 1 200px;border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--panel);
+  }
+  .metric .v{font-size:24px;color:var(--gold);letter-spacing:.5px}
+  .metric .k{font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+  .cap{color:var(--muted);font-size:13px;text-align:center;margin:6px 0 24px;font-style:italic}
+  .kv{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+  .kv div{border:1px solid var(--line);border-radius:8px;padding:10px 14px;background:var(--panel);font-size:14px}
+  .kv div b{color:var(--gold);font-weight:400}
+  svg{display:block;width:100%;height:auto;margin:10px 0 4px}
+  .barwrap{margin:18px 0 6px}
+  .barrow{display:flex;align-items:center;gap:12px;margin-bottom:9px;font-size:14px}
+  .barlabel{width:130px;flex:none;color:var(--muted);text-align:right}
+  .bartrack{flex:1;background:#1a1a21;border:1px solid var(--line);border-radius:4px;height:22px;position:relative;overflow:hidden}
+  .barfill{height:100%;background:linear-gradient(90deg,#8a6d3a,#d4b06a);border-radius:3px 0 0 3px}
+  .barfill.alt{background:linear-gradient(90deg,#3c5566,#7fa8c9)}
+  .barfill.dim{background:linear-gradient(90deg,#5a3a38,#c0705f)}
+  .barval{width:96px;flex:none;color:#eec987;font-size:14px}
+  .stack{display:flex;height:34px;border-radius:6px;overflow:hidden;border:1px solid var(--line);margin:14px 0 8px}
+  .stack div{display:flex;align-items:center;justify-content:center;font-size:12.5px;color:#0d0d0f}
+  .note{font-size:13.5px;color:var(--muted);line-height:1.7}
+  .src{font-size:12.5px;color:#7d7768}
+  .tocbox{border:1px solid var(--line);border-radius:10px;padding:18px 24px;background:var(--panel);margin:24px 0 8px}
+  .tocbox ol{margin:0 0 0 20px;font-size:15px;columns:2;column-gap:36px}
+  .tocbox li{margin-bottom:6px}
+  @media(max-width:720px){
+    .wrap{padding:36px 20px 64px}
+    h1{font-size:26px}
+    .barlabel{width:88px}
+    .tocbox ol{columns:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>创业板指的利润从哪来：<br>三大行业、两条引擎与一个 30% 的名字</h1>
+<div class="sub">行业权重地图 / 利润贡献地图 / 2026 中报增量拆解 / 集中度风险与情景含义</div>
+<div class="tagline">指数研究 · 2026 年 9 月 2 日 · 数据截至 2026 年中报与 8 月底</div>
+
+<div class="tocbox">
+<ol>
+  <li>投资摘要：一句话结论与五个判断</li>
+  <li>指数画像：从"泛成长杂烩"到三大行业近八成</li>
+  <li>两张地图：权重≠利润贡献</li>
+  <li>引擎一：AI 算力链——光模块、存储、PCB</li>
+  <li>引擎二：锂电回暖——一个 30% 的名字</li>
+  <li>其余板块：β 放大器、稳定器与拖累项</li>
+  <li>增量拆解：2026H1 多出来的 500 亿从哪来</li>
+  <li>集中度风险：低 PE 陷阱的行业来源</li>
+  <li>跟踪清单与结论</li>
+  <li>术语表（通俗版）与数据来源</li>
+</ol>
+</div>
+
+<h2>一、投资摘要：一句话结论与五个判断</h2>
+
+<div class="callout key">
+<p><b>一句话结论：创业板指的盈利高度集中在三大行业——通信、电子、电力设备合计权重约 78%，利润贡献约八成；驱动引擎只有两条——AI 算力链和锂电链；而链条的最顶端，宁德时代一家贡献指数约三成利润，中际旭创+新易盛+天孚通信三家公司半年赚了 224 亿、同比 +153%。</b></p>
+</div>
+
+<p>五个判断：</p>
+<ul>
+  <li><span class="hl">判断一</span>：创业板指早已不是"泛成长杂烩"。2010 年发布时权重前三是计算机、机械、医药；今天换成通信（30.1%）、电子（24.3%）、电力设备（24.0%）。买创业板指，本质是买"AI 基础设施 + 新能源"这两条产业链。</li>
+  <li><span class="hl">判断二</span>：权重地图和利润地图长得不一样。宁德时代权重 17.7%、利润贡献约 30%；通信行业权重 30%、利润贡献只有约 17%——市值给的是预期，利润兑现还在后面。</li>
+  <li><span class="hl">判断三</span>：2026 年中报的增长几乎全部来自 AI 算力链。创业板电子行业净利 +93.6%、通信 +68.5%、计算机 +50.6%，利润增量高度集中于光模块、存储、AI PCB 三个细分。</li>
+  <li><span class="hl">判断四</span>：锂电是第二引擎，但只剩"一个半"发动机。宁德时代 +42%、亿纬锂能 +106% 高增长，阳光电源 -32% 成为显著拖累——电力设备行业内部已经分化。</li>
+  <li><span class="hl">判断五</span>：这种结构是双刃剑。它解释了为什么创业板指 PE-TTM 能在 7 个月内从 39.5 被盈利滚动消化到 30 附近（见本站前篇《创业板指 PE-TTM 推演》）；也意味着一旦 2027 年 AI 资本开支周期回落，指数盈利没有多少缓冲垫。</li>
+</ul>
+
+<h2>二、指数画像：从"泛成长杂烩"到三大行业近八成</h2>
+
+<p>创业板指（399006）由创业板中市值大、流动性好的 100 只股票组成，按自由流通市值加权。截至 2026 年 7 月底，成分股总市值约 10.3 万亿元，对创业板全板块市值覆盖率超 56%；成分股归母净利润从 2010 年的 69 亿元增至 2025 年的 2127 亿元，十余年增长近 30 倍。</p>
+
+<div class="metric-row">
+  <div class="metric"><div class="v">78.4%</div><div class="k">通信+电子+电力设备<br>三大行业合计权重（2026-07）</div></div>
+  <div class="metric"><div class="v">57.1%</div><div class="k">前十大权重股合计占比<br>（2026-07-31）</div></div>
+  <div class="metric"><div class="v">2127 亿</div><div class="k">指数成分 2025 年归母净利<br>同比 +45%</div></div>
+  <div class="metric"><div class="v">+32.7%</div><div class="k">创业板板块 2026H1 净利增速<br>（1403 家，2027.5 亿）</div></div>
+</div>
+
+<p>行业结构的变迁本身就是一部产业史：</p>
+
+<table>
+<tr><th>时点</th><th>前三大权重行业</th><th>背景</th></tr>
+<tr><td class="c">2010 年（发布初期）</td><td>计算机、机械设备、医药生物</td><td>创业板初创，中小科技与制造企业为主</td></tr>
+<tr><td class="c">2015—2020 年</td><td>医药生物、计算机、传媒（阶段变化）</td><td>移动互联网与医药扩容期</td></tr>
+<tr><td class="c">2021 年前后</td><td>电力设备（宁德时代权重一度近 20%）、医药、电子</td><td>新能源超级周期</td></tr>
+<tr><td class="c">2026 年 7 月</td><td><span class="hl">通信 30.1% / 电子 24.3% / 电力设备 24.0%</span></td><td>AI 算力行情推高光模块与 PCB 龙头市值</td></tr>
+</table>
+
+<div class="barwrap">
+  <div class="barrow"><div class="barlabel">通信</div><div class="bartrack"><div class="barfill" style="width:100%"></div></div><div class="barval">30.1%</div></div>
+  <div class="barrow"><div class="barlabel">电子</div><div class="bartrack"><div class="barfill" style="width:81%"></div></div><div class="barval">24.3%</div></div>
+  <div class="barrow"><div class="barlabel">电力设备</div><div class="bartrack"><div class="barfill" style="width:80%"></div></div><div class="barval">24.0%</div></div>
+  <div class="barrow"><div class="barlabel">机械设备</div><div class="bartrack"><div class="barfill alt" style="width:15.4%"></div></div><div class="barval">4.6%</div></div>
+  <div class="barrow"><div class="barlabel">计算机</div><div class="bartrack"><div class="barfill alt" style="width:11.8%"></div></div><div class="barval">3.6%</div></div>
+  <div class="barrow"><div class="barlabel">医药生物</div><div class="bartrack"><div class="barfill alt" style="width:11.5%"></div></div><div class="barval">3.5%</div></div>
+  <div class="barrow"><div class="barlabel">非银金融</div><div class="bartrack"><div class="barfill alt" style="width:11.5%"></div></div><div class="barval">3.5%</div></div>
+  <div class="barrow"><div class="barlabel">其他（合计）</div><div class="bartrack"><div class="barfill dim" style="width:22%"></div></div><div class="barval">约 6.6%</div></div>
+</div>
+<div class="cap">创业板指申万一级行业权重分布（2026-07-22，Wind 数据；金色为三大主力行业）</div>
+
+<div class="callout">
+<p><b>前十大权重股</b>（2026-08-27）：宁德时代 17.7%、中际旭创 13.4%、新易盛 8.5%、东方财富 4.4%、阳光电源 2.6%、三环集团 2.4%、汇川技术 2.2%、长川科技 2.0%、胜宏科技 2.0%、天孚通信 1.8%。十家里面——2 家电池、3 家光模块、3 家电子制造/设备、1 家券商（东财）、1 家光伏逆变器。</p>
+</div>
+
+<h2>三、两张地图：权重≠利润贡献</h2>
+
+<p>这是全文最重要的一节。<b>指数按市值加权，但利润不按市值分布</b>——市值里含着对未来增长的定价，利润却是当下账本上的数字。把两张图叠在一起，能看到三个错位：</p>
+
+<table>
+<tr><th>板块 / 公司</th><th class="c">市值权重</th><th class="c">利润贡献*</th><th>错位解读</th></tr>
+<tr><td>电力设备（宁德+亿纬+阳光+电网链）</td><td class="c">24.0%</td><td class="c num">约 36%</td><td>利润贡献高于权重——宁德 433 亿半年净利的分量</td></tr>
+<tr><td>通信（光模块三剑客+网络设备）</td><td class="c">30.1%</td><td class="c num">约 17%</td><td>权重最高、利润兑现尚在途中——市值里提前定价了 AI 订单</td></tr>
+<tr><td>电子（存储+PCB+元件+设备）</td><td class="c">24.3%</td><td class="c num">约 15%</td><td>与权重接近，但增速最猛（净利 +93.6%），贡献在快速上升</td></tr>
+<tr><td>非银金融（东方财富）</td><td class="c">3.5%</td><td class="c num">约 5.5%</td><td>利润占比高于权重，行情放大器</td></tr>
+<tr><td>医药生物（迈瑞+爱尔等）</td><td class="c">3.5%</td><td class="c num">约 7%</td><td>利润占比高于权重，但增长弱（+21%，全行业中下）</td></tr>
+<tr><td>机械设备（汇川+先导等）</td><td class="c">4.6%</td><td class="c num">约 4.5%</td><td>基本对位</td></tr>
+</table>
+<div class="cap">* 利润贡献为估算值：以创业板板块 2026H1 净利 2027.5 亿为总盘、按指数成分头部公司实际中报利润加总推算指数成分合计约 1500 亿*，再归集行业。带 * 均为估算口径，非交易所官方数据。</div>
+
+<h3>三个错位，各有含义</h3>
+
+<p><span class="hl">错位一：宁德时代——权重 17.7%，利润约 30%。</span>指数每 3 块钱利润里有约 1 块来自这家电池公司。它基本面处于强周期（动力电池份额 + 储能放量 + 2026H1 净利 432.8 亿、同比 +42%），所以当下是"利润压舱石"；但反过来，指数对单一公司的依赖也到了这个量级。</p>
+
+<p><span class="hl">错位二：通信行业——权重 30%，利润约 17%。</span>光模块三剑客的市值涨得比利润快，市场在提前定价 1.6T 放量与 2027 年订单。这不是坏事（成长股本就如此），但意味着通信权重的"含预期量"最高——若订单兑现不及预期，权重与利润会双向收缩。</p>
+
+<p><span class="hl">错位三：前十大权重占 57%，利润贡献约 75%*。</span>集中度在利润端比市值端更极端。创业板指看起来是 100 家公司，实际上盈利叙事由不到 15 家公司书写。</p>
+
+<h2>四、引擎一：AI 算力链——光模块、存储、PCB</h2>
+
+<p>2026 年中报，深市电子、通信、计算机三行业 564 家公司合计净利 1435 亿，同比增速分别高达 <span class="pos">+93.6%、+68.5%、+50.6%</span>。利润增量高度集中于四个细分：存储、光通信、AI PCB、AI 服务器。创业板指内的代表公司成绩单：</p>
+
+<table>
+<tr><th>细分</th><th>公司</th><th class="r">2026H1 净利（亿）</th><th class="r">同比</th><th>看点</th></tr>
+<tr><td>光模块</td><td>中际旭创</td><td class="r num">136.5</td><td class="r pos">+241.7%</td><td>1.6T 规模放量，毛利率 46.3%</td></tr>
+<tr><td>光模块</td><td>新易盛</td><td class="r num">75.3</td><td class="r pos">+91.0%</td><td>净利率 36.2%，反超旭创</td></tr>
+<tr><td>光器件</td><td>天孚通信</td><td class="r num">12.0</td><td class="r pos">+33.9%</td><td>毛利率 60.9% 全链最高，但增速掉队</td></tr>
+<tr><td>存储</td><td>江波龙</td><td class="r num">105.8</td><td class="r pos">+715 倍</td><td>存储周期触底回升，量价齐升</td></tr>
+<tr><td>AI PCB</td><td>胜宏科技</td><td class="r num">28.6</td><td class="r pos">+33.3%</td><td>高多层板供不应求</td></tr>
+<tr><td>半导体设备</td><td>长川科技</td><td class="r num">—</td><td class="r pos">高增</td><td>AI 芯片测试设备国产导入窗口</td></tr>
+</table>
+
+<div class="callout key">
+<p><b>光模块三剑客（旭创+新易盛+天孚）半年合计净利 223.8 亿，同比 +153%，半年就超过了三家 2025 年全年的 223.5 亿。</b>这是中国光互连产业史上最强中报季。驱动链条一目了然：</p>
+<div class="chain">
+<span class="node">海外云厂商资本开支</span><i class="arrow">→</i>
+<span class="node">AI 超算/数据中心建设</span><i class="arrow">→</i>
+<span class="node">800G→1.6T 光模块升级</span><i class="arrow">→</i>
+<span class="node">高端产品量价齐升</span><i class="arrow">→</i>
+<span class="node">指数通信/电子利润爆发</span>
+</div>
+</div>
+
+<p>值得注意的是分化已经出现：同一条链上，中际旭创（+242%）与新易盛（+91%）增速悬殊，天孚（+34%）明显掉队——产业链位置、客户结构与产能节奏决定了谁吃到最肥的一段。上游器件毛利率最高（60.9%）但弹性最小，整机环节吃量的红利最大。跟踪这条链，不能只看行业总量，要看公司在链条上的位置变化。</p>
+
+<h2>五、引擎二：锂电回暖——一个 30% 的名字</h2>
+
+<p>电力设备是创业板指的元老行业，2026H1 深市电力设备 226 家公司净利 811 亿、同比 +40.0%。但指数内的利润分布极端不均：</p>
+
+<ul>
+  <li><span class="hl">宁德时代</span>：H1 营收 2769 亿（+55%）、净利 432.8 亿（+42%）。动力电池份额稳固 + 储能加速渗透（储能电池收入占 19.2%），叠加锂价上行与出货量增长，量价双击。它一家就贡献指数约三成利润，是名副其实的"利润压舱石"。</li>
+  <li><span class="hl">亿纬锂能</span>：净利 33.0 亿、同比 +106%，锂电二线在储能需求与锂价修复中全面回暖。</li>
+  <li><span class="hl">阳光电源</span>：净利 52.6 亿、<span class="neg">同比 -32%</span>，营收 -29%。光伏产业链价格下行压制逆变器/电站业务，是电力设备板块内最显著的拖累项。</li>
+</ul>
+
+<div class="callout warn">
+<p><b>行业内部的分化比行业之间的分化更值得盯。</b>"电力设备 +40%"这个平均数下，藏着宁德/亿纬的高增长和阳光电源的三成下滑。锂电链的逻辑是"储能高景气 + 锂价上行共振"，光伏链的逻辑是"产能出清未完、价格仍在磨底"——同一个申万一级行业，两种周期位置。</p>
+</div>
+
+<h2>六、其余板块：β 放大器、稳定器与拖累项</h2>
+
+<table>
+<tr><th>板块</th><th>代表公司</th><th class="r">2026H1 净利（亿）</th><th class="r">同比</th><th>角色定位</th></tr>
+<tr><td>非银金融</td><td>东方财富</td><td class="r num">80.6</td><td class="r pos">+44.9%</td><td>行情 β 放大器：牛市里经纪+两融+代销三击</td></tr>
+<tr><td>医药生物</td><td>迈瑞医疗</td><td class="r num">48.0</td><td class="r neg">-5.4%</td><td>稳定器：器械龙头韧性足（Q2 已转正 +1.1%），但板块增长弱</td></tr>
+<tr><td>机械设备</td><td>汇川技术</td><td class="r num">28.1</td><td class="r">稳健</td><td>工控+机器人叙事，跟随制造业周期</td></tr>
+<tr><td>电力设备</td><td>阳光电源</td><td class="r num">52.6</td><td class="r neg">-32.0%</td><td>当前最大单一拖累项</td></tr>
+</table>
+
+<p>三个补充观察：</p>
+<ul>
+  <li><span class="hl">东方财富是指数里唯一的"市场自身β"。</span>H1 股基交易额 26.45 万亿同比大增，经营现金流 +555%。它把"A 股活跃度"直接写进指数盈利——行情越好创业板指利润越高，这层反身性在熊市同样成立。</li>
+  <li><span class="hl">医药是"被稀释的前朝权重的残余"。</span>迈瑞一家占创业板指医药权重的大头，创新药产业链（CXO 等）虽有回暖（创业板医药净利 +21.4%）但权重已不足 4%。2015 年那种"创业板=医药+TMT"的印象早已过时。</li>
+  <li><span class="hl">农林牧渔、传媒、军工等合计权重约 4%</span>，温氏等周期股对指数利润是扰动项（猪周期）而非驱动项。</li>
+</ul>
+
+<h2>七、增量拆解：2026H1 多出来的利润从哪来</h2>
+
+<p>创业板板块 2026H1 净利 2027.5 亿，同比多赚约 <span class="num">500 亿</span>（2025H1 约 1527 亿）。这 500 亿增量的分布，比总量更能说明问题：</p>
+
+<div class="barwrap">
+  <div class="barrow"><div class="barlabel">宁德时代</div><div class="bartrack"><div class="barfill" style="width:98%"></div></div><div class="barval">约 +128 亿</div></div>
+  <div class="barrow"><div class="barlabel">江波龙(存储)</div><div class="bartrack"><div class="barfill" style="width:81%"></div></div><div class="barval">约 +106 亿</div></div>
+  <div class="barrow"><div class="barlabel">中际旭创</div><div class="bartrack"><div class="barfill" style="width:73%"></div></div><div class="barval">约 +95 亿</div></div>
+  <div class="barrow"><div class="barlabel">新易盛</div><div class="bartrack"><div class="barfill" style="width:28%"></div></div><div class="barval">约 +36 亿</div></div>
+  <div class="barrow"><div class="barlabel">东方财富</div><div class="bartrack"><div class="barfill" style="width:19%"></div></div><div class="barval">约 +25 亿</div></div>
+  <div class="barrow"><div class="barlabel">亿纬锂能</div><div class="bartrack"><div class="barfill" style="width:13%"></div></div><div class="barval">约 +17 亿</div></div>
+  <div class="barrow"><div class="barlabel">阳光电源</div><div class="bartrack"><div class="barfill dim" style="width:19%"></div></div><div class="barval neg">约 -25 亿</div></div>
+</div>
+<div class="cap">2026H1 净利增量贡献（亿元，按个股中报同比增量计算；负增量以红色示之）。其余数百家中/小公司增量贡献分散。</div>
+
+<div class="callout key">
+<p><b>链式验算：</b>六家正贡献公司合计增量约 407 亿，阳光电源一家回吐 25 亿——<b>不到十家公司解释了板块 500 亿增量的八成以上</b>。其中 AI 算力链（光模块 131 亿 + 存储 106 亿 + PCB/设备约 30 亿*）贡献约 260 亿*、占一半以上；锂电链（宁德+亿纬）贡献约 145 亿、约占三成。这与上一节的引擎判断互相印证。</p>
+</div>
+
+<h2>八、集中度风险：低 PE 陷阱的行业来源</h2>
+
+<p>本站前篇《创业板指 PE-TTM 推演》算过：若盈利兑现，到 2027 年 4 月底指数 PE-TTM 可被滚动消化到 30 倍附近。现在可以给那个"盈利兑现"假设加上行业坐标——它几乎完全押在两个周期上：</p>
+
+<div class="chain">
+<span class="node">全球 AI 资本开支周期</span><i class="arrow">→</i>
+<span class="node">光模块/存储/PCB 订单</span><i class="arrow">→</i>
+<span class="node">指数约 32%* 利润</span>
+</div>
+<div class="chain">
+<span class="node">锂价与储能景气周期</span><i class="arrow">→</i>
+<span class="node">宁德+亿纬利润</span><i class="arrow">→</i>
+<span class="node">指数约 33%* 利润</span>
+</div>
+
+<div class="callout warn">
+<p><b>风险清单（按杀伤力排序）：</b></p>
+<ul>
+  <li><span class="hl">AI 资本开支回落</span>：若 2027 年海外云厂商 capex 增速放缓或国产算力投资退潮，光模块+存储链利润没有对冲来源——这两块贡献了 2026 年增量的一半以上，且 TTM 是后视镜，分母缩水会<b>被动抬高</b> PE。</li>
+  <li><span class="hl">宁德时代单一公司风险</span>：约 30% 的利润集中度意味着汇率、碳酸锂价格、海外政策（IRA 类法案）任一变量的传导都被放大。</li>
+  <li><span class="hl">光伏持续出清</span>：阳光电源若继续下滑并扩散到逆变器/支架链条，电力设备行业会从"+40%"滑向平庸。</li>
+  <li><span class="hl">存储周期性</span>：江波龙式"715 倍增长"本质是存储价格周期的镜像，涨时多猛、跌时多深，明年同期基数极高。</li>
+  <li><span class="hl">指数编制的自我强化</span>：市值涨→纳入/权重升→ETF 被动买入（跟踪基金超 1200 亿），上涨期放大、下跌期同样放大。</li>
+</ul>
+</div>
+
+<h2>九、跟踪清单与结论</h2>
+
+<h4>季度跟踪清单</h4>
+<table>
+<tr><th>时点</th><th>看什么</th><th>健康信号 / 预警信号</th></tr>
+<tr><td class="c">2026 年 10 月底</td><td>三季报：旭创/新易盛 Q3 环比、江波龙存储价差、宁德出货与单价</td><td>三剑客合计环比正增长 / 任一龙头环比转负</td></tr>
+<tr><td class="c">2026 年 11—12 月</td><td>海外云厂商季度 capex 指引（谷歌/微软/Meta/亚马逊）</td><td>指引维持两位数增长 / 集体下修</td></tr>
+<tr><td class="c">2027 年 1 月底</td><td>碳酸锂价格中枢、储能电芯价格</td><td>锂价站稳 / 跌破现金成本区间</td></tr>
+<tr><td class="c">2027 年 4 月底</td><td>年报+一季报齐披露，TTM 换三个季度（见前篇推演）</td><td>26Q4+27Q1 合计同比 ≥25% / 26Q4 单季失速</td></tr>
+</table>
+
+<h4>结论</h4>
+<p>创业板指的盈利结构可以用一个不等式概括：<b>三大行业（78% 权重）＞两条链（AI+锂电，约 65%* 利润）＞几家公司（前十权重股约 75%* 利润）</b>。它不是一只宽基，更接近一条"AI 基础设施 + 电池"的杠杆化产业 ETF，附赠一个随行情起舞的券商。想清楚这一点，关于"创业板贵不贵、安不安全"的问题，就都转化为两个更具体的问题：<b>全球 AI 资本开支还能增长多久？锂价和储能景气能否守住？</b>指数层面的一切推演，都从这两个问题出发。</p>
+
+<h2>十、术语表（通俗版）与数据来源</h2>
+
+<h4>术语表</h4>
+<table>
+<tr><th>术语</th><th>通俗解释</th></tr>
+<tr><td>PE-TTM</td><td>市盈率（滚动十二个月）：股价÷最近四个季度每股利润。可以理解为"按现在的赚钱速度，多少年回本"。TTM = Trailing Twelve Months。</td></tr>
+<tr><td>权重股 / 权重</td><td>指数里占比大的股票。创业板指按"自由流通市值"加权——市值越大、能自由买卖的股份越多，对指数涨跌影响越大。</td></tr>
+<tr><td>归母净利润</td><td>归属于母公司股东的净利润：公司赚的钱里真正属于上市公司股东的那部分（要扣掉少数股东分走的）。财报里看盈利就看它。</td></tr>
+<tr><td>光模块</td><td>数据中心里把电信号和光信号互相转换的器件，AI 服务器之间高速"对话"的必经之路。速率从 400G→800G→1.6T 升级，越快越贵。</td></tr>
+<tr><td>存储 / 存储周期</td><td>内存、闪存芯片行业。价格呈"涨两年跌两年"的钟摆周期：供大于求跌价、去完库存涨价，利润跟着价格剧烈波动。</td></tr>
+<tr><td>PCB / AI PCB</td><td>印制电路板，电子元件的"地基"。AI 服务器需要层数更多、材料更高级的板子（高多层板），单价数倍于普通板。</td></tr>
+<tr><td>储能</td><td>把电存起来再放出去的系统，核心是大号电池。AI 数据中心配储能是新增长点（见本站《电池需求与 AI 配储》）。</td></tr>
+<tr><td>申万一级行业</td><td>申万宏源做的 A 股行业分类标准，一级最粗（31 个行业），每家公司归入一行。</td></tr>
+<tr><td>capex</td><td>Capital Expenditure，资本开支。云厂商 capex = 建数据中心、买服务器/网络设备的钱，是 AI 硬件链公司的订单来源。</td></tr>
+<tr><td>β（贝塔）</td><td>随大盘/行情波动的部分。东方财富的利润与 A 股成交额高度相关，行情火热时利润暴涨，属于典型的"高 β"。</td></tr>
+</table>
+
+<h4>数据来源</h4>
+<p class="src">
+① 华夏基金创业板指页面：十大权重股权重（2026-08-27）；② Wind/申万：创业板指申万一级行业权重（2026-07-22，转引自新浪财经）；③ 央广网/中国证券网/中新经纬：创业板 781 份半年报统计（2026-08-26/27）；④ 中国基金报/经济参考报：深市 2026 中报扫描，电子/通信/计算机行业增速（2026-09-02）；⑤ 中国证券网：创业板指成分股净利 2010→2025（69 亿→2127 亿）；⑥ 证券时报：创业板指千亿市值公司与 2025 年报行业增速；⑦ 各公司 2026 年半年报：宁德时代、中际旭创、新易盛、天孚通信、东方财富、迈瑞医疗、阳光电源、汇川技术、亿纬锂能、胜宏科技、江波龙；⑧ C114：光模块三剑客中报分析（2026-09-01）。<br>
+注：利润贡献比例（带 * 处）为本文基于板块总量与个股中报的推算，非官方口径；行业权重随成分股调整与股价变动持续变化。
+</p>
+
+<div class="foot">
+本报告为个人研究笔记，所有数据来自公开渠道，估算值均以 * 标注。不构成任何投资建议。市场有风险，投资需谨慎。<br>
+◆ 砚 · 深度研究 · 2026-09-02 · 关联前篇：《创业板指 PE-TTM 推演：年底与明年 4 月底的两个时点》
+</div>
+
+</div>
+</body>
+</html>
