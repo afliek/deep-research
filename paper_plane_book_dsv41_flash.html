@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>书页间的飞行（Ds-V4.1-flash）</title><script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:100%;height:100%;overflow:hidden;background:#241a13;}
+  #stage{position:fixed;inset:0;}
+  #stage canvas{display:block;width:100%;height:100%;}
+  /* 电影感暗角（非雾化蒙层） */
+  #vignette{
+    position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 80% 74% at 50% 46%,
+      rgba(0,0,0,0) 44%, rgba(12,6,2,0.16) 74%, rgba(12,6,2,0.44) 100%);
+  }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="vignette"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+/* =========================================================================
+   0. 环境与配置
+   ========================================================================= */
+const IS_TOUCH  = matchMedia('(hover: none)').matches;
+const IS_MOBILE = IS_TOUCH || innerWidth < 760;
+const LOWER_GPU = IS_MOBILE || (navigator.hardwareConcurrency || 4) <= 4;
+
+const CFG = {
+  book: {
+    pageW: 1.15,        // 单侧页宽
+    pageD: 1.62,        // 页深 (z)
+    stackT: 0.255,      // 单侧纸垛厚
+    coverT: 0.056,      // 封面厚
+    spineGap: 0.016,    // 中缝间隙
+    pageBend: 0.118,    // 页叠在中缝处的隆起
+    coverBend: 0.036,   // 封面弯曲
+    coverOut: 0.048     // 封面外扩
+  },
+  loop: 22.0,
+  phase: {              // 时间轴（秒）
+    hold:      1.90,    // 静止展示：书开、飞机停在页间
+    flightEnd: 15.30,   // 飞机完成降落
+    closeEnd:  17.10,   // 书合上完成
+    pauseEnd:  18.80,   // 合上的书静止
+    openEnd:   20.90    // 书重新打开
+  }
+};
+
+/* =========================================================================
+   1. 程序化纹理
+   ========================================================================= */
+const texCache = [];
+function makeTex(w, h, draw, rx = 1, ry = 1, srgb = true) {
+  const cv = document.createElement('canvas');
+  cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(rx, ry);
+  t.anisotropy = 8;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  texCache.push(t);
+  return t;
+}
+function grain(ctx, w, h, amount) {
+  const img = ctx.getImageData(0, 0, w, h), d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const n = (Math.random() - 0.5) * amount;
+    d[i] += n; d[i + 1] += n; d[i + 2] += n;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+/* 木纹 */
+function drawWood(ctx, w, h) {
+  ctx.fillStyle = '#bd9160'; ctx.fillRect(0, 0, w, h);
+
+  // 大尺度斑驳，打散重复感
+  for (let i = 0; i < 26; i++) {
+    const x = Math.random() * w, y = Math.random() * h, r = 90 + Math.random() * 320;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    const dark = Math.random() > 0.5;
+    g.addColorStop(0, dark ? `rgba(120,78,38,${0.05 + Math.random() * 0.10})`
+                           : `rgba(226,192,142,${0.05 + Math.random() * 0.10})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  }
+
+  for (let i = 0; i < 300; i++) {
+    const baseY = Math.random() * h;
+    const amp = 5 + Math.random() * 24;
+    const fre = 0.0035 + Math.random() * 0.008;
+    const ph  = Math.random() * Math.PI * 2;
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 6) {
+      const y = baseY + Math.sin(x * fre + ph) * amp
+                      + Math.sin(x * fre * 3.6 + ph * 1.6) * amp * 0.3;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = Math.random() > 0.46
+      ? `rgba(92,54,22,${0.03 + Math.random() * 0.12})`
+      : `rgba(232,196,146,${0.03 + Math.random() * 0.10})`;
+    ctx.lineWidth = 0.5 + Math.random() * 3.4;
+    ctx.stroke();
+  }
+  for (let i = 0; i < 3; i++) {
+    const cx = Math.random() * w, cy = Math.random() * h, R = 14 + Math.random() * 26;
+    for (let r = R; r > 0; r -= 2.2) {
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r * 1.7, r * 0.75, Math.random() * 0.4, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(84,48,18,${0.02 + 0.07 * (1 - r / R)})`;
+      ctx.lineWidth = 0.8 + Math.random();
+      ctx.stroke();
+    }
+  }
+  grain(ctx, w, h, 15);
+}
+
+/* 纸张 */
+function drawPaper(ctx, w, h) {
+  ctx.fillStyle = '#f8f2e5'; ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 46; i++) {
+    const x = Math.random() * w, y = Math.random() * h, r = 50 + Math.random() * 190;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, `rgba(228,212,182,${0.08 + Math.random() * 0.15})`);
+    g.addColorStop(1, 'rgba(228,212,182,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  }
+  for (let i = 0; i < 7000; i++) {
+    const x = Math.random() * w, y = Math.random() * h;
+    const len = 3 + Math.random() * 17, a = Math.random() * Math.PI * 2;
+    ctx.strokeStyle = `rgba(${198 + Math.random() * 42},${188 + Math.random() * 42},${166 + Math.random() * 44},${0.05 + Math.random() * 0.13})`;
+    ctx.lineWidth = 0.35 + Math.random() * 0.7;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + Math.cos(a) * len, y + Math.sin(a) * len);
+    ctx.stroke();
+  }
+  grain(ctx, w, h, 12);
+}
+
+/* 纸垛侧边（层叠） */
+function drawPageEdge(ctx, w, h) {
+  ctx.fillStyle = '#eee3cb'; ctx.fillRect(0, 0, w, h);
+  for (let y = 0; y < h; y += 1.5) {
+    ctx.fillStyle = `rgba(146,122,90,${0.06 + Math.random() * 0.40})`;
+    ctx.fillRect(0, y, w, 0.65 + Math.random() * 0.5);
+  }
+  const g = ctx.createLinearGradient(0, 0, w, 0);
+  g.addColorStop(0, 'rgba(116,92,64,0.16)');
+  g.addColorStop(0.45, 'rgba(255,250,236,0.10)');
+  g.addColorStop(1, 'rgba(116,92,64,0.16)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+}
+
+/* 皮革封面 */
+function drawLeather(ctx, w, h) {
+  ctx.fillStyle = '#4a2b1c'; ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 5200; i++) {
+    const x = Math.random() * w, y = Math.random() * h, r = 1 + Math.random() * 4;
+    ctx.fillStyle = `rgba(${Math.random() > 0.5 ? '96,58,38' : '42,22,13'},${0.05 + Math.random() * 0.22})`;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  }
+  for (let i = 0; i < 240; i++) {
+    ctx.strokeStyle = `rgba(122,80,52,${0.02 + Math.random() * 0.08})`;
+    ctx.lineWidth = 0.5 + Math.random() * 1.4;
+    const x = Math.random() * w, y = Math.random() * h;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + (Math.random() - 0.5) * 60, y + (Math.random() - 0.5) * 60);
+    ctx.stroke();
+  }
+  grain(ctx, w, h, 20);
+}
+
+/* 尘埃精灵 */
+function drawDustSprite(ctx, w, h) {
+  const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+  g.addColorStop(0.00, 'rgba(255,255,255,1)');
+  g.addColorStop(0.28, 'rgba(255,255,255,0.60)');
+  g.addColorStop(0.62, 'rgba(255,255,255,0.13)');
+  g.addColorStop(1.00, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+}
+
+/* 光柱 */
+function drawShaft(ctx, w, h) {
+  const gx = ctx.createLinearGradient(0, 0, w, 0);
+  gx.addColorStop(0.00, 'rgba(255,255,255,0)');
+  gx.addColorStop(0.32, 'rgba(255,255,255,0.55)');
+  gx.addColorStop(0.50, 'rgba(255,255,255,1)');
+  gx.addColorStop(0.68, 'rgba(255,255,255,0.55)');
+  gx.addColorStop(1.00, 'rgba(255,255,255,0)');
+  ctx.fillStyle = gx; ctx.fillRect(0, 0, w, h);
+  const gy = ctx.createLinearGradient(0, 0, 0, h);
+  gy.addColorStop(0.00, 'rgba(0,0,0,0)');
+  gy.addColorStop(0.10, 'rgba(0,0,0,0.85)');
+  gy.addColorStop(0.55, 'rgba(0,0,0,0.95)');
+  gy.addColorStop(1.00, 'rgba(0,0,0,0)');
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = gy; ctx.fillRect(0, 0, w, h);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+/* 环境贴图：暖奶油书房 */
+function makeEnvTexture() {
+  const cv = document.createElement('canvas');
+  cv.width = 1024; cv.height = 512;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0.00, '#fff8ec');
+  g.addColorStop(0.38, '#f2e3c9');
+  g.addColorStop(0.52, '#cdb693');
+  g.addColorStop(0.72, '#8d7458');
+  g.addColorStop(1.00, '#463527');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 1024, 512);
+
+  const w1 = ctx.createRadialGradient(286, 118, 0, 286, 118, 360);
+  w1.addColorStop(0.00, 'rgba(255,248,230,0.98)');
+  w1.addColorStop(0.42, 'rgba(255,235,198,0.42)');
+  w1.addColorStop(1.00, 'rgba(255,235,198,0)');
+  ctx.fillStyle = w1; ctx.fillRect(0, 0, 1024, 512);
+
+  const w2 = ctx.createRadialGradient(846, 196, 0, 846, 196, 280);
+  w2.addColorStop(0, 'rgba(255,228,186,0.34)');
+  w2.addColorStop(1, 'rgba(255,228,186,0)');
+  ctx.fillStyle = w2; ctx.fillRect(0, 0, 1024, 512);
+
+  const w3 = ctx.createLinearGradient(0, 300, 0, 512);
+  w3.addColorStop(0, 'rgba(214,178,128,0)');
+  w3.addColorStop(1, 'rgba(196,154,102,0.30)');
+  ctx.fillStyle = w3; ctx.fillRect(0, 0, 1024, 512);
+
+  const t = new THREE.CanvasTexture(cv);
+  t.mapping = THREE.EquirectangularReflectionMapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/* 背景：干净暖褐渐变 */
+function makeBgTexture() {
+  const cv = document.createElement('canvas');
+  cv.width = 512; cv.height = 512;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0.00, '#a08a6d');
+  g.addColorStop(0.34, '#7b6650');
+  g.addColorStop(0.62, '#544337');
+  g.addColorStop(1.00, '#231a13');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 512, 512);
+  const t = new THREE.CanvasTexture(cv);
+  t.mapping = THREE.EquirectangularReflectionMapping;
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+const TEX = {
+  wood:       makeTex(1024, 1024, drawWood, 4, 4),
+  woodBump:   makeTex(1024, 1024, drawWood, 4, 4, false),
+  paper:      makeTex(1024, 1024, drawPaper, 4.0, 5.5),
+  paperBump:  makeTex(768, 768, drawPaper, 8, 11, false),
+  edge:       makeTex(16, 512, drawPageEdge, 1, 0.30),
+  edgeSide:   makeTex(16, 512, drawPageEdge, 0.4, 0.30),
+  leather:    makeTex(1024, 1024, drawLeather, 2, 2),
+  leatherBump:makeTex(512, 512, drawLeather, 4, 4, false),
+  planePaper: makeTex(1024, 1024, drawPaper, 1.5, 2.0),
+  planeBump:  makeTex(512, 512, drawPaper, 2.5, 3.4, false),
+  dust:       makeTex(64, 64, drawDustSprite),
+  shaft:      makeTex(192, 512, drawShaft)
+};
+
+/* =========================================================================
+   2. 渲染器 / 场景 / 相机
+   ========================================================================= */
+const container = document.getElementById('stage');
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: !LOWER_GPU,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(devicePixelRatio, LOWER_GPU ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.16;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = makeBgTexture();
+scene.backgroundBlurriness = 0.34;
+scene.fog = new THREE.Fog(0x54432f, 8.5, 27);
+
+const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.1, 140);
+camera.position.set(0.96, 1.80, 3.62);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+const envRT = pmrem.fromEquirectangular(makeEnvTexture());
+scene.environment = envRT.texture;
+pmrem.dispose();
+
+/* =========================================================================
+   3. 灯光
+   ========================================================================= */
+const keyLight = new THREE.DirectionalLight(0xffe7c4, 2.95);
+keyLight.position.set(-6.6, 8.6, 4.6);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(LOWER_GPU ? 1024 : 2048, LOWER_GPU ? 1024 : 2048);
+const SH = 3.15;
+keyLight.shadow.camera.left   = -SH;
+keyLight.shadow.camera.right  =  SH;
+keyLight.shadow.camera.top    =  SH;
+keyLight.shadow.camera.bottom = -SH;
+keyLight.shadow.camera.near = 1;
+keyLight.shadow.camera.far  = 26;
+keyLight.shadow.bias = -0.00035;
+keyLight.shadow.normalBias = 0.013;
+keyLight.shadow.radius = 5;
+keyLight.target.position.set(0, 0.35, 0);
+scene.add(keyLight, keyLight.target);
+
+const fillLight = new THREE.DirectionalLight(0xffd9a6, 0.62);
+fillLight.position.set(5.4, 3.6, -3.4);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0xfff3e0, 0.85);
+rimLight.position.set(1.8, 3.2, -6.4);
+scene.add(rimLight);
+
+scene.add(new THREE.HemisphereLight(0xfff0d8, 0x4a3320, 0.52));
+scene.add(new THREE.AmbientLight(0xffe6c8, 0.16));
+
+/* =========================================================================
+   4. 桌面 + 接触阴影
+   ========================================================================= */
+const desk = new THREE.Mesh(
+  new THREE.PlaneGeometry(34, 34),
+  new THREE.MeshStandardMaterial({
+    map: TEX.wood,
+    bumpMap: TEX.woodBump,
+    bumpScale: 0.014,
+    roughness: 0.66,
+    metalness: 0.0,
+    envMapIntensity: 0.60
+  })
+);
+desk.rotation.x = -Math.PI / 2;
+desk.receiveShadow = true;
+scene.add(desk);
+
+const aoTex = makeTex(512, 512, (ctx, w, h) => {
+  const g = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+  g.addColorStop(0.00, 'rgba(255,255,255,1)');
+  g.addColorStop(0.42, 'rgba(255,255,255,0.80)');
+  g.addColorStop(0.70, 'rgba(255,255,255,0.34)');
+  g.addColorStop(1.00, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+}, 1, 1, false);
+
+const aoPlane = new THREE.Mesh(
+  new THREE.PlaneGeometry(2.88, 2.24),
+  new THREE.MeshBasicMaterial({
+    color: 0x3a2410, alphaMap: aoTex,
+    transparent: true, opacity: 0.13, depthWrite: false
+  })
+);
+aoPlane.rotation.x = -Math.PI / 2;
+aoPlane.position.set(-0.02, 0.0062, 0);
+aoPlane.renderOrder = 1;
+scene.add(aoPlane);
+
+/* =========================================================================
+   5. 书
+   ========================================================================= */
+const B = CFG.book;
+
+/* -------------------------------------------------------------------------
+   书页的弯曲放在顶点着色器里做，用 u_bendK 控制：
+   1 = 摊开时的自然弧度；0 = 完全平（合上时用，避免两个半页的隆起互相穿透）
+   ------------------------------------------------------------------------- */
+const bendShaders = [];
+function makeBendable(material, amp) {
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.u_bendK = { value: 1.0 };
+    shader.uniforms.u_halfW = { value: B.pageW };
+    shader.uniforms.u_amp   = { value: amp };
+    bendShaders.push(shader);
+
+    shader.vertexShader =
+      'uniform float u_bendK;\nuniform float u_halfW;\nuniform float u_amp;\n' +
+      shader.vertexShader;
+
+    // 法线随之倾斜，保证受光正确
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <beginnormal_vertex>',
+      `#include <beginnormal_vertex>
+       {
+         float bs = min(abs(position.x) / u_halfW, 1.0);
+         float slope = -u_amp * 1.75 * pow(max(1.0 - bs, 0.0), 0.75) / u_halfW
+                       * sign(position.x) * u_bendK;
+         objectNormal.x += -slope * objectNormal.y;
+         objectNormal = normalize(objectNormal);
+       }`
+    );
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <begin_vertex>',
+      `#include <begin_vertex>
+       {
+         float bs = min(abs(transformed.x) / u_halfW, 1.0);
+         transformed.y += u_amp * pow(max(1.0 - bs, 0.0), 1.75) * u_bendK;
+       }`
+    );
+  };
+  material.customProgramCacheKey = () => 'bend_' + amp;
+  return material;
+}
+
+const matPaperTop = makeBendable(new THREE.MeshPhysicalMaterial({
+  map: TEX.paper, bumpMap: TEX.paperBump, bumpScale: 0.0055,
+  roughness: 0.80, metalness: 0.0,
+  sheen: 0.30, sheenRoughness: 0.92, sheenColor: new THREE.Color(0xfff2dc),
+  clearcoat: 0.06, clearcoatRoughness: 0.75,
+  envMapIntensity: 0.72,
+  shadowSide: THREE.DoubleSide
+}), B.pageBend);
+
+const matPageEdgeOut = makeBendable(new THREE.MeshStandardMaterial({
+  map: TEX.edge, roughness: 0.88, metalness: 0.0,
+  color: 0xf3ead6, envMapIntensity: 0.55
+}), B.pageBend);
+
+const matPageEdgeIn = makeBendable(new THREE.MeshStandardMaterial({
+  map: TEX.edgeSide, roughness: 0.90, metalness: 0.0,
+  color: 0xe7dcc4, envMapIntensity: 0.45
+}), B.pageBend);
+
+const matLeather = makeBendable(new THREE.MeshPhysicalMaterial({
+  map: TEX.leather, bumpMap: TEX.leatherBump, bumpScale: 0.010,
+  roughness: 0.62, metalness: 0.0,
+  sheen: 0.28, sheenRoughness: 0.85, sheenColor: new THREE.Color(0xb07a4e),
+  clearcoat: 0.14, clearcoatRoughness: 0.62,
+  envMapIntensity: 0.85
+}), B.coverBend);
+
+/** 造一侧的「封面 + 纸垛 + 顶层纸」 sign: +1 右半 / -1 左半 */
+function buildHalf(sign) {
+  const g = new THREE.Group();
+  const inner = B.spineGap / 2;
+  const span  = B.pageW - inner;
+  const cx    = sign * (inner + span / 2);
+
+  // 封面（圆角，精装质感）
+  const cw = span + B.coverOut;
+  const cd = B.pageD + B.coverOut * 2;
+  const coverGeo = new RoundedBoxGeometry(cw, B.coverT, cd, 3, 0.014);
+  coverGeo.translate(sign * (inner + cw / 2), B.coverT / 2, 0);
+  const cover = new THREE.Mesh(coverGeo, matLeather);
+  cover.castShadow = cover.receiveShadow = true;
+  g.add(cover);
+
+  // 纸垛
+  const stackGeo = new THREE.BoxGeometry(span, B.stackT, B.pageD, 52, 3, 26);
+  stackGeo.translate(cx, B.coverT + B.stackT / 2, 0);
+  const sideMats = sign > 0
+    ? [matPageEdgeOut, matPageEdgeIn, matPaperTop, matPaperTop, matPageEdgeOut, matPageEdgeOut]
+    : [matPageEdgeIn, matPageEdgeOut, matPaperTop, matPaperTop, matPageEdgeOut, matPageEdgeOut];
+  const stack = new THREE.Mesh(stackGeo, sideMats);
+  stack.castShadow = stack.receiveShadow = true;
+  g.add(stack);
+
+  // 顶层纸（更细腻的纸面）
+  const topGeo = new THREE.BoxGeometry(span * 0.994, 0.0075, B.pageD * 0.994, 48, 1, 20);
+  topGeo.translate(cx, B.coverT + B.stackT + 0.003, 0);
+  const topPage = new THREE.Mesh(topGeo, matPaperTop);
+  topPage.castShadow = topPage.receiveShadow = true;
+  g.add(topPage);
+
+  return g;
+}
+
+const bookGroup = new THREE.Group();
+const rightHalf = buildHalf(1);
+const leftHalf  = buildHalf(-1);
+bookGroup.add(rightHalf, leftHalf);
+
+// 中缝暗缝（书脊在书背侧，从这个角度看不到，用一条暗缝表现）
+const gutterTex = makeTex(256, 32, (ctx, w, h) => {
+  const g = ctx.createLinearGradient(0, 0, w, 0);
+  g.addColorStop(0.00, 'rgba(255,255,255,0)');
+  g.addColorStop(0.38, 'rgba(255,255,255,0.78)');
+  g.addColorStop(0.50, 'rgba(255,255,255,1)');
+  g.addColorStop(0.62, 'rgba(255,255,255,0.78)');
+  g.addColorStop(1.00, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+}, 1, 1, false);
+const gutter = new THREE.Mesh(
+  new THREE.PlaneGeometry(0.058, B.pageD * 0.995),
+  new THREE.MeshBasicMaterial({
+    color: 0x3a2a1c, alphaMap: gutterTex,
+    transparent: true, opacity: 0.40, depthWrite: false
+  })
+);
+gutter.rotation.x = -Math.PI / 2;
+gutter.position.set(0, B.coverT + B.stackT + B.pageBend + 0.008, 0);
+gutter.renderOrder = 2;
+bookGroup.add(gutter);
+
+scene.add(bookGroup);
+
+/* 合上时左半页抬升量。让两半页的纸层**互相嵌入**一点（而不是恰好对齐），
+   否则两个面近乎共面会 z-fighting，在书口处露出一条闪烁的亮线。 */
+const CLOSE_LIFT = (B.coverT + B.stackT) * 2 - 0.007;
+
+/* =========================================================================
+   6. 纸飞机（程序化折纸）
+   ========================================================================= */
+function buildPaperPlaneGeometry() {
+  const N = [ 0.00,  0.030, -1.02];  // 机头 (-Z 朝前)
+  const L = [ 0.66, -0.105,  0.76];  // 左翼尖（下垂）
+  const R = [-0.66, -0.105,  0.76];  // 右翼尖（下垂）
+  const C = [ 0.00,  0.105,  0.88];  // 尾脊（隆起）
+  const K = [ 0.00, -0.215,  0.30];  // 龙骨底
+
+  const v = [], uv = [];
+  const tri = (a, b, c) => {
+    v.push(...a, ...b, ...c);
+    for (const p of [a, b, c]) {
+      // 用 xz 平面投影做 UV，让纸张纤维纹理铺满整个机身
+      uv.push((p[0] + 1.4) / 2.8, (p[2] + 1.10) / 2.20);
+    }
+  };
+  tri(N, L, C);   // 左翼
+  tri(N, C, R);   // 右翼
+  tri(N, K, C);   // 机身龙骨
+  tri(N, C, K);   // 龙骨另一侧（显厚度）
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(v, 3));
+  geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geo.computeVertexNormals();   // 非索引 → 硬边，折纸质感
+  geo.center();
+  geo.computeBoundingSphere();
+  return geo;
+}
+
+const planeMat = new THREE.MeshPhysicalMaterial({
+  color: 0xfffcf4,
+  map: TEX.planePaper, bumpMap: TEX.planeBump, bumpScale: 0.006,
+  roughness: 0.62, metalness: 0.0,
+  side: THREE.DoubleSide,
+  shadowSide: THREE.DoubleSide,
+  sheen: 0.22, sheenRoughness: 0.90, sheenColor: new THREE.Color(0xfff5e2),
+  clearcoat: 0.08, clearcoatRoughness: 0.62,
+  envMapIntensity: 0.85
+});
+const planeMesh = new THREE.Mesh(buildPaperPlaneGeometry(), planeMat);
+planeMesh.castShadow = true;
+planeMesh.scale.setScalar(0.62);
+
+const planeHolder = new THREE.Group();
+planeHolder.add(planeMesh);
+scene.add(planeHolder);
+
+/* =========================================================================
+   7. 尘埃
+   ========================================================================= */
+const DUST_N = LOWER_GPU ? 170 : 340;
+const dustBase = new Float32Array(DUST_N * 3);
+const dustSeed = new Float32Array(DUST_N);
+for (let i = 0; i < DUST_N; i++) {
+  dustBase[i * 3]     = (Math.random() - 0.5) * 7.0;
+  dustBase[i * 3 + 1] = 0.25 + Math.random() * 4.8;
+  dustBase[i * 3 + 2] = (Math.random() - 0.5) * 7.0;
+  dustSeed[i] = Math.random() * Math.PI * 2;
+}
+const dustGeo = new THREE.BufferGeometry();
+dustGeo.setAttribute('position', new THREE.BufferAttribute(dustBase.slice(), 3));
+const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+  size: 0.028, map: TEX.dust, color: 0xffeacb,
+  transparent: true, opacity: 0.58,
+  depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true
+}));
+dust.frustumCulled = false;
+scene.add(dust);
+
+/* =========================================================================
+   8. 窗边体积光柱（克制）
+   ========================================================================= */
+const shafts = [];
+function addShaft(x, y, z, w, h, tilt, opacity) {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({
+      map: TEX.shaft, color: 0xffe3b6, transparent: true, opacity,
+      depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide
+    })
+  );
+  m.position.set(x, y, z);
+  m.userData.tilt = tilt;
+  m.renderOrder = 3;
+  scene.add(m);
+  shafts.push(m);
+}
+addShaft(-3.35, 3.25, 1.35, 2.00, 7.2, -0.42, 0.085);
+addShaft(-2.15, 3.55, 2.55, 1.25, 6.6, -0.36, 0.052);
+addShaft(-4.35, 3.05, 0.10, 1.15, 6.2, -0.48, 0.042);
+
+/* =========================================================================
+   9. 飞行轨迹
+   ========================================================================= */
+/* 一条首尾闭合的环绕路径：从书页间滑出 → 绕书本一圈 → 沿原方向滑回原处。
+   首尾切线一致，所以循环播放时姿态不会跳变。 */
+const FLIGHT = new THREE.CatmullRomCurve3([
+  new THREE.Vector3( 0.00, 0.454, -0.12),  //  0 停在中缝上（机头朝左前方）
+  new THREE.Vector3(-0.34, 0.500,  0.05),  //  1 贴着书页向左前滑行
+  new THREE.Vector3(-0.78, 0.690,  0.38),  //  2 滑出书页左前角并抬头
+  new THREE.Vector3(-1.19, 0.960,  0.86),  //  3 升空
+  new THREE.Vector3(-1.44, 1.120, -0.23),  //  4 左
+  new THREE.Vector3(-0.86, 1.165, -1.19),  //  5 左后
+  new THREE.Vector3( 0.23, 1.145, -1.45),  //  6 正后
+  new THREE.Vector3( 1.19, 1.085, -0.86),  //  7 右后
+  new THREE.Vector3( 1.44, 1.010,  0.23),  //  8 右
+  new THREE.Vector3( 0.86, 0.940,  1.19),  //  9 右前
+  new THREE.Vector3(-0.22, 0.865,  1.45),  // 10 正前
+  new THREE.Vector3( 0.74, 0.700,  0.86),  // 11 转向下降
+  new THREE.Vector3( 1.19, 0.575,  0.00),  // 12 右侧低空
+  new THREE.Vector3( 0.80, 0.490, -0.61),  // 13 绕到右后
+  new THREE.Vector3( 0.00, 0.454, -0.12)   // 14 滑回书页缝隙
+], false, 'catmullrom', 0.5);
+FLIGHT.arcLengthDivisions = 900;
+FLIGHT.updateArcLengths();
+
+/* 飞机静止位：书页间 / 被夹在合上的书里 */
+const SEAT_A = new THREE.Vector3(0.00, 0.454, -0.12);
+const SEAT_B = new THREE.Vector3(0.52, 0.452, -0.12);
+
+/* 采样缓冲（避免每帧 GC） */
+const _p   = new THREE.Vector3();
+const _t1  = new THREE.Vector3();
+const _t2  = new THREE.Vector3();
+const _tv  = new THREE.Vector3();
+const _m4  = new THREE.Matrix4();
+const _q   = new THREE.Quaternion();
+const _q2  = new THREE.Quaternion();
+const _zero = new THREE.Vector3(0, 0, 0);
+const _up   = new THREE.Vector3(0, 1, 0);
+const _axZ  = new THREE.Vector3(0, 0, 1);
+const _axX  = new THREE.Vector3(1, 0, 0);
+
+/* =========================================================================
+   10. 控制器
+   ========================================================================= */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.055;
+controls.target.set(0, 0.60, 0);
+controls.minDistance = 1.9;
+controls.maxDistance = 13;
+controls.maxPolarAngle = Math.PI * 0.495;
+controls.minPolarAngle = Math.PI * 0.10;
+controls.panSpeed = 0.55;
+controls.rotateSpeed = 0.62;
+controls.zoomSpeed = 0.75;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.30;
+
+let autoResumeAt = 0;
+controls.addEventListener('start', () => {
+  controls.autoRotate = false;
+  autoResumeAt = 0;
+});
+controls.addEventListener('end', () => {
+  autoResumeAt = performance.now() + 3200;   // 松手 3.2s 后恢复自动旋转
+});
+
+/* =========================================================================
+   11. 动画时间轴
+   ========================================================================= */
+const PH = CFG.phase;
+const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+const easeInOutSine  = v => -(Math.cos(Math.PI * v) - 1) / 2;
+const easeInOutCubic = v => v < 0.5 ? 4 * v * v * v : 1 - Math.pow(-2 * v + 2, 3) / 2;
+
+/** 书翻开程度：1 全开 → 0 合上 */
+function bookOpenAt(t) {
+  if (t < PH.flightEnd)  return 1;
+  if (t < PH.closeEnd)   return 1 - easeInOutSine(clamp01((t - PH.flightEnd) / (PH.closeEnd - PH.flightEnd)));
+  if (t < PH.pauseEnd)   return 0;
+  if (t < PH.openEnd)    return easeInOutSine(clamp01((t - PH.pauseEnd) / (PH.openEnd - PH.pauseEnd)));
+  return 1;
+}
+
+/** 飞机在书内的位置参数：0 = SEAT_A，1 = SEAT_B */
+function bookSeatAt(t) {
+  if (t < PH.flightEnd)  return 0;
+  if (t < PH.closeEnd)   return easeInOutCubic(clamp01((t - PH.flightEnd) / (PH.closeEnd - PH.flightEnd)));
+  if (t < PH.pauseEnd)   return 1;
+  if (t < PH.openEnd)    return 1 - easeInOutSine(clamp01((t - PH.pauseEnd) / (PH.openEnd - PH.pauseEnd)));
+  return 0;
+}
+
+/** 飞行曲线参数 u（起飞与降落减速，中段平稳巡航） */
+function flightUAt(t) {
+  const p = clamp01((t - PH.hold) / (PH.flightEnd - PH.hold));
+  const k = 0.38;
+  return clamp01(p - k * Math.sin(2 * Math.PI * p) / (2 * Math.PI));
+}
+
+/* ---- 飞行姿态：机头对准切线 + 转弯侧倾 + 纸飞机式晃动 ---- */
+function poseFlying(u, time, out) {
+  FLIGHT.getPointAt(u, out);
+  FLIGHT.getTangentAt(u, _t1).normalize();
+
+  // 转弯方向（切线叉积的 y 分量）
+  FLIGHT.getTangentAt(clamp01(u - 0.024), _t2);
+  FLIGHT.getTangentAt(clamp01(u + 0.024), _tv);
+  const crossY = _t2.cross(_tv).y;
+
+  let roll = THREE.MathUtils.clamp(-crossY * 3.6, -0.52, 0.52);
+  roll += Math.sin(time * 2.15) * 0.045 + Math.sin(time * 3.70 + 1.1) * 0.020;
+  const pitchWob = Math.sin(time * 3.05 + 0.6) * 0.042;
+
+  _m4.lookAt(_zero, _t1, _up);          // -Z 轴对准切线
+  _q.setFromRotationMatrix(_m4);
+  _q2.setFromAxisAngle(_axZ, roll);     // 局部滚转
+  _q.multiply(_q2);
+  _q2.setFromAxisAngle(_axX, pitchWob); // 局部俯仰微扰
+  _q.multiply(_q2);
+
+  planeHolder.quaternion.copy(_q);
+  out.y += Math.sin(time * 2.55) * 0.024;   // 轻微升沉
+  return out;
+}
+
+/* ---- 静止在书页上 / 被合进书里 ---- */
+function poseResting(u, seat, time) {
+  FLIGHT.getPointAt(u, _p);
+  FLIGHT.getTangentAt(u, _t1).normalize();
+  _m4.lookAt(_zero, _t1, _up);
+  _q.setFromRotationMatrix(_m4);
+
+  const breath = Math.sin(time * 1.25) * 0.013;
+  // 停在书页上时微微抬头并侧倾，像蓄势待发，同时让机翼在书页上留下清楚的投影
+  _q2.setFromAxisAngle(_axX, 0.10 + breath * 0.6);
+  _q.multiply(_q2);
+  _q2.setFromAxisAngle(_axZ, 0.06 + breath);
+  _q.multiply(_q2);
+
+  if (seat > 0.001) {
+    // 跟着左半页一起翻转 180°
+    const flip = new THREE.Quaternion().setFromAxisAngle(_axZ, -seat * Math.PI);
+    planeHolder.quaternion.copy(flip).multiply(_q);
+  } else {
+    planeHolder.quaternion.copy(_q);
+  }
+
+  planeHolder.position.lerpVectors(SEAT_A, SEAT_B, seat);
+  planeHolder.position.y += Math.sin(time * 1.9) * 0.006;
+}
+
+/* =========================================================================
+   12. 主循环
+   ========================================================================= */
+const clock = new THREE.Clock();
+/* 调试用：?t=8.5 可把画面固定在循环的第 8.5 秒 */
+const FIXED_T = (() => {
+  const m = /[?&]t=([\d.]+)/.exec(location.search);
+  return m ? parseFloat(m[1]) : null;
+})();
+
+function frame() {
+  requestAnimationFrame(frame);
+
+  clock.getDelta();
+  const T = clock.getElapsedTime();
+  const t = FIXED_T !== null ? FIXED_T : (T % CFG.loop);
+
+  /* --- 书 --- */
+  const open = bookOpenAt(t);
+  leftHalf.rotation.z = -(1 - open) * Math.PI;
+  leftHalf.position.y =  (1 - open) * CLOSE_LIFT;
+
+  // 书页弧度随开合变化：摊开时自然弯曲，合上时压平
+  for (let i = 0; i < bendShaders.length; i++) {
+    bendShaders[i].uniforms.u_bendK.value = open;
+  }
+  gutter.position.y = B.coverT + B.stackT + B.pageBend * open + 0.008;
+  gutter.material.opacity = 0.40 * open;   // 合上时中缝贴片会让书脊侧露出一小块，淡出掉
+
+  /* 伪 AO 贴片跟随书本：合上时收缩并右移，避免书本离开后露出一整块暗斑 */
+  const aoK = 1 - open;
+  aoPlane.scale.set(1 - aoK * 0.32, 1 - aoK * 0.14, 1);
+  aoPlane.position.x = -0.02 + aoK * 0.42;
+
+  /* --- 飞机 --- */
+  const flying = (t > PH.hold && t < PH.flightEnd);
+  const seat   = bookSeatAt(t);
+
+  if (flying) {
+    poseFlying(flightUAt(t), T, _p);
+    planeHolder.position.copy(_p);
+  } else {
+    // 起飞前用曲线起点姿态；降落后用曲线终点姿态
+    const u = (t > PH.hold) ? 1 : 0;
+    poseResting(u, seat, T);
+  }
+
+  /* --- 尘埃 --- */
+  const arr = dustGeo.attributes.position.array;
+  for (let i = 0; i < DUST_N; i++) {
+    const s = dustSeed[i], i3 = i * 3;
+    arr[i3]     = dustBase[i3]     + Math.sin(T * 0.16 + s) * 0.42;
+    arr[i3 + 1] = dustBase[i3 + 1] + Math.sin(T * 0.21 + s * 1.7) * 0.30;
+    arr[i3 + 2] = dustBase[i3 + 2] + Math.cos(T * 0.13 + s * 0.8) * 0.42;
+  }
+  dustGeo.attributes.position.needsUpdate = true;
+
+  /* --- 光柱绕 Y 面向相机 --- */
+  for (let i = 0; i < shafts.length; i++) {
+    const s = shafts[i];
+    const ang = Math.atan2(camera.position.x - s.position.x, camera.position.z - s.position.z);
+    _q.setFromAxisAngle(_up, ang);
+    _q2.setFromAxisAngle(_axZ, s.userData.tilt);
+    s.quaternion.copy(_q).multiply(_q2);
+  }
+
+  /* --- 自动旋转：松手后延时恢复 --- */
+  if (!controls.autoRotate && autoResumeAt && performance.now() > autoResumeAt) {
+    controls.autoRotate = true;
+    autoResumeAt = 0;
+  }
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+/* =========================================================================
+   13. 响应式
+   ========================================================================= */
+function onResize() {
+  const w = innerWidth, h = innerHeight;
+  const portrait = h > w;
+  camera.aspect = w / h;
+  camera.fov = portrait ? 50 : 38;          // 竖屏放宽视野，保证书本完整
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(devicePixelRatio, LOWER_GPU ? 1.5 : 2));
+  renderer.setSize(w, h);
+  controls.minDistance = portrait ? 2.6 : 1.9;
+  controls.maxDistance = portrait ? 16  : 13;
+}
+addEventListener('resize', onResize);
+onResize();
+
+frame();
+
+addEventListener('beforeunload', () => {
+  renderer.dispose();
+  texCache.forEach(t => t.dispose());
+});
+</script>
+</body>
+</html>
