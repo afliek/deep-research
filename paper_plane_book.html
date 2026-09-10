@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#d8c5a7" />
+  <title>书页间的飞行</title><script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  <style>
+    :root { color-scheme: light; background: #d8c5a7; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
+
+// 场景、相机与渲染器。
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.domElement.setAttribute('aria-label', '可以拖动旋转、滚轮缩放的书本与纸飞机三维场景');
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#d8c8ae');
+scene.fog = new THREE.FogExp2('#d8c8ae', 0.04);
+const camera = new THREE.PerspectiveCamera(34, innerWidth / innerHeight, 0.1, 60);
+camera.position.set(3.25, 3.9, 5.45);
+const room = new RoomEnvironment();
+const pmrem = new THREE.PMREMGenerator(renderer);
+const environment = pmrem.fromScene(room, 0.035);
+scene.environment = environment.texture;
+room.dispose();
+pmrem.dispose();
+
+// 所有材质纹理由画布生成，不依赖图片、字体或模型资源。
+let randomState = 7319;
+function random() {
+  randomState = (Math.imul(1664525, randomState) + 1013904223) >>> 0;
+  return randomState / 4294967296;
+}
+function canvasTexture(width, height, draw) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  draw(canvas.getContext('2d'), width, height);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+  return texture;
+}
+const woodMap = canvasTexture(2048, 1024, (ctx, w, h) => {
+  const image = ctx.createImageData(w, h);
+  for (let y = 0; y < h; y++) {
+    const board = Math.floor(y / 256);
+    for (let x = 0; x < w; x++) {
+      const bend = 8 * Math.sin(x * 0.003 + board * 2.8)
+        + 2.7 * Math.sin(x * 0.008 + y * 0.012)
+        + 9 * Math.exp(-Math.pow((x - 1280) / 380, 2)) * Math.sin(y * 0.017);
+      const grain = y + bend;
+      const fine = Math.sin(grain * 2.4 + 0.6 * Math.sin(x * 0.025));
+      const broad = Math.sin(grain * 0.054 + Math.sin(x * 0.0018));
+      const pore = Math.pow(Math.max(0, Math.sin(grain * 0.74)), 14);
+      const value = broad * 6 + fine * 2.2 - pore * 6 + (random() - 0.5) * 5;
+      const joint = y % 256 < 2 ? -12 : 0;
+      const variation = [3, -1, 2, -3][board];
+      const i = (y * w + x) * 4;
+      image.data[i] = 119 + value + joint + variation;
+      image.data[i + 1] = 86 + value * 0.82 + joint + variation;
+      image.data[i + 2] = 58 + value * 0.63 + joint + variation;
+      image.data[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(image, 0, 0);
+  for (let i = 0; i < 480; i++) {
+    const y = random() * h, x = random() * w;
+    ctx.strokeStyle = `rgba(49,31,19,${0.025 + random() * 0.065})`;
+    ctx.lineWidth = 0.4 + random() * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.bezierCurveTo(x + 70, y - 1.5, x + 180, y + 2, x + 270 + random() * 340, y);
+    ctx.stroke();
+  }
+});
+woodMap.wrapS = woodMap.wrapT = THREE.RepeatWrapping;
+woodMap.repeat.set(3.4, 3);
+const woodBump = woodMap.clone();
+woodBump.colorSpace = THREE.NoColorSpace;
+woodBump.needsUpdate = true;
+
+const paperMap = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#faf7ed';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 42000; i++) {
+    ctx.fillStyle = `rgba(105,88,62,${random() * 0.055})`;
+    ctx.fillRect(random() * w, random() * h, 0.6 + random(), 0.6 + random());
+  }
+  for (let i = 0; i < 1600; i++) {
+    const x = random() * w, y = random() * h;
+    ctx.strokeStyle = `rgba(144,125,94,${random() * 0.075})`;
+    ctx.lineWidth = 0.35;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + random() * 9 - 4, y + random() * 5 - 2);
+    ctx.stroke();
+  }
+});
+const paperBump = paperMap.clone();
+paperBump.colorSpace = THREE.NoColorSpace;
+paperBump.needsUpdate = true;
+const edgeMap = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#e5d5b2';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 92; i++) {
+    const y = i * h / 92;
+    ctx.fillStyle = `rgba(255,252,226,${0.25 + random() * 0.35})`;
+    ctx.fillRect(0, y + 0.9, w, 2.2 + random());
+    ctx.strokeStyle = `rgba(102,77,41,${0.12 + random() * 0.22})`;
+    ctx.lineWidth = 0.6 + random() * 0.55;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.bezierCurveTo(w * 0.3, y + random(), w * 0.7, y - random(), w, y);
+    ctx.stroke();
+  }
+});
+const leatherMap = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#d5c8b6';
+  ctx.fillRect(0, 0, w, h);
+  for (let i = 0; i < 62000; i++) {
+    const x = random() * w, y = random() * h;
+    ctx.fillStyle = `rgba(44,32,25,${random() * 0.14})`;
+    ctx.fillRect(x, y, 0.7 + random() * 1.3, 0.6 + random());
+    if (i % 3 === 0) {
+      ctx.fillStyle = 'rgba(255,250,235,0.1)';
+      ctx.fillRect(x, y + 1.2, 1, 0.6);
+    }
+  }
+});
+leatherMap.wrapS = leatherMap.wrapT = THREE.RepeatWrapping;
+leatherMap.repeat.set(2, 2);
+const leatherBump = leatherMap.clone();
+leatherBump.colorSpace = THREE.NoColorSpace;
+leatherBump.needsUpdate = true;
+
+const coverMaterial = new THREE.MeshPhysicalMaterial({
+  color: '#623c32', map: leatherMap, bumpMap: leatherBump, bumpScale: 0.004,
+  roughness: 0.62, metalness: 0, clearcoat: 0.12, clearcoatRoughness: 0.65,
+  sheen: 0.35, sheenColor: new THREE.Color('#ad7959'), sheenRoughness: 0.8,
+  envMapIntensity: 0.38
+});
+const goldMaterial = new THREE.MeshStandardMaterial({
+  color: '#bca16a', metalness: 0.72, roughness: 0.46, envMapIntensity: 0.6
+});
+const pageMaterial = new THREE.MeshPhysicalMaterial({
+  color: '#fff2d7', map: paperMap, bumpMap: paperBump, bumpScale: 0.0018,
+  roughness: 0.87, metalness: 0, sheen: 0.52,
+  sheenColor: new THREE.Color('#fff5e1'), sheenRoughness: 0.86,
+  emissive: '#cdbb94', emissiveIntensity: 0.017,
+  side: THREE.DoubleSide, envMapIntensity: 0.42
+});
+const edgeMaterial = new THREE.MeshStandardMaterial({
+  color: '#fff3d9', map: edgeMap, bumpMap: edgeMap, bumpScale: 0.0013,
+  roughness: 0.94, envMapIntensity: 0.3
+});
+
+// 窗边主光、较冷的填充光，以及真实投影的窗格光斑。
+scene.add(new THREE.HemisphereLight('#f9eed9', '#806148', 0.48));
+const keyLight = new THREE.DirectionalLight('#ffe7c7', 2.25);
+keyLight.position.set(-3.8, 6.5, -1.8);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+Object.assign(keyLight.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 0.5, far: 16 });
+keyLight.shadow.camera.updateProjectionMatrix();
+keyLight.shadow.bias = -0.0002;
+keyLight.shadow.normalBias = 0.004;
+keyLight.shadow.radius = 4;
+scene.add(keyLight);
+const fillLight = new THREE.DirectionalLight('#e7edf6', 0.4);
+fillLight.position.set(3, 4, 3);
+scene.add(fillLight);
+const windowMap = canvasTexture(512, 512, (ctx, w, h) => {
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, w, h);
+  ctx.filter = 'blur(9px)';
+  ctx.fillStyle = '#fff';
+  for (let x = 0; x < 2; x++) {
+    for (let y = 0; y < 2; y++) ctx.fillRect(85 + x * 177, 72 + y * 190, 151, 164);
+  }
+});
+const windowLight = new THREE.SpotLight('#ffe6c0', 75, 20, 0.58, 0.7, 2);
+windowLight.position.copy(keyLight.position);
+windowLight.target.position.set(-0.55, 0, -0.65);
+windowLight.map = windowMap;
+windowLight.castShadow = true;
+windowLight.shadow.mapSize.set(1024, 1024);
+windowLight.shadow.bias = -0.0002;
+windowLight.shadow.normalBias = 0.004;
+scene.add(windowLight, windowLight.target);
+
+// 木桌与近景接触阴影。
+const desk = new THREE.Mesh(
+  new RoundedBoxGeometry(30, 0.25, 24, 2, 0.045),
+  new THREE.MeshPhysicalMaterial({
+    map: woodMap, bumpMap: woodBump, bumpScale: 0.009,
+    roughness: 0.63, metalness: 0, clearcoat: 0.14,
+    clearcoatRoughness: 0.65, envMapIntensity: 0.32
+  })
+);
+desk.position.y = -0.125;
+desk.receiveShadow = true;
+scene.add(desk);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200),
+  new THREE.MeshStandardMaterial({ color: '#b6a38a', roughness: 1, envMapIntensity: 0.2 }));
+floor.rotation.x = -Math.PI / 2;
+floor.position.y = -0.32;
+scene.add(floor);
+const contactMaterial = new THREE.ShaderMaterial({
+  uniforms: { opacity: { value: 0.28 } },
+  vertexShader: `varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `varying vec2 vUv; uniform float opacity;
+    void main() {
+      vec2 p = abs(vUv - 0.5) * 2.0;
+      float shape = pow(p.x, 6.0) + pow(p.y, 6.0);
+      gl_FragColor = vec4(0.12, 0.065, 0.025, exp(-shape * 3.8) * opacity);
+    }`,
+  transparent: true, depthWrite: false
+});
+const contactShadow = new THREE.Mesh(new THREE.PlaneGeometry(3.85, 2.75), contactMaterial);
+contactShadow.rotation.x = -Math.PI / 2;
+contactShadow.rotation.z = 0.14;
+contactShadow.position.y = 0.003;
+scene.add(contactShadow);
+
+// 精装书：封壳、柔性书脊、弯曲书芯与独立薄页。
+const BOOK = { width: 1.4, depth: 2.05, gap: 0.032, hinge: 0.245, bottom: 0.062 };
+const book = new THREE.Group();
+book.rotation.y = -0.14;
+scene.add(book);
+const deformablePages = [];
+const movingSpine = [];
+const smooth = value => {
+  const t = THREE.MathUtils.clamp(value, 0, 1);
+  return t * t * t * (t * (t * 6 - 15) + 10);
+};
+const mix = THREE.MathUtils.lerp;
+function pageHeight(u, v, close, leaf = 0) {
+  const arch = Math.pow(Math.max(0, Math.sin(Math.PI * u)), 0.85);
+  const gutter = Math.exp(-u * 13) * 0.034;
+  const corner = Math.pow(u, 4) * Math.cos(v * Math.PI * 2) * (0.002 + leaf * 0.00015);
+  const open = 0.205 + arch * (0.052 + leaf * 0.0011) - gutter + corner + leaf * 0.003;
+  return mix(open, 0.218 + leaf * 0.002, close);
+}
+
+// 每个顶点记录纸面参数，合书时连续压平纸页，而非让实体书芯互相穿透。
+function pageGeometry(sign, leaf = 0) {
+  const positions = [], uvs = [], parameters = [], indices = [];
+  const width = BOOK.width - leaf * 0.0035;
+  const depth = BOOK.depth - leaf * 0.003;
+  const topLeaf = leaf > 0;
+  const bottom = (u, v, close) => topLeaf ? pageHeight(u, v, close, leaf) - 0.00085 : BOOK.bottom;
+  const geometry = new THREE.BufferGeometry();
+  function patch(nu, nv, sampler, reverse, materialIndex) {
+    const start = parameters.length, first = indices.length;
+    for (let j = 0; j <= nv; j++) {
+      for (let i = 0; i <= nu; i++) {
+        const a = i / nu, b = j / nv;
+        const [u, v, t] = sampler(a, b);
+        parameters.push({ u, v, t });
+        positions.push(sign * (BOOK.gap + u * width), 0, (v - 0.5) * depth);
+        uvs.push(a, b);
+      }
+    }
+    for (let j = 0; j < nv; j++) {
+      for (let i = 0; i < nu; i++) {
+        const a = start + j * (nu + 1) + i, b = a + 1, c = a + nu + 1, d = c + 1;
+        if (reverse) indices.push(a, b, c, b, d, c);
+        else indices.push(a, c, b, b, c, d);
+      }
+    }
+    geometry.addGroup(first, indices.length - first, materialIndex);
+  }
+  patch(32, 18, (u, v) => [u, v, 1], sign < 0, 0);
+  patch(32, topLeaf ? 18 : 2, (u, v) => [u, v, 0], sign > 0, 0);
+  patch(32, 1, (u, t) => [u, 0, t], sign < 0, topLeaf ? 0 : 1);
+  patch(32, 1, (u, t) => [u, 1, t], sign > 0, topLeaf ? 0 : 1);
+  patch(18, 1, (v, t) => [1, v, t], sign < 0, topLeaf ? 0 : 1);
+  patch(18, 1, (v, t) => [0, v, t], sign > 0, topLeaf ? 0 : 1);
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(indices);
+  const update = close => {
+    const position = geometry.attributes.position;
+    for (let i = 0; i < parameters.length; i++) {
+      const { u, v, t } = parameters[i];
+      position.setY(i, mix(bottom(u, v, close), pageHeight(u, v, close, leaf), t) - BOOK.hinge);
+    }
+    position.needsUpdate = true;
+    geometry.computeVertexNormals();
+    geometry.computeBoundingSphere();
+  };
+  update(0);
+  deformablePages.push(update);
+  return geometry;
+}
+function goldLine(points, parent, radius = 0.0018, closed = false) {
+  const curve = new THREE.CatmullRomCurve3(points, closed, 'centripetal');
+  const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, Math.max(24, points.length * 5), radius, 4, closed), goldMaterial);
+  parent.add(mesh);
+}
+function coverBorder(parent, sign, inset, y) {
+  const x0 = 0.012 + inset, x1 = 1.53 - inset, z0 = -1.095 + inset, z1 = 1.095 - inset;
+  const radius = 0.033, points = [];
+  const corners = [[x1 - radius, z1 - radius, 0], [x0 + radius, z1 - radius, 1],
+    [x0 + radius, z0 + radius, 2], [x1 - radius, z0 + radius, 3]];
+  for (const [cx, cz, quadrant] of corners) {
+    for (let j = 0; j <= 5; j++) {
+      const angle = quadrant * Math.PI / 2 + j / 5 * Math.PI / 2;
+      points.push(new THREE.Vector3(sign * (cx + Math.cos(angle) * radius), y - BOOK.hinge, cz + Math.sin(angle) * radius));
+    }
+  }
+  goldLine(points, parent, 0.0017, true);
+}
+function buildHalf(sign) {
+  const half = new THREE.Group();
+  half.position.y = BOOK.hinge;
+  book.add(half);
+  const cover = new THREE.Mesh(new RoundedBoxGeometry(1.518, 0.048, 2.19, 3, 0.012), coverMaterial);
+  cover.position.set(sign * 0.771, 0.029 - BOOK.hinge, 0);
+  cover.castShadow = cover.receiveShadow = true;
+  half.add(cover);
+  coverBorder(half, sign, 0.046, 0.0035);
+  coverBorder(half, sign, 0.062, 0.0035);
+  coverBorder(half, sign, 0.027, 0.054);
+  // 无文字的细金线压花，只在外封面上出现。
+  const ornamentY = 0.003 - BOOK.hinge, centerX = sign * 0.79;
+  goldLine([
+    new THREE.Vector3(centerX, ornamentY, -0.23), new THREE.Vector3(centerX + 0.12, ornamentY, 0),
+    new THREE.Vector3(centerX, ornamentY, 0.23), new THREE.Vector3(centerX - 0.12, ornamentY, 0)
+  ], half, 0.0021, true);
+  for (let leaf = 0; leaf <= 6; leaf++) {
+    const mesh = new THREE.Mesh(pageGeometry(sign, leaf), [pageMaterial, edgeMaterial]);
+    mesh.castShadow = leaf === 0 || leaf === 6;
+    mesh.receiveShadow = true;
+    half.add(mesh);
+  }
+  return half;
+}
+buildHalf(1);
+const leftHalf = buildHalf(-1);
+function spineStrip(z0, z1, material, offset = 0) {
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(33 * 2 * 3), uv = [], indices = [];
+  for (let j = 0; j < 2; j++) {
+    for (let i = 0; i <= 32; i++) uv.push(i / 32, j);
+  }
+  for (let i = 0; i < 32; i++) indices.push(i, i + 1, i + 33, i + 1, i + 34, i + 33);
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geometry.setIndex(indices);
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  mesh.frustumCulled = false;
+  book.add(mesh);
+  movingSpine.push(close => {
+    const angle = -Math.PI * close;
+    const bx = -0.037 * Math.cos(angle) - (0.029 - BOOK.hinge) * Math.sin(angle);
+    const by = -0.037 * Math.sin(angle) + (0.029 - BOOK.hinge) * Math.cos(angle) + BOOK.hinge;
+    const cx = -0.16 * Math.sin(Math.PI * close / 2);
+    const cy = (0.029 + by) * 0.5 - 0.038 * (1 - close);
+    for (let j = 0; j < 2; j++) {
+      for (let i = 0; i <= 32; i++) {
+        const u = i / 32, a = (1 - u) ** 2, b = 2 * u * (1 - u), c = u * u;
+        geometry.attributes.position.setXYZ(j * 33 + i,
+          a * 0.037 + b * cx + c * bx - offset,
+          a * 0.029 + b * cy + c * by - offset * (1 - close), j ? z1 : z0);
+      }
+    }
+    geometry.attributes.position.needsUpdate = true;
+    geometry.computeVertexNormals();
+  });
+}
+const spineMaterial = coverMaterial.clone();
+spineMaterial.side = THREE.DoubleSide;
+spineStrip(-1.092, 1.092, spineMaterial);
+for (const z of [-0.83, -0.72, 0.72, 0.83]) spineStrip(z - 0.005, z + 0.005, goldMaterial, 0.001);
+
+// 与书本相连的一小段丝质书签。
+const ribbonGeometry = new THREE.BufferGeometry();
+const ribbonPositions = [], ribbonUvs = [], ribbonIndices = [];
+const ribbonCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(0.09, 0.155, 0.75), new THREE.Vector3(0.09, 0.12, 1.03),
+  new THREE.Vector3(0.12, 0.021, 1.17), new THREE.Vector3(0.24, 0.012, 1.41)
+]);
+for (let i = 0; i <= 28; i++) {
+  const point = ribbonCurve.getPoint(i / 28);
+  ribbonPositions.push(point.x - 0.024, point.y, point.z, point.x + 0.024, point.y + 0.001, point.z);
+  ribbonUvs.push(0, i / 28, 1, i / 28);
+  if (i < 28) { const n = i * 2; ribbonIndices.push(n, n + 2, n + 1, n + 1, n + 2, n + 3); }
+}
+ribbonGeometry.setAttribute('position', new THREE.Float32BufferAttribute(ribbonPositions, 3));
+ribbonGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(ribbonUvs, 2));
+ribbonGeometry.setIndex(ribbonIndices);
+ribbonGeometry.computeVertexNormals();
+const ribbon = new THREE.Mesh(ribbonGeometry, new THREE.MeshPhysicalMaterial({
+  color: '#8a673b', roughness: 0.75, sheen: 0.9, sheenColor: new THREE.Color('#d0ab6e'),
+  sheenRoughness: 0.7, side: THREE.DoubleSide, envMapIntensity: 0.35
+}));
+ribbon.castShadow = ribbon.receiveShadow = true;
+book.add(ribbon);
+let lastBookClose = -1;
+function setBookClose(close) {
+  if (Math.abs(close - lastBookClose) < 0.000015) return;
+  lastBookClose = close;
+  leftHalf.rotation.z = -Math.PI * close;
+  const compression = smooth(close);
+  for (const update of deformablePages) update(compression);
+  for (const update of movingSpine) update(close);
+  book.position.x = -0.56 * compression;
+  contactShadow.position.x = book.position.x + 0.64 * compression;
+  contactShadow.scale.x = mix(1, 0.57, compression);
+  contactMaterial.uniforms.opacity.value = mix(0.28, 0.35, compression);
+}
+setBookClose(0);
+
+// 折纸纸飞机：分别构建翼面、内折面与机腹，保留真实折痕和薄纸边缘。
+const airplane = new THREE.Group();
+book.add(airplane);
+const airplaneMaterial = new THREE.MeshPhysicalMaterial({
+  color: '#ffffff', map: paperMap, bumpMap: paperBump, bumpScale: 0.001,
+  roughness: 0.76, metalness: 0, sheen: 0.48,
+  sheenColor: new THREE.Color('#fff9ec'), sheenRoughness: 0.8,
+  emissive: '#fff3dc', emissiveIntensity: 0.025,
+  side: THREE.DoubleSide, flatShading: true, envMapIntensity: 0.55
+});
+const foldMaterial = airplaneMaterial.clone();
+foldMaterial.color.set('#eeeadd');
+const V = {
+  nose: [0, 0.035, 0.69],
+  leftWing: [-0.48, 0.045, -0.45], rightWing: [0.48, 0.045, -0.45],
+  leftFold: [-0.092, -0.012, -0.39], rightFold: [0.092, -0.012, -0.39],
+  keelFront: [0, -0.075, 0.24], keelBack: [0, -0.12, -0.43],
+  leftUnder: [-0.31, 0.019, -0.40], rightUnder: [0.31, 0.019, -0.40]
+};
+function foldedSurface(triangles, material) {
+  const position = [], uv = [];
+  for (const triangle of triangles) {
+    for (const key of triangle) {
+      const point = V[key];
+      position.push(...point);
+      uv.push(point[0] + 0.5, (point[2] + 0.45) / 1.14);
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  geometry.computeVertexNormals();
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  airplane.add(mesh);
+  airplane.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 24),
+    new THREE.LineBasicMaterial({ color: '#b9ae96', transparent: true, opacity: 0.15 })));
+}
+foldedSurface([
+  ['nose', 'leftFold', 'leftWing'], ['nose', 'rightWing', 'rightFold']
+], airplaneMaterial);
+foldedSurface([
+  ['nose', 'keelFront', 'leftFold'], ['leftFold', 'keelFront', 'keelBack'],
+  ['nose', 'rightFold', 'keelFront'], ['rightFold', 'keelBack', 'keelFront'],
+  ['nose', 'leftUnder', 'leftFold'], ['nose', 'rightFold', 'rightUnder']
+], foldMaterial);
+
+// 同起点、同朝向的连续航线，落地后不瞬移重置。
+const restPosition = new THREE.Vector3(0.12, 0.305, 0.04);
+const flightCurve = new THREE.CatmullRomCurve3([
+  restPosition.clone(), new THREE.Vector3(0.12, 0.35, 0.43),
+  new THREE.Vector3(0.32, 0.77, 1.03), new THREE.Vector3(1.05, 1.28, 1.18),
+  new THREE.Vector3(1.68, 1.65, 0.40), new THREE.Vector3(1.26, 1.81, -0.68),
+  new THREE.Vector3(0.04, 1.70, -1.17), new THREE.Vector3(-1.18, 1.46, -0.76),
+  new THREE.Vector3(-1.62, 1.20, 0.30), new THREE.Vector3(-0.81, 1.03, 1.14),
+  new THREE.Vector3(0.12, 0.85, 0.79), new THREE.Vector3(0.57, 0.66, -0.12),
+  new THREE.Vector3(0.12, 0.40, -0.47), new THREE.Vector3(0.12, 0.315, -0.20),
+  restPosition.clone()
+], false, 'centripetal');
+flightCurve.arcLengthDivisions = 900;
+flightCurve.updateArcLengths();
+const TIMELINE = { takeoff: 2.6, landing: 21.1, closing: 22.0, closed: 26.2, opening: 28.3, opened: 32.8, duration: 34.6 };
+const tangent = new THREE.Vector3(), nextTangent = new THREE.Vector3(), cross = new THREE.Vector3();
+const flightPoint = new THREE.Vector3(), lookPoint = new THREE.Vector3();
+const planePose = new THREE.Object3D();
+const restQuaternion = new THREE.Quaternion();
+function updateStory(time, delta) {
+  const t = time % TIMELINE.duration;
+  let close = 0;
+  if (t >= TIMELINE.closing && t < TIMELINE.closed) {
+    close = smooth((t - TIMELINE.closing) / (TIMELINE.closed - TIMELINE.closing));
+  } else if (t >= TIMELINE.closed && t < TIMELINE.opening) {
+    close = 1;
+  } else if (t >= TIMELINE.opening && t < TIMELINE.opened) {
+    close = 1 - smooth((t - TIMELINE.opening) / (TIMELINE.opened - TIMELINE.opening));
+  }
+  setBookClose(close);
+  const flying = t >= TIMELINE.takeoff && t < TIMELINE.landing;
+  if (flying) {
+    const progress = (t - TIMELINE.takeoff) / (TIMELINE.landing - TIMELINE.takeoff);
+    const u = smooth(progress);
+    const lift = smooth(progress / 0.13) * smooth((1 - progress) / 0.13);
+    flightCurve.getPointAt(u, flightPoint);
+    flightCurve.getTangentAt(u, tangent);
+    flightCurve.getTangentAt(Math.min(1, u + 0.007), nextTangent);
+    airplane.position.copy(flightPoint);
+    airplane.position.y += Math.sin(time * 1.6) * 0.012 * lift;
+    airplane.position.x += Math.sin(time * 1.1) * 0.009 * lift;
+    planePose.position.copy(airplane.position);
+    lookPoint.copy(airplane.position).add(tangent);
+    planePose.lookAt(lookPoint);
+    const turn = cross.crossVectors(tangent, nextTangent).y;
+    planePose.rotateZ((THREE.MathUtils.clamp(-turn * 13, -0.46, 0.46) + Math.sin(time * 1.7) * 0.035) * lift);
+    planePose.rotateX(Math.sin(time * 1.9) * 0.018 * lift);
+    planePose.quaternion.slerp(restQuaternion, 1 - lift);
+    airplane.quaternion.slerp(planePose.quaternion, 1 - Math.exp(-delta * 12));
+    airplane.scale.set(1, 1, 1);
+  } else {
+    // 收拢后夹在两半书芯之间；由真实几何遮挡，不突然隐藏飞机。
+    const tuck = smooth(close * 2.2);
+    airplane.position.set(mix(restPosition.x, 0.73, tuck), mix(restPosition.y, BOOK.hinge, tuck), restPosition.z);
+    airplane.quaternion.slerp(restQuaternion, 1 - Math.exp(-delta * 12));
+    airplane.scale.set(1, mix(1, 0.055, tuck), 1);
+  }
+}
+
+// 轻微体积光与稀疏尘埃，避免抢占书本与飞机的视觉中心。
+const shaftMaterial = new THREE.ShaderMaterial({
+  uniforms: { color: { value: new THREE.Color('#ffe5bb') } },
+  vertexShader: `varying vec2 vUv; varying vec3 vNormal; varying vec3 vView;
+    void main() {
+      vUv = uv; vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      vNormal = normalize(normalMatrix * normal); vView = normalize(-mv.xyz);
+      gl_Position = projectionMatrix * mv;
+    }`,
+  fragmentShader: `varying vec2 vUv; varying vec3 vNormal; varying vec3 vView; uniform vec3 color;
+    void main() {
+      float side = pow(1.0 - abs(dot(normalize(vNormal), normalize(vView))), 2.0);
+      float ends = smoothstep(0.0, 0.18, vUv.y) * (1.0 - smoothstep(0.6, 1.0, vUv.y));
+      gl_FragColor = vec4(color, side * ends * 0.008);
+    }`,
+  transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending
+});
+function lightShaft(from, to, radius) {
+  const direction = new THREE.Vector3().subVectors(to, from);
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(0.18, radius, direction.length(), 40, 1, true), shaftMaterial);
+  mesh.position.copy(from).addScaledVector(direction, 0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), direction.normalize());
+  mesh.renderOrder = 2;
+  scene.add(mesh);
+}
+lightShaft(new THREE.Vector3(-3.8, 6.5, -1.8), new THREE.Vector3(-0.55, 0.06, -0.65), 1.15);
+lightShaft(new THREE.Vector3(-3.0, 6.5, -2.1), new THREE.Vector3(0.5, 0.06, -1.2), 0.72);
+const DUST_COUNT = 150;
+const dustPositions = new Float32Array(DUST_COUNT * 3);
+const dustSeeds = new Float32Array(DUST_COUNT);
+for (let i = 0; i < DUST_COUNT; i++) {
+  dustPositions[i * 3] = (random() - 0.5) * 6.5;
+  dustPositions[i * 3 + 1] = 0.08 + random() * 3.8;
+  dustPositions[i * 3 + 2] = (random() - 0.5) * 5.5;
+  dustSeeds[i] = random();
+}
+const dustGeometry = new THREE.BufferGeometry();
+dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3).setUsage(THREE.DynamicDrawUsage));
+dustGeometry.setAttribute('seed', new THREE.BufferAttribute(dustSeeds, 1));
+const dustMaterial = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 }, pixelRatio: { value: renderer.getPixelRatio() } },
+  vertexShader: `attribute float seed; uniform float time; uniform float pixelRatio; varying float alpha;
+    void main() {
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * mv;
+      gl_PointSize = clamp((10.0 + seed * 9.0) * pixelRatio / -mv.z, 1.0, 3.0 * pixelRatio);
+      alpha = (0.12 + seed * 0.2) * (0.7 + 0.3 * sin(time * 0.55 + seed * 40.0));
+    }`,
+  fragmentShader: `varying float alpha;
+    void main() {
+      float radius = length(gl_PointCoord - 0.5) * 2.0;
+      gl_FragColor = vec4(1.0, 0.89, 0.70, (1.0 - smoothstep(0.05, 1.0, radius)) * alpha);
+    }`,
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+});
+const dust = new THREE.Points(dustGeometry, dustMaterial);
+dust.renderOrder = 3;
+scene.add(dust);
+function updateDust(time, delta) {
+  for (let i = 0; i < DUST_COUNT; i++) {
+    const phase = dustSeeds[i] * Math.PI * 2;
+    dustPositions[i * 3] += Math.sin(time * 0.24 + phase) * 0.014 * delta;
+    dustPositions[i * 3 + 1] += (0.009 + dustSeeds[i] * 0.009) * delta;
+    dustPositions[i * 3 + 2] += Math.cos(time * 0.19 + phase) * 0.009 * delta;
+    if (dustPositions[i * 3 + 1] > 3.9) dustPositions[i * 3 + 1] = 0.07;
+  }
+  dustGeometry.attributes.position.needsUpdate = true;
+  dustMaterial.uniforms.time.value = time;
+}
+
+// 环境遮蔽只考虑实体，不让透明光束和接触阴影参与深度预渲染。
+class PhysicalSSAOPass extends SSAOPass {
+  overrideVisibility() {
+    super.overrideVisibility();
+    this.scene.traverse(object => {
+      if (object.material?.transparent && !object.material.depthWrite) object.visible = false;
+    });
+  }
+}
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const aoPass = new PhysicalSSAOPass(scene, camera, innerWidth, innerHeight, 16);
+aoPass.kernelRadius = 0.12;
+aoPass.minDistance = 0.0003;
+aoPass.maxDistance = 0.04;
+composer.addPass(aoPass);
+const gradePass = new ShaderPass({
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: `varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; varying vec2 vUv;
+    void main() {
+      vec3 color = texture2D(tDiffuse, vUv).rgb;
+      vec2 p = (vUv - 0.5) * 1.4;
+      color *= 1.0 - 0.19 * dot(p, p);
+      gl_FragColor = vec4(color, 1.0);
+    }`
+});
+composer.addPass(gradePass);
+const fxaaPass = new ShaderPass(FXAAShader);
+composer.addPass(fxaaPass);
+composer.addPass(new OutputPass());
+
+// 桌面鼠标与移动端触控：交互即暂停展示，空闲后再恢复。
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.54, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.065;
+controls.enablePan = true;
+controls.screenSpacePanning = true;
+controls.minDistance = 2.5;
+controls.maxDistance = 10;
+controls.minPolarAngle = 0.16;
+controls.maxPolarAngle = Math.PI * 0.465;
+controls.rotateSpeed = 0.55;
+controls.zoomSpeed = 0.65;
+controls.panSpeed = 0.55;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.22;
+controls.touches.ONE = THREE.TOUCH.ROTATE;
+controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
+let interacting = false;
+let resumeAt = 0;
+controls.addEventListener('start', () => {
+  interacting = true;
+  controls.autoRotate = false;
+});
+controls.addEventListener('end', () => {
+  interacting = false;
+  resumeAt = performance.now() + 4500;
+});
+controls.update();
+function resize() {
+  const width = window.innerWidth, height = window.innerHeight;
+  const aspect = width / height;
+  camera.aspect = aspect;
+  // 竖屏扩大垂直视场，保留完整书本与飞行范围，不重置用户视角。
+  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(34) / 2) * Math.max(1, 1.4 / aspect)));
+  camera.updateProjectionMatrix();
+  const pixelRatio = Math.min(window.devicePixelRatio, width < 700 ? 1.5 : 1.75);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.setSize(width, height);
+  composer.setPixelRatio(pixelRatio);
+  composer.setSize(width, height);
+  fxaaPass.material.uniforms.resolution.value.set(1 / (width * pixelRatio), 1 / (height * pixelRatio));
+  dustMaterial.uniforms.pixelRatio.value = pixelRatio;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// 使用受限增量推进时间轴，切回后台页面时不会跳过飞行或合书阶段。
+let elapsed = 0;
+let previousTime = performance.now();
+document.addEventListener('visibilitychange', () => { previousTime = performance.now(); });
+function animate(now) {
+  const delta = Math.min(Math.max((now - previousTime) / 1000, 0), 0.05);
+  previousTime = now;
+  if (document.hidden) return;
+  elapsed += delta;
+  updateStory(elapsed, delta);
+  updateDust(elapsed, delta);
+  controls.autoRotate = !interacting && now >= resumeAt;
+  controls.update(delta);
+  composer.render(delta);
+}
+updateStory(0, 1 / 60);
+renderer.setAnimationLoop(animate);
+</script>
+</body>
+</html>
