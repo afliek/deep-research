@@ -558,11 +558,6 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
       </div></div>
     <div class="set-row"><span>🎵 音效</span>
       <div class="seg-btns" id="sfxBtns"><button data-v="1">开</button><button data-v="0">关</button></div></div>
-    <div class="set-row"><span>🌱 每日新词目标</span>
-      <div class="seg-btns" id="newBtns">
-        <button data-v="4">4</button><button data-v="6">6</button>
-        <button data-v="8">8</button><button data-v="10">10</button>
-      </div></div>
     <button class="btn sm" id="testSent" style="width:100%;margin-top:4px">🔈 试听：apple → I eat a big red apple.</button>
     <div style="background:#F7F4FF;border-radius:16px;padding:10px;margin-top:10px">
       <div style="font-size:12px;font-weight:bold;margin-bottom:7px;text-align:left">
@@ -746,7 +741,7 @@ function load(){
 }
 function save(){localStorage.setItem(KEY,JSON.stringify(S));}
 const SKEY="eggy_setting_v4";
-const SET_DEF={rate:0.9,gap:500,sfx:1,dailyNew:6,aiVoice:"en-US-AnaNeural"};
+const SET_DEF={rate:0.9,gap:500,sfx:1,aiVoice:"en-US-AnaNeural"};
 let SET=(()=>{try{return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SKEY)))}catch(e){return Object.assign({},SET_DEF)}})();
 function saveSet(){localStorage.setItem(SKEY,JSON.stringify(SET));}
 function dayRec(){const d=today();S.days[d]=S.days[d]||{q:0,w:0,s:0};return S.days[d];}
@@ -780,7 +775,12 @@ document.querySelectorAll(".nav button").forEach(b=>{
     document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
     $("#v-"+b.dataset.v).classList.add("on");
     const v=b.dataset.v;
-    if(v==="learn"&&!sess&&!bossState)welcome();
+    /* 回到学单词页时按当前状态恢复画面：BOSS 中 / 闯关中 / 都没有就显示欢迎页 */
+    if(v==="learn"){
+      if(bossState)renderBoss();
+      else if(sess)nextQ();
+      else welcome();
+    }
     if(v==="map"){renderMap();renderDaily();}
     if(v==="puzzle"){renderBadges();renderCards();}
     if(v==="shop")renderShop();
@@ -808,11 +808,14 @@ function renderMap(){
     d.innerHTML=bossTag+'<div class="at">'+a.ic+'</div><div class="n">'+(i+1)+'</div><div class="c">'
       +(has?ws.length+" 词":"待补词表")+'</div><div class="st">'+st+'</div>';
     d.onclick=()=>{
-      if(!has){alert("第 "+(i+1)+" 段还没有单词，把词表发进来就解锁啦！");return;}
-      if(i>S.curSeg){alert("先通关前面的段落哦～");return;}
-      /* 已通关但 BOSS 没打赢 → 直接进 BOSS */
-      if(needBoss(i)&&!S.boss[i]&&(S.pieces.includes(i)||S.pendBoss===i)){startBoss(i);return;}
-      S.curSeg=i;save();startSegment(i);goView("learn");
+      try{
+        if(!has){alert("第 "+(i+1)+" 段还没有单词，把词表发进来就解锁啦！");return;}
+        if(i>S.curSeg){
+          alert("第 "+(S.curSeg+1)+" 段还没通关哦，先去完成它～");return;}
+        /* 已通关但 BOSS 没打赢 → 直接进 BOSS */
+        if(needBoss(i)&&!S.boss[i]&&(S.pieces.includes(i)||S.pendBoss===i)){startBoss(i);return;}
+        S.curSeg=i;save();startSegment(i);goView("learn");
+      }catch(e){alert("出错了："+(e&&e.message||e));console.error(e);}
     };
     g.appendChild(d);
   }
@@ -828,29 +831,28 @@ function welcome(){
 }
 
 /* ===========================================================
-   9b. 每日任务卡 + 护眼提醒 + 每日新词上限
+   9b. 每日任务卡 + 护眼提醒
    =========================================================== */
-function dailyGoalNew(){return +SET.dailyNew||6;}
 function dailyGoalRev(){return Math.min(20,Math.max(4,dueCount()));}
 function renderDaily(){
   const r=S.days[today()]||{w:0,rev:0,q:0,s:0};
-  const gn=dailyGoalNew(),gr=dailyGoalRev();
-  const nw=Math.min(r.w||0,gn),rv=Math.min(r.rev||0,gr);
-  const okAll=(r.w||0)>=gn&&(r.rev||0)>=gr;
-  if(okAll&&!r.done){                       /* 首次完成当日任务 → 奖励 1 次转盘 */
+  const gr=dailyGoalRev();
+  const rv=Math.min(r.rev||0,gr);
+  const okAll=(r.rev||0)>=gr&&(r.w||0)>0;      /* 复习清完 + 至少背了新词 */
+  if(okAll&&!r.done){                          /* 首次完成当日任务 → 奖励 1 次转盘 */
     r.done=true;S.spins=Math.min(MAX_SPIN,S.spins+1);save();
     setTimeout(()=>{toast("🎖️ 今日任务完成！奖励 1 次转盘");SFX.big();confetti(20);updateSpinUI();},400);
   }
-  const bar=(v,g,c1,c2)=>'<div class="bar" style="min-width:0"><i style="width:'+
-    (g?Math.min(100,v/g*100):100)+'%;background:linear-gradient(90deg,'+c1+','+c2+')"></i></div>';
   $("#dailyPanel").innerHTML=
     '<h2 class="title">📌 今日任务'+(okAll?' <span style="font-size:14px;color:#06D6A0">已完成 ✔</span>':'')+'</h2>'+
     '<div style="display:flex;flex-direction:column;gap:9px">'+
       '<div style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:bold">'+
-        '<span style="width:78px">🌱 新词</span>'+bar(nw,gn,"#8AE98C","#06D6A0")+
-        '<span style="width:52px;text-align:right">'+nw+'/'+gn+'</span></div>'+
+        '<span style="width:78px">🌱 新词</span>'+
+        '<span style="flex:1;font-size:15px">今天已掌握 <b style="color:#06D6A0">'+(r.w||0)+'</b> 个（想背多少都可以）</span></div>'+
       '<div style="display:flex;align-items:center;gap:9px;font-size:14px;font-weight:bold">'+
-        '<span style="width:78px">🔄 复习</span>'+bar(rv,gr,"#FFD166","#FF9F1C")+
+        '<span style="width:78px">🔄 复习</span>'+
+        '<div class="bar" style="min-width:0"><i style="width:'+(gr?Math.min(100,rv/gr*100):100)+
+          '%;background:linear-gradient(90deg,#FFD166,#FF9F1C)"></i></div>'+
         '<span style="width:52px;text-align:right">'+rv+'/'+gr+'</span></div>'+
     '</div>'+
     '<div class="row" style="margin-top:12px">'+
@@ -858,7 +860,12 @@ function renderDaily(){
       (dueCount()?'<button class="btn sm pink" id="dailyRev">🔄 只做复习（'+dueCount()+' 词到期）</button>':'')+
     '</div>'+
     '<p class="tips">今日已得 '+(r.s||0)+' 分 · 答题 '+(r.q||0)+' 次 · 待复习 '+dueCount()+' 词</p>';
-  $("#dailyGo").onclick=()=>{startSegment(S.curSeg);goView("learn");};
+  $("#dailyGo").onclick=()=>{
+    /* 若当前段的 BOSS 还没打赢，优先去打 BOSS */
+    const c=S.curSeg-1;
+    if(c>=0&&needBoss(c)&&!S.boss[c]&&(S.pieces.includes(c)||S.pendBoss===c)){startBoss(c);return;}
+    startSegment(S.curSeg);goView("learn");
+  };
   if($("#dailyRev"))$("#dailyRev").onclick=()=>{
     const list=dueWords().slice(0,dailyGoalRev());
     if(!list.length){alert("今天没有到期要复习的词，去背新词吧！");return;}
@@ -867,6 +874,7 @@ function renderDaily(){
 }
 /* 纯复习模式：只做到期词的复习题，不计新分 */
 function startReviewOnly(list){
+  resetSession();
   sess={seg:S.curSeg,words:[],prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:true,
         studied:true,reviewOnly:true,
         warm:list.map(w=>({w,t:1+Math.floor(Math.random()*3)}))};
@@ -881,14 +889,6 @@ function touchActive(){
   if(activeMs>=20*60*1000){
     activeMs=0;
     setTimeout(()=>{$("#restModal").classList.add("show");SFX.buy();},600);
-  }
-}
-/* 每日新词上限提醒（只提醒，不强制中断） */
-function checkDailyLimit(){
-  const lim=+SET.dailyNew||6,r=dayRec();
-  if(lim&&(r.w||0)>=lim&&!r.limitTip){
-    r.limitTip=true;save();
-    setTimeout(()=>toast("🎉 今天的新词目标完成啦！可以继续，也可以去做复习"),900);
   }
 }
 /* 轻提示条 */
@@ -936,8 +936,24 @@ function reviewPick(seg,n){
 /* ===========================================================
    10b. 段落流程：热身复习 → 讲解 → 三关闯关
    =========================================================== */
-let studyIdx=0;
+let studyIdx=0,qTimer=null;
+/* 所有「下一题」都走这里，保证同一时刻只有一个挂起的推进定时器 */
+function schedNext(ms){clearTimeout(qTimer);qTimer=setTimeout(()=>{qTimer=null;nextQ();},ms);}
+/* 开新会话前把旧会话彻底清干净 */
+function resetSession(){clearTimeout(qTimer);qTimer=null;bossState=null;cardSeq++;}
+/* 存档自检：修掉进度对不上导致关卡打不开的情况 */
+function repairState(){
+  if(typeof S.curSeg!=="number"||isNaN(S.curSeg))S.curSeg=0;
+  const mx=S.pieces.length?Math.max.apply(null,S.pieces.map(Number)):-1;
+  const should=Math.min(SEG_COUNT-1,mx+1);
+  if(S.curSeg<should)S.curSeg=should;                  /* 已通关的段之后必须解锁 */
+  S.curSeg=Math.max(0,Math.min(SEG_COUNT-1,S.curSeg));
+  if(S.pendBoss!=null&&S.boss[S.pendBoss])grantPendingPiece(S.pendBoss);
+  if(S.pendBoss!=null&&S.pieces.includes(S.pendBoss))S.pendBoss=null;
+  save();
+}
 function startSegment(i,customWords){
+  resetSession();
   const ws=customWords||segWords(i);
   if(!ws.length){$("#learnArea").innerHTML='<div class="study"><h2 class="title">这一段还没有单词 ➕</h2></div>';return;}
   sess={seg:i,words:ws,prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:!!customWords,
@@ -1080,7 +1096,7 @@ function pass(w,warm){
     sess.warm.shift();srsPass(w.en);dayRec().rev=(dayRec().rev||0)+1;
     floatScore("✓ 复习正确");save();renderHUD();
     if(energy>=10)setTimeout(ultimate,300);
-    setTimeout(nextQ,700);return;
+    schedNext(700);return;
   }
   sess.total++;sess.right++;sess.prog[w.en]++;
   const st=sess.prog[w.en];
@@ -1099,13 +1115,13 @@ function pass(w,warm){
     if(!S.scored[w.en]){
       S.scored[w.en]=true;srsInit(w.en);dayRec().w++;
       setTimeout(()=>floatScore("🏆 三关全过，"+sess.earned[w.en]+" 分锁定！"),620);
-      confetti(6);checkAch();checkDailyLimit();
+      confetti(6);checkAch();
     }
     sess.queue.shift();
   }else{sess.queue.shift();sess.queue.push(w);}
   save();renderHUD();
   if(energy>=10)setTimeout(ultimate,300);
-  setTimeout(nextQ,st>=3?1000:760);
+  schedNext(st>=3?1000:760);
 }
 function fail(w,warm){
   dayRec().q++;touchActive();
@@ -1114,7 +1130,7 @@ function fail(w,warm){
   if(warm){
     sess.warm.shift();srsFail(w.en);
     floatScore("✗ 这个老词忘了，明天再复习",true);save();renderHUD();
-    setTimeout(nextQ,1250);return;
+    schedNext(1250);return;
   }
   sess.total++;
   const back=sess.earned[w.en]||0;
@@ -1124,7 +1140,7 @@ function fail(w,warm){
   }else floatScore("✗ 答错了，这个词重头再来",true);
   sess.prog[w.en]=0;save();
   sess.queue.shift();sess.queue.push(w);
-  renderHUD();setTimeout(nextQ,1350);
+  renderHUD();schedNext(1350);
 }
 function floatScore(t,minus){
   const d=document.createElement("div");d.className="float-score"+(minus?" minus":"");
@@ -1157,7 +1173,8 @@ function bossPool(seg){
   const a=segWords(seg),b=seg>0?segWords(seg-1):[];
   return b.concat(a).filter(w=>w.sen&&w.senZh);
 }
-/* 生成文章 + 题目（可被 BOSS_TEXTS 手写内容覆盖） */
+/* 生成文章 + 5 道题（可被 BOSS_TEXTS 手写内容覆盖）
+   难度体现在：文章长度、选项数量、题型构成，题目数量固定 5 道 */
 const BOSS_TEXTS={};
 function buildBossPaper(seg){
   if(BOSS_TEXTS[seg])return BOSS_TEXTS[seg];
@@ -1171,42 +1188,41 @@ function buildBossPaper(seg){
   const title=TITLES[lv-1];
   const sents=used.map((w,i)=>(i&&lv>=2?CONN[i%CONN.length]:"")+w.sen);
   const zh=used.map(w=>w.senZh).join("");
-  /* 正文里把目标词高亮 */
   let html=sents.join(" ");
-  used.forEach(w=>{
-    html=html.replace(new RegExp("\\b("+w.en+")\\b","i"),"<b>$1</b>");
-  });
-  const qs=[];
-  const others=k=>shuffle(pool.filter(x=>x.en!==k.en)).slice(0,lv>=3?3:2);
-  /* 题型1 词义题 */
-  const w1=used[0];
-  qs.push({q:'文章里的 "'+w1.en+'" 是什么意思？',
-    opts:shuffle([{t:w1.zh,ok:1}].concat(others(w1).map(o=>({t:o.zh}))))});
-  /* 题型2 完形填空（KET Part 5 形式） */
-  const w2=used[1];
-  qs.push({q:"选词填空： "+w2.sen.replace(new RegExp("\\b"+w2.en+"\\b","i"),"______"),
-    opts:shuffle([{t:w2.en,ok:1}].concat(others(w2).map(o=>({t:o.en}))))});
-  /* 题型3 判断正确的句子 */
-  const w3=used[2%used.length],fake=others(w3);
-  qs.push({q:"哪一句和文章一致？",
-    opts:shuffle([{t:w3.sen,ok:1}].concat(fake.map(o=>
-      ({t:w3.sen.replace(new RegExp("\\b"+w3.en+"\\b","i"),o.en)}))))});
-  /* 题型4（lv≥3）再来一道词义题 */
-  if(lv>=3&&used.length>3){
-    const w4=used[3];
-    qs.push({q:'文章里的 "'+w4.en+'" 是什么意思？',
-      opts:shuffle([{t:w4.zh,ok:1}].concat(others(w4).map(o=>({t:o.zh}))))});
-  }
-  /* 题型5（lv≥4）标题题 */
-  if(lv>=4){
-    qs.push({q:"这篇文章最好的题目是？",
-      opts:shuffle([{t:title,ok:1},{t:"My Maths Test"},{t:"A Rainy Night"},{t:"The Lost Key"}])});
-  }
+  used.forEach(w=>{html=html.replace(new RegExp("\\b("+w.en+")\\b","i"),"<b>$1</b>");});
+
+  const nDis=lv>=3?3:2;                            /* 干扰项个数：低阶 3 选 1，高阶 4 选 1 */
+  const others=k=>shuffle(pool.filter(x=>x.en!==k.en)).slice(0,nDis);
+  const pick=i=>used[i%used.length];
+  const blank=w=>w.sen.replace(new RegExp("\\b"+w.en+"\\b","i"),"______");
+  const qMean=w=>({q:'文章里的 "'+w.en+'" 是什么意思？',
+    opts:shuffle([{t:w.zh,ok:1}].concat(others(w).map(o=>({t:o.zh}))))});
+  const qCloze=w=>({q:"选词填空： "+blank(w),
+    opts:shuffle([{t:w.en,ok:1}].concat(others(w).map(o=>({t:o.en}))))});
+  const qTrue=w=>({q:"哪一句和文章一致？",
+    opts:shuffle([{t:w.sen,ok:1}].concat(others(w).map(o=>
+      ({t:w.sen.replace(new RegExp("\\b"+w.en+"\\b","i"),o.en)}))))});
+  const qNotIn=()=>{
+    const outs=shuffle(WORDS.filter(x=>!used.some(u=>u.en===x.en))).slice(0,1);
+    const wrong=outs.length?outs[0].en:"pizza";
+    return {q:"下面哪个词【没有】出现在文章里？",
+      opts:shuffle([{t:wrong,ok:1}].concat(shuffle(used).slice(0,nDis).map(o=>({t:o.en}))))};};
+  const qTitle=()=>({q:"这篇文章最好的题目是？",
+    opts:shuffle([{t:title,ok:1}].concat(
+      shuffle(["My Maths Test","A Rainy Night","The Lost Key","At the Hospital"]).slice(0,nDis)
+        .map(t=>({t:t}))))});
+
+  /* 固定 5 道题，最后一道固定是标题题（KET 常考题型） */
+  const qs=(lv<=2)
+    ? [qMean(pick(0)),qCloze(pick(1)),qTrue(pick(2)),qMean(pick(3)),qTitle()]
+    : [qMean(pick(0)),qCloze(pick(1)),qTrue(pick(2)),
+       (lv>=4?qNotIn():qCloze(pick(3))),qTitle()];
   return {title:title,html:html,zh:zh,qs:qs,words:used.map(w=>w.en)};
 }
 /* ---- 战斗状态 ---- */
 let bossState=null;
 function startBoss(seg){
+  clearTimeout(qTimer);qTimer=null;sess=null;cardSeq++;
   const paper=buildBossPaper(seg);
   if(!paper){                                  /* 词不够，直接放行 */
     grantPendingPiece(seg);goView("puzzle");return;
@@ -1287,7 +1303,7 @@ function bossWin(){
     '<p style="font-size:17px;font-weight:bold">奖励 +'+reward+' 分 · +2 次转盘'+
       (holdsPiece(B.seg)?'<br>🧩 徽章最后一块已解锁！':'')+'</p>'+
     '<button class="btn green" id="bossNext">收下奖励 →</button></div>';
-  $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();goView("puzzle");};
+  $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();renderMap();renderDaily();goView("puzzle");};
   updateSpinUI();
 }
 function bossLose(){
@@ -1300,7 +1316,7 @@ function bossLose(){
     '<div class="row"><button class="btn green" id="bossAgain">🔁 再来一次</button>'+
     '<button class="btn ghost sm" id="bossLater">稍后再战</button></div></div>';
   $("#bossAgain").onclick=()=>startBoss(B.seg);
-  $("#bossLater").onclick=()=>{bossState=null;goView("map");};
+  $("#bossLater").onclick=()=>{bossState=null;renderMap();renderDaily();goView("map");};
 }
 /* 徽章最后一块：打赢才发 */
 function grantPendingPiece(seg){
@@ -1315,18 +1331,25 @@ function grantPendingPiece(seg){
 /* ===========================================================
    12. 结算：星级 + 转盘 + BOSS 衔接
    =========================================================== */
-let spinning=false;
+let spinning=false,wheelRot=0,spinToken=0;
+const WHEEL_EASE="transform 4.2s cubic-bezier(.12,.72,.05,1)";
 function updateSpinUI(){
   $("#mdSpin").textContent=S.spins;
   $("#spinBtn").disabled=(S.spins<=0||spinning);
-  $("#spinBtn").textContent=S.spins>0?("🎡 转盘抽奖（还有 "+S.spins+" 次）"):"🎡 次数已用完";
+  $("#spinBtn").textContent=spinning?"🎡 转盘转动中…"
+    :(S.spins>0?("🎡 转盘抽奖（还有 "+S.spins+" 次）"):"🎡 次数已用完");
   $("#closeBtn").textContent=S.spins>0?"先收着，之后点顶部 🎡 再转 →":"收下奖励 →";
   $("#spinChip").style.animation=S.spins>0?"breathe 1.6s ease-in-out infinite":"none";
   renderHUD();
 }
+/* 只在没有转动时同步一下当前角度，绝不把角度往回设 */
 function resetWheelPos(){
-  const wl=$("#wheel");wl.style.transition="none";wl.style.transform="rotate(0deg)";
-  setTimeout(()=>wl.style.transition="transform 4.2s cubic-bezier(.12,.72,.05,1)",50);
+  if(spinning)return;
+  const wl=$("#wheel");
+  wl.style.transition="none";
+  wl.style.transform="rotate("+(wheelRot%360)+"deg)";
+  void wl.offsetWidth;
+  wl.style.transition=WHEEL_EASE;
 }
 /* res 为 null 时是「补转模式」，不显示段落结算信息 */
 let lastRes=null;
@@ -1350,7 +1373,7 @@ function openWheel(res){
   if(res&&res.boss)$("#closeBtn").textContent="⚔️ 去挑战阅读 BOSS →";
   $("#modal").classList.add("show");
 }
-$("#spinChip").onclick=()=>openWheel(null);
+$("#spinChip").onclick=()=>{if(!spinning)openWheel(null);};
 function finishSegment(){
   const acc=sess.total?Math.round(sess.right/sess.total*100):0;
   const stars=acc>=95?3:(acc>=85?2:1);
@@ -1371,7 +1394,8 @@ function finishSegment(){
   save();renderBadges();renderCards();checkAch();
   const res={acc,stars,sp,gained:sess.gained,custom:sess.custom,
              reviewOnly:sess.reviewOnly,boss:boss,seg:sess.seg};
-  sess=null;renderHUD();
+  clearTimeout(qTimer);qTimer=null;         /* 本段结束，清掉挂起的推进定时器 */
+  sess=null;renderHUD();renderMap();renderDaily();
   openWheel(res);confetti(26);
 }
 function buildWheel(){
@@ -1386,12 +1410,22 @@ function buildWheel(){
 }
 $("#spinBtn").onclick=()=>{
   if(spinning||S.spins<=0)return;
-  spinning=true;S.spins--;save();updateSpinUI();
-  const i=Math.floor(Math.random()*WHEEL.length),ang=360/WHEEL.length,turns=5+Math.floor(Math.random()*3);
-  const target=turns*360-i*ang;
-  $("#wheel").style.transform="rotate("+target+"deg)";
+  spinning=true;
+  const tk=++spinToken;                       /* 本次转动的令牌，防止回调被执行两次 */
+  S.spins--;save();updateSpinUI();
+  const i=Math.floor(Math.random()*WHEEL.length),ang=360/WHEEL.length;
+  const turns=5+Math.floor(Math.random()*3);
+  /* 角度只累加不回弹：算出到目标扇区还需要转多少度 */
+  const cur=((wheelRot%360)+360)%360;
+  const want=((360-i*ang)%360+360)%360;
+  wheelRot+=turns*360+((want-cur)%360+360)%360;
+  const wl=$("#wheel");
+  wl.style.transition=WHEEL_EASE;
+  wl.style.transform="rotate("+wheelRot+"deg)";
   $("#wheelMsg").textContent="转啊转啊转……";
   setTimeout(()=>{
+    if(tk!==spinToken)return;                 /* 已经开始了新的一次转动，忽略旧回调 */
+    spinning=false;
     const v=WHEEL[i];
     if(v==="x2"){
       S.x2=(S.x2||0)+X2_COUNT;S.flags.x2=true;save();checkAch();
@@ -1404,12 +1438,11 @@ $("#spinBtn").onclick=()=>{
       floatScore("+"+v+" 🎁");confetti(14);SFX.score();
       $("#wheelMsg").textContent="获得 "+v+" 分！"+(S.spins>0?"还剩 "+S.spins+" 次":"转盘用完啦");
     }
-    spinning=false;updateSpinUI();
-    const wl=$("#wheel");wl.style.transition="none";wl.style.transform="rotate("+(target%360)+"deg)";
-    setTimeout(()=>wl.style.transition="transform 4.2s cubic-bezier(.12,.72,.05,1)",30);
-  },4300);
+    updateSpinUI();
+  },4350);
 };
 $("#closeBtn").onclick=()=>{
+  if(spinning)return;                       /* 转动中不允许关闭，避免动画被打断后重播 */
   $("#modal").classList.remove("show");
   if(lastRes&&lastRes.boss){const s=lastRes.seg;lastRes=null;startBoss(s);return;}
   if(document.querySelector("#modal .stat-line").style.display!=="none")goView("puzzle");
@@ -1834,7 +1867,6 @@ function syncSet(){
   document.querySelectorAll("#rateBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.rate));
   document.querySelectorAll("#gapBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.gap));
   document.querySelectorAll("#sfxBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.sfx));
-  document.querySelectorAll("#newBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.dailyNew));
 }
 $("#setBtn").onclick=()=>{loadVoices();syncSet();$("#setModal").classList.add("show");};
 $("#setClose").onclick=()=>$("#setModal").classList.remove("show");
@@ -1844,8 +1876,6 @@ document.querySelectorAll("#rateBtns button").forEach(b=>b.onclick=()=>{
 document.querySelectorAll("#gapBtns button").forEach(b=>b.onclick=()=>{
   SET.gap=+b.dataset.v;saveSet();syncSet();sayCard(DEMO_CARD);});
 document.querySelectorAll("#sfxBtns button").forEach(b=>b.onclick=()=>{SET.sfx=+b.dataset.v;saveSet();syncSet();SFX.ok();});
-document.querySelectorAll("#newBtns button").forEach(b=>b.onclick=()=>{
-  SET.dailyNew=+b.dataset.v;saveSet();syncSet();renderDaily();SFX.click();});
 const DEMO_CARD={en:"apple",sen:"I eat a big red apple."};
 $("#testSent").onclick=()=>sayCard(DEMO_CARD);
 /* 存档导出 / 导入 */
@@ -1927,6 +1957,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function pickOthers(w,n){return shuffle(WORDS.filter(x=>x.en!==w.en)).slice(0,n);}
 
 /* 启动 */
+repairState();
 applyTheme();buildWheel();renderBadges();renderCards();renderMap();renderDaily();
 renderHUD();updateSpinUI();renderAch();checkAch();welcome();
 </script>
