@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>蛋仔单词魔法学院</title>
+<title>魔法单词学院</title>
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -81,6 +81,8 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   border:4px solid #EFEAFB;box-shadow:0 5px 0 #E3DFF3;transition:transform .12s}
 .seg:active{transform:translateY(3px)}
 .seg .n{font-size:24px;font-weight:bold;line-height:1}
+.seg .tp{font-size:10px;font-weight:bold;opacity:.82;margin-top:3px;line-height:1.1;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .seg .c{font-size:11px;opacity:.65;margin-top:2px}
 .seg .st{font-size:15px;margin-top:2px;min-height:18px}
 .seg .at{position:absolute;top:-8px;right:-6px;font-size:17px}
@@ -134,6 +136,7 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   align-items:center;justify-content:center;font-size:27px;font-weight:bold}
 .slot.filled{background:#fff;border-style:solid;border-color:var(--green);cursor:pointer}
 .slot.over{background:#E6FFF6;border-color:var(--green)}
+.slot.fix{background:#EDEAF5;border:3px solid #D6CFEA;color:#A79FC4;font-size:22px;pointer-events:none}
 .tiles{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;max-width:560px}
 .tile{width:52px;height:60px;border-radius:16px;font-size:27px;font-weight:bold;cursor:grab;
   background:linear-gradient(160deg,#FFE99B,var(--yellow));border:3px solid #fff;color:#8A5A00;
@@ -177,7 +180,7 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 @keyframes shine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(120%)}}
 .card.ult{grid-column:span 2;background:linear-gradient(135deg,#FFD166,#FF6B9D 45%,#9B5DE5)}
 
-/* 商店 / 蛋仔 */
+/* 商店 / 小魔法师 */
 .eggy-stage{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px}
 #stage3d{position:relative;width:100%;max-width:420px;height:320px;border-radius:26px;overflow:hidden;
   background:radial-gradient(circle at 50% 30%,#FFFDF5 0%,#FFEFF8 45%,#E6F2FF 100%);
@@ -201,26 +204,61 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 .good.r-legend::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
   background:linear-gradient(120deg,transparent 42%,rgba(255,255,255,.7) 50%,transparent 58%);
   animation:shine 3s ease-in-out infinite}
-.eggy{position:relative;width:150px;height:175px}
-.eggy .body{position:absolute;inset:0;border-radius:50% 50% 46% 46%/58% 58% 42% 42%;
-  background:linear-gradient(165deg,#FFFDF6,#FFE9C9);border:4px solid #fff;
-  box-shadow:0 10px 0 rgba(43,45,110,.15),inset -8px -10px 18px rgba(255,190,120,.35)}
-.eggy .ey{position:absolute;top:44%;width:17px;height:22px;border-radius:50%;background:#2B2D6E}
-.eggy .ey.l{left:33%}.eggy .ey.r{right:33%}
-.eggy .ey::after{content:"";position:absolute;top:3px;left:4px;width:6px;height:6px;border-radius:50%;background:#fff}
-.eggy .mo{position:absolute;top:62%;left:50%;transform:translateX(-50%);width:26px;height:13px;
-  border-bottom:4px solid #2B2D6E;border-radius:0 0 40% 40%}
-.eggy .bl{position:absolute;top:56%;width:20px;height:9px;border-radius:50%;background:#FFB3C9;opacity:.8}
-.eggy .bl.l{left:16%}.eggy .bl.r{right:16%}
-.eggy .slot-hat{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-size:52px}
-.eggy .slot-face{position:absolute;top:36%;left:50%;transform:translateX(-50%);font-size:46px}
-.eggy .slot-hand{position:absolute;bottom:6%;right:-24px;font-size:42px;transform:rotate(-12deg)}
-.eggy .slot-back{position:absolute;top:22%;left:50%;transform:translateX(-50%);font-size:70px;z-index:-1;opacity:.95}
-.eggy .slot-aura{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);font-size:150px;opacity:.35;
+/* ---- CSS 兜底版少年魔法师（没有 WebGL 时用）---- */
+.eggy{position:relative;width:150px;height:200px}
+.eggy .cape{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);width:112px;height:86px;
+  border-radius:46% 46% 38% 38%/56% 56% 30% 30%;background:linear-gradient(165deg,#8A6BD6,#5B3EA8);z-index:0}
+.eggy .body{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);width:94px;height:88px;
+  border-radius:38% 38% 26% 26%/54% 54% 32% 32%;z-index:2;
+  background:linear-gradient(165deg,#48BE7C,#218A52);border:4px solid #fff;
+  box-shadow:0 8px 0 rgba(43,45,110,.14),inset -8px -8px 16px rgba(10,70,40,.25)}
+.eggy .body::after{content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  width:7px;height:62px;border-radius:4px;background:#FFCB47}
+.eggy .belt{position:absolute;left:50%;bottom:66px;transform:translateX(-50%);width:92px;height:13px;
+  border-radius:5px;background:#7A4E2B;z-index:3}
+.eggy .belt::after{content:"";position:absolute;left:50%;top:-3px;transform:translateX(-50%);
+  width:18px;height:19px;border-radius:4px;background:linear-gradient(160deg,#FFE08A,#E8A81F)}
+.eggy .leg{position:absolute;bottom:14px;width:18px;height:38px;border-radius:7px;background:#36406B;z-index:1}
+.eggy .leg.l{left:53px}.eggy .leg.r{right:53px}
+.eggy .ft{position:absolute;bottom:0;width:27px;height:17px;border-radius:7px 7px 9px 9px;
+  background:#7A4E2B;border-top:3px solid #FFCB47;z-index:2}
+.eggy .ft.l{left:48px}.eggy .ft.r{right:48px}
+.eggy .arm{position:absolute;bottom:52px;width:15px;height:48px;border-radius:8px;z-index:3;
+  background:linear-gradient(180deg,#FFE3C8,#FFD0A6)}
+.eggy .arm::after{content:"";position:absolute;bottom:0;left:-1px;width:17px;height:14px;
+  border-radius:6px;background:#7A4E2B}
+.eggy .arm.l{left:22px;transform:rotate(7deg)}
+.eggy .arm.r{right:22px;transform:rotate(-7deg)}
+.eggy .head{position:absolute;left:50%;top:40px;transform:translateX(-50%);width:70px;height:74px;
+  border-radius:50%;z-index:4;background:linear-gradient(165deg,#FFE9D2,#FFD2AC);border:3px solid #fff;
+  box-shadow:inset -6px -7px 12px rgba(212,148,96,.22)}
+.eggy .ear{position:absolute;top:66px;width:11px;height:24px;border-radius:50% 50% 60% 60%;z-index:3;
+  background:linear-gradient(165deg,#FFE9D2,#FFCFA6)}
+.eggy .ear.l{left:33px;transform:rotate(20deg)}
+.eggy .ear.r{right:33px;transform:rotate(-20deg)}
+.eggy .hair{position:absolute;left:50%;top:31px;transform:translateX(-50%);width:78px;height:46px;z-index:5;
+  border-radius:50% 50% 38% 38%/74% 74% 26% 26%;background:linear-gradient(165deg,#F8DA93,#DFA943)}
+.eggy .hair::before{content:"";position:absolute;right:-5px;top:24px;width:52px;height:21px;
+  border-radius:60% 40% 50% 50%;transform:rotate(9deg);background:linear-gradient(160deg,#F8DA93,#E3B24D)}
+.eggy .hair::after{content:"";position:absolute;left:-4px;top:26px;width:20px;height:34px;
+  border-radius:50% 50% 60% 60%;background:linear-gradient(165deg,#F0C878,#D99F3A)}
+.eggy .ey{position:absolute;top:76px;width:13px;height:15px;border-radius:50%;background:#2F7FE0;z-index:6;
+  box-shadow:inset 0 -4px 5px rgba(0,0,0,.25)}
+.eggy .ey.l{left:37%}.eggy .ey.r{right:37%}
+.eggy .ey::after{content:"";position:absolute;top:2px;left:2px;width:5px;height:5px;border-radius:50%;background:#fff}
+.eggy .ey::before{content:"";position:absolute;top:-11px;left:-2px;width:17px;height:4px;border-radius:3px;
+  background:#D99F3A}
+.eggy .mo{position:absolute;top:99px;left:50%;transform:translateX(-50%);width:18px;height:9px;z-index:6;
+  border-bottom:3px solid #3A3052;border-radius:0 0 46% 46%}
+.eggy .slot-hat{position:absolute;top:-2px;left:50%;transform:translateX(-50%);font-size:52px;z-index:7}
+.eggy .slot-face{position:absolute;top:64px;left:50%;transform:translateX(-50%);font-size:42px;z-index:7}
+.eggy .slot-hand{position:absolute;bottom:38px;right:-24px;font-size:42px;transform:rotate(-12deg);z-index:7}
+.eggy .slot-back{position:absolute;top:44px;left:50%;transform:translateX(-50%);font-size:70px;z-index:-1;opacity:.95}
+.eggy .slot-aura{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);font-size:150px;opacity:.35;
   animation:spinSlow 9s linear infinite}
-.eggy .slot-ride{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);font-size:56px}
-.eggy .slot-pet{position:absolute;bottom:0;left:-34px;font-size:40px;animation:hop 1.4s ease-in-out infinite}
-.eggy .slot-badge{position:absolute;left:6%;bottom:19%;width:46px;height:46px;border-radius:50%;
+.eggy .slot-ride{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:56px;z-index:1}
+.eggy .slot-pet{position:absolute;bottom:0;left:-32px;font-size:40px;animation:hop 1.4s ease-in-out infinite;z-index:7}
+.eggy .slot-badge{position:absolute;left:9%;bottom:42%;width:42px;height:42px;border-radius:50%;z-index:7;
   display:flex;align-items:center;justify-content:center;font-size:24px;border:3px solid #fff;
   box-shadow:0 5px 12px rgba(43,45,110,.28);animation:bdShine 2.6s ease-in-out infinite}
 @keyframes bdShine{0%,100%{box-shadow:0 5px 12px rgba(43,45,110,.28)}
@@ -287,6 +325,24 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 .seg-btns button{border:3px solid #EFEAFB;background:#fff;border-radius:14px;padding:8px 12px;font-family:inherit;
   font-weight:bold;cursor:pointer;color:var(--deep);font-size:14px}
 .seg-btns button.on{background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;border-color:#fff}
+
+/* 家长模式 */
+.pa-box{background:#F9F7FF;border:3px solid #EFEAFB;border-radius:18px;padding:10px;margin:10px 0;text-align:left}
+.pa-t{font-size:13px;font-weight:bold;color:var(--deep);margin-bottom:8px}
+.pa-line{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:13px;font-weight:bold}
+.pa-line>span{flex:1;min-width:120px}
+.pa-inp{border:3px solid #EFEAFB;border-radius:14px;padding:8px 10px;font-family:inherit;font-weight:bold;
+  font-size:15px;color:var(--deep);background:#fff;width:100%;box-sizing:border-box}
+.pa-inp.sm{width:74px;text-align:center}
+#paSeg{flex:1}
+
+/* 备份记录 */
+.bk-row{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:bold;
+  background:#fff;border:2px solid #EFEAFB;border-radius:12px;padding:6px 8px;margin-bottom:5px}
+.bk-row span{flex:1;text-align:left;line-height:1.35}
+.bk-row b{color:var(--purple)}
+.bk-row button{border:none;background:linear-gradient(135deg,var(--blue),var(--purple));color:#fff;
+  font-family:inherit;font-weight:bold;font-size:12px;border-radius:10px;padding:6px 10px;cursor:pointer}
 
 /* 导航 */
 .nav{position:fixed;bottom:0;left:0;right:0;z-index:60;display:flex;justify-content:center;gap:6px;
@@ -420,8 +476,8 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   <div id="spVig"></div>
   <div id="splashUI">
     <div class="sp-deco"><i></i><span>✦ ✦ ✦</span><i></i></div>
-    <div class="sp-title">蛋仔单词<b>魔法学院</b></div>
-    <div class="sp-sub">90 天 · 482 词 · 25 段 · 5 枚魔法徽章</div>
+    <div class="sp-title">魔法单词<b>学院</b></div>
+    <div class="sp-sub" id="spSub">90 天 · 25 段 · 5 枚魔法徽章</div>
     <button class="btn" id="spStart">✨ 开始冒险</button>
     <div id="spSkip">跳过动画 →</div>
   </div>
@@ -430,7 +486,7 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 <div class="hud">
   <div class="hud-row">
     <div class="chip fam"><span class="ic">🏆</span><span id="famNum">0</span></div>
-    <div class="chip coin"><span class="ic">🥚</span><span id="coinNum">0</span></div>
+    <div class="chip coin"><span class="ic">🪙</span><span id="coinNum">0</span></div>
     <div class="chip spin btn-chip" id="spinChip" title="点我使用剩余的转盘次数"><span class="ic">🎡</span><span id="spinNum">0</span></div>
     <div class="chip x2" id="x2Chip" style="display:none" title="双倍积分剩余次数"><span class="ic">⚡</span>×2 <span id="x2Num">0</span></div>
     <div class="chip"><span class="ic">🔮</span><span class="energy" id="energyBar"></span></div>
@@ -467,7 +523,7 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
       <h2 class="title">🧩 五大魔法徽章</h2>
       <div class="badges" id="badges"></div>
       <p class="tips" id="pzText"></p>
-      <p class="tips">集齐整枚徽章后，可以到 🛒 商店 → 🏅 徽章 里免费佩戴到蛋仔身上</p>
+      <p class="tips">集齐整枚徽章后，可以到 🛒 商店 → 🏅 徽章 里免费佩戴到小魔法师身上</p>
     </div>
     <div class="panel">
       <h2 class="title">📕 魔法图鉴</h2>
@@ -478,14 +534,14 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   <!-- 商店 -->
   <section class="view" id="v-shop">
     <div class="panel">
-      <h2 class="title">🛒 蛋仔商店</h2>
+      <h2 class="title">🛒 魔法商店</h2>
       <div class="eggy-stage">
         <div id="stage3d">
           <canvas id="eggyCv"></canvas>
           <div id="eggyFb"></div>
-          <div id="stage3dHint">🖐 拖动可旋转蛋仔</div>
+          <div id="stage3dHint">🖐 拖动可旋转小魔法师</div>
         </div>
-        <div style="font-weight:bold;font-size:14px">🥚 蛋仔币 <span id="shopCoin">0</span> · 点商品买 / 点已买的装备或卸下 · 🏅 徽章通关获得，免费佩戴</div>
+        <div style="font-weight:bold;font-size:14px">🪙 魔法币 <span id="shopCoin">0</span> · 点商品买 / 点已买的装备或卸下 · 🏅 徽章通关获得，免费佩戴</div>
       </div>
       <div class="shop-tabs" id="shopTabs"></div>
       <div class="goods" id="goods"></div>
@@ -537,7 +593,7 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
     <div class="wheel-wrap">
       <div class="pointer">🔻</div>
       <div class="wheel" id="wheel"></div>
-      <div class="wheel-hub">🥚</div>
+      <div class="wheel-hub">🪄</div>
     </div>
     <p id="wheelMsg" style="font-weight:bold;font-size:18px;min-height:26px">转一下试试运气吧！</p>
     <button class="btn green" id="spinBtn" style="width:100%">🎡 转盘抽奖</button>
@@ -561,25 +617,94 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
     <button class="btn sm" id="testSent" style="width:100%;margin-top:4px">🔈 试听：apple → I eat a big red apple.</button>
     <div style="background:#F7F4FF;border-radius:16px;padding:10px;margin-top:10px">
       <div style="font-size:12px;font-weight:bold;margin-bottom:7px;text-align:left">
-        💾 存档备份（清浏览器缓存会丢进度，建议每周导出一次）</div>
+        💾 存档备份（自动进行，平时不用管）</div>
+      <p class="tips" id="bkStat" style="text-align:left;margin:0 0 7px"></p>
       <div class="row">
+        <button class="btn sm ghost" id="bkListBtn">📜 备份记录</button>
+        <button class="btn sm ghost" id="bkFileBtn">📁 自动备份到文件</button>
+      </div>
+      <div id="bkList" style="display:none;margin-top:8px"></div>
+      <div class="row" style="margin-top:6px">
         <button class="btn sm ghost" id="expBtn">⬇️ 导出存档</button>
         <button class="btn sm ghost" id="impBtn">⬆️ 导入存档</button>
       </div>
       <input type="file" id="impFile" accept=".json" style="display:none">
+    </div>
+    <div style="background:#FFF4E6;border-radius:16px;padding:10px;margin-top:10px">
+      <div style="font-size:12px;font-weight:bold;margin-bottom:7px;text-align:left">
+        👨‍👩‍👧 家长模式（需要密码，可重置进度、调整积分）</div>
+      <button class="btn sm ghost" id="paBtn" style="width:100%">🔐 进入家长模式</button>
     </div>
     <button class="btn ghost" id="setClose" style="width:100%;margin-top:9px">好啦</button>
     <p class="tips">单词用真人录音，句子用微软 AI 神经语音，都会自动选最好的通道</p>
   </div>
 </div>
 
+<!-- 家长模式 -->
+<div class="modal" id="paModal">
+  <div class="modal-card" style="max-width:420px">
+    <h2 class="title" style="justify-content:center">👨‍👩‍👧 家长模式</h2>
+    <!-- 密码门 -->
+    <div id="paGate">
+      <p style="font-size:14px;font-weight:bold">请输入家长密码</p>
+      <input type="password" class="pa-inp" id="paPwd" inputmode="numeric" placeholder="密码">
+      <p id="paErr" class="tips" style="color:#E5484D;min-height:18px"></p>
+      <button class="btn green" id="paOk" style="width:100%">解锁</button>
+    </div>
+    <!-- 面板 -->
+    <div id="paBody" style="display:none">
+      <div class="pa-box">
+        <div class="pa-t">🏆 家庭积分 / 🪙 魔法币</div>
+        <div class="pa-line"><span>🏆 家庭积分 <b id="paFam">0</b></span>
+          <input type="number" class="pa-inp sm" id="paFamN" value="10">
+          <button class="btn sm green" data-pa="fam+">＋</button>
+          <button class="btn sm ghost" data-pa="fam-">－</button></div>
+        <div class="pa-line"><span>🪙 魔法币 <b id="paCoin">0</b></span>
+          <input type="number" class="pa-inp sm" id="paCoinN" value="10">
+          <button class="btn sm green" data-pa="coin+">＋</button>
+          <button class="btn sm ghost" data-pa="coin-">－</button></div>
+        <div class="row" style="margin-top:6px">
+          <button class="btn sm ghost" data-pa="spin+">🎡 转盘次数 +1</button>
+          <button class="btn sm ghost" data-pa="x2+">⚡ 双倍次数 +1</button>
+        </div>
+      </div>
+      <div class="pa-box">
+        <div class="pa-t">🎛️ 分段控制（选一段，再选要做什么）</div>
+        <div class="pa-line"><select class="pa-inp" id="paSeg"></select></div>
+        <div class="row" style="margin-top:7px">
+          <button class="btn sm green" id="paSegPass">✅ 标记本段过关</button>
+          <button class="btn sm" id="paSegRe">♻️ 重置本段</button>
+        </div>
+        <button class="btn sm ghost" id="paPassTo" style="width:100%;margin-top:6px">⏩ 第 1 段到本段全部标记过关</button>
+        <p class="tips" id="paSegInfo" style="text-align:left"></p>
+        <p class="tips" style="text-align:left">标记过关＝这一段的词算已掌握、拼图块和 BOSS 直接给，
+          但不会发积分（要给的话用上面的加减）。想撤销就点「重置本段」。</p>
+      </div>
+      <div class="pa-box">
+        <div class="pa-t">🧨 重置整个单词表</div>
+        <p class="tips" style="text-align:left">清空全部背诵记录、徽章、星级、BOSS 与复习计划，从第 1 段重新开始。
+          积分、已买的装扮默认保留。</p>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:bold;margin:4px 0">
+          <input type="checkbox" id="paWipeAll">连积分和装扮一起清空</label>
+        <button class="btn sm" id="paAllRe" style="width:100%">重置整个单词表</button>
+      </div>
+      <div class="pa-box">
+        <div class="pa-t">🔑 修改家长密码</div>
+        <div class="pa-line"><input type="password" class="pa-inp" id="paNew" placeholder="新密码（4 位以上）">
+          <button class="btn sm" id="paPwdSave">保存</button></div>
+      </div>
+      <button class="btn ghost" id="paClose" style="width:100%;margin-top:4px">关闭</button>
+    </div>
+  </div>
+</div>
+
 <!-- 护眼休息提醒 -->
 <div class="modal" id="restModal">
   <div class="modal-card">
-    <div style="font-size:64px">🥚💤</div>
+    <div style="font-size:64px">🧙💤</div>
     <h2 class="title" style="justify-content:center">已经学 20 分钟啦</h2>
     <p style="font-size:16px;font-weight:bold;line-height:1.8">
-      蛋仔要休息一下～<br>站起来，看看窗外远处的东西<br>数 20 秒再回来继续 👀</p>
+      小魔法师要休息一下～<br>站起来，看看窗外远处的东西<br>数 20 秒再回来继续 👀</p>
     <button class="btn green" id="restOk" style="width:100%;margin-top:10px">好，休息一下</button>
   </div>
 </div>
@@ -621,14 +746,14 @@ const WORDS=[
 {en:"tie",zh:"领带；系",ph:"/taɪ/",sen:"My dad wears a blue tie.",senZh:"我爸爸系着蓝领带。",tip:"tie 既是领带也是「系」"},
 {en:"web",zh:"网；网页",ph:"/web/",sen:"A spider makes a web.",senZh:"蜘蛛织网。",tip:"web 也是网址里的 www"},
 {en:"wet",zh:"湿的",ph:"/wet/",sen:"My hair is still wet.",senZh:"我的头发还是湿的。",tip:"wet 反义词是 dry"},
-{en:"kid(s)",zh:"小孩",ph:"/kɪdz/",sen:"The kids are playing outside.",senZh:"孩子们在外面玩。",tip:"kid 就是小孩，复数是 kids"},
+{en:"kid",zh:"小孩",ph:"/kɪdz/",sen:"The kids are playing outside.",senZh:"孩子们在外面玩。",tip:"kid 就是小孩，复数是 kids"},
 {en:"versus",zh:"对；比",ph:"/ˈvɜːsəs/",sen:"It's China versus Japan.",senZh:"是中国对日本。",tip:"比赛常用，缩写 vs."},
-{en:"yog(h)urt",zh:"酸奶",ph:"/ˈjɒɡət/",sen:"I eat yoghurt for breakfast.",senZh:"我早餐吃酸奶。",tip:"yog-hurt，h 可写可不写"},
+{en:"yogurt",zh:"酸奶",ph:"/ˈjɒɡət/",sen:"I eat yoghurt for breakfast.",senZh:"我早餐吃酸奶。",tip:"yog-hurt，h 可写可不写"},
 {en:"CD",zh:"激光唱片",ph:"/ˌsiː ˈdiː/",sen:"I have a CD of children's songs.",senZh:"我有一张儿歌 CD。",tip:"C-D 两个字母名，就是读音"},
 {en:"hip hop",zh:"嘻哈音乐",ph:"/ˈhɪp hɒp/",sen:"He likes hip hop music.",senZh:"他喜欢嘻哈音乐。",tip:"hip 和 hop 都以 p 结尾"},
 {en:"PC",zh:"个人电脑",ph:"/ˌpiː ˈsiː/",sen:"My dad works on a PC all day.",senZh:"我爸爸整天用电脑工作。",tip:"personal computer 的缩写"},
 {en:"DVD",zh:"数字光盘",ph:"/ˌdiː viː ˈdiː/",sen:"We watched a DVD at home.",senZh:"我们在家看了 DVD。",tip:"D-V-D，比 CD 多一个 D"},
-{en:"kilogramme (kg)",zh:"千克",ph:"/ˈkɪləɡræm/",sen:"This bag is two kilogrammes.",senZh:"这个包两千克。",tip:"kilo 千 + gramme 克"},
+{en:"kilogram",zh:"千克",ph:"/ˈkɪləɡræm/",sen:"This bag is two kilogrammes.",senZh:"这个包两千克。",tip:"kilo 千 + gramme 克"},
 {en:"a.m.",zh:"上午",ph:"/ˌeɪ ˈem/",sen:"I get up at seven a.m.",senZh:"我早上七点起床。",tip:"a 在前 = 上午"},
 {en:"p.m.",zh:"下午",ph:"/ˌpiː ˈem/",sen:"We go home at five p.m.",senZh:"我们下午五点回家。",tip:"p 在前 = 下午"},
 {en:"bake",zh:"烤",ph:"/beɪk/",sen:"We bake a cake on Sunday.",senZh:"我们周日烤蛋糕。",tip:"bake 加 r 就是 baker 面包师"},
@@ -704,7 +829,7 @@ const WORDS=[
 {en:"wifi",zh:"无线网络",ph:"/ˈwaɪfaɪ/",sen:"Is there wifi in the hotel?",senZh:"酒店有 wifi 吗？",tip:"wi-fi 读「歪fai」"},
 {en:"wing",zh:"翅膀；机翼",ph:"/wɪŋ/",sen:"The bird hurt its wing.",senZh:"小鸟伤了翅膀。",tip:"wing 和 swing 押韵"},
 {en:"wood",zh:"木头",ph:"/wʊd/",sen:"The table is made of wood.",senZh:"这张桌子是木头做的。",tip:"wood 和 would 同音"},
-{en:"Yeah!",zh:"是的；对",ph:"/jeə/",sen:"Yeah! Let's go!",senZh:"对！我们走！",tip:"Yeah 是很随意的 yes"},
+{en:"yeah",zh:"是的；对",ph:"/jeə/",sen:"Yeah! Let's go!",senZh:"对！我们走！",tip:"Yeah 是很随意的 yes"},
 {en:"zero",zh:"零",ph:"/ˈzɪərəʊ/",sen:"The score is three to zero.",senZh:"比分是三比零。",tip:"zero 就是数字 0"},
 {en:"adult",zh:"成年人",ph:"/ˈædʌlt/",sen:"Tickets for adults cost more.",senZh:"成人票更贵。",tip:"adult 就是「大人」"},
 {en:"awful",zh:"糟糕的",ph:"/ˈɔːfl/",sen:"The weather is awful today.",senZh:"今天天气糟透了。",tip:"awful 是「很糟」"},
@@ -775,7 +900,7 @@ const WORDS=[
 {en:"belong",zh:"属于",ph:"/bɪˈlɒŋ/",sen:"This book belongs to me.",senZh:"这本书是我的。",tip:"belong to 固定搭配"},
 {en:"beside",zh:"在…旁边",ph:"/bɪˈsaɪd/",sen:"Sit beside me, please.",senZh:"请坐在我旁边。",tip:"be + side"},
 {en:"better",zh:"更好的",ph:"/ˈbetə/",sen:"You look better today.",senZh:"你今天看起来好些了。",tip:"good - better - best"},
-{en:"blond(e)",zh:"金发的",ph:"/blɒnd/",sen:"She has blond hair.",senZh:"她有一头金发。",tip:"男用 blond，女用 blonde"},
+{en:"blonde",zh:"金发的",ph:"/blɒnd/",sen:"She has blond hair.",senZh:"她有一头金发。",tip:"男用 blond，女用 blonde"},
 {en:"blouse",zh:"女式衬衫",ph:"/blaʊz/",sen:"My mother wears a white blouse.",senZh:"妈妈穿白衬衫。",tip:"blouse 是女式衬衫"},
 {en:"boiled",zh:"煮的",ph:"/bɔɪld/",sen:"I want two boiled eggs.",senZh:"我要两个水煮蛋。",tip:"boil 加 ed 变形容词"},
 {en:"borrow",zh:"借入",ph:"/ˈbɒrəʊ/",sen:"Can I borrow your ruler?",senZh:"我能借你的尺子吗？",tip:"borrow 借入，lend 借出"},
@@ -803,7 +928,7 @@ const WORDS=[
 {en:"excuse",zh:"借口；原谅",ph:"/ɪkˈskjuːz/",sen:"Excuse me, where is the station?",senZh:"请问车站在哪里？",tip:"Excuse me 是礼貌用语"},
 {en:"folder",zh:"文件夹",ph:"/ˈfəʊldə/",sen:"Put the papers in the folder.",senZh:"把文件放进文件夹。",tip:"fold 加 er"},
 {en:"garlic",zh:"大蒜",ph:"/ˈɡɑːlɪk/",sen:"Put some garlic in the soup.",senZh:"汤里放点大蒜。",tip:"garlic 味道很冲"},
-{en:"gram(me)",zh:"克",ph:"/ɡræm/",sen:"Add 200 grammes of sugar.",senZh:"加200克糖。",tip:"kilo 是 1000 克"},
+{en:"gram",zh:"克",ph:"/ɡræm/",sen:"Add 200 grammes of sugar.",senZh:"加200克糖。",tip:"kilo 是 1000 克"},
 {en:"granny",zh:"奶奶；外婆",ph:"/ˈɡræni/",sen:"My granny tells great stories.",senZh:"我奶奶很会讲故事。",tip:"granny 是 grandma 的昵称"},
 {en:"hoodie",zh:"连帽衫",ph:"/ˈhuːdi/",sen:"He wears a blue hoodie.",senZh:"他穿蓝色连帽衫。",tip:"hood 加 ie，带帽子"},
 {en:"horror",zh:"恐怖",ph:"/ˈhɒrə/",sen:"I don't like horror films.",senZh:"我不喜欢恐怖片。",tip:"horror 是「恐怖」"},
@@ -948,7 +1073,7 @@ const WORDS=[
 {en:"elevator",zh:"电梯",ph:"/ˈelɪveɪtə/",sen:"Take the elevator to the fifth floor.",senZh:"坐电梯到五楼。",tip:"美式 elevator，英式 lift"},
 {en:"envelope",zh:"信封",ph:"/ˈenvələʊp/",sen:"Put the letter in an envelope.",senZh:"把信放进信封。",tip:"en + velope"},
 {en:"explorer",zh:"探险家",ph:"/ɪkˈsplɔːrə/",sen:"He wants to be an explorer.",senZh:"他想当探险家。",tip:"explore 加 r"},
-{en:"grand(d)ad",zh:"爷爷；外公",ph:"/ˈɡrændæd/",sen:"My grandad tells funny jokes.",senZh:"我爷爷讲笑话很好笑。",tip:"grandad 或 granddad"},
+{en:"granddad",zh:"爷爷；外公",ph:"/ˈɡrændæd/",sen:"My grandad tells funny jokes.",senZh:"我爷爷讲笑话很好笑。",tip:"grandad 或 granddad"},
 {en:"grandson",zh:"孙子；外孙",ph:"/ˈɡrænsʌn/",sen:"She has two grandsons.",senZh:"她有两个孙子。",tip:"grand + son"},
 {en:"horrible",zh:"可怕的；糟糕的",ph:"/ˈhɒrəbl/",sen:"The soup tastes horrible.",senZh:"这汤味道糟透了。",tip:"horror 的形容词"},
 {en:"kangaroo",zh:"袋鼠",ph:"/ˌkæŋɡəˈruː/",sen:"A kangaroo carries a baby in its pocket.",senZh:"袋鼠用育儿袋装宝宝。",tip:"双 o 结尾"},
@@ -977,13 +1102,13 @@ const WORDS=[
 {en:"wardrobe",zh:"衣柜",ph:"/ˈwɔːdrəʊb/",sen:"Hang your coat in the wardrobe.",senZh:"把外套挂进衣柜。",tip:"英式 wardrobe，美式 closet"},
 {en:"wildlife",zh:"野生动物",ph:"/ˈwaɪldlaɪf/",sen:"We must protect wildlife.",senZh:"我们必须保护野生动物。",tip:"wild + life"},
 {en:"yourself",zh:"你自己",ph:"/jɔːˈself/",sen:"Be careful with yourself.",senZh:"照顾好自己。",tip:"your + self"},
-{en:"pound (£)",zh:"英镑",ph:"/paʊnd/",sen:"It costs five pounds.",senZh:"这个要五英镑。",tip:"£ 是英镑符号"},
+{en:"pound",zh:"英镑",ph:"/paʊnd/",sen:"It costs five pounds.",senZh:"这个要五英镑。",tip:"£ 是英镑符号"},
 {en:"make-up",zh:"化妆品",ph:"/ˈmeɪkʌp/",sen:"She doesn't wear make-up.",senZh:"她不化妆。",tip:"make + up"},
-{en:"cafe / café",zh:"咖啡馆",ph:"/ˈkæfeɪ/",sen:"Let's meet at the cafe.",senZh:"我们在咖啡馆见吧。",tip:"cafe 和 café 都可以"},
+{en:"cafe",zh:"咖啡馆",ph:"/ˈkæfeɪ/",sen:"Let's meet at the cafe.",senZh:"我们在咖啡馆见吧。",tip:"cafe 和 café 都可以"},
 {en:"parking lot",zh:"停车场",ph:"/ˈpɑːkɪŋ lɒt/",sen:"The parking lot is full.",senZh:"停车场满了。",tip:"美式 parking lot，英式 car park"},
 {en:"bathing suit",zh:"泳衣",ph:"/ˈbeɪðɪŋ suːt/",sen:"Bring your bathing suit.",senZh:"带上你的泳衣。",tip:"bathing suit = swimsuit"},
 {en:"French fries",zh:"炸薯条",ph:"/ˌfrentʃ ˈfraɪz/",sen:"I want French fries, please.",senZh:"请给我炸薯条。",tip:"美式 French fries，英式 chips"},
-{en:"mobile (phone)",zh:"手机",ph:"/ˈməʊbaɪl/",sen:"Turn off your mobile phone.",senZh:"关掉你的手机。",tip:"英式 mobile，美式 cell phone"},
+{en:"mobile phone",zh:"手机",ph:"/ˈməʊbaɪl/",sen:"Turn off your mobile phone.",senZh:"关掉你的手机。",tip:"英式 mobile，美式 cell phone"},
 {en:"stomach ache",zh:"胃疼；肚子疼",ph:"/ˈstʌmək eɪk/",sen:"I have a stomach ache.",senZh:"我肚子疼。",tip:"stomach + ache"},
 {en:"grocery store",zh:"杂货店",ph:"/ˈɡrəʊsəri stɔː/",sen:"Mum is at the grocery store.",senZh:"妈妈在杂货店。",tip:"grocery 复数是 groceries"},
 {en:"movie theater",zh:"电影院",ph:"/ˈmuːvi θɪətə/",sen:"We met at the movie theater.",senZh:"我们在电影院见的面。",tip:"美式 movie theater，英式 cinema"},
@@ -1075,17 +1200,76 @@ const WORDS=[
 {en:"washing-up",zh:"洗碗",ph:"/ˌwɒʃɪŋ ˈʌp/",sen:"I do the washing-up after dinner.",senZh:"晚饭后我洗碗。",tip:"do the washing-up 英式说法"},
 {en:"guest-house",zh:"客栈；家庭旅馆",ph:"/ˈɡest haʊs/",sen:"We stayed in a small guest-house.",senZh:"我们住在一家小客栈。",tip:"guest + house"},
 {en:"identification",zh:"身份证明",ph:"/aɪˌdentɪfɪˈkeɪʃn/",sen:"Show your identification, please.",senZh:"请出示身份证明。",tip:"缩写是 ID"},
-{en:"congratulations!",zh:"恭喜！",ph:"/kənˌɡrætʃuˈleɪʃnz/",sen:"Congratulations! You passed!",senZh:"恭喜！你通过了！",tip:"永远用复数形式"},
+{en:"congratulations",zh:"恭喜！",ph:"/kənˌɡrætʃuˈleɪʃnz/",sen:"Congratulations! You passed!",senZh:"恭喜！你通过了！",tip:"永远用复数形式"},
 {en:"good-looking",zh:"好看的",ph:"/ˌɡʊd ˈlʊkɪŋ/",sen:"He is a good-looking boy.",senZh:"他是个好看的男孩。",tip:"good + looking"},
-{en:"kilometre (km)",zh:"千米；公里",ph:"/ˈkɪləmiːtə/",sen:"It is five kilometres away.",senZh:"离这儿五公里。",tip:"kilo 千 + metre 米"},
-{en:"centimetre (cm)",zh:"厘米",ph:"/ˈsentɪmiːtə/",sen:"The line is ten centimetres long.",senZh:"这条线十厘米长。",tip:"centi 是「百分之一」"},
+{en:"kilometre",zh:"千米；公里",ph:"/ˈkɪləmiːtə/",sen:"It is five kilometres away.",senZh:"离这儿五公里。",tip:"kilo 千 + metre 米"},
+{en:"centimetre",zh:"厘米",ph:"/ˈsentɪmiːtə/",sen:"The line is ten centimetres long.",senZh:"这条线十厘米长。",tip:"centi 是「百分之一」"},
 {en:"department store",zh:"百货商店",ph:"/dɪˈpɑːtmənt stɔː/",sen:"She works in a department store.",senZh:"她在百货商店工作。",tip:"department + store"},
-{en:"examination / exam",zh:"考试",ph:"/ɪɡˌzæmɪˈneɪʃn/",sen:"Good luck with your examination!",senZh:"祝你考试顺利！",tip:"口语常说 exam"}
+{en:"exam",zh:"考试",ph:"/ɪɡˈzæm/",sen:"Good luck with your exam!",senZh:"祝你考试顺利！",tip:"examination 的口语说法"}
 ];
 
-/* 2. 分段 */
-const SEG_SIZES=[].concat(Array(5).fill(10),Array(5).fill(16),Array(5).fill(20),Array(5).fill(24),[26,26,26,27,27]);
-const SEG_COUNT=25,PER_BADGE=5,TOTAL_WORDS=482,PLAN_DAYS=90;
+/* 1b. 话题分组顺序：按「话题 + 常用度」重排词表，同一话题内字母少的先学。
+       这样每一段都是一个完整话题，难度从生活近词逐步走向抽象长词。 */
+const TOPIC_PLAN=[
+{t:"我和家人",w:["mom","kid","guy","Miss","adult","granny","parent","married","surname","granddad","grandson","teenager","boyfriend","celebrity","neighbour","penfriend","girlfriend","grandchild","grandparent","granddaughter"]},
+{t:"身体与外貌",w:["fit","comb","neck","pale","slim","beard","blood","blonde","perfume","shampoo","stomach","make-up","toothbrush","good-looking"]},
+{t:"心情与性格",w:["cry","mad","shy","glad","hate","kiss","miss","pity","lazy","awful","brave","shame","upset","afraid","amazed","lovely","polite","helpful","nervous","pleased","unhappy","worried","surprise","frightened"]},
+{t:"打招呼与交际",w:["hey","chat","dear","yeah","bother","excuse","pardon","alright","goodbye","conversation","congratulations"]},
+{t:"食物与饮料",w:["oil","bean","cola","candy","curry","grape","mango","melon","pasta","steak","toast","yogurt","cereal","chilli","garlic","pepper","potato","supper","barbecue","omelette","French fries"]},
+{t:"厨房与烹饪",w:["kit","mug","bake","boil","oven","roast","boiled","cooker","recipe","grilled","machine","ingredient","refrigerator","washing-up"]},
+{t:"衣服与饰品",w:["tie","boot","shoe","sock","suit","size","ring","chain","glove","scarf","purse","blouse","hoodie","jumper","pocket","tights","earring","sweater","trainer","bracelet","necklace","swimsuit","bathing suit"]},
+{t:"家与家具",w:["bin","rent","roof","shelf","closet","pillow","toilet","poster","bathtub","blanket","cabinet","curtain","heating","armchair","elevator","wardrobe","apartment","washing machine"]},
+{t:"学校与学习",w:["fail","quiz","term","exam","pupil","spell","eraser","biology","college","diploma","mistake","physics","project","beginner","language","scissors","textbook","chemistry","timetable","dictionary","university","headteacher","schoolchild"]},
+{t:"时间与日期",w:["a.m.","p.m.","hour","noon","till","daily","later","midday","minute","moment","weekly","monthly","lunchtime","September"]},
+{t:"数字与单位",w:["zero","plus","gram","minus","litre","metre","double","degree","length","million","quarter","several","kilogram","kilometre","centimetre","temperature"]},
+{t:"动物与自然",w:["bee","nest","swan","wing","camel","snail","beetle","donkey","desert","extinct","creature","kangaroo","tortoise","wildlife","jellyfish","countryside","environment"]},
+{t:"天气与材料",w:["wet","dry","wood","metal","wooden","leather","plastic","thunderstorm"]},
+{t:"购物与钱",w:["cash","earn","euro","lend","sale","save","store","pence","price","pound","borrow","cheque","dollar","wallet","receipt","shopper","customer","discount","bookstore","drugstore","department","half-price","grocery store","department store"]},
+{t:"商店与场所",w:["club","exit","sign","cafe","square","closed","chemist","factory","gallery","pharmacy"]},
+{t:"交通与出行",w:["gas","seat","tram","tyre","delay","engine","petrol","return","scooter","delayed","motorway","transport","roundabout","parking lot"]},
+{t:"旅行与住宿",w:["tour","guest","luggage","visitor","backpack","campsite","passport","guidebook","appointment","guest-house","accommodation"]},
+{t:"体育与运动",w:["goal","sail","versus","court","rugby","score","final","runner","soccer","cricket","Olympic","stadium","snowboard","surfboard","windsurfing","surfboarding"]},
+{t:"音乐与娱乐",w:["ad","band","drum","jazz","news","tune","disco","movie","opera","radio","title","circus","comedy","horror","record","channel","program","hip hop","magazine","classical","newspaper","exhibition","instrument","microphone","movie theater","advertisement"]},
+{t:"科技与通信",w:["CD","PC","DVD","web","mail","file","site","wifi","click","stamp","folder","online","screen","selfie","upload","battery","contact","message","chatroom","document","download","electric","envelope","keyboard","software","telephone","headphones","electricity","mobile phone"]},
+{t:"职业与工作",w:["boss","staff","career","police","dancer","writer","cleaner","painter","explorer","mechanic","musician","secretary","assistant","colleague","housewife","journalist","occupation","businessman","receptionist","businesswoman","police officer"]},
+{t:"健康与意外",w:["ill","die","dead","pain","accident","ambulance","stomach ache"]},
+{t:"常用动作",w:["push","seem","shut","sort","hurry","share","shout","steal","belong","decide","invent","repair","believe","deliver","discuss","explain","improve","receive","suppose","discover","understand"]},
+{t:"常用形容词",w:["low","poor","wide","usual","worse","worst","wrong","better","latest","modern","normal","crowded","foreign","perfect","similar","advanced","horrible","possible","available","difficult","brilliant","excellent","attractive","impossible","successful","comfortable","international"]},
+{t:"常用副词",w:["since","almost","anyway","except","nearly","anymore","exactly","luckily","perhaps","actually","anywhere","possibly","carefully","including","afterwards","unfortunately"]},
+{t:"方位·代词·抽象",w:["dot","east","west","fact","stuff","crowd","event","itself","myself","nobody","advice","beside","bottom","memory","anybody","herself","himself","licence","nothing","opinion","success","trouble","opposite","somebody","upstairs","yourself","beginning","equipment","everybody","ourselves","left-hand","difference","downstairs","experience","information","instructions","identification"]}
+];
+/* 按话题顺序重排 WORDS，同话题内按字母数由少到多 */
+(function reorderWords(){
+  const ln=s=>(s.match(/[a-z]/gi)||[]).length;
+  const exact=new Map(),lower=new Map();
+  WORDS.forEach(w=>{if(!exact.has(w.en))exact.set(w.en,w);
+    if(!lower.has(w.en.toLowerCase()))lower.set(w.en.toLowerCase(),w);});
+  const out=[],used=new Set();
+  const pick=en=>{                                  /* 先精确匹配，再忽略大小写（Miss / miss 要分开） */
+    const a=exact.get(en);if(a&&!used.has(a))return a;
+    const b=lower.get(en.toLowerCase());if(b&&!used.has(b))return b;
+    return null;
+  };
+  TOPIC_PLAN.forEach(g=>{
+    g.w.slice().sort((a,b)=>ln(a)-ln(b)||a.localeCompare(b)).forEach(en=>{
+      const w=pick(en);if(w){used.add(w);w.topic=g.t;out.push(w);}
+    });
+  });
+  WORDS.forEach(w=>{if(!used.has(w)){used.add(w);w.topic=w.topic||"综合复习";out.push(w);}});
+  WORDS.length=0;out.forEach(w=>WORDS.push(w));
+})();
+
+/* 2. 分段：25 段，每段 15–23 词，约 3 天一段 */
+const SEG_SIZES=[].concat(Array(5).fill(15),Array(5).fill(18),Array(5).fill(20),Array(5).fill(21),[22,22,22,23,23]);
+const SEG_COUNT=25,PER_BADGE=5,PLAN_DAYS=90;
+const TOTAL_WORDS=WORDS.length;
+/* 开机副标题的词数跟着词表走 */
+(function(){const el=document.getElementById("spSub");if(el)el.textContent="90 天 · "+TOTAL_WORDS+" 词 · 25 段 · 5 枚魔法徽章";})();
+/* 每段的话题标签：取该段里出现最多的话题 */
+function segTopic(i){
+  const c={};segWords(i).forEach(w=>{c[w.topic||"综合"]=(c[w.topic||"综合"]||0)+1});
+  return Object.keys(c).sort((a,b)=>c[b]-c[a])[0]||"综合";
+}
 
 /* 3. 五大魔法属性 */
 const ATTRS=[
@@ -1110,48 +1294,48 @@ const WHEEL_COLORS=["#FF6B9D","#FFD166","#06D6A0","#4CC9F0","#FF8A00",
                     "#9B5DE5","#FF9F1C","#8AE98C","#FF8FB1"];
 const MAX_SPIN=4, X2_COUNT=10;      /* 双倍积分可用次数 */
 
-/* 5. 商店商品（花蛋仔币）。r：稀有度 normal/rare/epic/legend；d3:true 表示真 3D 建模 */
-const SLOTS=[{k:"badge",nm:"🏅 徽章"},{k:"hat",nm:"🎩 头顶"},{k:"face",nm:"🕶️ 脸饰"},
-  {k:"hand",nm:"🪄 手持"},{k:"back",nm:"🪽 背饰"},{k:"aura",nm:"💫 光环"},
-  {k:"ride",nm:"🛹 坐骑"},{k:"pet",nm:"🐣 宠物"},{k:"theme",nm:"🌈 主题"}];
+/* 5. 商店商品（花魔法币）。r：稀有度 normal/rare/epic/legend；d3:true 表示真 3D 建模 */
+const SLOTS=[{k:"badge",nm:"🏅 徽章"},{k:"hat",nm:"🎩 魔帽"},{k:"face",nm:"🕶️ 脸饰"},
+  {k:"hand",nm:"🪄 法器"},{k:"back",nm:"🪽 背饰"},{k:"aura",nm:"💫 光环"},
+  {k:"ride",nm:"🛹 坐骑"},{k:"pet",nm:"🐣 魔宠"},{k:"theme",nm:"🌈 结界"}];
 const RAR={normal:"",rare:"稀有",epic:"史诗",legend:"传说"};
 const ITEMS=[
  /* --- 平价装扮（3D 立牌） --- */
- {id:"h1",slot:"hat",ic:"🧢",nm:"鸭舌帽",price:25,r:"normal"},
- {id:"h2",slot:"hat",ic:"🎩",nm:"小礼帽",price:40,r:"normal"},
- {id:"h3",slot:"hat",ic:"🍄",nm:"蘑菇帽",price:55,r:"normal"},
- {id:"h4",slot:"hat",ic:"🎓",nm:"学士帽",price:80,r:"normal"},
- {id:"f1",slot:"face",ic:"👓",nm:"圆眼镜",price:25,r:"normal"},
- {id:"f2",slot:"face",ic:"🕶️",nm:"酷墨镜",price:40,r:"normal"},
- {id:"d1",slot:"hand",ic:"🎈",nm:"气球",price:25,r:"normal"},
- {id:"p1",slot:"pet",ic:"🐣",nm:"小鸡",price:45,r:"normal"},
- {id:"p2",slot:"pet",ic:"🐱",nm:"小猫",price:65,r:"normal"},
+ {id:"h1",slot:"hat",ic:"🧙",nm:"见习尖帽",price:25,r:"normal"},
+ {id:"h2",slot:"hat",ic:"🌙",nm:"月牙魔帽",price:40,r:"normal"},
+ {id:"h3",slot:"hat",ic:"🍄",nm:"蘑菇魔帽",price:55,r:"normal"},
+ {id:"h4",slot:"hat",ic:"🎓",nm:"学院毕业帽",price:80,r:"normal"},
+ {id:"f1",slot:"face",ic:"👓",nm:"占星圆镜",price:25,r:"normal"},
+ {id:"f2",slot:"face",ic:"🕶️",nm:"暗夜魔镜",price:40,r:"normal"},
+ {id:"d1",slot:"hand",ic:"📜",nm:"咒语卷轴",price:25,r:"normal"},
+ {id:"p1",slot:"pet",ic:"🐣",nm:"魔法雏鸟",price:45,r:"normal"},
+ {id:"p2",slot:"pet",ic:"🐈‍⬛",nm:"女巫黑猫",price:65,r:"normal"},
  {id:"p3",slot:"pet",ic:"🦄",nm:"独角兽",price:120,r:"rare"},
- {id:"t1",slot:"theme",ic:"🌈",nm:"彩虹世界",price:45,r:"normal"},
- {id:"t2",slot:"theme",ic:"🌊",nm:"海洋世界",price:45,r:"normal"},
- {id:"t3",slot:"theme",ic:"🌙",nm:"星夜世界",price:75,r:"rare"},
+ {id:"t1",slot:"theme",ic:"🌈",nm:"彩虹结界",price:45,r:"normal"},
+ {id:"t2",slot:"theme",ic:"🌊",nm:"深海结界",price:45,r:"normal"},
+ {id:"t3",slot:"theme",ic:"🌙",nm:"星夜结界",price:75,r:"rare"},
  /* --- 高阶装扮（真 3D 模型 + 特效） --- */
- {id:"h5",slot:"hat",ic:"👑",nm:"黄金皇冠",price:130,r:"rare",d3:1},
- {id:"h6",slot:"hat",ic:"🔥",nm:"烈焰王冠",price:260,r:"epic",d3:1},
+ {id:"h5",slot:"hat",ic:"👑",nm:"黄金魔冠",price:130,r:"rare",d3:1},
+ {id:"h6",slot:"hat",ic:"🔥",nm:"烈焰魔冠",price:260,r:"epic",d3:1},
  {id:"h7",slot:"hat",ic:"✨",nm:"星耀法冠",price:380,r:"legend",d3:1},
  {id:"f3",slot:"face",ic:"🥽",nm:"魔法护目镜",price:60,r:"rare",d3:1},
- {id:"f4",slot:"face",ic:"😎",nm:"能量目镜",price:200,r:"epic",d3:1},
+ {id:"f4",slot:"face",ic:"😎",nm:"元素魔瞳",price:200,r:"epic",d3:1},
  {id:"d2",slot:"hand",ic:"🪄",nm:"魔法棒",price:65,r:"rare",d3:1},
- {id:"d3",slot:"hand",ic:"🗡️",nm:"勇者之剑",price:150,r:"rare",d3:1},
+ {id:"d3",slot:"hand",ic:"🗡️",nm:"符文魔剑",price:150,r:"rare",d3:1},
  {id:"d5",slot:"hand",ic:"⚔️",nm:"雷霆巨剑",price:300,r:"epic",d3:1},
  {id:"d6",slot:"hand",ic:"🌟",nm:"星辰法杖",price:380,r:"legend",d3:1},
  {id:"k1",slot:"back",ic:"🪽",nm:"天使之翼",price:220,r:"rare",d3:1},
- {id:"k2",slot:"back",ic:"🧣",nm:"王者披风",price:280,r:"epic",d3:1},
- {id:"k3",slot:"back",ic:"🚀",nm:"喷射背包",price:330,r:"epic",d3:1},
+ {id:"k2",slot:"back",ic:"🧣",nm:"大法师斗篷",price:280,r:"epic",d3:1},
+ {id:"k3",slot:"back",ic:"🧹",nm:"飞天扫帚",price:330,r:"epic",d3:1},
  {id:"k4",slot:"back",ic:"🦋",nm:"极光之翼",price:430,r:"legend",d3:1},
  {id:"a1",slot:"aura",ic:"💫",nm:"星环光轮",price:240,r:"epic",d3:1},
  {id:"a2",slot:"aura",ic:"🌈",nm:"彩虹环绕",price:300,r:"epic",d3:1},
  {id:"a3",slot:"aura",ic:"🛡️",nm:"魔法护罩",price:450,r:"legend",d3:1},
- {id:"r1",slot:"ride",ic:"☁️",nm:"软软云朵",price:200,r:"rare",d3:1},
- {id:"r2",slot:"ride",ic:"🛹",nm:"悬浮滑板",price:300,r:"epic",d3:1},
+ {id:"r1",slot:"ride",ic:"☁️",nm:"腾云术",price:200,r:"rare",d3:1},
+ {id:"r2",slot:"ride",ic:"🛹",nm:"浮空魔板",price:300,r:"epic",d3:1},
  {id:"r3",slot:"ride",ic:"🧞",nm:"魔法飞毯",price:400,r:"legend",d3:1},
  {id:"p4",slot:"pet",ic:"🐉",nm:"小飞龙",price:170,r:"rare",d3:1},
- {id:"p5",slot:"pet",ic:"🤖",nm:"机械小蛋",price:280,r:"epic",d3:1},
+ {id:"p5",slot:"pet",ic:"🤖",nm:"机械魔偶",price:280,r:"epic",d3:1},
  {id:"p6",slot:"pet",ic:"🐲",nm:"炎龙宝宝",price:420,r:"legend",d3:1}
 ];
 const THEME_CLS={t1:"t-rainbow",t2:"t-ocean",t3:"t-night"};
@@ -1181,7 +1365,11 @@ function load(){
     if(o&&o.v>=3)return Object.assign({},S_DEF,o,{v:4});}catch(e){}
   return JSON.parse(JSON.stringify(S_DEF));
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S));}
+  catch(e){console.warn("存档写入失败",e);if(typeof toast==="function")toast("⚠️ 存档写入失败，浏览器空间可能满了");}
+  if(typeof autoBackupTick==="function")autoBackupTick();   /* 顺手做自动备份 */
+}
 const SKEY="eggy_setting_v4";
 const SET_DEF={rate:0.9,gap:500,sfx:1,aiVoice:"en-US-AnaNeural"};
 let SET=(()=>{try{return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SKEY)))}catch(e){return Object.assign({},SET_DEF)}})();
@@ -1217,6 +1405,7 @@ document.querySelectorAll(".nav button").forEach(b=>{
     document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
     $("#v-"+b.dataset.v).classList.add("on");
     const v=b.dataset.v;
+    if(v!=="learn")stopSpeak();          /* 离开学单词页就停掉还在读的单词/例句 */
     /* 回到学单词页时按当前状态恢复画面：BOSS 中 / 闯关中 / 都没有就显示欢迎页 */
     if(v==="learn"){
       if(bossState)renderBoss();
@@ -1247,7 +1436,8 @@ function renderMap(){
     if(!has){cls+=" empty";st="➕";}
     const d=document.createElement("div");d.className=cls;
     const bossTag=needBoss(i)?('<div class="boss">'+(S.boss[i]?"✅":"👹")+'</div>'):"";
-    d.innerHTML=bossTag+'<div class="at">'+a.ic+'</div><div class="n">'+(i+1)+'</div><div class="c">'
+    d.innerHTML=bossTag+'<div class="at">'+a.ic+'</div><div class="n">'+(i+1)+'</div>'
+      +'<div class="tp">'+(has?segTopic(i):"")+'</div><div class="c">'
       +(has?ws.length+" 词":"待补词表")+'</div><div class="st">'+st+'</div>';
     d.onclick=()=>{
       try{
@@ -1264,10 +1454,10 @@ function renderMap(){
 }
 function welcome(){
   $("#learnArea").innerHTML='<div class="study">'+eggyHTML("small")+
-    '<h2 class="title" style="justify-content:center">蛋仔单词魔法学院</h2>'+
-    '<p style="font-size:15px">90 天 · 482 词 · 25 段 · 5 枚魔法徽章</p>'+
+    '<h2 class="title" style="justify-content:center">魔法单词学院</h2>'+
+    '<p style="font-size:15px">90 天 · '+TOTAL_WORDS+' 词 · 25 段 · 5 枚魔法徽章</p>'+
     '<p class="hintline">每关都能加分 💰 答错会被收走 💸 三关全过才锁定分数</p>'+
-    '<p class="hintline">🏆 家庭积分只累计（爸妈兑现实奖励）· 🥚 蛋仔币可在商店花</p>'+
+    '<p class="hintline">🏆 家庭积分只累计（爸妈兑现实奖励）· 🪙 魔法币可在商店花</p>'+
     '<button class="btn green" id="goBtn">开始第 '+(S.curSeg+1)+' 段 →</button></div>';
   $("#goBtn").onclick=()=>startSegment(S.curSeg);
 }
@@ -1382,7 +1572,7 @@ let studyIdx=0,qTimer=null;
 /* 所有「下一题」都走这里，保证同一时刻只有一个挂起的推进定时器 */
 function schedNext(ms){clearTimeout(qTimer);qTimer=setTimeout(()=>{qTimer=null;nextQ();},ms);}
 /* 开新会话前把旧会话彻底清干净 */
-function resetSession(){clearTimeout(qTimer);qTimer=null;bossState=null;cardSeq++;}
+function resetSession(){clearTimeout(qTimer);qTimer=null;bossState=null;stopSpeak();}
 /* 存档自检：修掉进度对不上导致关卡打不开的情况 */
 function repairState(){
   if(typeof S.curSeg!=="number"||isNaN(S.curSeg))S.curSeg=0;
@@ -1403,6 +1593,7 @@ function startSegment(i,customWords){
   ws.forEach(w=>sess.prog[w.en]=0);
   sess.queue=shuffle(ws.slice());
   energy=0;studyIdx=0;renderHUD();
+  preSyn(ws.slice(0,3));                /* 开段就先备好前几句，第一张讲解卡不用等 */
   if(customWords)startQuiz();
   else if(sess.warm.length)nextQ();     // 先热身复习
   else renderStudy();
@@ -1410,7 +1601,7 @@ function startSegment(i,customWords){
 function renderStudy(){
   const w=sess.words[studyIdx],n=sess.words.length;
   $("#learnArea").innerHTML='<div class="study">'+
-    '<div class="sc-tag">📖 讲解 '+(studyIdx+1)+' / '+n+'</div>'+
+    '<div class="sc-tag">📖 讲解 '+(studyIdx+1)+' / '+n+(w.topic?' · '+w.topic:'')+'</div>'+
     '<div class="sc-word">'+w.en+'</div>'+
     '<div class="sc-ph">'+(w.ph||"")+'</div>'+
     '<div class="sc-zh">'+w.zh+'</div>'+
@@ -1429,14 +1620,15 @@ function renderStudy(){
   if($("#toQuiz"))$("#toQuiz").onclick=startQuiz;
   $("#skip").onclick=startQuiz;
   sayCard(w);                 /* 进卡片就自动连读：单词 → 例句 */
-  const nx=sess.words[studyIdx+1];            /* 顺手预合成下一张卡的例句，切卡零等待 */
-  if(nx&&nx.sen)msSynth(nx.sen).catch(()=>{});
+  /* 预合成后面几张卡的例句，切卡零等待；第一张卡多备几句，开头也不会卡 */
+  const ahead=studyIdx===0?4:2;
+  preSyn(sess.words.slice(studyIdx+1,studyIdx+1+ahead));
 }
 
 /* ===========================================================
    11. 闯关
    =========================================================== */
-function startQuiz(){cardSeq++;sess.studied=true;nextQ();}
+function startQuiz(){stopSpeak();sess.studied=true;nextQ();}
 function nextQ(){
   if(sess.warm&&sess.warm.length){       // 热身复习题
     const it=sess.warm[0];renderHUD();
@@ -1450,7 +1642,7 @@ function nextQ(){
   render_q(w,sess.prog[w.en]+1,false);
 }
 function render_q(w,t,warm){
-  cardSeq++;                              /* 打断讲解卡里还没读的例句 */
+  stopSpeak();                            /* 打断讲解卡里还没读完的单词和例句 */
   if(t===1)qZh(w,warm);else if(t===2)qListen(w,warm);else qSpell(w,warm);
 }
 function stageBar(cur,warm){
@@ -1487,15 +1679,24 @@ function bindOpts(w,warm){
   });
 }
 function qSpell(w,warm){
-  const letters=shuffle(w.en.split(""));
+  /* 只有字母需要拖；空格、连字符、小数点等符号预先锁定，孩子不用管 */
+  const isL=c=>/[a-z]/i.test(c);
+  const chars=w.en.split("");
+  const letters=shuffle(chars.filter(isL));
+  const hasFix=chars.some(c=>!isL(c));
+  const slotHTML=chars.map((c,i)=>isL(c)
+    ? '<div class="slot" data-i="'+i+'"></div>'
+    : '<div class="slot fix" data-c="'+c+'">'+(c===" "?"&middot;":c)+'</div>').join("");
   $("#learnArea").innerHTML='<div class="quiz">'+stageBar(3,warm)+
     '<div class="qtype'+(warm?" warm":"")+'">'+(warm?"复习一下 · 拼出来":"第 3 关 · 拼出这个单词！")+'</div>'+
     '<div class="zh-big">'+w.zh+'</div><button class="speaker" id="sp">🔊</button>'+
-    '<div class="slots" id="slots">'+w.en.split("").map((_,i)=>'<div class="slot" data-i="'+i+'"></div>').join("")+'</div>'+
+    '<div class="slots" id="slots">'+slotHTML+'</div>'+
     '<div class="tiles" id="tiles">'+letters.map((L,i)=>'<div class="tile" draggable="true" data-t="'+i+'">'+L+'</div>').join("")+'</div>'+
-    '<div class="hintline">点字母或拖过去都可以</div></div>';
+    '<div class="hintline">点字母或拖过去都可以'+(hasFix?'（灰色的空格和符号已经帮你填好啦）':'')+'</div></div>';
   $("#sp").onclick=()=>say(w.en);say(w.en);
-  const slots=[...document.querySelectorAll("#slots .slot")],tiles=[...document.querySelectorAll("#tiles .tile")];
+  const all=[...document.querySelectorAll("#slots .slot")];
+  const slots=all.filter(s=>!s.classList.contains("fix"));
+  const tiles=[...document.querySelectorAll("#tiles .tile")];
   let drag=null,locked=false;
   const place=t=>{
     if(locked)return;
@@ -1515,15 +1716,16 @@ function qSpell(w,warm){
   function check(){
     if(slots.some(s=>!s.classList.contains("filled")))return;
     locked=true;
-    if(slots.map(s=>s.textContent).join("")===w.en){
+    const got=all.map(s=>s.classList.contains("fix")?s.dataset.c:s.textContent).join("");
+    if(got.toLowerCase()===w.en.toLowerCase()){
       slots.forEach(s=>{s.style.background="#8AE98C";s.style.color="#fff"});pass(w,warm);
     }else{$("#slots").style.animation="shake .4s";fail(w,warm);}
   }
 }
 
 /* --- 答对 / 答错：每关立刻加分，答错退回本轮已加的分 --- */
-/* 积分规则：每 3 个字母 1 分（不足 3 个也算 1 分），三关各给一次 */
-function wordPt(w){return Math.max(1,Math.ceil(w.en.length/3));}
+/* 积分规则：每 3 个字母 1 分（只数字母，空格和符号不算），三关各给一次 */
+function wordPt(w){return Math.max(1,Math.ceil((w.en.match(/[a-z]/gi)||[]).length/3));}
 function addScore(n){
   S.family=Math.max(0,S.family+n);
   S.coins=Math.max(0,S.coins+n);
@@ -1664,7 +1866,7 @@ function buildBossPaper(seg){
 /* ---- 战斗状态 ---- */
 let bossState=null;
 function startBoss(seg){
-  clearTimeout(qTimer);qTimer=null;sess=null;cardSeq++;
+  clearTimeout(qTimer);qTimer=null;sess=null;stopSpeak();
   const paper=buildBossPaper(seg);
   if(!paper){                                  /* 词不够，直接放行 */
     grantPendingPiece(seg);goView("puzzle");return;
@@ -1930,7 +2132,7 @@ function renderBadges(){
   });
   const fullN=ATTRS.filter((a,bi)=>[0,1,2,3,4].every(k=>S.pieces.includes(bi*5+k))).length;
   $("#pzText").textContent="已集齐 "+S.pieces.length+" / 25 块 · 完整徽章 "+fullN+" / 5"+
-    (fullN===5?"　🏅 恭喜成为蛋仔大魔法师！":"");
+    (fullN===5?"　🏅 恭喜成为学院大魔法师！":"");
 }
 function renderCards(){
   const box=$("#cardBox");box.innerHTML="";
@@ -1944,13 +2146,13 @@ function renderCards(){
   });
   const all=ATTRS.every((a,bi)=>S.cardDate[bi]);
   const u=document.createElement("div");u.className="card ult "+(all?"got":"lock");
-  u.innerHTML='<div class="cic">'+(all?"🧙":"🔒")+'</div><div class="cnm">蛋仔大魔法师</div>'+
+  u.innerHTML='<div class="cic">'+(all?"🧙":"🔒")+'</div><div class="cnm">学院大魔法师</div>'+
     '<div class="cdt">'+(all?"五大属性全部掌握！":"集齐 5 张属性卡合成")+'</div>';
   box.appendChild(u);
 }
 
 /* ===========================================================
-   14. 商店 + 蛋仔形象
+   14. 商店 + 小魔法师形象
    =========================================================== */
 let shopTab="badge";
 const badgeDone=i=>[0,1,2,3,4].every(k=>S.pieces.includes(i*5+k));
@@ -1962,8 +2164,15 @@ function eggyHTML(size){
   return '<div class="eggy" style="'+sc+'">'+
     (get("aura")?'<div class="slot-aura">'+get("aura")+'</div>':'')+
     (get("back")?'<div class="slot-back">'+get("back")+'</div>':'')+
-    '<div class="body"></div><div class="bl l"></div><div class="bl r"></div>'+
+    '<div class="cape"></div>'+
+    '<div class="leg l"></div><div class="leg r"></div>'+
+    '<div class="ft l"></div><div class="ft r"></div>'+
+    '<div class="body"></div><div class="belt"></div>'+
+    '<div class="arm l"></div><div class="arm r"></div>'+
+    '<div class="ear l"></div><div class="ear r"></div>'+
+    '<div class="head"></div>'+
     '<div class="ey l"></div><div class="ey r"></div><div class="mo"></div>'+
+    '<div class="hair"></div>'+
     (get("hat")?'<div class="slot-hat">'+get("hat")+'</div>':'')+
     (get("face")?'<div class="slot-face">'+get("face")+'</div>':'')+
     (get("hand")?'<div class="slot-hand">'+get("hand")+'</div>':'')+
@@ -2005,29 +2214,29 @@ function renderShop(){
     return '<div class="good r-'+(i.r||"normal")+' '+(on?"on":(owned?"owned":""))+(poor?" no":"")+'" data-id="'+i.id+'">'+
       (rr?'<span class="rar">'+rr+(i.d3?" 3D":"")+'</span>':'')+
       '<div class="gic">'+i.ic+'</div><div class="gnm">'+i.nm+'</div>'+
-      '<div class="gpr">'+(on?"✔ 已装备":(owned?"点击装备":"🥚 "+i.price))+'</div></div>';
+      '<div class="gpr">'+(on?"✔ 已装备":(owned?"点击装备":"🪙 "+i.price))+'</div></div>';
   }).join("");
   document.querySelectorAll("#goods .good").forEach(g=>g.onclick=()=>buyOrEquip(g.dataset.id));
 }
-/* 有 WebGL 就显示 3D 蛋仔，否则退回 CSS 版 */
+/* 有 WebGL 就显示 3D 小魔法师，否则退回 CSS 版 */
 function showEggyStage(){
   const hint=$("#stage3dHint");
   if(window.eggy3d&&window.eggy3d.ready){
     window.eggy3d.refresh();
     $("#eggyFb").classList.remove("on");
-    if(hint)hint.textContent="🖐 拖动可旋转蛋仔";
+    if(hint)hint.textContent="🖐 拖动可旋转小魔法师";
     return;
   }
   $("#eggyFb").classList.add("on");
   $("#eggyFb").innerHTML=eggyHTML();
   if(hint)hint.textContent=(window.eggy3d&&window.eggy3d.failed)
-    ?("⚠️ 3D 出错："+(window.eggy3d.err||"未知")):"⏳ 正在加载 3D 蛋仔…";
+    ?("⚠️ 3D 出错："+(window.eggy3d.err||"未知")):"⏳ 正在加载 3D 小魔法师…";
   if(window.eggy3d)window.eggy3d.init();
 }
 function buyOrEquip(id){
   const it=ITEMS.find(i=>i.id===id);
   if(!S.owned.includes(id)){
-    if(S.coins<it.price){alert("蛋仔币不够啦！再背几个单词就能买了 💪");beep(220);return;}
+    if(S.coins<it.price){alert("魔法币不够啦！再背几个单词就能买了 💪");beep(220);return;}
     S.coins-=it.price;S.owned.push(id);S.equip[it.slot]=id;
     confetti(12);SFX.buy();floatScore("🛒 买到 "+it.nm+"！");checkAch();
   }else{
@@ -2081,7 +2290,7 @@ function renderParent(){
     '<div><b>'+Math.round(learned/TOTAL_WORDS*100)+'%</b>总进度</div>'+
     '<div><b>'+dueCount()+'</b>🔄今日待复习</div>'+
     '<div><b>'+S.family+'</b>🏆家庭积分</div>'+
-    '<div><b>'+S.coins+'</b>🥚可用蛋仔币</div>'+
+    '<div><b>'+S.coins+'</b>🪙可用魔法币</div>'+
     '<div><b>'+S.pieces.length+'</b>通关段数</div>'+
     '<div><b>'+Object.keys(S.boss).length+'</b>👹BOSS 胜利</div>'+
     '<div><b>'+st+'</b>连续天数</div>'+
@@ -2215,8 +2424,26 @@ async function msGec(){
 }
 const msFullName=v=>{const m=v.match(/^([a-z]{2}-[A-Z]{2})-(.+)$/);
   return "Microsoft Server Speech Text to Speech Voice ("+m[1]+", "+m[2]+")";};
-async function msSynth(text){
-  const ck="ms|"+aiVoice()+"|"+ratePct()+"|"+text;
+/* 缓存键单独拿出来：这样能同步判断"这句话是不是已经合成好了" */
+const msKey=t=>"ms|"+aiVoice()+"|"+ratePct()+"|"+t;
+const msCached=t=>msCache.get(msKey(t));
+const msPending=new Map();
+/* 同一句话只合成一次：命中缓存直接返回，正在合成的复用同一个 Promise */
+function msSynth(text){
+  const ck=msKey(text);
+  if(msCache.has(ck))return Promise.resolve(msCache.get(ck));
+  if(msPending.has(ck))return msPending.get(ck);
+  const p=msSynthRaw(text);
+  msPending.set(ck,p);
+  p.then(()=>msPending.delete(ck),()=>msPending.delete(ck));
+  return p;
+}
+/* 提前把这些卡片的例句合成好，播的时候零等待 */
+function preSyn(list){
+  list.forEach(w=>{if(w&&w.sen)msSynth(w.sen).catch(()=>{});});
+}
+async function msSynthRaw(text){
+  const ck=msKey(text);
   if(msCache.has(ck))return msCache.get(ck);
   if(!window.crypto||!crypto.subtle)throw new Error("需要 https 或 localhost 环境");
   const gec=await msGec();
@@ -2279,29 +2506,72 @@ function saySentence(t,onend){
     else youdaoSay(t,null,onend);};
   msSynth(t).then(u=>playUrl(u,onend)).catch(localTry);
 }
-/* 讲解卡：单词读完 → 精确等待 SET.gap → 读例句
-   关键：卡片一出现就并行预合成例句音频，这样间隔时间才是真实可控的 */
-let cardSeq=0;
+/* 讲解卡的连读节奏（A 方案：固定间隔）
+   ① 卡片一出现就开始合成例句，并且「先把例句音频备好（最多等 1.2 秒）再开口读单词」
+   ② 单词读到只剩 0.12 秒尾音时就算读完，抵掉不同录音结尾静音长度不一的差异
+   ③ 然后严格等 SET.gap 再播例句 —— 这样间隔恒定，不会忽长忽短 */
+let cardSeq=0,spTimers=[];
+const WORD_TAIL=.12;            /* 提前判定单词结束的秒数，抵消尾部静音 */
+const PRE_WAIT=1200;            /* 开口前最多等例句合成多久 */
+function laterSp(fn,ms){const h=setTimeout(fn,ms);spTimers.push(h);return h;}
+function everySp(fn,ms){const h=setInterval(fn,ms);spTimers.push(h);return h;}
+/* 彻底打断现在的发音：网页音频 + 浏览器语音 + 所有还没到点的定时器
+   （切卡、切页、进闯关都要调它，否则上一句会压着下一张卡继续读） */
+function stopSpeak(){
+  cardSeq++;
+  spTimers.forEach(h=>{clearTimeout(h);clearInterval(h);});spTimers=[];
+  try{audioEl.onended=null;audioEl.onerror=null;audioEl.pause();}catch(e){}
+  try{clearTimeout(ttsTimer);}catch(e){}
+  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
+}
 function sayCard(w){
-  const id=++cardSeq;
+  stopSpeak();                    /* 先把上一张卡的声音和定时器全部掐掉 */
+  const id=cardSeq;
   const gap=+SET.gap||500;
-  let pre=null,preFail=false;
-  if(w.sen)msSynth(w.sen).then(u=>{pre=u;}).catch(()=>{preFail=true;});
+  let pre=w.sen?(msCached(w.sen)||null):null;     /* 命中缓存就是零等待 */
+  let preFail=false;
+  if(w.sen&&!pre)msSynth(w.sen).then(u=>{pre=u;}).catch(()=>{preFail=true;});
+
   const playSen=()=>{
     if(id!==cardSeq||!w.sen)return;
     if(pre){playUrl(pre);return;}
     if(preFail){saySentence(w.sen);return;}
-    const t0=Date.now();                       // 预合成还没回来，等它（最多 4 秒）
-    const timer=setInterval(()=>{
+    const t0=Date.now();                       /* 极端情况：开口前那 1.2 秒还没合成完 */
+    const timer=everySp(()=>{
       if(id!==cardSeq){clearInterval(timer);return;}
       if(pre){clearInterval(timer);playUrl(pre);}
       else if(preFail||Date.now()-t0>4000){clearInterval(timer);saySentence(w.sen);}
     },80);
   };
-  let moved=false;
-  const next=()=>{if(moved||id!==cardSeq)return;moved=true;setTimeout(playSen,gap);};
-  sayWord(w.en,next);
-  setTimeout(next,2400);          // 兜底：没收到播放结束事件也继续往下读
+
+  /* 真正开口读单词 → 读完等 gap → 读例句 */
+  const startWord=()=>{
+    if(id!==cardSeq)return;
+    let moved=false;
+    const next=()=>{if(moved||id!==cardSeq)return;moved=true;laterSp(playSen,gap);};
+    sayWord(w.en,next);
+    /* 用播放进度提前判定"读完了"，比 onended 更稳（onended 要等尾部静音走完）*/
+    const watch=everySp(()=>{
+      if(moved||id!==cardSeq){clearInterval(watch);return;}
+      if(!audioEl.paused&&audioEl.duration&&
+         audioEl.currentTime>=audioEl.duration-WORD_TAIL){clearInterval(watch);next();}
+    },50);
+    /* 兜底：一直没动静也要往下读 */
+    laterSp(function fb(){
+      if(moved||id!==cardSeq)return;
+      if(!audioEl.paused&&audioEl.duration&&audioEl.currentTime<audioEl.duration-WORD_TAIL){
+        laterSp(fb,80);return;
+      }
+      next();
+    },2600);
+  };
+
+  if(!w.sen||pre||preFail){startWord();return;}
+  const t0=Date.now();
+  const wait=everySp(()=>{
+    if(id!==cardSeq){clearInterval(wait);return;}
+    if(pre||preFail||Date.now()-t0>PRE_WAIT){clearInterval(wait);startWord();}
+  },40);
 }
 
 /* --- 设置面板：只保留语速和音效 --- */
@@ -2310,7 +2580,7 @@ function syncSet(){
   document.querySelectorAll("#gapBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.gap));
   document.querySelectorAll("#sfxBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.sfx));
 }
-$("#setBtn").onclick=()=>{loadVoices();syncSet();$("#setModal").classList.add("show");};
+$("#setBtn").onclick=()=>{loadVoices();syncSet();renderBkUI();$("#setModal").classList.add("show");};
 $("#setClose").onclick=()=>$("#setModal").classList.remove("show");
 $("#restOk").onclick=()=>{$("#restModal").classList.remove("show");activeMs=0;lastTick=0;};
 document.querySelectorAll("#rateBtns button").forEach(b=>b.onclick=()=>{
@@ -2325,7 +2595,7 @@ $("#expBtn").onclick=()=>{
   const data=JSON.stringify({save:S,setting:SET,exported:new Date().toISOString()},null,1);
   const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));
-  a.download="蛋仔单词存档_"+today()+".json";a.click();
+  a.download="魔法单词学院存档_"+today()+".json";a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),3000);
   toast("💾 存档已导出，收好这个文件");
 };
@@ -2338,12 +2608,339 @@ $("#impFile").onchange=e=>{
       const o=JSON.parse(rd.result);
       if(!o.save)throw new Error("不是有效的存档文件");
       if(!confirm("导入后会覆盖当前进度，确定吗？"))return;
+      snapshot(true,"导入前");            /* 导入前先给当前进度留一份，导错了能回滚 */
       localStorage.setItem(KEY,JSON.stringify(o.save));
       if(o.setting)localStorage.setItem(SKEY,JSON.stringify(o.setting));
       alert("导入成功！页面将重新加载。");location.reload();
     }catch(err){alert("导入失败："+err.message);}
   };
   rd.readAsText(f);
+};
+
+/* ===========================================================
+   16c. 自动存档与备份
+   ① 每次 save() 都写 localStorage（这一步一直是自动的）
+   ② 滚动快照：跨天或每 15 分钟留一份，重置/导入这类危险操作前强制留一份，可一键回滚
+   ③ 镜像到 IndexedDB：localStorage 万一被写坏，启动时能问要不要恢复
+   ④ 绑定一个本地文件后，之后自动往里写备份，不用每次手动导出
+   =========================================================== */
+const BKEY="eggy_backups_v1";
+const BMAX=14, SNAP_GAP=15*60*1000;
+let lastSnap=+(SET.lastSnapT||0), bkFile=null, bkFileState="none";   /* none/granted/prompt */
+function loadBackups(){try{return JSON.parse(localStorage.getItem(BKEY))||[]}catch(e){return []}}
+function writeBackups(arr){
+  for(let i=0;i<6;i++){
+    try{localStorage.setItem(BKEY,JSON.stringify(arr));return true;}
+    catch(e){if(arr.length<2)return false;arr.splice(arr.length>2?1:0,1);}  /* 空间不够就丢旧的重试 */
+  }
+  return false;
+}
+const bkMeta=s=>({w:Object.keys(s.scored||{}).length,seg:(s.pieces||[]).length,
+                  coin:s.coins||0,fam:s.family||0});
+/* 留一份快照。force=true 时无论间隔都留 */
+function snapshot(force,tag){
+  const now=Date.now(),d=today();
+  const arr=loadBackups();
+  const last=arr[arr.length-1];
+  if(!force&&last&&last.day===d&&now-lastSnap<SNAP_GAP)return false;
+  lastSnap=now;SET.lastSnapT=now;saveSet();
+  arr.push({t:new Date().toISOString(),day:d,tag:tag||"自动",m:bkMeta(S),
+            save:JSON.parse(JSON.stringify(S))});
+  /* 超量时优先丢掉"同一天里较早的自动快照"，保证每天至少留一份、手动标记的尽量留 */
+  while(arr.length>BMAX){
+    let del=-1;
+    for(let i=0;i<arr.length-1;i++){
+      if(arr[i].day===arr[i+1].day&&arr[i].tag==="自动"){del=i;break;}
+    }
+    arr.splice(del<0?0:del,1);
+  }
+  writeBackups(arr);
+  renderBkUI();
+  return true;
+}
+/* save() 里调用：节流后做快照 + 镜像 + 文件备份 */
+let lastMirror=0;
+function autoBackupTick(){
+  const now=Date.now();
+  if(snapshot(false)){writeBackupFile().catch(()=>{});}
+  if(now-lastMirror>60000){lastMirror=now;idbSet("save",S).catch(()=>{});}
+}
+/* ---- IndexedDB：存文件句柄和存档镜像 ---- */
+function idb(){
+  return new Promise((res,rej)=>{
+    if(!window.indexedDB)return rej(new Error("no idb"));
+    const r=indexedDB.open("eggyBackup",1);
+    r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains("kv"))r.result.createObjectStore("kv");};
+    r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);
+  });
+}
+async function idbSet(k,v){
+  const db=await idb();
+  return new Promise((res,rej)=>{const tx=db.transaction("kv","readwrite");
+    tx.objectStore("kv").put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});
+}
+async function idbGet(k){
+  const db=await idb();
+  return new Promise((res,rej)=>{const tx=db.transaction("kv","readonly");
+    const q=tx.objectStore("kv").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});
+}
+/* ---- 自动写本地文件（Chrome / Edge 支持）---- */
+const canFileBk=()=>!!window.showSaveFilePicker;
+function bkPayload(){
+  return JSON.stringify({save:S,setting:SET,exported:new Date().toISOString()},null,1);
+}
+async function writeBackupFile(){
+  if(!bkFile)return false;
+  try{
+    if(bkFile.queryPermission){
+      const p=await bkFile.queryPermission({mode:"readwrite"});
+      if(p!=="granted"){bkFileState="prompt";renderBkUI();return false;}
+    }
+    const w=await bkFile.createWritable();
+    await w.write(bkPayload());await w.close();
+    bkFileState="granted";
+    SET.lastFileBk=new Date().toISOString();saveSet();renderBkUI();
+    return true;
+  }catch(e){console.warn("文件备份失败",e);return false;}
+}
+async function bindBackupFile(){
+  if(!canFileBk()){alert("这个浏览器不支持自动写文件，用「⬇️ 导出存档」手动备份吧（Chrome / Edge 支持）");return;}
+  try{
+    bkFile=await showSaveFilePicker({suggestedName:"魔法单词学院_自动备份.json",
+      types:[{description:"存档文件",accept:{"application/json":[".json"]}}]});
+    await idbSet("fh",bkFile);
+    const ok=await writeBackupFile();
+    toast(ok?"📁 自动文件备份已开启":"⚠️ 文件写入没成功，再试一次");
+  }catch(e){
+    if(e&&e.name!=="AbortError")alert("没能绑定备份文件："+(e.message||e)+
+      "\n（用 file:// 直接打开时浏览器不允许写文件，放到 http 或 https 下再试）");
+  }
+}
+async function reauthBackupFile(){
+  if(!bkFile)return bindBackupFile();
+  try{
+    const p=await bkFile.requestPermission({mode:"readwrite"});
+    if(p==="granted"){await writeBackupFile();toast("📁 已恢复自动文件备份");}
+    else toast("没有授权，暂时用手动导出");
+  }catch(e){bindBackupFile();}
+}
+/* ---- 备份区 UI ---- */
+const bkTime=s=>{const d=new Date(s);
+  return (d.getMonth()+1)+"/"+d.getDate()+" "+String(d.getHours()).padStart(2,"0")+":"+
+         String(d.getMinutes()).padStart(2,"0");};
+function renderBkUI(){
+  const st=$("#bkStat");if(!st)return;
+  const arr=loadBackups();
+  const last=arr.length?bkTime(arr[arr.length-1].t):"暂无";
+  let file="未开启（建议开启，换电脑/清缓存都不怕）";
+  if(bkFileState==="granted")file="已开启 · 上次写入 "+(SET.lastFileBk?bkTime(SET.lastFileBk):"刚刚");
+  else if(bkFileState==="prompt")file="需要重新授权（点右边按钮一次就好）";
+  else if(!canFileBk())file="此浏览器不支持，请用下面的导出";
+  st.innerHTML="自动快照：共 <b>"+arr.length+"</b> 份 · 最近 "+last+"<br>文件备份："+file;
+  const fb=$("#bkFileBtn");
+  if(fb)fb.textContent=bkFileState==="granted"?"📁 立即备份到文件"
+        :(bkFileState==="prompt"?"🔓 重新授权文件备份":"📁 自动备份到文件");
+  const box=$("#bkList");
+  if(box&&box.style.display!=="none")renderBkList();
+}
+function renderBkList(){
+  const box=$("#bkList"),arr=loadBackups();
+  if(!box)return;
+  if(!arr.length){box.innerHTML='<p class="tips" style="text-align:left">还没有快照，玩一会儿就会自动生成</p>';return;}
+  box.innerHTML=arr.slice().reverse().map((b,idx)=>{
+    const i=arr.length-1-idx;
+    return '<div class="bk-row"><span>'+bkTime(b.t)+' · '+b.tag+'<br>已掌握 <b>'+b.m.w+
+      '</b> 词 · 通关 <b>'+b.m.seg+'</b> 段 · 🪙'+b.m.coin+'</span>'+
+      '<button data-bk="'+i+'">回到这里</button></div>';
+  }).join("");
+  box.querySelectorAll("button[data-bk]").forEach(btn=>btn.onclick=()=>restoreBackup(+btn.dataset.bk));
+}
+function restoreBackup(i){
+  const arr=loadBackups(),b=arr[i];
+  if(!b)return;
+  if(!confirm("回到 "+bkTime(b.t)+" 的存档吗？\n那时：已掌握 "+b.m.w+" 词 · 通关 "+b.m.seg+
+              " 段\n（当前进度会先自动留一份快照）"))return;
+  snapshot(true,"回滚前");
+  localStorage.setItem(KEY,JSON.stringify(b.save));
+  alert("已回到那份存档，页面将重新加载。");location.reload();
+}
+$("#bkListBtn").onclick=()=>{
+  const box=$("#bkList");
+  const show=box.style.display==="none";
+  box.style.display=show?"block":"none";
+  if(show)renderBkList();
+};
+$("#bkFileBtn").onclick=()=>{
+  if(bkFileState==="granted")writeBackupFile().then(ok=>toast(ok?"📁 已写入备份文件":"⚠️ 写入失败"));
+  else if(bkFileState==="prompt")reauthBackupFile();
+  else bindBackupFile();
+};
+/* 启动：取回文件句柄 + 定时快照 + 切后台时补一次 */
+(async function initBackup(){
+  try{
+    const h=await idbGet("fh");
+    if(h){bkFile=h;
+      if(h.queryPermission){const p=await h.queryPermission({mode:"readwrite"});
+        bkFileState=(p==="granted")?"granted":"prompt";}
+      else bkFileState="granted";
+    }
+  }catch(e){}
+  renderBkUI();
+  /* localStorage 空了但 IndexedDB 里还有存档 → 问要不要恢复 */
+  try{
+    if(!localStorage.getItem(KEY)){
+      const m=await idbGet("save");
+      if(m&&Object.keys(m.scored||{}).length&&
+         confirm("检测到浏览器里的进度不见了，但找到一份自动备份（已掌握 "+
+                 Object.keys(m.scored).length+" 词），要恢复吗？")){
+        localStorage.setItem(KEY,JSON.stringify(m));location.reload();return;
+      }
+    }
+  }catch(e){}
+  snapshot(false);
+  setInterval(()=>{if(snapshot(false))writeBackupFile().catch(()=>{});},5*60*1000);
+  addEventListener("visibilitychange",()=>{
+    if(document.visibilityState==="hidden"){snapshot(false);writeBackupFile().catch(()=>{});}
+  });
+})();
+
+/* ===========================================================
+   16b. 家长模式（密码进入：重置进度 / 调整积分）
+   =========================================================== */
+const PA_DEF="8888";
+const paPwd=()=>SET.paPwd||PA_DEF;
+function openParentMode(){
+  $("#paGate").style.display="";$("#paBody").style.display="none";
+  $("#paPwd").value="";$("#paErr").textContent="";
+  $("#paModal").classList.add("show");
+  setTimeout(()=>$("#paPwd").focus(),120);
+}
+function paUnlock(){
+  if($("#paPwd").value.trim()!==paPwd()){
+    $("#paErr").textContent="密码不对，再试一次";beep(220);$("#paPwd").value="";return;
+  }
+  $("#paGate").style.display="none";$("#paBody").style.display="";
+  SFX.ok();renderPaPanel();
+}
+/* 段落下拉 + 当前币值 */
+function renderPaPanel(){
+  $("#paFam").textContent=S.family;
+  $("#paCoin").textContent=S.coins;
+  const sel=$("#paSeg"),keep=sel.value;
+  sel.innerHTML="";
+  for(let i=0;i<SEG_COUNT;i++){
+    const ws=segWords(i),done=ws.filter(w=>S.scored[w.en]).length;
+    const o=document.createElement("option");o.value=i;
+    o.textContent=(S.pieces.includes(i)?"✅ ":"　")+"第 "+(i+1)+" 段 · "+segTopic(i)+
+      "（"+done+"/"+ws.length+" 词）";
+    sel.appendChild(o);
+  }
+  sel.value=keep||Math.min(S.curSeg,SEG_COUNT-1);
+  paSegInfo();
+}
+function paSegInfo(){
+  const i=+$("#paSeg").value||0,ws=segWords(i);
+  const done=ws.filter(w=>S.scored[w.en]).length;
+  $("#paSegInfo").textContent="第 "+(i+1)+" 段共 "+ws.length+" 词，已掌握 "+done+" 词"+
+    (S.pieces.includes(i)?" · 已拿到拼图块":" · 未通关")+
+    (needBoss(i)?(S.boss[i]?" · BOSS 已通过":" · 有 BOSS"):"")+
+    "　当前进度停在第 "+(S.curSeg+1)+" 段";
+}
+/* 直接判这一段过关：词算掌握、拼图块和 BOSS 都给，但不发积分 */
+function passSeg(i){
+  segWords(i).forEach(w=>{
+    if(!S.scored[w.en]){S.scored[w.en]=true;srsInit(w.en);}
+    delete S.errors[w.en];
+  });
+  if(!S.pieces.includes(i))S.pieces.push(i);
+  if(!S.stars[i]||S.stars[i]<3)S.stars[i]=3;
+  if(needBoss(i))S.boss[i]=true;
+  if(+S.pendBoss===i)S.pendBoss=null;
+  const bi=attrOf(i);
+  if(badgeDone(bi)&&!S.cardDate[bi])S.cardDate[bi]=today();
+  if(S.curSeg<Math.min(SEG_COUNT-1,i+1))S.curSeg=Math.min(SEG_COUNT-1,i+1);
+  resetSession();sess=null;
+  save();
+}
+/* 清掉某一段的成绩 */
+function resetSeg(i){
+  segWords(i).forEach(w=>{delete S.scored[w.en];delete S.errors[w.en];delete S.srs[w.en];});
+  S.pieces=S.pieces.filter(p=>+p!==i);
+  delete S.stars[i];delete S.boss[i];
+  if(+S.pendBoss===i)S.pendBoss=null;
+  const bi=attrOf(i);if(!badgeDone(bi))delete S.cardDate[bi];
+  /* curSeg 不往回退，后面已通关的段还能点开复习 */
+  resetSession();sess=null;
+  save();
+}
+/* 清掉全部背诵进度 */
+function resetAllWords(wipeRewards){
+  S.scored={};S.errors={};S.srs={};S.pieces=[];S.stars={};S.boss={};S.cardDate={};
+  S.curSeg=0;S.pendBoss=null;S.days={};S.flags={};S.ach=[];
+  if(wipeRewards){S.family=0;S.coins=0;S.spins=0;S.x2=0;S.owned=[];S.equip={};}
+  resetSession();sess=null;
+  save();
+}
+$("#paBtn").onclick=openParentMode;
+$("#paOk").onclick=paUnlock;
+$("#paPwd").onkeydown=e=>{if(e.key==="Enter")paUnlock();};
+$("#paClose").onclick=()=>$("#paModal").classList.remove("show");
+$("#paSeg").onchange=paSegInfo;
+document.querySelectorAll("#paBody button[data-pa]").forEach(b=>b.onclick=()=>{
+  const k=b.dataset.pa;
+  const n=v=>Math.max(1,Math.abs(parseInt(v,10)||0));
+  if(k==="fam+")S.family+=n($("#paFamN").value);
+  if(k==="fam-")S.family=Math.max(0,S.family-n($("#paFamN").value));
+  if(k==="coin+")S.coins+=n($("#paCoinN").value);
+  if(k==="coin-")S.coins=Math.max(0,S.coins-n($("#paCoinN").value));
+  if(k==="spin+")S.spins=Math.min(MAX_SPIN,S.spins+1);
+  if(k==="x2+")S.x2+=1;
+  save();renderHUD();renderPaPanel();SFX.click();
+});
+/* 分段控制后统一刷新各页面 */
+function paRefreshAll(){
+  checkAch();
+  renderPaPanel();renderHUD();renderMap();renderDaily();renderBadges();renderCards();
+}
+$("#paSegPass").onclick=()=>{
+  const i=+$("#paSeg").value||0;
+  if(!confirm("把第 "+(i+1)+" 段直接判为过关吗？这一段的词会算已掌握，拼图块"+
+    (needBoss(i)?"和 BOSS ":"")+"直接给（不发积分）。"))return;
+  snapshot(true,"标记过关前");
+  passSeg(i);paRefreshAll();SFX.big();confetti(12);
+  toast("✅ 第 "+(i+1)+" 段已标记过关");
+};
+$("#paPassTo").onclick=()=>{
+  const i=+$("#paSeg").value||0;
+  if(!confirm("把第 1 段到第 "+(i+1)+" 段全部判为过关吗？共 "+(i+1)+" 段。"))return;
+  snapshot(true,"批量过关前");
+  for(let k=0;k<=i;k++)passSeg(k);
+  paRefreshAll();SFX.big();confetti(20);
+  toast("⏩ 第 1–"+(i+1)+" 段已全部标记过关");
+};
+$("#paSegRe").onclick=()=>{
+  const i=+$("#paSeg").value||0;
+  if(!confirm("确定重置第 "+(i+1)+" 段吗？这一段的成绩、星级和拼图块会清掉，可以重新背。"))return;
+  snapshot(true,"重置第"+(i+1)+"段前");
+  resetSeg(i);paRefreshAll();
+  toast("♻️ 第 "+(i+1)+" 段已重置");
+};
+$("#paAllRe").onclick=()=>{
+  const wipe=$("#paWipeAll").checked;
+  if(!confirm("确定重置整个单词表吗？"+(wipe?"积分和装扮也会一起清空！":"积分和装扮会保留。")))return;
+  if(!confirm("再确认一次：所有背诵记录都会消失。\n（重置前会自动留一份快照，设置 → 📜 备份记录里可以回滚）"))return;
+  snapshot(true,"整表重置前");
+  resetAllWords(wipe);
+  applyTheme();
+  if(window.eggy3d&&window.eggy3d.ready)window.eggy3d.refresh();
+  renderPaPanel();renderHUD();renderMap();renderBadges();renderCards();renderShop();
+  $("#paModal").classList.remove("show");$("#setModal").classList.remove("show");
+  goView("learn");toast("🧨 已重置，从第 1 段重新开始");
+};
+$("#paPwdSave").onclick=()=>{
+  const v=$("#paNew").value.trim();
+  if(v.length<4){alert("密码至少 4 位");return;}
+  SET.paPwd=v;saveSet();$("#paNew").value="";toast("🔑 家长密码已更新");
 };
 
 /* ===========================================================
@@ -2385,7 +2982,7 @@ function beep(f){
   else if(f>=800)SFX.ok();else if(f>=700)SFX.click();else SFX.no();
 }
 function confetti(n){
-  const em=["🎉","⭐","🥚","🍬","🎈","✨","🧩"];
+  const em=["🎉","⭐","🪄","🔮","🎈","✨","🧩"];
   for(let i=0;i<n;i++){
     const d=document.createElement("div");d.className="confetti";
     d.textContent=em[Math.floor(Math.random()*em.length)];
@@ -2415,7 +3012,7 @@ renderHUD();updateSpinUI();renderAch();checkAch();welcome();
 </script>
 
 <!-- ===========================================================
-     3D 模块：共享 three.js 加载器 + 蛋仔模型 + 高阶礼物 3D 建模
+     3D 模块：共享 three.js 加载器 + 小魔法师模型 + 高阶礼物 3D 建模
      =========================================================== -->
 <script>
 /* ---------- 共享加载器（开机动画和商店都用它） ---------- */
@@ -2445,38 +3042,122 @@ window.loadThreeJs=function(cb){
   })(0);
 };
 
-/* ---------- 蛋仔基础模型（身体/脚/眼/腮红/嘴） ---------- */
+/* ---------- 少年魔法师基础模型（束腰短袍 / 披风 / 长靴 / 帅气发型） ---------- */
 window.makeEggyBase=function(T){
-  const g=new T.Group(),prof=[];
-  for(let i=0;i<=44;i++){const t=i/44*Math.PI;
-    prof.push(new T.Vector2(Math.sin(t)*1.05*(1-.2*Math.cos(t)),-Math.cos(t)*1.42));}
-  const body=new T.Mesh(new T.LatheGeometry(prof,72),
-    new T.MeshPhysicalMaterial({color:0xFFF7E4,roughness:.26,clearcoat:1,clearcoatRoughness:.14,
-      sheen:1,sheenColor:new T.Color(0xFFD9A8),envMapIntensity:1.15}));
-  body.castShadow=true;g.add(body);
-  const footM=new T.MeshPhysicalMaterial({color:0xFFCE8A,roughness:.3,clearcoat:.8});
-  [-.36,.36].forEach(x=>{const f=new T.Mesh(new T.SphereGeometry(.2,20,16),footM);
-    f.position.set(x,-1.3,.26);f.scale.set(1,.55,1.35);f.castShadow=true;g.add(f);});
-  const eyeM=new T.MeshPhysicalMaterial({color:0x23264F,roughness:.15,clearcoat:1});
-  [-.35,.35].forEach(x=>{
-    const e=new T.Mesh(new T.SphereGeometry(.15,28,28),eyeM);
-    e.position.set(x,.2,.86);e.scale.set(.85,1.15,.7);g.add(e);
-    const h=new T.Mesh(new T.SphereGeometry(.05,16,16),new T.MeshBasicMaterial({color:0xffffff}));
-    h.position.set(x-.05,.29,.98);g.add(h);
+  const g=new T.Group();
+  const skinM=new T.MeshPhysicalMaterial({color:0xFFDFC2,roughness:.36,clearcoat:.45,
+    sheen:.5,sheenColor:new T.Color(0xFFC9A0)});
+  const goldM=new T.MeshPhysicalMaterial({color:0xFFCB47,metalness:.8,roughness:.22,clearcoat:.9});
+  const leatherM=new T.MeshPhysicalMaterial({color:0x7A4E2B,roughness:.55,clearcoat:.35});
+  const pantM=new T.MeshPhysicalMaterial({color:0x36406B,roughness:.5,clearcoat:.3});
+
+  /* 长靴 + 腿 */
+  [-.22,.22].forEach(x=>{
+    const leg=new T.Mesh(new T.CylinderGeometry(.13,.15,.72,18),pantM);
+    leg.position.set(x,-.78,0);leg.castShadow=true;g.add(leg);
+    const boot=new T.Mesh(new T.CylinderGeometry(.17,.18,.42,18),leatherM);
+    boot.position.set(x,-1.25,0);boot.castShadow=true;g.add(boot);
+    const toe=new T.Mesh(new T.SphereGeometry(.18,20,16),leatherM);
+    toe.position.set(x,-1.42,.09);toe.scale.set(1,.5,1.5);toe.castShadow=true;g.add(toe);
+    const cuff=new T.Mesh(new T.TorusGeometry(.18,.038,10,24),goldM);
+    cuff.rotation.x=Math.PI/2;cuff.position.set(x,-1.04,0);g.add(cuff);
   });
-  const blM=new T.MeshBasicMaterial({color:0xFF9CBE,transparent:true,opacity:.62});
-  [-.66,.66].forEach(x=>{const b=new T.Mesh(new T.CircleGeometry(.15,24),blM);
-    b.position.set(x,-.05,.68);b.rotation.y=x>0?-.7:.7;b.scale.y=.62;g.add(b);});
-  const sm=new T.Mesh(new T.TorusGeometry(.2,.032,10,40,Math.PI),eyeM);
-  sm.position.set(0,-.16,.86);sm.rotation.z=Math.PI;g.add(sm);
-  return {group:g,body:body};
+
+  /* 束腰短袍：肩宽腰细、下摆微展 */
+  const prof=[[0,-.62],[.52,-.62],[.5,-.5],[.42,-.28],[.37,-.05],[.38,.16],
+              [.44,.34],[.42,.46],[.22,.52],[0,.52]].map(p=>new T.Vector2(p[0],p[1]));
+  const body=new T.Mesh(new T.LatheGeometry(prof,64),
+    new T.MeshPhysicalMaterial({color:0x2F9E63,roughness:.42,clearcoat:.55,clearcoatRoughness:.25,
+      sheen:.8,sheenColor:new T.Color(0x8FE3B4),envMapIntensity:1.05}));
+  body.castShadow=true;g.add(body);
+  /* 前襟金边 */
+  const trim=new T.Mesh(new T.BoxGeometry(.07,1.02,.06),goldM);
+  trim.position.set(0,-.05,.37);trim.rotation.x=-.06;g.add(trim);
+  /* 皮腰带 + 金扣 */
+  const belt=new T.Mesh(new T.TorusGeometry(.385,.06,12,40),leatherM);
+  belt.rotation.x=Math.PI/2;belt.position.y=-.08;g.add(belt);
+  const buckle=new T.Mesh(new T.BoxGeometry(.16,.14,.07),goldM);
+  buckle.position.set(0,-.08,.39);g.add(buckle);
+
+  /* 披风（肩上的紫色短披，学院配色） */
+  const capeM=new T.MeshPhysicalMaterial({color:0x6C4AB6,roughness:.45,clearcoat:.5,
+    sheen:1,sheenColor:new T.Color(0xB9A4FF),side:T.DoubleSide});
+  const cprof=[[.3,.46],[.46,.28],[.56,0],[.6,-.3],[.58,-.46]].map(p=>new T.Vector2(p[0],p[1]));
+  const cape=new T.Mesh(new T.LatheGeometry(cprof,48,Math.PI*.28,Math.PI*1.44),capeM);
+  cape.castShadow=true;g.add(cape);
+  const clasp=new T.Mesh(new T.SphereGeometry(.075,18,14),goldM);
+  clasp.position.set(.23,.44,.16);g.add(clasp);
+  const clasp2=clasp.clone();clasp2.position.set(-.23,.44,.16);g.add(clasp2);
+
+  /* 肩膀 + 手臂 + 手 */
+  [-1,1].forEach(s=>{
+    const sh=new T.Mesh(new T.SphereGeometry(.16,20,16),body.material);
+    sh.position.set(s*.42,.34,0);g.add(sh);
+    const arm=new T.Mesh(new T.CylinderGeometry(.115,.1,.92,18),skinM);
+    arm.position.set(s*.5,-.12,.04);arm.rotation.z=s*.18;arm.castShadow=true;g.add(arm);
+    const glove=new T.Mesh(new T.CylinderGeometry(.115,.125,.22,18),leatherM);
+    glove.position.set(s*.56,-.5,.05);glove.rotation.z=s*.18;g.add(glove);
+    const hand=new T.Mesh(new T.SphereGeometry(.135,20,16),skinM);
+    hand.position.set(s*.6,-.66,.06);g.add(hand);
+  });
+
+  /* 脖子 + 头 */
+  const neck=new T.Mesh(new T.CylinderGeometry(.15,.17,.16,18),skinM);
+  neck.position.y=.55;g.add(neck);
+  const head=new T.Mesh(new T.SphereGeometry(.44,40,32),skinM);
+  head.position.set(0,.98,0);head.scale.set(1,1.06,.98);head.castShadow=true;g.add(head);
+  /* 精灵耳 */
+  [-1,1].forEach(s=>{
+    const ear=new T.Mesh(new T.ConeGeometry(.09,.3,12),skinM);
+    ear.position.set(s*.42,1.03,-.02);ear.rotation.z=-s*.55;ear.rotation.x=-.2;g.add(ear);
+  });
+  /* 金发：后脑发盖 + 斜刘海 + 两侧鬓发 */
+  const hairM=new T.MeshPhysicalMaterial({color:0xF0C463,roughness:.45,clearcoat:.6,
+    sheen:1,sheenColor:new T.Color(0xFFF0B8)});
+  const cap=new T.Mesh(new T.SphereGeometry(.458,36,26,0,Math.PI*2,0,Math.PI*.52),hairM);
+  cap.position.set(0,.98,-.02);cap.scale.set(1.03,1.1,1.03);g.add(cap);
+  const back=new T.Mesh(new T.SphereGeometry(.42,28,22),hairM);
+  back.position.set(0,.96,-.14);back.scale.set(1,1.05,.85);g.add(back);
+  /* 斜向刘海：几片错落的薄片，往右后方扫 */
+  [[-.3,1.24,.3,.5,-.5],[-.06,1.3,.34,.7,-.25],[.2,1.28,.32,.6,.0],[.36,1.2,.24,.45,.3]]
+    .forEach(p=>{
+      const b=new T.Mesh(new T.SphereGeometry(.15,16,12),hairM);
+      b.position.set(p[0],p[1],p[2]);b.scale.set(1.5,.55,.75);b.rotation.z=p[4];g.add(b);
+    });
+  [-1,1].forEach(s=>{
+    const side=new T.Mesh(new T.ConeGeometry(.1,.42,12),hairM);
+    side.position.set(s*.36,.96,.16);side.rotation.z=s*.14;side.rotation.x=-.25;g.add(side);
+  });
+
+  /* 五官：蓝眼 + 眉毛 + 淡笑 */
+  const whiteM=new T.MeshPhysicalMaterial({color:0xFFFFFF,roughness:.2,clearcoat:1});
+  const irisM=new T.MeshPhysicalMaterial({color:0x2F7FE0,roughness:.12,clearcoat:1});
+  const darkM=new T.MeshPhysicalMaterial({color:0x2A2340,roughness:.3});
+  [-.165,.165].forEach(x=>{
+    const w=new T.Mesh(new T.SphereGeometry(.082,22,18),whiteM);
+    w.position.set(x,1.0,.37);w.scale.set(1,.92,.55);g.add(w);
+    const ir=new T.Mesh(new T.SphereGeometry(.05,20,16),irisM);
+    ir.position.set(x,.995,.42);ir.scale.set(.95,1.05,.55);g.add(ir);
+    const pu=new T.Mesh(new T.SphereGeometry(.024,14,12),darkM);
+    pu.position.set(x,.995,.45);g.add(pu);
+    const hl=new T.Mesh(new T.SphereGeometry(.018,12,10),new T.MeshBasicMaterial({color:0xffffff}));
+    hl.position.set(x-.022,1.02,.46);g.add(hl);
+    const br=new T.Mesh(new T.BoxGeometry(.15,.028,.03),hairM);
+    br.position.set(x,1.1,.4);br.rotation.z=x<0?.12:-.12;g.add(br);
+  });
+  const nose=new T.Mesh(new T.SphereGeometry(.045,14,12),skinM);
+  nose.position.set(0,.94,.44);nose.scale.set(.9,.8,1);g.add(nose);
+  const sm=new T.Mesh(new T.TorusGeometry(.085,.017,10,32,Math.PI),darkM);
+  sm.position.set(0,.85,.4);sm.rotation.z=Math.PI;g.add(sm);
+
+  return {group:g,body:body,head:head,cape:cape};
 };
 
 /* ===========================================================
    商店 3D 展示台
    =========================================================== */
 (function(){
-  let T=null,R=null,scene,cam,root,eggy,body,raf=null,clock=null;
+  let T=null,R=null,scene,cam,root,bob,eggy,body,cape,raf=null,clock=null;
   let slotGroups={},updaters=[],dragging=false,lastX=0,rotY=.3,spinV=.0018;
   const api=window.eggy3d={ready:false,init:init,refresh:refresh};
 
@@ -2489,7 +3170,7 @@ window.makeEggyBase=function(T){
         build();api.ready=true;refresh();
         document.getElementById("eggyFb").classList.remove("on");
         const h=document.getElementById("stage3dHint");
-        if(h)h.textContent="🖐 拖动可旋转蛋仔";
+        if(h)h.textContent="🖐 拖动可旋转小魔法师";
       }catch(e){api.failed=true;api.err=(e&&e.message)||String(e);console.warn("3D 展示台失败",e);
         const h=document.getElementById("stage3dHint");
         if(h)h.textContent="⚠️ 3D 出错："+api.err;}
@@ -2519,6 +3200,36 @@ window.makeEggyBase=function(T){
       opacity:op==null?.85:op,depthWrite:false,blending:T.AdditiveBlending}));
     s.scale.set(size,size,1);return s;
   }
+
+  /* ---------- 挂件位置校正表 ----------
+     FIT：每个 3D 礼物相对挂点的偏移和缩放（按人物真实尺寸调出来的）
+     SPRITE_FIT：emoji 立牌按槽位统一校正 */
+  const FIT={
+    /* 帽子：帽圈压在头发上，整体缩小到头围大小 */
+    h5:{s:.72},        h6:{y:.02,s:.72},   h7:{y:.05,s:.75},
+    /* 脸饰：模型已按头围重做，不用再缩放 */
+    f3:{},             f4:{},
+    /* 手持：让握点落在手掌上，剑柄不穿地 */
+    d1:{y:.16,s:.8},   d2:{y:.18,s:.95},   d3:{y:.38},
+    d5:{y:.4,s:.95},   d6:{y:.5,s:1.15},
+    /* 背饰 */
+    k1:{y:.12,s:.75},  k2:{y:-.02,s:.85},  k3:{y:-.18},  k4:{y:.12,s:.8},
+    /* 光环 */
+    a1:{s:.92},        a2:{s:.92},         a3:{s:.95},
+    /* 坐骑：踩在上面而不是悬空 */
+    r1:{y:-.45},       r2:{},              r3:{y:.02},
+    /* 宠物 */
+    p4:{y:.25},        p5:{y:.3},          p6:{y:.25}
+  };
+  const SPRITE_FIT={
+    hat:{y:.3,s:.8},                 /* 帽檐正好压在头顶 */
+    face:{y:.05,z:.44,s:.72},        /* 眼镜贴在眼睛高度 */
+    hand:{y:.16,s:.8},
+    back:{y:.15,z:-.1,s:.95},
+    pet:{y:-.05,s:.95},
+    ride:{y:.1,s:1},
+    aura:{s:1.4}
+  };
 
   /* ---------- 高阶礼物 3D 模型库 ---------- */
   const BUILD={
@@ -2567,30 +3278,34 @@ window.makeEggyBase=function(T){
         st.forEach((s,i)=>{const a=-t*1.6+i/10*Math.PI*2;
           s.position.set(Math.cos(a)*.75,.18+Math.sin(t*3+i)*.25,Math.sin(a)*.75);
           s.material.opacity=.35+.6*Math.abs(Math.sin(t*4+i));});}};},
-    /* 魔法护目镜 */
+    /* 魔法护目镜：按头围重做，皮带水平环住脑袋，镜片正好落在两只眼睛上 */
     f3(){const g=new T.Group();
-      const strap=new T.Mesh(new T.TorusGeometry(.8,.05,10,40),mat({color:0x4A3B77}));
-      strap.rotation.y=Math.PI/2;strap.scale.set(1,.85,1);g.add(strap);
-      [-.33,.33].forEach(x=>{
-        const l=new T.Mesh(new T.CylinderGeometry(.24,.24,.1,24),
-          mat({color:0x9AD9FF,transmission:.7,thickness:.3,transparent:true,opacity:.85,
-            emissive:0x1E6FA8,emissiveIntensity:.35}));
-        l.rotation.x=Math.PI/2;l.position.set(x,0,.02);g.add(l);
-        const rim=new T.Mesh(new T.TorusGeometry(.25,.035,10,28),mat({color:0xFFC93C,metalness:.7}));
-        rim.position.set(x,0,.04);g.add(rim);});
+      const strap=new T.Mesh(new T.TorusGeometry(.455,.038,10,44),mat({color:0x4A3B77}));
+      strap.rotation.x=Math.PI/2;strap.scale.z=.94;g.add(strap);
+      const lensM=mat({color:0x9AD9FF,transmission:.7,thickness:.3,transparent:true,opacity:.85,
+        emissive:0x1E6FA8,emissiveIntensity:.35});
+      [-.17,.17].forEach(x=>{
+        const l=new T.Mesh(new T.CylinderGeometry(.135,.135,.07,24),lensM);
+        l.rotation.x=Math.PI/2;l.position.set(x,0,.4);g.add(l);
+        const rim=new T.Mesh(new T.TorusGeometry(.14,.028,10,28),
+          mat({color:0xFFC93C,metalness:.7}));
+        rim.position.set(x,0,.43);g.add(rim);});
+      const bridge=new T.Mesh(new T.BoxGeometry(.1,.05,.05),mat({color:0xFFC93C,metalness:.7}));
+      bridge.position.set(0,0,.42);g.add(bridge);
       return {obj:g,update:t=>{}};},
-    /* 能量目镜 */
+    /* 元素魔瞳：贴在脸上的一条发光目镜 */
     f4(){const g=new T.Group();
-      const bar=new T.Mesh(new T.BoxGeometry(1,.2,.12),mat({color:0x23264F,metalness:.6,roughness:.2}));
-      g.add(bar);
-      const led=new T.Mesh(new T.BoxGeometry(.86,.07,.04),glowMat(0x00E5FF));
-      led.position.z=.07;g.add(led);
-      const sideL=new T.Mesh(new T.BoxGeometry(.12,.12,.5),mat({color:0x23264F}));
-      sideL.position.set(-.5,0,-.22);g.add(sideL);
-      const sideR=sideL.clone();sideR.position.x=.5;g.add(sideR);
-      const gl=puff(0x00E5FF,.9,.45);gl.position.z=.12;g.add(gl);
+      const bar=new T.Mesh(new T.BoxGeometry(.72,.17,.12),
+        mat({color:0x23264F,metalness:.6,roughness:.2}));
+      bar.position.z=.36;g.add(bar);
+      const led=new T.Mesh(new T.BoxGeometry(.6,.06,.04),glowMat(0x9B5DE5));
+      led.position.z=.43;g.add(led);
+      [-.36,.36].forEach(x=>{
+        const side=new T.Mesh(new T.BoxGeometry(.1,.1,.44),mat({color:0x23264F}));
+        side.position.set(x,0,.16);g.add(side);});
+      const gl=puff(0xC6A2FF,.8,.45);gl.position.z=.47;g.add(gl);
       return {obj:g,update:t=>{led.material.opacity=.55+.45*Math.abs(Math.sin(t*3));
-        gl.scale.setScalar(.8+Math.sin(t*3)*.18);}};},
+        gl.scale.setScalar(.75+Math.sin(t*3)*.16);}};},
     /* 魔法棒 */
     d2(){const g=new T.Group();
       const rod=new T.Mesh(new T.CylinderGeometry(.045,.055,1.1,14),mat({color:0xF5F1FF}));
@@ -2682,29 +3397,31 @@ window.makeEggyBase=function(T){
           p.array[i*3+2]=Math.sin(t*2.2+y*2.2+x*1.4)*.13*(1-(y+.95)/1.9)-.12;
         }
         p.needsUpdate=true;geo.computeVertexNormals();}};},
-    /* 喷射背包 */
+    /* 飞天扫帚 */
     k3(){const g=new T.Group();
-      [-.34,.34].forEach(x=>{
-        const tank=new T.Mesh(new T.CapsuleGeometry?new T.CapsuleGeometry(.19,.5,8,16)
-          :new T.CylinderGeometry(.19,.19,.7,18),mat({color:0xE8EEF7,metalness:.7,roughness:.2}));
-        tank.position.set(x,.1,0);g.add(tank);
-        const noz=new T.Mesh(new T.CylinderGeometry(.13,.2,.2,16),mat({color:0x3B3B52,metalness:.8}));
-        noz.position.set(x,-.35,0);g.add(noz);});
-      const flames=[],smokes=[];
-      [-.34,.34].forEach(x=>{
-        for(let i=0;i<3;i++){
-          const f=new T.Mesh(new T.ConeGeometry(.15-i*.03,.5,12),
-            new T.MeshBasicMaterial({color:[0xFFFFFF,0xFFD166,0xFF7A1A][i],transparent:true,
-              opacity:.85,blending:T.AdditiveBlending,depthWrite:false}));
-          f.position.set(x,-.72-i*.06,0);f.rotation.x=Math.PI;f.userData={i,x};g.add(f);flames.push(f);}
-        for(let i=0;i<4;i++){const s=puff(0xFFE0B0,.5,.4);s.userData={x,ph:i*.6};g.add(s);smokes.push(s);}
-      });
+      const woodM=mat({color:0x9B6B3A,roughness:.6,clearcoat:.35});
+      const stick=new T.Mesh(new T.CylinderGeometry(.075,.055,2.3,16),woodM);
+      stick.rotation.z=Math.PI/2;g.add(stick);
+      const knob=new T.Mesh(new T.SphereGeometry(.1,18,14),woodM);
+      knob.position.x=-1.16;g.add(knob);
+      const band=new T.Mesh(new T.TorusGeometry(.1,.028,8,22),gold());
+      band.position.x=.92;band.rotation.y=Math.PI/2;g.add(band);
+      const brM=mat({color:0xE0B25E,roughness:.75,clearcoat:.2});
+      const bristles=[];
+      for(let i=0;i<14;i++){
+        const b=new T.Mesh(new T.ConeGeometry(.05,.85,8),brM);
+        const a=i/14*Math.PI*2,rr=.02+(i%3)*.05;
+        b.position.set(1.48,Math.cos(a)*rr,Math.sin(a)*rr);
+        b.rotation.z=-Math.PI/2;b.rotation.x=Math.sin(a)*.18;
+        b.userData={ph:i*.5};g.add(b);bristles.push(b);
+      }
+      const sp=[];for(let i=0;i<10;i++){const s=puff(0xFFE9A3,.34,.8);g.add(s);sp.push(s);}
+      g.rotation.z=-.5;g.rotation.y=.35;g.scale.setScalar(.82);
       return {obj:g,update:t=>{
-        flames.forEach(f=>{const k=.8+Math.abs(Math.sin(t*10+f.userData.i))*.6;
-          f.scale.set(1,k,1);});
-        smokes.forEach(s=>{const k=((t*1.1+s.userData.ph)%1.6);
-          s.position.set(s.userData.x+Math.sin(t*2+s.userData.ph)*.12,-1-k,0);
-          s.scale.setScalar(.45+k*.6);s.material.opacity=Math.max(0,.45-k*.3);});}};},
+        bristles.forEach(b=>{b.rotation.x=Math.sin(t*4+b.userData.ph)*.16;});
+        sp.forEach((s,i)=>{const k=((t*1.3+i*.3)%1.5);
+          s.position.set(1.9+k*1.1,Math.sin(t*3+i)*.14,Math.cos(t*2.4+i)*.14);
+          s.scale.setScalar(.36+k*.35);s.material.opacity=Math.max(0,.8-k*.6);});}};},
     /* 星环光轮 */
     a1(){const g=new T.Group();
       const r1=new T.Mesh(new T.TorusGeometry(1.75,.055,14,80),
@@ -2793,22 +3510,22 @@ window.makeEggyBase=function(T){
     p4(){return dragon(0x6FE3B0,0x2BBF84);},
     /* 炎龙宝宝 */
     p6(){const d=dragon(0xFF7A45,0xC62E12,true);return d;},
-    /* 机械小蛋 */
+    /* 机械魔偶 */
     p5(){const g=new T.Group();
       const b=new T.Mesh(new T.SphereGeometry(.42,28,24),
         mat({color:0xD8E2EF,metalness:.9,roughness:.18,envMapIntensity:1.6}));
-      b.scale.y=1.2;b.castShadow=true;g.add(b);
-      const visor=new T.Mesh(new T.BoxGeometry(.4,.13,.08),glowMat(0x00E5FF));
+      b.scale.y=1.05;b.castShadow=true;g.add(b);
+      const visor=new T.Mesh(new T.BoxGeometry(.4,.13,.08),glowMat(0x9B5DE5));
       visor.position.set(0,.08,.38);g.add(visor);
       const ant=new T.Mesh(new T.CylinderGeometry(.02,.02,.3,8),mat({color:0x888FA6,metalness:.8}));
-      ant.position.y=.62;g.add(ant);
-      const tip=new T.Mesh(new T.SphereGeometry(.07,14,14),glowMat(0xFF4D6D));
-      tip.position.y=.79;g.add(tip);
+      ant.position.y=.56;g.add(ant);
+      const tip=new T.Mesh(new T.OctahedronGeometry(.09),glowMat(0xFFE9A3));
+      tip.position.y=.74;g.add(tip);
       [-.42,.42].forEach(x=>{const w=new T.Mesh(new T.BoxGeometry(.12,.26,.1),
         mat({color:0x9AA6BF,metalness:.8}));w.position.set(x,-.05,0);g.add(w);});
-      const jet=puff(0x4CC9F0,.8,.6);jet.position.y=-.6;g.add(jet);
+      const jet=puff(0x9B5DE5,.8,.6);jet.position.y=-.56;g.add(jet);
       return {obj:g,update:t=>{g.position.y=Math.sin(t*2.2)*.12;g.rotation.y=Math.sin(t*.8)*.5;
-        visor.material.opacity=.6+.4*Math.abs(Math.sin(t*4));
+        tip.rotation.y=t*2;visor.material.opacity=.6+.4*Math.abs(Math.sin(t*4));
         jet.scale.setScalar(.7+Math.sin(t*6)*.2);}};}
   };
   /* 翅膀 / 龙 两个共用构造器 */
@@ -2914,18 +3631,25 @@ window.makeEggyBase=function(T){
       new T.MeshBasicMaterial({color:0xFFD9A8}));
     ring.rotation.x=Math.PI/2;ring.position.y=-1.62;scene.add(ring);
 
-    /* 蛋仔 + 各挂点 */
+    /* 少年魔法师 + 各挂点
+       头上/脸上/手上/背上的挂件都放进 bob 里，跟着人物一起上下浮动，不会脱开；
+       坐骑和宠物放在 root 上，保持贴地不抖。 */
     root=new T.Group();scene.add(root);
+    bob=new T.Group();root.add(bob);
     const base=window.makeEggyBase(T);
-    eggy=base.group;body=base.body;root.add(eggy);
-    const anchor=(x,y,z)=>{const a=new T.Group();a.position.set(x,y,z);root.add(a);return a;};
+    eggy=base.group;body=base.body;cape=base.cape;bob.add(eggy);
+    const anchor=(x,y,z,p)=>{const a=new T.Group();a.position.set(x,y,z);(p||bob).add(a);return a;};
     slotGroups={
-      hat:anchor(0,1.36,0), face:anchor(0,.16,.9), hand:anchor(1.18,-.35,.35),
-      back:anchor(0,.25,-.75), aura:anchor(0,-.1,0), ride:anchor(0,-1.6,0),
-      pet:anchor(-1.85,-1,.3), badge:anchor(-.5,-.55,.82)
+      hat:anchor(0,1.30,0),          /* 帽圈高度（压在头发上）*/
+      face:anchor(0,.98,0),          /* 头的球心，环绕类的眼镜才能套正 */
+      hand:anchor(.62,-.5,.12),      /* 右手掌位置 */
+      back:anchor(0,.40,-.36),
+      aura:anchor(0,-.05,0),
+      badge:anchor(-.17,.13,.37),
+      ride:anchor(0,-1.15,0,root),
+      pet:anchor(-1.55,-1,.25,root)
     };
-    slotGroups.hand.rotation.z=-.35;
-    slotGroups.face.rotation.x=.05;
+    slotGroups.hand.rotation.z=-.12;   /* 手持物微微外倾 */
 
     /* 拖动旋转 */
     const down=e=>{dragging=true;lastX=(e.touches?e.touches[0]:e).clientX;};
@@ -2957,28 +3681,39 @@ window.makeEggyBase=function(T){
       if(k==="badge"){
         const m=id.match(/^b(\d)$/);if(!m)return;
         const a=ATTRS[+m[1]];
+        const bg=new T.Group();bg.scale.setScalar(.8);grp.add(bg);
         const disc=new T.Mesh(new T.CylinderGeometry(.22,.22,.05,28),
           mat({color:new T.Color(a.c2),metalness:.7,roughness:.2,envMapIntensity:1.5}));
-        disc.rotation.x=Math.PI/2;grp.add(disc);
-        const rim=new T.Mesh(new T.TorusGeometry(.23,.03,10,28),gold());grp.add(rim);
-        const ic=emojiSprite(a.ic,.3);ic.position.z=.06;grp.add(ic);
-        updaters.push(t=>{grp.rotation.z=Math.sin(t*1.5)*.15;});
+        disc.rotation.x=Math.PI/2;bg.add(disc);
+        const rim=new T.Mesh(new T.TorusGeometry(.23,.03,10,28),gold());bg.add(rim);
+        const ic=emojiSprite(a.ic,.3);ic.position.z=.06;bg.add(ic);
+        updaters.push(t=>{grp.rotation.z=Math.sin(t*1.5)*.12;});
         return;
       }
       const it=ITEMS.find(x=>x.id===id);
       if(!it||it.slot!==k)return;
       if(it.slot==="theme")return;
+      /* 统一用一个 holder 做位置/缩放校正：模型自己的 update 会改 obj.position，
+         所以偏移只能加在外层，不然会被动画覆盖掉 */
+      const f=FIT[id]||SPRITE_FIT[k]||{};
+      const holder=new T.Group();
+      holder.position.set(f.x||0,f.y||0,f.z||0);
+      if(f.s)holder.scale.setScalar(f.s);
+      if(f.rz)holder.rotation.z=f.rz;
+      grp.add(holder);
       if(BUILD[id]){                       /* 高阶：真 3D 模型 */
-        const r=BUILD[id]();grp.add(r.obj);
+        const r=BUILD[id]();holder.add(r.obj);
         if(r.update)updaters.push(r.update);
       }else{                               /* 平价：3D 立牌 */
-        const s=emojiSprite(it.ic,k==="pet"?1:.95);grp.add(s);
-        updaters.push(t=>{s.position.y=Math.sin(t*2+1)*.06;});
+        const s=emojiSprite(it.ic,1);holder.add(s);
+        updaters.push(t=>{s.position.y=Math.sin(t*2+1)*.05;});
       }
     });
-    /* 坐骑时蛋仔抬高一点 */
+    /* 披风类背饰会和自带披风打架，装上就把自带的收起来 */
+    if(cape)cape.visible=((S.equip||{}).back!=="k2");
+    /* 坐骑时人物抬高一点 */
     const hasRide=!!(S.equip||{}).ride;
-    eggy.position.y=hasRide?.45:0;
+    bob.position.y=hasRide?.45:0;
     slotGroups.pet.position.y=hasRide?-.6:-1;
   }
 
@@ -2994,21 +3729,21 @@ window.makeEggyBase=function(T){
     rotY+=spinV*60*0.016;
     root.rotation.y=rotY;
     const hasRide=!!(S.equip||{}).ride;
-    eggy.position.y=(hasRide?.45:0)+Math.sin(t*1.7)*.07;
-    eggy.rotation.z=Math.sin(t*1.25)*.04;
-    body.scale.set(1+Math.sin(t*1.7)*.02,1-Math.sin(t*1.7)*.025,1+Math.sin(t*1.7)*.02);
+    bob.position.y=(hasRide?.45:0)+Math.sin(t*1.7)*.06;
+    bob.rotation.z=Math.sin(t*1.25)*.022;
+    body.scale.set(1+Math.sin(t*1.7)*.018,1-Math.sin(t*1.7)*.008,1+Math.sin(t*1.7)*.018);
     updaters.forEach(f=>{try{f(t);}catch(e){}});
     R.render(scene,cam);
   }
 
-  /* 页面一加载就把 3D 蛋仔准备好，进商店时直接就是立体的 */
+  /* 页面一加载就把 3D 小魔法师准备好，进商店时直接就是立体的 */
   if(document.readyState==="complete")setTimeout(init,300);
   else addEventListener("load",()=>setTimeout(init,300));
 })();
 </script>
 
 <!-- ===========================================================
-     开机动画：three.js 3D 蛋仔魔法学院
+     开机动画：three.js 3D 魔法单词学院
      =========================================================== -->
 <script>
 (function(){
@@ -3039,7 +3774,7 @@ window.makeEggyBase=function(T){
   function fallback(){
     const box=$s("#spFallback");box.classList.add("on");
     let html='<div style="position:relative;width:320px;height:320px;display:flex;align-items:center;justify-content:center">';
-    html+='<div class="fb-egg">'+(typeof eggyHTML==="function"?eggyHTML():"<div style='font-size:120px'>🥚</div>")+'</div>';
+    html+='<div class="fb-egg">'+(typeof eggyHTML==="function"?eggyHTML():"<div style='font-size:120px'>🧙</div>")+'</div>';
     "ABCDEFGH".split("").forEach((L,i)=>{
       html+='<div class="fb-letter" style="animation-delay:'+(-i*0.75)+'s">'+L+'</div>';
     });
@@ -3198,7 +3933,7 @@ window.makeEggyBase=function(T){
       sparks.push(s);scene.add(s);
     }
 
-    /* ---- 蛋仔本体（共享模型） ---- */
+    /* ---- 小魔法师本体（共享模型） ---- */
     const base=window.makeEggyBase(T);
     const eggy=base.group,body=base.body;scene.add(eggy);
     /* 魔法帽 */
@@ -3311,13 +4046,13 @@ window.makeEggyBase=function(T){
       camera.position.y+= (-my*.4+ .75 - camera.position.y)*.03;
       camera.lookAt(0,.2,0);
 
-      /* 蛋仔弹入 + 呼吸 */
+      /* 小魔法师弹入 + 呼吸 */
       const ep=Math.min(1,Math.max(0,(t-.15)/.9));
       eggy.scale.setScalar(Math.max(.001,backOut(ep)));
       eggy.position.y=Math.sin(t*1.7)*.11;
       eggy.rotation.y=Math.sin(t*.55)*.26;
       eggy.rotation.z=Math.sin(t*1.25)*.045;
-      body.scale.set(1+Math.sin(t*1.7)*.02,1-Math.sin(t*1.7)*.025,1+Math.sin(t*1.7)*.02);
+      body.scale.set(1+Math.sin(t*1.7)*.018,1-Math.sin(t*1.7)*.008,1+Math.sin(t*1.7)*.018);
       hat.rotation.z=-.16+Math.sin(t*1.5)*.06;
       star.rotation.y=t*2.2;star.rotation.x=t*1.4;
 
