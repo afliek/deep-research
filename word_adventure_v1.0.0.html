@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>魔法单词学院 · v1.1.0</title>
-<meta name="app-version" content="1.1.0">
+<title>魔法单词学院</title>
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -16,19 +15,19 @@
       media="print" onload="this.media='all'">
 <style>
 :root{
-  --pink:#BE5078; --yellow:#F3CE76; --green:#278768; --blue:#427CA6;
-  --purple:#7660B4; --orange:#A76913; --deep:#35334D;
-  --paper:#FFFDFA; --muted:#716D85; --line:#E9E3F1; --lilac:#F2EDF9;
-  --radius:24px; --shadow:0 8px 28px rgba(63,49,98,.07),0 2px 4px rgba(63,49,98,.04);
+  --pink:#FF6B9D; --yellow:#FFD166; --green:#06D6A0; --blue:#4CC9F0;
+  --purple:#9B5DE5; --orange:#FF9F1C; --deep:#2B2D6E;
+  --radius:26px; --shadow:0 8px 0 rgba(43,45,110,.18);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{
-  font-family:'PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:var(--deep);
+  font-family:"Comic Sans MS",'PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:var(--deep);
   background:
-    radial-gradient(ellipse at 5% 5%,#EEE7FA 0,transparent 48%),
-    radial-gradient(ellipse at 95% 65%,#FAEED7 0,transparent 42%),
-    #F8F6F2;
+    radial-gradient(circle at 12% 12%,#FFE9F3 0 18%,transparent 19%),
+    radial-gradient(circle at 88% 22%,#E4F7FF 0 16%,transparent 17%),
+    radial-gradient(circle at 20% 85%,#FFF6DC 0 20%,transparent 21%),
+    linear-gradient(170deg,#DFF3FF 0%,#F6ECFF 50%,#FFF0F6 100%);
   background-attachment:fixed;overflow-x:hidden;
 }
 body.t-rainbow{background:linear-gradient(170deg,#FFE0EC,#FFF3D6 35%,#DDF6E3 65%,#DCEEFF)!important;background-attachment:fixed!important}
@@ -76,62 +75,25 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 .tips{font-size:13px;opacity:.6;text-align:center;margin-top:10px}
 .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
-/* 五大区域的冒险路线，保持原有段号与解锁规则。 */
-.map-heading,.shop-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
-.eyebrow{color:var(--purple);font-size:11px;letter-spacing:2px;font-weight:700;margin:0 0 8px}
-.map-heading h2,.shop-heading h2{margin:0;font-size:27px;letter-spacing:1px}
-.section-note{color:var(--muted);font-size:13px;line-height:1.7;margin:8px 0 0}
-.map-progress{flex-shrink:0;padding:12px 16px;border-radius:18px;background:var(--lilac);font-size:12px;color:var(--muted);text-align:center}
-.map-progress b{font-size:25px;display:block;color:var(--purple);margin-bottom:3px}
-.attr-legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.attr-legend a{display:flex;align-items:center;gap:7px;padding:10px 13px;border:1px solid var(--line);border-radius:12px;
-  background:var(--paper);color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;min-height:44px}
-.attr-legend a i{width:8px;height:8px;border-radius:50%;background:var(--region);flex-shrink:0}
-.attr-legend a[aria-current]{background:var(--lilac);border-color:#B8A6DA;color:var(--purple)}
-.seg-grid{display:flex;flex-direction:column;gap:22px}
-.map-region{--region:#39866E;--region-bg:#ECF5EF;position:relative;background:var(--region-bg);border:1px solid #E8E6E0;
-  border-radius:24px;padding:22px;scroll-margin-top:150px;overflow:hidden}
-.map-region-head{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-.region-index{width:44px;height:44px;display:grid;place-items:center;background:#FFFFFFBA;border:1px solid #FFFFFF;
-  border-radius:15px;color:var(--region);font-size:18px;font-weight:800;flex-shrink:0}
-.map-region h3{margin:0 0 5px;font-size:19px;color:var(--region)}
-.map-region-head p{margin:0;font-size:12px;color:#666579;line-height:1.5}
-.region-count{margin-left:auto;font-size:12px;font-weight:700;color:var(--region);white-space:nowrap}
-.region-route{position:relative;min-height:240px;padding-top:24px}
-.route-line{position:absolute;left:0;top:24px;width:100%;height:128px;opacity:.3;pointer-events:none;overflow:visible}
-.route-line path{fill:none;stroke:var(--region);stroke-width:3;stroke-dasharray:5 7;vector-effect:non-scaling-stroke}
-.route-stops{position:relative;list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0;padding:0}
-.route-stop:nth-child(even){padding-top:64px}
-.seg{width:100%;position:relative;border:0;padding:0 2px;background:none;font-family:inherit;color:var(--deep);text-align:center;cursor:pointer}
-.seg .n{position:relative;display:grid;place-items:center;width:64px;height:64px;border:3px solid #fff;border-radius:50%;margin:0 auto 10px;
-  background:#FDFCF9;color:var(--region);font-size:24px;font-weight:800;box-shadow:0 4px 0 #00000013,0 5px 12px #00000008;transition:transform .15s}
-.seg:active .n{transform:translateY(3px)}
-.seg .tp{display:block;font-size:13px;font-weight:700;line-height:1.5;overflow-wrap:anywhere}
-.seg .c{display:block;font-size:11px;color:#747083;margin-top:2px}
-.seg .st{display:block;font-size:11px;min-height:20px;margin-top:5px;color:#75663F;font-weight:700}
-.seg.done .n{background:var(--region);color:#fff}
-.seg.done .n::after{content:'✓';position:absolute;right:-4px;bottom:-3px;border:2px solid #fff;border-radius:50%;background:#fff;color:var(--region);
-  width:20px;height:20px;font-size:12px;display:grid;place-items:center}
-.seg.cur .n{background:#F3CE76;color:#614714;box-shadow:0 0 0 5px #FFFFFFA6,0 5px 0 #BA9541}
-.seg.cur .st{color:#765012}
-.seg.lock .n,.seg.empty .n{background:#E5E4E8;color:#7D788A;box-shadow:0 3px 0 #D3D0D9}
-.seg.lock .tp,.seg.empty .tp{color:#777284}
-.seg .boss-note{display:block;font-size:10px;font-weight:700;color:var(--region);margin-top:3px}
-.region-reward{border-top:1px solid #0000000D;padding-top:12px;font-size:12px;color:var(--region);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-@media(max-width:600px){
-  .map-heading h2,.shop-heading h2{font-size:23px}.map-progress{padding:9px 11px}.map-progress b{font-size:21px}
-  .map-region{padding:16px 12px}.map-region h3{font-size:17px}.region-count{font-size:11px}
-  .region-route{padding:24px 0 16px;min-height:0}.route-stops{display:flex;flex-direction:column;gap:16px}
-  .route-stop{width:100%;min-height:76px}.route-stop:nth-child(even){padding-top:0}
-  .seg{display:grid;grid-template-columns:72px 1fr;grid-template-rows:auto auto auto;column-gap:14px;text-align:left;padding:8px 12px;
-    border:1px solid #FFFFFF;border-radius:20px;background:#FFFFFF91;width:calc(100% - 18px)}
-  .route-stop:nth-child(even) .seg{margin-left:18px}
-  .seg .n{grid-row:1/4;margin:0;width:60px;height:60px;align-self:center}.seg .tp{font-size:14px}
-  .seg .st{margin-top:2px;min-height:16px}.seg .boss-note{grid-column:2}
-  .route-line{display:none}
-  .region-route::before{content:'';position:absolute;top:45px;bottom:60px;left:53px;border-left:3px dashed var(--region);opacity:.28}
-  .attr-legend{gap:6px}.attr-legend a{padding:8px 10px;font-size:12px}
-}
+/* 地图 */
+.seg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:11px}
+.seg{position:relative;border-radius:20px;padding:10px 6px 8px;text-align:center;cursor:pointer;background:#fff;
+  border:4px solid #EFEAFB;box-shadow:0 5px 0 #E3DFF3;transition:transform .12s}
+.seg:active{transform:translateY(3px)}
+.seg .n{font-size:24px;font-weight:bold;line-height:1}
+.seg .tp{font-size:10px;font-weight:bold;opacity:.82;margin-top:3px;line-height:1.1;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seg .c{font-size:11px;opacity:.65;margin-top:2px}
+.seg .st{font-size:15px;margin-top:2px;min-height:18px}
+.seg .at{position:absolute;top:-8px;right:-6px;font-size:17px}
+.seg.done{background:linear-gradient(160deg,#D9FFF0,#B6F5DE);border-color:#8AE9C9;box-shadow:0 5px 0 #7FDCBC}
+.seg.cur{background:linear-gradient(160deg,var(--yellow),var(--orange));border-color:#fff;color:#fff;
+  box-shadow:0 5px 0 #E08A15;animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.seg.lock{opacity:.5;filter:grayscale(.4)}
+.seg.empty{opacity:.45}
+.attr-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px;font-size:13px;font-weight:bold}
+.attr-legend span{padding:4px 11px;border-radius:999px;color:#fff}
 
 /* 讲解 */
 .study{min-height:430px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;justify-content:center}
@@ -503,118 +465,6 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 @keyframes fbOrbit{from{transform:rotate(0) translateX(150px) rotate(0)}
   to{transform:rotate(360deg) translateX(150px) rotate(-360deg)}}
 
-/* v1.1.0：奶油白与浅紫的学院界面 */
-.wrap{max-width:1080px;padding-bottom:120px}
-.hud{margin:0 0 12px;padding:10px max(14px,calc((100% - 1052px)/2));background:#FFFDFAF2;box-shadow:0 3px 18px #4334600A;border-bottom:1px solid var(--line)}
-.hud-row{gap:8px}.chip{border:1px solid var(--line);box-shadow:none;padding:6px 11px;background:var(--paper)}
-.chip.fam{background:#F6EAF0;color:#8F4564;border-color:#EAD4E0}.chip.coin{background:#FCF1D9;color:#8E631A;border-color:#ECDDAD}
-.chip.spin{background:#EDF3F8;color:#3F7195;border-color:#D6E3EF}.chip.x2{animation:none;background:#F7EAC6;color:#805914}
-.bar{height:12px;border:0;background:#EDE8F3}.bar i{background:var(--purple);border-radius:999px}
-.energy b.on{background:#D9AC4A;box-shadow:none}
-.panel{padding:24px;background:var(--paper);border:1px solid var(--line);margin-bottom:20px}
-h2.title{font-size:21px;letter-spacing:.5px}
-.btn{background:var(--purple);border:1px solid #6C55AC;border-radius:16px;box-shadow:0 3px 0 #57428C;min-height:52px;line-height:1.5}
-.btn.green{background:#278768;border-color:#23785D;box-shadow:0 3px 0 #1B654C}
-.btn.pink{background:#B64F74;border-color:#A34467;box-shadow:0 3px 0 #87334F}
-.btn.ghost{background:#F7F4FB;border-color:var(--line);color:#675685;box-shadow:0 2px 0 #DED5EA}
-.btn:active{transform:translateY(2px);box-shadow:none}.btn.sm{border-radius:13px;min-height:44px}
-.btn:disabled{cursor:not-allowed;filter:none}
-button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8B71C5;outline-offset:4px}
-.tips,.hintline{opacity:1;color:var(--muted);line-height:1.7}.modal-card{border:1px solid var(--line);box-shadow:0 20px 70px #30244933}
-.seg-btns{flex-wrap:wrap;justify-content:flex-end}.seg-btns button{border:1px solid var(--line);min-height:42px}
-.seg-btns button.on{background:var(--purple)}
-.nav{background:#FFFDFAF5;border-top:1px solid var(--line);box-shadow:0 -4px 20px #43346008;gap:8px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
-.nav button{color:#756D87;max-width:140px;padding:8px 0;font-size:12px;min-height:56px}
-.nav button.on{color:#685098;background:#EEE7F8}.nav button .ic{font-size:21px;margin-bottom:3px}
-#spStart{background:var(--purple);border-color:#6C55AC}
-
-/* 学习时降低装饰强度，字形清晰、朗读对象明确。 */
-#v-learn>.panel{max-width:860px;margin-left:auto;margin-right:auto;padding:28px}
-.study,.quiz{gap:18px;width:100%;min-width:0}
-.study-card{max-width:700px;margin:auto;gap:16px}
-.study-top{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;flex-wrap:wrap}
-.sc-tag,.qtype,.qtype.warm{background:var(--lilac);color:#71559D;padding:7px 12px}
-.study-progress{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-.study-main{padding:22px 14px 18px;width:100%;border:2px solid transparent;border-radius:22px;transition:background .18s,border-color .18s}
-.sc-word,.word-big{font-family:Arial,'Helvetica Neue',sans-serif;font-size:clamp(32px,6vw,54px);letter-spacing:.5px;line-height:1.2;overflow-wrap:anywhere;max-width:100%}
-.sc-ph{font-family:'Segoe UI',Arial,sans-serif;font-size:18px;font-weight:400;color:#807395;line-height:1.7;margin-top:8px}
-.sc-zh{font-size:clamp(21px,4vw,28px);margin-top:9px;line-height:1.5}.zh-big{font-size:clamp(24px,4vw,34px);line-height:1.5}
-.study-listen{display:flex;align-items:center;justify-content:center;gap:13px;width:100%}
-#readStatus{color:var(--muted);font-size:13px;line-height:1.6;max-width:240px;text-align:left}
-.speaker{width:62px;height:62px;background:#EEE7F8;color:#685098;font-size:28px;border:1px solid #D9CBEF;box-shadow:0 3px 0 #D2C4E5;flex-shrink:0}
-.speaker:active{transform:translateY(2px)}
-.sc-sen{background:#F8F5EE;border:2px solid #EEE7DA;border-radius:20px;padding:18px 22px;max-width:100%;text-align:left;transition:background .18s,border-color .18s}
-.sc-label{font-size:11px;letter-spacing:2px;font-weight:700;color:#8D784D;margin-bottom:9px}
-.sc-sen .en{font-family:Arial,'Helvetica Neue',sans-serif;font-size:22px;line-height:1.6;color:#3E3B50;overflow-wrap:anywhere}
-.sc-sen .zh{font-size:15px;line-height:1.7;color:#797187;opacity:1;margin-top:8px}
-.study-main.is-speaking,.sc-sen.is-speaking{background:#F2ECFC;border-color:#B69ADC;box-shadow:0 0 0 3px #EEE5F8}
-.sc-tip{background:none;border-left:3px solid #DCCCEB;text-align:left;padding:6px 12px;max-width:100%;width:100%;border-radius:0;font-size:14px;line-height:1.7;color:#7A7088}
-.study-actions{padding-top:12px;width:100%;border-top:1px solid var(--line)}
-.dots{margin-top:4px}.dots i{width:7px;height:7px;background:#E3DDEC}.dots i.on{background:var(--purple);transform:none}
-.stage{gap:8px;flex-wrap:wrap;justify-content:center}.stage b{padding:7px 12px;font-size:12px;border-radius:10px;background:#F0EDF4;color:#776D89}
-.stage b.ok{background:#E9F3ED;color:#34765D}.stage b.now{background:#F7EAC8;color:#81611C}
-.opts{max-width:620px;gap:14px}.opt,.bopt{border:2px solid var(--line);box-shadow:0 3px 0 #E7E0EF;border-radius:17px;font-weight:600;line-height:1.45;overflow-wrap:anywhere}
-.opt.ok,.bopt.ok{background:#E8F4EC;border-color:#63A580;color:#276444;animation:answerSoft .25s ease}
-.opt.no,.bopt.no{background:#FBEEF0;border-color:#D9A3B0;color:#8E5062;animation:none}
-@keyframes answerSoft{from{opacity:.6}to{opacity:1}}
-.slot,.tile{font-family:Arial,sans-serif}.tile{background:#F7E6B2;color:#765624;border:1px solid #E5CD8F;box-shadow:0 3px 0 #CFB578}
-.slot{border:2px dashed #D5C5E9;background:#F6F2FB}.slot.filled{border-color:#63A580;background:#F4FAF5}
-.article{border:1px solid #EDE2C9;background:#FCF8EF;font-family:Arial,'Microsoft YaHei',sans-serif}
-body:has(#v-learn.on) .chip.x2{animation:none}
-
-/* 人物与商品分栏，装扮状态不用只靠颜色区分。 */
-.shop-layout{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:28px;align-items:start}
-.wardrobe-preview{min-width:0;position:sticky;top:136px}.wardrobe-catalog{min-width:0}
-.shop-wallet{background:#FBF0D6;border:1px solid #EBDAAE;border-radius:18px;padding:12px 18px;min-width:110px;color:#85611D;text-align:center;flex-shrink:0}
-.shop-wallet span{font-size:11px;display:block}.shop-wallet b{display:block;font-size:27px;margin-top:5px;font-variant-numeric:tabular-nums}
-#stage3d{max-width:none;height:380px;background:linear-gradient(180deg,#F1EBF8,#F9F5EE);box-shadow:inset 0 0 0 1px #E5DCEE;border-radius:24px;isolation:isolate}
-.stage-arch{position:absolute;inset:38px 14% 44px;border:1px solid #DAD0E5;border-radius:150px 150px 15px 15px;background:linear-gradient(180deg,#FFFEFA,#F0E8F4);pointer-events:none}
-.stage-arch::before,.stage-arch::after{content:'';position:absolute;top:42%;width:8px;height:8px;border:1px solid #C7AC71;transform:rotate(45deg)}
-.stage-arch::before{left:12%}.stage-arch::after{right:12%}
-.stage-caption{position:absolute;left:18px;top:17px;color:#8B7B9F;font-size:10px;letter-spacing:2px;pointer-events:none}
-#eggyCv,#eggyFb{z-index:1}#stage3dHint{z-index:2;white-space:nowrap;background:#FFFDFAE6;color:#7C6B94;max-width:94%;overflow:hidden;text-overflow:ellipsis}
-.outfit-caption{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px;font-size:15px}
-.outfit-caption span{font-size:12px;color:var(--muted)}
-.wardrobe-note{margin-top:18px;padding:13px 15px;background:#F5F1FA;border:1px solid var(--line);border-radius:15px;font-size:12px;color:#7D6B92;line-height:1.8}
-.shop-tabs{gap:7px;justify-content:flex-start;margin-bottom:18px}
-.shop-tabs button{padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:#F7F4FB;min-height:44px;color:#7C718D;font-size:13px}
-.shop-tabs button.on{background:var(--purple);border-color:var(--purple);color:#fff}
-.catalog-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}
-.catalog-heading h3{font-size:16px;margin:0}.catalog-heading>span{font-size:12px;color:var(--muted)}
-.goods{grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:12px}
-.good{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;padding:12px;border:1px solid var(--line);border-radius:18px;
-  background:#FFFDFB;font-family:inherit;color:var(--deep);box-shadow:0 3px 8px #43346006;position:relative}
-.good .gic{display:grid;place-items:center;background:#F5F1FA;width:66px;height:66px;border-radius:22px;font-size:37px;margin:6px 0;line-height:1}
-.good .gnm{font-size:13px;margin:0;line-height:1.5;min-height:20px}
-.good .gpr{font-size:12px;color:#967020;margin:1px 0 4px}
-.good .rar{position:static;transform:none;background:transparent;color:#93809E;padding:0;font-size:10px;min-height:14px}
-.good.r-rare,.good.r-epic,.good.r-legend{box-shadow:0 3px 8px #43346006;background:#FFFDFB;border-color:var(--line)}
-.good.r-rare .rar{background:none;color:#4F7FA9}.good.r-epic .rar{background:none;color:#8B5BB0}.good.r-legend .rar{background:none;color:#A37A26}
-.good.r-legend::after{display:none}.good.r-legend .gic{background:#FBF1DB}.good.r-rare .gic{background:#EDF3FA}
-.good .gstatus{align-self:flex-start;font-size:10px;color:#827889;background:#F1EDF5;border-radius:6px;padding:3px 6px}
-.good .gaction{display:block;background:#F0EAF9;color:#745898;font-size:11px;font-weight:700;border-radius:9px;padding:9px 4px;width:100%;margin-top:auto;line-height:1.5}
-.good.owned{border-color:#B6D3C2;background:#FCFEFC}.good.owned .gstatus{background:#E9F4EC;color:#398063}
-.good.on{border:2px solid #9B81C3;padding:11px;background:#F8F4FE;box-shadow:none}.good.on .gstatus{background:#E8DDF7;color:#705196}
-.good.on .gaction{background:var(--purple);color:#fff}.good.no{opacity:1}.good.no .gic{filter:saturate(.65)}.good.no .gaction{background:#F3F0F5;color:#81778B}
-@media(hover:hover){.btn:hover:not(:disabled){filter:brightness(1.06)}.good:hover{border-color:#B5A0D1}.seg:hover .n{transform:translateY(-2px)}}
-@media(max-width:820px){.shop-layout{grid-template-columns:1fr}.wardrobe-preview{position:static;max-width:520px;width:100%;margin:auto}#stage3d{height:340px}}
-@media(max-width:600px){
-  .wrap{padding:8px 10px 112px}.panel{padding:18px 14px}.hud{padding:9px 10px}.hud-row{gap:5px}.chip{padding:5px 8px;font-size:12px}.chip.fam,.chip.coin{font-size:15px}
-  #v-learn>.panel{padding:18px 14px}.study-main{padding:18px 8px 14px}.study-top{gap:8px}.sc-tag{font-size:11px}.sc-sen{padding:15px}.sc-sen .en{font-size:20px}
-  .opts{gap:10px}.opt{font-size:18px;padding:17px 8px}.study-actions{gap:8px}.study-actions .btn{padding:10px 14px}
-  .shop-heading{gap:10px}.shop-wallet{padding:10px 12px;min-width:92px}.shop-wallet b{font-size:23px}.shop-layout{gap:22px}
-  .goods{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.shop-tabs button{padding:9px 11px}#stage3d{height:320px}
-  .map-region-head{gap:9px}.region-index{width:34px;height:38px;font-size:15px}.region-count{white-space:normal;min-width:43px}
-}
-.release-footer{font-size:12px;text-align:center;color:#81728F;padding:20px 8px 0;line-height:1.8}
-.release-footer a,.release-info a{color:#745599;text-underline-offset:3px}
-.release-info{text-align:left;margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#F9F6FD}
-.release-info summary{cursor:pointer;font-size:13px;font-weight:700;color:#71568E;min-height:24px;line-height:1.8}
-.release-info p{font-size:12px;line-height:1.8;color:#786A87}
-body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-}
 </style>
 </head>
 <body>
@@ -655,11 +505,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
   <section class="view on" id="v-map">
     <div class="panel" id="dailyPanel"></div>
     <div class="panel">
-      <div class="map-heading">
-        <div><p class="eyebrow">你的魔法旅程</p><h2>学院冒险地图</h2><p class="section-note">走过五大区域，一步一步点亮你的魔法徽章。</p></div>
-        <div class="map-progress"><b id="mapDone">0 / 25</b>已通关</div>
-      </div>
-      <div class="attr-legend" id="legend" aria-label="跳转到冒险区域"></div>
+      <h2 class="title">🗺️ 魔法学院 25 段</h2>
+      <div class="attr-legend" id="legend"></div>
       <div class="seg-grid" id="segGrid"></div>
       <p class="tips">每 3 个字母 1 分 · 每关答对立刻加分 · 答错把这一轮的分退回去 · 已掌握的词不再计分</p>
     </div>
@@ -686,32 +533,19 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
 
   <!-- 商店 -->
   <section class="view" id="v-shop">
-    <div class="panel shop-panel">
-      <div class="shop-heading">
-        <div><p class="eyebrow">把努力穿在身上</p><h2>魔法衣帽间</h2><p class="section-note">挑选喜欢的装扮，成为独一无二的小魔法师。</p></div>
-        <div class="shop-wallet"><span>可用魔法币</span><b id="shopCoin">0</b></div>
-      </div>
-      <div class="shop-layout">
-        <div class="wardrobe-preview">
-          <div class="eggy-stage">
-            <div id="stage3d">
-              <div class="stage-arch" aria-hidden="true"></div>
-              <span class="stage-caption">学院装扮展示</span>
-              <canvas id="eggyCv" aria-label="可拖动旋转的小魔法师"></canvas>
-              <div id="eggyFb"></div>
-              <div id="stage3dHint">拖动可旋转小魔法师</div>
-            </div>
-          </div>
-          <div class="outfit-caption"><b>我的魔法装扮</b><span id="outfitCount">见习魔法师</span></div>
-          <p class="section-note">购买后立即穿上；点已拥有的装扮可装备，再点一次可卸下。</p>
-          <div class="wardrobe-note">徽章由通关获得，集齐后可免费佩戴。家庭积分不会被购物消耗。</div>
+    <div class="panel">
+      <h2 class="title">🛒 魔法商店</h2>
+      <div class="eggy-stage">
+        <div id="stage3d">
+          <canvas id="eggyCv"></canvas>
+          <div id="eggyFb"></div>
+          <div id="stage3dHint">🖐 拖动可旋转小魔法师</div>
         </div>
-        <div class="wardrobe-catalog">
-          <div class="shop-tabs" id="shopTabs" aria-label="装扮分类"></div>
-          <div class="catalog-heading"><h3 id="shopCategory">徽章</h3><span id="shopCount"></span></div>
-          <div class="goods" id="goods"></div>
-        </div>
+        <div style="font-weight:bold;font-size:14px">🪙 魔法币 <span id="shopCoin">0</span> · 点商品买 / 点已买的装备或卸下 · 🏅 徽章通关获得，免费佩戴</div>
       </div>
+      <div class="shop-tabs" id="shopTabs"></div>
+      <div class="goods" id="goods"></div>
+      <p class="tips">🏆 家庭积分只累计不消费，留给爸爸妈妈兑换现实奖励</p>
     </div>
   </section>
 
@@ -744,7 +578,6 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="errlist" id="topErr" style="max-height:none;margin-top:8px"></div>
     </div>
   </section>
-  <footer class="release-footer">魔法单词学院 <span data-app-version></span> · <a href="word_adventure_v1.0.0.html">打开旧版 v1.0.0</a></footer>
 </div>
 
 <!-- 结算 + 转盘 -->
@@ -802,13 +635,6 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         👨‍👩‍👧 家长模式（需要密码，可重置进度、调整积分）</div>
       <button class="btn sm ghost" id="paBtn" style="width:100%">🔐 进入家长模式</button>
     </div>
-    <details class="release-info">
-      <summary>版本与回退 · <span data-app-version></span></summary>
-      <p><b>v1.1.0 · 2026-09-23</b><br>冒险路线地图、统一配色、清晰学习卡与朗读高亮、魔法衣帽间。</p>
-      <p><a href="word_adventure_v1.0.0.html">打开 v1.0.0 旧版</a> · <a href="word_adventure_v1.0.0.html" download>下载旧版备份</a></p>
-      <p>这是网页版本回退，不是学习记录回滚。同一浏览器、同一网站地址下，两版共用学习进度；切换前请结束当前答题，避免同时打开两版学习。需要回滚学习记录，请使用上方「备份记录」。</p>
-      <p>版本规则：小修递增末位（1.1.1），较大改版递增中位（1.2.0），不兼容的大改递增首位（2.0.0）。每次交付前保留上一版，更新这里的版本记录。</p>
-    </details>
     <button class="btn ghost" id="setClose" style="width:100%;margin-top:9px">好啦</button>
     <p class="tips">单词用真人录音，句子用微软 AI 神经语音，都会自动选最好的通道</p>
   </div>
@@ -894,9 +720,6 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
 </nav>
 
 <script>
-/* 网页版本独立于存档格式版本，发布时同步更新标题与版本记录。 */
-const APP_VERSION=document.querySelector('meta[name="app-version"]').content;
-document.querySelectorAll('[data-app-version]').forEach(el=>el.textContent='v'+APP_VERSION);
 /* ===========================================================
    1. 词表（示例 40 个，填满第 1–5 段）
    =========================================================== */
@@ -1601,55 +1424,33 @@ const goView=n=>document.querySelector('.nav button[data-v="'+n+'"]').click();
    9. 地图（含星级）
    =========================================================== */
 function renderMap(){
-  const regions=[
-    {name:"微风花园",color:"#34765D",bg:"#EEF6EF",note:"跟着风，迈出冒险的第一步"},
-    {name:"暖焰山谷",color:"#AA5939",bg:"#FCF0E7",note:"点亮勇气，收集新的魔法"},
-    {name:"雷鸣云岛",color:"#86661B",bg:"#FAF5E4",note:"穿过云层，让知识闪闪发光"},
-    {name:"电光星港",color:"#3E70A0",bg:"#EDF3FA",note:"为你的魔法旅程充满能量"},
-    {name:"秘药森林",color:"#79559D",bg:"#F3EDF8",note:"发现最后的配方，成为学院大魔法师"}
-  ];
-  $("#mapDone").textContent=S.pieces.length+" / "+SEG_COUNT;
-  $("#legend").innerHTML=regions.map((r,i)=>'<a href="#region-'+i+'" style="--region:'+r.color+'"'+
-    (i===attrOf(S.curSeg)?' aria-current="location"':'')+'><i aria-hidden="true"></i>'+r.name+'</a>').join("");
+  $("#legend").innerHTML=ATTRS.map((a,i)=>'<span style="background:linear-gradient(135deg,'+a.c1+','+a.c2+')">'
+    +a.ic+' '+a.nm+' 第'+(i*5+1)+'-'+(i*5+5)+'段</span>').join("");
   const g=$("#segGrid");g.innerHTML="";
-  regions.forEach((r,bi)=>{
-    const got=S.pieces.filter(i=>attrOf(i)===bi).length;
-    const region=document.createElement("section");region.className="map-region";region.id="region-"+bi;
-    region.style.setProperty("--region",r.color);region.style.setProperty("--region-bg",r.bg);
-    region.setAttribute("aria-labelledby","region-title-"+bi);
-    region.innerHTML='<header class="map-region-head"><span class="region-index">0'+(bi+1)+'</span>'+
-      '<div><h3 id="region-title-'+bi+'">'+r.name+'</h3><p>'+r.note+'</p></div>'+
-      '<span class="region-count">'+got+' / 5 段</span></header>'+
-      '<div class="region-route"><svg class="route-line" viewBox="0 0 100 128" preserveAspectRatio="none" aria-hidden="true">'+
-      '<path d="M10 32 C20 32 20 96 30 96 S40 32 50 32 S60 96 70 96 S80 32 90 32"/></svg><ol class="route-stops"></ol></div>'+
-      '<footer class="region-reward"><span>区域奖励 · '+ATTRS[bi].nm+'</span><span>'+(got===5?'已集齐，可去商店佩戴':'每通关一段，点亮一块徽章')+'</span></footer>';
-    const stops=region.querySelector(".route-stops");
-    for(let i=bi*5;i<Math.min(bi*5+5,SEG_COUNT);i++){
-      const ws=segWords(i),has=ws.length>0,done=S.pieces.includes(i),locked=i>S.curSeg;
-      let cls="seg",st="可进入";
-      if(done){cls+=" done";st="已完成 · "+(S.stars[i]||1)+" 星";}
-      else if(i===S.curSeg){cls+=" cur";st="你在这里 · 继续";}
-      else if(locked){cls+=" lock";st="尚未解锁";}
-      if(!has){cls+=" empty";st="待补词表";}
-      const d=document.createElement("button");d.type="button";d.className=cls;d.dataset.seg=i;
-      d.setAttribute("aria-label","第 "+(i+1)+" 段，"+(has?segTopic(i)+"，":"")+st);
-      if(i===S.curSeg)d.setAttribute("aria-current","step");
-      if(locked||!has)d.setAttribute("aria-disabled","true");
-      d.innerHTML='<span class="n">'+(i+1)+'</span><span class="tp">'+(has?segTopic(i):"等待新单词")+'</span>'+
-        '<span class="c">'+(has?ws.length+" 个单词":"")+'</span><span class="st">'+st+'</span>'+
-        (needBoss(i)?'<span class="boss-note">'+(S.boss[i]?"守关挑战已完成":"含守关挑战")+'</span>':"");
-      d.onclick=()=>{
-        try{
-          if(!has){alert("第 "+(i+1)+" 段还没有单词，把词表发进来就解锁啦！");return;}
-          if(i>S.curSeg){alert("第 "+(S.curSeg+1)+" 段还没通关哦，先去完成它～");return;}
-          if(needBoss(i)&&!S.boss[i]&&(S.pieces.includes(i)||S.pendBoss===i)){startBoss(i);return;}
-          S.curSeg=i;save();startSegment(i);goView("learn");
-        }catch(e){alert("出错了："+(e&&e.message||e));console.error(e);}
-      };
-      const stop=document.createElement("li");stop.className="route-stop";stop.appendChild(d);stops.appendChild(stop);
-    }
-    g.appendChild(region);
-  });
+  for(let i=0;i<SEG_COUNT;i++){
+    const ws=segWords(i),has=ws.length>0,a=ATTRS[attrOf(i)];
+    let cls="seg",st="🔒";
+    if(S.pieces.includes(i)){cls+=" done";st="⭐".repeat(S.stars[i]||1);}
+    else if(i===S.curSeg){cls+=" cur";st="▶";}
+    else if(i>S.curSeg)cls+=" lock";
+    if(!has){cls+=" empty";st="➕";}
+    const d=document.createElement("div");d.className=cls;
+    const bossTag=needBoss(i)?('<div class="boss">'+(S.boss[i]?"✅":"👹")+'</div>'):"";
+    d.innerHTML=bossTag+'<div class="at">'+a.ic+'</div><div class="n">'+(i+1)+'</div>'
+      +'<div class="tp">'+(has?segTopic(i):"")+'</div><div class="c">'
+      +(has?ws.length+" 词":"待补词表")+'</div><div class="st">'+st+'</div>';
+    d.onclick=()=>{
+      try{
+        if(!has){alert("第 "+(i+1)+" 段还没有单词，把词表发进来就解锁啦！");return;}
+        if(i>S.curSeg){
+          alert("第 "+(S.curSeg+1)+" 段还没通关哦，先去完成它～");return;}
+        /* 已通关但 BOSS 没打赢 → 直接进 BOSS */
+        if(needBoss(i)&&!S.boss[i]&&(S.pieces.includes(i)||S.pendBoss===i)){startBoss(i);return;}
+        S.curSeg=i;save();startSegment(i);goView("learn");
+      }catch(e){alert("出错了："+(e&&e.message||e));console.error(e);}
+    };
+    g.appendChild(d);
+  }
 }
 function welcome(){
   $("#learnArea").innerHTML='<div class="study">'+eggyHTML("small")+
@@ -1799,29 +1600,26 @@ function startSegment(i,customWords){
 }
 function renderStudy(){
   const w=sess.words[studyIdx],n=sess.words.length;
-  $("#learnArea").innerHTML='<div class="study study-card">'+
-    '<div class="study-top"><div class="sc-tag">📖 讲解'+(w.topic?' · '+w.topic:'')+'</div>'+
-      '<div class="study-progress">第 '+(studyIdx+1)+' / '+n+' 张</div></div>'+
-    '<div class="study-main"><div class="sc-word" lang="en">'+w.en+'</div>'+
-      '<div class="sc-ph" lang="en">'+(w.ph||"")+'</div>'+
-      '<div class="sc-zh">'+w.zh+'</div></div>'+
-    '<div class="study-listen"><button class="speaker" id="sayAll" title="再听一次" aria-label="朗读单词和例句">🔊</button>'+
-      '<span id="readStatus" role="status" aria-live="polite">点喇叭再听一次</span></div>'+
-    '<div class="sc-sen"><div class="sc-label">例句</div><div class="en" lang="en">'+(w.sen||"")+'</div><div class="zh">'+(w.senZh||"")+'</div></div>'+
+  $("#learnArea").innerHTML='<div class="study">'+
+    '<div class="sc-tag">📖 讲解 '+(studyIdx+1)+' / '+n+(w.topic?' · '+w.topic:'')+'</div>'+
+    '<div class="sc-word">'+w.en+'</div>'+
+    '<div class="sc-ph">'+(w.ph||"")+'</div>'+
+    '<div class="sc-zh">'+w.zh+'</div>'+
+    '<button class="speaker" id="sayAll" title="再听一次">🔊</button>'+
+    '<div class="sc-sen"><div class="en">'+(w.sen||"")+'</div><div class="zh">'+(w.senZh||"")+'</div></div>'+
     (w.tip?'<div class="sc-tip">💡 '+w.tip+'</div>':'')+
     '<div class="dots">'+sess.words.map((_,i)=>'<i class="'+(i===studyIdx?"on":"")+'"></i>').join("")+'</div>'+
-    '<div class="row study-actions">'+
+    '<div class="row">'+
       (studyIdx>0?'<button class="btn ghost sm" id="prev">← 上一个</button>':'')+
       (studyIdx<n-1?'<button class="btn sm" id="next">下一个 →</button>'
                    :'<button class="btn green" id="toQuiz">全部讲完，开始闯关 🎯</button>')+
       '<button class="btn ghost sm" id="skip">跳过讲解</button></div></div>';
-  const card=$("#learnArea .study-card");
-  $("#sayAll").onclick=()=>sayCard(w,card);
+  $("#sayAll").onclick=()=>sayCard(w);
   if($("#prev"))$("#prev").onclick=()=>{studyIdx--;renderStudy();};
   if($("#next"))$("#next").onclick=()=>{studyIdx++;renderStudy();};
   if($("#toQuiz"))$("#toQuiz").onclick=startQuiz;
   $("#skip").onclick=startQuiz;
-  sayCard(w,card);            /* 进卡片就自动连读：单词 → 例句 */
+  sayCard(w);                 /* 进卡片就自动连读：单词 → 例句 */
   /* 预合成后面几张卡的例句，切卡零等待；第一张卡多备几句，开头也不会卡 */
   const ahead=studyIdx===0?4:2;
   preSyn(sess.words.slice(studyIdx+1,studyIdx+1+ahead));
@@ -2391,21 +2189,15 @@ function applyTheme(){
 function renderShop(){
   showEggyStage();
   $("#shopCoin").textContent=S.coins;
-  const slotNames={badge:"徽章",hat:"魔帽",face:"脸饰",hand:"法器",back:"背饰",aura:"光环",ride:"坐骑",pet:"魔宠",theme:"结界"};
-  $("#outfitCount").textContent="已装备 "+Object.values(S.equip).filter(Boolean).length+" 件";
-  $("#shopCategory").textContent=slotNames[shopTab];
-  $("#shopTabs").innerHTML=SLOTS.map(s=>'<button type="button" data-k="'+s.k+'" aria-pressed="'+(s.k===shopTab)+'" class="'+(s.k===shopTab?"on":"")+'">'+slotNames[s.k]+'</button>').join("");
+  $("#shopTabs").innerHTML=SLOTS.map(s=>'<button data-k="'+s.k+'" class="'+(s.k===shopTab?"on":"")+'">'+s.nm+'</button>').join("");
   document.querySelectorAll("#shopTabs button").forEach(b=>b.onclick=()=>{shopTab=b.dataset.k;renderShop();});
   if(shopTab==="badge"){        /* 徽章靠通关获得，不花钱 */
-    $("#shopCount").textContent=ATTRS.filter((_,i)=>badgeDone(i)).length+" / 5 已集齐";
     $("#goods").innerHTML=ATTRS.map((a,i)=>{
       const done=badgeDone(i),got=[0,1,2,3,4].filter(k=>S.pieces.includes(i*5+k)).length;
       const on=S.equip.badge==="b"+i;
-      return '<button type="button" class="good '+(on?"on":(done?"owned":""))+(done?"":" no")+'" data-bd="'+i+'" aria-pressed="'+on+'">'+
-        '<span class="gstatus">'+(on?"已装备":done?"已拥有":"待解锁")+'</span>'+
-        '<span class="gic" aria-hidden="true">'+a.ic+'</span><span class="gnm">'+a.nm+'</span>'+
-        '<span class="gpr">'+(done?"通关奖励 · 免费":got+" / 5 块徽章")+'</span>'+
-        '<span class="gaction">'+(on?"点击卸下":done?"点击佩戴":"查看解锁条件")+'</span></button>';
+      return '<div class="good '+(on?"on":(done?"owned":""))+(done?"":" no")+'" data-bd="'+i+'">'+
+        '<div class="gic">'+(done?a.ic:"🔒")+'</div><div class="gnm">'+a.nm+'</div>'+
+        '<div class="gpr">'+(on?"✔ 已佩戴":(done?"点击佩戴":got+"/5 块"))+'</div></div>';
     }).join("");
     document.querySelectorAll("#goods .good").forEach(g=>g.onclick=()=>{
       const i=+g.dataset.bd;
@@ -2416,16 +2208,13 @@ function renderShop(){
     return;
   }
   const list=ITEMS.filter(i=>i.slot===shopTab).sort((a,b)=>a.price-b.price);
-  $("#shopCount").textContent=list.filter(i=>S.owned.includes(i.id)).length+" / "+list.length+" 已拥有";
   $("#goods").innerHTML=list.map(i=>{
     const owned=S.owned.includes(i.id),on=S.equip[i.slot]===i.id,poor=!owned&&S.coins<i.price;
     const rr=RAR[i.r||"normal"];
-    return '<button type="button" class="good r-'+(i.r||"normal")+' '+(on?"on":(owned?"owned":""))+(poor?" no":"")+'" data-id="'+i.id+'" aria-pressed="'+on+'">'+
-      '<span class="gstatus">'+(on?"已装备":owned?"已拥有":"未购买")+'</span>'+
-      '<span class="gic" aria-hidden="true">'+i.ic+'</span><span class="gnm">'+i.nm+'</span>'+
-      '<span class="rar">'+(rr||"基础")+(i.d3?" · 3D":"")+'</span>'+
-      '<span class="gpr">'+i.price+' 魔法币</span><span class="gaction">'+
-      (on?"点击卸下":owned?"点击装备":poor?"还差 "+(i.price-S.coins)+" 币":"购买并装备")+'</span></button>';
+    return '<div class="good r-'+(i.r||"normal")+' '+(on?"on":(owned?"owned":""))+(poor?" no":"")+'" data-id="'+i.id+'">'+
+      (rr?'<span class="rar">'+rr+(i.d3?" 3D":"")+'</span>':'')+
+      '<div class="gic">'+i.ic+'</div><div class="gnm">'+i.nm+'</div>'+
+      '<div class="gpr">'+(on?"✔ 已装备":(owned?"点击装备":"🪙 "+i.price))+'</div></div>';
   }).join("");
   document.querySelectorAll("#goods .good").forEach(g=>g.onclick=()=>buyOrEquip(g.dataset.id));
 }
@@ -2590,46 +2379,35 @@ function pickVoice(prefs){
 
 /* --- 本机语音：修掉 cancel 后立刻 speak 无声、以及首字被吃的问题 --- */
 let ttsTimer=null;
-function ttsSay(t,v,rate,onfail,onend,onstate){
-  const id=cardSeq;
-  let started=false,done=false;
-  const fail=e=>{if(done||id!==cardSeq)return;done=true;onstate&&onstate(false);onfail&&onfail(e);};
-  if(!window.speechSynthesis){fail(new Error("浏览器不支持语音"));return;}
+function ttsSay(t,v,rate,onfail,onend){
+  if(!window.speechSynthesis){onfail&&onfail(new Error("浏览器不支持语音"));return;}
   try{
     speechSynthesis.cancel();
     clearTimeout(ttsTimer);
     ttsTimer=setTimeout(()=>{                    // cancel 后必须留间隔，否则 Edge 静默失败
-      if(id!==cardSeq)return;
-      try{
-        const u=new SpeechSynthesisUtterance(" "+t);   // 前置空格，防首字被吃
-        if(v)u.voice=v;
-        u.lang=v?v.lang:"en-US";u.rate=rate||+SET.rate;u.pitch=1;u.volume=1;
-        u.onstart=()=>{if(done||id!==cardSeq)return;started=true;onstate&&onstate(true);};
-        u.onend=()=>{if(done||id!==cardSeq)return;done=true;onend&&onend();};
-        u.onerror=e=>fail(new Error(e.error||"语音出错"));
-        speechSynthesis.speak(u);
-        setTimeout(()=>{                            // 1.6 秒还没出声就认为这条通道挂了
-          if(!started&&!speechSynthesis.speaking)fail(new Error("本机语音无响应"));
-        },1600);
-      }catch(e){fail(e);}
+      const u=new SpeechSynthesisUtterance(" "+t);   // 前置空格，防首字被吃
+      if(v)u.voice=v;
+      u.lang=v?v.lang:"en-US";u.rate=rate||+SET.rate;u.pitch=1;u.volume=1;
+      let started=false;
+      u.onstart=()=>started=true;
+      u.onend=()=>onend&&onend();
+      u.onerror=e=>{if(!started)onfail&&onfail(new Error(e.error||"语音出错"));};
+      speechSynthesis.speak(u);
+      setTimeout(()=>{                            // 1.6 秒还没出声就认为这条通道挂了
+        if(!started&&!speechSynthesis.speaking)onfail&&onfail(new Error("本机语音无响应"));
+      },1600);
     },120);
-  }catch(e){fail(e);}
+  }catch(e){onfail&&onfail(e);}
 }
-function youdaoSay(t,onfail,onend,onstate){
-  const id=cardSeq,run=++audioSeq;
-  let done=false;
-  const active=()=>!done&&id===cardSeq&&run===audioSeq;
-  const fail=e=>{if(!active())return;done=true;onstate&&onstate(false);onfail&&onfail(e);};
+function youdaoSay(t,onfail,onend){
   try{
     audioEl.pause();
-    audioEl.onplaying=()=>{if(active())onstate&&onstate(true);};
-    audioEl.onwaiting=()=>{if(active())onstate&&onstate(false);};
-    audioEl.onended=()=>{if(!active())return;done=true;onend&&onend();};
+    audioEl.onended=onend||null;
     audioEl.src="https://dict.youdao.com/dictvoice?type=2&audio="+encodeURIComponent(t);
     audioEl.playbackRate=+SET.rate<0.8?0.85:+SET.rate;
-    audioEl.onerror=()=>fail(new Error("有道网络失败"));
-    audioEl.play().catch(fail);
-  }catch(e){fail(e);}
+    audioEl.onerror=()=>onfail&&onfail(new Error("有道网络失败"));
+    audioEl.play().catch(e=>onfail&&onfail(e));
+  }catch(e){onfail&&onfail(e);}
 }
 
 /* --- 微软 AI 神经语音（免密钥）--- */
@@ -2707,19 +2485,9 @@ async function msSynthRaw(text){
     ws.onclose=()=>fin(new Error("连接被关闭"));
   });
 }
-async function playUrl(u,onend,onstate,onfail){
-  const id=cardSeq,run=++audioSeq;
-  let done=false;
-  const active=()=>!done&&id===cardSeq&&run===audioSeq;
-  const fail=e=>{if(!active())return;done=true;onstate&&onstate(false);onfail&&onfail(e);};
-  try{
-    audioEl.pause();
-    audioEl.onplaying=()=>{if(active())onstate&&onstate(true);};
-    audioEl.onwaiting=()=>{if(active())onstate&&onstate(false);};
-    audioEl.onended=()=>{if(!active())return;done=true;onend&&onend();};
-    audioEl.onerror=()=>fail(new Error("音频播放失败"));
-    audioEl.src=u;audioEl.playbackRate=1;await audioEl.play();
-  }catch(e){fail(e);if(!onfail)throw e;}
+async function playUrl(u,onend){
+  audioEl.pause();audioEl.onended=onend||null;
+  audioEl.src=u;audioEl.playbackRate=1;await audioEl.play();
 }
 
 /* --- 统一入口：含空格的按句子处理 --- */
@@ -2728,27 +2496,21 @@ function say(t){
   if(/\s/.test(t))saySentence(t);else sayWord(t);
 }
 /* 单词：有道真人录音 → 本机语音 */
-function sayWord(t,onend,onstate,onfail){
-  const id=cardSeq;
-  youdaoSay(t,()=>{if(id===cardSeq)ttsSay(t,pickVoice(WORD_PREF),null,onfail,onend,onstate);},onend,onstate);
+function sayWord(t,onend){
+  youdaoSay(t,()=>ttsSay(t,pickVoice(WORD_PREF),null,null,onend),onend);
 }
 /* 句子：微软 AI 神经语音 → 本机神经语音 → 有道 */
-function saySentence(t,onend,onstate,onfail){
-  const id=cardSeq;
-  const localTry=()=>{
-    if(id!==cardSeq)return;
-    onstate&&onstate(false);
-    const v=pickVoice(SENT_PREF);
-    const remoteTry=()=>{if(id===cardSeq)youdaoSay(t,onfail,onend,onstate);};
-    if(v)ttsSay(t,v,Math.min(1,+SET.rate+0.05),remoteTry,onend,onstate);
-    else remoteTry();};
-  msSynth(t).then(u=>{if(id===cardSeq)return playUrl(u,onend,onstate,localTry);}).catch(localTry);
+function saySentence(t,onend){
+  const localTry=()=>{const v=pickVoice(SENT_PREF);
+    if(v)ttsSay(t,v,Math.min(1,+SET.rate+0.05),()=>youdaoSay(t,null,onend),onend);
+    else youdaoSay(t,null,onend);};
+  msSynth(t).then(u=>playUrl(u,onend)).catch(localTry);
 }
 /* 讲解卡的连读节奏（A 方案：固定间隔）
    ① 卡片一出现就开始合成例句，并且「先把例句音频备好（最多等 1.2 秒）再开口读单词」
    ② 单词读到只剩 0.12 秒尾音时就算读完，抵掉不同录音结尾静音长度不一的差异
    ③ 然后严格等 SET.gap 再播例句 —— 这样间隔恒定，不会忽长忽短 */
-let cardSeq=0,spTimers=[],audioSeq=0,clearStudyRead=null;
+let cardSeq=0,spTimers=[];
 const WORD_TAIL=.12;            /* 提前判定单词结束的秒数，抵消尾部静音 */
 const PRE_WAIT=1200;            /* 开口前最多等例句合成多久 */
 function laterSp(fn,ms){const h=setTimeout(fn,ms);spTimers.push(h);return h;}
@@ -2756,73 +2518,38 @@ function everySp(fn,ms){const h=setInterval(fn,ms);spTimers.push(h);return h;}
 /* 彻底打断现在的发音：网页音频 + 浏览器语音 + 所有还没到点的定时器
    （切卡、切页、进闯关都要调它，否则上一句会压着下一张卡继续读） */
 function stopSpeak(){
-  if(clearStudyRead){clearStudyRead();clearStudyRead=null;}
-  cardSeq++;audioSeq++;
+  cardSeq++;
   spTimers.forEach(h=>{clearTimeout(h);clearInterval(h);});spTimers=[];
-  try{audioEl.onended=null;audioEl.onerror=null;audioEl.onplaying=null;audioEl.onwaiting=null;audioEl.pause();}catch(e){}
+  try{audioEl.onended=null;audioEl.onerror=null;audioEl.pause();}catch(e){}
   try{clearTimeout(ttsTimer);}catch(e){}
   try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
 }
-function sayCard(w,card){
+function sayCard(w){
   stopSpeak();                    /* 先把上一张卡的声音和定时器全部掐掉 */
   const id=cardSeq;
-  const main=card&&card.querySelector(".study-main"),sen=card&&card.querySelector(".sc-sen");
-  const status=card&&card.querySelector("#readStatus");
-  const setRead=(part,text)=>{
-    if(id!==cardSeq||!card||!card.isConnected||$("#learnArea .study-card")!==card)return;
-    main.classList.toggle("is-speaking",part==="word");
-    sen.classList.toggle("is-speaking",part==="sentence");
-    status.textContent=text;
-  };
-  if(card)clearStudyRead=()=>{
-    main.classList.remove("is-speaking");sen.classList.remove("is-speaking");
-    status.textContent="点喇叭再听一次";
-  };
-  setRead("","正在准备朗读…");
   const gap=+SET.gap||500;
-  let wordFailed=false;
   let pre=w.sen?(msCached(w.sen)||null):null;     /* 命中缓存就是零等待 */
   let preFail=false;
   if(w.sen&&!pre)msSynth(w.sen).then(u=>{pre=u;}).catch(()=>{preFail=true;});
 
   const playSen=()=>{
     if(id!==cardSeq||!w.sen)return;
-    setRead("","正在加载例句语音…");
-    const state=playing=>setRead(playing?"sentence":"",playing?"正在朗读例句":"正在加载例句语音…");
-    const end=()=>setRead("",wordFailed?"例句朗读结束，单词未能播放，可点喇叭重试":"朗读结束，点喇叭再听一次");
-    const fail=()=>setRead("","例句暂时无法播放，请点喇叭重试");
-    const fallback=()=>{if(id===cardSeq)saySentence(w.sen,end,state,fail);};
-    const cachedPlay=()=>{playUrl(pre,end,state,fallback).catch(fail);};
-    if(pre){cachedPlay();return;}
-    if(preFail){fallback();return;}
+    if(pre){playUrl(pre);return;}
+    if(preFail){saySentence(w.sen);return;}
     const t0=Date.now();                       /* 极端情况：开口前那 1.2 秒还没合成完 */
     const timer=everySp(()=>{
       if(id!==cardSeq){clearInterval(timer);return;}
-      if(pre){clearInterval(timer);cachedPlay();}
-      else if(preFail||Date.now()-t0>4000){clearInterval(timer);fallback();}
+      if(pre){clearInterval(timer);playUrl(pre);}
+      else if(preFail||Date.now()-t0>4000){clearInterval(timer);saySentence(w.sen);}
     },80);
   };
 
   /* 真正开口读单词 → 读完等 gap → 读例句 */
   const startWord=()=>{
     if(id!==cardSeq)return;
-    setRead("","正在加载单词语音…");
-    let moved=false,started=false;
-    const next=()=>{
-      if(moved||id!==cardSeq)return;
-      moved=true;
-      setRead("",w.sen?(wordFailed?"单词暂时无法播放，即将朗读例句…":"单词朗读结束，即将朗读例句…")
-        :(wordFailed?"单词暂时无法播放，请点喇叭重试":"朗读结束，点喇叭再听一次"));
-      laterSp(playSen,gap);
-    };
-    sayWord(w.en,next,playing=>{
-      if(moved)return;
-      if(playing)started=true;
-      setRead(playing?"word":"",playing?"正在朗读单词":"正在加载单词语音…");
-    },()=>{
-      if(moved||id!==cardSeq)return;
-      wordFailed=true;setRead("","单词暂时无法播放，请点喇叭重试");
-    });
+    let moved=false;
+    const next=()=>{if(moved||id!==cardSeq)return;moved=true;laterSp(playSen,gap);};
+    sayWord(w.en,next);
     /* 用播放进度提前判定"读完了"，比 onended 更稳（onended 要等尾部静音走完）*/
     const watch=everySp(()=>{
       if(moved||id!==cardSeq){clearInterval(watch);return;}
@@ -2835,7 +2562,6 @@ function sayCard(w,card){
       if(!audioEl.paused&&audioEl.duration&&audioEl.currentTime<audioEl.duration-WORD_TAIL){
         laterSp(fb,80);return;
       }
-      if(!started)wordFailed=true;
       next();
     },2600);
   };
@@ -3388,7 +3114,7 @@ window.makeEggyBase=function(T){
   /* 金发：后脑发盖 + 斜刘海 + 两侧鬓发 */
   const hairM=new T.MeshPhysicalMaterial({color:0xF0C463,roughness:.45,clearcoat:.6,
     sheen:1,sheenColor:new T.Color(0xFFF0B8)});
-  const cap=new T.Mesh(new T.SphereGeometry(.458,36,26,0,Math.PI*2,0,Math.PI*.37),hairM);
+  const cap=new T.Mesh(new T.SphereGeometry(.458,36,26,0,Math.PI*2,0,Math.PI*.52),hairM);
   cap.position.set(0,.98,-.02);cap.scale.set(1.03,1.1,1.03);g.add(cap);
   const back=new T.Mesh(new T.SphereGeometry(.42,28,22),hairM);
   back.position.set(0,.96,-.14);back.scale.set(1,1.05,.85);g.add(back);
@@ -3403,47 +3129,26 @@ window.makeEggyBase=function(T){
     side.position.set(s*.36,.96,.16);side.rotation.z=s*.14;side.rotation.x=-.25;g.add(side);
   });
 
-  /* 五官贴合头部曲面，避免眼白被脸遮住、瞳孔像凸出的珠子。 */
-  const faceZ=(x,y)=>.44*.98*Math.sqrt(1-(x/.44)**2-((y-.98)/(.44*1.06))**2);
-  const whiteM=new T.MeshBasicMaterial({color:0xFFF9F0});
-  const rimM=new T.MeshBasicMaterial({color:0x715047});
-  const irisM=new T.MeshBasicMaterial({color:0x674535});
-  const pupilM=new T.MeshBasicMaterial({color:0x30272C});
-  const shineM=new T.MeshBasicMaterial({color:0xFFFFFF});
-  const browM=new T.MeshBasicMaterial({color:0xBA8B4C});
-  const lipM=new T.MeshBasicMaterial({color:0xA96158});
-  const blushM=new T.MeshBasicMaterial({color:0xF4A59C,transparent:true,opacity:.38,depthWrite:false});
-  function faceOval(name,x,y,rx,ry,lift,mat){
-    const geo=new T.CircleGeometry(1,48),pos=geo.attributes.position;
-    for(let i=0;i<pos.count;i++){
-      const px=x+pos.getX(i)*rx,py=y+pos.getY(i)*ry;
-      pos.setXYZ(i,px,py,faceZ(px,py)+lift);
-    }
-    geo.computeVertexNormals();
-    const mesh=new T.Mesh(geo,mat);mesh.name=name;g.add(mesh);
-  }
-  function faceCurve(name,points,mat,radius){
-    const curve=new T.QuadraticBezierCurve3(...points.map(p=>new T.Vector3(p[0],p[1],0)));
-    const path=curve.getPoints(32).map(p=>new T.Vector3(p.x,p.y,faceZ(p.x,p.y)+.008));
-    const mesh=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(path),32,radius,8,false),mat);
-    mesh.name=name;g.add(mesh);
-  }
-  [-1,1].forEach(s=>{
-    const x=s*.16,side=s<0?"left":"right";
-    /* 两只眼睛同高、竖直对称，不加斜眼角和尖睫毛。 */
-    faceOval(side+"EyeOutline",x,1.0,.079,.097,.004,rimM);
-    faceOval(side+"EyeWhite",x,1.0,.072,.09,.008,whiteM);
-    faceOval(side+"Iris",x,.998,.053,.07,.014,irisM);
-    faceOval(side+"Pupil",x,1.002,.037,.053,.019,pupilM);
-    faceOval(side+"EyeShine",x-.017,1.03,.016,.02,.023,shineM);
-    faceOval(side+"EyeShineSmall",x+.018,.971,.008,.009,.023,shineM);
-    faceCurve(side+"Brow",[[x-.052,1.132],[x,1.15],[x+.052,1.132]],browM,.009);
-    faceOval(side+"Blush",s*.255,.884,.045,.022,.006,blushM);
+  /* 五官：蓝眼 + 眉毛 + 淡笑 */
+  const whiteM=new T.MeshPhysicalMaterial({color:0xFFFFFF,roughness:.2,clearcoat:1});
+  const irisM=new T.MeshPhysicalMaterial({color:0x2F7FE0,roughness:.12,clearcoat:1});
+  const darkM=new T.MeshPhysicalMaterial({color:0x2A2340,roughness:.3});
+  [-.165,.165].forEach(x=>{
+    const w=new T.Mesh(new T.SphereGeometry(.082,22,18),whiteM);
+    w.position.set(x,1.0,.37);w.scale.set(1,.92,.55);g.add(w);
+    const ir=new T.Mesh(new T.SphereGeometry(.05,20,16),irisM);
+    ir.position.set(x,.995,.42);ir.scale.set(.95,1.05,.55);g.add(ir);
+    const pu=new T.Mesh(new T.SphereGeometry(.024,14,12),darkM);
+    pu.position.set(x,.995,.45);g.add(pu);
+    const hl=new T.Mesh(new T.SphereGeometry(.018,12,10),new T.MeshBasicMaterial({color:0xffffff}));
+    hl.position.set(x-.022,1.02,.46);g.add(hl);
+    const br=new T.Mesh(new T.BoxGeometry(.15,.028,.03),hairM);
+    br.position.set(x,1.1,.4);br.rotation.z=x<0?.12:-.12;g.add(br);
   });
-  const nose=new T.Mesh(new T.SphereGeometry(.028,16,14),skinM);
-  nose.position.set(0,.923,.427);nose.scale.set(.9,.8,.7);g.add(nose);
-  /* 浅浅的 U 形微笑，两侧嘴角同高。 */
-  faceCurve("smile",[[-.062,.846],[0,.801],[.062,.846]],lipM,.008);
+  const nose=new T.Mesh(new T.SphereGeometry(.045,14,12),skinM);
+  nose.position.set(0,.94,.44);nose.scale.set(.9,.8,1);g.add(nose);
+  const sm=new T.Mesh(new T.TorusGeometry(.085,.017,10,32,Math.PI),darkM);
+  sm.position.set(0,.85,.4);sm.rotation.z=Math.PI;g.add(sm);
 
   return {group:g,body:body,head:head,cape:cape};
 };
@@ -3892,7 +3597,7 @@ window.makeEggyBase=function(T){
     R.setPixelRatio(Math.min(devicePixelRatio,2));
     R.setSize(W(),H());
     if(T.sRGBEncoding)R.outputEncoding=T.sRGBEncoding;
-    if(T.ACESFilmicToneMapping){R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=.85;}
+    if(T.ACESFilmicToneMapping){R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.1;}
     R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
 
     /* 环境光照 */
@@ -3907,8 +3612,8 @@ window.makeEggyBase=function(T){
     try{const pm=new T.PMREMGenerator(R);pm.compileEquirectangularShader();
       scene.environment=pm.fromEquirectangular(et).texture;}catch(e){}
 
-    scene.add(new T.HemisphereLight(0xFFF6E0,0xC6DEFF,.5));
-    const key=new T.DirectionalLight(0xffffff,.95);key.position.set(3.5,7,5);
+    scene.add(new T.HemisphereLight(0xFFF6E0,0xC6DEFF,.7));
+    const key=new T.DirectionalLight(0xffffff,1.3);key.position.set(3.5,7,5);
     key.castShadow=true;key.shadow.mapSize.set(1024,1024);
     key.shadow.camera.near=1;key.shadow.camera.far=22;
     key.shadow.camera.left=-6;key.shadow.camera.right=6;
