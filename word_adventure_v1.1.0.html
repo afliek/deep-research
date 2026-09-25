@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
-     实测英文单词通道不受影响，反而更快。 -->
-<meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.7.0</title>
-<meta name="app-version" content="1.7.0">
+<title>魔法单词学院 · v1.1.0</title>
+<meta name="app-version" content="1.1.0">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -550,96 +547,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .sc-label{font-size:11px;letter-spacing:2px;font-weight:700;color:#8D784D;margin-bottom:9px}
 .sc-sen .en{font-family:Arial,'Helvetica Neue',sans-serif;font-size:22px;line-height:1.6;color:#3E3B50;overflow-wrap:anywhere}
 .sc-sen .zh{font-size:15px;line-height:1.7;color:#797187;opacity:1;margin-top:8px}
-.sen-item+.sen-item{margin-top:14px;padding-top:14px;border-top:1px solid #E7DFCE}
-/* 中文记忆讲解：朗读时和例句一样有高亮 */
-.sc-talk{width:100%;text-align:left;background:#F3F0FA;border:2px solid #E4DCF2;border-radius:20px;padding:18px 22px;
-  transition:background .18s,border-color .18s}
-.sc-talk .sc-label{color:#74599B}
-.sc-talk p{margin:0;font-size:17px;line-height:1.9;color:#443F5A}
-.study-main.is-speaking,.sc-sen.is-speaking,.sc-talk.is-speaking{background:#F2ECFC;border-color:#B69ADC;box-shadow:0 0 0 3px #EEE5F8}
-/* 动画小剧场：用画面帮孩子记单词，讲解读完自动放一遍，也可以手动重播 */
-.sc-anim{width:100%;text-align:left;background:#EFF7FB;border:2px solid #D5E7F1;border-radius:20px;padding:16px 18px}
-.sc-anim .sc-label{color:#41748F}
-.ani-stage{position:relative;width:100%;max-width:430px;margin:0 auto;aspect-ratio:320/196;
-  border-radius:16px;overflow:hidden;
-  background:linear-gradient(180deg,#FCFEFF 0%,#E9F3FA 100%)}
-.ani-scene{position:absolute;inset:0;opacity:0;visibility:hidden}
-.ani-scene.on{opacity:1;visibility:visible}
-.ani-scene svg{display:block;width:100%;height:100%}
-.ani-cap{margin-top:11px;min-height:46px;font-size:16px;font-weight:700;line-height:1.55;color:#33505F}
-.ani-cap small{display:block;margin-top:4px;font-size:13px;font-weight:400;line-height:1.6;color:#6D8796}
-.ani-bar{display:flex;align-items:center;gap:7px;margin-top:6px}
-.ani-bar i{width:20px;height:5px;border-radius:3px;background:#D3E4EE;transition:background .2s}
-.ani-bar i.on{background:#4C90B4}
-.ani-replay{margin-left:auto}
-/* 场景里的动画：全部循环播放，人物一直在呼吸、眨眼、挥手，像动画片一样不停 */
-.ani-scene .ani-bob,.ani-scene .ani-shadow,.ani-scene .ani-blink,.ani-scene .ani-hop,
-.ani-scene .ani-pulse,.ani-scene .ani-tile,.ani-scene .flash,.ani-scene .slide,
-.ani-scene .drop,.ani-scene .up,.ani-scene .inL,.ani-scene .inR,.ani-scene .showUp,
-.ani-scene .ani-float,.ani-scene .ani-rise,.ani-scene .ani-drip,
-.ani-scene .ani-beat{transform-box:fill-box;transform-origin:center}
-.ani-scene .ani-arm,.ani-scene .ani-point{transform-box:fill-box;transform-origin:left bottom}
-.ani-scene .ani-cup{transform-box:fill-box;transform-origin:center bottom}
-.ani-scene .ani-bob{animation:aniBob 2.4s ease-in-out infinite}
-.ani-scene .ani-shadow{animation:aniShadow 2.4s ease-in-out infinite}
-.ani-scene .ani-blink{animation:aniBlink 4.2s ease-in-out infinite}
-.ani-scene .ani-arm{animation:aniWave 1.05s ease-in-out infinite alternate}
-.ani-scene .ani-point{animation:aniPointing 2s ease-in-out infinite alternate}
-.ani-scene .ani-hop{animation:aniHop 1.2s ease-in-out infinite}
-.ani-scene .ani-pulse{animation:aniPulse 2.2s ease-in-out infinite}
-.ani-scene .ani-tile{animation:aniTileHop 1.8s ease-in-out infinite}
-.ani-scene .ani-cup{animation:aniCupTap 3s ease-in-out infinite}
-.ani-scene .drop{animation:aniDropLoop 3s ease-in-out infinite}
-.ani-scene .flash{animation:aniFlashLoop 3s ease-in-out infinite}
-.ani-scene .slide{animation:aniSlideLoop 2.8s ease-in-out infinite}
-.ani-scene .up{animation:aniUp .5s both}
-/* 拆词合并：左右两半飞进来，合起来的词跳出来 */
-.ani-scene .inL{animation:aniInL 3.6s ease-in-out infinite}
-.ani-scene .inR{animation:aniInR 3.6s ease-in-out infinite}
-.ani-scene .showUp{animation:aniShowUp 3.6s ease-in-out infinite}
-/* 小道具：上下飘、往上飘走、左右摆、往下滴、一闪一闪 */
-.ani-scene .ani-float{animation:aniFloat 2.6s ease-in-out infinite}
-.ani-scene .ani-rise{animation:aniRise 2.4s ease-out infinite}
-.ani-scene .ani-swing{transform-box:fill-box;transform-origin:center top;
-  animation:aniSwing 1.5s ease-in-out infinite alternate}
-.ani-scene .ani-drip{animation:aniDrip 2.2s ease-in infinite}
-.ani-scene .ani-beat{animation:aniBeat 1.4s ease-in-out infinite}
-.ani-scene .ani-twinkle{animation:aniTwinkle 1.6s ease-in-out infinite}
-/* 错开时间差，几个人物不会一起同步动，看着更自然 */
-.ani-scene .o1{animation-delay:.2s}.ani-scene .o2{animation-delay:.4s}.ani-scene .o3{animation-delay:.6s}
-.ani-scene .d4{animation-delay:.9s}
-@keyframes aniBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3.5px)}}
-@keyframes aniShadow{0%,100%{transform:scale(1)}50%{transform:scale(.88)}}
-@keyframes aniBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
-@keyframes aniWave{from{transform:rotate(-13deg)}to{transform:rotate(16deg)}}
-@keyframes aniPointing{from{transform:rotate(-3deg)}to{transform:rotate(4deg)}}
-@keyframes aniHop{0%,58%,100%{transform:translateY(0)}28%{transform:translateY(-15px)}}
-@keyframes aniPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes aniTileHop{0%,55%,100%{transform:translateY(0)}25%{transform:translateY(-13px)}}
-@keyframes aniCupTap{0%,28%{transform:scaleY(1)}34%{transform:scaleY(.955)}44%,100%{transform:scaleY(1)}}
-@keyframes aniDropLoop{0%{transform:translateY(-36px);opacity:0}10%{opacity:1}
-  30%{transform:translateY(0)}36%{transform:translateY(-7px)}44%{transform:translateY(0)}
-  84%{transform:translateY(0);opacity:1}90%{transform:translateY(0);opacity:0}
-  91%,100%{transform:translateY(-36px);opacity:0}}
-@keyframes aniFlashLoop{0%,26%{opacity:0;transform:scale(.7)}34%{opacity:1;transform:scale(1.1)}
-  54%{opacity:1;transform:scale(1)}66%,100%{opacity:0;transform:scale(1)}}
-@keyframes aniSlideLoop{0%{opacity:0;transform:translateX(34px)}18%{opacity:1;transform:translateX(0)}
-  74%{transform:translateX(0)}84%{transform:scale(1.14)}92%,100%{opacity:0;transform:translateX(34px)}}
-@keyframes aniUp{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes aniInL{0%{opacity:0;transform:translateX(-48px)}18%,72%{opacity:1;transform:translateX(0)}
-  88%,100%{opacity:0;transform:translateX(-48px)}}
-@keyframes aniInR{0%{opacity:0;transform:translateX(48px)}18%,72%{opacity:1;transform:translateX(0)}
-  88%,100%{opacity:0;transform:translateX(48px)}}
-@keyframes aniShowUp{0%,30%{opacity:0;transform:scale(.55)}44%{opacity:1;transform:scale(1.12)}
-  52%,80%{opacity:1;transform:scale(1)}92%,100%{opacity:0;transform:scale(.55)}}
-@keyframes aniFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes aniRise{0%{opacity:0;transform:translateY(8px) scale(.6)}25%{opacity:1}
-  70%{opacity:.85}100%{opacity:0;transform:translateY(-36px) scale(1.15)}}
-@keyframes aniSwing{from{transform:rotate(-13deg)}to{transform:rotate(13deg)}}
-@keyframes aniDrip{0%{opacity:0;transform:translateY(0) scale(.7)}18%{opacity:1;transform:scale(1)}
-  100%{opacity:0;transform:translateY(40px) scale(.9)}}
-@keyframes aniBeat{0%,100%{transform:scale(1)}30%{transform:scale(1.16)}60%{transform:scale(1)}}
-@keyframes aniTwinkle{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+.study-main.is-speaking,.sc-sen.is-speaking{background:#F2ECFC;border-color:#B69ADC;box-shadow:0 0 0 3px #EEE5F8}
 .sc-tip{background:none;border-left:3px solid #DCCCEB;text-align:left;padding:6px 12px;max-width:100%;width:100%;border-radius:0;font-size:14px;line-height:1.7;color:#7A7088}
 .study-actions{padding-top:12px;width:100%;border-top:1px solid var(--line)}
 .dots{margin-top:4px}.dots i{width:7px;height:7px;background:#E3DDEC}.dots i.on{background:var(--purple);transform:none}
@@ -651,9 +559,6 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @keyframes answerSoft{from{opacity:.6}to{opacity:1}}
 .slot,.tile{font-family:Arial,sans-serif}.tile{background:#F7E6B2;color:#765624;border:1px solid #E5CD8F;box-shadow:0 3px 0 #CFB578}
 .slot{border:2px dashed #D5C5E9;background:#F6F2FB}.slot.filled{border-color:#63A580;background:#F4FAF5}
-/* 看答案后填出来的字母：用琥珀色区分，提醒这题算答错 */
-.slot.shown{border:2px solid #D6A94B;background:#FBF3E2;color:#7A5714}
-#reveal{margin-top:4px}#reveal:disabled{opacity:1;color:#7A5714;background:#FBF3E2;box-shadow:none;border-color:#E3CE9C}
 .article{border:1px solid #EDE2C9;background:#FCF8EF;font-family:Arial,'Microsoft YaHei',sans-serif}
 body:has(#v-learn.on) .chip.x2{animation:none}
 
@@ -696,16 +601,16 @@ body:has(#v-learn.on) .chip.x2{animation:none}
 @media(max-width:600px){
   .wrap{padding:8px 10px 112px}.panel{padding:18px 14px}.hud{padding:9px 10px}.hud-row{gap:5px}.chip{padding:5px 8px;font-size:12px}.chip.fam,.chip.coin{font-size:15px}
   #v-learn>.panel{padding:18px 14px}.study-main{padding:18px 8px 14px}.study-top{gap:8px}.sc-tag{font-size:11px}.sc-sen{padding:15px}.sc-sen .en{font-size:20px}
-  .sc-anim{padding:14px}.ani-cap{font-size:15px}
   .opts{gap:10px}.opt{font-size:18px;padding:17px 8px}.study-actions{gap:8px}.study-actions .btn{padding:10px 14px}
   .shop-heading{gap:10px}.shop-wallet{padding:10px 12px;min-width:92px}.shop-wallet b{font-size:23px}.shop-layout{gap:22px}
   .goods{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.shop-tabs button{padding:9px 11px}#stage3d{height:320px}
   .map-region-head{gap:9px}.region-index{width:34px;height:38px;font-size:15px}.region-count{white-space:normal;min-width:43px}
 }
 .release-footer{font-size:12px;text-align:center;color:#81728F;padding:20px 8px 0;line-height:1.8}
-.release-footer a,.pa-box a{color:#745599;text-underline-offset:3px}
-/* 家长模式里的回退入口用的是链接，补上按钮外观 */
-a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.release-footer a,.release-info a{color:#745599;text-underline-offset:3px}
+.release-info{text-align:left;margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#F9F6FD}
+.release-info summary{cursor:pointer;font-size:13px;font-weight:700;color:#71568E;min-height:24px;line-height:1.8}
+.release-info p{font-size:12px;line-height:1.8;color:#786A87}
 body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
@@ -839,7 +744,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="errlist" id="topErr" style="max-height:none;margin-top:8px"></div>
     </div>
   </section>
-  <footer class="release-footer">魔法单词学院 <span data-app-version></span></footer>
+  <footer class="release-footer">魔法单词学院 <span data-app-version></span> · <a href="word_adventure_v1.0.0.html">打开旧版 v1.0.0</a></footer>
 </div>
 
 <!-- 结算 + 转盘 -->
@@ -869,9 +774,14 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <h2 class="title" style="justify-content:center">⚙️ 设置</h2>
     <div class="set-row"><span>🐢 语速</span>
       <div class="seg-btns" id="rateBtns"><button data-v="0.75">慢</button><button data-v="0.9">正常</button><button data-v="1">快</button></div></div>
+    <div class="set-row"><span>⏱️ 单词→句子间隔</span>
+      <div class="seg-btns" id="gapBtns">
+        <button data-v="500">0.5秒</button><button data-v="1000">1秒</button>
+        <button data-v="1500">1.5秒</button><button data-v="2000">2秒</button>
+      </div></div>
     <div class="set-row"><span>🎵 音效</span>
       <div class="seg-btns" id="sfxBtns"><button data-v="1">开</button><button data-v="0">关</button></div></div>
-    <button class="btn sm" id="testSent" style="width:100%;margin-top:4px">🔈 试听：mom → 中文意思 → 记忆讲解</button>
+    <button class="btn sm" id="testSent" style="width:100%;margin-top:4px">🔈 试听：apple → I eat a big red apple.</button>
     <div style="background:#F7F4FF;border-radius:16px;padding:10px;margin-top:10px">
       <div style="font-size:12px;font-weight:bold;margin-bottom:7px;text-align:left">
         💾 存档备份（自动进行，平时不用管）</div>
@@ -892,8 +802,15 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         👨‍👩‍👧 家长模式（需要密码，可重置进度、调整积分）</div>
       <button class="btn sm ghost" id="paBtn" style="width:100%">🔐 进入家长模式</button>
     </div>
+    <details class="release-info">
+      <summary>版本与回退 · <span data-app-version></span></summary>
+      <p><b>v1.1.0 · 2026-09-23</b><br>冒险路线地图、统一配色、清晰学习卡与朗读高亮、魔法衣帽间。</p>
+      <p><a href="word_adventure_v1.0.0.html">打开 v1.0.0 旧版</a> · <a href="word_adventure_v1.0.0.html" download>下载旧版备份</a></p>
+      <p>这是网页版本回退，不是学习记录回滚。同一浏览器、同一网站地址下，两版共用学习进度；切换前请结束当前答题，避免同时打开两版学习。需要回滚学习记录，请使用上方「备份记录」。</p>
+      <p>版本规则：小修递增末位（1.1.1），较大改版递增中位（1.2.0），不兼容的大改递增首位（2.0.0）。每次交付前保留上一版，更新这里的版本记录。</p>
+    </details>
     <button class="btn ghost" id="setClose" style="width:100%;margin-top:9px">好啦</button>
-    <p class="tips">单词用真人录音；中文讲解优先用预先生成好的语音，没有时自动用在线语音</p>
+    <p class="tips">单词用真人录音，句子用微软 AI 神经语音，都会自动选最好的通道</p>
   </div>
 </div>
 
@@ -949,30 +866,6 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <div class="pa-t">🔑 修改家长密码</div>
         <div class="pa-line"><input type="password" class="pa-inp" id="paNew" placeholder="新密码（4 位以上）">
           <button class="btn sm" id="paPwdSave">保存</button></div>
-      </div>
-      <div class="pa-box">
-        <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.7.0</b>：前 10 段（165 词）的中文意思和讲解全部录成真人感语音（Vivi 2.0），共 327 条，放在 voice 文件夹里。第 1～10 段现在是零延迟、音色固定、断网可用。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.6.0</b>：前 10 段（165 词）全部写上「怎么记住它」讲解和例句；第 2、3 段的 30 个词每个都配了 3 幕动画小剧场。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.5.1</b>：动画小剧场改成动画片那样一直在动——人物会呼吸、眨眼、挥手、蹦跳，三个画面循环轮播，进讲解卡就开始，不用等讲解读完。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.5.0</b>：讲解卡新增「动画小剧场」，用画面帮孩子记单词。先给 guy、kid 两个词做了。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.4.0</b>：一段超过 8 个词会分组（讲一组、练一组，练全对再讲下一组）；拼写题看答案后要自己点「记住了，下一个」才继续；版本回退挪进家长模式，避免小孩误点。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.3.0</b>：第 1 段中文讲解改用预先生成的真人感语音（Vivi 2.0），放在 voice 文件夹里随网页发布，零延迟、音色固定、断网可用。</p>
-        <p class="tips" style="text-align:left;margin:0 0 6px">
-          <b>v1.2.1</b> 修掉中文朗读忽长忽短 · <b>v1.2.0</b> 三段式讲解与看答案按钮 · <b>v1.1.0</b> 冒险地图与衣帽间</p>
-        <div class="row" style="margin-top:4px">
-          <a class="btn sm ghost" href="word_adventure_v1.1.0.html">打开 v1.1.0</a>
-          <a class="btn sm ghost" href="word_adventure_v1.0.0.html">打开 v1.0.0</a>
-        </div>
-        <p class="tips" style="text-align:left">这是网页版本回退，不是学习记录回滚：各版本共用同一份进度。
-          切换前请先结束当前答题，也不要同时开两个版本。要回滚学习记录，用设置里的「备份记录」。
-          上传新版时记得把 voice 文件夹一起传，否则中文讲解会退回在线语音、音色变化。</p>
       </div>
       <button class="btn ghost" id="paClose" style="width:100%;margin-top:4px">关闭</button>
     </div>
@@ -1543,356 +1436,6 @@ const TOPIC_PLAN=[
   WORDS.length=0;out.forEach(w=>WORDS.push(w));
 })();
 
-/* 1c. 中文记忆讲解（talk：读出来的讲解稿；ex：多给一个例句，只看不读）
-       讲解稿按"大人坐在旁边聊天"的口气写：短句、口语词、有停顿，
-       听起来才不像念课文。逗号句号会被语音引擎当作停顿，别删。
-       先做第 1 段这 15 个词，确认效果好再往后面段补。
-       键必须和词表里的 en 完全一致（Miss 的大写要保留）。 */
-const TALKS={
- guy:{talk:"这个词特别短，就三个字母。读起来像盖子的「盖」。它说的就是「那个人」，大人聊天的时候特别爱用。",
-   ex:[{en:"Who is that guy?",zh:"那个人是谁？"}]},
- kid:{talk:"kid 就是小孩儿。爸爸妈妈叫你 kid，其实就是在说「小家伙」。想说好几个小孩，后面加个 s，变成 kids。",
-   ex:[{en:"He is a smart kid.",zh:"他是个聪明的小孩。"}]},
- mom:{talk:"这个最熟悉啦，妈妈。你看，头和尾都是 m，中间那个 o 像张开的嘴巴。美国人写 mom，英国人写 mum，就差中间一个字母。",
-   ex:[{en:"Mom, I am home!",zh:"妈妈，我回来了！"}]},
- Miss:{talk:"注意，这个词第一个字母要大写。放在姓前面，用来叫女老师，比如 Miss Wang，王老师。要是写成小写的 miss，意思就变了，变成「想念」啦。",
-   ex:[{en:"Good morning, Miss Wang.",zh:"早上好，王老师。"}]},
- adult:{talk:"adult 就是大人。买门票的时候，票上写 adult，那一行就是大人的价钱。你现在还不是 adult 哦。",
-   ex:[{en:"This film is for adults only.",zh:"这部电影只给大人看。"}]},
- granny:{talk:"granny 就是奶奶、外婆。前面的 gran 是「祖」的意思，后面加上 ny，念起来软软的。就像我们撒着娇喊「奶奶」一样。",
-   ex:[{en:"I visit my granny every Sunday.",zh:"我每个星期天去看奶奶。"}]},
- parent:{talk:"parent 只指一个人，爸爸或者妈妈。要说爸爸妈妈两个人，得加个 s，变成 parents。开家长会，英语就说 parents meeting。",
-   ex:[{en:"Ask your parents first.",zh:"先问问你的爸爸妈妈。"}]},
- married:{talk:"married 就是结婚了。它原来长这样：marry。因为结尾是 y，所以要先把 y 变成 i，再加 ed。还有个地方最容易错，中间是两个 r，别少写一个。",
-   ex:[{en:"They got married last year.",zh:"他们去年结婚了。"}]},
- surname:{talk:"这个词拆开看就懂了，sur 加上 name。name 是名字，前面加个 sur，就变成「姓」。有意思的是，我们中文把姓放前面，英语里姓却放在最后面。",
-   ex:[{en:"Please write your surname here.",zh:"请把你的姓写在这里。"}]},
- granddad:{talk:"grand 是「祖」，dad 是爸爸。爸爸的爸爸，那就是爷爷啦。拼的时候数一下，中间是两个 d，一个跟着 grand，一个跟着 dad。",
-   ex:[{en:"My granddad is eighty years old.",zh:"我爷爷八十岁了。"}]},
- grandson:{talk:"跟刚才那个词很像，grand 加上 son。son 是儿子，儿子的儿子，就是孙子。要是孙女呢，把 son 换成 daughter 就行。",
-   ex:[{en:"He is my grandson.",zh:"他是我的孙子。"}]},
- teenager:{talk:"这个词的秘密藏在中间的 teen 里。你数数看，thirteen、fourteen，一直到 nineteen，结尾都有 teen。所以十几岁的孩子，就叫 teenager。",
-   ex:[{en:"Teenagers like pop music.",zh:"青少年喜欢流行音乐。"}]},
- boyfriend:{talk:"boy 是男孩，friend 是朋友。两个词一凑，男朋友。那女朋友怎么说？把前面换成 girl，girlfriend。",
-   ex:[{en:"Her boyfriend is very tall.",zh:"她的男朋友很高。"}]},
- celebrity:{talk:"celebrity 就是名人、大明星。它跟 celebrate 是一家人，celebrate 是庆祝。大家都在为他欢呼庆祝，他当然就是名人啦。这个词长，读的时候分四拍：ce、le、bri、ty。",
-   ex:[{en:"Many celebrities came to the party.",zh:"很多名人来了这个聚会。"}]},
- neighbour:{talk:"住在你家旁边的人，就是 neighbour。中间的 gh 不出声，所以听起来像「内伯」。英国人写 neighbour，美国人偷懒，少写一个 u，写成 neighbor。",
-   ex:[{en:"My neighbour has a big dog.",zh:"我的邻居有一只大狗。"}]},
- /* 第 2 段：家人收尾 + 身体和外貌 */
- penfriend:{talk:"pen 是钢笔，friend 是朋友。用笔写信交上的朋友，就是笔友。现在大家都发消息了，可这个词还留着呢。",
-   ex:[{en:"I have a penfriend in Japan.",zh:"我在日本有一个笔友。"}]},
- girlfriend:{talk:"还记得 boyfriend 吗，这两个是一对。girl 是女孩，friend 是朋友，合起来就是女朋友。记住中间不空格，一个词写到底。",
-   ex:[{en:"His girlfriend is a teacher.",zh:"他的女朋友是老师。"}]},
- grandchild:{talk:"grand 又出来了，还是「祖」的意思，child 是小孩。祖辈眼里的小孩，就是孙子孙女。它变复数很特别，是 grandchildren。",
-   ex:[{en:"She has three grandchildren.",zh:"她有三个孙辈。"}]},
- grandparent:{talk:"grand 加 parent。parent 是爸爸或者妈妈，前面加个 grand 就升了一辈，变成爷爷奶奶外公外婆里的一个。",
-   ex:[{en:"They are my grandparents.",zh:"他们是我的祖父母。"}]},
- granddaughter:{talk:"还是 grand 家族的。daughter 是女儿，前面加 grand 就是孙女。拼的时候数一下，中间是两个 d，跟 granddad 一样。",
-   ex:[{en:"His granddaughter is six.",zh:"他的孙女六岁了。"}]},
- fit:{talk:"这个词有两个意思。说衣服 fit，是说合身；说人 fit，是说身体结实、健康。就三个字母，别跟 fat 搞混了，fat 是胖。",
-   ex:[{en:"These shoes don't fit me.",zh:"这双鞋我穿不合脚。"}]},
- comb:{talk:"梳子，也可以说梳头。它最大的秘密是最后那个 b 不发音，听起来像「科姆」。写的时候千万别漏了这个不出声的 b。",
-   ex:[{en:"I need a comb.",zh:"我需要一把梳子。"}]},
- neck:{talk:"脖子。项链那个词 necklace 就是从它来的，neck 加上 lace 带子，挂在脖子上的带子。",
-   ex:[{en:"My neck hurts.",zh:"我脖子疼。"}]},
- pale:{talk:"脸色发白、苍白。生病的时候脸白得像纸，那就是 pale。它跟水桶 pail 读音一样，可拼法不一样，别写错。",
-   ex:[{en:"You look pale today.",zh:"你今天看起来脸色发白。"}]},
- slim:{talk:"苗条。你看这四个字母都是细细长长的，看着就瘦。夸人身材好用 slim，比 thin 客气多了。",
-   ex:[{en:"She is tall and slim.",zh:"她又高又苗条。"}]},
- beard:{talk:"长在下巴上的胡子。有意思的是，这个词里藏着一个 ear，耳朵。从耳朵一直连到下巴的，那就是胡子啦。",
-   ex:[{en:"My dad has a beard.",zh:"我爸爸有胡子。"}]},
- blood:{talk:"血。两个 o 挨在一起，可它不读「乌」，读出来像「布拉德」。想着两滴血挨着，就是这两个 o。",
-   ex:[{en:"Blood is red.",zh:"血是红色的。"}]},
- blonde:{talk:"金黄色头发的。前面是 blond，最后加个 e，一般用来说女生。说男生的话，那个 e 可以不要。",
-   ex:[{en:"She has blonde hair.",zh:"她有一头金发。"}]},
- "make-up":{talk:"化妆品。make 是做，up 是往上。在脸上「做」点东西，就是化妆。中间那个小横线别忘了写。",
-   ex:[{en:"My mum doesn't wear make-up.",zh:"我妈妈不化妆。"}]},
- perfume:{talk:"香水。per 加 fume，fume 是烟雾。喷出来一团香香的雾，那就是香水。",
-   ex:[{en:"This perfume smells nice.",zh:"这香水很好闻。"}]},
- /* 第 3 段：身体收尾 + 心情和性格 */
- shampoo:{talk:"洗发水。读起来像「先普」，重音在后面。它是从印度话来的，本来的意思就是揉头、按头。洗头的时候不就是在揉头吗。",
-   ex:[{en:"Where is the shampoo?",zh:"洗发水在哪儿？"}]},
- stomach:{talk:"胃、肚子。这个词最容易读错，最后的 ch 不读「去」，要读「克」，听起来像「斯达么克」。",
-   ex:[{en:"My stomach hurts.",zh:"我肚子疼。"}]},
- toothbrush:{talk:"tooth 是牙，brush 是刷子。刷牙的刷子，就是牙刷。两个词拼在一起，一个字母都不用改。",
-   ex:[{en:"I have a new toothbrush.",zh:"我有一把新牙刷。"}]},
- "good-looking":{talk:"good 是好，looking 是看起来。看起来好，就是好看、帅气。中间有个小横线，别漏了。",
-   ex:[{en:"He is very good-looking.",zh:"他很帅。"}]},
- cry:{talk:"哭。三个字母里一个 a e i o u 都没有，是 y 在替它们当元音，读出来像「克瑞」。",
-   ex:[{en:"Don't cry.",zh:"别哭。"}]},
- mad:{talk:"生气的。妈妈说 I'm mad，那是生气了。它跟 sad、bad 是一家人，就差第一个字母，都不是好心情。",
-   ex:[{en:"Don't be mad at me.",zh:"别生我的气。"}]},
- shy:{talk:"害羞。跟 cry 一样，也是 y 在当元音。想想害羞的人说话小小声，嘘一声，所以是 sh 开头。",
-   ex:[{en:"She is too shy to sing.",zh:"她太害羞了，不敢唱歌。"}]},
- glad:{talk:"高兴。它跟 sad 就差一个字母，意思正好反过来。前面加个 g，心情就从难过变成高兴了。",
-   ex:[{en:"I am glad to see you.",zh:"见到你我很高兴。"}]},
- hate:{talk:"讨厌，是 love 的反义词。四个字母，最后的 e 不发音，读出来像「黑特」。",
-   ex:[{en:"I hate rainy days.",zh:"我讨厌下雨天。"}]},
- kiss:{talk:"亲一下。结尾是两个 s，就像亲完之后的啧啧两声。",
-   ex:[{en:"Mum gives me a kiss.",zh:"妈妈亲了我一下。"}]},
- lazy:{talk:"懒。你看里面有个 z，睡觉打呼噜不就是 z z z 吗，懒虫正在睡大觉呢。",
-   ex:[{en:"The cat is very lazy.",zh:"这只猫很懒。"}]},
- miss:{talk:"注意，这个是小写的 miss，意思是想念，也可以是错过、没赶上。第 1 段学过的大写 Miss 是叫女老师的，别搞混。",
-   ex:[{en:"I miss my granny.",zh:"我想念我的奶奶。"}]},
- pity:{talk:"可惜。大人常说 What a pity，真可惜。里面藏着一个 pit，坑，可惜掉进坑里了。",
-   ex:[{en:"What a pity!",zh:"真可惜！"}]},
- awful:{talk:"糟糕。后面的 ful 跟 wonderful 那个 ful 一样，都是「装满了」的意思，只不过 awful 装满的是糟心事。",
-   ex:[{en:"The weather is awful.",zh:"天气糟透了。"}]},
- brave:{talk:"勇敢。它跟 grave 只差第一个字母。想想勇敢的人挺起胸膛说，我不怕。",
-   ex:[{en:"Be brave!",zh:"勇敢一点！"}]},
- /* 第 4 段：心情收尾 + 打招呼 */
- shame:{talk:"可惜，也有羞愧的意思。大人说 What a shame，跟 What a pity 一个意思，都是真可惜。",
-   ex:[{en:"What a shame you can't come.",zh:"你不能来，真可惜。"}]},
- upset:{talk:"up 加 set，两个特简单的词拼一起，意思可一点不简单：心里乱、难过。心情被翻了个个儿，当然不舒服。",
-   ex:[{en:"Don't be upset.",zh:"别难过。"}]},
- afraid:{talk:"害怕。它常常跟 of 一起用，I'm afraid of dogs，我怕狗。中间是 frai，别写成 fria。",
-   ex:[{en:"I'm afraid of the dark.",zh:"我怕黑。"}]},
- amazed:{talk:"惊讶得张大了嘴。里面藏着一个 maze，迷宫。走进迷宫，哇，太神奇了。",
-   ex:[{en:"I was amazed.",zh:"我惊讶极了。"}]},
- lovely:{talk:"love 加 ly。满满都是爱的样子，就是可爱、美好。英国人夸东西最爱说 lovely。",
-   ex:[{en:"What a lovely day!",zh:"多美好的一天！"}]},
- polite:{talk:"有礼貌。结尾是 ite，读出来像「泼来特」。要说不礼貌，前面加 im，变成 impolite。",
-   ex:[{en:"Be polite to others.",zh:"对别人要有礼貌。"}]},
- helpful:{talk:"help 加 ful。ful 是「装满了」，装满了帮助，就是热心、有用。",
-   ex:[{en:"She is very helpful.",zh:"她很乐于助人。"}]},
- nervous:{talk:"紧张。它跟 nerve 是一家人，nerve 是神经。神经绷得紧紧的，那就是紧张。",
-   ex:[{en:"I feel nervous before a test.",zh:"考试前我很紧张。"}]},
- pleased:{talk:"高兴、满意。please 是「请」，后面加个 d，就变成心里舒服了。第一次见面常说 Pleased to meet you。",
-   ex:[{en:"I'm pleased to meet you.",zh:"很高兴见到你。"}]},
- unhappy:{talk:"happy 前面加了个 un。un 就是「不」，所以 unhappy 是不开心。这个 un 特别好用，unlucky 就是不走运。",
-   ex:[{en:"He looks unhappy.",zh:"他看起来不开心。"}]},
- worried:{talk:"担心。它原来是 worry，结尾是 y，所以先把 y 变成 i，再加 ed。跟 married 的变法一模一样。",
-   ex:[{en:"Mum is worried about me.",zh:"妈妈担心我。"}]},
- surprise:{talk:"惊喜，也可以是惊讶。开头的 sur 跟 surname 那个 sur 一样。记住中间是 pri，不是 per。",
-   ex:[{en:"What a nice surprise!",zh:"真是个好惊喜！"}]},
- frightened:{talk:"被吓到了。里面藏着一个 right，可这儿的 gh 不出声，整个词读出来像「弗莱特恩德」。",
-   ex:[{en:"The dog frightened me.",zh:"那只狗吓到我了。"}]},
- hey:{talk:"嘿。就三个字母，招呼人用的。它比 hello 随便，跟熟人才这么喊。",
-   ex:[{en:"Hey, wait for me!",zh:"嘿，等等我！"}]},
- chat:{talk:"聊天。ch 读「去」，读出来像「查特」。它跟 talk 差不多，但 chat 更轻松，就是随便聊几句。",
-   ex:[{en:"We chat every evening.",zh:"我们每天晚上聊天。"}]},
- /* 第 5 段：打招呼收尾 + 食物 */
- dear:{talk:"亲爱的。写信开头写 Dear Tom，亲爱的汤姆。它跟小鹿 deer 读音一样，可别写错。",
-   ex:[{en:"Dear Mum, I miss you.",zh:"亲爱的妈妈，我想你。"}]},
- yeah:{talk:"就是 yes 的随便说法，对啊。四个字母，读出来像「耶啊」。跟长辈说话还是用 yes 更有礼貌。",
-   ex:[{en:"Yeah, that's right.",zh:"对，没错。"}]},
- bother:{talk:"打扰、麻烦。大人常说 Don't bother，别麻烦了。中间的 th 要把舌头轻轻放在牙齿中间。",
-   ex:[{en:"Sorry to bother you.",zh:"不好意思打扰你。"}]},
- excuse:{talk:"原谅，也可以是借口。Excuse me 是最常用的一句，打扰一下。注意中间是 cu，不是 ck。",
-   ex:[{en:"Excuse me, where is the station?",zh:"打扰一下，车站在哪儿？"}]},
- pardon:{talk:"没听清的时候说一声 Pardon，就是请再说一遍。很客气的一个词，读出来像「派登」。",
-   ex:[{en:"Pardon? I didn't hear you.",zh:"什么？我没听清。"}]},
- alright:{talk:"好吧、没问题。它其实是 all right 挤成了一个词，所以中间只有一个 l，别写成两个。",
-   ex:[{en:"Are you alright?",zh:"你还好吗？"}]},
- goodbye:{talk:"good 加 bye。它最早是一句祝福话缩出来的，现在就是再见。熟人之间也可以只说 bye。",
-   ex:[{en:"Goodbye, see you tomorrow.",zh:"再见，明天见。"}]},
- conversation:{talk:"对话、谈话。前面的 con 是「一起」，中间的 vers 是「说」，大家凑在一起说话，就是对话。读的时候分四拍：con、ver、sa、tion。",
-   ex:[{en:"We had a long conversation.",zh:"我们聊了很久。"}]},
- congratulations:{talk:"恭喜！这是词表里最长的词之一，但它很好念：con、gra、tu、la、tions，五拍。记住结尾一定要加 s。",
-   ex:[{en:"Congratulations on your win!",zh:"恭喜你赢了！"}]},
- oil:{talk:"油。三个字母，中间的 oi 读「奥伊」。炒菜的油、地下的石油，都是它。",
-   ex:[{en:"Don't put too much oil in.",zh:"别放太多油。"}]},
- bean:{talk:"豆子。它跟 been 读音一样，可意思差远了。四个字母，ea 读长长的「衣」。",
-   ex:[{en:"I don't like beans.",zh:"我不喜欢豆子。"}]},
- cola:{talk:"可乐。念出来就跟中文的可乐一个味道，是词表里最好记的一个。",
-   ex:[{en:"A glass of cola, please.",zh:"请给我一杯可乐。"}]},
- candy:{talk:"糖果，美国说法，英国人爱说 sweets。里面有个 can，能吃到糖当然开心。",
-   ex:[{en:"Too much candy is bad for you.",zh:"糖吃太多不好。"}]},
- curry:{talk:"咖喱。念出来就像咖喱，注意中间是两个 r。",
-   ex:[{en:"I love chicken curry.",zh:"我爱吃咖喱鸡。"}]},
- grape:{talk:"葡萄。一串葡萄要说 grapes。它跟 great 长得像，可 grape 读出来是「格瑞普」。",
-   ex:[{en:"These grapes are sweet.",zh:"这些葡萄很甜。"}]},
- /* 第 6 段：食物 + 厨房开头 */
- mango:{talk:"芒果。读出来像「芒狗」。它变复数有点特别，可以加 es，写成 mangoes。",
-   ex:[{en:"Mangoes grow in hot places.",zh:"芒果长在很热的地方。"}]},
- melon:{talk:"瓜。西瓜就是 watermelon，water 加 melon，装满水的瓜，是不是很形象。",
-   ex:[{en:"This melon is sweet.",zh:"这个瓜很甜。"}]},
- pasta:{talk:"意大利面。这是从意大利借来的词，读出来像「帕斯特」。所有的意面、通心粉都叫 pasta。",
-   ex:[{en:"We had pasta for dinner.",zh:"我们晚饭吃了意大利面。"}]},
- steak:{talk:"牛排。这个词最爱被读错，中间的 ea 要读「诶」，整个词跟 snake 押韵，像「斯太克」。",
-   ex:[{en:"I want a big steak.",zh:"我想要一块大牛排。"}]},
- toast:{talk:"烤面包片。面包片放进 toaster 烤一烤，就成了 toast。它跟 roast 只差第一个字母，一个烤面包，一个烤肉。",
-   ex:[{en:"I eat toast for breakfast.",zh:"我早餐吃吐司。"}]},
- cereal:{talk:"早餐麦片。早上倒一碗，加上牛奶，就是它。读三拍：ce、re、al。",
-   ex:[{en:"I have cereal every morning.",zh:"我每天早上吃麦片。"}]},
- chilli:{talk:"辣椒。ch 读「去」，读出来像「切利」。注意中间是两个 l。",
-   ex:[{en:"This chilli is too hot.",zh:"这个辣椒太辣了。"}]},
- garlic:{talk:"大蒜。gar 加 lic。想想一头蒜能掰出好多瓣来。",
-   ex:[{en:"I don't like garlic.",zh:"我不喜欢大蒜。"}]},
- pepper:{talk:"胡椒，也可以指甜椒。中间是两个 p。盐是 salt，胡椒是 pepper，这两个老在一起。",
-   ex:[{en:"Pass me the salt and pepper.",zh:"把盐和胡椒递给我。"}]},
- potato:{talk:"土豆。读三拍：po、ta、to。它变复数要加 es，potatoes，跟番茄 tomatoes 一样。",
-   ex:[{en:"I like baked potatoes.",zh:"我喜欢烤土豆。"}]},
- supper:{talk:"晚饭，比 dinner 随便一点，睡觉前吃的那顿。中间是两个 p，跟 super 就差一个 p，别写少了。",
-   ex:[{en:"We have supper at seven.",zh:"我们七点吃晚饭。"}]},
- yogurt:{talk:"酸奶。读出来像「优格特」。也有人写成 yoghurt，中间多一个 h，两种都对。",
-   ex:[{en:"I eat yogurt after lunch.",zh:"我午饭后吃酸奶。"}]},
- barbecue:{talk:"烧烤。这个词平时常写成三个字母 BBQ。要写全的话注意结尾是 cue。",
-   ex:[{en:"We had a barbecue in the garden.",zh:"我们在院子里烧烤。"}]},
- omelette:{talk:"煎蛋卷。这是从法国借来的词，读出来像「奥么勒特」。注意结尾是 ette，有两个 t。美国人写得短一点，omelet。",
-   ex:[{en:"I can make an omelette.",zh:"我会做煎蛋卷。"}]},
- "French fries":{talk:"炸薯条，美国说法，英国人管它叫 chips。注意 French 要大写，因为它的意思是「法国的」。",
-   ex:[{en:"I'd like some French fries.",zh:"我想要一些炸薯条。"}]},
- kit:{talk:"一整套工具。就三个字母。医药箱是 first aid kit，工具包是 tool kit。",
-   ex:[{en:"Where is my tool kit?",zh:"我的工具包在哪儿？"}]},
- mug:{talk:"马克杯，带把儿的那种大杯子。三个字母，跟 mud、mum 押韵。",
-   ex:[{en:"A mug of milk, please.",zh:"请给我一杯牛奶。"}]},
- bake:{talk:"用烤箱烤。做面包、蛋糕用 bake，烤肉用 roast。会做面包的人就叫 baker。",
-   ex:[{en:"Let's bake a cake.",zh:"我们来烤个蛋糕吧。"}]},
- /* 第 7 段：厨房 + 衣服开头 */
- boil:{talk:"煮开、沸腾。oi 读「奥伊」。它跟油 oil 长得很像，可 boil 是煮，oil 是油，别混了。",
-   ex:[{en:"Boil the water first.",zh:"先把水煮开。"}]},
- oven:{talk:"烤箱。它读「阿文」，不读「奥文」，这个最容易错。蛋糕就是从 oven 里出来的。",
-   ex:[{en:"The cake is in the oven.",zh:"蛋糕在烤箱里。"}]},
- roast:{talk:"烤的。烤鸡是 roast chicken。它跟吐司 toast 只差第一个字母，一个烤肉，一个烤面包。",
-   ex:[{en:"We had roast chicken.",zh:"我们吃了烤鸡。"}]},
- boiled:{talk:"boil 加上 ed，煮过的。白煮蛋就是 boiled egg。",
-   ex:[{en:"I want a boiled egg.",zh:"我想要一个白煮蛋。"}]},
- cooker:{talk:"炉灶，就是家里做饭的那个灶台。小心，做饭的人是 cook，做饭的机器才是 cooker。",
-   ex:[{en:"The cooker is very old.",zh:"这个灶很旧了。"}]},
- recipe:{talk:"食谱，做菜的方法。它的读法很怪，结尾那个 e 要发音，读出来像「瑞色皮」。",
-   ex:[{en:"This is my mum's recipe.",zh:"这是我妈妈的食谱。"}]},
- grilled:{talk:"架在火上烤的。烤鱼是 grilled fish。注意中间是两个 l。",
-   ex:[{en:"I like grilled fish.",zh:"我喜欢烤鱼。"}]},
- machine:{talk:"机器。这里的 ch 读「许」，整个词像「么信」。洗衣机就是 washing machine。",
-   ex:[{en:"This machine is broken.",zh:"这台机器坏了。"}]},
- "washing-up":{talk:"洗碗这件事。do the washing-up 就是洗碗。中间有个小横线，别漏了。",
-   ex:[{en:"I help with the washing-up.",zh:"我帮着洗碗。"}]},
- ingredient:{talk:"做菜的原料。in 加上 gredient。读四拍：in、gre、di、ent。",
-   ex:[{en:"Flour is the main ingredient.",zh:"面粉是主要原料。"}]},
- refrigerator:{talk:"冰箱，词表里最长的词之一。好消息是，平时大家都只说 fridge，五个字母就够了。",
-   ex:[{en:"Put the milk in the refrigerator.",zh:"把牛奶放进冰箱。"}]},
- tie:{talk:"领带，也可以是「系上」。系鞋带就说 tie your shoes。就三个字母。",
-   ex:[{en:"Dad wears a tie to work.",zh:"爸爸上班打领带。"}]},
- boot:{talk:"靴子。两个 o 读长长的「乌」。下雨天穿的雨靴是 rain boots。",
-   ex:[{en:"I need new boots.",zh:"我需要新靴子。"}]},
- ring:{talk:"戒指，也可以是电话「响」。手指上戴的圈圈，和铃声响起来，都是这一个词。",
-   ex:[{en:"She wears a gold ring.",zh:"她戴着一枚金戒指。"}]},
- shoe:{talk:"鞋。一只是 shoe，两只是 shoes。注意结尾是 oe，不是 oo。",
-   ex:[{en:"My shoe is dirty.",zh:"我的鞋脏了。"}]},
- size:{talk:"尺寸、码数。买鞋子的时候问 What size，就是问你穿多大码。",
-   ex:[{en:"What size are your shoes?",zh:"你的鞋穿多大码？"}]},
- sock:{talk:"短袜。一只 sock，一双 socks。它跟 rock、lock 押韵。",
-   ex:[{en:"Where is my other sock?",zh:"我另一只袜子在哪儿？"}]},
- suit:{talk:"西装，也可以是「合适」。泳衣 swimsuit 里面也藏着它。",
-   ex:[{en:"Dad wears a black suit.",zh:"爸爸穿一身黑西装。"}]},
- /* 第 8 段：衣服饰品 + 家开头 */
- chain:{talk:"链条，也可以指连锁店。ch 读「去」，读出来像「切恩」。一环扣一环的都叫 chain。",
-   ex:[{en:"She wears a gold chain.",zh:"她戴着一条金链子。"}]},
- glove:{talk:"手套。你看里面有个 love。天冷的时候戴上它，手就被好好爱护着了。",
-   ex:[{en:"Put on your gloves.",zh:"把手套戴上。"}]},
- purse:{talk:"钱包。英国人说的 purse 是女士的小钱包，男士的钱包一般叫 wallet。",
-   ex:[{en:"My purse is in my bag.",zh:"我的钱包在包里。"}]},
- scarf:{talk:"围巾。它变复数有点特别，f 要变成 ves，写成 scarves。",
-   ex:[{en:"Wear a scarf, it's cold.",zh:"围上围巾，天冷。"}]},
- blouse:{talk:"女式衬衫。读出来像「布劳斯」。男生的衬衫叫 shirt，这两个别搞混。",
-   ex:[{en:"She has a white blouse.",zh:"她有一件白衬衫。"}]},
- hoodie:{talk:"连帽衫。hood 就是帽子那一块，后面加上 ie。带帽子的卫衣，就是 hoodie。",
-   ex:[{en:"I like my new hoodie.",zh:"我喜欢我的新连帽衫。"}]},
- jumper:{talk:"套头毛衣，英国说法。jump 是跳，加上 er。记法：套头衫往头上一跳就穿好了。",
-   ex:[{en:"Put on a jumper.",zh:"穿上毛衣。"}]},
- pocket:{talk:"口袋。中间是 ck。零花钱叫 pocket money，意思就是口袋里的钱。",
-   ex:[{en:"My keys are in my pocket.",zh:"我的钥匙在口袋里。"}]},
- tights:{talk:"连裤袜。它永远要加 s，因为有两条腿。跟 jeans、scissors 一样，都是天生的复数。",
-   ex:[{en:"She is wearing black tights.",zh:"她穿着黑色连裤袜。"}]},
- earring:{talk:"ear 是耳朵，ring 是圈圈。耳朵上的圈圈，耳环。中间连着两个 r，一个属于 ear，一个属于 ring。",
-   ex:[{en:"I lost one earring.",zh:"我丢了一只耳环。"}]},
- sweater:{talk:"毛衣，美国说法。里面藏着一个 sweat，汗。穿太厚会出汗，所以叫 sweater。",
-   ex:[{en:"This sweater is warm.",zh:"这件毛衣很暖和。"}]},
- trainer:{talk:"运动鞋，英国说法，一般说成 trainers 两只一起。它还有另一个意思是教练。",
-   ex:[{en:"My trainers are new.",zh:"我的运动鞋是新的。"}]},
- bracelet:{talk:"手链。前面 brace，后面 let。戴在手腕上的那个小圈。",
-   ex:[{en:"She has a silver bracelet.",zh:"她有一条银手链。"}]},
- necklace:{talk:"neck 是脖子，lace 是带子。挂在脖子上的带子，那就是项链。",
-   ex:[{en:"What a pretty necklace!",zh:"多漂亮的项链！"}]},
- swimsuit:{talk:"swim 是游泳，suit 是一套衣服。游泳穿的那套，就是泳衣。",
-   ex:[{en:"Don't forget your swimsuit.",zh:"别忘了带泳衣。"}]},
- "bathing suit":{talk:"泳衣的另一种说法，美国人爱用。bathing 是泡水，suit 是那一套。注意这是分开的两个词，中间有空格。",
-   ex:[{en:"She bought a new bathing suit.",zh:"她买了一件新泳衣。"}]},
- bin:{talk:"垃圾桶。就三个字母。扔垃圾就说 put it in the bin。",
-   ex:[{en:"Throw it in the bin.",zh:"把它扔进垃圾桶。"}]},
- rent:{talk:"租，也可以指租金。每个月交的房租就是 rent。它跟 sent、tent 押韵。",
-   ex:[{en:"We rent this flat.",zh:"这套房子是我们租的。"}]},
- /* 第 9 段：家与家具 + 学校开头 */
- roof:{talk:"屋顶。两个 o 读长长的「乌」。房子最上面那一层就是 roof。",
-   ex:[{en:"A bird is on the roof.",zh:"有只鸟在屋顶上。"}]},
- shelf:{talk:"架子。好几个架子要写成 shelves，f 变成 ves，跟围巾 scarf 的变法一样。",
-   ex:[{en:"Put the book on the shelf.",zh:"把书放到架子上。"}]},
- closet:{talk:"壁橱，美国说法。里面有个 close，关。能关起来的柜子，就是壁橱。",
-   ex:[{en:"My coat is in the closet.",zh:"我的外套在壁橱里。"}]},
- pillow:{talk:"枕头。后面是 low，低。睡觉的时候头低低地放上去。注意中间是两个 l。",
-   ex:[{en:"This pillow is soft.",zh:"这个枕头很软。"}]},
- poster:{talk:"海报。post 是贴、寄，加上 er。贴在墙上的大画，就是海报。",
-   ex:[{en:"I have a poster of a cat.",zh:"我有一张猫的海报。"}]},
- toilet:{talk:"厕所。读两拍：toi、let。在英国问厕所就说 Where is the toilet。",
-   ex:[{en:"Where is the toilet?",zh:"厕所在哪儿？"}]},
- bathtub:{talk:"bath 是洗澡，tub 是大桶。洗澡用的大桶，那就是浴缸。",
-   ex:[{en:"The baby is in the bathtub.",zh:"宝宝在浴缸里。"}]},
- blanket:{talk:"毯子。前面 blan，后面 ket。天冷的时候盖在身上那一条。",
-   ex:[{en:"I need another blanket.",zh:"我还要一条毯子。"}]},
- cabinet:{talk:"橱柜。读三拍：ca、bi、net。厨房墙上挂的那种柜子。",
-   ex:[{en:"The cups are in the cabinet.",zh:"杯子在橱柜里。"}]},
- curtain:{talk:"窗帘。cur 加 tain，读出来像「克疼」，结尾很轻。天黑了就拉上 curtains。",
-   ex:[{en:"Please close the curtains.",zh:"请把窗帘拉上。"}]},
- heating:{talk:"暖气。heat 是热，加上 ing。冬天把暖气打开，就说 turn on the heating。",
-   ex:[{en:"Turn on the heating.",zh:"把暖气打开。"}]},
- armchair:{talk:"arm 是胳膊，chair 是椅子。有胳膊的椅子，就是扶手椅。",
-   ex:[{en:"Granddad sits in the armchair.",zh:"爷爷坐在扶手椅上。"}]},
- elevator:{talk:"电梯，美国说法，英国人叫 lift。elevate 是升起来，加上 or 就是把人送上去的那个东西。",
-   ex:[{en:"Take the elevator to floor five.",zh:"坐电梯到五楼。"}]},
- wardrobe:{talk:"衣柜。前面 ward，后面 robe，robe 是长袍。放袍子和衣服的地方，就是衣柜。",
-   ex:[{en:"Hang it in the wardrobe.",zh:"把它挂到衣柜里。"}]},
- apartment:{talk:"公寓，美国说法，英国人叫 flat。读三拍：a、part、ment。",
-   ex:[{en:"They live in a big apartment.",zh:"他们住在一套大公寓里。"}]},
- "washing machine":{talk:"洗衣机。washing 是洗，machine 是机器。这是分开写的两个词，中间有空格。",
-   ex:[{en:"The washing machine is on.",zh:"洗衣机正在转。"}]},
- exam:{talk:"考试。它其实是 examination 的短写，太长了，所以大家都只说 exam。",
-   ex:[{en:"I have a maths exam today.",zh:"我今天有数学考试。"}]},
- fail:{talk:"没通过、不及格，跟 pass 正好相反。四个字母，ai 读「诶」。",
-   ex:[{en:"Don't be afraid to fail.",zh:"别怕失败。"}]},
- /* 第 10 段：学校与学习 */
- quiz:{talk:"小测验，比 exam 轻松多了。注意 q 后面永远跟着一个 u，这是英语的规矩。",
-   ex:[{en:"We had a spelling quiz.",zh:"我们做了一次拼写小测。"}]},
- term:{talk:"学期。一年分成好几个 term。它还有「术语」的意思，先记住学期就行。",
-   ex:[{en:"The new term starts in September.",zh:"新学期九月开始。"}]},
- pupil:{talk:"小学生。英国学校里的学生叫 pupil，上大学的才叫 student。它还有个意思，是眼睛里的瞳孔。",
-   ex:[{en:"There are thirty pupils in my class.",zh:"我们班有三十个学生。"}]},
- spell:{talk:"拼写。老师说 Spell it，就是让你把字母一个一个念出来。注意结尾是两个 l。",
-   ex:[{en:"How do you spell your name?",zh:"你的名字怎么拼？"}]},
- eraser:{talk:"橡皮，美国说法。erase 是擦掉，加上 r 就是擦东西的家伙。英国人管它叫 rubber。",
-   ex:[{en:"Can I borrow your eraser?",zh:"能借一下你的橡皮吗？"}]},
- biology:{talk:"生物。bio 是「生命」，logy 是「学问」。研究生命的学问，就是生物课。",
-   ex:[{en:"Biology is my favourite subject.",zh:"生物是我最喜欢的课。"}]},
- college:{talk:"学院、大学。注意中间是两个 l。",
-   ex:[{en:"My sister is at college.",zh:"我姐姐在上大学。"}]},
- diploma:{talk:"文凭、证书。读三拍：di、plo、ma。毕业的时候发给你的那张纸。",
-   ex:[{en:"She got her diploma.",zh:"她拿到了文凭。"}]},
- mistake:{talk:"错误。mis 是「错」，take 是拿。拿错了，就是犯错。常跟 make 一起用，make a mistake。",
-   ex:[{en:"Everyone makes mistakes.",zh:"每个人都会犯错。"}]},
- physics:{talk:"物理。ph 读「夫」，读出来像「菲日克斯」。它结尾有个 s，可它是一门课，当单数用。",
-   ex:[{en:"Physics is hard but fun.",zh:"物理很难但很有趣。"}]},
- project:{talk:"项目、课题。老师布置的那种大作业就叫 project。pro 加上 ject。",
-   ex:[{en:"We are doing a science project.",zh:"我们在做一个科学课题。"}]},
- beginner:{talk:"初学者。begin 是开始，后面加 ner。注意 n 要写两个，begin 变成 beginner。",
-   ex:[{en:"I'm still a beginner.",zh:"我还是个初学者。"}]},
- language:{talk:"语言。中间是 gu，很容易漏掉那个 u。英语、中文都是 language。",
-   ex:[{en:"English is a useful language.",zh:"英语是一门有用的语言。"}]},
- scissors:{talk:"剪刀。它跟 tights 一样永远加 s，因为剪刀有两片刀。开头的 c 不出声，读出来像「西泽斯」。",
-   ex:[{en:"Be careful with the scissors.",zh:"用剪刀小心点。"}]},
- textbook:{talk:"text 是课文，book 是书。装着课文的书，就是课本。",
-   ex:[{en:"Open your textbook.",zh:"打开你的课本。"}]},
- chemistry:{talk:"化学。这里的 ch 读「克」，读出来像「凯么斯翠」。就是做实验那门课。",
-   ex:[{en:"We do experiments in chemistry.",zh:"化学课上我们做实验。"}]},
- timetable:{talk:"time 是时间，table 是表格。把时间排成一张表，就是课程表。",
-   ex:[{en:"Look at the timetable.",zh:"看看课程表。"}]},
- dictionary:{talk:"词典。读四拍：dic、tio、na、ry。不认识的词，问它就行。",
-   ex:[{en:"Use a dictionary.",zh:"查查词典。"}]}
-};
-(function attachTalks(){
-  WORDS.forEach(w=>{const t=TALKS[w.en];if(t){w.talk=t.talk;if(t.ex)w.ex=t.ex;}});
-})();
-
 /* 2. 分段：25 段，每段 15–23 词，约 3 天一段 */
 const SEG_SIZES=[].concat(Array(5).fill(15),Array(5).fill(18),Array(5).fill(20),Array(5).fill(21),[22,22,22,23,23]);
 const SEG_COUNT=25,PER_BADGE=5,PLAN_DAYS=90;
@@ -2005,7 +1548,7 @@ function save(){
   if(typeof autoBackupTick==="function")autoBackupTick();   /* 顺手做自动备份 */
 }
 const SKEY="eggy_setting_v4";
-const SET_DEF={rate:0.9,sfx:1,aiVoice:"en-US-AnaNeural"};
+const SET_DEF={rate:0.9,gap:500,sfx:1,aiVoice:"en-US-AnaNeural"};
 let SET=(()=>{try{return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SKEY)))}catch(e){return Object.assign({},SET_DEF)}})();
 function saveSet(){localStorage.setItem(SKEY,JSON.stringify(SET));}
 function dayRec(){const d=today();S.days[d]=S.days[d]||{q:0,w:0,s:0};return S.days[d];}
@@ -2027,17 +1570,10 @@ function renderHUD(){
   let e="";for(let i=0;i<10;i++)e+='<b class="'+(i<energy?"on":"")+'"></b>';
   $("#energyBar").innerHTML=e;
   if(sess){
-    /* 进度条按整段算，换组时不会倒退，孩子看得出总进度 */
-    const all=sess.allWords&&sess.allWords.length?sess.allWords:sess.words;
-    const n=all?all.length:0;
-    if(n){
-      const got=all.filter(w=>sess.prog[w.en]===3).length;
-      const steps=all.reduce((a,w)=>a+(sess.prog[w.en]||0),0);
-      $("#segBar").style.width=(steps/(n*3)*100)+"%";
-      const grp=(sess.batches&&sess.batches.length>1)
-        ?("　第 "+(sess.batchIdx+1)+"/"+sess.batches.length+" 组"):"";
-      $("#segTxt").textContent=got+"/"+n+" 词"+grp;
-    }else{$("#segBar").style.width="0%";$("#segTxt").textContent="复习中";}
+    const n=sess.words.length,got=sess.words.filter(w=>sess.prog[w.en]===3).length;
+    const steps=sess.words.reduce((a,w)=>a+sess.prog[w.en],0);
+    $("#segBar").style.width=(steps/(n*3)*100)+"%";
+    $("#segTxt").textContent=got+"/"+n+" 词";
   }else{$("#segBar").style.width="0%";$("#segTxt").textContent="未开始";}
 }
 document.querySelectorAll(".nav button").forEach(b=>{
@@ -2247,604 +1783,46 @@ function repairState(){
   if(S.pendBoss!=null&&S.pieces.includes(S.pendBoss))S.pendBoss=null;
   save();
 }
-/* 一次最多讲几个词。超过就分组：讲完一组马上练这一组，练全对了再讲下一组。
-   一口气讲十几个再统一测，孩子记不住前面的。 */
-const BATCH_MAX=8;
-function splitBatches(ws){
-  if(ws.length<=BATCH_MAX)return [ws.slice()];
-  const groups=Math.ceil(ws.length/BATCH_MAX);        /* 分成几组 */
-  const size=Math.ceil(ws.length/groups);            /* 每组尽量一样多，别出现最后一组只剩 1 个 */
-  const out=[];
-  for(let k=0;k<ws.length;k+=size)out.push(ws.slice(k,k+size));
-  return out;
-}
 function startSegment(i,customWords){
   resetSession();
   const ws=customWords||segWords(i);
   if(!ws.length){$("#learnArea").innerHTML='<div class="study"><h2 class="title">这一段还没有单词 ➕</h2></div>';return;}
-  const batches=customWords?[ws.slice()]:splitBatches(ws);
-  sess={seg:i,allWords:ws,batches:batches,batchIdx:0,words:batches[0],
-        prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:!!customWords,
+  sess={seg:i,words:ws,prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:!!customWords,
         warm:customWords?[]:reviewPick(i,3).map(w=>({w,t:1+Math.floor(Math.random()*3)}))};
-  ws.forEach(w=>sess.prog[w.en]=0);          /* 进度按整段记，分组只影响讲解和出题顺序 */
-  sess.queue=shuffle(batches[0].slice());
+  ws.forEach(w=>sess.prog[w.en]=0);
+  sess.queue=shuffle(ws.slice());
   energy=0;studyIdx=0;renderHUD();
-  loadVoicePack(i);                     /* 有本地音频包就先取回来，之后每句零延迟 */
-  preSyn(batches[0].slice(0,3));        /* 没有音频包的段落，提前拉好在线语音 */
+  preSyn(ws.slice(0,3));                /* 开段就先备好前几句，第一张讲解卡不用等 */
   if(customWords)startQuiz();
   else if(sess.warm.length)nextQ();     // 先热身复习
   else renderStudy();
 }
-/* 这一组全部闯关通过 → 讲下一组 */
-function nextBatch(){
-  stopSpeak();
-  sess.batchIdx++;
-  sess.words=sess.batches[sess.batchIdx];
-  sess.queue=shuffle(sess.words.slice());
-  sess.studied=false;studyIdx=0;
-  preSyn(sess.words.slice(0,3));
-  toast("👏 这一组过啦！接着讲第 "+(sess.batchIdx+1)+" 组");
-  renderStudy();
-}
-/* ---- 动画小剧场 ----------------------------------------------------
-   给难记的词配一段小动画：三个画面轮着放，放完再从头开始，一直动着不停。
-   人物身上挂着 ani-bob（呼吸）、ani-blink（眨眼）、ani-arm（挥手）这些循环动画，
-   画面里的关键动作（盖子落下、字母蹦跳、s 飞进来）也都是循环的。
-   画面全部是内联 SVG + CSS 动画，不依赖任何外部文件。
-   新增一个词的动画：往 ANIMS 里加一项，scenes 里每项写 svg / cap / sub / ms。 */
-const aniKid=(x,y,s,shirt,hair,arm,off,hop)=>{
-  const dly=off?'animation-delay:'+off+'s':'';           /* 错开一点，几个人不会同步动 */
-  const d=dly?' style="'+dly+'"':'';
-  /* 会蹦的人用 ani-hop，站着的人用 ani-bob 轻轻呼吸；影子留在地上，只跟着缩放 */
-  const sd=hop?' style="'+(dly?dly+';':'')+'animation-duration:1.2s"':d;
-  const rightArm=arm==="wave"
-    ? '<g class="ani-arm"'+d+'><path d="M13 24 q14 -6 15 -20" stroke="#FFD9B8" stroke-width="7" fill="none" stroke-linecap="round"/></g>'
-    : arm==="point"
-    ? '<g class="ani-point"'+d+'><path d="M13 24 q17 -3 31 -9" stroke="#FFD9B8" stroke-width="7" fill="none" stroke-linecap="round"/></g>'
-    : '<path d="M13 24 q13 9 12 21" stroke="#FFD9B8" stroke-width="7" fill="none" stroke-linecap="round"/>';
-  return '<g transform="translate('+x+','+y+') scale('+s+')">'+
-    '<ellipse class="ani-shadow" cx="0" cy="67" rx="22" ry="6" fill="#25384A" opacity=".08"'+sd+'/>'+
-    '<g class="'+(hop?"ani-hop":"ani-bob")+'"'+d+'>'+
-      '<path d="M-13 24 q-13 9 -12 21" stroke="#FFD9B8" stroke-width="7" fill="none" stroke-linecap="round"/>'+rightArm+
-      '<rect x="-11" y="46" width="9" height="19" rx="4.5" fill="#6B7BA0"/>'+
-      '<rect x="2" y="46" width="9" height="19" rx="4.5" fill="#6B7BA0"/>'+
-      '<rect x="-15" y="14" width="30" height="36" rx="14" fill="'+shirt+'"/>'+
-      '<circle cx="0" cy="-2" r="17" fill="#FFE3C6"/>'+
-      '<path d="M-17 -5 a17 17 0 0 1 34 0 z" fill="'+hair+'"/>'+
-      '<g class="ani-blink"'+d+'>'+
-        '<circle cx="-6" cy="1" r="2.6" fill="#3B3145"/><circle cx="6" cy="1" r="2.6" fill="#3B3145"/>'+
-        '<circle cx="-5.1" cy=".1" r=".9" fill="#fff"/><circle cx="6.9" cy=".1" r=".9" fill="#fff"/></g>'+
-      '<circle cx="-11" cy="7" r="3.3" fill="#FFB9B2" opacity=".7"/><circle cx="11" cy="7" r="3.3" fill="#FFB9B2" opacity=".7"/>'+
-      '<path d="M-4.5 8 q4.5 4.5 9 0" stroke="#C4726B" stroke-width="2.2" fill="none" stroke-linecap="round"/>'+
-    '</g></g>';
-};
-const aniBubble=(x,y,w,tail,txt,fs)=>'<g class="ani-pulse">'+
-  '<path d="M'+(tail-8)+' '+(y+46)+' l4 15 l15 -15 z" fill="#fff" stroke="#9FBFD1" stroke-width="3"/>'+
-  '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="46" rx="14" fill="#fff" stroke="#9FBFD1" stroke-width="3"/>'+
-  '<text x="'+(x+w/2)+'" y="'+(y+30)+'" text-anchor="middle" font-size="'+(fs||20)+'" font-family="Arial" fill="#33505F">'+txt+'</text></g>';
-const aniTile=(x,txt,cls)=>'<g class="ani-tile '+cls+'">'+
-  '<rect x="'+x+'" y="58" width="52" height="64" rx="13" fill="#FFF3D6" stroke="#E5C782" stroke-width="3"/>'+
-  '<text x="'+(x+26)+'" y="104" text-anchor="middle" font-size="37" font-weight="bold" font-family="Arial" fill="#8A6A2A">'+txt+'</text></g>';
-/* 一个大脑袋，用来讲脸、头发、胡子、脖子这类词 */
-const aniHead=(x,y,s,o)=>{
-  o=o||{};
-  const skin=o.skin||"#FFE3C6",hair=o.hair||"#3B3145";
-  return '<g transform="translate('+x+','+y+') scale('+s+')">'+
-    '<g class="ani-bob"'+(o.off?' style="animation-delay:'+o.off+'s"':'')+'>'+
-      (o.neck?'<rect x="-12" y="24" width="24" height="26" rx="9" fill="'+(o.neckColor||skin)+'"/>':'')+
-      '<circle cx="0" cy="0" r="34" fill="'+skin+'"/>'+
-      '<path d="M-34 -7 a34 34 0 0 1 68 0 z" fill="'+hair+'"/>'+
-      (o.longHair?'<path d="M-34 -6 q-7 30 2 44 q7 -18 6 -44 z" fill="'+hair+'"/>'+
-        '<path d="M34 -6 q7 30 -2 44 q-7 -18 -6 -44 z" fill="'+hair+'"/>':'')+
-      (o.beard?'<path d="M-25 8 q1 33 25 33 q24 0 25 -33 q-11 13 -25 13 q-14 0 -25 -13 z" fill="'+(o.beardColor||hair)+'"/>':'')+
-      (o.brow==="angry"?'<path d="M-21 -13 l14 7 M21 -13 l-14 7" stroke="#3B3145" stroke-width="3" stroke-linecap="round"/>'
-       :o.brow==="sad"?'<path d="M-21 -6 l14 -7 M21 -6 l-14 -7" stroke="#3B3145" stroke-width="3" stroke-linecap="round"/>'
-       :o.brow==="up"?'<path d="M-19 -10 q6 -7 13 0 M19 -10 q-6 -7 -13 0" stroke="#3B3145" stroke-width="3" fill="none" stroke-linecap="round"/>':'')+
-      (o.eyes==="closed"
-        ?'<path d="M-18 4 q6 7 12 0 M6 4 q6 7 12 0" stroke="#3B3145" stroke-width="3" fill="none" stroke-linecap="round"/>'
-        :'<g class="ani-blink"><circle cx="-12" cy="4" r="4.4" fill="#3B3145"/><circle cx="12" cy="4" r="4.4" fill="#3B3145"/>'+
-          '<circle cx="-10.6" cy="2.6" r="1.5" fill="#fff"/><circle cx="13.4" cy="2.6" r="1.5" fill="#fff"/></g>')+
-      (o.blush?'<g class="'+(o.blushOn?'ani-beat':'')+'"><circle cx="-21" cy="14" r="7" fill="'+(o.blush===true?"#FFB9B2":o.blush)+'" opacity=".8"/>'+
-        '<circle cx="21" cy="14" r="7" fill="'+(o.blush===true?"#FFB9B2":o.blush)+'" opacity=".8"/></g>':'')+
-      (o.mouth==="open"?'<ellipse cx="0" cy="21" rx="7" ry="8" fill="#C4726B"/>'
-       :o.mouth==="flat"?'<path d="M-8 20 h16" stroke="#C4726B" stroke-width="3" fill="none" stroke-linecap="round"/>'
-       :o.mouth==="sad"?'<path d="M-8 23 q8 -8 16 0" stroke="#C4726B" stroke-width="3" fill="none" stroke-linecap="round"/>'
-       :o.mouth==="wide"?'<path d="M-11 16 q11 15 22 0 z" fill="#C4726B"/>'
-       :o.mouth==="kiss"?'<circle cx="0" cy="20" r="5" fill="#D96A74"/>'
-       :o.mouth==="zig"?'<path d="M-10 20 l5 -5 l5 5 l5 -5 l5 5" stroke="#C4726B" stroke-width="3" fill="none" stroke-linecap="round"/>'
-       :'<path d="M-8 18 q8 8 16 0" stroke="#C4726B" stroke-width="3" fill="none" stroke-linecap="round"/>')+
-    '</g></g>';
-};
-/* 模板一：拆词 —— 左右两半飞进来，合起来的词跳出来 */
-const scCombine=(a,b,whole,cap,sub,note)=>{
-  const half=(a+b).length>12?22:28;           /* 两半太长就缩小一号，免得顶出画面 */
-  return {ms:6000,cap:cap,sub:sub,svg:
-  '<g class="inL"><text x="152" y="62" text-anchor="end" font-size="'+half+'" font-weight="bold" font-family="Arial" fill="#3F7EA0">'+a+'</text></g>'+
-  '<text x="160" y="62" text-anchor="middle" font-size="24" font-weight="bold" fill="#9FB6C4">+</text>'+
-  '<g class="inR"><text x="168" y="62" font-size="'+half+'" font-weight="bold" font-family="Arial" fill="#C4813E">'+b+'</text></g>'+
-  '<text x="160" y="94" text-anchor="middle" font-size="14" fill="#8FA9B8">合起来就是</text>'+
-  '<g class="showUp"><text x="160" y="140" text-anchor="middle" font-size="'+(whole.length>11?28:34)+
-    '" font-weight="bold" font-family="Arial" fill="#33505F">'+whole+'</text></g>'+
-  (note?'<text class="up d4" x="160" y="172" text-anchor="middle" font-size="13" fill="#6D8796">'+note+'</text>':'')};
-};
-/* 模板二：字母摊开，指定的字母高亮，用来讲不出声的字母和双写字母 */
-const scLetters=(word,hi,cap,sub,note)=>{
-  const n=word.length,tw=Math.min(40,Math.floor(300/n))-4;
-  const x0=(320-(n*(tw+4)-4))/2,fs=Math.min(26,Math.round(tw*.95));
-  let s='';
-  word.split("").forEach((c,i)=>{
-    const x=x0+i*(tw+4),on=hi&&hi[i];
-    s+='<g class="ani-tile '+(i%3===1?"o1":i%3===2?"o2":"")+'">'+
-      '<rect x="'+x+'" y="60" width="'+tw+'" height="52" rx="10" fill="'+(on?"#FFE2C2":"#FFF3D6")+
-        '" stroke="'+(on?"#DF8E48":"#E5C782")+'" stroke-width="3"/>'+
-      '<text x="'+(x+tw/2)+'" y="'+(60+26+fs*.36)+'" text-anchor="middle" font-size="'+fs+
-        '" font-weight="bold" font-family="Arial" fill="'+(on?"#95530F":"#8A6A2A")+'">'+c+'</text></g>';
-  });
-  const tips=[];
-  if(hi)Object.keys(hi).forEach(i=>{if(hi[i]&&tips.indexOf(hi[i])<0)tips.push(hi[i]);});
-  return {ms:5400,cap:cap,sub:sub,svg:
-    '<text x="160" y="40" text-anchor="middle" font-size="26" font-weight="bold" font-family="Arial" fill="#33505F">'+word+'</text>'+
-    s+(tips.length?'<text class="ani-pulse" x="160" y="140" text-anchor="middle" font-size="15" font-weight="bold" fill="#C4813E">'+tips.join("　")+'</text>':'')+
-    (note?'<text class="up d4" x="160" y="172" text-anchor="middle" font-size="13" fill="#6D8796">'+note+'</text>':'')};
-};
-/* 模板三：小朋友把例句说出来（例句直接取 TALKS 里写好的那句） */
-const scSay=(key,tip)=>{
-  const t=TALKS[key]||{},e=(t.ex&&t.ex[0])||{en:key,zh:""};
-  const n=e.en.length,fs=n>28?15:n>22?17:19;
-  const w=Math.min(300,Math.round(n*fs*.56)+32),x=Math.round((320-w)/2);
-  const c=key.charCodeAt(0)%3;
-  return {ms:6400,cap:e.en+"　"+e.zh,sub:tip||"跟着念一遍，记得更牢",svg:
-    aniBubble(x,12,w,118,e.en,fs)+
-    aniKid(104,96,1.1,["#9AA8D8","#7FC8E8","#8ED9B4"][c],"#463A4F","point")+
-    aniKid(236,104,.85,["#FFD27A","#F09F8C","#C9B6E8"][c],"#3B3145","",-1.1,true)+
-    '<text class="up d4" x="160" y="174" text-anchor="middle" font-size="13" fill="#6D8796">'+e.zh+'</text>'};
-};
-/* 模板四：几张词卡摆一排做对比，hot 的那张用绿色标出来 */
-const scCards=(items,cap,sub,note)=>{
-  const n=items.length,w=n===2?128:94,gap=n===2?18:12;
-  const x0=(320-(n*w+(n-1)*gap))/2;
-  let s='';
-  items.forEach((it,i)=>{
-    const x=x0+i*(w+gap),cx=x+w/2,hot=it.hot;
-    s+='<g class="ani-tile '+(i===1?"o1":i===2?"o2":"")+'">'+
-      '<rect x="'+x+'" y="50" width="'+w+'" height="62" rx="14" fill="'+(hot?"#E9F4EC":"#FBF7EF")+
-        '" stroke="'+(hot?"#78B295":"#E0D4BC")+'" stroke-width="3"/>'+
-      '<text x="'+cx+'" y="90" text-anchor="middle" font-size="'+(n===2?27:21)+
-        '" font-weight="bold" font-family="Arial" fill="'+(hot?"#2F6D4F":"#7A6A4E")+'">'+it.en+'</text></g>'+
-      '<text x="'+cx+'" y="134" text-anchor="middle" font-size="14" fill="'+(hot?"#3F7A5C":"#8A7E6A")+'">'+it.zh+'</text>';
-  });
-  return {ms:5600,cap:cap,sub:sub,svg:s+
-    (note?'<text class="up d4" x="160" y="172" text-anchor="middle" font-size="13" fill="#6D8796">'+note+'</text>':'')};
-};
-/* 小道具：爱心、T 恤、水滴、瓶子。带动画的类要放在里层，
-   因为外层那个 g 已经占用了 transform 属性，CSS 的 transform 会把它顶掉 */
-const aniHeart=(x,y,s,cls)=>'<g transform="translate('+x+','+y+') scale('+s+')"><g class="'+(cls||"")+'">'+
-  '<path d="M0 14 C-16 2 -12 -12 -1 -6 C0 -5 0 -5 1 -6 C12 -12 16 2 0 14 z" fill="#F58BA6"/></g></g>';
-const aniTee=(x,y,s,c)=>'<g transform="translate('+x+','+y+') scale('+s+')">'+
-  '<path d="M-20 -14 h40 l16 12 l-10 14 l-6 -5 v38 h-40 v-38 l-6 5 l-10 -14 z" fill="'+c+'" stroke="#DDE4EA" stroke-width="2"/>'+
-  '<path d="M-8 -14 q8 9 16 0" fill="none" stroke="#DDE4EA" stroke-width="3"/></g>';
-const aniDroplet=(x,y,s,c,cls)=>'<g transform="translate('+x+','+y+') scale('+s+')"><g class="'+(cls||"")+'">'+
-  '<path d="M0 -12 q9 13 9 19 a9 9 0 0 1 -18 0 q0 -6 9 -19 z" fill="'+c+'"/></g></g>';
-const aniBottle=(x,y,s,c)=>'<g transform="translate('+x+','+y+') scale('+s+')">'+
-  '<rect x="-6" y="-38" width="12" height="12" rx="3" fill="#B9A78E"/>'+
-  '<rect x="-20" y="-28" width="40" height="56" rx="10" fill="'+c+'" stroke="#D9C9B4" stroke-width="3"/>'+
-  '<rect x="-12" y="-8" width="24" height="16" rx="4" fill="#FFFFFF" opacity=".55"/></g>';
-const ANIMS={
- guy:{scenes:[
-  {ms:6000,cap:"盖子的「盖」，读起来就是 guy",sub:"想到 guy，就想起盖子啪一下盖上杯子",
-   svg:'<ellipse cx="160" cy="160" rx="50" ry="7" fill="#25384A" opacity=".08"/>'+
-     '<g class="ani-cup"><path d="M134 86 L186 86 L180 152 Q179 158 173 158 L147 158 Q141 158 140 152 Z" fill="#fff" stroke="#8FB3C7" stroke-width="3"/>'+
-       '<path d="M186 100 q19 8 0 28" stroke="#8FB3C7" stroke-width="3" fill="none"/></g>'+
-     '<g class="drop"><ellipse cx="160" cy="84" rx="34" ry="9" fill="#FFB27A" stroke="#DF8248" stroke-width="3"/>'+
-       '<rect x="154" y="70" width="12" height="10" rx="5" fill="#DF8248"/></g>'+
-     '<text class="flash" x="228" y="94" font-size="21" font-weight="bold" fill="#DF8248">啪！</text>'+
-     '<text class="ani-pulse" x="160" y="38" text-anchor="middle" font-size="27" font-weight="bold" fill="#33505F">盖 ≈ guy</text>'},
-  {ms:5400,cap:"它只有三个字母：g · u · y",sub:"短得像一个小盖子，一眼就记住了",
-   svg:'<text x="160" y="36" text-anchor="middle" font-size="15" fill="#6D8796">数一数，就三个字母</text>'+
-     aniTile(76,"g","")+aniTile(134,"u","o1")+aniTile(192,"y","o2")+
-     '<text class="ani-pulse o3" x="160" y="160" text-anchor="middle" font-size="22" font-weight="bold" fill="#33505F">guy　那个人</text>'},
-  {ms:6600,cap:"Who is that guy?　那个人是谁？",sub:"guy 就是「那个人、那个家伙」，大人聊天最爱用",
-   svg:aniBubble(46,14,228,96,"Who is that guy?")+
-     aniKid(92,104,.95,"#7FC8E8","#4A3A33","point")+
-     aniKid(236,100,1.05,"#F09F8C","#3B3145","",-1.3)+
-     '<text class="up d4" x="160" y="178" text-anchor="middle" font-size="14" fill="#6D8796">他指着那边那个人问：那是谁呀？</text>'}
- ]},
- kid:{scenes:[
-  {ms:6000,cap:"kid 就是小孩儿",sub:"爸爸妈妈喊你 kid，说的就是你",
-   svg:aniKid(160,70,1.05,"#8ED9B4","#3B3145","wave",0,true)+
-     '<text class="ani-pulse" x="160" y="174" text-anchor="middle" font-size="24" font-weight="bold" fill="#33505F">kid ＝ 小孩儿</text>'},
-  {ms:6600,cap:"Hey, kid!　嘿，小家伙！",sub:"大人跟小孩说话的时候，特别爱用这个词",
-   svg:aniBubble(84,12,152,124,"Hey, kid!")+
-     aniKid(96,88,1.2,"#9AA8D8","#463A4F","point")+
-     aniKid(232,104,.82,"#FFD27A","#3B3145","",-1.1,true)+
-     '<text class="up d4" x="160" y="178" text-anchor="middle" font-size="14" fill="#6D8796">大人低头跟小孩打招呼</text>'},
-  {ms:5600,cap:"好几个小孩，后面加一个 s：kids",sub:"一个是 kid，三个就是 kids",
-   svg:'<text x="178" y="62" text-anchor="end" font-size="42" font-weight="bold" font-family="Arial" fill="#33505F">kid</text>'+
-     '<g class="slide"><text x="181" y="62" font-size="42" font-weight="bold" font-family="Arial" fill="#DF8248">s</text></g>'+
-     aniKid(72,118,.62,"#8ED9B4","#3B3145","",0,true)+
-     aniKid(160,118,.62,"#7FC8E8","#4A3A33","",-.4,true)+
-     aniKid(248,118,.62,"#FFD27A","#463A4F","",-.8,true)+
-     '<text class="up" x="160" y="92" text-anchor="middle" font-size="14" fill="#6D8796">人一多，就得加 s</text>'}
- ]},
- /* ===== 第 2 段：家人收尾 + 身体和外貌 ===== */
- penfriend:{scenes:[
-  scCombine("pen","friend","penfriend","pen 是钢笔，friend 是朋友","合起来就是笔友","用笔写信交上的朋友"),
-  {ms:5600,cap:"写一封信，寄给远方的朋友",sub:"现在大家都发消息了，可这个词还留着",
-   svg:'<rect x="80" y="54" width="130" height="94" rx="8" fill="#fff" stroke="#C9D8E2" stroke-width="3"/>'+
-     '<path d="M94 80 h100 M94 98 h100 M94 116 h70" stroke="#DCE7EE" stroke-width="4" stroke-linecap="round"/>'+
-     '<g transform="translate(196,32)"><g class="ani-swing">'+
-       '<rect x="-5" y="0" width="10" height="42" rx="4" fill="#5B8FB0"/>'+
-       '<path d="M-5 42 l5 12 l5 -12 z" fill="#33505F"/></g></g>'+
-     '<g transform="translate(258,122)"><g class="ani-float">'+
-       '<rect x="-26" y="-18" width="52" height="36" rx="5" fill="#FFF3D6" stroke="#E5C782" stroke-width="3"/>'+
-       '<path d="M-26 -18 l26 20 l26 -20" fill="none" stroke="#E5C782" stroke-width="3"/></g></g>'+
-     '<text class="up d4" x="140" y="178" text-anchor="middle" font-size="13" fill="#6D8796">写好信，寄给笔友</text>'},
-  scSay("penfriend")
- ]},
- girlfriend:{scenes:[
-  scCombine("girl","friend","girlfriend","girl 是女孩，friend 是朋友","合起来就是女朋友","中间不空格，一个词写到底"),
-  {ms:5600,cap:"girlfriend 和 boyfriend 是一对",sub:"把前面换成 boy，就是男朋友",
-   svg:aniHeart(160,58,1.1,"ani-rise")+aniHeart(126,64,.75,"ani-rise o1")+aniHeart(194,64,.75,"ani-rise o2")+
-     aniKid(124,106,1,"#7FC8E8","#4A3A33")+
-     aniKid(198,106,1,"#F5A3C7","#5A3C2E","",-1.2)+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">girl 换成 boy，意思就换了</text>'},
-  scSay("girlfriend")
- ]},
- grandchild:{scenes:[
-  scCombine("grand","child","grandchild","grand 是「祖」，child 是小孩","祖辈眼里的小孩，就是孙子孙女","复数很特别：grandchildren"),
-  {ms:5800,cap:"爷爷奶奶眼里的小孩，就是 grandchild",sub:"要说好几个，得写成 grandchildren",
-   svg:aniHead(88,82,.92,{hair:"#B9B2AE"})+
-     '<text x="88" y="150" text-anchor="middle" font-size="14" fill="#6D8796">爷爷奶奶</text>'+
-     '<path d="M138 100 h32" stroke="#9FB6C4" stroke-width="3"/><path d="M170 100 l-10 -5 v10 z" fill="#9FB6C4"/>'+
-     aniKid(230,92,.95,"#8ED9B4","#3B3145","wave",0,true)+
-     '<text class="ani-pulse" x="230" y="180" text-anchor="middle" font-size="17" font-weight="bold" fill="#33505F">grandchild</text>'},
-  scSay("grandchild")
- ]},
- grandparent:{scenes:[
-  scCombine("grand","parent","grandparent","parent 是爸爸或者妈妈","前面加个 grand 就升了一辈","爷爷奶奶外公外婆都算"),
-  {ms:6000,cap:"往上数一辈，前面就加一个 grand",sub:"parent 是爸妈，grandparent 是爷爷奶奶那一辈",
-   svg:aniKid(56,112,.68,"#8ED9B4","#3B3145","",0,true)+
-     '<text x="56" y="178" text-anchor="middle" font-size="13" fill="#6D8796">我</text>'+
-     '<path d="M92 130 h24" stroke="#9FB6C4" stroke-width="3"/><path d="M116 130 l-10 -5 v10 z" fill="#9FB6C4"/>'+
-     aniKid(158,104,.9,"#9AA8D8","#463A4F","",-.9)+
-     '<text x="158" y="178" text-anchor="middle" font-size="13" fill="#6D8796">parent</text>'+
-     '<path d="M196 130 h24" stroke="#9FB6C4" stroke-width="3"/><path d="M220 130 l-10 -5 v10 z" fill="#9FB6C4"/>'+
-     aniKid(258,102,.92,"#C9B6E8","#B9B2AE","",-1.6)+
-     '<text class="ani-pulse" x="258" y="178" text-anchor="middle" font-size="13" font-weight="bold" fill="#C4813E">grandparent</text>'},
-  scSay("grandparent")
- ]},
- granddaughter:{scenes:[
-  scCombine("grand","daughter","granddaughter","daughter 是女儿","前面加个 grand 就是孙女","跟 granddad 一样有两个 d"),
-  scLetters("granddaughter",{4:"两个 d",5:"两个 d"},"数一下，中间是两个 d","一个跟着 grand，一个跟着 daughter","漏掉一个就拼错了"),
-  scSay("granddaughter")
- ]},
- fit:{scenes:[
-  {ms:5600,cap:"fit 和 fat 就差中间一个字母",sub:"fit 是合身、结实，fat 是胖",
-   svg:'<g class="ani-tile"><rect x="34" y="50" width="110" height="60" rx="14" fill="#E9F4EC" stroke="#78B295" stroke-width="3"/>'+
-       '<text x="89" y="92" text-anchor="middle" font-size="32" font-weight="bold" font-family="Arial" fill="#2F6D4F">fit</text></g>'+
-     '<g class="ani-tile o2"><rect x="176" y="50" width="110" height="60" rx="14" fill="#FBEEF0" stroke="#D9A3B0" stroke-width="3"/>'+
-       '<text x="231" y="92" text-anchor="middle" font-size="32" font-weight="bold" font-family="Arial" fill="#8E5062">fat</text></g>'+
-     '<text x="89" y="136" text-anchor="middle" font-size="15" fill="#3F7A5C">合身 · 结实</text>'+
-     '<text x="231" y="136" text-anchor="middle" font-size="15" fill="#8E5062">胖</text>'+
-     '<text class="up d4" x="160" y="172" text-anchor="middle" font-size="13" fill="#6D8796">中间那个 i 和 a，可别看错</text>'},
-  {ms:5400,cap:"衣服 fit，就是刚好合身",sub:"说人 fit，是说身体结实、健康",
-   svg:aniTee(94,74,1,"#7FC8E8")+aniTee(226,74,1.35,"#D8DEE6")+
-     '<text class="ani-pulse" x="94" y="158" text-anchor="middle" font-size="19" font-weight="bold" fill="#2F6D4F">刚好 fit</text>'+
-     '<text x="226" y="158" text-anchor="middle" font-size="17" fill="#B98A97">太大了</text>'},
-  scSay("fit")
- ]},
- comb:{scenes:[
-  scLetters("comb",{3:"这个 b 不出声"},"最后那个 b 不发音","听起来像「科姆」，可写的时候不能少","少写一个 b 就错了"),
-  {ms:5400,cap:"拿梳子梳梳头发",sub:"comb 既是梳子，也可以说梳头",
-   svg:aniHead(146,106,1.1,{hair:"#4A3A33"})+
-     '<g transform="translate(206,40)"><g class="ani-swing">'+
-       '<rect x="-9" y="0" width="18" height="38" rx="4" fill="#C98A4B"/>'+
-       '<path d="M-9 38 v12 M-3 38 v12 M3 38 v12 M9 38 v12" stroke="#C98A4B" stroke-width="3"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">comb 梳子</text>'},
-  scSay("comb")
- ]},
- neck:{scenes:[
-  {ms:5600,cap:"头和身体中间那一段，就是 neck",sub:"脖子",
-   svg:aniHead(146,74,1.05,{neck:true,neckColor:"#FFD2A8"})+
-     '<path d="M236 116 h-58" stroke="#DF8248" stroke-width="3"/><path d="M178 116 l10 -5 v10 z" fill="#DF8248"/>'+
-     '<text class="ani-pulse" x="262" y="121" text-anchor="middle" font-size="19" font-weight="bold" fill="#DF8248">neck</text>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">脖子疼就说 My neck hurts</text>'},
-  scCombine("neck","lace","necklace","neck 是脖子，lace 是带子","挂在脖子上的带子，就是项链","后面还会学到 necklace"),
-  scSay("neck")
- ]},
- pale:{scenes:[
-  {ms:5600,cap:"脸色发白，就是 pale",sub:"生病的时候脸白得像纸",
-   svg:aniHead(88,86,.92,{blush:true})+
-     aniHead(230,86,.92,{skin:"#FBF4EE",mouth:"flat",off:-1.1})+
-     '<text x="88" y="162" text-anchor="middle" font-size="15" fill="#6D8796">平时</text>'+
-     '<text class="ani-pulse" x="230" y="164" text-anchor="middle" font-size="19" font-weight="bold" fill="#8E7F9B">pale 苍白</text>'},
-  {ms:5400,cap:"pale 和 pail 读音一样，意思差远了",sub:"pale 是苍白，pail 是水桶",
-   svg:'<text x="84" y="52" text-anchor="middle" font-size="26" font-weight="bold" font-family="Arial" fill="#33505F">pale</text>'+
-     aniHead(84,110,.6,{skin:"#FBF4EE",mouth:"flat"})+
-     '<text x="236" y="52" text-anchor="middle" font-size="26" font-weight="bold" font-family="Arial" fill="#C4813E">pail</text>'+
-     '<g transform="translate(236,110)"><g class="ani-float">'+
-       '<path d="M-22 -26 h44 l-6 46 h-32 z" fill="#CFE3EF" stroke="#7FA8C0" stroke-width="3"/>'+
-       '<path d="M-22 -26 q22 -20 44 0" fill="none" stroke="#7FA8C0" stroke-width="3"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">写的时候可别写错</text>'},
-  scSay("pale")
- ]},
- slim:{scenes:[
-  scLetters("slim",null,"四个字母都细细长长的","看着就瘦，s、l、i、m 一个比一个细","苗条就是 slim"),
-  {ms:5800,cap:"夸人身材好，用 slim 更好听",sub:"slim 是苗条，thin 说出来有点太直接",
-   svg:'<g class="ani-pulse"><rect x="24" y="18" width="126" height="44" rx="14" fill="#E9F4EC" stroke="#78B295" stroke-width="3"/>'+
-       '<text x="87" y="46" text-anchor="middle" font-size="17" font-family="Arial" fill="#2F6D4F">slim 苗条</text></g>'+
-     '<rect x="172" y="18" width="126" height="44" rx="14" fill="#F4F1EC" stroke="#CFC6BA" stroke-width="3"/>'+
-     '<text x="235" y="46" text-anchor="middle" font-size="17" font-family="Arial" fill="#7A7068">thin 瘦</text>'+
-     aniKid(160,100,1,"#8ED9B4","#3B3145","wave",0,true)+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">夸人的时候用左边那个</text>'},
-  scSay("slim")
- ]},
- beard:{scenes:[
-  scLetters("beard",{1:"里面藏着 ear",2:"里面藏着 ear",3:"里面藏着 ear"},"b、ear、d，中间藏着一只耳朵","从耳朵一直连到下巴的，就是胡子","beard 胡子"),
-  {ms:5600,cap:"长在下巴上的胡子，beard",sub:"从耳朵连到下巴，正好把 ear 包在中间",
-   svg:aniHead(160,84,1.15,{beard:true,beardColor:"#6B4A33",hair:"#4A3A33"})+
-     '<circle cx="121" cy="88" r="9" fill="#FFD2A8"/><circle cx="199" cy="88" r="9" fill="#FFD2A8"/>'+
-     '<text class="ani-pulse" x="160" y="182" text-anchor="middle" font-size="19" font-weight="bold" fill="#8A5A34">b + ear + d</text>'},
-  scSay("beard")
- ]},
- blood:{scenes:[
-  scLetters("blood",{2:"两个 o",3:"两个 o"},"中间是两个 o，挨在一起","可它不读「乌」，读出来像「布拉德」",null),
-  {ms:5200,cap:"一滴一滴的，那就是 blood",sub:"两个 o 挨在一起，像两滴血",
-   svg:aniDroplet(160,54,1.7,"#E0574F","ani-drip")+
-     aniDroplet(120,62,1,"#EE8B85","ani-drip o1")+
-     aniDroplet(200,62,1,"#EE8B85","ani-drip o2")+
-     '<text x="160" y="150" text-anchor="middle" font-size="30" font-weight="bold" font-family="Arial" fill="#C1443D">blood</text>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">Blood is red，血是红的</text>'},
-  scSay("blood")
- ]},
- blonde:{scenes:[
-  {ms:5600,cap:"一头金黄色的头发，就是 blonde",sub:"一般用来说女生",
-   svg:aniHead(160,84,1.25,{hair:"#F2C14E",longHair:true,blush:true})+
-     '<g transform="translate(246,52)"><g class="ani-twinkle"><circle cx="0" cy="0" r="6" fill="#E9B43C"/></g></g>'+
-     '<g transform="translate(72,66)"><g class="ani-twinkle o2"><circle cx="0" cy="0" r="5" fill="#E9B43C"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="186" text-anchor="middle" font-size="19" font-weight="bold" fill="#B98A2A">blonde 金发的</text>'},
-  scCombine("blond","e","blonde","前面是 blond","说女生的时候后面加个 e","说男生那个 e 可以不要"),
-  scSay("blonde")
- ]},
- "make-up":{scenes:[
-  scCombine("make","up","make-up","make 是做，up 是往上","在脸上「做」点东西，就是化妆","中间那个小横线别忘了"),
-  {ms:5600,cap:"腮红、口红，都算 make-up",sub:"在脸上做点东西，就是化妆品",
-   svg:aniHead(116,92,1.1,{blush:"#F58BA6",blushOn:true,longHair:true,hair:"#5A3C2E"})+
-     '<g transform="translate(244,98)"><g class="ani-float">'+
-       '<rect x="-11" y="-36" width="22" height="30" rx="4" fill="#E0574F"/>'+
-       '<rect x="-13" y="-8" width="26" height="42" rx="6" fill="#B9A78E"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">make-up 化妆品</text>'},
-  scSay("make-up")
- ]},
- perfume:{scenes:[
-  scCombine("per","fume","perfume","fume 是烟雾","喷出来一团香香的雾，就是香水",null),
-  {ms:5600,cap:"喷一下，香香的一团雾",sub:"perfume 香水",
-   svg:aniBottle(160,116,1.15,"#F7D9E4")+
-     '<g transform="translate(160,56)"><g class="ani-rise"><circle cx="0" cy="0" r="8" fill="#EFB6CE" opacity=".85"/></g></g>'+
-     '<g transform="translate(128,64)"><g class="ani-rise o1"><circle cx="0" cy="0" r="5" fill="#EFB6CE" opacity=".7"/></g></g>'+
-     '<g transform="translate(192,64)"><g class="ani-rise o2"><circle cx="0" cy="0" r="5" fill="#EFB6CE" opacity=".7"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">per + fume = perfume</text>'},
-  scSay("perfume")
- ]},
- /* ===== 第 3 段：身体收尾 + 心情和性格 ===== */
- shampoo:{scenes:[
-  {ms:5600,cap:"洗头发用的，就是 shampoo",sub:"它本来的意思是揉头、按头",
-   svg:aniBottle(160,118,1.2,"#BFE3F0")+
-     '<g transform="translate(160,54)"><g class="ani-rise"><circle cx="0" cy="0" r="10" fill="#DFF1F8" stroke="#A9CFE0" stroke-width="2"/></g></g>'+
-     '<g transform="translate(124,62)"><g class="ani-rise o1"><circle cx="0" cy="0" r="7" fill="#DFF1F8" stroke="#A9CFE0" stroke-width="2"/></g></g>'+
-     '<g transform="translate(198,62)"><g class="ani-rise o2"><circle cx="0" cy="0" r="6" fill="#DFF1F8" stroke="#A9CFE0" stroke-width="2"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">洗头的时候不就是在揉头吗</text>'},
-  scLetters("shampoo",{5:"两个 o",6:"两个 o"},"结尾是两个 o，重音在后面","读出来像「先普」，后半截要用点力",null),
-  scSay("shampoo")
- ]},
- stomach:{scenes:[
-  {ms:5600,cap:"肚子、胃，就是 stomach",sub:"吃多了肚子疼，就说 My stomach hurts",
-   svg:aniKid(130,88,1.3,"#8ED9B4","#3B3145")+
-     '<g transform="translate(130,128)"><g class="ani-beat"><circle cx="0" cy="0" r="15" fill="#FFFFFF" opacity=".45"/></g></g>'+
-     '<path d="M244 128 h-80" stroke="#DF8248" stroke-width="3"/><path d="M164 128 l10 -5 v10 z" fill="#DF8248"/>'+
-     '<text class="ani-pulse" x="268" y="133" text-anchor="middle" font-size="17" font-weight="bold" fill="#DF8248">这儿</text>'},
-  scLetters("stomach",{5:"ch 读「克」",6:"ch 读「克」"},"最后的 ch 不读「去」，要读「克」","整个词听起来像「斯达么克」","这是最容易读错的地方"),
-  scSay("stomach")
- ]},
- toothbrush:{scenes:[
-  scCombine("tooth","brush","toothbrush","tooth 是牙，brush 是刷子","刷牙的刷子，就是牙刷","两个词拼一起，一个字母都不用改"),
-  {ms:5400,cap:"每天早晚刷两次牙",sub:"牙刷 toothbrush，刷起来",
-   svg:'<path d="M118 78 q42 -28 84 0 q6 46 -42 62 q-48 -16 -42 -62 z" fill="#FFFFFF" stroke="#C9D8E2" stroke-width="3"/>'+
-     '<g transform="translate(238,32)"><g class="ani-swing">'+
-       '<rect x="-7" y="0" width="14" height="52" rx="5" fill="#5BAFD0"/>'+
-       '<rect x="-13" y="52" width="26" height="12" rx="4" fill="#EAF4F8" stroke="#A9CFE0" stroke-width="2"/></g></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">tooth 是牙，brush 是刷子</text>'},
-  scSay("toothbrush")
- ]},
- "good-looking":{scenes:[
-  scCombine("good","looking","good-looking","good 是好，looking 是看起来","看起来好，就是好看、帅气","中间有个小横线，别漏了"),
-  {ms:5600,cap:"看起来好看，就是 good-looking",sub:"夸人帅、夸人漂亮都能用",
-   svg:aniHead(160,86,1.2,{mouth:"wide",brow:"up",blush:true})+
-     '<g transform="translate(248,52)"><g class="ani-twinkle"><circle cx="0" cy="0" r="6" fill="#E9B43C"/></g></g>'+
-     '<g transform="translate(70,60)"><g class="ani-twinkle o2"><circle cx="0" cy="0" r="5" fill="#E9B43C"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="186" text-anchor="middle" font-size="18" font-weight="bold" fill="#3F7EA0">good-looking</text>'},
-  scSay("good-looking")
- ]},
- cry:{scenes:[
-  {ms:5400,cap:"哭，就是 cry",sub:"眼泪一滴一滴掉下来",
-   svg:aniHead(160,80,1.25,{mouth:"open",brow:"sad"})+
-     aniDroplet(138,106,.8,"#7FC8E8","ani-drip")+
-     aniDroplet(184,106,.8,"#7FC8E8","ani-drip o2")+
-     '<text class="ani-pulse" x="160" y="186" text-anchor="middle" font-size="20" font-weight="bold" fill="#3F7EA0">cry 哭</text>'},
-  scLetters("cry",{2:"y 在当元音"},"三个字母里一个 a e i o u 都没有","是 y 替它们当了元音，读出来像「克瑞」",null),
-  scSay("cry")
- ]},
- mad:{scenes:[
-  {ms:5400,cap:"生气了，就是 mad",sub:"气得头顶直冒烟",
-   svg:aniHead(160,90,1.25,{mouth:"flat",brow:"angry",skin:"#FFD2C2"})+
-     '<g transform="translate(128,44)"><g class="ani-rise o1"><circle cx="0" cy="0" r="7" fill="#F4C7BC"/></g></g>'+
-     '<g transform="translate(192,44)"><g class="ani-rise o2"><circle cx="0" cy="0" r="7" fill="#F4C7BC"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="188" text-anchor="middle" font-size="19" font-weight="bold" fill="#B85A4A">mad 生气的</text>'},
-  scCards([{en:"mad",zh:"生气的",hot:1},{en:"sad",zh:"难过的"},{en:"bad",zh:"坏的"}],
-    "mad、sad、bad 是一家人","就差第一个字母，三个都不是好心情","记住一个，等于记住三个"),
-  scSay("mad")
- ]},
- shy:{scenes:[
-  {ms:5400,cap:"害羞，就是 shy",sub:"脸红红的，说话小小声",
-   svg:aniHead(160,90,1.25,{eyes:"closed",blush:"#F58BA6",blushOn:true})+
-     '<text class="ani-pulse" x="160" y="188" text-anchor="middle" font-size="19" font-weight="bold" fill="#C4708A">shy 害羞的</text>'},
-  scCards([{en:"shy",zh:"害羞",hot:1},{en:"cry",zh:"哭"}],
-    "shy 和 cry 一样，都是 y 在当元音","嘘一声，sh 开头，说话小小声","这两个一起记"),
-  scSay("shy")
- ]},
- glad:{scenes:[
-  {ms:5400,cap:"高兴，就是 glad",sub:"见到你我很高兴，I am glad to see you",
-   svg:aniHead(160,88,1.2,{mouth:"wide",brow:"up",blush:true})+
-     '<g transform="translate(244,54)"><g class="ani-twinkle"><circle cx="0" cy="0" r="6" fill="#E9B43C"/></g></g>'+
-     '<g transform="translate(76,62)"><g class="ani-twinkle o2"><circle cx="0" cy="0" r="5" fill="#E9B43C"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="186" text-anchor="middle" font-size="19" font-weight="bold" fill="#2F6D4F">glad 高兴的</text>'},
-  scCards([{en:"glad",zh:"高兴的",hot:1},{en:"sad",zh:"难过的"}],
-    "glad 和 sad 只差一个字母","前面加个 g，心情就从难过变成高兴了","一个 g，差别真大"),
-  scSay("glad")
- ]},
- hate:{scenes:[
-  scCards([{en:"love",zh:"喜欢"},{en:"hate",zh:"讨厌",hot:1}],
-    "hate 是 love 的反义词","一个喜欢，一个讨厌，正好反过来","四个字母，最后的 e 不发音"),
-  {ms:5400,cap:"讨厌，就是 hate",sub:"读出来像「黑特」，结尾的 e 不出声",
-   svg:aniHead(150,88,1.2,{mouth:"sad",brow:"angry"})+
-     '<g transform="translate(248,62)"><g class="ani-beat">'+
-       '<path d="M-12 -12 l24 24 M12 -12 l-24 24" stroke="#D9A3B0" stroke-width="5" stroke-linecap="round"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="186" text-anchor="middle" font-size="19" font-weight="bold" fill="#8E5062">hate 讨厌</text>'},
-  scSay("hate")
- ]},
- kiss:{scenes:[
-  {ms:5400,cap:"亲一下，就是 kiss",sub:"妈妈亲你一下，Mum gives me a kiss",
-   svg:aniHead(104,100,1,{mouth:"kiss",longHair:true,hair:"#5A3C2E",blush:true})+
-     aniHead(216,104,.9,{mouth:"kiss",off:-1.1,blush:true})+
-     aniHeart(160,72,1,"ani-rise")+aniHeart(134,64,.7,"ani-rise o1")+aniHeart(186,64,.7,"ani-rise o2")+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">kiss 亲一下</text>'},
-  scLetters("kiss",{2:"两个 s",3:"两个 s"},"结尾是两个 s","就像亲完之后啧啧两声",null),
-  scSay("kiss")
- ]},
- lazy:{scenes:[
-  {ms:5400,cap:"懒洋洋的，就是 lazy",sub:"里面有个 z，睡觉打呼噜不就是 z z z",
-   svg:aniHead(140,98,1.2,{eyes:"closed",mouth:"flat"})+
-     '<g transform="translate(206,70)"><g class="ani-rise"><text x="0" y="0" font-size="20" font-weight="bold" font-family="Arial" fill="#8FA9B8">z</text></g></g>'+
-     '<g transform="translate(230,58)"><g class="ani-rise o1"><text x="0" y="0" font-size="26" font-weight="bold" font-family="Arial" fill="#8FA9B8">z</text></g></g>'+
-     '<g transform="translate(258,46)"><g class="ani-rise o2"><text x="0" y="0" font-size="32" font-weight="bold" font-family="Arial" fill="#8FA9B8">z</text></g></g>'+
-     '<text class="ani-pulse" x="140" y="188" text-anchor="middle" font-size="19" font-weight="bold" fill="#6D8796">lazy 懒的</text>'},
-  scLetters("lazy",{2:"z 就是打呼噜"},"中间那个 z，记成打呼噜的声音","懒虫正在睡大觉呢",null),
-  scSay("lazy")
- ]},
- miss:{scenes:[
-  scCards([{en:"Miss",zh:"叫女老师"},{en:"miss",zh:"想念、错过",hot:1}],
-    "大写 Miss 和小写 miss 是两个意思","第 1 段学的 Miss 是称呼，这个小写的是想念","先看第一个字母大不大写"),
-  {ms:5600,cap:"心里一直想着谁，就是 miss",sub:"我想念奶奶，I miss my granny",
-   svg:aniHead(104,102,1,{mouth:"sad",brow:"sad"})+
-     aniHeart(172,78,.8,"ani-rise o1")+
-     '<g class="ani-pulse"><rect x="196" y="60" width="104" height="52" rx="14" fill="#FFFFFF" stroke="#9FBFD1" stroke-width="3"/>'+
-       '<text x="248" y="92" text-anchor="middle" font-size="17" font-family="Arial" fill="#33505F">granny</text></g>'+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">也可以是错过、没赶上</text>'},
-  scSay("miss")
- ]},
- pity:{scenes:[
-  {ms:5400,cap:"真可惜，What a pity",sub:"东西掉了、事情没成，都可以这么说",
-   svg:aniHead(100,104,1,{mouth:"sad",brow:"sad"})+
-     '<g class="ani-pulse"><rect x="170" y="52" width="132" height="50" rx="14" fill="#FFFFFF" stroke="#9FBFD1" stroke-width="3"/>'+
-       '<text x="236" y="84" text-anchor="middle" font-size="17" font-family="Arial" fill="#33505F">What a pity!</text></g>'+
-     aniDroplet(236,126,.9,"#C9D8E2","ani-drip o2")+
-     '<text class="up d4" x="160" y="176" text-anchor="middle" font-size="13" fill="#6D8796">pity 可惜</text>'},
-  scLetters("pity",{1:"里面有个 pit 坑"},"前面藏着一个 pit，就是坑","可惜，掉进坑里了",null),
-  scSay("pity")
- ]},
- awful:{scenes:[
-  {ms:5400,cap:"糟透了，就是 awful",sub:"下雨刮风什么都不顺，The weather is awful",
-   svg:'<path d="M96 76 q6 -24 28 -22 q10 -18 32 -10 q22 -6 26 16 q20 2 16 20 h-104 q-8 -2 2 -4 z" fill="#C9D8E2"/>'+
-     aniDroplet(118,104,.75,"#9FBFD1","ani-drip")+
-     aniDroplet(148,104,.75,"#9FBFD1","ani-drip o1")+
-     aniDroplet(178,104,.75,"#9FBFD1","ani-drip o2")+
-     aniHead(252,116,.8,{mouth:"zig",brow:"sad"})+
-     '<text class="ani-pulse" x="140" y="180" text-anchor="middle" font-size="19" font-weight="bold" fill="#6D8796">awful 糟糕的</text>'},
-  scCards([{en:"wonderful",zh:"好极了"},{en:"awful",zh:"糟透了",hot:1}],
-    "两个词结尾都是 ful，意思是「装满了」","一个装满了美好，一个装满了糟心事","ful 见多了就认得"),
-  scSay("awful")
- ]},
- brave:{scenes:[
-  {ms:5400,cap:"勇敢，就是 brave",sub:"挺起胸膛说，我不怕",
-   svg:aniKid(160,86,1.3,"#E8825F","#3B3145","wave",0,true)+
-     '<g transform="translate(244,60)"><g class="ani-twinkle"><circle cx="0" cy="0" r="7" fill="#E9B43C"/></g></g>'+
-     '<g transform="translate(74,66)"><g class="ani-twinkle o2"><circle cx="0" cy="0" r="6" fill="#E9B43C"/></g></g>'+
-     '<text class="ani-pulse" x="160" y="182" text-anchor="middle" font-size="19" font-weight="bold" fill="#B85A4A">Be brave!</text>'},
-  scCards([{en:"brave",zh:"勇敢的",hot:1},{en:"grave",zh:"坟墓"}],
-    "brave 和 grave 只差第一个字母","一个是勇敢，一个是坟墓，别写错","第一个字母要看清"),
-  scSay("brave")
- ]}
-};
-let aniTimers=[];
-function stopAnim(){aniTimers.forEach(clearTimeout);aniTimers=[];}
-function animBlock(w){
-  const a=ANIMS[w.en];if(!a)return "";
-  return '<div class="sc-anim"><div class="sc-label">🎬 动画小剧场</div>'+
-    '<div class="ani-stage">'+a.scenes.map((s,i)=>'<div class="ani-scene'+(i?"":" on")+'">'+
-      '<svg viewBox="0 0 320 196" preserveAspectRatio="xMidYMid meet">'+s.svg+'</svg></div>').join("")+'</div>'+
-    '<div class="ani-cap">'+aniCap(a.scenes[0])+'</div>'+
-    '<div class="ani-bar">'+a.scenes.map((_,i)=>'<i class="'+(i?"":"on")+'"></i>').join("")+
-      '<button class="btn ghost sm ani-replay" id="aniReplay">🎬 从头看</button></div></div>';
-}
-function aniCap(s){return s.cap+(s.sub?'<small>'+s.sub+'</small>':'');}
-/* 三个画面循环播放，放完第三个又回到第一个，一直不停；卡片换了就自动停下 */
-function playAnim(w,card){
-  const a=ANIMS[w.en];if(!a||!card)return;
-  const box=card.querySelector(".sc-anim");if(!box)return;
-  stopAnim();
-  const scenes=box.querySelectorAll(".ani-scene"),dots=box.querySelectorAll(".ani-bar i"),cap=box.querySelector(".ani-cap");
-  const alive=()=>card.isConnected&&$("#learnArea .study-card")===card;
-  let k=0;
-  const step=()=>{
-    if(!alive())return;
-    scenes.forEach(s=>s.classList.remove("on"));
-    void box.offsetWidth;                 /* 强制重排，CSS 动画才会从头再跑一遍 */
-    scenes[k].classList.add("on");
-    dots.forEach((d,i)=>d.classList.toggle("on",i===k));
-    cap.innerHTML=aniCap(a.scenes[k]);
-    const ms=a.scenes[k].ms;
-    k=(k+1)%a.scenes.length;
-    aniTimers.push(setTimeout(step,ms));
-  };
-  step();
-}
 function renderStudy(){
   const w=sess.words[studyIdx],n=sess.words.length;
-  /* 例句只看不读：原有 sen 和 TALKS 里补充的 ex 合在一起展示 */
-  const sens=[].concat(w.sen?[{en:w.sen,zh:w.senZh||""}]:[],w.ex||[]);
-  const many=sess.batches&&sess.batches.length>1;
   $("#learnArea").innerHTML='<div class="study study-card">'+
     '<div class="study-top"><div class="sc-tag">📖 讲解'+(w.topic?' · '+w.topic:'')+'</div>'+
-      '<div class="study-progress">'+(many?'第 '+(sess.batchIdx+1)+'/'+sess.batches.length+' 组 · ':'')+
-      '第 '+(studyIdx+1)+' / '+n+' 张</div></div>'+
+      '<div class="study-progress">第 '+(studyIdx+1)+' / '+n+' 张</div></div>'+
     '<div class="study-main"><div class="sc-word" lang="en">'+w.en+'</div>'+
       '<div class="sc-ph" lang="en">'+(w.ph||"")+'</div>'+
       '<div class="sc-zh">'+w.zh+'</div></div>'+
-    '<div class="study-listen"><button class="speaker" id="sayAll" title="再听一次" aria-label="朗读单词、中文意思和讲解">🔊</button>'+
+    '<div class="study-listen"><button class="speaker" id="sayAll" title="再听一次" aria-label="朗读单词和例句">🔊</button>'+
       '<span id="readStatus" role="status" aria-live="polite">点喇叭再听一次</span></div>'+
-    (w.talk?'<div class="sc-talk"><div class="sc-label">怎么记住它</div><p>'+w.talk+'</p></div>':'')+
-    animBlock(w)+
-    (sens.length?'<div class="sc-sen"><div class="sc-label">例句（看一看，不朗读）</div>'+
-      sens.map(s=>'<div class="sen-item"><div class="en" lang="en">'+s.en+'</div>'+
-        (s.zh?'<div class="zh">'+s.zh+'</div>':'')+'</div>').join("")+'</div>':'')+
+    '<div class="sc-sen"><div class="sc-label">例句</div><div class="en" lang="en">'+(w.sen||"")+'</div><div class="zh">'+(w.senZh||"")+'</div></div>'+
     (w.tip?'<div class="sc-tip">💡 '+w.tip+'</div>':'')+
     '<div class="dots">'+sess.words.map((_,i)=>'<i class="'+(i===studyIdx?"on":"")+'"></i>').join("")+'</div>'+
     '<div class="row study-actions">'+
       (studyIdx>0?'<button class="btn ghost sm" id="prev">← 上一个</button>':'')+
       (studyIdx<n-1?'<button class="btn sm" id="next">下一个 →</button>'
-                   :'<button class="btn green" id="toQuiz">'+
-                     (many?'这组讲完，开始闯关 🎯':'全部讲完，开始闯关 🎯')+'</button>')+
-      '<button class="btn ghost sm" id="skip">'+(many?'跳过这组讲解':'跳过讲解')+'</button></div></div>';
+                   :'<button class="btn green" id="toQuiz">全部讲完，开始闯关 🎯</button>')+
+      '<button class="btn ghost sm" id="skip">跳过讲解</button></div></div>';
   const card=$("#learnArea .study-card");
   $("#sayAll").onclick=()=>sayCard(w,card);
   if($("#prev"))$("#prev").onclick=()=>{studyIdx--;renderStudy();};
   if($("#next"))$("#next").onclick=()=>{studyIdx++;renderStudy();};
   if($("#toQuiz"))$("#toQuiz").onclick=startQuiz;
-  if($("#aniReplay"))$("#aniReplay").onclick=()=>playAnim(w,card);
   $("#skip").onclick=startQuiz;
-  sayCard(w,card);            /* 进卡片就自动读：单词 → 中文意思 → 记忆讲解 */
-  playAnim(w,card);           /* 有动画的词：一进卡片小剧场就开始转，一直循环 */
-  /* 预合成后面几张卡的中文语音，切卡零等待；第一张卡多备几张，开头也不会卡 */
+  sayCard(w,card);            /* 进卡片就自动连读：单词 → 例句 */
+  /* 预合成后面几张卡的例句，切卡零等待；第一张卡多备几句，开头也不会卡 */
   const ahead=studyIdx===0?4:2;
   preSyn(sess.words.slice(studyIdx+1,studyIdx+1+ahead));
 }
@@ -2861,11 +1839,7 @@ function nextQ(){
   if(!sess.studied&&!sess.custom){       // 热身结束 → 进入讲解
     studyIdx=0;renderStudy();return;
   }
-  if(!sess.queue.length){
-    /* 这一组练完了：还有下一组就继续讲，全部组都过了才算通关 */
-    if(sess.batches&&sess.batchIdx<sess.batches.length-1){nextBatch();return;}
-    finishSegment();return;
-  }
+  if(!sess.queue.length){finishSegment();return;}
   const w=sess.queue[0];renderHUD();
   render_q(w,sess.prog[w.en]+1,false);
 }
@@ -2920,8 +1894,7 @@ function qSpell(w,warm){
     '<div class="zh-big">'+w.zh+'</div><button class="speaker" id="sp">🔊</button>'+
     '<div class="slots" id="slots">'+slotHTML+'</div>'+
     '<div class="tiles" id="tiles">'+letters.map((L,i)=>'<div class="tile" draggable="true" data-t="'+i+'">'+L+'</div>').join("")+'</div>'+
-    '<div class="hintline">点字母或拖过去都可以'+(hasFix?'（灰色的空格和符号已经帮你填好啦）':'')+'</div>'+
-    '<button class="btn ghost sm" id="reveal">🙈 看答案（这题算答错）</button></div>';
+    '<div class="hintline">点字母或拖过去都可以'+(hasFix?'（灰色的空格和符号已经帮你填好啦）':'')+'</div></div>';
   $("#sp").onclick=()=>say(w.en);say(w.en);
   const all=[...document.querySelectorAll("#slots .slot")];
   const slots=all.filter(s=>!s.classList.contains("fix"));
@@ -2942,33 +1915,7 @@ function qSpell(w,warm){
     s.addEventListener("drop",e=>{e.preventDefault();s.classList.remove("over");
       if(drag&&!drag.classList.contains("used"))place(drag);});
   });
-  /* 看答案：把正确拼写填出来，算答错。不自动跳下一题——
-     孩子可能需要多看几眼才记住，所以必须自己点「下一个」才继续。 */
-  $("#reveal").onclick=()=>{
-    if(locked)return;
-    locked=true;
-    slots.forEach(s=>{s.onclick=null;});
-    all.forEach(s=>{
-      if(s.classList.contains("fix"))return;
-      s.textContent=w.en[+s.dataset.i];s.classList.add("filled","shown");
-    });
-    say(w.en);
-    const btn=$("#reveal");
-    btn.disabled=true;
-    btn.textContent="答案是 "+w.en+"　（这题算答错，会再练一次）";
-    const next=document.createElement("button");
-    next.className="btn green";next.id="revealNext";
-    next.textContent="记住了，下一个 →";
-    btn.insertAdjacentElement("afterend",next);
-    next.onclick=()=>{
-      if(next.disabled)return;
-      next.disabled=true;next.textContent="下一个来啦…";
-      fail(w,warm);
-    };
-    next.focus();
-  };
   function check(){
-    if(locked)return;
     if(slots.some(s=>!s.classList.contains("filled")))return;
     locked=true;
     const got=all.map(s=>s.classList.contains("fix")?s.dataset.c:s.textContent).join("");
@@ -3625,23 +2572,20 @@ function renderAch(){
          → 本机神经语音 → 有道 → Azure（需自备 Key）
    =========================================================== */
 const audioEl=new Audio();audioEl.preload="none";
-let voices=[],zhVoices=[];
+let voices=[];
 const isNatural=v=>/Natural|Online/i.test(v.name);
 const SENT_PREF=[/Ana|Maisie|Libby/i,/Jenny|Aria|Emma|Sonia/i,/Natural|Online/i,
                  /Google US English/i,/Samantha|Karen/i];
 const WORD_PREF=[/Natural/i,/Online/i,/Aria|Jenny|Ana|Guy/i,/Google US English/i,/Samantha|Karen/i,/Zira|David/i];
-const ZH_PREF=[/Xiaoxiao|Xiaoyi/i,/Yunxi|Yunyang/i,/Natural|Online/i,/Huihui|Kangkang|Yaoyao/i];
 function loadVoices(){
   if(!window.speechSynthesis)return;
   voices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
-  zhVoices=speechSynthesis.getVoices().filter(v=>/^zh/i.test(v.lang));
 }
 if(window.speechSynthesis){speechSynthesis.onvoiceschanged=loadVoices;
   setTimeout(loadVoices,300);setTimeout(loadVoices,1500);}
-function pickVoice(prefs,pool){
-  const list=pool||voices;
-  for(const re of prefs){const v=list.find(v=>re.test(v.name));if(v)return v;}
-  return list[0];
+function pickVoice(prefs){
+  for(const re of prefs){const v=voices.find(v=>re.test(v.name));if(v)return v;}
+  return voices[0];
 }
 
 /* --- 本机语音：修掉 cancel 后立刻 speak 无声、以及首字被吃的问题 --- */
@@ -3703,29 +2647,25 @@ async function msGec(){
 const msFullName=v=>{const m=v.match(/^([a-z]{2}-[A-Z]{2})-(.+)$/);
   return "Microsoft Server Speech Text to Speech Voice ("+m[1]+", "+m[2]+")";};
 /* 缓存键单独拿出来：这样能同步判断"这句话是不是已经合成好了" */
-const msKey=(t,v)=>"ms|"+(v||aiVoice())+"|"+ratePct()+"|"+t;
-const msCached=(t,v)=>msCache.get(msKey(t,v));
+const msKey=t=>"ms|"+aiVoice()+"|"+ratePct()+"|"+t;
+const msCached=t=>msCache.get(msKey(t));
 const msPending=new Map();
 /* 同一句话只合成一次：命中缓存直接返回，正在合成的复用同一个 Promise */
-function msSynth(text,voice){
-  const ck=msKey(text,voice);
+function msSynth(text){
+  const ck=msKey(text);
   if(msCache.has(ck))return Promise.resolve(msCache.get(ck));
   if(msPending.has(ck))return msPending.get(ck);
-  const p=msSynthRaw(text,voice);
+  const p=msSynthRaw(text);
   msPending.set(ck,p);
   p.then(()=>msPending.delete(ck),()=>msPending.delete(ck));
   return p;
 }
-/* 提前把这些卡片要读的中文音频拉到浏览器缓存里，切卡零等待 */
+/* 提前把这些卡片的例句合成好，播的时候零等待 */
 function preSyn(list){
-  list.forEach(w=>{
-    if(!w)return;
-    zhPrefetch(zhLine(w));
-    zhPrefetch(w.talk);
-  });
+  list.forEach(w=>{if(w&&w.sen)msSynth(w.sen).catch(()=>{});});
 }
-async function msSynthRaw(text,voice){
-  const ck=msKey(text,voice);
+async function msSynthRaw(text){
+  const ck=msKey(text);
   if(msCache.has(ck))return msCache.get(ck);
   if(!window.crypto||!crypto.subtle)throw new Error("需要 https 或 localhost 环境");
   const gec=await msGec();
@@ -3745,9 +2685,8 @@ async function msSynthRaw(text,voice){
           outputFormat:"audio-24khz-48kbitrate-mono-mp3"}}}}));
       const id=hex(crypto.getRandomValues(new Uint8Array(16)));
       const p=ratePct();
-      const vc=voice||aiVoice();
-      const ssml="<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='"+vc.slice(0,5)+"'>"+
-        "<voice name='"+msFullName(vc)+"'><prosody rate='"+(p>=0?"+":"")+p+"%' pitch='+0Hz'>"+
+      const ssml="<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"+
+        "<voice name='"+msFullName(aiVoice())+"'><prosody rate='"+(p>=0?"+":"")+p+"%' pitch='+0Hz'>"+
         text.replace(/&/g,"&amp;").replace(/</g,"&lt;")+"</prosody></voice></speak>";
       ws.send("X-RequestId:"+id+"\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:"+
         new Date().toISOString()+"\r\nPath:ssml\r\n\r\n"+ssml);
@@ -3783,134 +2722,40 @@ async function playUrl(u,onend,onstate,onfail){
   }catch(e){fail(e);if(!onfail)throw e;}
 }
 
-/* --- 统一入口 ---
-   单词和词组（department store 这类）都走有道真人录音，词典接口对短语一样有效。
-   长句子（BOSS 阅读）才用句子通道。 */
+/* --- 统一入口：含空格的按句子处理 --- */
 function say(t){
   if(!t)return;t=String(t).trim();
-  if(t.split(/\s+/).length>3)saySentence(t);else sayWord(t);
+  if(/\s/.test(t))saySentence(t);else sayWord(t);
 }
 /* 单词：有道真人录音 → 本机语音 */
 function sayWord(t,onend,onstate,onfail){
   const id=cardSeq;
   youdaoSay(t,()=>{if(id===cardSeq)ttsSay(t,pickVoice(WORD_PREF),null,onfail,onend,onstate);},onend,onstate);
 }
-/* 句子：本机神经语音 → 有道
-   （原来放在最前面的微软免密钥通道已整体 403，先试它只会白等一次，所以去掉） */
+/* 句子：微软 AI 神经语音 → 本机神经语音 → 有道 */
 function saySentence(t,onend,onstate,onfail){
-  const id=cardSeq;
-  const v=pickVoice(SENT_PREF);
-  const remoteTry=()=>{if(id===cardSeq)youdaoSay(t,onfail,onend,onstate);};
-  if(v)ttsSay(t,v,Math.min(1,+SET.rate+0.05),remoteTry,onend,onstate);
-  else remoteTry();
-}
-/* --- 中文语音（词义和记忆讲解）---
-   三层来源，按顺序取第一个能用的：
-   ① 本地音频包 voice/segNN.mp3：预先用真人感语音生成好，进段时一次取回、切成单条，
-      之后每条都是零延迟、音色固定，断网也能用（浏览器会缓存这个文件）。
-      这一层是为了根治"音色机械"和"等待时间忽长忽短"两个老问题。
-   ② 在线中文语音：还没生成音频包的段落用它兜着（约 300-500ms）。
-   ③ 本机中文语音：彻底断网时的最后兜底，音色比较机械。
-   注意：微软那个免密钥通道已整体返回 403，中文不再走它，
-   否则每次都要先白失败一次，等待就会忽长忽短。 */
-const ZH_AUDIO={};          /* { 文本: 本地音频包切出来的地址 } */
-const VOICE_PACK={};        /* { 段号: "loading" | "ready" | "none" } */
-/* 各段音频包的索引：{ 段号: { 文本: [起始字节, 长度] } }，由生成脚本写入 */
-const VOICE_INDEX={
-"seg01":{"它的意思是，人；家伙":[0,25965],"这个词特别短，就三个字母。读起来像盖子的「盖」。它说的就是「那个人」，大人聊天的时候特别爱用。":[25965,72621],"它的意思是，小孩":[98586,19437],"kid 就是小孩儿。爸爸妈妈叫你 kid，其实就是在说「小家伙」。想说好几个小孩，后面加个 s，变成 kids。":[118023,80493],"它的意思是，妈妈":[198516,18093],"这个最熟悉啦，妈妈。你看，头和尾都是 m，中间那个 o 像张开的嘴巴。美国人写 mom，英国人写 mum，就差中间一个字母。":[216609,99693],"它的意思是，小姐（称呼）":[316302,22701],"注意，这个词第一个字母要大写。放在姓前面，用来叫女老师，比如 Miss Wang，王老师。要是写成小写的 miss，意思就变了，变成「想念」啦。":[339003,98541],"它的意思是，成年人":[437544,22701],"adult 就是大人。买门票的时候，票上写 adult，那一行就是大人的价钱。你现在还不是 adult 哦。":[460245,78957],"它的意思是，奶奶；外婆":[539202,25965],"granny 就是奶奶、外婆。前面的 gran 是「祖」的意思，后面加上 ny，念起来软软的。就像我们撒着娇喊「奶奶」一样。":[565167,86829],"它的意思是，父亲或母亲":[651996,25965],"parent 只指一个人，爸爸或者妈妈。要说爸爸妈妈两个人，得加个 s，变成 parents。开家长会，英语就说 parents meeting。":[677961,92013],"它的意思是，已婚的":[769974,21357],"married 就是结婚了。它原来长这样：marry。因为结尾是 y，所以要先把 y 变成 i，再加 ed。还有个地方最容易错，中间是两个 r，别少写一个。":[791331,119085],"它的意思是，姓":[910416,18093],"这个词拆开看就懂了，sur 加上 name。name 是名字，前面加个 sur，就变成「姓」。有意思的是，我们中文把姓放前面，英语里姓却放在最后面。":[928509,104877],"它的意思是，爷爷；外公":[1033386,22701],"grand 是「祖」，dad 是爸爸。爸爸的爸爸，那就是爷爷啦。拼的时候数一下，中间是两个 d，一个跟着 grand，一个跟着 dad。":[1056087,97965],"它的意思是，孙子；外孙":[1154052,25965],"跟刚才那个词很像，grand 加上 son。son 是儿子，儿子的儿子，就是孙子。要是孙女呢，把 son 换成 daughter 就行。":[1180017,98733],"它的意思是，青少年":[1278750,22893],"这个词的秘密藏在中间的 teen 里。你数数看，thirteen、fourteen，一直到 nineteen，结尾都有 teen。所以十几岁的孩子，就叫 teenager。":[1301643,97965],"它的意思是，男朋友":[1399608,21357],"boy 是男孩，friend 是朋友。两个词一凑，男朋友。那女朋友怎么说？把前面换成 girl，girlfriend。":[1420965,85485],"它的意思是，名人":[1506450,19629],"celebrity 就是名人、大明星。它跟 celebrate 是一家人，celebrate 是庆祝。大家都在为他欢呼庆祝，他当然就是名人啦。这个词长，读的时候分四拍：ce、le、bri、ty。":[1526079,142701],"它的意思是，邻居":[1668780,19629],"住在你家旁边的人，就是 neighbour。中间的 gh 不出声，所以听起来像「内伯」。英国人写 neighbour，美国人偷懒，少写一个 u，写成 neighbor。":[1688409,102765]},
-"seg02":{"它的意思是，笔友":[0,19629],"pen 是钢笔，friend 是朋友。用笔写信交上的朋友，就是笔友。现在大家都发消息了，可这个词还留着呢。":[19629,83757],"它的意思是，女朋友":[103386,21357],"还记得 boyfriend 吗，这两个是一对。girl 是女孩，friend 是朋友，合起来就是女朋友。记住中间不空格，一个词写到底。":[124743,86829],"它的意思是，孙子；孙女":[211572,24621],"grand 又出来了，还是「祖」的意思，child 是小孩。祖辈眼里的小孩，就是孙子孙女。它变复数很特别，是 grandchildren。":[236193,96429],"它的意思是，祖父母之一":[332622,22701],"grand 加 parent。parent 是爸爸或者妈妈，前面加个 grand 就升了一辈，变成爷爷奶奶外公外婆里的一个。":[355323,77229],"它的意思是，孙女；外孙女":[432552,27885],"还是 grand 家族的。daughter 是女儿，前面加 grand 就是孙女。拼的时候数一下，中间是两个 d，跟 granddad 一样。":[460437,80493],"它的意思是，合身；健康的":[540930,25773],"这个词有两个意思。说衣服 fit，是说合身；说人 fit，是说身体结实、健康。就三个字母，别跟 fat 搞混了，fat 是胖。":[566703,90093],"它的意思是，梳子；梳头":[656796,25965],"梳子，也可以说梳头。它最大的秘密是最后那个 b 不发音，听起来像「科姆」。写的时候千万别漏了这个不出声的 b。":[682761,87021],"它的意思是，脖子":[769782,18285],"脖子。项链那个词 necklace 就是从它来的，neck 加上 lace 带子，挂在脖子上的带子。":[788067,66093],"它的意思是，苍白的":[854160,18093],"脸色发白、苍白。生病的时候脸白得像纸，那就是 pale。它跟水桶 pail 读音一样，可拼法不一样，别写错。":[872253,82221],"它的意思是，苗条的":[954474,18093],"苗条。你看这四个字母都是细细长长的，看着就瘦。夸人身材好用 slim，比 thin 客气多了。":[972567,66285],"它的意思是，胡子":[1038852,16365],"长在下巴上的胡子。有意思的是，这个词里藏着一个 ear，耳朵。从耳朵一直连到下巴的，那就是胡子啦。":[1055217,77229],"它的意思是，血":[1132446,19437],"血。两个 o 挨在一起，可它不读「乌」，读出来像「布拉德」。想着两滴血挨着，就是这两个 o。":[1151883,74157],"它的意思是，金发的":[1226040,21357],"金黄色头发的。前面是 blond，最后加个 e，一般用来说女生。说男生的话，那个 e 可以不要。":[1247397,69165],"它的意思是，化妆品":[1316562,21357],"化妆品。make 是做，up 是往上。在脸上「做」点东西，就是化妆。中间那个小横线别忘了写。":[1337919,69357],"它的意思是，香水":[1407276,19629],"香水。per 加 fume，fume 是烟雾。喷出来一团香香的雾，那就是香水。":[1426905,54765]},
-"seg03":{"它的意思是，洗发水":[0,21357],"洗发水。读起来像「先普」，重音在后面。它是从印度话来的，本来的意思就是揉头、按头。洗头的时候不就是在揉头吗。":[21357,95085],"它的意思是，胃；肚子":[116442,24621],"胃、肚子。这个词最容易读错，最后的 ch 不读「去」，要读「克」，听起来像「斯达么克」。":[141063,67437],"它的意思是，牙刷":[208500,19437],"tooth 是牙，brush 是刷子。刷牙的刷子，就是牙刷。两个词拼在一起，一个字母都不用改。":[227937,70701],"它的意思是，好看的":[298638,19437],"good 是好，looking 是看起来。看起来好，就是好看、帅气。中间有个小横线，别漏了。":[318075,64365],"它的意思是，哭":[382440,18093],"哭。三个字母里一个 a e i o u 都没有，是 y 在替它们当元音，读出来像「克瑞」。":[400533,62637],"它的意思是，生气的；疯的":[463170,27693],"生气的。妈妈说 I'm mad，那是生气了。它跟 sad、bad 是一家人，就差第一个字母，都不是好心情。":[490863,80493],"它的意思是，害羞的":[571356,19437],"害羞。跟 cry 一样，也是 y 在当元音。想想害羞的人说话小小声，嘘一声，所以是 sh 开头。":[590793,79149],"它的意思是，高兴的":[669942,21165],"高兴。它跟 sad 就差一个字母，意思正好反过来。前面加个 g，心情就从难过变成高兴了。":[691107,64365],"它的意思是，讨厌":[755472,21357],"讨厌，是 love 的反义词。四个字母，最后的 e 不发音，读出来像「黑特」。":[776829,60909],"它的意思是，吻；亲":[837738,24429],"亲一下。结尾是两个 s，就像亲完之后的啧啧两声。":[862167,44013],"它的意思是，懒的":[906180,21357],"懒。你看里面有个 z，睡觉打呼噜不就是 z z z 吗，懒虫正在睡大觉呢。":[927537,58029],"它的意思是，错过；想念":[985566,25965],"注意，这个是小写的 miss，意思是想念，也可以是错过、没赶上。第 1 段学过的大写 Miss 是叫女老师的，别搞混。":[1011531,80493],"它的意思是，可惜；遗憾":[1092024,27885],"可惜。大人常说 What a pity，真可惜。里面藏着一个 pit，坑，可惜掉进坑里了。":[1119909,83565],"它的意思是，糟糕的":[1203474,19629],"糟糕。后面的 ful 跟 wonderful 那个 ful 一样，都是「装满了」的意思，只不过 awful 装满的是糟心事。":[1223103,72813],"它的意思是，勇敢的":[1295916,21165],"勇敢。它跟 grave 只差第一个字母。想想勇敢的人挺起胸膛说，我不怕。":[1317081,54957]},
-"seg04":{"它的意思是，可惜；羞愧":[0,27693],"可惜，也有羞愧的意思。大人说 What a shame，跟 What a pity 一个意思，都是真可惜。":[27693,65901],"它的意思是，难过的；心烦的":[93594,27693],"up 加 set，两个特简单的词拼一起，意思可一点不简单：心里乱、难过。心情被翻了个个儿，当然不舒服。":[121287,74157],"它的意思是，害怕的":[195444,18093],"害怕。它常常跟 of 一起用，I'm afraid of dogs，我怕狗。中间是 frai，别写成 fria。":[213537,72237],"它的意思是，惊讶的":[285774,21357],"惊讶得张大了嘴。里面藏着一个 maze，迷宫。走进迷宫，哇，太神奇了。":[307131,64365],"它的意思是，可爱的；美好的":[371496,25965],"love 加 ly。满满都是爱的样子，就是可爱、美好。英国人夸东西最爱说 lovely。":[397461,67629],"它的意思是，有礼貌的":[465090,21357],"有礼貌。结尾是 ite，读出来像「泼来特」。要说不礼貌，前面加 im，变成 impolite。":[486447,75885],"它的意思是，有帮助的":[562332,21357],"help 加 ful。ful 是「装满了」，装满了帮助，就是热心、有用。":[583689,57837],"它的意思是，紧张的":[641526,21357],"紧张。它跟 nerve 是一家人，nerve 是神经。神经绷得紧紧的，那就是紧张。":[662883,82221],"它的意思是，高兴的；满意的":[745104,27885],"高兴、满意。please 是「请」，后面加个 d，就变成心里舒服了。第一次见面常说 Pleased to meet you。":[772989,77229],"它的意思是，不开心的":[850218,22701],"happy 前面加了个 un。un 就是「不」，所以 unhappy 是不开心。这个 un 特别好用，unlucky 就是不走运。":[872919,72621],"它的意思是，担心的":[945540,21357],"担心。它原来是 worry，结尾是 y，所以先把 y 变成 i，再加 ed。跟 married 的变法一模一样。":[966897,75885],"它的意思是，惊喜；惊讶":[1042782,24621],"惊喜，也可以是惊讶。开头的 sur 跟 surname 那个 sur 一样。记住中间是 pri，不是 per。":[1067403,75885],"被吓到了。里面藏着一个 right，可这儿的 gh 不出声，整个词读出来像「弗莱特恩德」。":[1143288,69165],"它的意思是，嘿":[1212453,16365],"嘿。就三个字母，招呼人用的。它比 hello 随便，跟熟人才这么喊。":[1228818,53421],"它的意思是，聊天":[1282239,18093],"聊天。ch 读「去」，读出来像「查特」。它跟 talk 差不多，但 chat 更轻松，就是随便聊几句。":[1300332,75693]},
-"seg05":{"它的意思是，亲爱的":[0,21357],"亲爱的。写信开头写 Dear Tom，亲爱的汤姆。它跟小鹿 deer 读音一样，可别写错。":[21357,66285],"它的意思是，是的；对":[87642,19629],"就是 yes 的随便说法，对啊。四个字母，读出来像「耶啊」。跟长辈说话还是用 yes 更有礼貌。":[107271,67629],"它的意思是，打扰；麻烦":[174900,24429],"打扰、麻烦。大人常说 Don't bother，别麻烦了。中间的 th 要把舌头轻轻放在牙齿中间。":[199329,72621],"它的意思是，借口；原谅":[271950,24621],"原谅，也可以是借口。Excuse me 是最常用的一句，打扰一下。注意中间是 cu，不是 ck。":[296571,78573],"它的意思是，请再说一遍":[375144,24621],"没听清的时候说一声 Pardon，就是请再说一遍。很客气的一个词，读出来像「派登」。":[399765,56493],"它的意思是，好吧；没问题":[456258,25965],"好吧、没问题。它其实是 all right 挤成了一个词，所以中间只有一个 l，别写成两个。":[482223,63021],"它的意思是，再见":[545244,21357],"good 加 bye。它最早是一句祝福话缩出来的，现在就是再见。熟人之间也可以只说 bye。":[566601,57837],"它的意思是，对话；谈话":[624438,25965],"对话、谈话。前面的 con 是「一起」，中间的 vers 是「说」，大家凑在一起说话，就是对话。读的时候分四拍：con、ver、sa、tion。":[650403,101421],"它的意思是，恭喜！":[751824,19437],"恭喜！这是词表里最长的词之一，但它很好念：con、gra、tu、la、tions，五拍。记住结尾一定要加 s。":[771261,95277],"它的意思是，油":[866538,16365],"油。三个字母，中间的 oi 读「奥伊」。炒菜的油、地下的石油，都是它。":[882903,69549],"它的意思是，豆子":[952452,19629],"豆子。它跟 been 读音一样，可意思差远了。四个字母，ea 读长长的「衣」。":[972081,64557],"它的意思是，可乐":[1036638,19437],"可乐。念出来就跟中文的可乐一个味道，是词表里最好记的一个。":[1056075,43629],"它的意思是，糖果":[1099704,21357],"糖果，美国说法，英国人爱说 sweets。里面有个 can，能吃到糖当然开心。":[1121061,54765],"它的意思是，咖喱":[1175826,19629],"咖喱。念出来就像咖喱，注意中间是两个 r。":[1195455,39021],"它的意思是，葡萄":[1234476,21357],"葡萄。一串葡萄要说 grapes。它跟 great 长得像，可 grape 读出来是「格瑞普」。":[1255833,66093]},
-"seg06":{"它的意思是，芒果":[0,19437],"芒果。读出来像「芒狗」。它变复数有点特别，可以加 es，写成 mangoes。":[19437,61101],"它的意思是，瓜；甜瓜":[80538,24621],"瓜。西瓜就是 watermelon，water 加 melon，装满水的瓜，是不是很形象。":[105159,60141],"它的意思是，意大利面":[165300,19437],"意大利面。这是从意大利借来的词，读出来像「帕斯特」。所有的意面、通心粉都叫 pasta。":[184737,63213],"它的意思是，牛排":[247950,19629],"牛排。这个词最爱被读错，中间的 ea 要读「诶」，整个词跟 snake 押韵，像「斯太克」。":[267579,74157],"它的意思是，吐司；烤面包":[341736,24621],"烤面包片。面包片放进 toaster 烤一烤，就成了 toast。它跟 roast 只差第一个字母，一个烤面包，一个烤肉。":[366357,80493],"它的意思是，麦片":[446850,19437],"早餐麦片。早上倒一碗，加上牛奶，就是它。读三拍：ce、re、al。":[466287,58221],"它的意思是，辣椒":[524508,19629],"辣椒。ch 读「去」，读出来像「切利」。注意中间是两个 l。":[544137,53421],"它的意思是，大蒜":[597558,18285],"大蒜。gar 加 lic。想想一头蒜能掰出好多瓣来。":[615843,47085],"它的意思是，胡椒":[662928,19629],"胡椒，也可以指甜椒。中间是两个 p。盐是 salt，胡椒是 pepper，这两个老在一起。":[682557,80301],"它的意思是，土豆":[762858,19437],"土豆。读三拍：po、ta、to。它变复数要加 es，potatoes，跟番茄 tomatoes 一样。":[782295,75885],"它的意思是，晚饭":[858180,19629],"晚饭，比 dinner 随便一点，睡觉前吃的那顿。中间是两个 p，跟 super 就差一个 p，别写少了。":[877809,67821],"它的意思是，酸奶":[945630,21357],"酸奶。读出来像「优格特」。也有人写成 yoghurt，中间多一个 h，两种都对。":[966987,61293],"它的意思是，烧烤":[1028280,18093],"烧烤。这个词平时常写成三个字母 BBQ。要写全的话注意结尾是 cue。":[1046373,56301],"它的意思是，煎蛋卷":[1102674,21357],"煎蛋卷。这是从法国借来的词，读出来像「奥么勒特」。注意结尾是 ette，有两个 t。美国人写得短一点，omelet。":[1124031,85101],"它的意思是，炸薯条":[1209132,19629],"炸薯条，美国说法，英国人管它叫 chips。注意 French 要大写，因为它的意思是「法国的」。":[1228761,72621],"它的意思是，成套工具":[1301382,22701],"一整套工具。就三个字母。医药箱是 first aid kit，工具包是 tool kit。":[1324083,62829],"它的意思是，马克杯":[1386912,19437],"马克杯，带把儿的那种大杯子。三个字母，跟 mud、mum 押韵。":[1406349,58413],"它的意思是，烤":[1464762,21357],"用烤箱烤。做面包、蛋糕用 bake，烤肉用 roast。会做面包的人就叫 baker。":[1486119,61293]},
-"seg07":{"它的意思是，煮沸":[0,18093],"煮开、沸腾。oi 读「奥伊」。它跟油 oil 长得很像，可 boil 是煮，oil 是油，别混了。":[18093,79149],"它的意思是，烤箱":[97242,19629],"烤箱。它读「阿文」，不读「奥文」，这个最容易错。蛋糕就是从 oven 里出来的。":[116871,64173],"它的意思是，烤的":[181044,18093],"烤的。烤鸡是 roast chicken。它跟吐司 toast 只差第一个字母，一个烤肉，一个烤面包。":[199137,74157],"它的意思是，煮的":[273294,19629],"boil 加上 ed，煮过的。白煮蛋就是 boiled egg。":[292923,44013],"它的意思是，炉灶":[336936,19629],"炉灶，就是家里做饭的那个灶台。小心，做饭的人是 cook，做饭的机器才是 cooker。":[356565,61293],"它的意思是，食谱":[417858,21165],"食谱，做菜的方法。它的读法很怪，结尾那个 e 要发音，读出来像「瑞色皮」。":[439023,57837],"架在火上烤的。烤鱼是 grilled fish。注意中间是两个 l。":[496860,45357],"它的意思是，机器":[542217,21357],"机器。这里的 ch 读「许」，整个词像「么信」。洗衣机就是 washing machine。":[563574,57837],"它的意思是，洗碗":[621411,19437],"洗碗这件事。do the washing-up 就是洗碗。中间有个小横线，别漏了。":[640848,53229],"它的意思是，原料；成分":[694077,24621],"做菜的原料。in 加上 gredient。读四拍：in、gre、di、ent。":[718698,66093],"它的意思是，冰箱":[784791,19629],"冰箱，词表里最长的词之一。好消息是，平时大家都只说 fridge，五个字母就够了。":[804420,63213],"它的意思是，领带；系":[867633,25965],"领带，也可以是「系上」。系鞋带就说 tie your shoes。就三个字母。":[893598,47085],"它的意思是，靴子":[940683,19437],"靴子。两个 o 读长长的「乌」。下雨天穿的雨靴是 rain boots。":[960120,56685],"它的意思是，戒指；响铃":[1016805,27693],"戒指，也可以是电话「响」。手指上戴的圈圈，和铃声响起来，都是这一个词。":[1044498,54957],"它的意思是，鞋":[1099455,18093],"鞋。一只是 shoe，两只是 shoes。注意结尾是 oe，不是 oo。":[1117548,59757],"它的意思是，尺寸；码":[1177305,24621],"尺寸、码数。买鞋子的时候问 What size，就是问你穿多大码。":[1201926,46701],"它的意思是，短袜":[1248627,19629],"短袜。一只 sock，一双 socks。它跟 rock、lock 押韵。":[1268256,49965],"它的意思是，西装；适合":[1318221,29229],"西装，也可以是「合适」。泳衣 swimsuit 里面也藏着它。":[1347450,48429]},
-"seg08":{"它的意思是，链条；连锁店":[0,27693],"链条，也可以指连锁店。ch 读「去」，读出来像「切恩」。一环扣一环的都叫 chain。":[27693,75885],"它的意思是，手套":[103578,19437],"手套。你看里面有个 love。天冷的时候戴上它，手就被好好爱护着了。":[123015,50157],"它的意思是，钱包":[173172,19629],"钱包。英国人说的 purse 是女士的小钱包，男士的钱包一般叫 wallet。":[192801,61101],"它的意思是，围巾":[253902,19437],"围巾。它变复数有点特别，f 要变成 ves，写成 scarves。":[273339,54765],"它的意思是，女式衬衫":[328104,21357],"女式衬衫。读出来像「布劳斯」。男生的衬衫叫 shirt，这两个别搞混。":[349461,54957],"它的意思是，连帽衫":[404418,21357],"连帽衫。hood 就是帽子那一块，后面加上 ie。带帽子的卫衣，就是 hoodie。":[425775,67437],"它的意思是，针织套头衫":[493212,24429],"套头毛衣，英国说法。jump 是跳，加上 er。记法：套头衫往头上一跳就穿好了。":[517641,67629],"它的意思是，口袋":[585270,19629],"口袋。中间是 ck。零花钱叫 pocket money，意思就是口袋里的钱。":[604899,57837],"它的意思是，连裤袜":[662736,21357],"连裤袜。它永远要加 s，因为有两条腿。跟 jeans、scissors 一样，都是天生的复数。":[684093,64557],"它的意思是，耳环":[748650,19437],"ear 是耳朵，ring 是圈圈。耳朵上的圈圈，耳环。中间连着两个 r，一个属于 ear，一个属于 ring。":[768087,78957],"它的意思是，毛衣":[847044,19629],"毛衣，美国说法。里面藏着一个 sweat，汗。穿太厚会出汗，所以叫 sweater。":[866673,57837],"它的意思是，运动鞋；教练":[924510,25965],"运动鞋，英国说法，一般说成 trainers 两只一起。它还有另一个意思是教练。":[950475,57837],"它的意思是，手链":[1008312,19437],"手链。前面 brace，后面 let。戴在手腕上的那个小圈。":[1027749,46701],"它的意思是，项链":[1074450,18093],"neck 是脖子，lace 是带子。挂在脖子上的带子，那就是项链。":[1092543,46893],"它的意思是，泳衣":[1139436,18285],"swim 是游泳，suit 是一套衣服。游泳穿的那套，就是泳衣。":[1157721,49965],"泳衣的另一种说法，美国人爱用。bathing 是泡水，suit 是那一套。注意这是分开的两个词，中间有空格。":[1207686,77421],"它的意思是，垃圾桶":[1285107,19437],"垃圾桶。就三个字母。扔垃圾就说 put it in the bin。":[1304544,40557],"它的意思是，租；租金":[1345101,24621],"租，也可以指租金。每个月交的房租就是 rent。它跟 sent、tent 押韵。":[1369722,56685]},
-"seg09":{"它的意思是，屋顶":[0,19629],"屋顶。两个 o 读长长的「乌」。房子最上面那一层就是 roof。":[19629,51693],"它的意思是，架子":[71322,18093],"架子。好几个架子要写成 shelves，f 变成 ves，跟围巾 scarf 的变法一样。":[89415,59757],"它的意思是，壁橱":[149172,19437],"壁橱，美国说法。里面有个 close，关。能关起来的柜子，就是壁橱。":[168609,56685],"它的意思是，枕头":[225294,21357],"枕头。后面是 low，低。睡觉的时候头低低地放上去。注意中间是两个 l。":[246651,72621],"它的意思是，海报":[319272,18093],"海报。post 是贴、寄，加上 er。贴在墙上的大画，就是海报。":[337365,54765],"它的意思是，厕所":[392130,21357],"厕所。读两拍：toi、let。在英国问厕所就说 Where is the toilet。":[413487,67629],"它的意思是，浴缸":[481116,18093],"bath 是洗澡，tub 是大桶。洗澡用的大桶，那就是浴缸。":[499209,47085],"它的意思是，毯子":[546294,21357],"毯子。前面 blan，后面 ket。天冷的时候盖在身上那一条。":[567651,48429],"它的意思是，橱柜":[616080,21357],"橱柜。读三拍：ca、bi、net。厨房墙上挂的那种柜子。":[637437,51501],"它的意思是，窗帘":[688938,21357],"窗帘。cur 加 tain，读出来像「克疼」，结尾很轻。天黑了就拉上 curtains。":[710295,59565],"它的意思是，暖气":[769860,19629],"暖气。heat 是热，加上 ing。冬天把暖气打开，就说 turn on the heating。":[789489,57837],"它的意思是，扶手椅":[847326,19629],"arm 是胳膊，chair 是椅子。有胳膊的椅子，就是扶手椅。":[866955,46893],"它的意思是，电梯":[913848,19629],"电梯，美国说法，英国人叫 lift。elevate 是升起来，加上 or 就是把人送上去的那个东西。":[933477,73581],"它的意思是，衣柜":[1007058,18093],"衣柜。前面 ward，后面 robe，robe 是长袍。放袍子和衣服的地方，就是衣柜。":[1025151,59565],"它的意思是，公寓":[1084716,18093],"公寓，美国说法，英国人叫 flat。读三拍：a、part、ment。":[1102809,51501],"它的意思是，洗衣机":[1154310,21165],"洗衣机。washing 是洗，machine 是机器。这是分开写的两个词，中间有空格。":[1175475,67629],"它的意思是，考试":[1243104,19437],"考试。它其实是 examination 的短写，太长了，所以大家都只说 exam。":[1262541,56685],"它的意思是，失败；不及格":[1319226,24429],"没通过、不及格，跟 pass 正好相反。四个字母，ai 读「诶」。":[1343655,45165]},
-"seg10":{"它的意思是，小测验":[0,22701],"小测验，比 exam 轻松多了。注意 q 后面永远跟着一个 u，这是英语的规矩。":[22701,59757],"它的意思是，学期":[82458,19437],"学期。一年分成好几个 term。它还有「术语」的意思，先记住学期就行。":[101895,54765],"它的意思是，小学生":[156660,21357],"小学生。英国学校里的学生叫 pupil，上大学的才叫 student。它还有个意思，是眼睛里的瞳孔。":[178017,70893],"它的意思是，拼写":[248910,19629],"拼写。老师说 Spell it，就是让你把字母一个一个念出来。注意结尾是两个 l。":[268539,63021],"它的意思是，橡皮":[331560,21357],"橡皮，美国说法。erase 是擦掉，加上 r 就是擦东西的家伙。英国人管它叫 rubber。":[352917,72429],"它的意思是，生物":[425346,18093],"生物。bio 是「生命」，logy 是「学问」。研究生命的学问，就是生物课。":[443439,58029],"它的意思是，学院；大学":[501468,27693],"学院、大学。注意中间是两个 l。":[529161,34029],"它的意思是，文凭；证书":[563190,25773],"文凭、证书。读三拍：di、plo、ma。毕业的时候发给你的那张纸。":[588963,57837],"它的意思是，错误":[646800,19437],"错误。mis 是「错」，take 是拿。拿错了，就是犯错。常跟 make 一起用，make a mistake。":[666237,71085],"它的意思是，物理":[737322,19629],"物理。ph 读「夫」，读出来像「菲日克斯」。它结尾有个 s，可它是一门课，当单数用。":[756951,75885],"它的意思是，项目；课题":[832836,25965],"项目、课题。老师布置的那种大作业就叫 project。pro 加上 ject。":[858801,54957],"它的意思是，初学者":[913758,21165],"初学者。begin 是开始，后面加 ner。注意 n 要写两个，begin 变成 beginner。":[934923,67245],"它的意思是，语言":[1002168,19437],"语言。中间是 gu，很容易漏掉那个 u。英语、中文都是 language。":[1021605,51501],"它的意思是，剪刀":[1073106,19437],"剪刀。它跟 tights 一样永远加 s，因为剪刀有两片刀。开头的 c 不出声，读出来像「西泽斯」。":[1092543,74157],"它的意思是，课本":[1166700,19629],"text 是课文，book 是书。装着课文的书，就是课本。":[1186329,45165],"它的意思是，化学":[1231494,21357],"化学。这里的 ch 读「克」，读出来像「凯么斯翠」。就是做实验那门课。":[1252851,61293],"它的意思是，时间表；课程表":[1314144,27693],"time 是时间，table 是表格。把时间排成一张表，就是课程表。":[1341837,53421],"它的意思是，词典":[1395258,21357],"词典。读四拍：dic、tio、na、ry。不认识的词，问它就行。":[1416615,74157]}
-};
-/* 取回某段的音频包，切成一条条独立音频。失败就静默放弃，自动退回在线语音。 */
-function loadVoicePack(seg){
-  const key="seg"+String(seg+1).padStart(2,"0");
-  const idx=VOICE_INDEX[key];
-  if(!idx||VOICE_PACK[key])return;                 /* 没有这一段，或者已经在取了 */
-  VOICE_PACK[key]="loading";
-  fetch("voice/"+key+".mp3").then(r=>{
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    return r.blob();
-  }).then(blob=>{
-    let n=0;
-    Object.keys(idx).forEach(text=>{
-      const [start,len]=idx[text];
-      if(start+len>blob.size)return;               /* 索引和文件不匹配就跳过这条 */
-      ZH_AUDIO[text]=URL.createObjectURL(blob.slice(start,start+len,"audio/mpeg"));
-      n++;
-    });
-    VOICE_PACK[key]=n?"ready":"none";
-  }).catch(()=>{VOICE_PACK[key]="none";});         /* 用 file:// 直接打开时会失败，走在线 */
-}
-/* 音频包里已有的句子集合：这些句子不必再走在线预取 */
-const PACK_TEXTS=new Set();
-Object.keys(VOICE_INDEX).forEach(k=>Object.keys(VOICE_INDEX[k]).forEach(t=>PACK_TEXTS.add(t)));
-const zhOnline=t=>"https://fanyi.baidu.com/gettts?lan=zh&spd=5&source=web&text="+encodeURIComponent(t);
-const zhSrc=t=>ZH_AUDIO[t]||zhOnline(t);
-const zhWarm=new Map();     /* 预加载过的在线音频，浏览器会把数据留在缓存里 */
-function zhPrefetch(t){
-  if(!t||ZH_AUDIO[t]||zhWarm.has(t)||PACK_TEXTS.has(t))return;
-  try{
-    const a=new Audio();a.preload="auto";a.src=zhOnline(t);a.load();
-    zhWarm.set(t,a);
-    if(zhWarm.size>40){const k=zhWarm.keys().next().value;zhWarm.delete(k);}
-  }catch(e){}
-}
-function sayZh(t,onend,onstate,onfail){
-  if(!t){onend&&onend();return;}
   const id=cardSeq;
   const localTry=()=>{
     if(id!==cardSeq)return;
     onstate&&onstate(false);
-    const v=pickVoice(ZH_PREF,zhVoices);
-    if(v)ttsSay(t,v,Math.min(1,+SET.rate+0.05),()=>{onfail&&onfail();onend&&onend();},onend,onstate);
-    else{onfail&&onfail();onend&&onend();}          /* 没有中文语音就当读完，继续往下走 */
-  };
-  const play=()=>{
-    if(id!==cardSeq)return;
-    const baked=ZH_AUDIO[t];
-    /* 本地音频包失败时先退到在线，再退到本机 */
-    const onlineTry=()=>{
-      if(id!==cardSeq)return;
-      playUrl(zhOnline(t),onend,onstate,localTry).catch(localTry);
-    };
-    const back=baked?onlineTry:localTry;
-    playUrl(baked||zhOnline(t),onend,onstate,back).catch(back);
-  };
-  /* 音频包正在取、而这句正好在包里：稍等它一下再开口，
-     不然会出现前一句本地音色、后一句在线音色的突变，听起来更别扭 */
-  const waiting=!ZH_AUDIO[t]&&PACK_TEXTS.has(t)&&
-    Object.keys(VOICE_PACK).some(k=>VOICE_PACK[k]==="loading");
-  if(waiting){
-    onstate&&onstate(false);
-    const t0=Date.now();
-    const timer=everySp(()=>{
-      if(id!==cardSeq){clearInterval(timer);return;}
-      const stillLoading=Object.keys(VOICE_PACK).some(k=>VOICE_PACK[k]==="loading");
-      if(ZH_AUDIO[t]||!stillLoading||Date.now()-t0>2500){clearInterval(timer);play();}
-    },60);
-    return;
-  }
-  play();
+    const v=pickVoice(SENT_PREF);
+    const remoteTry=()=>{if(id===cardSeq)youdaoSay(t,onfail,onend,onstate);};
+    if(v)ttsSay(t,v,Math.min(1,+SET.rate+0.05),remoteTry,onend,onstate);
+    else remoteTry();};
+  msSynth(t).then(u=>{if(id===cardSeq)return playUrl(u,onend,onstate,localTry);}).catch(localTry);
 }
-/* 讲解卡的朗读节奏：英文单词 → 中文意思 → 中文记忆讲解
-   ① 单词读到只剩 0.12 秒尾音时就算读完，抵掉不同录音结尾静音长度不一的差异
-   ② 每段之间固定间隔，节奏稳定；例句只看不读 */
+/* 讲解卡的连读节奏（A 方案：固定间隔）
+   ① 卡片一出现就开始合成例句，并且「先把例句音频备好（最多等 1.2 秒）再开口读单词」
+   ② 单词读到只剩 0.12 秒尾音时就算读完，抵掉不同录音结尾静音长度不一的差异
+   ③ 然后严格等 SET.gap 再播例句 —— 这样间隔恒定，不会忽长忽短 */
 let cardSeq=0,spTimers=[],audioSeq=0,clearStudyRead=null;
 const WORD_TAIL=.12;            /* 提前判定单词结束的秒数，抵消尾部静音 */
-const STEP_GAP=520;             /* 单词→中文→讲解之间的固定间隔 */
+const PRE_WAIT=1200;            /* 开口前最多等例句合成多久 */
 function laterSp(fn,ms){const h=setTimeout(fn,ms);spTimers.push(h);return h;}
 function everySp(fn,ms){const h=setInterval(fn,ms);spTimers.push(h);return h;}
 /* 彻底打断现在的发音：网页音频 + 浏览器语音 + 所有还没到点的定时器
    （切卡、切页、进闯关都要调它，否则上一句会压着下一张卡继续读） */
 function stopSpeak(){
-  stopAnim();                   /* 卡片要换了，动画小剧场也一起停 */
   if(clearStudyRead){clearStudyRead();clearStudyRead=null;}
   cardSeq++;audioSeq++;
   spTimers.forEach(h=>{clearTimeout(h);clearInterval(h);});spTimers=[];
@@ -3918,56 +2763,47 @@ function stopSpeak(){
   try{clearTimeout(ttsTimer);}catch(e){}
   try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
 }
-/* 中文意思读成一句自然的话；这句话也是中文音频的索引键，改动前先想清楚 */
-function zhLine(w){return w.zh?("它的意思是，"+w.zh):"";}
 function sayCard(w,card){
   stopSpeak();                    /* 先把上一张卡的声音和定时器全部掐掉 */
   const id=cardSeq;
   const main=card&&card.querySelector(".study-main"),sen=card&&card.querySelector(".sc-sen");
-  const talkBox=card&&card.querySelector(".sc-talk");
   const status=card&&card.querySelector("#readStatus");
   const setRead=(part,text)=>{
     if(id!==cardSeq||!card||!card.isConnected||$("#learnArea .study-card")!==card)return;
-    main.classList.toggle("is-speaking",part==="word"||part==="zh");
-    if(sen)sen.classList.toggle("is-speaking",part==="sentence");
-    if(talkBox)talkBox.classList.toggle("is-speaking",part==="talk");
+    main.classList.toggle("is-speaking",part==="word");
+    sen.classList.toggle("is-speaking",part==="sentence");
     status.textContent=text;
   };
   if(card)clearStudyRead=()=>{
-    main.classList.remove("is-speaking");
-    if(sen)sen.classList.remove("is-speaking");
-    if(talkBox)talkBox.classList.remove("is-speaking");
+    main.classList.remove("is-speaking");sen.classList.remove("is-speaking");
     status.textContent="点喇叭再听一次";
   };
   setRead("","正在准备朗读…");
+  const gap=+SET.gap||500;
   let wordFailed=false;
-  const doneText=()=>wordFailed?"单词暂时无法播放，可点喇叭重试":"讲解结束，点喇叭再听一次";
+  let pre=w.sen?(msCached(w.sen)||null):null;     /* 命中缓存就是零等待 */
+  let preFail=false;
+  if(w.sen&&!pre)msSynth(w.sen).then(u=>{pre=u;}).catch(()=>{preFail=true;});
 
-  /* 第三步：中文记忆讲解 */
-  const playTalk=()=>{
-    if(id!==cardSeq||!w.talk)return;
-    setRead("","正在加载讲解语音…");
-    sayZh(w.talk,
-      ()=>setRead("",doneText()),
-      playing=>setRead(playing?"talk":"",playing?"正在讲解怎么记住它":"正在加载讲解语音…"),
-      ()=>setRead("","讲解语音暂时无法播放，可以看屏幕上的文字"));
+  const playSen=()=>{
+    if(id!==cardSeq||!w.sen)return;
+    setRead("","正在加载例句语音…");
+    const state=playing=>setRead(playing?"sentence":"",playing?"正在朗读例句":"正在加载例句语音…");
+    const end=()=>setRead("",wordFailed?"例句朗读结束，单词未能播放，可点喇叭重试":"朗读结束，点喇叭再听一次");
+    const fail=()=>setRead("","例句暂时无法播放，请点喇叭重试");
+    const fallback=()=>{if(id===cardSeq)saySentence(w.sen,end,state,fail);};
+    const cachedPlay=()=>{playUrl(pre,end,state,fallback).catch(fail);};
+    if(pre){cachedPlay();return;}
+    if(preFail){fallback();return;}
+    const t0=Date.now();                       /* 极端情况：开口前那 1.2 秒还没合成完 */
+    const timer=everySp(()=>{
+      if(id!==cardSeq){clearInterval(timer);return;}
+      if(pre){clearInterval(timer);cachedPlay();}
+      else if(preFail||Date.now()-t0>4000){clearInterval(timer);fallback();}
+    },80);
   };
 
-  /* 第二步：中文意思 */
-  const playZh=()=>{
-    if(id!==cardSeq)return;
-    const line=zhLine(w);
-    if(!line){playTalk();return;}
-    setRead("","正在加载中文语音…");
-    sayZh(line,
-      ()=>{if(id!==cardSeq)return;
-        if(w.talk){setRead("","马上讲怎么记住它…");laterSp(playTalk,STEP_GAP);}
-        else setRead("",doneText());},
-      playing=>setRead(playing?"zh":"",playing?"正在朗读中文意思":"正在加载中文语音…"),
-      ()=>setRead("","中文语音暂时无法播放，可以看屏幕上的文字"));
-  };
-
-  /* 第一步：英文单词，读完固定间隔后进入中文 */
+  /* 真正开口读单词 → 读完等 gap → 读例句 */
   const startWord=()=>{
     if(id!==cardSeq)return;
     setRead("","正在加载单词语音…");
@@ -3975,9 +2811,9 @@ function sayCard(w,card){
     const next=()=>{
       if(moved||id!==cardSeq)return;
       moved=true;
-      const hasMore=!!(zhLine(w)||w.talk);
-      setRead("",hasMore?(wordFailed?"单词暂时无法播放，继续读中文…":"单词读完，接着说中文意思…"):doneText());
-      if(hasMore)laterSp(playZh,STEP_GAP);
+      setRead("",w.sen?(wordFailed?"单词暂时无法播放，即将朗读例句…":"单词朗读结束，即将朗读例句…")
+        :(wordFailed?"单词暂时无法播放，请点喇叭重试":"朗读结束，点喇叭再听一次"));
+      laterSp(playSen,gap);
     };
     sayWord(w.en,next,playing=>{
       if(moved)return;
@@ -4004,12 +2840,18 @@ function sayCard(w,card){
     },2600);
   };
 
-  startWord();
+  if(!w.sen||pre||preFail){startWord();return;}
+  const t0=Date.now();
+  const wait=everySp(()=>{
+    if(id!==cardSeq){clearInterval(wait);return;}
+    if(pre||preFail||Date.now()-t0>PRE_WAIT){clearInterval(wait);startWord();}
+  },40);
 }
 
 /* --- 设置面板：只保留语速和音效 --- */
 function syncSet(){
   document.querySelectorAll("#rateBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.rate));
+  document.querySelectorAll("#gapBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.gap));
   document.querySelectorAll("#sfxBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.sfx));
 }
 $("#setBtn").onclick=()=>{loadVoices();syncSet();renderBkUI();$("#setModal").classList.add("show");};
@@ -4017,8 +2859,10 @@ $("#setClose").onclick=()=>$("#setModal").classList.remove("show");
 $("#restOk").onclick=()=>{$("#restModal").classList.remove("show");activeMs=0;lastTick=0;};
 document.querySelectorAll("#rateBtns button").forEach(b=>b.onclick=()=>{
   SET.rate=+b.dataset.v;saveSet();syncSet();msCache.clear();sayCard(DEMO_CARD);});
+document.querySelectorAll("#gapBtns button").forEach(b=>b.onclick=()=>{
+  SET.gap=+b.dataset.v;saveSet();syncSet();sayCard(DEMO_CARD);});
 document.querySelectorAll("#sfxBtns button").forEach(b=>b.onclick=()=>{SET.sfx=+b.dataset.v;saveSet();syncSet();SFX.ok();});
-const DEMO_CARD={en:"mom",zh:"妈妈",talk:"mom 就是妈妈，美国人常说 mom，英国人常说 mum。"};
+const DEMO_CARD={en:"apple",sen:"I eat a big red apple."};
 $("#testSent").onclick=()=>sayCard(DEMO_CARD);
 /* 存档导出 / 导入 */
 $("#expBtn").onclick=()=>{
