@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.7.0</title>
-<meta name="app-version" content="1.7.0">
+<title>魔法单词学院 · v1.8.1</title>
+<meta name="app-version" content="1.8.1">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -497,6 +497,13 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 #spSkip{pointer-events:auto;font-family:var(--cute);font-size:14px;letter-spacing:2px;color:#6A6AA0;
   opacity:0;cursor:pointer;padding:8px 14px;animation:spIn .6s 2.4s ease forwards}
 @keyframes spIn{to{opacity:1;transform:translateY(0) scale(1)}}
+/* 开机音乐的静音按钮：右上角，小孩自己也能点 */
+#spMute{position:absolute;top:16px;right:16px;z-index:3;pointer-events:auto;
+  width:46px;height:46px;border-radius:50%;font-size:20px;line-height:1;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.34);color:#fff;
+  box-shadow:none;opacity:0;animation:spIn .6s 2.6s ease forwards;transition:background .2s}
+#spMute:hover{background:rgba(255,255,255,.3)}
+#spMute.off{opacity:.55}
 /* 没有 three.js 时的降级场景 */
 #spFallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
 #spFallback.on{display:flex}
@@ -719,6 +726,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
   <canvas id="spCanvas"></canvas>
   <div id="spFallback"></div>
   <div id="spVig"></div>
+  <button id="spMute" title="开机音乐开关" aria-label="开机音乐开关">🎵</button>
   <div id="splashUI">
     <div class="sp-deco"><i></i><span>✦ ✦ ✦</span><i></i></div>
     <div class="sp-title">魔法单词<b>学院</b></div>
@@ -871,6 +879,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="seg-btns" id="rateBtns"><button data-v="0.75">慢</button><button data-v="0.9">正常</button><button data-v="1">快</button></div></div>
     <div class="set-row"><span>🎵 音效</span>
       <div class="seg-btns" id="sfxBtns"><button data-v="1">开</button><button data-v="0">关</button></div></div>
+    <div class="set-row"><span>🎼 开机音乐</span>
+      <div class="seg-btns" id="bgmBtns"><button data-v="1">开</button><button data-v="0">关</button></div></div>
     <button class="btn sm" id="testSent" style="width:100%;margin-top:4px">🔈 试听：mom → 中文意思 → 记忆讲解</button>
     <div style="background:#F7F4FF;border-radius:16px;padding:10px;margin-top:10px">
       <div style="font-size:12px;font-weight:bold;margin-bottom:7px;text-align:left">
@@ -953,6 +963,10 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="pa-box">
         <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
         <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.8.1</b>：开机音乐换成真实录音（Enchanted Valley，钢片琴 + 长笛 + 单簧管，117 拍，截取前 60 秒循环），接缝处做了 1.1 秒淡出淡入。原来那段现场合成的小曲降级成备用，只在 mp3 加载失败时顶上。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.8.0</b>：开机页加了背景音乐，点「开始冒险」自动淡出。右上角有静音按钮，设置里也能长期关掉。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.7.0</b>：前 10 段（165 词）的中文意思和讲解全部录成真人感语音（Vivi 2.0），共 327 条，放在 voice 文件夹里。第 1～10 段现在是零延迟、音色固定、断网可用。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.6.0</b>：前 10 段（165 词）全部写上「怎么记住它」讲解和例句；第 2、3 段的 30 个词每个都配了 3 幕动画小剧场。</p>
@@ -966,6 +980,9 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
           <b>v1.3.0</b>：第 1 段中文讲解改用预先生成的真人感语音（Vivi 2.0），放在 voice 文件夹里随网页发布，零延迟、音色固定、断网可用。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.2.1</b> 修掉中文朗读忽长忽短 · <b>v1.2.0</b> 三段式讲解与看答案按钮 · <b>v1.1.0</b> 冒险地图与衣帽间</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          🎼 开机音乐：Enchanted Valley，作者 Kevin MacLeod（incompetech.com），
+          按 <b>CC BY 4.0</b> 授权使用，已截取前 60 秒循环播放。</p>
         <div class="row" style="margin-top:4px">
           <a class="btn sm ghost" href="word_adventure_v1.1.0.html">打开 v1.1.0</a>
           <a class="btn sm ghost" href="word_adventure_v1.0.0.html">打开 v1.0.0</a>
@@ -2005,7 +2022,7 @@ function save(){
   if(typeof autoBackupTick==="function")autoBackupTick();   /* 顺手做自动备份 */
 }
 const SKEY="eggy_setting_v4";
-const SET_DEF={rate:0.9,sfx:1,aiVoice:"en-US-AnaNeural"};
+const SET_DEF={rate:0.9,sfx:1,bgm:1,aiVoice:"en-US-AnaNeural"};
 let SET=(()=>{try{return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SKEY)))}catch(e){return Object.assign({},SET_DEF)}})();
 function saveSet(){localStorage.setItem(SKEY,JSON.stringify(SET));}
 function dayRec(){const d=today();S.days[d]=S.days[d]||{q:0,w:0,s:0};return S.days[d];}
@@ -4007,10 +4024,11 @@ function sayCard(w,card){
   startWord();
 }
 
-/* --- 设置面板：只保留语速和音效 --- */
+/* --- 设置面板：语速、音效、开机音乐 --- */
 function syncSet(){
   document.querySelectorAll("#rateBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.rate));
   document.querySelectorAll("#sfxBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.sfx));
+  document.querySelectorAll("#bgmBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.bgm));
 }
 $("#setBtn").onclick=()=>{loadVoices();syncSet();renderBkUI();$("#setModal").classList.add("show");};
 $("#setClose").onclick=()=>$("#setModal").classList.remove("show");
@@ -4018,6 +4036,11 @@ $("#restOk").onclick=()=>{$("#restModal").classList.remove("show");activeMs=0;la
 document.querySelectorAll("#rateBtns button").forEach(b=>b.onclick=()=>{
   SET.rate=+b.dataset.v;saveSet();syncSet();msCache.clear();sayCard(DEMO_CARD);});
 document.querySelectorAll("#sfxBtns button").forEach(b=>b.onclick=()=>{SET.sfx=+b.dataset.v;saveSet();syncSet();SFX.ok();});
+document.querySelectorAll("#bgmBtns button").forEach(b=>b.onclick=()=>{
+  SET.bgm=+b.dataset.v;saveSet();syncSet();
+  /* 开机页已经退掉了，这里只存设置；下次打开生效 */
+  if(window.BGM)+SET.bgm?BGM.start():BGM.stop();
+  toast(+SET.bgm?"🎼 开机音乐已打开，下次进来就能听到":"🔇 开机音乐已关掉");});
 const DEMO_CARD={en:"mom",zh:"妈妈",talk:"mom 就是妈妈，美国人常说 mom，英国人常说 mum。"};
 $("#testSent").onclick=()=>sayCard(DEMO_CARD);
 /* 存档导出 / 导入 */
@@ -5202,9 +5225,209 @@ window.makeEggyBase=function(T){
   const splash=$s("#splash");
   let raf=null,renderer=null,alive=true;
 
+  /* ---------- 开机音乐 ----------------------------------------
+     主用 music/splash.mp3（Enchanted Valley，Kevin MacLeod，CC BY 4.0，
+     已按帧截取前 60 秒，没有重新编码）。循环播放，接缝处做淡入淡出。
+     万一这个文件没传上去或者加载失败，自动退回下面那段现场合成的小曲。
+     只在开机页响，点「开始冒险」就淡出，免得跟讲解语音抢。 */
+  const BGM=(()=>{
+  /* 备用：一段原创的三拍子小曲，Web Audio 现场合成，不依赖任何文件。
+     F 大调，每分钟 72 拍，16 小节一轮。和声 F - C - Dm - Bb - F - C - Bb - F。 */
+  const SYNTH=(()=>{
+    const BPM=72,BEAT=60/BPM,BAR=BEAT*3,BARS=16;
+    const STEP={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+    /* 音名转频率，比如 A4 就是 440 */
+    const hz=n=>{
+      const m=/^([A-G])([b#]?)(\d)$/.exec(n);
+      const s=STEP[m[1]]+(m[2]==="#"?1:m[2]==="b"?-1:0)+(+m[3]+1)*12;
+      return 440*Math.pow(2,(s-69)/12);
+    };
+    /* 旋律：[小节, 第几拍, 音名, 几拍长]。F 大调，所以 B 一律是降 B */
+    const MEL=[
+      [0,0,"A4",1],[0,1,"C5",1],[0,2,"F5",1],
+      [1,0,"E5",1.5],[1,1.5,"D5",.5],[1,2,"C5",1],
+      [2,0,"G4",1],[2,1,"Bb4",1],[2,2,"E5",1],
+      [3,0,"D5",2],[3,2,"Bb4",1],
+      [4,0,"F4",1],[4,1,"A4",1],[4,2,"D5",1],
+      [5,0,"C5",1.5],[5,1.5,"A4",.5],[5,2,"F4",1],
+      [6,0,"D5",1],[6,1,"F5",1],[6,2,"Bb5",1],
+      [7,0,"A5",2],[7,2,"F5",1],
+      [8,0,"C5",1],[8,1,"A4",1],[8,2,"F4",1],
+      [9,0,"G4",1],[9,1,"A4",1],[9,2,"C5",1],
+      [10,0,"Bb4",1],[10,1,"D5",1],[10,2,"G5",1],
+      [11,0,"F5",1.5],[11,1.5,"E5",.5],[11,2,"D5",1],
+      [12,0,"F5",1],[12,1,"D5",1],[12,2,"Bb4",1],
+      [13,0,"C5",1],[13,1,"D5",1],[13,2,"F5",1],
+      [14,0,"A5",1],[14,1,"G5",1],[14,2,"F5",1],
+      [15,0,"F5",3]
+    ];
+    /* 伴奏：每小节第一拍低音，第二三拍两个和弦音（华尔兹的「蹦 恰 恰」） */
+    const CH=[["F2","A3","C4"],["C3","E3","G3"],["D3","F3","A3"],["Bb2","D3","F3"],
+              ["F2","A3","C4"],["C3","E3","G3"],["Bb2","D3","F3"],["F2","A3","C4"]];
+    const chordOf=bar=>CH[Math.floor(bar/2)%CH.length];
+
+    let ctx=null,out=null,timer=null,on=false;
+    function build(){
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+      out=ctx.createGain();out.gain.value=0;out.connect(ctx.destination);
+      /* 用一条带低通的反馈延时当简易混响，听起来空间感足一些 */
+      const dl=ctx.createDelay(1),fb=ctx.createGain(),lp=ctx.createBiquadFilter(),wet=ctx.createGain();
+      dl.delayTime.value=.28;fb.gain.value=.34;
+      lp.type="lowpass";lp.frequency.value=2100;wet.gain.value=.34;
+      dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(wet);wet.connect(out);
+      return dl;
+    }
+    /* 一个钢琴味的音：基音 + 八度泛音，起音快、尾音长 */
+    function note(f,t,dur,vel,rev){
+      const g=ctx.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(vel,t+.015);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      g.connect(out);g.connect(rev);
+      [[1,1],[2,.28],[3,.1]].forEach(([mul,amp])=>{
+        const o=ctx.createOscillator();
+        o.type=mul===1?"triangle":"sine";
+        o.frequency.value=f*mul;
+        const og=ctx.createGain();og.gain.value=amp;
+        o.connect(og);og.connect(g);
+        o.start(t);o.stop(t+dur+.05);
+      });
+    }
+    function schedule(t0,rev){
+      MEL.forEach(([bar,beat,n,len])=>
+        note(hz(n),t0+bar*BAR+beat*BEAT,len*BEAT*1.15,.16,rev));
+      for(let bar=0;bar<BARS;bar++){
+        const c=chordOf(bar),t=t0+bar*BAR;
+        note(hz(c[0]),t,BEAT*1.7,.11,rev);
+        note(hz(c[1]),t+BEAT,BEAT*.95,.055,rev);
+        note(hz(c[2]),t+BEAT*2,BEAT*.95,.055,rev);
+      }
+    }
+    function loop(){
+      const rev=loop.rev;
+      schedule(ctx.currentTime+.08,rev);
+      timer=setTimeout(loop,BARS*BAR*1000-120);
+    }
+    function start(){
+      if(!+SET.bgm)return;
+      try{
+        if(!ctx)loop.rev=build();
+        /* 浏览器要求先有交互才让出声。没放行就先别排音符，
+           否则它们会排进一个暂停的时钟里，一放行就全挤在一起响。 */
+        if(ctx.state!=="running"){
+          const p=ctx.resume&&ctx.resume();
+          if(p&&p.then)p.then(()=>start(),()=>{});
+          return;
+        }
+        if(on)return;
+        on=true;
+        out.gain.cancelScheduledValues(ctx.currentTime);
+        out.gain.setValueAtTime(0.0001,ctx.currentTime);
+        out.gain.exponentialRampToValueAtTime(.9,ctx.currentTime+2.4);
+        loop();
+      }catch(e){on=false;}
+    }
+    function stop(fade){
+      if(!ctx)return;
+      clearTimeout(timer);timer=null;on=false;
+      try{
+        out.gain.cancelScheduledValues(ctx.currentTime);
+        out.gain.setValueAtTime(out.gain.value||0.0001,ctx.currentTime);
+        out.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+(fade||1.2));
+        setTimeout(()=>{try{ctx.close();}catch(e){}ctx=null;},(fade||1.2)*1000+200);
+      }catch(e){}
+    }
+    return {start:start,stop:stop,playing:()=>!!(on&&ctx&&ctx.state==="running")};
+  })();
+
+  /* 主用录音文件。接缝处 1.1 秒淡出淡入，把硬切的那一下盖掉 */
+  const SRC="music/splash.mp3",VOL=.55,FADE=1.1;
+  let el=null,useSynth=false,want=false,volT=null,stopT=null;
+  function make(){
+    el=new Audio(SRC);
+    el.loop=true;el.preload="auto";el.volume=0;
+    el.addEventListener("error",fail);
+    return el;
+  }
+  function fail(){                    /* 文件没传上去、404、解码失败都走这儿 */
+    useSynth=true;
+    if(volT){clearInterval(volT);volT=null;}
+    if(want)SYNTH.start();
+  }
+  function seam(){
+    if(!el)return;
+    const d=el.duration||0,t=el.currentTime;
+    let v=VOL;
+    if(d){
+      if(t<FADE)v=VOL*(t/FADE);                 /* 开头淡入 */
+      else if(d-t<FADE)v=VOL*((d-t)/FADE);      /* 结尾淡出，紧接着又回到开头 */
+    }else v=0;
+    el.volume=Math.max(0,Math.min(1,v));
+  }
+  function start(){
+    if(!+SET.bgm)return;
+    want=true;
+    if(stopT){clearInterval(stopT);stopT=null;}
+    if(useSynth)return SYNTH.start();
+    if(!el)make();
+    try{
+      const p=el.play();
+      if(p&&p.catch)p.catch(()=>{});   /* 还没交互会被拒，等下次点击再试 */
+    }catch(e){}
+    if(!volT)volT=setInterval(seam,80);
+  }
+  function stop(fade){
+    want=false;
+    SYNTH.stop(fade);
+    if(volT){clearInterval(volT);volT=null;}
+    if(!el)return;
+    const v0=el.volume,steps=Math.max(1,Math.round((fade||1.2)*1000/60));
+    let i=0;
+    if(stopT)clearInterval(stopT);
+    stopT=setInterval(()=>{
+      i++;
+      try{el.volume=Math.max(0,v0*(1-i/steps));}catch(e){}
+      if(i>=steps){
+        clearInterval(stopT);stopT=null;
+        try{el.pause();el.currentTime=0;}catch(e){}
+      }
+    },60);
+  }
+  return {start:start,stop:stop,
+    playing:()=>useSynth?SYNTH.playing():!!(el&&!el.paused&&!el.ended&&el.currentTime>0),
+    usingSynth:()=>useSynth};
+  })();
+  window.BGM=BGM;
+
+  /* 浏览器要求先有交互才让出声：先试一次，不行就等第一次点击 */
+  const muteBtn=$s("#spMute");
+  function syncMute(){
+    muteBtn.textContent=+SET.bgm?"🎵":"🔇";
+    muteBtn.classList.toggle("off",!+SET.bgm);
+  }
+  syncMute();
+  BGM.start();
+  /* 第一次交互（点哪儿都算）就再试一次，直到真的出声为止 */
+  const kick=()=>{
+    BGM.start();
+    setTimeout(()=>{if(BGM.playing())offKick();},400);
+  };
+  function offKick(){
+    ["pointerdown","keydown","touchstart"].forEach(e=>window.removeEventListener(e,kick));
+  }
+  ["pointerdown","keydown","touchstart"].forEach(e=>window.addEventListener(e,kick,{passive:true}));
+  muteBtn.onclick=e=>{
+    e.stopPropagation();
+    SET.bgm=+SET.bgm?0:1;
+    try{saveSet();}catch(err){}
+    syncMute();
+    if(+SET.bgm)BGM.start();else BGM.stop(.4);
+  };
+
   /* ---------- 退出开机界面 ---------- */
   function leave(){
     if(!alive)return;alive=false;
+    BGM.stop(1.4);                  /* 音乐淡出，别跟讲解语音抢 */
     splash.classList.add("hide");
     document.body.style.overflow="";
     /* 借这次用户点击解锁语音（浏览器要求先有交互） */
