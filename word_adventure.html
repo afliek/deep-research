@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.8.1</title>
-<meta name="app-version" content="1.8.1">
+<title>魔法单词学院 · v1.9.0</title>
+<meta name="app-version" content="1.9.0">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -497,6 +497,20 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 #spSkip{pointer-events:auto;font-family:var(--cute);font-size:14px;letter-spacing:2px;color:#6A6AA0;
   opacity:0;cursor:pointer;padding:8px 14px;animation:spIn .6s 2.4s ease forwards}
 @keyframes spIn{to{opacity:1;transform:translateY(0) scale(1)}}
+/* 首页的已掌握词数：实时读存档，数字会从 0 滚上去 */
+#spProg{width:min(340px,86vw);opacity:0;animation:spIn .8s 1.7s ease forwards;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(6px);border-radius:20px;
+  padding:12px 18px 13px;box-shadow:0 4px 14px rgba(70,55,120,.12)}
+.sp-p-top{display:flex;align-items:baseline;justify-content:center;gap:7px;
+  font-family:var(--cute);color:#4A4A8A;font-size:14px;letter-spacing:1px}
+.sp-p-top b{font-size:34px;letter-spacing:0;line-height:1;font-weight:400;
+  background:linear-gradient(95deg,#06D6A0,#4CC9F0);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sp-p-bar{height:9px;border-radius:99px;background:rgba(70,55,120,.12);margin-top:9px;overflow:hidden}
+.sp-p-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,#06D6A0,#4CC9F0 60%,#9B5DE5);
+  transition:width 1.1s cubic-bezier(.2,.9,.3,1)}
+.sp-p-note{font-family:var(--cute);font-size:12px;color:#6A6AA0;letter-spacing:1px;margin-top:7px}
 /* 开机音乐的静音按钮：右上角，小孩自己也能点 */
 #spMute{position:absolute;top:16px;right:16px;z-index:3;pointer-events:auto;
   width:46px;height:46px;border-radius:50%;font-size:20px;line-height:1;
@@ -731,6 +745,11 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <div class="sp-deco"><i></i><span>✦ ✦ ✦</span><i></i></div>
     <div class="sp-title">魔法单词<b>学院</b></div>
     <div class="sp-sub" id="spSub">90 天 · 25 段 · 5 枚魔法徽章</div>
+    <div id="spProg">
+      <div class="sp-p-top"><span>已掌握</span><b id="spPNum">0</b><span id="spPTot">词</span></div>
+      <div class="sp-p-bar"><i id="spPBar"></i></div>
+      <div class="sp-p-note" id="spPNote">　</div>
+    </div>
     <button class="btn" id="spStart">✨ 开始冒险</button>
     <div id="spSkip">跳过动画 →</div>
   </div>
@@ -750,6 +769,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <div class="bar"><i id="segBar"></i></div>
     <span id="segTxt" style="font-size:12px;font-weight:bold">未开始</span>
     <span class="chip" style="font-size:12px"><span class="ic">📅</span>今日 <b id="todayNum">0</b> 词</span>
+    <span class="chip" style="font-size:12px"><span class="ic">📖</span>已掌握 <b id="learnNum">0</b> 词</span>
   </div>
 </div>
 
@@ -962,6 +982,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       </div>
       <div class="pa-box">
         <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.9.0</b>：开机页加了「已掌握 N / 482 词」的进度卡，数字从 0 滚上去，下面还有一句鼓励话。每次打开都直接读存档，所以看到的一定是最新数；另一个标签页背完词、或者从后台切回来，这个数也会自己更新。顶上的状态条也多了一个「📖 已掌握 N 词」，背词途中实时涨。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.8.1</b>：开机音乐换成真实录音（Enchanted Valley，钢片琴 + 长笛 + 单簧管，117 拍，截取前 60 秒循环），接缝处做了 1.1 秒淡出淡入。原来那段现场合成的小曲降级成备用，只在 mp3 加载失败时顶上。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
@@ -2041,6 +2063,7 @@ function renderHUD(){
   $("#segNum").textContent=(sess?sess.seg:S.curSeg)+1;
   $("#segAttr").textContent=ATTRS[attrOf(sess?sess.seg:S.curSeg)].ic;
   $("#todayNum").textContent=(S.days[today()]||{w:0}).w;
+  $("#learnNum").textContent=Object.keys(S.scored).length;
   let e="";for(let i=0;i<10;i++)e+='<b class="'+(i<energy?"on":"")+'"></b>';
   $("#energyBar").innerHTML=e;
   if(sess){
@@ -5407,6 +5430,44 @@ window.makeEggyBase=function(T){
   }
   syncMute();
   BGM.start();
+
+  /* ---------- 首页的已掌握词数 ----------------------------------
+     直接读存档里的 S.scored，所以每次打开都是最新的。
+     另外挂两个监听：别的标签页改了存档、或者这个页面从后台切回来，都重新读一次。 */
+  function masteredNow(){
+    try{
+      const o=JSON.parse(localStorage.getItem(KEY));
+      if(o&&o.scored)return Object.keys(o.scored).length;
+    }catch(e){}
+    try{return Object.keys(S.scored).length;}catch(e){return 0;}
+  }
+  let shown=-1;
+  function paintProg(animate){
+    const box=$s("#spProg");
+    if(!box||!box.isConnected)return;              /* 开机页已经退掉了就不用画了 */
+    const n=masteredNow(),tot=TOTAL_WORDS;
+    $s("#spPTot").textContent="/ "+tot+" 词";
+    $s("#spPBar").style.width=(tot?Math.min(100,n/tot*100):0)+"%";
+    $s("#spPNote").textContent=
+      n===0?"还没开始，点下面的按钮出发吧":
+      n>=tot?"全部背完啦，你太厉害了":
+      ("再背 "+Math.min(tot-n,6)+" 个，今天就很棒了");
+    if(!animate||shown<0){$s("#spPNum").textContent=n;shown=n;return;}
+    if(n===shown)return;
+    /* 数字滚上去，小孩爱看这个 */
+    const from=shown,t0=performance.now(),dur=900;
+    const tick=now=>{
+      if(!box.isConnected)return;
+      const k=Math.min(1,(now-t0)/dur);
+      $s("#spPNum").textContent=Math.round(from+(n-from)*(1-Math.pow(1-k,3)));
+      if(k<1)requestAnimationFrame(tick);else shown=n;
+    };
+    requestAnimationFrame(tick);
+  }
+  paintProg(false);                                /* 先摆好进度条 */
+  setTimeout(()=>{shown=0;$s("#spPNum")&&($s("#spPNum").textContent="0");paintProg(true);},1700);
+  window.addEventListener("storage",e=>{if(!e.key||e.key===KEY)paintProg(true);});
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)paintProg(true);});
   /* 第一次交互（点哪儿都算）就再试一次，直到真的出声为止 */
   const kick=()=>{
     BGM.start();
