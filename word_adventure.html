@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.9.0</title>
-<meta name="app-version" content="1.9.0">
+<title>魔法单词学院 · v1.17.0</title>
+<meta name="app-version" content="1.17.0">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -49,6 +49,18 @@ body.t-night{color:#2B2D6E}
 .chip .ic{font-size:17px}
 .chip.fam{background:linear-gradient(135deg,#FFB3C9,var(--pink));color:#fff;font-size:17px}
 .chip.coin{background:linear-gradient(135deg,var(--yellow),var(--orange));color:#fff;font-size:17px}
+.chip.dev{background:linear-gradient(135deg,#6B7A8F,#3B4758);color:#fff}
+/* 开发者模式：地图上的词表入口 + 词表弹窗 */
+.dev-list-btn{display:block;width:100%;margin-top:5px;border:2px dashed #9AA6B8;background:#F3F5F8;
+  color:#3B4758;border-radius:12px;padding:5px 0;font-family:inherit;font-weight:bold;font-size:12px;cursor:pointer}
+.dev-words{display:flex;flex-direction:column;gap:7px;max-height:46vh;overflow:auto;margin-bottom:8px}
+.dw{display:flex;align-items:center;gap:8px;background:#F7F9FC;border:2px solid #E4EAF2;border-radius:14px;padding:7px 10px}
+.dw .en{font-weight:bold;font-size:17px}
+.dw .zh{font-size:13px;opacity:.75;flex:1;text-align:left}
+.dw .mk{font-size:12px;letter-spacing:1px}
+.dw button{border:none;border-radius:11px;padding:6px 11px;font-family:inherit;font-weight:bold;
+  font-size:12px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--purple));cursor:pointer}
+.dw button.q{background:linear-gradient(135deg,#0AA57C,#067A5C)}
 .chip.spin{background:linear-gradient(135deg,var(--green),var(--blue));color:#fff}
 .chip.x2{background:linear-gradient(135deg,#FFB703,#FF5E3A);color:#fff;
   animation:x2Pulse 1.2s ease-in-out infinite}
@@ -416,24 +428,84 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 @keyframes tIn{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes tOut{to{opacity:0;transform:translate(-50%,-14px)}}
 
-/* ===== BOSS 阅读理解战 ===== */
-.boss-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.boss-ic{font-size:52px;animation:bossFloat 2.2s ease-in-out infinite}
-@keyframes bossFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
-.boss-ic.hurt{animation:bossHurt .45s}
-@keyframes bossHurt{0%,100%{transform:scale(1)}30%{transform:scale(1.18) rotate(-10deg);filter:brightness(2)}
-  60%{transform:scale(.92) rotate(8deg)}}
-.boss-info{flex:1}
-.boss-nm{font-weight:bold;font-size:17px}
-.hpbar{height:20px;border-radius:999px;background:#EFEAFB;overflow:hidden;border:3px solid #fff;
-  box-shadow:0 3px 0 rgba(43,45,110,.12);margin-top:5px}
-.hpbar i{display:block;height:100%;border-radius:999px;transition:width .5s cubic-bezier(.2,1,.3,1);
-  background:linear-gradient(90deg,#FF3D71,#FF9F1C)}
-.hearts{font-size:20px;letter-spacing:2px}
+/* ===== BOSS 阅读理解战：小魔法师举枪打怪 ===== */
+.fight{position:relative;height:152px;border-radius:20px;overflow:hidden;margin-bottom:10px;
+  background:linear-gradient(180deg,#DCEAFF,#F1E9FF 60%,#E7F5DF 60%,#D3EDC4)}
+.f-ground{position:absolute;left:0;right:0;bottom:0;height:36%;
+  background:linear-gradient(180deg,#B9E39B,#8FCE73)}
+.f-hero{position:absolute;left:14px;bottom:12px;width:76px;height:86px;transform-origin:70% 90%}
+.f-hero-svg{width:100%;height:100%;display:block}
+.f-hero.fire{animation:fFire .42s ease}
+@keyframes fFire{0%{transform:translateX(0)}28%{transform:translateX(-8px) rotate(-3deg)}100%{transform:translateX(0)}}
+.f-hero.hit{animation:fHit .55s}
+@keyframes fHit{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px) rotate(-8deg);filter:brightness(.82)}
+  62%{transform:translateX(4px)}}
+.f-muzzle{animation:fGlow 1.6s ease-in-out infinite}
+@keyframes fGlow{0%,100%{opacity:.5}50%{opacity:1}}
+.f-bullet{position:absolute;left:86px;bottom:58px;width:15px;height:15px;border-radius:50%;opacity:0;
+  background:radial-gradient(circle at 38% 38%,#FFFBE6,#FFB703);box-shadow:0 0 12px 5px rgba(255,183,3,.6)}
+.f-bullet.fly{animation:fFly .44s linear forwards}
+@keyframes fFly{0%{opacity:1;transform:translateX(0) scale(.7)}
+  86%{opacity:1}100%{opacity:0;transform:translateX(var(--fly,200px)) scale(1.3)}}
+.f-mon-wrap{position:absolute;right:18px;bottom:14px;
+  transition:transform .65s cubic-bezier(.3,1.25,.4,1)}
+.f-mon{font-size:52px;line-height:1;animation:fFloat 2.2s ease-in-out infinite}
+/* 被打中时头上冒出一个哭脸 */
+.f-cry{position:absolute;top:-20px;left:50%;font-size:24px;opacity:0;pointer-events:none;
+  transform:translateX(-50%) scale(.5)}
+.f-cry.on{animation:fCry 1.1s ease forwards}
+@keyframes fCry{0%{opacity:0;transform:translateX(-50%) scale(.5)}
+  22%{opacity:1;transform:translateX(-50%) translateY(-4px) scale(1.15)}
+  70%{opacity:1;transform:translateX(-50%) translateY(-10px) scale(1)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-20px) scale(.9)}}
+@keyframes fFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+.f-mon.hurt{animation:fHurt .5s}
+@keyframes fHurt{0%,100%{transform:scale(1)}24%{transform:scale(1.2) rotate(-12deg);filter:brightness(2.2)}
+  60%{transform:scale(.9) rotate(9deg)}}
+.f-mon.strike{animation:fStrike .62s}
+@keyframes fStrike{0%,100%{transform:translateX(0)}42%{transform:translateX(-48px) scale(1.12) rotate(-9deg)}}
+.f-mon.down{animation:fDown .9s forwards}
+@keyframes fDown{to{transform:translateY(26px) rotate(96deg);opacity:.16;filter:grayscale(1)}}
+.f-mon-tag{position:absolute;right:12px;top:9px;font-size:11px;font-weight:bold;color:#4A4A8A;
+  background:rgba(255,255,255,.84);border-radius:13px;padding:5px 10px;text-align:right}
+.f-hp{display:flex;gap:3px;margin-top:4px;justify-content:flex-end}
+.f-hp i{width:17px;height:9px;border-radius:3px;background:#E2DCEF;transition:background .35s}
+.f-hp i.on{background:linear-gradient(90deg,#FF3D71,#FF9F1C)}
+.f-life{position:absolute;left:12px;top:9px;font-size:15px;letter-spacing:1px}
+.f-step{position:absolute;left:12px;top:9px;font-size:11px;font-weight:bold;color:#4A4A8A;
+  background:rgba(255,255,255,.84);border-radius:13px;padding:5px 10px}
+.f-step b{color:#E5484D}
+/* 打赢守关怪后的盲盒：三个盒子挑一个 */
+.bbox-row{display:flex;gap:12px;justify-content:center;margin:10px 0 4px}
+.bbox{width:78px;height:78px;border:none;border-radius:20px;font-size:38px;cursor:pointer;
+  background:linear-gradient(160deg,#FFE9A8,#FFB703);box-shadow:0 5px 0 #E08A00,0 8px 16px rgba(0,0,0,.14);
+  transition:transform .18s,opacity .3s,filter .3s}
+.bbox:active{transform:translateY(3px)}
+.bbox.dim{opacity:.34;filter:grayscale(.7);box-shadow:0 3px 0 #C9C2D8}
+.bbox.shake{animation:bboxShake .62s}
+@keyframes bboxShake{0%,100%{transform:rotate(0)}18%{transform:rotate(-13deg) scale(1.05)}
+  42%{transform:rotate(12deg) scale(1.05)}66%{transform:rotate(-8deg)}86%{transform:rotate(6deg)}}
+.bbox.open{background:linear-gradient(160deg,#D9FFE4,#8AE98C);box-shadow:0 5px 0 #43B14A,0 0 22px 6px rgba(138,233,140,.6);
+  animation:bboxPop .5s}
+@keyframes bboxPop{0%{transform:scale(.7)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
 .article{background:linear-gradient(160deg,#FFFDF4,#FFF6E2);border:3px dashed var(--orange);
-  border-radius:20px;padding:15px 17px;font-size:18px;line-height:1.85;text-align:left;
+  border-radius:20px;padding:15px 17px;font-size:18px;line-height:1.95;text-align:left;
   max-height:38vh;overflow:auto}
 .article b{background:linear-gradient(transparent 62%,#FFE27A 62%);font-weight:bold}
+/* 文章里可点开看意思的单词 */
+.article b.wk{background:none;border-bottom:2px dotted var(--orange);color:#8A5A00;
+  cursor:pointer;padding:0 1px}
+.article b.wk:active{background:#FFE27A}
+#wkPop{position:fixed;z-index:360;width:220px;display:none;background:#fff;border:3px solid #EFEAFB;
+  border-radius:18px;padding:11px 13px;box-shadow:0 10px 26px rgba(43,45,110,.22);text-align:center}
+#wkPop.show{display:block}
+.wk-en{font-size:21px;font-weight:bold}
+.wk-ph{font-size:13px;color:var(--purple)}
+.wk-zh{font-size:16px;font-weight:bold;margin-top:3px}
+.wk-ok{font-size:11px;color:var(--green);font-weight:bold;margin-top:3px}
+.wk-say{margin-top:7px;border:none;border-radius:12px;padding:6px 13px;font-family:inherit;
+  font-weight:bold;font-size:12px;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--blue),var(--purple))}
 .article .zh{display:block;font-size:13px;opacity:.6;margin-top:8px;line-height:1.6}
 .bq{font-size:17px;font-weight:bold;text-align:left;margin:12px 0 8px}
 .bopts{display:flex;flex-direction:column;gap:9px}
@@ -494,8 +566,6 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   background:linear-gradient(135deg,#FFD166,#FF6B9D 60%,#9B5DE5);
   animation:spIn .8s 1.9s cubic-bezier(.2,1.8,.4,1) forwards,spPulse 1.8s 2.7s ease-in-out infinite}
 @keyframes spPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-#spSkip{pointer-events:auto;font-family:var(--cute);font-size:14px;letter-spacing:2px;color:#6A6AA0;
-  opacity:0;cursor:pointer;padding:8px 14px;animation:spIn .6s 2.4s ease forwards}
 @keyframes spIn{to{opacity:1;transform:translateY(0) scale(1)}}
 /* 首页的已掌握词数：实时读存档，数字会从 0 滚上去 */
 #spProg{width:min(340px,86vw);opacity:0;animation:spIn .8s 1.7s ease forwards;
@@ -518,6 +588,11 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   box-shadow:none;opacity:0;animation:spIn .6s 2.6s ease forwards;transition:background .2s}
 #spMute:hover{background:rgba(255,255,255,.3)}
 #spMute.off{opacity:.55}
+/* 浏览器拦住了自动播放时，把这个按钮点亮提示可以手动开音乐 */
+#spMute.hint{animation:spIn .6s 2.6s ease forwards,muteHint 1.5s 3s ease-in-out infinite;
+  background:rgba(255,255,255,.34);border-color:rgba(255,255,255,.75)}
+@keyframes muteHint{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.5)}
+  50%{transform:scale(1.1);box-shadow:0 0 0 9px rgba(255,255,255,0)}}
 /* 没有 three.js 时的降级场景 */
 #spFallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
 #spFallback.on{display:flex}
@@ -751,7 +826,6 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="sp-p-note" id="spPNote">　</div>
     </div>
     <button class="btn" id="spStart">✨ 开始冒险</button>
-    <div id="spSkip">跳过动画 →</div>
   </div>
 </div>
 
@@ -770,6 +844,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <span id="segTxt" style="font-size:12px;font-weight:bold">未开始</span>
     <span class="chip" style="font-size:12px"><span class="ic">📅</span>今日 <b id="todayNum">0</b> 词</span>
     <span class="chip" style="font-size:12px"><span class="ic">📖</span>已掌握 <b id="learnNum">0</b> 词</span>
+    <span class="chip dev" id="devChip" style="display:none;font-size:12px"><span class="ic">🛠️</span>开发者模式</span>
   </div>
 </div>
 
@@ -968,6 +1043,17 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
           但不会发积分（要给的话用上面的加减）。想撤销就点「重置本段」。</p>
       </div>
       <div class="pa-box">
+        <div class="pa-t">🛠️ 开发者模式（大人调试用）</div>
+        <div class="pa-line"><span>开发者模式</span>
+          <div class="seg-btns" id="devBtns"><button data-v="1">开</button><button data-v="0">关</button></div></div>
+        <p class="tips" style="text-align:left">打开后：商店里所有礼物都能免费买、免费换；地图上任何一段都能直接点进去看效果，
+          而且跳段不会改动孩子的进度，也不扣魔法币、不发积分。进段时会跳过热身复习，直接从讲解开始。</p>
+        <p class="tips" style="text-align:left">注意：免费拿到的礼物会留在「已拥有」里。想清掉，用下面的「重置整个单词表」并勾上「连积分和装扮一起清空」。</p>
+        <p class="tips" style="text-align:left">顶上状态条会出现「🛠️ 开发者模式」提醒，调试完记得关掉。
+          开关记在设置里（不在孩子的学习存档里）。网址后面加 <b>?dev=1</b> 也能打开，
+          但那只对这一次打开有效，不会存下来。</p>
+      </div>
+      <div class="pa-box">
         <div class="pa-t">🧨 重置整个单词表</div>
         <p class="tips" style="text-align:left">清空全部背诵记录、徽章、星级、BOSS 与复习计划，从第 1 段重新开始。
           积分、已买的装扮默认保留。</p>
@@ -982,6 +1068,30 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       </div>
       <div class="pa-box">
         <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
+        <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
+        <div id="verBody" style="display:none;margin-top:6px">
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.17.0</b>：① 打赢守关怪不再固定给「50 分 + 2 次转盘」，奖励全部来自盲盒——挑一个 🎁 点开，拿到转盘 +2（25%）、转盘 +3（20%）、积分 +30（25%）、积分 +50（20%）、积分 +100（10%）其中一种。② 转盘次数取消 4 次上限，通关、每日任务、盲盒给的次数都往上累加，不会再浪费。③ 这个「版本与回退」区块默认收起，点上面的按钮才展开，家长模式不用再一路往下滑。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.16.0</b>：打赢守关怪后加了一次盲盒，胜利画面上三个 🎁 挑一个点开，没开盲盒不会出现「收下奖励」按钮。开发者模式里也能看盲盒动画，但不会真的发奖。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.15.1</b>：打赢阅读理解的守关怪，奖励保底 50 分（这条已被 v1.17.0 的盲盒取代）。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.15.0</b>：阅读理解全部重写，难度按 5 个场景递进：微风花园 8 句约 70 词、暖焰山谷 11 句约 100 词、雷鸣云岛 13 句约 130 词、电光星港 15 句约 160 词、秘药森林 17 句约 190 词，最后一档的长度和句式（who / because / although / 过去完成）已经接近 KET 阅读的段落。每篇过渡句都比上一版多，考点词 5-7 个，其余句子只管把故事讲顺。另外把没有守关怪的那 10 段「一句一个生词」的自动拼装文章整块删掉了——那些本来只有开发者模式能看到，读起来最生硬。因为「朗读全文」已经在上一版去掉，这次改文字不需要重新合成语音。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.14.1</b>：开机音乐有时候不响的问题。原因是浏览器的自动播放策略——没有交互过的页面会被静音拦下，而且同一台电脑有时放行有时不放行，所以才时有时无。现在改成：开机页在的时候每 0.7 秒补试一次，任何一次点击、按键、触摸也都会再试；两秒后还是没声音，右上角的 🎵 按钮会一圈一圈亮起来提示手动点一下。另外刚打开就点「开始冒险」时，音乐改成快速收掉，不会留一声突兀的响。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.14.0</b>：① 讲解卡加了跟读环节：单词读完会说一句「跟着我读三遍」，然后读一遍、留 1.5 秒给孩子跟着读，来回三遍，屏幕上同步显示「第几遍 · 听我读」和「👦 轮到你读」，三遍完了才说中文意思和怎么记住它。② 25 段的守关怪各不一样，从慢吞吞蜗牛、蹦蹦蚱蜢一路到霸王小龙、魔王大鬼，名字也各自不同。③ 怪物被子弹打中时头上会冒出哭脸。④ 去掉阅读理解的「🔊 朗读全文」按钮。⑤ 去掉开机页的「跳过动画」，只留「开始冒险」。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.13.0</b>：① 15 篇阅读文章全部改成手写的小故事，有开头、有过渡、有结尾（比如《A Family Photo》《The Broken Bike》《Sports Day》），不再是一句一个生词硬拼出来的。每篇挑 5 个学过的词当考点，其余是过渡句，读起来顺，难度也降下来了；题目直接从文章原句出，所以和文章永远一致。② 修掉点「朗读全文」没反应——录音文件缺失时原来退回在线语音，而在线通道读不了这么长的英文。现在改用本机语音一句一句读，屏幕下方还会显示当前状态（正在朗读／改用本机语音／没有可用语音）。③ 换成新的语音密钥，15 段朗读全部重新合成。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.12.1</b>：① 修掉文章和朗读对不上——网页加载时会按话题重排词表，上一版合成音频用的是重排前的顺序，选的句子就错位了。现在每段文章用哪些词、什么顺序，都固定写在网页里（BOSS_FIX），录音也照这份表重新合成，15 段逐条核对过，一字不差。② 文章里不再显示中文整段释义，想知道意思点单个单词。③ 答错不再扣心，改成怪物往前逼近一步，走满 3 步冲到小人面前就算输（所以最多错 2 题）。④ 一点选项就立刻停掉还在朗读的文章，按「开始答题」也会停。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.12.0</b>：阅读理解大改。① 修掉了答完 5 题卡住退不出的毛病（答对时少了一个「题目答完」的判断，会去取第 6 题导致画面卡死），另外加了随时可按的「退出」。② 打怪变成小游戏：左边小魔法师举着魔法枪，答对一题就开一枪，子弹飞过去打中怪物，打中 4 枪怪物倒下；答错怪物会扑过来，小人掉一颗心，3 颗心掉完算输，所以 5 题里最多错 1 题。③ 文章里凡是词表里的单词都带虚线下划线，点一下弹出音标、中文意思，还会读一遍。④ 15 段有阅读理解的文章全部用豆包合成了真人感朗读（voice/readNN.mp3），点「🔊 朗读全文」就是真人声；文件缺失时自动退回在线语音。为了让音频和文字对得上，文章改成按段号固定生成，不再每次随机重组。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.11.0</b>：开发者模式下，地图每一段下面多了「🛠️ 单词表 / 阅读理解」。点开就是这一段的全部单词，每个词可以单独看讲解或单独做测试，也能只进这一段的阅读理解，还能整段从头讲。列表里标了哪些词有动画（🎬）、有讲解词（🗣）、孩子已掌握（✓）。从这里进去的全部不计分、不写掌握记录、不记错词、不发奖励。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.10.0</b>：家长模式里加了「🛠️ 开发者模式」。打开后商店所有礼物免费买免费换，地图上任何一段都能直接点进去看效果，跳段不改动孩子的进度、不扣币不发分，进段还会跳过热身复习直接看讲解。顶上会显示「🛠️ 开发者模式」提醒，网址加 ?dev=1 也能临时打开。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.9.0</b>：开机页加了「已掌握 N / 482 词」的进度卡，数字从 0 滚上去，下面还有一句鼓励话。每次打开都直接读存档，所以看到的一定是最新数；另一个标签页背完词、或者从后台切回来，这个数也会自己更新。顶上的状态条也多了一个「📖 已掌握 N 词」，背词途中实时涨。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
@@ -1012,9 +1122,26 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <p class="tips" style="text-align:left">这是网页版本回退，不是学习记录回滚：各版本共用同一份进度。
           切换前请先结束当前答题，也不要同时开两个版本。要回滚学习记录，用设置里的「备份记录」。
           上传新版时记得把 voice 文件夹一起传，否则中文讲解会退回在线语音、音色变化。</p>
+        </div>
       </div>
       <button class="btn ghost" id="paClose" style="width:100%;margin-top:4px">关闭</button>
     </div>
+  </div>
+</div>
+
+<!-- 开发者模式：某一段的单词表 -->
+<div class="modal" id="devModal">
+  <div class="modal-card" style="max-width:470px">
+    <h2 class="title" style="justify-content:center">🛠️ 第 <span id="devSegNum">1</span> 段单词表</h2>
+    <p class="tips" id="devSegTip" style="margin-top:0"></p>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn sm" id="devBoss">⚔️ 只进阅读理解</button>
+      <button class="btn sm ghost" id="devAll">📖 整段从头讲</button>
+    </div>
+    <div class="dev-words" id="devWords"></div>
+    <p class="tips" style="text-align:left">🎬 有动画 · 🗣 有讲解词 · ✓ 孩子已掌握。
+      从这里进去的讲解、测试、阅读理解都不计分、不写学习记录、不扣魔法币。</p>
+    <button class="btn ghost" id="devClose" style="width:100%">关闭</button>
   </div>
 </div>
 
@@ -1028,6 +1155,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <button class="btn green" id="restOk" style="width:100%;margin-top:10px">好，休息一下</button>
   </div>
 </div>
+
+<div id="wkPop" aria-live="polite"></div>
 
 <div id="ult"><div class="core"></div><div class="txt"></div></div>
 
@@ -1961,11 +2090,11 @@ const IMG_PROMPT=[
 ];
 const badgeImg=i=>"assets/word-adventure/badge-"+(i+1)+".jpg";
 
-/* 4. 转盘：2–30 分 + ⚡双倍积分，最多 4 次 */
+/* 4. 转盘：2–30 分 + ⚡双倍积分，次数不设上限，能攒多少攒多少 */
 const WHEEL=[2,5,8,12,"x2",16,20,25,30];
 const WHEEL_COLORS=["#FF6B9D","#FFD166","#06D6A0","#4CC9F0","#FF8A00",
                     "#9B5DE5","#FF9F1C","#8AE98C","#FF8FB1"];
-const MAX_SPIN=4, X2_COUNT=10;      /* 双倍积分可用次数 */
+const X2_COUNT=10;      /* 双倍积分可用次数 */
 
 /* 5. 商店商品（花魔法币）。r：稀有度 normal/rare/epic/legend；d3:true 表示真 3D 建模 */
 const SLOTS=[{k:"badge",nm:"🏅 徽章"},{k:"hat",nm:"🎩 魔帽"},{k:"face",nm:"🕶️ 脸饰"},
@@ -2044,9 +2173,13 @@ function save(){
   if(typeof autoBackupTick==="function")autoBackupTick();   /* 顺手做自动备份 */
 }
 const SKEY="eggy_setting_v4";
-const SET_DEF={rate:0.9,sfx:1,bgm:1,aiVoice:"en-US-AnaNeural"};
+const SET_DEF={rate:0.9,sfx:1,bgm:1,dev:0,aiVoice:"en-US-AnaNeural"};
 let SET=(()=>{try{return Object.assign({},SET_DEF,JSON.parse(localStorage.getItem(SKEY)))}catch(e){return Object.assign({},SET_DEF)}})();
 function saveSet(){localStorage.setItem(SKEY,JSON.stringify(SET));}
+/* 开发者模式：大人调试用。商店随便买、地图随便进。
+   开关存在设置里（不在孩子的学习存档里），网址加 ?dev=1 也能直接打开。 */
+if(/[?&]dev=1/.test(location.search))SET.dev=1;
+const DEV=()=>+SET.dev===1;
 function dayRec(){const d=today();S.days[d]=S.days[d]||{q:0,w:0,s:0};return S.days[d];}
 
 /* ===========================================================
@@ -2086,7 +2219,7 @@ document.querySelectorAll(".nav button").forEach(b=>{
     document.querySelectorAll(".view").forEach(v=>v.classList.remove("on"));
     $("#v-"+b.dataset.v).classList.add("on");
     const v=b.dataset.v;
-    if(v!=="learn")stopSpeak();          /* 离开学单词页就停掉还在读的单词/例句 */
+    if(v!=="learn"){stopSpeak();stopRead();}   /* 离开学单词页就停掉还在读的单词/例句/文章 */
     /* 回到学单词页时按当前状态恢复画面：BOSS 中 / 闯关中 / 都没有就显示欢迎页 */
     if(v==="learn"){
       if(bossState)renderBoss();
@@ -2129,11 +2262,13 @@ function renderMap(){
       '<footer class="region-reward"><span>区域奖励 · '+ATTRS[bi].nm+'</span><span>'+(got===5?'已集齐，可去商店佩戴':'每通关一段，点亮一块徽章')+'</span></footer>';
     const stops=region.querySelector(".route-stops");
     for(let i=bi*5;i<Math.min(bi*5+5,SEG_COUNT);i++){
-      const ws=segWords(i),has=ws.length>0,done=S.pieces.includes(i),locked=i>S.curSeg;
+      const ws=segWords(i),has=ws.length>0,done=S.pieces.includes(i);
+      const locked=i>S.curSeg&&!DEV();          /* 开发者模式下所有段都能点开 */
       let cls="seg",st="可进入";
       if(done){cls+=" done";st="已完成 · "+(S.stars[i]||1)+" 星";}
       else if(i===S.curSeg){cls+=" cur";st="你在这里 · 继续";}
       else if(locked){cls+=" lock";st="尚未解锁";}
+      else if(i>S.curSeg){st="🛠️ 开发者可进";}
       if(!has){cls+=" empty";st="待补词表";}
       const d=document.createElement("button");d.type="button";d.className=cls;d.dataset.seg=i;
       d.setAttribute("aria-label","第 "+(i+1)+" 段，"+(has?segTopic(i)+"，":"")+st);
@@ -2145,12 +2280,23 @@ function renderMap(){
       d.onclick=()=>{
         try{
           if(!has){alert("第 "+(i+1)+" 段还没有单词，把词表发进来就解锁啦！");return;}
-          if(i>S.curSeg){alert("第 "+(S.curSeg+1)+" 段还没通关哦，先去完成它～");return;}
+          if(i>S.curSeg&&!DEV()){alert("第 "+(S.curSeg+1)+" 段还没通关哦，先去完成它～");return;}
           if(needBoss(i)&&!S.boss[i]&&(S.pieces.includes(i)||S.pendBoss===i)){startBoss(i);return;}
+          if(DEV()){                         /* 调试跳段：不动 curSeg，孩子的进度原样留着 */
+            startSegment(i);goView("learn");
+            toast("🛠️ 第 "+(i+1)+" 段（调试进入，没有改动进度）");return;
+          }
           S.curSeg=i;save();startSegment(i);goView("learn");
         }catch(e){alert("出错了："+(e&&e.message||e));console.error(e);}
       };
-      const stop=document.createElement("li");stop.className="route-stop";stop.appendChild(d);stops.appendChild(stop);
+      const stop=document.createElement("li");stop.className="route-stop";stop.appendChild(d);
+      if(DEV()&&has){                          /* 开发者模式：每段挂一个词表入口 */
+        const b=document.createElement("button");b.type="button";b.className="dev-list-btn";
+        b.textContent="🛠️ 单词表 / 阅读理解";
+        b.onclick=e=>{e.stopPropagation();openDevList(i);};
+        stop.appendChild(b);
+      }
+      stops.appendChild(stop);
     }
     g.appendChild(region);
   });
@@ -2175,7 +2321,7 @@ function renderDaily(){
   const rv=Math.min(r.rev||0,gr);
   const okAll=(r.rev||0)>=gr&&(r.w||0)>0;      /* 复习清完 + 至少背了新词 */
   if(okAll&&!r.done){                          /* 首次完成当日任务 → 奖励 1 次转盘 */
-    r.done=true;S.spins=Math.min(MAX_SPIN,S.spins+1);save();
+    r.done=true;S.spins+=1;save();
     setTimeout(()=>{toast("🎖️ 今日任务完成！奖励 1 次转盘");SFX.big();confetti(20);updateSpinUI();},400);
   }
   $("#dailyPanel").innerHTML=
@@ -2298,14 +2444,14 @@ function splitBatches(ws){
   for(let k=0;k<ws.length;k+=size)out.push(ws.slice(k,k+size));
   return out;
 }
-function startSegment(i,customWords){
+function startSegment(i,customWords,devMode){
   resetSession();
   const ws=customWords||segWords(i);
   if(!ws.length){$("#learnArea").innerHTML='<div class="study"><h2 class="title">这一段还没有单词 ➕</h2></div>';return;}
   const batches=customWords?[ws.slice()]:splitBatches(ws);
   sess={seg:i,allWords:ws,batches:batches,batchIdx:0,words:batches[0],
-        prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:!!customWords,
-        warm:customWords?[]:reviewPick(i,3).map(w=>({w,t:1+Math.floor(Math.random()*3)}))};
+        prog:{},earned:{},queue:[],total:0,right:0,gained:0,custom:!!customWords,dev:!!devMode,
+        warm:(customWords||DEV())?[]:reviewPick(i,3).map(w=>({w,t:1+Math.floor(Math.random()*3)}))};
   ws.forEach(w=>sess.prog[w.en]=0);          /* 进度按整段记，分组只影响讲解和出题顺序 */
   sess.queue=shuffle(batches[0].slice());
   energy=0;studyIdx=0;renderHUD();
@@ -2874,9 +3020,12 @@ function renderStudy(){
       (studyIdx<n-1?'<button class="btn sm" id="next">下一个 →</button>'
                    :'<button class="btn green" id="toQuiz">'+
                      (many?'这组讲完，开始闯关 🎯':'全部讲完，开始闯关 🎯')+'</button>')+
-      '<button class="btn ghost sm" id="skip">'+(many?'跳过这组讲解':'跳过讲解')+'</button></div></div>';
+      '<button class="btn ghost sm" id="skip">'+(many?'跳过这组讲解':'跳过讲解')+'</button>'+
+      (sess.dev?'<button class="btn ghost sm" id="devBack">🛠️ 回词表</button>':'')+
+      '</div></div>';
   const card=$("#learnArea .study-card");
   $("#sayAll").onclick=()=>sayCard(w,card);
+  if($("#devBack"))$("#devBack").onclick=()=>{const s=sess.seg;resetSession();sess=null;openDevList(s);};
   if($("#prev"))$("#prev").onclick=()=>{studyIdx--;renderStudy();};
   if($("#next"))$("#next").onclick=()=>{studyIdx++;renderStudy();};
   if($("#toQuiz"))$("#toQuiz").onclick=startQuiz;
@@ -3029,7 +3178,9 @@ function addScore(n){
     const el=$(id);el.classList.remove("score-pop");void el.offsetWidth;el.classList.add("score-pop");});
 }
 function pass(w,warm){
-  dayRec().q++;touchActive();
+  const dev=!!(sess&&sess.dev);              /* 调试会话：只看效果，什么都不记 */
+  if(!dev)dayRec().q++;
+  touchActive();
   energy=Math.min(10,energy+1);SFX.ok();
   if(warm){
     sess.warm.shift();srsPass(w.en);dayRec().rev=(dayRec().rev||0)+1;
@@ -3039,7 +3190,9 @@ function pass(w,warm){
   }
   sess.total++;sess.right++;sess.prog[w.en]++;
   const st=sess.prog[w.en];
-  if(S.scored[w.en]){                       // 这个词以前已经拿过分，永不重复计分
+  if(dev){
+    floatScore("✓ 第"+st+"关过 · 调试不计分");
+  }else if(S.scored[w.en]){                 // 这个词以前已经拿过分，永不重复计分
     floatScore("✓ 第"+st+"关过 · 已掌握不计分");
     if(st>=3)srsPass(w.en);
   }else{
@@ -3051,20 +3204,24 @@ function pass(w,warm){
     if(dbl)SFX.score();
   }
   if(st>=3){
-    if(!S.scored[w.en]){
+    if(dev){
+      setTimeout(()=>floatScore("🛠️ 三关全过（调试，没有记录）"),620);confetti(6);
+    }else if(!S.scored[w.en]){
       S.scored[w.en]=true;srsInit(w.en);dayRec().w++;
       setTimeout(()=>floatScore("🏆 三关全过，"+sess.earned[w.en]+" 分锁定！"),620);
       confetti(6);checkAch();
     }
     sess.queue.shift();
   }else{sess.queue.shift();sess.queue.push(w);}
-  save();renderHUD();
+  if(!dev)save();
+  renderHUD();
   if(energy>=10)setTimeout(ultimate,300);
   schedNext(st>=3?1000:760);
 }
 function fail(w,warm){
-  dayRec().q++;touchActive();
-  S.errors[w.en]=(S.errors[w.en]||0)+1;
+  const dev=!!(sess&&sess.dev);
+  if(!dev){dayRec().q++;S.errors[w.en]=(S.errors[w.en]||0)+1;}
+  touchActive();
   energy=0;SFX.no();
   if(warm){
     sess.warm.shift();srsFail(w.en);
@@ -3076,8 +3233,8 @@ function fail(w,warm){
   if(back>0){                               // 把这一轮已经加的分退回去
     sess.earned[w.en]=0;sess.gained-=back;addScore(-back);
     floatScore("−"+back+"　答错，分数被收走！",true);
-  }else floatScore("✗ 答错了，这个词重头再来",true);
-  sess.prog[w.en]=0;save();
+  }else floatScore(dev?"✗ 答错了（调试，不记错词）":"✗ 答错了，这个词重头再来",true);
+  sess.prog[w.en]=0;if(!dev)save();
   sess.queue.shift();sess.queue.push(w);
   renderHUD();schedNext(1350);
 }
@@ -3107,91 +3264,413 @@ const needBoss=seg=>{const n=seg+1;return n%2===0||n%5===0;};
 const holdsPiece=seg=>((seg+1)%5===0);      /* 徽章最后一块必须打赢 BOSS 才给 */
 const bossLevel=seg=>Math.min(5,1+Math.floor(seg/5));
 const BOSS_NAME=["旋风小怪","炎炎火怪","轰隆雷怪","闪电电怪","咕噜毒怪"];
-/* 本场考查词：刚通关这段 + 上一段 */
-function bossPool(seg){
-  const a=segWords(seg),b=seg>0?segWords(seg-1):[];
-  return b.concat(a).filter(w=>w.sen&&w.senZh);
+/* 每一段的守关怪都不一样：25 段各一只，越往后越厉害 */
+const BOSS_MON=[
+ {ic:"🐌",nm:"慢吞吞蜗牛"},{ic:"🐛",nm:"拱拱小青虫"},{ic:"🦗",nm:"蹦蹦蚱蜢"},
+ {ic:"🕷️",nm:"八脚小蛛"},{ic:"🦂",nm:"翘尾小蝎"},{ic:"🐙",nm:"滑溜章鱼"},
+ {ic:"🦑",nm:"深海乌贼"},{ic:"🦈",nm:"尖牙小鲨"},{ic:"🐍",nm:"缠缠花蛇"},
+ {ic:"🐊",nm:"大嘴鳄鱼"},{ic:"🦇",nm:"夜行蝙蝠"},{ic:"🐺",nm:"灰毛野狼"},
+ {ic:"🦉",nm:"猫头鹰博士"},{ic:"🐗",nm:"冲冲野猪"},{ic:"🦏",nm:"铁皮犀牛"},
+ {ic:"🦍",nm:"大力金刚"},{ic:"🐉",nm:"云中小龙"},{ic:"🦕",nm:"长颈巨龙"},
+ {ic:"🦖",nm:"霸王小龙"},{ic:"👾",nm:"像素怪"},{ic:"🤖",nm:"铁皮机器人"},
+ {ic:"👻",nm:"咯咯幽灵"},{ic:"🧟",nm:"摇摇僵尸"},{ic:"👺",nm:"红鼻天狗"},
+ {ic:"👹",nm:"魔王大鬼"}
+];
+const monOf=seg=>BOSS_MON[Math.max(0,Math.min(BOSS_MON.length-1,seg))];
+/* 文章里凡是词表里有的词，都包成可点击的标签，点一下能看中文意思 */
+const WMAP=(()=>{const m={};WORDS.forEach(w=>{m[w.en.toLowerCase()]=w;});return m;})();
+function linkWords(txt){
+  return txt.replace(/[A-Za-z']+/g,m=>{
+    const w=WMAP[m.toLowerCase()];
+    return w?'<b class="wk" data-w="'+w.en+'">'+m+'</b>':m;
+  });
 }
-/* 生成文章 + 5 道题（可被 BOSS_TEXTS 手写内容覆盖）
-   难度体现在：文章长度、选项数量、题型构成，题目数量固定 5 道 */
-const BOSS_TEXTS={};
-function buildBossPaper(seg){
-  if(BOSS_TEXTS[seg])return BOSS_TEXTS[seg];
+/* 有阅读理解的 15 段，文章全部手写，难度按 5 个场景递进：
+   Lv1（第 1-5 段）8 句短句 · Lv2（6-10 段）11 句 · Lv3（11-15 段）13 句
+   Lv4（16-20 段）15 句、开始用 because / while / who 这类连接
+   Lv5（21-25 段）17 句、带从句和过去完成，长度接近 KET 阅读的段落。
+   带 w 的句子是「考点句」，题目就从这些原句出；没带 w 的是过渡句，负责把故事讲顺。
+   没有守关怪的那 10 段不做阅读理解，所以这里只有 15 篇。 */
+const BOSS_STORY={
+ /* ---------- Lv1：8 句，短句 ---------- */
+ 1:{title:"A Family Photo",lines:[
+   {s:"Today is Sunday, and my family is at home."},
+   {s:"My mom finds an old photo in a box.",w:"mom"},
+   {s:"We all sit on the sofa and look at it."},
+   {s:"The tall man in the photo is my granddad.",w:"granddad"},
+   {s:"He was young then, and he had black hair."},
+   {s:"My aunt got married in the same year.",w:"married"},
+   {s:"Her little boy is granddad's first grandson.",w:"grandson"},
+   {s:"We all have the same surname, so we are one family.",w:"surname"}]},
+ 3:{title:"A Little Surprise",lines:[
+   {s:"It is my sister's birthday today."},
+   {s:"After dinner I give her a surprise.",w:"surprise"},
+   {s:"I turn off the light and bring in a small cake."},
+   {s:"At first she is afraid of the dark room.",w:"afraid"},
+   {s:"Then she sees six candles and starts to laugh."},
+   {s:"Mom is glad that we did it together.",w:"glad"},
+   {s:"Dad is a little mad, because I used all the sugar.",w:"mad"},
+   {s:"What a shame, there is no cake for tomorrow.",w:"shame"}]},
+ 4:{title:"The New Boy",lines:[
+   {s:"A new boy comes to our class today."},
+   {s:"I wave at him and say hey.",w:"hey"},
+   {s:"He is very polite and says thank you.",w:"polite"},
+   {s:"His family moved here from another city last week."},
+   {s:"At break time we chat about football.",w:"chat"},
+   {s:"He was frightened on his first day at school.",w:"frightened"},
+   {s:"A girl says excuse me and asks to join our game.",w:"excuse"},
+   {s:"Now the three of us are good friends."}]},
+ /* ---------- Lv2：11 句 ---------- */
+ 5:{title:"Cooking with Dad",lines:[
+   {s:"On Sunday afternoon Dad and I cook dinner for the family."},
+   {s:"Mom is tired, so today she can rest on the sofa."},
+   {s:"We want to make chicken curry with rice.",w:"curry"},
+   {s:"First Dad cuts the chicken into small pieces."},
+   {s:"Then he puts some salt and pepper into the pot.",w:"pepper"},
+   {s:"The kitchen soon smells very good."},
+   {s:"While I wait, I eat one green grape.",w:"grape"},
+   {s:"I also drink some cold water from my big mug.",w:"mug"},
+   {s:"At six o'clock the curry is ready."},
+   {s:"Mom tastes it and says congratulations to the two new cooks.",w:"congratulations"},
+   {s:"Yeah, this is the best dinner of the week.",w:"yeah"}]},
+ 7:{title:"A Cold Sunday",lines:[
+   {s:"It is cold and windy outside today."},
+   {s:"Nobody in my family wants to go out."},
+   {s:"When I open the window, I put on my warm red scarf.",w:"scarf"},
+   {s:"Mom has a plan for a special dinner at home."},
+   {s:"She checks every ingredient on her shopping list.",w:"ingredient"},
+   {s:"Then she puts the chicken into the oven.",w:"oven"},
+   {s:"Tonight we will eat roast chicken with potatoes.",w:"roast"},
+   {s:"The kitchen becomes warm, and the whole house smells lovely."},
+   {s:"Mom looks very nice in her new blouse.",w:"blouse"},
+   {s:"Dad even puts on a red tie for the dinner.",w:"tie"},
+   {s:"We sit down together at seven, and everybody is happy."}]},
+ 9:{title:"Moving Day",lines:[
+   {s:"Today my family moves to a new apartment.",w:"apartment"},
+   {s:"It is on the fourth floor, and it has big windows."},
+   {s:"Two men carry a heavy armchair up the stairs.",w:"armchair"},
+   {s:"Mom puts all the cups into the kitchen cabinet.",w:"cabinet"},
+   {s:"The washing machine is much too heavy for me.",w:"washing machine"},
+   {s:"So I carry the small boxes instead."},
+   {s:"I try to walk fast, and then I drop one box."},
+   {s:"It was my mistake, so I say sorry to Mom.",w:"mistake"},
+   {s:"Inside that box I find my old maths textbook.",w:"textbook"},
+   {s:"My new room is small, but it is bright and quiet."},
+   {s:"Tonight I will sleep here for the first time."}]},
+ /* ---------- Lv3：13 句 ---------- */
+ 11:{title:"In the Garden",lines:[
+   {s:"After school I go to the garden with Grandpa."},
+   {s:"He grows tomatoes there, and he also keeps some flowers."},
+   {s:"Today a small black beetle walks slowly along a leaf.",w:"beetle"},
+   {s:"I want to touch it, but Grandpa says we should just watch."},
+   {s:"High in the tall tree there is a bird nest.",w:"nest"},
+   {s:"Two birds fly in and out with food for their babies."},
+   {s:"Grandpa says these birds come back to the same tree every spring."},
+   {s:"The tree is one metre taller than me now.",w:"metre"},
+   {s:"We give it a litre of water every evening.",w:"litre"},
+   {s:"Today the temperature is only five degrees.",w:"temperature"},
+   {s:"So we both wear gloves while we work."},
+   {s:"We stay in the garden till five, and then we go home.",w:"till"},
+   {s:"I think the garden is the best place after a long school day."}]},
+ 13:{title:"At the Bookstore",lines:[
+   {s:"On Saturday morning Mom takes me to a bookstore.",w:"bookstore"},
+   {s:"The shop is near the park, and it is full of people."},
+   {s:"A big sign says that all animal books are half-price today.",w:"half-price"},
+   {s:"I look at the shelf for a long time."},
+   {s:"In the end I choose a book about a tortoise.",w:"tortoise"},
+   {s:"The tortoise in this book is one hundred years old."},
+   {s:"He is slow, but he travels to many countries."},
+   {s:"Mom pays for the book and puts the receipt in her bag.",w:"receipt"},
+   {s:"Because of the sale, we save ten euro.",w:"save"},
+   {s:"The shop gives a free bookmark to every customer.",w:"customer"},
+   {s:"Mine has a picture of a small green turtle on it."},
+   {s:"On the bus I read the first ten pages."},
+   {s:"I want to come back to this shop next Saturday."}]},
+ 14:{title:"A Day in the City",lines:[
+   {s:"On Sunday we take a tram into the city.",w:"tram"},
+   {s:"The tram is full of people, so we stand near the door."},
+   {s:"Our first stop is an art gallery beside the river.",w:"gallery"},
+   {s:"Inside there are more than fifty paintings."},
+   {s:"The pictures of the sea are my favourite ones."},
+   {s:"Mom likes a painting of an old street at night."},
+   {s:"After that we walk to a shoe shop."},
+   {s:"The shop gives us a big discount on my school shoes.",w:"discount"},
+   {s:"Mom keeps the receipt, because I may need a bigger size.",w:"receipt"},
+   {s:"We have noodles in a small restaurant for lunch."},
+   {s:"Before we drive home, Dad puts gas in the car.",w:"gas"},
+   {s:"Our car is old, but the engine is still quiet.",w:"engine"},
+   {s:"We get home at six, tired but very happy."}]},
+ /* ---------- Lv4：15 句，开始用 because / while / who ---------- */
+ 15:{title:"The School Trip",lines:[
+   {s:"Our class goes on a school trip today, and everybody arrives early."},
+   {s:"I put water, bread and a pen into my backpack.",w:"backpack"},
+   {s:"Unfortunately the bus is delayed for twenty minutes.",w:"delayed"},
+   {s:"While we wait, our teacher tells us the plan for the day."},
+   {s:"When the bus comes, I find a seat next to the window.",w:"seat"},
+   {s:"The bus goes fast on the motorway, so nobody feels bored.",w:"motorway"},
+   {s:"We pass green fields, small white houses and a long river."},
+   {s:"Our teacher gives each of us a guidebook about the city.",w:"guidebook"},
+   {s:"Our first stop is a factory that makes paper.",w:"factory"},
+   {s:"A woman there shows us how old books become new paper."},
+   {s:"The machines are very loud, so we must listen carefully."},
+   {s:"After that we eat our lunch in a park near the factory."},
+   {s:"In the afternoon we play tennis on the court behind the school.",w:"court"},
+   {s:"My team loses, but the games are great fun."},
+   {s:"On the way home most of us fall asleep on the bus."}]},
+ 17:{title:"Friday Night",lines:[
+   {s:"Friday night is family night at our home, and nobody goes out."},
+   {s:"While Mom cooks, Dad turns on the radio in the kitchen.",w:"radio"},
+   {s:"An old song comes on, and my parents sing together."},
+   {s:"After dinner Mom reads a magazine on the sofa.",w:"magazine"},
+   {s:"Then we watch a comedy about a family and their dog.",w:"comedy"},
+   {s:"There is a long advertisement before the film starts.",w:"advertisement"},
+   {s:"My little brother does not like waiting, so he plays with his car."},
+   {s:"Everybody laughs when the dog runs away with a shoe."},
+   {s:"After the film we watch the news for ten minutes.",w:"news"},
+   {s:"Tonight the news is about a new park in our city."},
+   {s:"My dad then finds an old DVD in a box under the TV.",w:"DVD"},
+   {s:"It is a film about school children who start a band."},
+   {s:"At the end of the film the children dance at a disco.",w:"disco"},
+   {s:"We are all sleepy, but we want to see the last part."},
+   {s:"Friday night is the best night of the week for me."}]},
+ 19:{title:"Grandma and the Computer",lines:[
+   {s:"My grandma is seventy, and this month she wants to learn about computers."},
+   {s:"First I show her how to click on the small pictures.",w:"click"},
+   {s:"She is careful, because she is afraid of breaking something."},
+   {s:"On Monday she sends her first message to my dad.",w:"message"},
+   {s:"Dad writes back in one minute, and Grandma laughs happily."},
+   {s:"Now she buys rice and fruit online every week.",w:"online"},
+   {s:"She also talks to her old school friends in a chatroom.",w:"chatroom"},
+   {s:"They live far away, so they have not met for many years."},
+   {s:"My cousin puts new software on her computer for photos.",w:"software"},
+   {s:"Grandma keeps all her family photos in one folder now."},
+   {s:"After school I am her computer assistant for half an hour.",w:"assistant"},
+   {s:"Sometimes she teaches me things too, like the names of old songs."},
+   {s:"She says my career will be in computers one day.",w:"career"},
+   {s:"I am not sure, but I like helping her very much."},
+   {s:"Next week we will learn how to send a photo to my uncle."}]},
+ /* ---------- Lv5：17 句，带从句，长度接近 KET 阅读 ---------- */
+ 21:{title:"The Broken Bike",lines:[
+   {s:"Yesterday afternoon Tom fell off his bike near the school gate."},
+   {s:"It was a small accident, but everybody stopped to look.",w:"accident"},
+   {s:"He got up slowly, because he felt a pain in his left arm.",w:"pain"},
+   {s:"Our teacher came out of the office and asked what had happened."},
+   {s:"She called an ambulance, although Tom said he was fine.",w:"ambulance"},
+   {s:"At the hospital a doctor looked at his arm very carefully."},
+   {s:"Luckily nothing was broken, so Tom went home before dinner."},
+   {s:"This morning our teacher asked us to discuss bike safety in class.",w:"discuss"},
+   {s:"We talked about lights, helmets and the rules on busy roads."},
+   {s:"Tom said he had been riding too fast on the wet road."},
+   {s:"His dad will repair the bike this weekend.",w:"repair"},
+   {s:"The front wheel is bent, and one light is broken."},
+   {s:"Until then, I share my bike with him every morning.",w:"share"},
+   {s:"We ride to school together, and he sits behind me on the way home."},
+   {s:"I cannot believe how happy he is about my old bike.",w:"believe"},
+   {s:"Tom says he will be much more careful in the future."},
+   {s:"Our teacher put a big poster about bike rules on the classroom wall."}]},
+ 23:{title:"My Reading Corner",lines:[
+   {s:"In the corner of my bedroom there is a small reading place."},
+   {s:"It has an old brown chair which is very comfortable.",w:"comfortable"},
+   {s:"My grandfather gave me the chair when I was six years old."},
+   {s:"I sit there and read nearly every evening after my homework.",w:"nearly"},
+   {s:"This month I am reading a longer book than usual."},
+   {s:"It is a foreign story about a girl who lives beside the sea.",w:"foreign"},
+   {s:"Some of the words are difficult, so I use a dictionary."},
+   {s:"Many words look similar to Chinese words I already know.",w:"similar"},
+   {s:"That makes the book easier than I thought at first."},
+   {s:"Unfortunately, the last page of the book is missing.",w:"unfortunately"},
+   {s:"Nobody in my family knows how the story ends.",w:"nobody"},
+   {s:"My sister thinks the girl finds her lost dog."},
+   {s:"I think the girl becomes a famous swimmer instead."},
+   {s:"The same book is available at the school library.",w:"available"},
+   {s:"I will borrow it on Monday and read the ending there."},
+   {s:"Then I will tell my sister who was right."},
+   {s:"Reading before bed is the quietest part of my day."}]},
+ 24:{title:"Sports Day",lines:[
+   {s:"Sports day is the biggest event of the year at our school.",w:"event"},
+   {s:"It happens in June, when the weather is usually warm and dry."},
+   {s:"Early in the morning the teachers carry all the equipment to the field.",w:"equipment"},
+   {s:"They put out flags, balls and a long rope for the last game."},
+   {s:"My class wears yellow shirts, so we are easy to find."},
+   {s:"My brother wants to run the long race himself, without any help.",w:"himself"},
+   {s:"He is nine, and this is his first long race at school."},
+   {s:"The other boys in his group are taller and older than he is."},
+   {s:"He is not the fastest runner, but he never stops."},
+   {s:"In the end he finishes at the bottom of his group.",w:"bottom"},
+   {s:"Our parents clap loudly, and his teacher gives him a small card."},
+   {s:"Afterwards we all eat ice cream under the big tree.",w:"afterwards"},
+   {s:"My brother eats two, because he is so hungry after the race."},
+   {s:"Actually, that quiet moment is my favourite part of the day.",w:"actually"},
+   {s:"We sit on the grass and watch the older students play football."},
+   {s:"This sports day will be a happy memory for our whole family.",w:"memory"},
+   {s:"Next year my brother says he will practise and finish in the middle."}]}
+};
+/* 手写故事的出题：考点句就是文章里的原句，所以题目和文章永远一致 */
+function storyPaper(seg,st){
   const lv=bossLevel(seg);
-  const pool=shuffle(bossPool(seg).slice());
-  if(pool.length<4)return null;
-  const n=Math.min(pool.length,3+lv*2);            /* 5~13 句 */
-  const used=pool.slice(0,n);
-  const CONN=["","Then, ","Also, ","After that, ","Next, ","And ","Finally, "];
-  const TITLES=["Eggy's Day","A Happy Day","Eggy at Home","Eggy Goes Out","Eggy's Adventure"];
-  const title=TITLES[lv-1];
-  const sents=used.map((w,i)=>(i&&lv>=2?CONN[i%CONN.length]:"")+w.sen);
-  const zh=used.map(w=>w.senZh).join("");
-  let html=sents.join(" ");
-  used.forEach(w=>{html=html.replace(new RegExp("\\b("+w.en+")\\b","i"),"<b>$1</b>");});
-
-  const nDis=lv>=3?3:2;                            /* 干扰项个数：低阶 3 选 1，高阶 4 选 1 */
-  const others=k=>shuffle(pool.filter(x=>x.en!==k.en)).slice(0,nDis);
-  const pick=i=>used[i%used.length];
-  const blank=w=>w.sen.replace(new RegExp("\\b"+w.en+"\\b","i"),"______");
-  const qMean=w=>({q:'文章里的 "'+w.en+'" 是什么意思？',
-    opts:shuffle([{t:w.zh,ok:1}].concat(others(w).map(o=>({t:o.zh}))))});
-  const qCloze=w=>({q:"选词填空： "+blank(w),
-    opts:shuffle([{t:w.en,ok:1}].concat(others(w).map(o=>({t:o.en}))))});
-  const qTrue=w=>({q:"哪一句和文章一致？",
-    opts:shuffle([{t:w.sen,ok:1}].concat(others(w).map(o=>
-      ({t:w.sen.replace(new RegExp("\\b"+w.en+"\\b","i"),o.en)}))))});
+  const text=st.lines.map(l=>l.s).join(" ");
+  const html=linkWords(text);
+  const tw=st.lines.filter(l=>l.w)
+    .map(l=>({w:WORDS.find(x=>x.en===l.w),s:l.s})).filter(o=>o.w);
+  if(tw.length<4)return null;
+  const nDis=lv>=3?3:2;
+  const others=k=>shuffle(tw.filter(o=>o.w.en!==k.en).map(o=>o.w)).slice(0,nDis);
+  const cut=(s,en)=>s.replace(new RegExp("\\b"+en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i"),"______");
+  const swap=(s,en,to)=>s.replace(new RegExp("\\b"+en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i"),to);
+  const qMean=o=>({q:'文章里的 "'+o.w.en+'" 是什么意思？',
+    opts:shuffle([{t:o.w.zh,ok:1}].concat(others(o.w).map(x=>({t:x.zh}))))});
+  const qCloze=o=>({q:"选词填空： "+cut(o.s,o.w.en),
+    opts:shuffle([{t:o.w.en,ok:1}].concat(others(o.w).map(x=>({t:x.en}))))});
+  const qTrue=o=>({q:"哪一句和文章一致？",
+    opts:shuffle([{t:o.s,ok:1}].concat(others(o.w).map(x=>({t:swap(o.s,o.w.en,x.en)}))))});
   const qNotIn=()=>{
-    const outs=shuffle(WORDS.filter(x=>!used.some(u=>u.en===x.en))).slice(0,1);
+    const outs=shuffle(WORDS.filter(x=>!new RegExp("\\b"+x.en+"\\b","i").test(text))).slice(0,1);
     const wrong=outs.length?outs[0].en:"pizza";
     return {q:"下面哪个词【没有】出现在文章里？",
-      opts:shuffle([{t:wrong,ok:1}].concat(shuffle(used).slice(0,nDis).map(o=>({t:o.en}))))};};
+      opts:shuffle([{t:wrong,ok:1}].concat(shuffle(tw.slice()).slice(0,nDis).map(o=>({t:o.w.en}))))};
+  };
   const qTitle=()=>({q:"这篇文章最好的题目是？",
-    opts:shuffle([{t:title,ok:1}].concat(
-      shuffle(["My Maths Test","A Rainy Night","The Lost Key","At the Hospital"]).slice(0,nDis)
-        .map(t=>({t:t}))))});
-
-  /* 固定 5 道题，最后一道固定是标题题（KET 常考题型） */
-  const qs=(lv<=2)
-    ? [qMean(pick(0)),qCloze(pick(1)),qTrue(pick(2)),qMean(pick(3)),qTitle()]
-    : [qMean(pick(0)),qCloze(pick(1)),qTrue(pick(2)),
-       (lv>=4?qNotIn():qCloze(pick(3))),qTitle()];
-  return {title:title,html:html,zh:zh,qs:qs,words:used.map(w=>w.en)};
+    opts:shuffle([{t:st.title,ok:1}].concat(
+      shuffle(["My Maths Test","A Rainy Night","The Lost Key","At the Hospital","A Trip to the Zoo"])
+        .slice(0,nDis).map(t=>({t:t}))))});
+  const at=i=>tw[i%tw.length];
+  const qs=[qMean(at(0)),qCloze(at(1)),qTrue(at(2)),
+            (lv>=4?qNotIn():qMean(at(3))),qTitle()];
+  return {title:st.title,html:html,text:text,zh:"",qs:qs,words:tw.map(o=>o.w.en)};
 }
-/* ---- 战斗状态 ---- */
+function buildBossPaper(seg){
+  const st=BOSS_STORY[seg];
+  return st?storyPaper(seg,st):null;             /* 没写故事的段就没有阅读理解 */
+}
+/* ---- 战斗状态 ----------------------------------------------------
+   打怪做成一个小游戏：左边小魔法师举着魔法枪，右边是怪物。
+   答对一题就开一枪，子弹飞过去打中怪物；打中 4 次怪物倒下。
+   答错怪物就往前逼近一步，走满 3 步冲到小人面前，这一场就算输。
+   所以 5 道题里最多只能错 2 道，而且要打中 4 枪才赢。 */
 let bossState=null;
-function startBoss(seg){
-  clearTimeout(qTimer);qTimer=null;sess=null;stopSpeak();
+const BOSS_HITS=4;                            /* 打几枪能放倒怪物 */
+const BOSS_STEPS=3;                           /* 怪物走几步就到小人面前 */
+function startBoss(seg,dev){
+  clearTimeout(qTimer);qTimer=null;sess=null;stopSpeak();stopRead();
   const paper=buildBossPaper(seg);
   if(!paper){                                  /* 词不够，直接放行 */
+    if(dev){toast("这一段可用例句不够，凑不出阅读文章");return;}
     grantPendingPiece(seg);goView("puzzle");return;
   }
   const bi=attrOf(seg);
-  bossState={seg,paper,idx:-1,hp:paper.qs.length,max:paper.qs.length,life:3,bi};
+  bossState={seg,paper,idx:-1,hp:BOSS_HITS,hpMax:BOSS_HITS,qMax:paper.qs.length,
+             step:0,bi,mon:monOf(seg),dev:!!dev,busy:false};
   goView("learn");renderBoss();
 }
+/* 小魔法师 + 魔法枪，纯内联 SVG，不要外部图片 */
+const fighterSVG=
+  '<svg viewBox="0 0 92 104" class="f-hero-svg" aria-hidden="true">'+
+   '<ellipse cx="44" cy="99" rx="26" ry="5" fill="rgba(43,45,110,.18)"/>'+
+   '<rect x="33" y="60" width="9" height="34" rx="4" fill="#36406B"/>'+
+   '<rect x="46" y="60" width="9" height="34" rx="4" fill="#2C3558"/>'+
+   '<rect x="28" y="88" width="20" height="9" rx="4" fill="#7A4E2B"/>'+
+   '<rect x="44" y="88" width="20" height="9" rx="4" fill="#6B4425"/>'+
+   '<path d="M26 40h36l6 24H20z" fill="#6F58B8"/>'+
+   '<path d="M26 40h36l3 12H23z" fill="#8A6BD6"/>'+
+   '<circle cx="44" cy="26" r="16" fill="#FFE1C6" stroke="#fff" stroke-width="3"/>'+
+   '<circle cx="38" cy="26" r="2.6" fill="#2F7FE0"/><circle cx="50" cy="26" r="2.6" fill="#2F7FE0"/>'+
+   '<path d="M39 33q5 4 10 0" stroke="#C4756A" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+   '<path d="M22 14q22-12 44 0z" fill="#5B3EA8"/>'+
+   '<path d="M44 14 74 6 52 20z" fill="#7660B4"/>'+
+   '<rect x="58" y="50" width="30" height="9" rx="4.5" fill="#4A4A8A"/>'+
+   '<rect x="60" y="52" width="24" height="3" rx="1.5" fill="#8EA0C8"/>'+
+   '<circle cx="88" cy="54" r="6" fill="#FFD166" class="f-muzzle"/>'+
+   '<rect x="52" y="48" width="12" height="13" rx="5" fill="#FFE1C6"/>'+
+  '</svg>';
 function renderBoss(){
-  const B=bossState,a=ATTRS[B.bi],p=B.paper;
-  const readMode=B.idx<0;
+  const B=bossState,p=B.paper;
   $("#learnArea").innerHTML=
-    '<div class="boss-head">'+
-      '<div class="boss-ic" id="bossIc">'+["🌪️","🔥","🌩️","⚡","🧪"][B.bi]+'👹</div>'+
-      '<div class="boss-info"><div class="boss-nm">'+BOSS_NAME[B.bi]+
-        ' <span style="font-size:12px;opacity:.6">Lv.'+bossLevel(B.seg)+'</span></div>'+
-        '<div class="hpbar"><i style="width:'+(B.hp/B.max*100)+'%"></i></div></div>'+
-      '<div class="hearts">'+"❤️".repeat(B.life)+"🖤".repeat(3-B.life)+'</div>'+
+    '<div class="fight" id="fStage">'+
+      '<div class="f-ground"></div>'+
+      '<div class="f-hero" id="fHero">'+fighterSVG+'</div>'+
+      '<div class="f-bullet" id="fBullet"></div>'+
+      '<div class="f-mon-wrap" id="fMonWrap"><div class="f-cry" id="fCry">😭</div>'+
+        '<div class="f-mon" id="fMon">'+B.mon.ic+'</div></div>'+
+      '<div class="f-mon-tag">'+["🌪️","🔥","🌩️","⚡","🧪"][B.bi]+
+        ' <b>'+B.mon.nm+'</b> Lv.'+bossLevel(B.seg)+
+        '<div class="f-hp" id="fHp"></div></div>'+
+      '<div class="f-step" id="fStep"></div>'+
     '</div>'+
     '<div class="article"><div style="font-weight:bold;font-size:19px;margin-bottom:6px">'+p.title+'</div>'+
-      p.html+'<span class="zh">'+p.zh+'</span></div>'+
-    '<div class="row" style="margin-top:10px">'+
-      '<button class="btn ghost sm" id="bossRead">🔊 朗读全文</button>'+
+      p.html+'</div>'+
+    '<p class="tips" style="margin:6px 0 0">点文章里带下划线的单词，可以看中文意思</p>'+
+    '<div class="row" style="margin-top:8px">'+
       (B.idx<0?'<button class="btn green" id="bossGo">读完了，开始答题 →</button>':'')+
+      '<button class="btn ghost sm" id="bossQuit">退出</button>'+
     '</div>'+
-    (B.idx>=0?renderBossQ():'')+
-    '<p class="bprog">'+(B.idx>=0?("第 "+(B.idx+1)+" / "+B.max+" 题"):"先读一遍文章，再开始答题")+'</p>';
-  $("#bossRead").onclick=()=>saySentence(p.html.replace(/<[^>]+>/g,""));
-  if($("#bossGo"))$("#bossGo").onclick=()=>{B.idx=0;renderBoss();};
-  if(B.idx>=0)bindBossOpts();
+    '<div id="bossQWrap"></div>'+
+    '<p class="bprog" id="bossProg"></p>';
+  $("#bossQuit").onclick=quitBoss;
+  bindWordTaps();
+  if($("#bossGo"))$("#bossGo").onclick=()=>{stopRead();stopSpeak();B.idx=0;renderBoss();};
+  paintFight();
+  if(B.idx>=0)paintBossQ();
+  else $("#bossProg").textContent="先读一遍文章，再开始答题";
+}
+/* 怪物血条、逼近的步数，单独刷新，不动整个画面，动画才不会被打断 */
+function paintFight(){
+  const B=bossState;if(!B||!$("#fHp"))return;
+  let hp="";
+  for(let i=0;i<B.hpMax;i++)hp+='<i class="'+(i<B.hp?"on":"")+'"></i>';
+  $("#fHp").innerHTML=hp;
+  const left=BOSS_STEPS-B.step;
+  $("#fStep").innerHTML="👣".repeat(B.step)+(B.step?" ":"")+
+    (left>0?("怪物还差 <b>"+left+"</b> 步到你面前"):"<b>怪物冲到面前了！</b>");
+  /* 用外层容器平移，内层留着浮动和受击动画，两者不会互相顶掉。
+     offsetLeft 不受 transform 影响，所以间距每次算出来都一样。 */
+  const wrap=$("#fMonWrap"),hero=$("#fHero");
+  if(wrap&&hero){
+    const gap=Math.max(0,wrap.offsetLeft-(hero.offsetLeft+hero.offsetWidth)-4);
+    wrap.style.transform="translateX(-"+(B.step/BOSS_STEPS*gap)+"px)";
+  }
+}
+function paintBossQ(){
+  const B=bossState;
+  $("#bossQWrap").innerHTML=renderBossQ();
+  $("#bossProg").textContent="第 "+(B.idx+1)+" / "+B.qMax+" 题 · 还要打中 "+B.hp+" 枪";
+  bindBossOpts();
+}
+function quitBoss(){
+  const B=bossState;if(!B)return;
+  const s=B.seg,dev=B.dev;
+  bossState=null;stopSpeak();stopRead();renderMap();renderDaily();
+  if(dev){goView("map");openDevList(s);}
+  else{goView("map");toast("已退出，随时可以回来再打");}
+}
+/* 点文章里的单词 → 弹出中文意思 */
+function bindWordTaps(){
+  document.querySelectorAll("#learnArea .article .wk").forEach(b=>{
+    b.onclick=e=>{e.stopPropagation();showWordPop(b.dataset.w,b);};
+  });
+}
+function showWordPop(en,anchor){
+  const w=WMAP[(en||"").toLowerCase()];if(!w)return;
+  const p=$("#wkPop");
+  p.innerHTML='<div class="wk-en" lang="en">'+w.en+'</div>'+
+    (w.ph?'<div class="wk-ph" lang="en">'+w.ph+'</div>':'')+
+    '<div class="wk-zh">'+w.zh+'</div>'+
+    (S.scored[w.en]?'<div class="wk-ok">✓ 这个词你已经掌握了</div>':'')+
+    '<button class="wk-say" type="button">🔊 听一听</button>';
+  p.querySelector(".wk-say").onclick=e=>{e.stopPropagation();sayWord(w.en);};
+  p.classList.add("show");
+  sayWord(w.en);
+  if(anchor){                       /* 尽量贴着点到的那个词显示 */
+    const r=anchor.getBoundingClientRect();
+    p.style.left=Math.min(Math.max(12,r.left+r.width/2-110),window.innerWidth-232)+"px";
+    p.style.top=(r.bottom+8)+"px";
+  }
+}
+$("#wkPop").onclick=e=>e.stopPropagation();
+document.addEventListener("click",()=>{const p=$("#wkPop");if(p)p.classList.remove("show");});
+/* 已去掉「朗读全文」按钮，这里只留一个停止函数，
+   给切页、退出、答题时统一掐掉还在响的语音用。 */
+function stopRead(){
+  try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
 }
 function renderBossQ(){
   const q=bossState.paper.qs[bossState.idx];
@@ -3203,59 +3682,155 @@ function bindBossOpts(){
   const B=bossState,q=B.paper.qs[B.idx];
   document.querySelectorAll("#learnArea .bopt").forEach(b=>{
     b.onclick=()=>{
+      if(B.busy)return;
+      B.busy=true;
+      stopRead();stopSpeak();                  /* 一答题就把还在读的文章停掉 */
       document.querySelectorAll("#learnArea .bopt").forEach(x=>x.onclick=null);
       const ok=q.opts[+b.dataset.i].ok;
-      if(ok){
-        b.classList.add("ok");B.hp--;SFX.hit();
-        const ic=$("#bossIc");if(ic)ic.classList.add("hurt");
-        dayRec().q++;touchActive();
-        setTimeout(()=>{
-          if(B.hp<=0){bossWin();return;}
-          B.idx++;renderBoss();
-        },820);
-      }else{
-        b.classList.add("no");B.life--;SFX.hurt();
+      if(!B.dev)dayRec().q++;
+      touchActive();
+      if(ok){b.classList.add("ok");shoot();}
+      else{
+        b.classList.add("no");B.step++;SFX.hurt();monsterStrike();
         const r=document.querySelectorAll("#learnArea .bopt")[q.opts.findIndex(o=>o.ok)];
         if(r)r.classList.add("ok");
-        dayRec().q++;
-        setTimeout(()=>{
-          if(B.life<=0){bossLose();return;}
-          B.idx++;
-          if(B.idx>=B.max){B.hp>0?bossLose():bossWin();return;}
-          renderBoss();
-        },1500);
+        paintFight();
       }
-      save();
+      if(!B.dev)save();
+      setTimeout(()=>{
+        B.busy=false;
+        if(!bossState)return;                  /* 中途退出了就别接着跑 */
+        if(B.step>=BOSS_STEPS){bossLose();return;}
+        if(B.hp<=0){bossWin();return;}
+        B.idx++;
+        if(B.idx>=B.qMax){                     /* 题目答完了：够 4 枪就赢，不够就输 */
+          B.hp<=0?bossWin():bossLose();return;
+        }
+        paintBossQ();
+      },ok?1250:1700);
     };
   });
 }
+/* 开一枪：小人后坐 → 子弹飞过去 → 打中怪物掉一格血 */
+function shoot(){
+  const B=bossState,hero=$("#fHero"),bl=$("#fBullet"),mon=$("#fMon");
+  SFX.hit();
+  if(hero){hero.classList.remove("fire");void hero.offsetWidth;hero.classList.add("fire");}
+  if(bl&&mon){
+    const a=bl.getBoundingClientRect(),m=mon.getBoundingClientRect();
+    bl.style.setProperty("--fly",Math.max(60,m.left+m.width*.35-a.left)+"px");
+    bl.classList.remove("fly");void bl.offsetWidth;bl.classList.add("fly");
+  }
+  setTimeout(()=>{
+    if(!bossState)return;
+    B.hp--;paintFight();
+    if(mon){
+      mon.classList.remove("hurt");void mon.offsetWidth;
+      mon.classList.add(B.hp<=0?"down":"hurt");
+    }
+    const cry=$("#fCry");                     /* 被打中就哭一下 */
+    if(cry){cry.classList.remove("on");void cry.offsetWidth;cry.classList.add("on");}
+    if(B.hp<=0)SFX.big();
+    const pg=$("#bossProg");
+    if(pg)pg.textContent=B.hp<=0?"怪物被打倒了！":("打中了！还要 "+B.hp+" 枪");
+  },430);
+}
+/* 答错：怪物往前扑一步，小人抖一下 */
+function monsterStrike(){
+  const mon=$("#fMon"),hero=$("#fHero");
+  if(mon){mon.classList.remove("strike");void mon.offsetWidth;mon.classList.add("strike");}
+  if(hero){hero.classList.remove("hit");void hero.offsetWidth;hero.classList.add("hit");}
+  const pg=$("#bossProg"),B=bossState;
+  if(pg)pg.textContent=B&&B.step>=BOSS_STEPS
+    ?"怪物冲到面前了！":("答错了，怪物逼近一步（还差 "+(BOSS_STEPS-(B?B.step:0))+" 步）");
+}
+/* 打赢守关怪的盲盒：概率合计 100%，抽一次 */
+const BOSS_BOX=[
+ {p:25,ic:"🎡",t:"转盘次数 +2",kind:"spin",n:2},
+ {p:20,ic:"🎠",t:"转盘次数 +3",kind:"spin",n:3},
+ {p:25,ic:"⭐",t:"积分 +30",kind:"score",n:30},
+ {p:20,ic:"🌟",t:"积分 +50",kind:"score",n:50},
+ {p:10,ic:"💎",t:"积分 +100",kind:"score",n:100}
+];
+function drawBossBox(){
+  let r=Math.random()*100;
+  for(const g of BOSS_BOX)if((r-=g.p)<0)return g;
+  return BOSS_BOX[BOSS_BOX.length-1];
+}
+/* 盲盒交互：三个盒子挑一个，开了才发奖，发完才出「收下奖励」 */
+function bindBossBox(dev,onDone){
+  const row=$("#boxRow"),tip=$("#boxTip"),next=$("#bossNext");
+  if(!row)return;
+  let opened=false;
+  row.querySelectorAll(".bbox").forEach(b=>b.onclick=()=>{
+    if(opened)return;opened=true;
+    const g=drawBossBox();
+    row.querySelectorAll(".bbox").forEach(x=>{if(x!==b)x.classList.add("dim")});
+    b.classList.add("shake");SFX.click();
+    setTimeout(()=>{
+      b.classList.remove("shake");b.classList.add("open");b.textContent=g.ic;
+      let extra="";
+      if(dev)extra='<br><span style="opacity:.6;font-size:13px">🛠️ 调试模式没有真的发奖</span>';
+      else if(g.kind==="spin"){S.spins+=g.n;save();updateSpinUI();}
+      else{addScore(g.n);save();}
+      SFX.big();confetti(26);
+      tip.innerHTML='盲盒打开是 <b style="color:#E5484D">'+g.t+'</b>！'+extra;
+      if(next)next.style.display="";
+      if(onDone)onDone(g);
+    },640);
+  });
+}
 function bossWin(){
-  const B=bossState,reward=30+B.seg*5;
-  S.boss[B.seg]=true;addScore(reward);
-  S.spins=Math.min(MAX_SPIN,S.spins+2);
+  /* 打赢的奖励全部来自盲盒，不再另外固定加分和转盘 */
+  const B=bossState;
+  const boxHTML='<div class="bbox-row" id="boxRow">'+
+    [0,1,2].map(()=>'<button class="bbox">🎁</button>').join("")+
+    '</div><p class="tips" id="boxTip" style="margin:2px 0 8px">🎁 挑一个盲盒打开，看看是什么奖励！</p>';
+  stopRead();
+  if(B.dev){                                 /* 调试打赢：不发奖、不记通关 */
+    SFX.big();confetti(24);
+    $("#learnArea").innerHTML=
+      '<div class="study"><div style="font-size:78px">🎉</div>'+
+      '<h2 class="title" style="justify-content:center">打败 '+B.mon.nm+'！</h2>'+
+      '<p style="font-size:16px;font-weight:bold">🛠️ 调试模式：没有发奖励，也没有记通关<br>'+
+        '正式打赢会开一次盲盒'+
+        (holdsPiece(B.seg)?'<br>🧩 还会解锁徽章最后一块':'')+'</p>'+
+      boxHTML+
+      '<button class="btn green" id="bossNext" style="display:none">回单词表 →</button></div>';
+    bindBossBox(true);
+    $("#bossNext").onclick=()=>{const s=B.seg;bossState=null;goView("map");openDevList(s);};
+    return;
+  }
+  S.boss[B.seg]=true;
   grantPendingPiece(B.seg);
   S.flags.boss=(S.flags.boss||0)+1;
   save();SFX.big();confetti(40);checkAch();
   $("#learnArea").innerHTML=
     '<div class="study"><div style="font-size:78px">🎉</div>'+
-    '<h2 class="title" style="justify-content:center">打败 '+BOSS_NAME[B.bi]+'！</h2>'+
-    '<p style="font-size:17px;font-weight:bold">奖励 +'+reward+' 分 · +2 次转盘'+
+    '<h2 class="title" style="justify-content:center">打败 '+B.mon.nm+'！</h2>'+
+    '<p style="font-size:17px;font-weight:bold">通关奖励是一次盲盒'+
       (holdsPiece(B.seg)?'<br>🧩 徽章最后一块已解锁！':'')+'</p>'+
-    '<button class="btn green" id="bossNext">收下奖励 →</button></div>';
+    boxHTML+
+    '<button class="btn green" id="bossNext" style="display:none">收下奖励 →</button></div>';
+  bindBossBox(false,()=>{renderHUD&&renderHUD();});
   $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();renderMap();renderDaily();goView("puzzle");};
   updateSpinUI();
 }
 function bossLose(){
-  const B=bossState;SFX.lose();
+  const B=bossState;SFX.lose();stopRead();
   $("#learnArea").innerHTML=
     '<div class="study"><div style="font-size:78px">😵‍💫</div>'+
     '<h2 class="title" style="justify-content:center">这次没打过…</h2>'+
-    '<p style="font-size:16px;font-weight:bold">'+BOSS_NAME[B.bi]+'还剩 '+B.hp+' 点血<br>'+
+    '<p style="font-size:16px;font-weight:bold">'+
+      (B.step>=BOSS_STEPS?B.mon.nm+"冲到你面前了":B.mon.nm+"还差 "+B.hp+" 枪才倒下")+'<br>'+
       '再读一遍文章，一定能赢！<span style="opacity:.6;font-size:13px">（不扣任何积分）</span></p>'+
     '<div class="row"><button class="btn green" id="bossAgain">🔁 再来一次</button>'+
     '<button class="btn ghost sm" id="bossLater">稍后再战</button></div></div>';
-  $("#bossAgain").onclick=()=>startBoss(B.seg);
-  $("#bossLater").onclick=()=>{bossState=null;renderMap();renderDaily();goView("map");};
+  $("#bossAgain").onclick=()=>startBoss(B.seg,B.dev);
+  $("#bossLater").onclick=()=>{
+    const s=B.seg,dev=B.dev;bossState=null;renderMap();renderDaily();goView("map");
+    if(dev)openDevList(s);
+  };
 }
 /* 徽章最后一块：打赢才发 */
 function grantPendingPiece(seg){
@@ -3314,10 +3889,16 @@ function openWheel(res){
 }
 $("#spinChip").onclick=()=>{if(!spinning)openWheel(null);};
 function finishSegment(){
+  if(sess&&sess.dev){                        /* 调试会话：不转盘、不发奖、不写记录 */
+    const seg=sess.seg,acc=sess.total?Math.round(sess.right/sess.total*100):0;
+    clearTimeout(qTimer);qTimer=null;sess=null;renderHUD();
+    toast("🛠️ 调试结束，正确率 "+acc+"%，没有记录任何成绩");
+    openDevList(seg);return;
+  }
   const acc=sess.total?Math.round(sess.right/sess.total*100):0;
   const stars=acc>=95?3:(acc>=85?2:1);
-  const sp=acc>=90?MAX_SPIN:3;
-  S.spins=Math.min(MAX_SPIN,S.spins+sp);      // 剩余次数保留，总持有上限 4 次
+  const sp=acc>=90?4:3;
+  S.spins+=sp;                                // 次数只累加，不设上限
   let boss=false;
   if(!sess.custom){
     if(holdsPiece(sess.seg)){                 // 徽章最后一块先扣着，打赢 BOSS 才发
@@ -3511,14 +4092,14 @@ function renderShop(){
   const list=ITEMS.filter(i=>i.slot===shopTab).sort((a,b)=>a.price-b.price);
   $("#shopCount").textContent=list.filter(i=>S.owned.includes(i.id)).length+" / "+list.length+" 已拥有";
   $("#goods").innerHTML=list.map(i=>{
-    const owned=S.owned.includes(i.id),on=S.equip[i.slot]===i.id,poor=!owned&&S.coins<i.price;
+    const owned=S.owned.includes(i.id),on=S.equip[i.slot]===i.id,poor=!owned&&S.coins<i.price&&!DEV();
     const rr=RAR[i.r||"normal"];
     return '<button type="button" class="good r-'+(i.r||"normal")+' '+(on?"on":(owned?"owned":""))+(poor?" no":"")+'" data-id="'+i.id+'" aria-pressed="'+on+'">'+
       '<span class="gstatus">'+(on?"已装备":owned?"已拥有":"未购买")+'</span>'+
       '<span class="gic" aria-hidden="true">'+i.ic+'</span><span class="gnm">'+i.nm+'</span>'+
       '<span class="rar">'+(rr||"基础")+(i.d3?" · 3D":"")+'</span>'+
-      '<span class="gpr">'+i.price+' 魔法币</span><span class="gaction">'+
-      (on?"点击卸下":owned?"点击装备":poor?"还差 "+(i.price-S.coins)+" 币":"购买并装备")+'</span></button>';
+      '<span class="gpr">'+((DEV()&&!owned)?"🛠️ 免费":i.price+" 魔法币")+'</span><span class="gaction">'+
+      (on?"点击卸下":owned?"点击装备":poor?"还差 "+(i.price-S.coins)+" 币":(DEV()?"开发者免费装备":"购买并装备"))+'</span></button>';
   }).join("");
   document.querySelectorAll("#goods .good").forEach(g=>g.onclick=()=>buyOrEquip(g.dataset.id));
 }
@@ -3540,9 +4121,11 @@ function showEggyStage(){
 function buyOrEquip(id){
   const it=ITEMS.find(i=>i.id===id);
   if(!S.owned.includes(id)){
-    if(S.coins<it.price){alert("魔法币不够啦！再背几个单词就能买了 💪");beep(220);return;}
-    S.coins-=it.price;S.owned.push(id);S.equip[it.slot]=id;
-    confetti(12);SFX.buy();floatScore("🛒 买到 "+it.nm+"！");checkAch();
+    const free=DEV();                       /* 开发者模式：不查币、也不扣币 */
+    if(!free&&S.coins<it.price){alert("魔法币不够啦！再背几个单词就能买了 💪");beep(220);return;}
+    if(!free)S.coins-=it.price;
+    S.owned.push(id);S.equip[it.slot]=id;
+    confetti(12);SFX.buy();floatScore((free?"🛠️ 试装 ":"🛒 买到 ")+it.nm+"！");checkAch();
   }else{
     S.equip[it.slot]=(S.equip[it.slot]===id)?"":id;SFX.click();
   }
@@ -3945,6 +4528,24 @@ function sayZh(t,onend,onstate,onfail){
 let cardSeq=0,spTimers=[],audioSeq=0,clearStudyRead=null;
 const WORD_TAIL=.12;            /* 提前判定单词结束的秒数，抵消尾部静音 */
 const STEP_GAP=520;             /* 单词→中文→讲解之间的固定间隔 */
+const FOLLOW_TIMES=3;           /* 跟读几遍 */
+const FOLLOW_GAP=1500;          /* 每遍读完留给孩子跟读的时间 */
+const FOLLOW_TIP="跟着我读三遍";
+/* 这句提示语每张卡都要说，所以单独存一个小音频，反复用；
+   文件缺失就退回普通中文语音通道。 */
+let followEl=null,followBad=false;
+function stopFollowTip(){if(followEl){try{followEl.pause();}catch(e){}}}
+function sayFollowTip(onend,onstate){
+  const fin=()=>{onend&&onend();};
+  if(followBad){sayZh(FOLLOW_TIP,fin,onstate,fin);return;}
+  if(!followEl)followEl=new Audio("voice/follow.mp3");
+  followEl.onended=fin;
+  followEl.onplaying=()=>onstate&&onstate(true);
+  followEl.onerror=()=>{followBad=true;sayZh(FOLLOW_TIP,fin,onstate,fin);};
+  try{followEl.currentTime=0;}catch(e){}
+  const pr=followEl.play();
+  if(pr&&pr.catch)pr.catch(()=>{followBad=true;sayZh(FOLLOW_TIP,fin,onstate,fin);});
+}
 function laterSp(fn,ms){const h=setTimeout(fn,ms);spTimers.push(h);return h;}
 function everySp(fn,ms){const h=setInterval(fn,ms);spTimers.push(h);return h;}
 /* 彻底打断现在的发音：网页音频 + 浏览器语音 + 所有还没到点的定时器
@@ -3954,6 +4555,7 @@ function stopSpeak(){
   if(clearStudyRead){clearStudyRead();clearStudyRead=null;}
   cardSeq++;audioSeq++;
   spTimers.forEach(h=>{clearTimeout(h);clearInterval(h);});spTimers=[];
+  stopFollowTip();              /* 跟读提示语也要掐掉 */
   try{audioEl.onended=null;audioEl.onerror=null;audioEl.onplaying=null;audioEl.onwaiting=null;audioEl.pause();}catch(e){}
   try{clearTimeout(ttsTimer);}catch(e){}
   try{if(window.speechSynthesis)speechSynthesis.cancel();}catch(e){}
@@ -4007,7 +4609,49 @@ function sayCard(w,card){
       ()=>setRead("","中文语音暂时无法播放，可以看屏幕上的文字"));
   };
 
-  /* 第一步：英文单词，读完固定间隔后进入中文 */
+  /* 第一步半：跟读三遍。先说一句"跟着我读三遍"，
+     然后读一遍、留 1.5 秒给孩子跟着读，来回三次，读完才进中文意思。 */
+  const sayWordSafe=(tip,cb)=>{
+    let moved=false;
+    const done=()=>{if(moved||id!==cardSeq)return;moved=true;cb();};
+    setRead("word",tip);
+    sayWord(w.en,done,playing=>{if(!moved)setRead(playing?"word":"",tip);},done);
+    /* 和第一遍一样，用播放进度判断读完，比 onended 稳 */
+    const watch=everySp(()=>{
+      if(moved||id!==cardSeq){clearInterval(watch);return;}
+      if(!audioEl.paused&&audioEl.duration&&
+         audioEl.currentTime>=audioEl.duration-WORD_TAIL){clearInterval(watch);done();}
+    },50);
+    laterSp(function fb(){
+      if(moved||id!==cardSeq)return;
+      if(!audioEl.paused&&audioEl.duration&&audioEl.currentTime<audioEl.duration-WORD_TAIL){
+        laterSp(fb,80);return;
+      }
+      done();
+    },2600);
+  };
+  const playFollow=()=>{
+    if(id!==cardSeq)return;
+    const toZh=()=>{
+      if(id!==cardSeq)return;
+      const hasMore=!!(zhLine(w)||w.talk);
+      setRead("",hasMore?"跟读完啦，接着说中文意思…":doneText());
+      if(hasMore)laterSp(playZh,STEP_GAP);
+    };
+    const round=k=>{
+      if(id!==cardSeq)return;
+      if(k>FOLLOW_TIMES){toZh();return;}
+      sayWordSafe("第 "+k+" 遍 · 听我读",()=>{
+        if(id!==cardSeq)return;
+        setRead("","👦 轮到你读第 "+k+" 遍（"+FOLLOW_TIMES+" 遍里的第 "+k+" 遍）");
+        laterSp(()=>round(k+1),FOLLOW_GAP);
+      });
+    };
+    sayFollowTip(()=>{if(id===cardSeq)laterSp(()=>round(1),260);},
+      playing=>setRead("",playing?"跟着我读三遍":"准备跟读…"));
+  };
+
+  /* 第一步：英文单词，读完固定间隔后进入跟读 */
   const startWord=()=>{
     if(id!==cardSeq)return;
     setRead("","正在加载单词语音…");
@@ -4015,9 +4659,8 @@ function sayCard(w,card){
     const next=()=>{
       if(moved||id!==cardSeq)return;
       moved=true;
-      const hasMore=!!(zhLine(w)||w.talk);
-      setRead("",hasMore?(wordFailed?"单词暂时无法播放，继续读中文…":"单词读完，接着说中文意思…"):doneText());
-      if(hasMore)laterSp(playZh,STEP_GAP);
+      setRead("",wordFailed?"单词暂时无法播放，继续往下…":"接下来跟我读三遍");
+      laterSp(playFollow,STEP_GAP);
     };
     sayWord(w.en,next,playing=>{
       if(moved)return;
@@ -4288,8 +4931,14 @@ const paPwd=()=>SET.paPwd||PA_DEF;
 function openParentMode(){
   $("#paGate").style.display="";$("#paBody").style.display="none";
   $("#paPwd").value="";$("#paErr").textContent="";
+  verFold(false);                               /* 版本记录每次都先收起来 */
   $("#paModal").classList.add("show");
   setTimeout(()=>$("#paPwd").focus(),120);
+}
+/* 版本详细记录：展开 / 收起 */
+function verFold(open){
+  $("#verBody").style.display=open?"":"none";
+  $("#verToggle").textContent=open?"📜 收起版本详细记录 ▴":"📜 查看各版本详细记录 ▾";
 }
 function paUnlock(){
   if($("#paPwd").value.trim()!==paPwd()){
@@ -4300,6 +4949,7 @@ function paUnlock(){
 }
 /* 段落下拉 + 当前币值 */
 function renderPaPanel(){
+  syncDev();
   $("#paFam").textContent=S.family;
   $("#paCoin").textContent=S.coins;
   const sel=$("#paSeg"),keep=sel.value;
@@ -4357,10 +5007,69 @@ function resetAllWords(wipeRewards){
   resetSession();sess=null;
   save();
 }
+/* ---------- 开发者模式：段落单词表 --------------------------------
+   挑任意一个词单独看讲解、单独做测试，或者只进这一段的阅读理解。
+   这些会话都带 dev 标记：不计分、不写掌握记录、不动进度、不扣币。 */
+function openDevList(seg){
+  const ws=segWords(seg);
+  $("#devSegNum").textContent=seg+1;
+  $("#devSegTip").textContent=segTopic(seg)+" · 共 "+ws.length+" 词 · "+
+    (BOSS_STORY[seg]
+      ?("阅读理解 Lv."+bossLevel(seg)+"，"+BOSS_STORY[seg].lines.length+" 句")
+      :"这一段没有阅读理解");
+  $("#devWords").innerHTML=ws.map(w=>
+    '<div class="dw"><span class="en" lang="en">'+w.en+'</span>'+
+    '<span class="zh">'+w.zh+'</span>'+
+    '<span class="mk">'+(ANIMS[w.en]?"🎬":"")+(w.talk?"🗣":"")+(S.scored[w.en]?"✓":"")+'</span>'+
+    '<button data-dw="'+w.en+'" data-m="study">讲解</button>'+
+    '<button class="q" data-dw="'+w.en+'" data-m="quiz">测试</button></div>').join("");
+  document.querySelectorAll("#devWords button[data-dw]").forEach(b=>b.onclick=()=>{
+    $("#devModal").classList.remove("show");
+    devOneWord(seg,b.dataset.dw,b.dataset.m);
+  });
+  $("#devBoss").onclick=()=>{
+    if(!buildBossPaper(seg)){toast("这一段没有阅读理解（只有守关怪的段落才有）");return;}
+    $("#devModal").classList.remove("show");startBoss(seg,true);
+  };
+  $("#devAll").onclick=()=>{
+    $("#devModal").classList.remove("show");
+    startSegment(seg,null,true);goView("learn");
+    toast("🛠️ 第 "+(seg+1)+" 段整段讲解（调试，不记成绩）");
+  };
+  $("#devClose").onclick=()=>$("#devModal").classList.remove("show");
+  $("#devModal").classList.add("show");
+}
+/* 只针对一个词的调试会话：mode 为 study 看讲解、quiz 直接测试 */
+function devOneWord(seg,en,mode){
+  const w=segWords(seg).find(x=>x.en===en);
+  if(!w)return;
+  resetSession();
+  sess={seg:seg,allWords:[w],batches:[[w]],batchIdx:0,words:[w],
+        prog:{},earned:{},queue:[w],total:0,right:0,gained:0,
+        custom:true,dev:true,studied:mode==="quiz",warm:[]};
+  sess.prog[w.en]=0;
+  energy=0;studyIdx=0;renderHUD();
+  loadVoicePack(seg);
+  goView("learn");
+  if(mode==="quiz")nextQ();else renderStudy();
+  toast("🛠️ "+w.en+"（调试"+(mode==="quiz"?"测试":"讲解")+"，不记成绩）");
+}
+/* ---------- 开发者模式的开关 --------------------------------------
+   只影响「能不能买」和「能不能进」，不碰任何学习记录。 */
+function syncDev(){
+  document.querySelectorAll("#devBtns button").forEach(b=>b.classList.toggle("on",+b.dataset.v===+SET.dev));
+  const c=$("#devChip");if(c)c.style.display=DEV()?"":"none";
+}
+document.querySelectorAll("#devBtns button").forEach(b=>b.onclick=()=>{
+  SET.dev=+b.dataset.v;saveSet();syncDev();
+  renderMap();renderShop();SFX.click();
+  toast(DEV()?"🛠️ 开发者模式已打开：礼物免费、章节随便进":"开发者模式已关掉");
+});
 $("#paBtn").onclick=openParentMode;
 $("#paOk").onclick=paUnlock;
 $("#paPwd").onkeydown=e=>{if(e.key==="Enter")paUnlock();};
 $("#paClose").onclick=()=>$("#paModal").classList.remove("show");
+$("#verToggle").onclick=()=>{verFold($("#verBody").style.display==="none");SFX.click();};
 $("#paSeg").onchange=paSegInfo;
 document.querySelectorAll("#paBody button[data-pa]").forEach(b=>b.onclick=()=>{
   const k=b.dataset.pa;
@@ -4369,7 +5078,7 @@ document.querySelectorAll("#paBody button[data-pa]").forEach(b=>b.onclick=()=>{
   if(k==="fam-")S.family=Math.max(0,S.family-n($("#paFamN").value));
   if(k==="coin+")S.coins+=n($("#paCoinN").value);
   if(k==="coin-")S.coins=Math.max(0,S.coins-n($("#paCoinN").value));
-  if(k==="spin+")S.spins=Math.min(MAX_SPIN,S.spins+1);
+  if(k==="spin+")S.spins+=1;
   if(k==="x2+")S.x2+=1;
   save();renderHUD();renderPaPanel();SFX.click();
 });
@@ -4475,6 +5184,7 @@ function pickOthers(w,n){return shuffle(WORDS.filter(x=>x.en!==w.en)).slice(0,n)
 repairState();
 applyTheme();buildWheel();renderBadges();renderCards();renderMap();renderDaily();
 renderHUD();updateSpinUI();renderAch();checkAch();welcome();
+syncDev();                       /* 开发者模式开着的话，顶上先把提醒亮出来 */
 </script>
 
 <script>/* three.js r149 内嵌，离线可用 */
@@ -5468,15 +6178,26 @@ window.makeEggyBase=function(T){
   setTimeout(()=>{shown=0;$s("#spPNum")&&($s("#spPNum").textContent="0");paintProg(true);},1700);
   window.addEventListener("storage",e=>{if(!e.key||e.key===KEY)paintProg(true);});
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)paintProg(true);});
-  /* 第一次交互（点哪儿都算）就再试一次，直到真的出声为止 */
-  const kick=()=>{
-    BGM.start();
-    setTimeout(()=>{if(BGM.playing())offKick();},400);
-  };
+  /* 浏览器的自动播放策略有时放行、有时不放行，所以这里反复补试：
+     ① 任何一次真实交互（点、按键、触摸）都再试一次
+     ② 开机页还在的时候每 700ms 检查一次，没出声就再试一次（重复调用是安全的）
+     ③ 一直放不出来，就把右上角的音乐按钮点亮，提示手动点一下 */
+  const bgmT0=Date.now();
+  const tryBGM=()=>{if(alive&&+SET.bgm&&!BGM.playing())BGM.start();};
+  const kick=()=>tryBGM();
+  const KICK_EV=["pointerdown","pointerup","click","keydown","touchstart","touchend"];
+  KICK_EV.forEach(e=>window.addEventListener(e,kick,{passive:true}));
   function offKick(){
-    ["pointerdown","keydown","touchstart"].forEach(e=>window.removeEventListener(e,kick));
+    KICK_EV.forEach(e=>window.removeEventListener(e,kick));
+    if(bgmWatch){clearInterval(bgmWatch);bgmWatch=null;}
+    muteBtn.classList.remove("hint");
   }
-  ["pointerdown","keydown","touchstart"].forEach(e=>window.addEventListener(e,kick,{passive:true}));
+  let bgmWatch=setInterval(()=>{
+    if(!alive){offKick();return;}
+    tryBGM();
+    /* 开机 2 秒后还没出声，就认为被拦住了，亮一下按钮 */
+    muteBtn.classList.toggle("hint",+SET.bgm&&!BGM.playing()&&Date.now()-bgmT0>2000);
+  },700);
   muteBtn.onclick=e=>{
     e.stopPropagation();
     SET.bgm=+SET.bgm?0:1;
@@ -5488,7 +6209,9 @@ window.makeEggyBase=function(T){
   /* ---------- 退出开机界面 ---------- */
   function leave(){
     if(!alive)return;alive=false;
-    BGM.stop(1.4);                  /* 音乐淡出，别跟讲解语音抢 */
+    offKick();
+    /* 刚打开就点开始的话，音乐可能才被浏览器放行，这时快速收掉，别留一声怪响 */
+    BGM.stop(Date.now()-bgmT0>2500?1.4:.25);
     splash.classList.add("hide");
     document.body.style.overflow="";
     /* 借这次用户点击解锁语音（浏览器要求先有交互） */
@@ -5502,7 +6225,6 @@ window.makeEggyBase=function(T){
     },800);
   }
   $s("#spStart").onclick=leave;
-  $s("#spSkip").onclick=leave;
   document.body.style.overflow="hidden";
 
   /* ---------- 降级场景（没网 / three.js 加载失败） ---------- */
