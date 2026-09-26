@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.17.0</title>
-<meta name="app-version" content="1.17.0">
+<title>魔法单词学院 · v1.18.0</title>
+<meta name="app-version" content="1.18.0">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -1071,6 +1071,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
         <div id="verBody" style="display:none;margin-top:6px">
         <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.18.0</b>：整本词表补齐。① 剩下 317 个词的「怎么记住它」全部写完，现在 482 个词每一个都有讲解和一条额外例句，讲的都是拆词根、双写字母、不发音的字母、重音落在哪这类真能用上的记忆点。② 这 317 个词的中文意思和讲解也全部用豆包合成了真人语音，voice 文件夹里新增 seg11 到 seg25 共 15 个音频包，964 条语音、44 MB，前 10 段的老音频不变。③ 动态演示做到了全覆盖：原来只有 32 个词有手绘小剧场，现在其余 450 个词会按模板现场生成三幕动画，第一幕看图记意思，第二幕讲拼写，复合词会拆成两半，其余的摊成字母牌并把双写字母、不出声的字母标黄，第三幕是例句。开发者模式的单词表里，🎬 表示手绘，🎞 表示自动生成。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.17.0</b>：① 打赢守关怪不再固定给「50 分 + 2 次转盘」，奖励全部来自盲盒——挑一个 🎁 点开，拿到转盘 +2（25%）、转盘 +3（20%）、积分 +30（25%）、积分 +50（20%）、积分 +100（10%）其中一种。② 转盘次数取消 4 次上限，通关、每日任务、盲盒给的次数都往上累加，不会再浪费。③ 这个「版本与回退」区块默认收起，点上面的按钮才展开，家长模式不用再一路往下滑。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.16.0</b>：打赢守关怪后加了一次盲盒，胜利画面上三个 🎁 挑一个点开，没开盲盒不会出现「收下奖励」按钮。开发者模式里也能看盲盒动画，但不会真的发奖。</p>
@@ -1139,7 +1141,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <button class="btn sm ghost" id="devAll">📖 整段从头讲</button>
     </div>
     <div class="dev-words" id="devWords"></div>
-    <p class="tips" style="text-align:left">🎬 有动画 · 🗣 有讲解词 · ✓ 孩子已掌握。
+    <p class="tips" style="text-align:left">🎬 手绘动画 · 🎞 自动动画 · 🗣 有讲解词 · ✓ 孩子已掌握。
       从这里进去的讲解、测试、阅读理解都不计分、不写学习记录、不扣魔法币。</p>
     <button class="btn ghost" id="devClose" style="width:100%">关闭</button>
   </div>
@@ -2055,7 +2057,671 @@ const TALKS={
  timetable:{talk:"time 是时间，table 是表格。把时间排成一张表，就是课程表。",
    ex:[{en:"Look at the timetable.",zh:"看看课程表。"}]},
  dictionary:{talk:"词典。读四拍：dic、tio、na、ry。不认识的词，问它就行。",
-   ex:[{en:"Use a dictionary.",zh:"查查词典。"}]}
+   ex:[{en:"Use a dictionary.",zh:"查查词典。"}]},
+ /* ---------- 第 11 段 ---------- */
+ university:{talk:"university 是大学。它比 college 大得多，里面一个学院一个学院的。读的时候重音在第三拍 ver 上，前面几拍轻轻带过。",
+   ex:[{en:"She studies at a university.",zh:"她在一所大学读书。"}]},
+ headteacher:{talk:"head 是头儿，teacher 是老师。学校里管着所有老师的那个头儿，就是校长。两个词连着写，中间不空格。",
+   ex:[{en:"Our headteacher is very kind.",zh:"我们校长很和气。"}]},
+ schoolchild:{talk:"school 是学校，child 是小孩。上学的小孩就是学童。它变复数很特别，是 schoolchildren，跟 children 一样。",
+   ex:[{en:"The schoolchild is only six.",zh:"这个学童才六岁。"}]},
+ "a.m.":{talk:"a.m. 表示上午。两个字母后面各有一个小点，别漏掉。记住 a 排在字母表最前面，所以它管前半天。",
+   ex:[{en:"The train leaves at six a.m.",zh:"火车早上六点开。"}]},
+ "p.m.":{talk:"p.m. 表示下午和晚上，正好跟 a.m. 反着。a 在前面，p 在后面，所以 p 管后半天。那两个小点同样别忘。",
+   ex:[{en:"The shop closes at nine p.m.",zh:"商店晚上九点关门。"}]},
+ hour:{talk:"hour 是小时。开头那个 h 不出声，所以它跟 our 读音一模一样。前面要用 an，说 an hour。",
+   ex:[{en:"We waited for an hour.",zh:"我们等了一个小时。"}]},
+ noon:{talk:"noon 是正午，就是中午十二点。两个 o 夹在两个 n 中间，前后对称。中午过后那半天就叫 afternoon。",
+   ex:[{en:"It is very hot at noon.",zh:"正午很热。"}]},
+ till:{talk:"till 就是「直到」，跟 until 一个意思，只是短一些。注意结尾是两个 l，别少写一个。",
+   ex:[{en:"I stay here till six.",zh:"我在这儿待到六点。"}]},
+ daily:{talk:"day 加上 ly 就是每天的。可拼的时候要小心，y 得先变成 i，写成 daily。报纸上写着 daily 的，就是日报。",
+   ex:[{en:"She takes a daily walk.",zh:"她每天散步。"}]},
+ later:{talk:"late 是晚，后面加个 r 就成了 later，过一会儿。跟人说再见常用 see you later。就多一个字母，意思变了。",
+   ex:[{en:"I will call you later.",zh:"我待会儿给你打电话。"}]},
+ midday:{talk:"mid 是中间，day 是一天。一天的正中间就是正午，跟 noon 说的是同一个时候。中间两个 d，别漏掉一个。",
+   ex:[{en:"We had lunch at midday.",zh:"我们中午吃了饭。"}]},
+ minute:{talk:"minute 是分钟，重音在前一拍，听着像「米尼特」，结尾的 e 不出声。重音挪到后面，它就变成「微小的」。",
+   ex:[{en:"The bus comes in five minutes.",zh:"公交车五分钟后到。"}]},
+ moment:{talk:"moment 就是很短的一会儿，比一分钟还短。mo 加上 ment，重音在最前面。让人稍等就说 just a moment。",
+   ex:[{en:"He left a moment ago.",zh:"他刚刚走了。"}]},
+ weekly:{talk:"week 是星期，加上 ly 就是每周的。它跟 daily 是一家人，只是不用改字母，直接加。周刊就是 weekly magazine。",
+   ex:[{en:"We have a weekly test.",zh:"我们每周有一次测验。"}]},
+ monthly:{talk:"month 是月，加 ly 就是每月的。它跟 daily 和 weekly 排成一队，一个管天，一个管周，一个管月。",
+   ex:[{en:"This is a monthly meeting.",zh:"这是每月一次的会。"}]},
+ lunchtime:{talk:"lunch 是午饭，time 是时间。吃午饭的那段时候就是 lunchtime，连着写。晚饭时间也能这么说，dinner time。",
+   ex:[{en:"Let's talk at lunchtime.",zh:"午饭时间再聊。"}]},
+ September:{talk:"September 是九月，开头必须大写，所有月份都这样。它常缩写成 Sep。读的时候重音在中间那拍 tem 上。",
+   ex:[{en:"My birthday is in September.",zh:"我的生日在九月。"}]},
+ gram:{talk:"gram 是克，很轻的单位，一颗糖也就几克。前面加上表示一千的 kilo，就成了 kilogram，千克。",
+   ex:[{en:"Add fifty grams of butter.",zh:"加五十克黄油。"}]},
+ plus:{talk:"plus 是加。算术题里那个小十字，念出来就是 plus。它的对头是 minus，减。结尾是 s，可它不是复数。",
+   ex:[{en:"Four plus four is eight.",zh:"四加四等于八。"}]},
+ zero:{talk:"zero 就是零。读两拍，重音在前面，听着像「贼柔」。念电话号码的时候，英国人常把零念成 oh。",
+   ex:[{en:"My score was zero.",zh:"我得了零分。"}]},
+
+ /* ---------- 第 12 段 ---------- */
+ litre:{talk:"litre 是升，一大瓶矿泉水差不多就是一升。英国人写 litre，美国人把最后两个字母调个头，写成 liter。",
+   ex:[{en:"Buy two litres of milk.",zh:"买两升牛奶。"}]},
+ metre:{talk:"metre 是米，一米差不多是你一大步半。它跟 litre 一样，英国写 tre 结尾，美国写 ter，变成 meter。",
+   ex:[{en:"The wall is two metres high.",zh:"这面墙两米高。"}]},
+ minus:{talk:"minus 是减，也表示零下几度。它开头那个 i 读「爱」，听着像「买纳斯」。它跟 plus 是一对。",
+   ex:[{en:"It is minus two today.",zh:"今天零下两度。"}]},
+ degree:{talk:"degree 是度，说气温就用它，温度计上那个小圈念出来就是 degree。它还能指大学学位。结尾是两个 e。",
+   ex:[{en:"Water boils at one hundred degrees.",zh:"水一百度就沸腾。"}]},
+ double:{talk:"double 是双倍的，也就是两份。它里头的 ou 不读「奥」，整个词听起来像「达波」。宾馆的双人间就叫 double room。",
+   ex:[{en:"This is a double bed.",zh:"这是一张双人床。"}]},
+ length:{talk:"long 是长，它的名词长度是 length。中间的 o 要换成 e，后面跟着 gth 三个字母，很容易写漏。",
+   ex:[{en:"Measure the length of your desk.",zh:"量一量你书桌的长度。"}]},
+ million:{talk:"million 是一百万。中间是两个 l，别少写一个。前面有具体数字的时候后面不加 s，说 five million。",
+   ex:[{en:"A million people live here.",zh:"有一百万人住在这里。"}]},
+ quarter:{talk:"quarter 是四分之一。看看钟表，一刻钟正好是一小时的四分之一。开头的 qu 两个字母总是手拉手出现。",
+   ex:[{en:"I ate a quarter of the pizza.",zh:"我吃了四分之一块披萨。"}]},
+ several:{talk:"several 是好几个，比 some 具体一点，大概三四个。它看着四拍，其实只读三拍，中间那个 e 几乎听不见。",
+   ex:[{en:"I waited several days.",zh:"我等了好几天。"}]},
+ kilogram:{talk:"kilo 是一千，gram 是克。一千克合起来就是千克，也就是我们平时说的一公斤。称体重用的就是它。",
+   ex:[{en:"The baby weighs four kilograms.",zh:"这个宝宝重四千克。"}]},
+ kilometre:{talk:"还是那个表示一千的 kilo，后面换成 metre 米。一千米就是一公里。跑步机上跳的那个数字，说的就是它。",
+   ex:[{en:"I ran three kilometres today.",zh:"我今天跑了三公里。"}]},
+ centimetre:{talk:"centi 表示百分之一，metre 是米。一米的百分之一就是厘米。尺子上最小的那种格子，一格就是一厘米。",
+   ex:[{en:"My pencil is ten centimetres long.",zh:"我的铅笔十厘米长。"}]},
+ temperature:{talk:"temperature 是温度，也指体温。量体温就说 take a temperature。它看着老长，读起来其实只有三拍。",
+   ex:[{en:"The temperature is going down.",zh:"温度在下降。"}]},
+ bee:{talk:"bee 是蜜蜂，就三个字母。结尾两个 e 读长长的「衣」，听着真有点像蜜蜂嗡嗡。它跟 see 和 tree 押韵。",
+   ex:[{en:"The bee is on my hand.",zh:"蜜蜂落在我手上。"}]},
+ nest:{talk:"nest 是鸟巢。它跟休息 rest 只差开头一个字母，鸟儿回巢就是回去休息，两个词连着记最省劲。",
+   ex:[{en:"There are four eggs in the nest.",zh:"巢里有四个蛋。"}]},
+ swan:{talk:"swan 是天鹅。它中间那个 a 不读「诶」，整个词听起来像「斯旺」。它跟 swim 一样以 sw 开头，天鹅也会游水。",
+   ex:[{en:"A swan is in the lake.",zh:"湖里有一只天鹅。"}]},
+ wing:{talk:"wing 是翅膀，飞机的机翼也用它。它跟秋千 swing 押韵，前面加个 s 就成了秋千，荡起来还真像扇翅膀。",
+   ex:[{en:"The plane has two wings.",zh:"飞机有两只机翼。"}]},
+ camel:{talk:"camel 是骆驼。重音在前面，读起来像「卡摸」。记住结尾是 el 不是 le。骆驼背上有一个或者两个驼峰。",
+   ex:[{en:"The camel walks very slowly.",zh:"骆驼走得很慢。"}]},
+ snail:{talk:"snail 是蜗牛。它跟钉子 nail 只差开头一个 s，读出来也就多一声「斯」。蜗牛背着壳，慢慢地爬。",
+   ex:[{en:"I found a snail in the garden.",zh:"我在花园里找到一只蜗牛。"}]},
+ beetle:{talk:"beetle 是甲虫，背上有一层硬壳。前面那两个 e 读长长的「衣」，跟 bee 一样。别把结尾的 tle 写成 tel。",
+   ex:[{en:"The beetle is black and shiny.",zh:"这只甲虫又黑又亮。"}]},
+
+ /* ---------- 第 13 段 ---------- */
+ desert:{talk:"desert 是沙漠。它跟甜点 dessert 只差一个 s，沙漠里缺水，所以 s 也缺一个。它的重音在最前面那拍。",
+   ex:[{en:"The desert is very dry.",zh:"沙漠非常干。"}]},
+ donkey:{talk:"donkey 是驴。它结尾正好是钥匙 key 那三个字母，看一眼就记住了。变复数直接加 s，写成 donkeys。",
+   ex:[{en:"The donkey is eating grass.",zh:"驴在吃草。"}]},
+ extinct:{talk:"extinct 是灭绝的，一个都不剩了，恐龙就是 extinct。它跟出口 exit 一样以 ex 开头，ex 有出去、没了的意思。",
+   ex:[{en:"This bird is now extinct.",zh:"这种鸟现在灭绝了。"}]},
+ creature:{talk:"create 是创造，换个尾巴加上 ure，就成了 creature，生物。被造出来的活物都算 creature。重音在最前面。",
+   ex:[{en:"The sea has many creatures.",zh:"海里有很多生物。"}]},
+ kangaroo:{talk:"kangaroo 是袋鼠，结尾是两个 o，读三拍，重音落在最后那声「鹿」上。妈妈肚子上有个口袋，宝宝就藏在里头。",
+   ex:[{en:"A kangaroo can jump very far.",zh:"袋鼠能跳得很远。"}]},
+ tortoise:{talk:"tortoise 是住在陆地上的龟，海里游的那种叫 turtle。它结尾 oise 四个字母读得很轻，听着像「拓特斯」。",
+   ex:[{en:"My tortoise eats green leaves.",zh:"我的陆龟吃绿叶子。"}]},
+ wildlife:{talk:"wild 是野生的，life 是生命。野外自己活着的那些动物，就是 wildlife。它当一个整体看，后面不加 s。",
+   ex:[{en:"This park is full of wildlife.",zh:"这个公园里有很多野生动物。"}]},
+ jellyfish:{talk:"jelly 是果冻，fish 是鱼。软软的像果冻一样的鱼，那就是水母。它的复数不变样，还是 jellyfish。",
+   ex:[{en:"Do not touch that jellyfish.",zh:"别碰那只水母。"}]},
+ countryside:{talk:"country 是国家，也指乡村，side 是一边。城市以外那一片，就是乡下。去乡下玩就说 go to the countryside。",
+   ex:[{en:"We cycle in the countryside.",zh:"我们在乡下骑车。"}]},
+ environment:{talk:"environment 是环境。最容易写错的地方是 ment 前面那个 n，千万别漏。重音在中间那拍，读出来像「爱」。",
+   ex:[{en:"Trees are good for the environment.",zh:"树对环境有好处。"}]},
+ dry:{talk:"dry 是干的，也能当动词，把东西弄干。它一个元音字母都没有，全靠结尾的 y 顶着，读「爱」。它的对头是 wet。",
+   ex:[{en:"Please dry your hands.",zh:"请把手擦干。"}]},
+ wet:{talk:"wet 是湿的，就三个字母，跟 get 和 pet 押韵。它跟 dry 正好反着，淋了雨就 wet，太阳一晒又 dry 了。",
+   ex:[{en:"The floor is wet.",zh:"地板是湿的。"}]},
+ wood:{talk:"wood 是木头。它跟 would 读音一样，可拼法完全不同。两个 o 挨着读短短的「乌」。一片小树林也叫 wood。",
+   ex:[{en:"We put wood on the fire.",zh:"我们往火里加木头。"}]},
+ metal:{talk:"metal 是金属。它跟奖牌 medal 长得特别像，一个中间是 t，一个中间是 d，看清楚再写。重音在前面一拍。",
+   ex:[{en:"This spoon is metal.",zh:"这把勺子是金属的。"}]},
+ wooden:{talk:"wood 是木头，后面加上 en 就是木制的。木盒子就说 wooden box。记住中间那两个 o，一个都不能少。",
+   ex:[{en:"I sat on a wooden chair.",zh:"我坐在一把木椅子上。"}]},
+ leather:{talk:"leather 是皮革，牛皮羊皮做出来的那种。它跟天气 weather 押韵，只是开头换成了 l。皮鞋就是 leather shoes。",
+   ex:[{en:"This leather bag is new.",zh:"这个皮包是新的。"}]},
+ plastic:{talk:"plastic 是塑料。它跟 fantastic 一样以 stic 收尾，重音都在最前面那一拍。装东西的塑料袋就说 plastic bag。",
+   ex:[{en:"This chair is made of plastic.",zh:"这把椅子是塑料做的。"}]},
+ thunderstorm:{talk:"thunder 是雷，storm 是暴风雨。雷和暴风雨凑一块儿，就是雷雨。开头那个 th 要把舌头轻轻放在牙齿中间。",
+   ex:[{en:"The thunderstorm woke me up.",zh:"雷雨把我吵醒了。"}]},
+ cash:{talk:"cash 是现金，手里的纸钞和硬币，刷卡就不算 cash 了。它中间的 a 跟 cat 里那个 a 一个音，结尾 sh 轻轻吐气。",
+   ex:[{en:"I have no cash today.",zh:"我今天没带现金。"}]},
+ earn:{talk:"earn 是挣钱。你看它里头藏着一个 ear 耳朵，可读起来一点不像耳朵，听着像「厄恩」。挣钱就说 earn money。",
+   ex:[{en:"She earns ten pounds a day.",zh:"她一天挣十英镑。"}]},
+
+ /* ---------- 第 14 段 ---------- */
+ euro:{talk:"euro 是欧元，欧洲好多国家都用这种钱。它跟 Europe 欧洲是一家人，开头都是 Eur 三个字母。读出来像「尤罗」，重音在前面。",
+   ex:[{en:"I have two euros.",zh:"我有两欧元。"}]},
+ lend:{talk:"lend 是借出，东西从你手里交到别人手里。要是同学跟你要笔，他会说 lend me a pen。记住方向，是往外给。",
+   ex:[{en:"I will lend you my book.",zh:"我把我的书借给你。"}]},
+ sale:{talk:"sale 是打折出售。商店玻璃上贴着大大的 sale，就是在降价卖。它跟动词 sell 卖是一家人，只是把 ll 换成了 le。",
+   ex:[{en:"There is a big sale today.",zh:"今天有大减价。"}]},
+ save:{talk:"save 有两个意思，一个是救，一个是存钱。其实是一回事，都是把东西保住不让它丢掉。存钱罐里的钱就是你 save 下来的。",
+   ex:[{en:"He saved a little cat.",zh:"他救了一只小猫。"}]},
+ pence:{talk:"pence 是便士，英国最小的那种钱。一个便士叫 penny，好几个就变成 pence，这个复数特别不讲道理，得硬记住。",
+   ex:[{en:"I only have ten pence.",zh:"我只有十便士。"}]},
+ pound:{talk:"pound 是英镑，英国人花的钱。它还有一个意思是重量单位磅，一个词既管钱又管秤。中间的 ou 读出来像「奥」。",
+   ex:[{en:"This book is one pound.",zh:"这本书一英镑。"}]},
+ price:{talk:"price 是价格。超市货架上那张小标签写的数字，就是 price。它跟米饭 rice 押韵，前面多一个 p，听着像「普赖斯」。",
+   ex:[{en:"What is the price?",zh:"价钱是多少？"}]},
+ store:{talk:"store 是商店，美国人爱这么说，英国人多说 shop。它还有一个意思是储存，把东西收起来放好，仓库里干的就是这事。",
+   ex:[{en:"The store opens at nine.",zh:"这家店九点开门。"}]},
+ borrow:{talk:"borrow 是借进来，东西跑到你手里。刚学过的 lend 是借出去，两个方向正好相反。拼的时候中间要双写 r，别少一个。",
+   ex:[{en:"He borrowed my bike.",zh:"他借走了我的自行车。"}]},
+ cheque:{talk:"cheque 是支票。后面那串 que 只出一个音，整个词读起来就是「切克」。美国人写成 check，英国人才写 cheque。",
+   ex:[{en:"I lost my cheque.",zh:"我丢了我的支票。"}]},
+ dollar:{talk:"dollar 是美元。它结尾是 ar 不是 er，这个地方最容易写错。中间还要双写 l，读的时候重音落在最前面。",
+   ex:[{en:"A dollar is not much.",zh:"一美元不算多。"}]},
+ wallet:{talk:"wallet 是钱包，放钞票和卡的那种扁扁的。中间是两个 l，后面跟着 et。女士用的小包一般说 purse，不太一样。",
+   ex:[{en:"I found a wallet on the bus.",zh:"我在公交车上找到一个钱包。"}]},
+ receipt:{talk:"receipt 是收据。它最坑的地方是中间那个 p 不发音，听起来像「瑞西特」。收银员给你的那张小纸条就是它。",
+   ex:[{en:"Keep the receipt, please.",zh:"请把收据留着。"}]},
+ shopper:{talk:"shop 是商店，把最后那个 p 双写再加 er，就是买东西的人。这个规矩你见过，跑步的人 runner 也是先双写再加 er。",
+   ex:[{en:"Many shoppers came today.",zh:"今天来了很多购物的人。"}]},
+ customer:{talk:"customer 是顾客，进店花钱的那个人。它跟 custom 习惯有关，老是习惯来这家店，那就成了熟客。读三拍，重音在最前面。",
+   ex:[{en:"A customer is waiting.",zh:"有位顾客在等着。"}]},
+ discount:{talk:"dis 有减掉的意思，count 是数。从价钱里减掉一点，就是折扣。在收银台听到 discount，那就是要便宜了。",
+   ex:[{en:"We got a big discount.",zh:"我们拿到很大的折扣。"}]},
+ bookstore:{talk:"book 是书，store 是店，两个一凑就是书店。刚学的 store 跑来跟 book 做了邻居，中间不空格，一个词写到底。",
+   ex:[{en:"The bookstore is next door.",zh:"书店就在隔壁。"}]},
+ drugstore:{talk:"drug 是药，store 是店，合起来就是美式说的药房。这种店挺有趣，除了药还卖牙膏和零食，什么都有。",
+   ex:[{en:"Is there a drugstore near here?",zh:"这附近有药店吗？"}]},
+ "half-price":{talk:"half 是一半，price 是价钱，一半的价钱就是半价。中间那个小横线别忘了写。half 里的 l 不发音，读着像「哈夫」。",
+   ex:[{en:"I bought it at half-price.",zh:"我半价买到的。"}]},
+ department:{talk:"department 是部门。大商场里分成好多区，每一区就是一个 department。它读四拍，重音落在第二拍 part 上面。",
+   ex:[{en:"Which department do you want?",zh:"你要去哪个部门？"}]},
+
+ /* ---------- 第 15 段 ---------- */
+ "grocery store":{talk:"grocery 是食品杂货，store 是店，合起来就是卖菜卖米的杂货店。写的时候中间要空一格，它是两个词。",
+   ex:[{en:"I walk to the grocery store.",zh:"我走去杂货店。"}]},
+ "department store":{talk:"刚学的 department 是部门，后面再放一个 store。一层一层分成好多部门的大店，就是百货商店。中间空一格。",
+   ex:[{en:"The department store is very big.",zh:"这家百货商店很大。"}]},
+ cafe:{talk:"cafe 是咖啡馆。它跟 coffee 是一家人，都从同一个老词来的。结尾那个 e 要出声，整个词读起来像「卡费」。",
+   ex:[{en:"There is a cafe near my school.",zh:"我学校附近有家咖啡馆。"}]},
+ club:{talk:"club 是俱乐部，也指学校里的社团。棋类社团就说 chess club。它还有一个意思是棍棒，一个词管两件不相干的事。",
+   ex:[{en:"I go to the club on Friday.",zh:"我星期五去社团。"}]},
+ exit:{talk:"exit 是出口。开头的 ex 有出去的意思，商场门上那块绿牌子写的就是它。找不到路的时候，就先找 exit。",
+   ex:[{en:"Where is the exit?",zh:"出口在哪儿？"}]},
+ sign:{talk:"sign 是标志，也是签名。它中间那个 g 不发音，读出来像「赛恩」。可一加上 al 变成 signal 信号，那个 g 又出声了。",
+   ex:[{en:"Please sign your name here.",zh:"请在这里签名。"}]},
+ closed:{talk:"close 是关，后面加个 d 就是关着的。店门上挂着 closed，那就是今天不做生意了。反过来开门的牌子写 open。",
+   ex:[{en:"The door is closed.",zh:"门是关着的。"}]},
+ square:{talk:"square 是正方形，也是广场。想一想，广场一般都方方正正的，两个意思就连上了。开头 squ 三个字母要黏在一起读。",
+   ex:[{en:"We met in the square.",zh:"我们在广场上见面。"}]},
+ chemist:{talk:"chemist 是药剂师，在英国这个词还直接指药店。它开头的 ch 不读「彻」，要读成「克」，听着像「凯米斯特」。",
+   ex:[{en:"Ask the chemist about it.",zh:"这件事问问药剂师。"}]},
+ factory:{talk:"factory 是工厂。它跟 fact 事实长得像，可意思一点不搭，别混在一起。变复数要把 y 改成 i 再加 es，写成 factories。",
+   ex:[{en:"The factory is very noisy.",zh:"这家工厂很吵。"}]},
+ gallery:{talk:"gallery 是美术馆，墙上挂满画的那种地方。中间是两个 l，别少写一个。它读三拍，重音在最前面的 ga 上。",
+   ex:[{en:"The gallery is free today.",zh:"美术馆今天免费。"}]},
+ pharmacy:{talk:"pharmacy 也是药房。它开头是 ph，这两个字母合读一个 f 的音，听着像「法马西」。英国人更爱用 chemist 这个词。",
+   ex:[{en:"I need to find a pharmacy.",zh:"我得找家药房。"}]},
+ gas:{talk:"gas 是汽油，美国人这么说。它还有一个意思是气体。就三个字母，很好记。美国的加油站就叫 gas station。",
+   ex:[{en:"The gas is too expensive.",zh:"汽油太贵了。"}]},
+ seat:{talk:"seat 是座位。它跟 sit 坐是一家人，坐下去的那个地方就是座位。中间 ea 读长长的「衣」，跟 eat 吃一个读法。",
+   ex:[{en:"This seat is free.",zh:"这个座位空着。"}]},
+ tram:{talk:"tram 是有轨电车，顺着地上的铁轨慢慢走。它跟火车 train 开头三个字母一样，可 tram 短得多，车也短得多。",
+   ex:[{en:"The tram is coming.",zh:"电车来了。"}]},
+ tyre:{talk:"tyre 是轮胎，英国人这么写，美国人写成 tire。要当心，tire 还有一个意思是累。两种写法都对，看你跟谁说话。",
+   ex:[{en:"This tyre is new.",zh:"这个轮胎是新的。"}]},
+ delay:{talk:"delay 是延误，也是推迟。车站大屏幕上写着 delay，那就是车晚点了。它的重音落在后面那一拍，读着像「迪来」。",
+   ex:[{en:"Sorry about the delay.",zh:"很抱歉晚了。"}]},
+ engine:{talk:"engine 是发动机。它开头读「恩」，后面 gine 读「进」，合起来像「恩进」。工程师 engineer 就是从这个词长出来的。",
+   ex:[{en:"The engine stopped.",zh:"发动机停了。"}]},
+ petrol:{talk:"petrol 是汽油，英国人这么说，美国人说 gas。加油站就叫 petrol station。别跟 patrol 巡逻搞混，那个中间是 a。",
+   ex:[{en:"We stopped for petrol.",zh:"我们停下来加油。"}]},
+ return:{talk:"re 有往回、再一次的意思，turn 是转。转回去，就是返回，也是把东西还回去。往返车票就叫 return ticket。",
+   ex:[{en:"When will you return?",zh:"你什么时候回来？"}]},
+
+ /* ---------- 第 16 段 ---------- */
+ delayed:{talk:"delay 是延误，后面加 ed 就成了延误的。机场屏幕上航班后面写着 delayed，那就得等了。准点的话写 on time。",
+   ex:[{en:"Our bus was delayed.",zh:"我们的公交车晚了。"}]},
+ scooter:{talk:"scooter 是踏板车，一只脚踩着往前滑的那种。中间双写 o，读长长的「乌」，跟 shoot 里的 oo 一样，后面再加 ter。",
+   ex:[{en:"My scooter is red.",zh:"我的踏板车是红色的。"}]},
+ motorway:{talk:"motor 是马达发动机，way 是路。让汽车放开跑的那条大路，就是高速公路。美国人更爱说 highway。",
+   ex:[{en:"The motorway is very busy.",zh:"高速公路上车很多。"}]},
+ transport:{talk:"trans 有从这边到那边的意思，port 跟搬运有关。把人和东西送到别处去，那就是交通运输。公交地铁都算 transport。",
+   ex:[{en:"I go by public transport.",zh:"我坐公共交通工具。"}]},
+ "parking lot":{talk:"park 除了公园还有停车的意思，加 ing 变成 parking。lot 是一块地。一块专门用来停车的地，就是停车场。",
+   ex:[{en:"We left the car in the parking lot.",zh:"我们把车停在停车场。"}]},
+ roundabout:{talk:"round 是圆的，about 是绕着。车子绕着一个大圆圈转出去，那就是环岛。两个熟词凑一块，中间不空格。",
+   ex:[{en:"Turn left at the roundabout.",zh:"在环岛左转。"}]},
+ tour:{talk:"tour 是旅行游览，转一大圈再回来那种。带你转的人叫 tour guide，跟着转的人叫 tourist。它只读一拍，像「吐儿」。",
+   ex:[{en:"The tour starts at nine.",zh:"游览九点开始。"}]},
+ guest:{talk:"guest 是客人，来你家吃饭或者住旅馆的那个人。它开头那个 u 不出声，只是陪着 g 站在那儿，读着像「盖斯特」。",
+   ex:[{en:"Our guest is very kind.",zh:"我们的客人很和气。"}]},
+ luggage:{talk:"luggage 是行李。中间要双写 g，结尾是 age，这两处最容易写错。它当一整堆看，不加 s，再多箱子也是 luggage。",
+   ex:[{en:"Put the luggage in the car.",zh:"把行李放进车里。"}]},
+ visitor:{talk:"visit 是拜访，后面加 or 就是来访的人。注意是 or 不是 er，这个尾巴要记牢。博物馆里转的人都是 visitors。",
+   ex:[{en:"The visitor waited outside.",zh:"来客在外面等着。"}]},
+ backpack:{talk:"back 是背，pack 是包。背在背上的那种包，就是双肩背包。两个词里都有 ack，看着特别整齐，好记。",
+   ex:[{en:"Put it in your backpack.",zh:"把它放进你的背包。"}]},
+ campsite:{talk:"camp 是露营，site 是地点。露营用的那块地，就是营地。site 这个词你见过，网站 website 后半截也是它。",
+   ex:[{en:"The campsite is near a river.",zh:"营地在一条河边。"}]},
+ passport:{talk:"pass 是通过，port 是港口关口。有了它就能过关，那就是护照。中间要双写 s，别少写一个，出门可全靠这本。",
+   ex:[{en:"I left my passport at home.",zh:"我把护照忘在家了。"}]},
+ guidebook:{talk:"guide 是指南向导，book 是书。给你指路的书，就是旅行指南。guide 开头那个 u 也不出声，跟 guest 一个样。",
+   ex:[{en:"This guidebook is very useful.",zh:"这本旅行指南很有用。"}]},
+ "guest-house":{talk:"guest 是客人，house 是房子。给客人住的小房子，就是家庭旅馆。中间那个小横线别忘了写上去。",
+   ex:[{en:"The guest-house has six rooms.",zh:"这家家庭旅馆有六个房间。"}]},
+ appointment:{talk:"appoint 是约定，后面加 ment 就变成约好的这件事，预约。看牙医前要先约好，那就是 appointment。中间双写 p。",
+   ex:[{en:"I made an appointment.",zh:"我约好了。"}]},
+ accommodation:{talk:"accommodation 是住宿。它最容易拼错，先双写 c，再双写 m，两对挨着排。读五拍，重音落在 da 那一拍上。",
+   ex:[{en:"We need accommodation for two nights.",zh:"我们需要住两晚。"}]},
+ goal:{talk:"goal 是球门，球进了大家也喊 goal。它还有一个意思是目标，心里想达到的那个地方。中间 oa 读长长的「欧」。",
+   ex:[{en:"Our team needs one more goal.",zh:"我们队还需要一个球。"}]},
+ sail:{talk:"sail 是航行，船上那张兜风的帆也叫 sail。它跟打折 sale 读音一模一样，可拼法不同，一个是 ail，一个是 ale。",
+   ex:[{en:"The boat can sail fast.",zh:"这条船能开得很快。"}]},
+ court:{talk:"court 是球场，打网球那块地就是它。它还有一个意思是法庭。中间 our 只读一个长音，整个词听着像「考特」。",
+   ex:[{en:"The court is wet today.",zh:"球场今天是湿的。"}]},
+ final:{talk:"final 是最后的，比赛的决赛也叫 final。它跟 finish 结束是一家人，都从同一个老词来。前面那个 i 读「爱」。",
+   ex:[{en:"Who won the final?",zh:"谁赢了决赛？"}]},
+
+ /* ---------- 第 17 段 ---------- */
+ rugby:{talk:"rugby 是橄榄球。这个名字来自英国一所叫 Rugby 的学校，那里的学生最早玩这种球。读的时候重音在前面，像「拉格比」。",
+   ex:[{en:"We watched a rugby match.",zh:"我们看了一场橄榄球比赛。"}]},
+ score:{talk:"score 是得分，也是比分。它跟 more 押韵，中间那个音拉得长长的。看球的时候大屏幕上那两个数字，就是 score。",
+   ex:[{en:"The score was two to one.",zh:"比分是二比一。"}]},
+ runner:{talk:"run 是跑，后面加 er 就是跑步的人。要注意 n 得写两个，先双写再加 er。游泳的人 swimmer 也是这个规矩。",
+   ex:[{en:"He is a good runner.",zh:"他很会跑。"}]},
+ soccer:{talk:"soccer 和 football 说的是同一种球，美国人爱说 soccer，英国人说 football。中间是两个 c，别漏掉一个。",
+   ex:[{en:"Let's play soccer after school.",zh:"放学后我们踢足球吧。"}]},
+ versus:{talk:"versus 就是「对」，中国对日本就用它。赛程表上常常缩写成 vs，只留两个字母。读的时候重音在前面一拍。",
+   ex:[{en:"Today it is red versus blue.",zh:"今天是红队对蓝队。"}]},
+ cricket:{talk:"cricket 是板球，在英国特别流行。这个词还有一个意思，是会叫的那种小虫子蟋蟀。一个词管两件事，一起记住。",
+   ex:[{en:"My dad likes cricket.",zh:"我爸爸喜欢板球。"}]},
+ Olympic:{talk:"Olympic 说的是奥运会的。它开头必须大写，因为来自希腊一个叫 Olympia 的地方。奥运会就是 the Olympic Games。",
+   ex:[{en:"She won an Olympic medal.",zh:"她赢得一枚奥运奖牌。"}]},
+ stadium:{talk:"stadium 是体育场，看球时坐满人的那种大场子。读三拍，sta di um，重音在第一拍。变复数就加 s，stadiums。",
+   ex:[{en:"We ran to the stadium.",zh:"我们跑去体育场。"}]},
+ snowboard:{talk:"这个词拆开就懂了，snow 是雪，board 是板。踩着一块板从雪山上滑下来，那就是单板滑雪板。",
+   ex:[{en:"I can ride a snowboard.",zh:"我会踩单板滑雪。"}]},
+ surfboard:{talk:"surf 是冲浪，board 还是板。合起来就是冲浪板。它跟 snowboard 是一家的，一个在雪上用，一个在海上用。",
+   ex:[{en:"My surfboard is blue.",zh:"我的冲浪板是蓝色的。"}]},
+ windsurfing:{talk:"wind 是风，surfing 是冲浪。板子上立一张帆，让风推着走，这就是帆板。中间不空格，一个词写到底。",
+   ex:[{en:"Windsurfing looks fun.",zh:"帆板看起来很好玩。"}]},
+ surfboarding:{talk:"就是刚才的 surfboard 后面挂个 ing，变成这项运动本身。英语里好多运动都这样，后面加 ing 就成了。",
+   ex:[{en:"They go surfboarding at the beach.",zh:"他们去海滩冲浪。"}]},
+ ad:{talk:"ad 就是广告。它是长词 advertisement 剪短来的，只留前面两个字母，说起来省劲多了。手机上老跳出来的就是 ad。",
+   ex:[{en:"This ad is very funny.",zh:"这个广告很好笑。"}]},
+ band:{talk:"band 是乐队，几个人一起弹一起唱。它还有个意思是带子，一条一条的。头上的发带就叫 hairband。",
+   ex:[{en:"The band played all night.",zh:"乐队演奏了一整晚。"}]},
+ drum:{talk:"drum 是鼓。打鼓的人叫 drummer，跟 runner 一个道理，先双写 m 再加 er。开头的 dr 两个字母黏在一起读。",
+   ex:[{en:"Can I try your drum?",zh:"我能试试你的鼓吗？"}]},
+ jazz:{talk:"jazz 是爵士乐。它结尾是两个 z，英语里这样收尾的词很少，看一眼就忘不了。开头那个 j 读得有点像「这」。",
+   ex:[{en:"We heard jazz in the park.",zh:"我们在公园听到爵士乐。"}]},
+ news:{talk:"news 是新闻。它屁股上有个 s，可它是当一个整体看的，后面动词要用单数。看新闻就说 watch the news。",
+   ex:[{en:"The news is good today.",zh:"今天的新闻是好消息。"}]},
+ tune:{talk:"tune 就是一首歌的调子。它跟六月 June 押韵，读出来都是长长的「运」。哼得出调子，就说 I know that tune。",
+   ex:[{en:"She sang a happy tune.",zh:"她唱了一首欢快的调子。"}]},
+ disco:{talk:"disco 是放音乐跳舞的地方。它是从长词 discotheque 剪短来的。中文说的迪斯科，就是照着这个词的读音叫的。",
+   ex:[{en:"The disco opens at eight.",zh:"迪斯科八点开门。"}]},
+ movie:{talk:"movie 是电影，美国人这么说，英国人爱说 film。它跟 move 有关，move 是动，一张张画动起来就成了电影。",
+   ex:[{en:"This movie is too long.",zh:"这部电影太长了。"}]},
+ opera:{talk:"opera 是歌剧，台上的人不说话，全靠唱。读三拍，重音在最前面。悉尼那座著名的白房子就叫 Opera House。",
+   ex:[{en:"We saw an opera last night.",zh:"昨晚我们看了一场歌剧。"}]},
+
+ /* ---------- 第 18 段 ---------- */
+ radio:{talk:"radio 是收音机，也指广播。读的时候重音在最前面，听起来像「瑞迪欧」。它结尾是 o，变复数直接加 s。",
+   ex:[{en:"Please turn on the radio.",zh:"请打开收音机。"}]},
+ title:{talk:"title 是标题。书封面上最大的那几个字就是它。它跟 little 长得很像，可读法不同，title 里的 i 读「爱」。",
+   ex:[{en:"Write the title here.",zh:"把标题写在这里。"}]},
+ circus:{talk:"circus 是马戏团，有小丑也有杂技。它跟圆圈 circle 是一家人，因为马戏的场地就是一个大圆圈。",
+   ex:[{en:"The circus comes in May.",zh:"马戏团五月来。"}]},
+ comedy:{talk:"comedy 是喜剧，看着让人笑的那种。让人哭的那种叫 tragedy 悲剧。读三拍，重音在最前面的 co 上。",
+   ex:[{en:"I like comedy films.",zh:"我喜欢喜剧片。"}]},
+ "hip hop":{talk:"hip hop 是嘻哈，写的时候中间要空一格，它是两个词。hip 是胯，hop 是单脚跳。中文的嘻哈就是照读音叫的。",
+   ex:[{en:"They dance to hip hop.",zh:"他们跟着嘻哈跳舞。"}]},
+ horror:{talk:"horror 是恐怖，恐怖片就是 horror film。它中间是两个 r，千万别少写一个。它的形容词是 horrible，糟透了。",
+   ex:[{en:"That horror story scared me.",zh:"那个恐怖故事吓到我了。"}]},
+ record:{talk:"record 有两个读法。重音落在前面时是名词，纪录或者唱片。重音挪到后面，就变成动词录音了。靠重音分家。",
+   ex:[{en:"Let's record a song.",zh:"我们录一首歌吧。"}]},
+ channel:{talk:"channel 是频道，电视上换台就是换 channel。它还有个意思是海峡，英国和法国中间那条就叫 the Channel。中间双写 n。",
+   ex:[{en:"This channel shows cartoons.",zh:"这个频道放动画片。"}]},
+ program:{talk:"program 是节目，也是电脑程序。美国人写 program，英国人写 programme，结尾多了 me 两个字母，意思一样。",
+   ex:[{en:"The program starts at seven.",zh:"节目七点开始。"}]},
+ magazine:{talk:"magazine 是杂志。它最容易读错，重音在最后一拍 zine 上，听着像「麦格进」。中间那个字母是 a 不是 e。",
+   ex:[{en:"This magazine is for kids.",zh:"这本杂志是给小孩看的。"}]},
+ classical:{talk:"classic 是经典的，后面加上 al 就是 classical，古典的。古典音乐就说 classical music。中间别忘了两个 s。",
+   ex:[{en:"My dad plays classical songs.",zh:"我爸爸弹古典曲子。"}]},
+ newspaper:{talk:"news 是新闻，paper 是纸。新闻印在纸上，就是报纸。爷爷手里摊开的那一大张，就是 newspaper。",
+   ex:[{en:"The newspaper is on the table.",zh:"报纸在桌子上。"}]},
+ exhibition:{talk:"exhibition 是展览。它最坑的地方是中间那个 h 不发音，听起来像「埃克西比申」。它的动词是 exhibit，展出。",
+   ex:[{en:"The art exhibition is free.",zh:"这个画展免费。"}]},
+ instrument:{talk:"instrument 是乐器，钢琴小提琴都算，它也指仪器。会弹乐器就说 play an instrument。读四拍，重音在最前面。",
+   ex:[{en:"The piano is a big instrument.",zh:"钢琴是个大乐器。"}]},
+ microphone:{talk:"micro 是小，phone 是声音。把小小的声音变大，那就是麦克风。平时大家还爱把它缩短成 mic，三个字母。",
+   ex:[{en:"The microphone is too loud.",zh:"麦克风声音太大了。"}]},
+ "movie theater":{talk:"movie 是电影，theater 是剧场，合起来就是电影院。这是美式说法，英国人只说 cinema。中间要空一格。",
+   ex:[{en:"The movie theater is closed.",zh:"电影院关门了。"}]},
+ advertisement:{talk:"advertisement 就是广告，前面学的 ad 是它的短样子。它长，读的时候重音落在第二拍 ver 上，中间写 tise。",
+   ex:[{en:"This advertisement is very long.",zh:"这个广告很长。"}]},
+ CD:{talk:"CD 两个字母都要大写，直接按字母名读，C 和 D。它是 compact disc 的缩写，圆圆一张银盘子，用来放歌。",
+   ex:[{en:"Put the CD in the player.",zh:"把 CD 放进播放机。"}]},
+ PC:{talk:"PC 也是按字母名读，P 和 C。它是 personal computer 的缩写，personal 是个人的，computer 是电脑。",
+   ex:[{en:"I play games on my PC.",zh:"我在电脑上玩游戏。"}]},
+ DVD:{talk:"DVD 比 CD 多一个字母，读的时候三个字母名连着念，D V D。它能装整部电影，CD 一般只装歌。三个都大写。",
+   ex:[{en:"This DVD is my favourite.",zh:"这张 DVD 是我最爱的。"}]},
+ web:{talk:"web 本来是蜘蛛网。后来网站一个连一个，也像张大网，就借用了这个词。网址开头那三个 w，就是 world wide web。",
+   ex:[{en:"I found it on the web.",zh:"我在网上找到的。"}]},
+
+ /* ---------- 第 19 段 ---------- */
+ file:{talk:"file 是文件，电脑里存下来的东西都叫 file。它跟 mile 押韵，i 读「爱」。装它的夹子叫 folder，文件夹。",
+   ex:[{en:"This file is too big.",zh:"这个文件太大了。"}]},
+ mail:{talk:"mail 是邮件。它跟 male 男的读音一模一样，可拼法完全不同。电子邮件是 email，前面多一个 e。",
+   ex:[{en:"Please check your mail.",zh:"请查看你的邮件。"}]},
+ site:{talk:"site 是地点，也是网站。它跟视线 sight 读音一样，只不过那个多了不发音的 gh。网站就是 web 加 site。",
+   ex:[{en:"I like this site.",zh:"我喜欢这个网站。"}]},
+ wifi:{talk:"wifi 是无线网，住酒店最想找的就是它。它由两半拼成，前后都押「爱」的音，读起来像「歪 fai」。",
+   ex:[{en:"The wifi is very slow.",zh:"wifi 很慢。"}]},
+ click:{talk:"click 是点击，鼠标咔嗒一下。这个词念出来就像那声咔嗒。结尾 ck 两个字母合读一个音，只出一下声。",
+   ex:[{en:"Click the blue button.",zh:"点那个蓝色按钮。"}]},
+ stamp:{talk:"stamp 是邮票，也是盖章，还能表示用脚跺。你看这几个意思都是往下按一下，按在信上的那张就是邮票。",
+   ex:[{en:"Put a stamp on the letter.",zh:"在信上贴张邮票。"}]},
+ folder:{talk:"fold 是折叠，后面加 er 就是文件夹。一张硬纸折一下，东西就能夹进去。电脑里那个黄色小图标也是它。",
+   ex:[{en:"The folder is on my desk.",zh:"文件夹在我桌上。"}]},
+ online:{talk:"on 是在上面，line 是线。连在线上，就是在线。网上买东西就说 buy online。反过来断网叫 offline。",
+   ex:[{en:"We play games online.",zh:"我们在网上玩游戏。"}]},
+ screen:{talk:"screen 是屏幕。中间两个 e 连在一起，读长长的「衣」。电影院里那块大白布也叫 screen，银幕。",
+   ex:[{en:"The screen is very big.",zh:"这块屏幕很大。"}]},
+ selfie:{talk:"self 是自己，后面加上 ie 显得亲切，就成了自拍。举起手机对着自己按一下，那张照片就是 selfie。",
+   ex:[{en:"She took a selfie with her dog.",zh:"她和狗拍了张自拍。"}]},
+ upload:{talk:"up 是往上，load 是装。把东西往网上装，就是上传。把 up 换成 down 就反过来了，download 是下载。",
+   ex:[{en:"I will upload the video.",zh:"我会上传这个视频。"}]},
+ battery:{talk:"battery 是电池。它看着四拍，其实只读三拍，中间那个 e 几乎听不见。变复数要把 y 改成 i 再加 es。",
+   ex:[{en:"I need a new battery.",zh:"我需要一块新电池。"}]},
+ contact:{talk:"contact 是联系。con 有一起的意思，tact 跟碰到有关，两边碰上了就是联系上了。手机里的名单叫 contacts。",
+   ex:[{en:"I lost her contact number.",zh:"我丢了她的联系电话。"}]},
+ message:{talk:"message 是消息。别跟 massage 搞混，那个中间是 a，意思是按摩。发消息就说 send a message。",
+   ex:[{en:"Did you get my message?",zh:"你收到我的消息了吗？"}]},
+ chatroom:{talk:"chat 是聊天，room 是房间。网上一起聊天的那个地方，就是聊天室。两个词连着写，中间不空格。",
+   ex:[{en:"The chatroom is very busy.",zh:"聊天室里很热闹。"}]},
+ document:{talk:"document 是文件，正式的那种，电脑里写好的文稿也叫它。读三拍，重音在最前面的 doc 上，后面轻轻带过。",
+   ex:[{en:"Print this document, please.",zh:"请打印这份文件。"}]},
+ download:{talk:"down 是往下，load 是装。把网上的东西装到自己这儿，就是下载。它跟 upload 正好反着，一下一上。",
+   ex:[{en:"Can I download this song?",zh:"我能下载这首歌吗？"}]},
+ electric:{talk:"electric 是电动的，电动车就说 electric car。它换个尾巴变成 electricity，就是电这个东西本身了。",
+   ex:[{en:"We have an electric bike.",zh:"我们有一辆电动自行车。"}]},
+ envelope:{talk:"envelope 是信封。前面的 en 有包进去的意思，把信包起来就是信封。读三拍，重音在最前面那个 en 上。",
+   ex:[{en:"The envelope is white.",zh:"这个信封是白色的。"}]},
+ keyboard:{talk:"key 是键，board 是板。一块板上排满了键，就是键盘。board 这个词你见过好几回了，snowboard 里也有它。",
+   ex:[{en:"The keyboard has many keys.",zh:"键盘上有很多键。"}]},
+ software:{talk:"soft 是软的，ware 是东西货品。摸不着的那部分就叫软件。摸得着的机器叫 hardware，硬件，hard 是硬。",
+   ex:[{en:"The software is easy to use.",zh:"这个软件很好用。"}]},
+
+ /* ---------- 第 20 段 ---------- */
+ telephone:{talk:"拆开看，tele 是远，phone 是声音。把声音送到很远的地方，就是电话。读的时候重音在最前面的 te。",
+   ex:[{en:"The telephone is ringing.",zh:"电话响了。"}]},
+ headphones:{talk:"head 是头，phone 是听筒。戴在头上的两个听筒，就是耳机。因为有两只，后面几乎总是带着 s。",
+   ex:[{en:"My headphones are new.",zh:"我的耳机是新的。"}]},
+ electricity:{talk:"它是 electric 的名词，electric 是电动的，electricity 才是电本身。这个词长，重音落在 tri 上。",
+   ex:[{en:"We use electricity every day.",zh:"我们每天都用电。"}]},
+ "mobile phone":{talk:"mobile 的意思是可移动的，能带着走的电话，就是手机。英国人说 mobile phone，美国人说 cell phone。",
+   ex:[{en:"Her mobile phone is black.",zh:"她的手机是黑色的。"}]},
+ boss:{talk:"boss 就是公司里说话最管用的那个人，头儿。就四个字母，中间双写的 s 别丢掉，读起来短短一下。",
+   ex:[{en:"The boss is very busy.",zh:"老板很忙。"}]},
+ staff:{talk:"staff 说的是一家店或者一家公司的全体员工，是个整体。所以它后面不加 s，动词常常用复数。",
+   ex:[{en:"All the staff work hard.",zh:"全体员工都很努力。"}]},
+ career:{talk:"career 指一个人长期做的事业，不是一天的活儿。重音在后半截 reer，前面那个 ca 读得很轻。",
+   ex:[{en:"He has a long career.",zh:"他有很长的职业生涯。"}]},
+ dancer:{talk:"dance 是跳舞，结尾已经有个 e，所以只加一个 r 就成了跳舞的人。跟 singer 一个道理，做这件事的人。",
+   ex:[{en:"The dancer moves fast.",zh:"那个舞者动作很快。"}]},
+ police:{talk:"police 说的是一整支警察队伍，所以从来不加 s。重音在后半截，前面那个 po 读得很轻。出事就找它。",
+   ex:[{en:"The police are here.",zh:"警察来了。"}]},
+ writer:{talk:"write 是写，结尾那个 e 要先去掉，再加 er，就是写东西的人。开头的 w 不发音，听着像 riter。",
+   ex:[{en:"I want to be a writer.",zh:"我想当作家。"}]},
+ cleaner:{talk:"clean 是干净，也是打扫，后面加 er 就是打扫的人。它还能指清洁剂，瓶子上写 cleaner 就是这个。",
+   ex:[{en:"The cleaner is very kind.",zh:"那位清洁工很和善。"}]},
+ painter:{talk:"paint 既是画画也是刷漆，所以 painter 有两个身份，画家和油漆工。到底哪个，得看前后在说什么。",
+   ex:[{en:"The painter is painting a wall.",zh:"油漆工在刷墙。"}]},
+ explorer:{talk:"explore 是探索，结尾有 e，直接加 r 就是探险的人。电脑上那个 Explorer 图标也是从它来的。",
+   ex:[{en:"The explorer found a cave.",zh:"探险家发现了一个洞。"}]},
+ mechanic:{talk:"mechanic 和 machine 是一家人，都跟机器有关。会修机器修汽车的人就是它。重音在中间的 cha。",
+   ex:[{en:"My uncle is a mechanic.",zh:"我叔叔是修理工。"}]},
+ musician:{talk:"music 是音乐，后面加 ian 就是搞音乐的人。注意读音变了，中间的 ci 读得像 shi，重音也在中间。",
+   ex:[{en:"The musician plays the piano.",zh:"那位音乐家弹钢琴。"}]},
+ assistant:{talk:"assist 是帮忙，加上 ant 就是帮忙的人。商店里的 shop assistant 就是店员。两个 s 挨着，别漏。",
+   ex:[{en:"I need an assistant.",zh:"我需要一个助手。"}]},
+ colleague:{talk:"colleague 就是一起上班的同事。它最容易拼错，结尾是 gue，后面那两个字母不出声，读到 g 就停。",
+   ex:[{en:"He is my new colleague.",zh:"他是我的新同事。"}]},
+ housewife:{talk:"house 是家，wife 是妻子，合起来就是在家操持家务的主妇。复数要把 f 变成 v，写成 housewives。",
+   ex:[{en:"My aunt is a housewife.",zh:"我姑姑是家庭主妇。"}]},
+ secretary:{talk:"secret 是秘密，后面加 ary。替老板管着好多事的那个人，就是秘书。中间的 re 读得很轻，别漏写。",
+   ex:[{en:"The secretary is very busy.",zh:"秘书很忙。"}]},
+ journalist:{talk:"journal 是期刊，也是日志，加上 ist 就是写稿子的人，记者。开头的 jour 读起来像 zher，不读 jiu。",
+   ex:[{en:"My aunt is a journalist.",zh:"我姑姑是记者。"}]},
+ occupation:{talk:"occupation 就是职业，填表格的时候常有这一栏。拼写要小心，前面两个 c 挨在一起，重音在 pa。",
+   ex:[{en:"Write your occupation here.",zh:"把你的职业写在这里。"}]},
+
+ /* ---------- 第 21 段 ---------- */
+ businessman:{talk:"business 是生意，man 是男人，合起来就是做生意的男人。它变复数很特别，man 要变成 men。",
+   ex:[{en:"My father is a businessman.",zh:"我爸爸是商人。"}]},
+ receptionist:{talk:"reception 是接待处，加上 ist 就是在接待处工作的人。进酒店第一个跟你说话的就是他。",
+   ex:[{en:"Ask the receptionist for help.",zh:"找接待员帮忙。"}]},
+ businesswoman:{talk:"跟 businessman 是一对，只是把 man 换成了 woman，指做生意的女人。复数写成 businesswomen。",
+   ex:[{en:"That businesswoman is my aunt.",zh:"那位女商人是我姑姑。"}]},
+ "police officer":{talk:"police 是整支警察队伍，officer 是有职务的人。两个词合起来指具体的一位警察，能加 s 说好几位。",
+   ex:[{en:"Ask that police officer.",zh:"问问那位警察。"}]},
+ die:{talk:"die 是动词，说的是死这个动作。它加 ing 很特别，要先把 ie 变成 y，写成 dying，别写错。",
+   ex:[{en:"Fish die without water.",zh:"鱼没有水会死。"}]},
+ ill:{talk:"ill 是生病的，跟 sick 意思差不多。英国人更爱用 ill，而且它一般放在 be 后面，不放名词前面。",
+   ex:[{en:"I feel ill today.",zh:"我今天不舒服。"}]},
+ dead:{talk:"dead 是形容词，说的是已经死了的状态。die 是动作，dead 是结果，这一对千万别用混。",
+   ex:[{en:"The bird is dead.",zh:"那只鸟死了。"}]},
+ pain:{talk:"pain 是身体上的疼。它跟下雨的 rain 只差第一个字母，读音也押韵，记住一个就带出另一个。",
+   ex:[{en:"The pain is very bad.",zh:"疼得很厉害。"}]},
+ accident:{talk:"accident 就是没想到会发生的事，事故。拼的时候注意开头两个 c 挨着。说偶然碰上就用 by accident。",
+   ex:[{en:"He had an accident at work.",zh:"他在工作时出了事故。"}]},
+ ambulance:{talk:"ambulance 是救护车，出事了先喊它。重音在最前面的 am，后面那几个音都读得又轻又快。",
+   ex:[{en:"The ambulance came fast.",zh:"救护车来得很快。"}]},
+ "stomach ache":{talk:"stomach 是胃，也是肚子，ache 是隐隐地疼。两个词一凑就是肚子疼。ache 里的 ch 读成 k 的音。",
+   ex:[{en:"My stomach ache is better now.",zh:"我肚子疼好点了。"}]},
+ push:{talk:"push 是往外推。商场门上常贴着 push 和 pull，一个推一个拉，这两个词最好一起记。",
+   ex:[{en:"He pushed the button.",zh:"他按了按钮。"}]},
+ seem:{talk:"seem 是看起来好像，没有十分确定。它跟 see 长得像，see 是真看见了，seem 只是看上去像。",
+   ex:[{en:"It seems easy.",zh:"这看起来很容易。"}]},
+ shut:{talk:"shut 是关上，比 close 更用力一点。它很省事，过去式和过去分词都还是 shut，一个字母不变。",
+   ex:[{en:"Shut the door, please.",zh:"请关上门。"}]},
+ sort:{talk:"sort 是种类，问哪一种就说 what sort of。它也能当动词，意思是把东西分门别类摆好。",
+   ex:[{en:"I like this sort of bread.",zh:"我喜欢这种面包。"}]},
+ hurry:{talk:"hurry 是赶快。它中间是两个 r，别少写一个。催人的时候说 hurry up，听着又短又急。",
+   ex:[{en:"Don't hurry, we have time.",zh:"别急，我们有时间。"}]},
+ share:{talk:"share 是分着一起用，分东西可以，合住一间房也可以。开头的 sh 要送气，别读成了 s。",
+   ex:[{en:"He shares a room with me.",zh:"他和我合住一间房。"}]},
+ shout:{talk:"shout 是大声喊。它跟 out 押韵，中间的 ou 读同一个音。图书馆那种地方，就别 shout。",
+   ex:[{en:"He shouted my name.",zh:"他喊了我的名字。"}]},
+ steal:{talk:"steal 是偷，过去式很不规则，变成 stole。小心它跟钢 steel 读音一样，可拼写不一样。",
+   ex:[{en:"Don't steal things.",zh:"不要偷东西。"}]},
+ belong:{talk:"belong 是属于，后面几乎总跟着一个 to。想说这个东西是我的，就说 it belongs to me。",
+   ex:[{en:"These shoes belong to my sister.",zh:"这双鞋是我姐姐的。"}]},
+ decide:{talk:"decide 是决定。后面要接动作，就用 decide to 加动词。它的名词是 decision，c 的读音会变。",
+   ex:[{en:"We decided to go home.",zh:"我们决定回家。"}]},
+ invent:{talk:"invent 是发明，做出世界上原来没有的东西。加 or 变成发明家 inventor，加 ion 变成发明 invention。",
+   ex:[{en:"He invented a new game.",zh:"他发明了一个新游戏。"}]},
+
+ /* ---------- 第 22 段 ---------- */
+ repair:{talk:"repair 是修好。前面的 re 有再一次的意思，把坏掉的东西再弄回原样。重音在后面的 pair。",
+   ex:[{en:"Can you repair my watch?",zh:"你能修我的表吗？"}]},
+ believe:{talk:"believe 是相信。它中间那段正好是 lie，说谎。记住相信里头藏着谎，就不会把 ie 写反了。",
+   ex:[{en:"I don't believe it.",zh:"我不信。"}]},
+ deliver:{talk:"deliver 是送到手上。快递员把东西送到家门口，做的就是 deliver。重音在中间的 li 上。",
+   ex:[{en:"The man delivers letters.",zh:"这个人送信。"}]},
+ discuss:{talk:"discuss 是几个人一起谈事情。结尾两个 s 别漏，它的名词是 discussion。重音在后半截 cuss。",
+   ex:[{en:"We discussed the film.",zh:"我们讨论了这部电影。"}]},
+ explain:{talk:"explain 是把事情讲清楚。注意后面直接跟要讲的东西，不能说 explain me，要说 explain to me。",
+   ex:[{en:"Please explain it again.",zh:"请再解释一遍。"}]},
+ improve:{talk:"improve 是变得更好。它里面藏着 prove，证明。天天练，就能证明自己在变好。重音在后面。",
+   ex:[{en:"Her English is improving.",zh:"她的英语在进步。"}]},
+ receive:{talk:"receive 是收到。最容易错的是中间，先 e 后 i，跟 believe 正好相反。这两个词放一起记最好。",
+   ex:[{en:"Did you receive my email?",zh:"你收到我的邮件了吗？"}]},
+ suppose:{talk:"suppose 是猜想，觉得大概如此，没那么肯定。中间两个 p 挨着。be supposed to 的意思是应该。",
+   ex:[{en:"I suppose so.",zh:"我想是吧。"}]},
+ discover:{talk:"cover 是盖住，前面加上 dis 就是把盖子揭开，那就是发现。东西原来就在那儿，只是被找出来了。",
+   ex:[{en:"Who discovered America?",zh:"谁发现了美洲？"}]},
+ understand:{talk:"under 是下面，stand 是站。站到下面去看明白，就是理解。它的过去式很怪，变成 understood。",
+   ex:[{en:"Do you understand me?",zh:"你听懂我说的了吗？"}]},
+ low:{talk:"low 是低，跟 high 正好相反。它不光说高度，声音小价钱便宜也能用 low。结尾的 w 不出声。",
+   ex:[{en:"Keep your voice low.",zh:"把声音放低。"}]},
+ poor:{talk:"poor 有两个意思，一个是穷，一个是可怜。看到 poor dog，说的不是狗没钱，是这只狗真可怜。",
+   ex:[{en:"He is very poor.",zh:"他很穷。"}]},
+ wide:{talk:"wide 是宽，反过来窄就是 narrow。它的名词是 width，结尾的 e 掉了，换成了 th，容易写错。",
+   ex:[{en:"Open your mouth wide.",zh:"把嘴张大。"}]},
+ usual:{talk:"usual 是平常的，跟往常一样。加上 ly 就变成 usually，通常。开头那个 u 要读成 you 的音。",
+   ex:[{en:"It was just a usual day.",zh:"那只是平常的一天。"}]},
+ worse:{talk:"worse 是更差，两样东西比的时候用它。bad 这一串得连着背，bad，worse，worst，一口气念下来。",
+   ex:[{en:"My cold is getting worse.",zh:"我的感冒更重了。"}]},
+ worst:{talk:"worst 是最差，三样以上里头垫底的那个，前面常常加 the。它比 worse 只多了一个 t。",
+   ex:[{en:"That was my worst day.",zh:"那是我最糟的一天。"}]},
+ wrong:{talk:"wrong 是错的。开头那个 w 不出声，听起来跟 long 押韵。写的时候千万别把这个 w 漏掉。",
+   ex:[{en:"You have the wrong number.",zh:"你打错号码了。"}]},
+ better:{talk:"better 是更好。good 那一串也要连着背，good，better，best。身体好转了也能说 feel better，很常用。",
+   ex:[{en:"This one is better.",zh:"这个更好。"}]},
+ latest:{talk:"late 是晚，最高级 latest 指时间上最靠后的，也就是最新的。手机广告里天天都有这个词。",
+   ex:[{en:"Have you seen the latest news?",zh:"你看到最新消息了吗？"}]},
+ modern:{talk:"modern 是现代的，新式的。重音在前面的 mo，后面那半截读得又轻又快。它的反面是 old。",
+   ex:[{en:"I like modern art.",zh:"我喜欢现代艺术。"}]},
+ normal:{talk:"normal 是正常的，跟平时一样。量体温看结果的时候最常听到它。反过来说奇怪就用 strange。",
+   ex:[{en:"Her temperature is normal.",zh:"她的体温正常。"}]},
+ crowded:{talk:"crowd 是人群，后面加 ed 就成了形容词，挤满人的。上下班时候的地铁，就是最 crowded 的。",
+   ex:[{en:"The park was crowded.",zh:"公园里挤满了人。"}]},
+
+ /* ---------- 第 23 段 ---------- */
+ foreign:{talk:"foreign 里那个 g 是个哑巴，一点声都不出，听起来像「佛林」。它的意思是外国的，外语就说 foreign language。",
+   ex:[{en:"I have a foreign friend.",zh:"我有一个外国朋友。"}]},
+ perfect:{talk:"perfect 可以拆成 per 和 fect，per 是「彻底」，fect 那半来自「做」。从头到尾都做到位，当然就是完美。",
+   ex:[{en:"The weather is perfect today.",zh:"今天天气好极了。"}]},
+ similar:{talk:"similar 是相似的意思，三个音节 si mi lar，重音落在最前面。要说和什么像，后面加一个 to，元音是 i i a。",
+   ex:[{en:"My bag is similar to yours.",zh:"我的包和你的很像。"}]},
+ advanced:{talk:"advanced 是 advance 加 d，advance 是往前走。学得比别人往前一段，就是高级的。",
+   ex:[{en:"She is in the advanced group.",zh:"她在高级组。"}]},
+ horrible:{talk:"horrible 和 horror 是一家人，前面那半 horr 都有两个 r，说的是让人发毛的事。结尾的 ible 表示「让人觉得怎样」。",
+   ex:[{en:"What a horrible day!",zh:"多糟糕的一天！"}]},
+ possible:{talk:"possible 说的是有可能，中间是两个 s，别少写一个。它前面加上 im 就翻了面，变成不可能 impossible。",
+   ex:[{en:"Come as soon as possible.",zh:"尽快来。"}]},
+ available:{talk:"available 结尾是 able，able 就是「能」。东西能用得上，人能腾出时间，都用这个词。座位空着，网上就写 available。",
+   ex:[{en:"No seats are available now.",zh:"现在没有空座位。"}]},
+ brilliant:{talk:"brilliant 本来是说闪闪发亮，英国人夸东西棒也用它。听见 That is brilliant，就是太棒了。",
+   ex:[{en:"Her drawing is brilliant.",zh:"她的画太棒了。"}]},
+ difficult:{talk:"difficult 里的 dif 有「不」的意思，后面那半来自「容易」。不容易，就是难，反过来就是 easy。",
+   ex:[{en:"Chinese is not difficult for me.",zh:"中文对我不难。"}]},
+ excellent:{talk:"excellent 是从 excel 来的，excel 就是比别人强出一截。所以它比 good 厉害多了，老师在卷子上写这个词你就乐吧。",
+   ex:[{en:"The food here is excellent.",zh:"这里的饭菜很棒。"}]},
+ attractive:{talk:"attractive 从 attract 来，attract 是把人拉过来。能把眼睛拉过去，就是好看的。",
+   ex:[{en:"She wore an attractive dress.",zh:"她穿了条好看的裙子。"}]},
+ impossible:{talk:"impossible 就是 possible 前面加 im，im 表示「不」，加上它就变成反面，很多形容词都这样。",
+   ex:[{en:"Nothing is impossible.",zh:"没有不可能的事。"}]},
+ successful:{talk:"successful 是 success 加 ful，ful 是「满满的」。装满了成功，就是成功的。",
+   ex:[{en:"The party was very successful.",zh:"聚会很成功。"}]},
+ comfortable:{talk:"comfortable 是 comfort 加 able，comfort 就是舒服，坐着睡着舒服都用它。",
+   ex:[{en:"The bed is soft and comfortable.",zh:"床又软又舒服。"}]},
+ international:{talk:"这个词里藏着 nation 国家。前面的 inter 是「在中间」，互联网 internet 也带着它。国与国之间的事，就是国际的。",
+   ex:[{en:"We took an international flight.",zh:"我们坐了国际航班。"}]},
+ since:{talk:"since 有两个用法。说时间的时候是「从那时起」，后面跟一个时间点，比如 since Monday。它跟 for 不一样。",
+   ex:[{en:"I have known him since May.",zh:"我从五月起就认识他。"}]},
+ almost:{talk:"almost 里面有 most，most 是「最多」。都快顶到最多了，只差一点点，所以是「几乎」。后面既能跟动词，也能跟形容词。",
+   ex:[{en:"It is almost dark.",zh:"天快黑了。"}]},
+ anyway:{talk:"anyway 是 any 加 way。any 是任何，way 是路。不管走哪条路结果都一样，那就是「反正」。大人换话题时开头就爱说它。",
+   ex:[{en:"Thanks anyway.",zh:"还是要谢谢你。"}]},
+ except:{talk:"except 前面的 ex 是「出去」，把一个人挑出去不算，那就是除了他。当心它和 expect 长得像。",
+   ex:[{en:"I like all fruit except apples.",zh:"除了苹果我都爱吃。"}]},
+ nearly:{talk:"nearly 是 near 加 ly，near 是「近」。离目标只差一点点，就是快要了，快到九点就说 nearly nine。",
+   ex:[{en:"I am nearly ready.",zh:"我快准备好了。"}]},
+ anymore:{talk:"anymore 是 any 加 more，再多一点的意思。它几乎总跟 not 一起出现，合起来是一点也不再有了。位置很固定，放在句子最后面。",
+   ex:[{en:"She does not live here anymore.",zh:"她不再住这儿了。"}]},
+ exactly:{talk:"exactly 是 exact 加 ly，exact 就是一点不差。别人说中你的心思，回一句 Exactly。",
+   ex:[{en:"Tell me exactly where it is.",zh:"告诉我它到底在哪。"}]},
+
+ /* ---------- 第 24 段 ---------- */
+ luckily:{talk:"luckily 是 lucky 变来的，结尾那个 y 要先换成 i，再加 ly。讲故事的时候把它放在句子最前面，后面跟个逗号，表示「还好，幸亏」。",
+   ex:[{en:"Luckily, nobody was hurt.",zh:"幸好没人受伤。"}]},
+ perhaps:{talk:"perhaps 里的 haps 和 happen 是一家人，都跟碰巧有关。碰巧会这样吧，就是也许，它和 maybe 意思一样。",
+   ex:[{en:"Perhaps she is at school.",zh:"也许她在学校。"}]},
+ actually:{talk:"actually 就是中文里常说的「其实」，它从 actual 真实的来。想纠正别人又不想太冲，先说它，再讲你的想法。",
+   ex:[{en:"Actually, I am eight.",zh:"其实我八岁。"}]},
+ anywhere:{talk:"anywhere 是 any 加 where，任何地方。somewhere，nowhere 都是它的亲戚。",
+   ex:[{en:"You can sit anywhere.",zh:"你可以随便坐。"}]},
+ possibly:{talk:"possibly 是 possible 变来的副词，把结尾的 le 换成 ly。意思是说不准，听着比 maybe 更没底气。",
+   ex:[{en:"He could possibly be late.",zh:"他可能会迟到。"}]},
+ carefully:{talk:"carefully 一层层拆，care 是在意，加 ful 变成 careful 小心的，再加 ly 就成了「小心地」。很多副词都这么长。",
+   ex:[{en:"Read the question carefully.",zh:"仔细读题。"}]},
+ including:{talk:"including 从 include 来，in 是「里面」，clude 是「关」。关进里面一起算，就是包括。",
+   ex:[{en:"Everything is free, including drinks.",zh:"所有东西都免费，包括饮料。"}]},
+ afterwards:{talk:"afterwards 是 after 加 wards，after 是「之后」，wards 表示方向。讲完一件再接下一件。",
+   ex:[{en:"We can talk afterwards.",zh:"我们可以待会儿再聊。"}]},
+ unfortunately:{talk:"这个词有四层，中间是 fortune 运气，加 ate 变成幸运的，前面 un 一来就翻成不幸的，最后 ly 收尾。",
+   ex:[{en:"Unfortunately, I lost the game.",zh:"可惜我输了比赛。"}]},
+ dot:{talk:"dot 就是一个小圆点。念网址的时候，那个点就读 dot，比如 dot com。它和小狗 dog 只差最后一个字母，读的时候舌尖要顶一下。",
+   ex:[{en:"Put a dot here.",zh:"在这儿点一个点。"}]},
+ east:{talk:"east 是东边，太阳从这头升起来，早上的光就从这边照进屋子。说在东边要带上 the，in the east。",
+   ex:[{en:"The school is east of my home.",zh:"学校在我家东边。"}]},
+ fact:{talk:"fact 说的是真事，不是想法。in fact 就是中文的「其实，事实上」。它和工厂 factory 前半截一样，都是从「做出来」这个意思来的。",
+   ex:[{en:"In fact, I have never been there.",zh:"其实我从没去过那儿。"}]},
+ west:{talk:"west 是西边，太阳落下去那一头。它和 east 一升一落，正好相反，说在西边用 in the west。",
+   ex:[{en:"They live in the west of China.",zh:"他们住在中国西部。"}]},
+ crowd:{talk:"crowd 是挤在一堆的一群人。给它加个 ed 变成 crowded，就是拥挤的。当心它和云 cloud 长得像，只差一个字母。",
+   ex:[{en:"The crowd sang together.",zh:"人群一起唱歌。"}]},
+ event:{talk:"event 里的 vent 是「来」的意思，来了一件事，就是事件或者活动。运动会上每个比赛项目都叫一个 event。",
+   ex:[{en:"It was a happy event.",zh:"这是件开心的事。"}]},
+ stuff:{talk:"stuff 就是一堆零碎东西，懒得一个个报名字的时候用它。它不可数，后面永远不加 s。当心它和员工 staff 只差中间那个元音字母。",
+   ex:[{en:"I have too much stuff.",zh:"我东西太多了。"}]},
+ advice:{talk:"advice 是建议，它不可数，不能说一个两个。带 c 的这个是名词，把 c 换成 s 变成 advise，就成了动词「劝」。",
+   ex:[{en:"Can you give me some advice?",zh:"你能给我点建议吗？"}]},
+ beside:{talk:"beside 里面藏着 side，就是「边」。在你的边上，那就是旁边，坐我旁边就说 sit beside me。",
+   ex:[{en:"The dog sleeps beside the door.",zh:"狗睡在门旁边。"}]},
+ bottom:{talk:"bottom 是最下面，反过来是 top。拼的时候中间是两个 t，名字写在最下面那行就说 at the bottom。",
+   ex:[{en:"Look at the bottom of the page.",zh:"看这页的最下面。"}]},
+ itself:{talk:"itself 是 it 加 self，self 就是「自己」。东西自己动起来就说 by itself。",
+   ex:[{en:"The door opened by itself.",zh:"门自己开了。"}]},
+ memory:{talk:"memory 和 remember 里都有 mem，都跟「记」有关。记性好就说 a good memory。",
+   ex:[{en:"I have a happy memory of that day.",zh:"我对那天有美好的记忆。"}]},
+ myself:{talk:"myself 是 my 加 self，我自己。想强调是你亲手做的，就在句子最后加上它，重音落在 self 上。",
+   ex:[{en:"I can do it myself.",zh:"我自己能做。"}]},
+ nobody:{talk:"nobody 是 no 加 body。body 在这里是「人」，一个人也没有，跟 no one 一样。",
+   ex:[{en:"Nobody knows the answer.",zh:"没人知道答案。"}]},
+
+ /* ---------- 第 25 段 ---------- */
+ anybody:{talk:"anybody 是 any 加 body，任何一个人，疑问句和否定句里最常见到它。它和 anyone 意思一样。",
+   ex:[{en:"Does anybody want tea?",zh:"有人要茶吗？"}]},
+ herself:{talk:"herself 是 her 加 self，她自己。和 himself 摆一起记，一个用 her，一个用 him。",
+   ex:[{en:"She lives here by herself.",zh:"她自己住在这儿。"}]},
+ himself:{talk:"himself 用的是 him，不是 his，千万别写成 hisself，那个词根本不存在，重音落在 self 上。",
+   ex:[{en:"He drew the picture himself.",zh:"这幅画是他自己画的。"}]},
+ licence:{talk:"licence 是官方发的证，比如驾照就叫 driving licence。英国人写成 c，美国人写成 s，成了 license。",
+   ex:[{en:"My mum lost her licence.",zh:"我妈妈丢了执照。"}]},
+ nothing:{talk:"nothing 是 no 加 thing，一样东西也没有。它和 something 结尾都是 thing。",
+   ex:[{en:"I have nothing to do today.",zh:"我今天没事做。"}]},
+ opinion:{talk:"opinion 是看法。想说「我觉得」，句子开头就用 in my opinion。拼的时候留意，字母 i 出现了两回。",
+   ex:[{en:"What is your opinion?",zh:"你的看法呢？"}]},
+ success:{talk:"success 最爱考的就是拼写，两个 c 紧跟着两个 s。后面加 ful 就变成形容词 successful。",
+   ex:[{en:"The show was a big success.",zh:"演出非常成功。"}]},
+ trouble:{talk:"trouble 是麻烦事，它不可数，不加 s。英语里麻烦不分大小，做错事被抓住就是 in trouble。",
+   ex:[{en:"He is always in trouble.",zh:"他老是惹麻烦。"}]},
+ "left-hand":{talk:"left-hand 是 left 加 hand，左手那一边，中间那根小横线别丢了。它是形容词，后面要接名词。",
+   ex:[{en:"Write it in the left-hand box.",zh:"写在左边那个格子里。"}]},
+ opposite:{talk:"opposite 里的 pos 是「放」，前面的 op 是「对着」。对着放的，那就是正对面。说在银行对面，中间不用加 of。",
+   ex:[{en:"Hot is the opposite of cold.",zh:"热和冷正相反。"}]},
+ somebody:{talk:"somebody 是 some 加 body，某个人，不知道是谁，和 someone 意思一样。它后面的动词用单数。",
+   ex:[{en:"Somebody is knocking.",zh:"有人在敲门。"}]},
+ upstairs:{talk:"upstairs 是 up 加 stairs，stairs 是楼梯。顺着楼梯往上就是楼上，楼下把 up 换成 down。",
+   ex:[{en:"Please go upstairs and wait.",zh:"请上楼等。"}]},
+ yourself:{talk:"yourself 是 your 加 self，你自己。对着好几个人要换成 yourselves，f 变成 v 再加 es。",
+   ex:[{en:"Did you make it yourself?",zh:"这是你自己做的吗？"}]},
+ beginning:{talk:"beginning 最容易错的是中间那两个 n。begin 重音在后半截，加 ing 前先写两遍 n。",
+   ex:[{en:"I missed the beginning of the film.",zh:"我错过了电影开头。"}]},
+ equipment:{talk:"equipment 是 equip 加 ment。equip 是给人配上装备，ment 一来就变成名词。",
+   ex:[{en:"The kitchen equipment is new.",zh:"厨房设备是新的。"}]},
+ everybody:{talk:"everybody 是 every 加 body，每一个人。说的是所有人，动词却要用单数，说 Everybody is happy。",
+   ex:[{en:"Everybody likes ice cream.",zh:"每个人都喜欢冰淇淋。"}]},
+ ourselves:{talk:"ourselves 是 our 加 selves。人一多，self 就变 selves，f 换成 v 再加 es。",
+   ex:[{en:"We painted the room ourselves.",zh:"房间是我们自己刷的。"}]},
+ difference:{talk:"difference 是 different 的名词。different 是不一样的，它是不一样这件事。",
+   ex:[{en:"I see no difference.",zh:"我看不出区别。"}]},
+ downstairs:{talk:"downstairs 是 down 加 stairs，顺着楼梯往下就是楼下，结尾永远带 s，它和 upstairs 正好一对。",
+   ex:[{en:"The kitchen is downstairs.",zh:"厨房在楼下。"}]},
+ experience:{talk:"experience 说的是亲身经过的事，一次难忘的旅行就是 a great experience。",
+   ex:[{en:"He has no work experience.",zh:"他没有工作经验。"}]},
+ information:{talk:"information 中间藏着 form，形式。把东西弄成你看得懂的形式交给你，那就是信息。它不可数，永远不加 s。重音在后面的 ma 那一块。",
+   ex:[{en:"The website gives useful information.",zh:"这个网站有有用的信息。"}]},
+ instructions:{talk:"instructions 里的 struct 是「搭起来」，和 structure 结构是一家。教你一步一步搭好，那就是说明，常用复数。",
+   ex:[{en:"Follow the teacher's instructions.",zh:"按老师的指示做。"}]},
+ identification:{talk:"identification 长得吓人，其实就是 identify 接了长长一段，平时都说缩写 ID。",
+   ex:[{en:"I forgot my identification.",zh:"我忘带身份证明了。"}]}
+
 };
 (function attachTalks(){
   WORDS.forEach(w=>{const t=TALKS[w.en];if(t){w.talk=t.talk;if(t.ex)w.ex=t.ex;}});
@@ -2961,10 +3627,110 @@ const ANIMS={
   scSay("brave")
  ]}
 };
+/* ---- 自动动态演示 --------------------------------------------------
+   手绘的小剧场只有上面这些词。其余的词全部用这套模板现场拼三幕：
+   第一幕看图记意思，第二幕讲拼写（复合词拆开，别的摊成字母牌并标出容易错的地方），
+   第三幕是例句。素材全部取自词表和 TALKS，不用再逐词写数据。 */
+const TOPIC_ICON={"我和家人":"👨‍👩‍👧","身体与外貌":"🧑","心情与性格":"😊","打招呼与交际":"👋",
+ "食物与饮料":"🍎","厨房与烹饪":"🍳","衣服与饰品":"👕","家与家具":"🛋️","学校与学习":"📚",
+ "时间与日期":"⏰","数字与单位":"📏","动物与自然":"🦋","天气与材料":"🌦️","购物与钱":"💰",
+ "商店与场所":"🏬","交通与出行":"🚌","旅行与住宿":"🧳","体育与运动":"⚽","音乐与娱乐":"🎵",
+ "科技与通信":"💻","职业与工作":"💼","健康与意外":"🚑","常用动作":"🏃","常用形容词":"✨",
+ "常用副词":"🕐","方位·代词·抽象":"🧭","综合复习":"🌟"};
+/* 拆复合词用的词块：词表里的词 + 几个常见小词 */
+const SMALL_WORDS=["head","book","store","shop","snow","board","wind","surf","sun","rain","foot",
+ "ball","key","note","some","any","every","body","thing","where","one","stairs","self","selves",
+ "hand","news","paper","week","day","end","mid","night","light","class","room","bed","bath",
+ "tooth","brush","hair","play","ground","black","white","air","port","word","birth","place",
+ "home","work","house","wife","man","woman","girl","boy","friend","grand","mother","father",
+ "son","child","life","time","table","phone","mail","box","way","side","door","yard","cake",
+ "milk","tea","water","fire","ice","star","moon","rail","road","car","bus","top","print","out"];
+const SHORT_OK=["no","up","my","it","us","in","on"];
+const NO_SPLIT=["carpet","canteen","cartoon","carrot","message","manager","however","notice",
+ "package","passage","sausage","toilet","forest","present","parent","printer","airport","boring"];
+const WORD_SET=(()=>{
+  const s=new Set(SMALL_WORDS);
+  WORDS.forEach(w=>{if(/^[a-z]+$/i.test(w.en))s.add(w.en.toLowerCase());});
+  return s;
+})();
+/* 能拆成两个认识的词块就拆，拆不出来返回 null */
+function splitTwo(en){
+  const s=en.toLowerCase();
+  if(!/^[a-z]+$/.test(s)||s.length<6||NO_SPLIT.indexOf(s)>=0)return null;
+  let best=null;
+  for(let i=2;i<=s.length-3;i++){
+    const a=s.slice(0,i),b=s.slice(i);
+    const aOK=(a.length>=3&&WORD_SET.has(a))||(a.length===2&&SHORT_OK.indexOf(a)>=0);
+    if(!aOK||!WORD_SET.has(b))continue;
+    const score=Math.min(a.length,b.length);        /* 两半越均匀越可信 */
+    if(!best||score>best.score)best={a,b,score};
+  }
+  return best;
+}
+/* 标出拼写里最容易错的地方：双写字母、不出声的字母、成对的元音 */
+function letterHints(en){
+  const s=en.toLowerCase(),hi={};
+  for(let i=0;i<s.length-1;i++)
+    if(s[i]===s[i+1]&&/[a-z]/.test(s[i])){
+      hi[i]=hi[i+1]="两个 "+s[i]+" 都要写";
+      return {hi,tip:"中间是两个 "+s[i]+"，别少写一个"};
+    }
+  const rules=[
+    [/^kn/,0,1,"k 不出声"],[/^wr/,0,1,"w 不出声"],[/^ps/,0,1,"p 不出声"],
+    [/mb$/,-2,2,"结尾的 b 不出声"],[/gh/,0,2,"gh 不出声"],[/gu[eia]/,0,2,"u 只是陪衬"],
+    [/ph/,0,2,"ph 读成 f"],[/^h(o?)ur/,0,1,"h 不出声"],[/sci/,0,3,"sc 只读一个音"]
+  ];
+  for(const [re,off,len,txt] of rules){
+    const m=s.match(re);if(!m)continue;
+    let st=m.index;if(off===-2)st=s.length-2;
+    for(let k=0;k<len;k++)hi[st+k]=txt;
+    return {hi,tip:txt+"，写的时候别漏掉"};
+  }
+  const pair=s.match(/ea|ee|oo|ou|ai|ie|ei|oa|au/);
+  if(pair){
+    for(let k=0;k<2;k++)hi[pair.index+k]=pair[0]+" 是一对";
+    return {hi,tip:pair[0]+" 这两个字母要挨在一起读"};
+  }
+  if(/e$/.test(s)&&s.length>4){
+    hi[s.length-1]="结尾 e 不发音";
+    return {hi,tip:"最后那个 e 只站着，不出声"};
+  }
+  return {hi:null,tip:s.length<=5?"就 "+s.length+" 个字母，很短，念一遍就记住了"
+    :"一共 "+s.length+" 个字母，分成两半来记"};
+}
+/* 第一幕：看图记意思 */
+function scMean(w){
+  const ic=TOPIC_ICON[w.topic]||"🌟";
+  const fs=w.en.length>13?24:w.en.length>10?29:34;
+  return {ms:5600,cap:w.en+"　"+w.zh,sub:w.ph||"",svg:
+    '<text x="160" y="44" text-anchor="middle" font-size="'+fs+
+      '" font-weight="bold" font-family="Arial" fill="#33505F">'+w.en+'</text>'+
+    (w.ph?'<text x="160" y="66" text-anchor="middle" font-size="13" fill="#8FA9B8">'+w.ph+'</text>':'')+
+    aniKid(92,104,.92,"#7FC8E8","#463A4F","wave")+
+    '<g class="ani-pulse"><text x="240" y="132" text-anchor="middle" font-size="54">'+ic+'</text></g>'+
+    '<g class="showUp"><text x="160" y="182" text-anchor="middle" font-size="21" font-weight="bold" fill="#33505F">'+
+      w.zh+'</text></g>'};
+}
+/* 三幕拼起来 */
+function autoAnim(w){
+  const sp=splitTwo(w.en),L=letterHints(w.en);
+  const two=sp?scCombine(sp.a,sp.b,w.en.toLowerCase(),
+      sp.a+" 加上 "+sp.b,"合起来就是 "+w.zh,w.tip||"")
+    :scLetters(w.en,L.hi,"拼一拼　"+w.en,L.tip,w.tip||"");
+  return {scenes:[scMean(w),two,scSay(w.en)]};
+}
+const AUTO_ANIM={};
+/* 有手绘的用手绘，没有的现场生成一次并存下来 */
+function animOf(w){
+  if(!w)return null;
+  if(ANIMS[w.en])return ANIMS[w.en];
+  if(!TALKS[w.en])return null;                 /* 连讲解都没有的词就不放小剧场 */
+  return AUTO_ANIM[w.en]||(AUTO_ANIM[w.en]=autoAnim(w));
+}
 let aniTimers=[];
 function stopAnim(){aniTimers.forEach(clearTimeout);aniTimers=[];}
 function animBlock(w){
-  const a=ANIMS[w.en];if(!a)return "";
+  const a=animOf(w);if(!a)return "";
   return '<div class="sc-anim"><div class="sc-label">🎬 动画小剧场</div>'+
     '<div class="ani-stage">'+a.scenes.map((s,i)=>'<div class="ani-scene'+(i?"":" on")+'">'+
       '<svg viewBox="0 0 320 196" preserveAspectRatio="xMidYMid meet">'+s.svg+'</svg></div>').join("")+'</div>'+
@@ -2975,7 +3741,7 @@ function animBlock(w){
 function aniCap(s){return s.cap+(s.sub?'<small>'+s.sub+'</small>':'');}
 /* 三个画面循环播放，放完第三个又回到第一个，一直不停；卡片换了就自动停下 */
 function playAnim(w,card){
-  const a=ANIMS[w.en];if(!a||!card)return;
+  const a=animOf(w);if(!a||!card)return;
   const box=card.querySelector(".sc-anim");if(!box)return;
   stopAnim();
   const scenes=box.querySelectorAll(".ani-scene"),dots=box.querySelectorAll(".ani-bar i"),cap=box.querySelector(".ani-cap");
@@ -4449,7 +5215,22 @@ const VOICE_INDEX={
 "seg07":{"它的意思是，煮沸":[0,18093],"煮开、沸腾。oi 读「奥伊」。它跟油 oil 长得很像，可 boil 是煮，oil 是油，别混了。":[18093,79149],"它的意思是，烤箱":[97242,19629],"烤箱。它读「阿文」，不读「奥文」，这个最容易错。蛋糕就是从 oven 里出来的。":[116871,64173],"它的意思是，烤的":[181044,18093],"烤的。烤鸡是 roast chicken。它跟吐司 toast 只差第一个字母，一个烤肉，一个烤面包。":[199137,74157],"它的意思是，煮的":[273294,19629],"boil 加上 ed，煮过的。白煮蛋就是 boiled egg。":[292923,44013],"它的意思是，炉灶":[336936,19629],"炉灶，就是家里做饭的那个灶台。小心，做饭的人是 cook，做饭的机器才是 cooker。":[356565,61293],"它的意思是，食谱":[417858,21165],"食谱，做菜的方法。它的读法很怪，结尾那个 e 要发音，读出来像「瑞色皮」。":[439023,57837],"架在火上烤的。烤鱼是 grilled fish。注意中间是两个 l。":[496860,45357],"它的意思是，机器":[542217,21357],"机器。这里的 ch 读「许」，整个词像「么信」。洗衣机就是 washing machine。":[563574,57837],"它的意思是，洗碗":[621411,19437],"洗碗这件事。do the washing-up 就是洗碗。中间有个小横线，别漏了。":[640848,53229],"它的意思是，原料；成分":[694077,24621],"做菜的原料。in 加上 gredient。读四拍：in、gre、di、ent。":[718698,66093],"它的意思是，冰箱":[784791,19629],"冰箱，词表里最长的词之一。好消息是，平时大家都只说 fridge，五个字母就够了。":[804420,63213],"它的意思是，领带；系":[867633,25965],"领带，也可以是「系上」。系鞋带就说 tie your shoes。就三个字母。":[893598,47085],"它的意思是，靴子":[940683,19437],"靴子。两个 o 读长长的「乌」。下雨天穿的雨靴是 rain boots。":[960120,56685],"它的意思是，戒指；响铃":[1016805,27693],"戒指，也可以是电话「响」。手指上戴的圈圈，和铃声响起来，都是这一个词。":[1044498,54957],"它的意思是，鞋":[1099455,18093],"鞋。一只是 shoe，两只是 shoes。注意结尾是 oe，不是 oo。":[1117548,59757],"它的意思是，尺寸；码":[1177305,24621],"尺寸、码数。买鞋子的时候问 What size，就是问你穿多大码。":[1201926,46701],"它的意思是，短袜":[1248627,19629],"短袜。一只 sock，一双 socks。它跟 rock、lock 押韵。":[1268256,49965],"它的意思是，西装；适合":[1318221,29229],"西装，也可以是「合适」。泳衣 swimsuit 里面也藏着它。":[1347450,48429]},
 "seg08":{"它的意思是，链条；连锁店":[0,27693],"链条，也可以指连锁店。ch 读「去」，读出来像「切恩」。一环扣一环的都叫 chain。":[27693,75885],"它的意思是，手套":[103578,19437],"手套。你看里面有个 love。天冷的时候戴上它，手就被好好爱护着了。":[123015,50157],"它的意思是，钱包":[173172,19629],"钱包。英国人说的 purse 是女士的小钱包，男士的钱包一般叫 wallet。":[192801,61101],"它的意思是，围巾":[253902,19437],"围巾。它变复数有点特别，f 要变成 ves，写成 scarves。":[273339,54765],"它的意思是，女式衬衫":[328104,21357],"女式衬衫。读出来像「布劳斯」。男生的衬衫叫 shirt，这两个别搞混。":[349461,54957],"它的意思是，连帽衫":[404418,21357],"连帽衫。hood 就是帽子那一块，后面加上 ie。带帽子的卫衣，就是 hoodie。":[425775,67437],"它的意思是，针织套头衫":[493212,24429],"套头毛衣，英国说法。jump 是跳，加上 er。记法：套头衫往头上一跳就穿好了。":[517641,67629],"它的意思是，口袋":[585270,19629],"口袋。中间是 ck。零花钱叫 pocket money，意思就是口袋里的钱。":[604899,57837],"它的意思是，连裤袜":[662736,21357],"连裤袜。它永远要加 s，因为有两条腿。跟 jeans、scissors 一样，都是天生的复数。":[684093,64557],"它的意思是，耳环":[748650,19437],"ear 是耳朵，ring 是圈圈。耳朵上的圈圈，耳环。中间连着两个 r，一个属于 ear，一个属于 ring。":[768087,78957],"它的意思是，毛衣":[847044,19629],"毛衣，美国说法。里面藏着一个 sweat，汗。穿太厚会出汗，所以叫 sweater。":[866673,57837],"它的意思是，运动鞋；教练":[924510,25965],"运动鞋，英国说法，一般说成 trainers 两只一起。它还有另一个意思是教练。":[950475,57837],"它的意思是，手链":[1008312,19437],"手链。前面 brace，后面 let。戴在手腕上的那个小圈。":[1027749,46701],"它的意思是，项链":[1074450,18093],"neck 是脖子，lace 是带子。挂在脖子上的带子，那就是项链。":[1092543,46893],"它的意思是，泳衣":[1139436,18285],"swim 是游泳，suit 是一套衣服。游泳穿的那套，就是泳衣。":[1157721,49965],"泳衣的另一种说法，美国人爱用。bathing 是泡水，suit 是那一套。注意这是分开的两个词，中间有空格。":[1207686,77421],"它的意思是，垃圾桶":[1285107,19437],"垃圾桶。就三个字母。扔垃圾就说 put it in the bin。":[1304544,40557],"它的意思是，租；租金":[1345101,24621],"租，也可以指租金。每个月交的房租就是 rent。它跟 sent、tent 押韵。":[1369722,56685]},
 "seg09":{"它的意思是，屋顶":[0,19629],"屋顶。两个 o 读长长的「乌」。房子最上面那一层就是 roof。":[19629,51693],"它的意思是，架子":[71322,18093],"架子。好几个架子要写成 shelves，f 变成 ves，跟围巾 scarf 的变法一样。":[89415,59757],"它的意思是，壁橱":[149172,19437],"壁橱，美国说法。里面有个 close，关。能关起来的柜子，就是壁橱。":[168609,56685],"它的意思是，枕头":[225294,21357],"枕头。后面是 low，低。睡觉的时候头低低地放上去。注意中间是两个 l。":[246651,72621],"它的意思是，海报":[319272,18093],"海报。post 是贴、寄，加上 er。贴在墙上的大画，就是海报。":[337365,54765],"它的意思是，厕所":[392130,21357],"厕所。读两拍：toi、let。在英国问厕所就说 Where is the toilet。":[413487,67629],"它的意思是，浴缸":[481116,18093],"bath 是洗澡，tub 是大桶。洗澡用的大桶，那就是浴缸。":[499209,47085],"它的意思是，毯子":[546294,21357],"毯子。前面 blan，后面 ket。天冷的时候盖在身上那一条。":[567651,48429],"它的意思是，橱柜":[616080,21357],"橱柜。读三拍：ca、bi、net。厨房墙上挂的那种柜子。":[637437,51501],"它的意思是，窗帘":[688938,21357],"窗帘。cur 加 tain，读出来像「克疼」，结尾很轻。天黑了就拉上 curtains。":[710295,59565],"它的意思是，暖气":[769860,19629],"暖气。heat 是热，加上 ing。冬天把暖气打开，就说 turn on the heating。":[789489,57837],"它的意思是，扶手椅":[847326,19629],"arm 是胳膊，chair 是椅子。有胳膊的椅子，就是扶手椅。":[866955,46893],"它的意思是，电梯":[913848,19629],"电梯，美国说法，英国人叫 lift。elevate 是升起来，加上 or 就是把人送上去的那个东西。":[933477,73581],"它的意思是，衣柜":[1007058,18093],"衣柜。前面 ward，后面 robe，robe 是长袍。放袍子和衣服的地方，就是衣柜。":[1025151,59565],"它的意思是，公寓":[1084716,18093],"公寓，美国说法，英国人叫 flat。读三拍：a、part、ment。":[1102809,51501],"它的意思是，洗衣机":[1154310,21165],"洗衣机。washing 是洗，machine 是机器。这是分开写的两个词，中间有空格。":[1175475,67629],"它的意思是，考试":[1243104,19437],"考试。它其实是 examination 的短写，太长了，所以大家都只说 exam。":[1262541,56685],"它的意思是，失败；不及格":[1319226,24429],"没通过、不及格，跟 pass 正好相反。四个字母，ai 读「诶」。":[1343655,45165]},
-"seg10":{"它的意思是，小测验":[0,22701],"小测验，比 exam 轻松多了。注意 q 后面永远跟着一个 u，这是英语的规矩。":[22701,59757],"它的意思是，学期":[82458,19437],"学期。一年分成好几个 term。它还有「术语」的意思，先记住学期就行。":[101895,54765],"它的意思是，小学生":[156660,21357],"小学生。英国学校里的学生叫 pupil，上大学的才叫 student。它还有个意思，是眼睛里的瞳孔。":[178017,70893],"它的意思是，拼写":[248910,19629],"拼写。老师说 Spell it，就是让你把字母一个一个念出来。注意结尾是两个 l。":[268539,63021],"它的意思是，橡皮":[331560,21357],"橡皮，美国说法。erase 是擦掉，加上 r 就是擦东西的家伙。英国人管它叫 rubber。":[352917,72429],"它的意思是，生物":[425346,18093],"生物。bio 是「生命」，logy 是「学问」。研究生命的学问，就是生物课。":[443439,58029],"它的意思是，学院；大学":[501468,27693],"学院、大学。注意中间是两个 l。":[529161,34029],"它的意思是，文凭；证书":[563190,25773],"文凭、证书。读三拍：di、plo、ma。毕业的时候发给你的那张纸。":[588963,57837],"它的意思是，错误":[646800,19437],"错误。mis 是「错」，take 是拿。拿错了，就是犯错。常跟 make 一起用，make a mistake。":[666237,71085],"它的意思是，物理":[737322,19629],"物理。ph 读「夫」，读出来像「菲日克斯」。它结尾有个 s，可它是一门课，当单数用。":[756951,75885],"它的意思是，项目；课题":[832836,25965],"项目、课题。老师布置的那种大作业就叫 project。pro 加上 ject。":[858801,54957],"它的意思是，初学者":[913758,21165],"初学者。begin 是开始，后面加 ner。注意 n 要写两个，begin 变成 beginner。":[934923,67245],"它的意思是，语言":[1002168,19437],"语言。中间是 gu，很容易漏掉那个 u。英语、中文都是 language。":[1021605,51501],"它的意思是，剪刀":[1073106,19437],"剪刀。它跟 tights 一样永远加 s，因为剪刀有两片刀。开头的 c 不出声，读出来像「西泽斯」。":[1092543,74157],"它的意思是，课本":[1166700,19629],"text 是课文，book 是书。装着课文的书，就是课本。":[1186329,45165],"它的意思是，化学":[1231494,21357],"化学。这里的 ch 读「克」，读出来像「凯么斯翠」。就是做实验那门课。":[1252851,61293],"它的意思是，时间表；课程表":[1314144,27693],"time 是时间，table 是表格。把时间排成一张表，就是课程表。":[1341837,53421],"它的意思是，词典":[1395258,21357],"词典。读四拍：dic、tio、na、ry。不认识的词，问它就行。":[1416615,74157]}
+"seg10":{"它的意思是，小测验":[0,22701],"小测验，比 exam 轻松多了。注意 q 后面永远跟着一个 u，这是英语的规矩。":[22701,59757],"它的意思是，学期":[82458,19437],"学期。一年分成好几个 term。它还有「术语」的意思，先记住学期就行。":[101895,54765],"它的意思是，小学生":[156660,21357],"小学生。英国学校里的学生叫 pupil，上大学的才叫 student。它还有个意思，是眼睛里的瞳孔。":[178017,70893],"它的意思是，拼写":[248910,19629],"拼写。老师说 Spell it，就是让你把字母一个一个念出来。注意结尾是两个 l。":[268539,63021],"它的意思是，橡皮":[331560,21357],"橡皮，美国说法。erase 是擦掉，加上 r 就是擦东西的家伙。英国人管它叫 rubber。":[352917,72429],"它的意思是，生物":[425346,18093],"生物。bio 是「生命」，logy 是「学问」。研究生命的学问，就是生物课。":[443439,58029],"它的意思是，学院；大学":[501468,27693],"学院、大学。注意中间是两个 l。":[529161,34029],"它的意思是，文凭；证书":[563190,25773],"文凭、证书。读三拍：di、plo、ma。毕业的时候发给你的那张纸。":[588963,57837],"它的意思是，错误":[646800,19437],"错误。mis 是「错」，take 是拿。拿错了，就是犯错。常跟 make 一起用，make a mistake。":[666237,71085],"它的意思是，物理":[737322,19629],"物理。ph 读「夫」，读出来像「菲日克斯」。它结尾有个 s，可它是一门课，当单数用。":[756951,75885],"它的意思是，项目；课题":[832836,25965],"项目、课题。老师布置的那种大作业就叫 project。pro 加上 ject。":[858801,54957],"它的意思是，初学者":[913758,21165],"初学者。begin 是开始，后面加 ner。注意 n 要写两个，begin 变成 beginner。":[934923,67245],"它的意思是，语言":[1002168,19437],"语言。中间是 gu，很容易漏掉那个 u。英语、中文都是 language。":[1021605,51501],"它的意思是，剪刀":[1073106,19437],"剪刀。它跟 tights 一样永远加 s，因为剪刀有两片刀。开头的 c 不出声，读出来像「西泽斯」。":[1092543,74157],"它的意思是，课本":[1166700,19629],"text 是课文，book 是书。装着课文的书，就是课本。":[1186329,45165],"它的意思是，化学":[1231494,21357],"化学。这里的 ch 读「克」，读出来像「凯么斯翠」。就是做实验那门课。":[1252851,61293],"它的意思是，时间表；课程表":[1314144,27693],"time 是时间，table 是表格。把时间排成一张表，就是课程表。":[1341837,53421],"它的意思是，词典":[1395258,21357],"词典。读四拍：dic、tio、na、ry。不认识的词，问它就行。":[1416615,74157]},
+"seg11":{"它的意思是，大学":[0,19629],"university 是大学。它比 college 大得多，里面一个学院一个学院的。读的时候重音在第三拍 ver 上，前面几拍轻轻带过。":[19629,88749],"它的意思是，校长":[108378,16365],"head 是头儿，teacher 是老师。学校里管着所有老师的那个头儿，就是校长。两个词连着写，中间不空格。":[124743,75693],"它的意思是，学童":[200436,21357],"school 是学校，child 是小孩。上学的小孩就是学童。它变复数很特别，是 schoolchildren，跟 children 一样。":[221793,82221],"它的意思是，上午":[304014,18285],"a.m. 表示上午。两个字母后面各有一个小点，别漏掉。记住 a 排在字母表最前面，所以它管前半天。":[322299,70893],"它的意思是，下午":[393192,21549],"p.m. 表示下午和晚上，正好跟 a.m. 反着。a 在前面，p 在后面，所以 p 管后半天。那两个小点同样别忘。":[414741,85293],"它的意思是，小时":[500034,21357],"hour 是小时。开头那个 h 不出声，所以它跟 our 读音一模一样。前面要用 an，说 an hour。":[521391,69357],"它的意思是，正午":[590748,19629],"noon 是正午，就是中午十二点。两个 o 夹在两个 n 中间，前后对称。中午过后那半天就叫 afternoon。":[610377,75885],"它的意思是，直到":[686262,19629],"till 就是「直到」，跟 until 一个意思，只是短一些。注意结尾是两个 l，别少写一个。":[705891,63021],"它的意思是，每天的":[768912,21357],"day 加上 ly 就是每天的。可拼的时候要小心，y 得先变成 i，写成 daily。报纸上写着 daily 的，就是日报。":[790269,85293],"它的意思是，稍后；后来":[875562,25965],"late 是晚，后面加个 r 就成了 later，过一会儿。跟人说再见常用 see you later。就多一个字母，意思变了。":[901527,75693],"mid 是中间，day 是一天。一天的正中间就是正午，跟 noon 说的是同一个时候。中间两个 d，别漏掉一个。":[977220,79341],"它的意思是，分钟":[1056561,21357],"minute 是分钟，重音在前一拍，听着像「米尼特」，结尾的 e 不出声。重音挪到后面，它就变成「微小的」。":[1077918,78957],"它的意思是，时刻；一会儿":[1156875,24621],"moment 就是很短的一会儿，比一分钟还短。mo 加上 ment，重音在最前面。让人稍等就说 just a moment。":[1181496,82413],"它的意思是，每周的":[1263909,21357],"week 是星期，加上 ly 就是每周的。它跟 daily 是一家人，只是不用改字母，直接加。周刊就是 weekly magazine。":[1285266,85293],"它的意思是，每月的":[1370559,21357],"month 是月，加 ly 就是每月的。它跟 daily 和 weekly 排成一队，一个管天，一个管周，一个管月。":[1391916,80685],"它的意思是，午饭时间":[1472601,21165],"lunch 是午饭，time 是时间。吃午饭的那段时候就是 lunchtime，连着写。晚饭时间也能这么说，dinner time。":[1493766,86829],"它的意思是，九月":[1580595,19629],"September 是九月，开头必须大写，所有月份都这样。它常缩写成 Sep。读的时候重音在中间那拍 tem 上。":[1600224,82413],"它的意思是，克":[1682637,18093],"gram 是克，很轻的单位，一颗糖也就几克。前面加上表示一千的 kilo，就成了 kilogram，千克。":[1700730,77421],"它的意思是，加":[1778151,18093],"plus 是加。算术题里那个小十字，念出来就是 plus。它的对头是 minus，减。结尾是 s，可它不是复数。":[1796244,86445],"它的意思是，零":[1882689,18285],"zero 就是零。读两拍，重音在前面，听着像「贼柔」。念电话号码的时候，英国人常把零念成 oh。":[1900974,85293]},
+"seg12":{"它的意思是，升":[0,18093],"litre 是升，一大瓶矿泉水差不多就是一升。英国人写 litre，美国人把最后两个字母调个头，写成 liter。":[18093,80301],"它的意思是，米":[98394,19437],"metre 是米，一米差不多是你一大步半。它跟 litre 一样，英国写 tre 结尾，美国写 ter，变成 meter。":[117831,80109],"它的意思是，减":[197940,19629],"minus 是减，也表示零下几度。它开头那个 i 读「爱」，听着像「买纳斯」。它跟 plus 是一对。":[217569,74541],"它的意思是，度；学位":[292110,24621],"degree 是度，说气温就用它，温度计上那个小圈念出来就是 degree。它还能指大学学位。结尾是两个 e。":[316731,80301],"它的意思是，双倍的":[397032,18093],"double 是双倍的，也就是两份。它里头的 ou 不读「奥」，整个词听起来像「达波」。宾馆的双人间就叫 double room。":[415125,77229],"它的意思是，长度":[492354,18093],"long 是长，它的名词长度是 length。中间的 o 要换成 e，后面跟着 gth 三个字母，很容易写漏。":[510447,75501],"它的意思是，百万":[585948,19437],"million 是一百万。中间是两个 l，别少写一个。前面有具体数字的时候后面不加 s，说 five million。":[605385,78957],"它的意思是，四分之一":[684342,21357],"quarter 是四分之一。看看钟表，一刻钟正好是一小时的四分之一。开头的 qu 两个字母总是手拉手出现。":[705699,73965],"它的意思是，几个":[779664,19437],"several 是好几个，比 some 具体一点，大概三四个。它看着四拍，其实只读三拍，中间那个 e 几乎听不见。":[799101,73965],"它的意思是，千克":[873066,18093],"kilo 是一千，gram 是克。一千克合起来就是千克，也就是我们平时说的一公斤。称体重用的就是它。":[891159,75693],"它的意思是，千米；公里":[966852,25965],"还是那个表示一千的 kilo，后面换成 metre 米。一千米就是一公里。跑步机上跳的那个数字，说的就是它。":[992817,80301],"它的意思是，厘米":[1073118,18093],"centi 表示百分之一，metre 是米。一米的百分之一就是厘米。尺子上最小的那种格子，一格就是一厘米。":[1091211,83373],"它的意思是，温度；体温":[1174584,25965],"temperature 是温度，也指体温。量体温就说 take a temperature。它看着老长，读起来其实只有三拍。":[1200549,69357],"它的意思是，蜜蜂":[1269906,21357],"bee 是蜜蜂，就三个字母。结尾两个 e 读长长的「衣」，听着真有点像蜜蜂嗡嗡。它跟 see 和 tree 押韵。":[1291263,80493],"它的意思是，鸟巢":[1371756,21357],"nest 是鸟巢。它跟休息 rest 只差开头一个字母，鸟儿回巢就是回去休息，两个词连着记最省劲。":[1393113,77229],"它的意思是，天鹅":[1470342,18093],"swan 是天鹅。它中间那个 a 不读「诶」，整个词听起来像「斯旺」。它跟 swim 一样以 sw 开头，天鹅也会游水。":[1488435,95085],"它的意思是，翅膀；机翼":[1583520,25965],"wing 是翅膀，飞机的机翼也用它。它跟秋千 swing 押韵，前面加个 s 就成了秋千，荡起来还真像扇翅膀。":[1609485,85293],"它的意思是，骆驼":[1694778,19437],"camel 是骆驼。重音在前面，读起来像「卡摸」。记住结尾是 el 不是 le。骆驼背上有一个或者两个驼峰。":[1714215,82221],"它的意思是，蜗牛":[1796436,21357],"snail 是蜗牛。它跟钉子 nail 只差开头一个 s，读出来也就多一声「斯」。蜗牛背着壳，慢慢地爬。":[1817793,78957],"它的意思是，甲虫":[1896750,21357],"beetle 是甲虫，背上有一层硬壳。前面那两个 e 读长长的「衣」，跟 bee 一样。别把结尾的 tle 写成 tel。":[1918107,96237]},
+"seg13":{"它的意思是，沙漠":[0,19629],"desert 是沙漠。它跟甜点 dessert 只差一个 s，沙漠里缺水，所以 s 也缺一个。它的重音在最前面那拍。":[19629,85293],"它的意思是，驴":[104922,19629],"donkey 是驴。它结尾正好是钥匙 key 那三个字母，看一眼就记住了。变复数直接加 s，写成 donkeys。":[124551,75693],"它的意思是，灭绝的":[200244,19437],"extinct 是灭绝的，一个都不剩了，恐龙就是 extinct。它跟出口 exit 一样以 ex 开头，ex 有出去、没了的意思。":[219681,96621],"它的意思是，生物":[316302,21357],"create 是创造，换个尾巴加上 ure，就成了 creature，生物。被造出来的活物都算 creature。重音在最前面。":[337659,83565],"它的意思是，袋鼠":[421224,21549],"kangaroo 是袋鼠，结尾是两个 o，读三拍，重音落在最后那声「鹿」上。妈妈肚子上有个口袋，宝宝就藏在里头。":[442773,80301],"它的意思是，陆龟":[523074,19629],"tortoise 是住在陆地上的龟，海里游的那种叫 turtle。它结尾 oise 四个字母读得很轻，听着像「拓特斯」。":[542703,88941],"它的意思是，野生动物":[631644,21357],"wild 是野生的，life 是生命。野外自己活着的那些动物，就是 wildlife。它当一个整体看，后面不加 s。":[653001,80109],"它的意思是，水母":[733110,19437],"jelly 是果冻，fish 是鱼。软软的像果冻一样的鱼，那就是水母。它的复数不变样，还是 jellyfish。":[752547,82221],"它的意思是，乡下；农村":[834768,25965],"country 是国家，也指乡村，side 是一边。城市以外那一片，就是乡下。去乡下玩就说 go to the countryside。":[860733,85293],"它的意思是，环境":[946026,19437],"environment 是环境。最容易写错的地方是 ment 前面那个 n，千万别漏。重音在中间那拍，读出来像「爱」。":[965463,82221],"它的意思是，干的；弄干":[1047684,27693],"dry 是干的，也能当动词，把东西弄干。它一个元音字母都没有，全靠结尾的 y 顶着，读「爱」。它的对头是 wet。":[1075377,80493],"它的意思是，湿的":[1155870,19437],"wet 是湿的，就三个字母，跟 get 和 pet 押韵。它跟 dry 正好反着，淋了雨就 wet，太阳一晒又 dry 了。":[1175307,85293],"它的意思是，木头":[1260600,19629],"wood 是木头。它跟 would 读音一样，可拼法完全不同。两个 o 挨着读短短的「乌」。一片小树林也叫 wood。":[1280229,78957],"它的意思是，金属":[1359186,19629],"metal 是金属。它跟奖牌 medal 长得特别像，一个中间是 t，一个中间是 d，看清楚再写。重音在前面一拍。":[1378815,83373],"它的意思是，木制的":[1462188,21357],"wood 是木头，后面加上 en 就是木制的。木盒子就说 wooden box。记住中间那两个 o，一个都不能少。":[1483545,80493],"它的意思是，皮革":[1564038,21165],"leather 是皮革，牛皮羊皮做出来的那种。它跟天气 weather 押韵，只是开头换成了 l。皮鞋就是 leather shoes。":[1585203,83565],"它的意思是，塑料":[1668768,19629],"plastic 是塑料。它跟 fantastic 一样以 stic 收尾，重音都在最前面那一拍。装东西的塑料袋就说 plastic bag。":[1688397,85293],"它的意思是，雷雨":[1773690,21357],"thunder 是雷，storm 是暴风雨。雷和暴风雨凑一块儿，就是雷雨。开头那个 th 要把舌头轻轻放在牙齿中间。":[1795047,85485],"它的意思是，现金":[1880532,24429],"cash 是现金，手里的纸钞和硬币，刷卡就不算 cash 了。它中间的 a 跟 cat 里那个 a 一个音，结尾 sh 轻轻吐气。":[1904961,81837],"它的意思是，赚；挣":[1986798,21357],"earn 是挣钱。你看它里头藏着一个 ear 耳朵，可读起来一点不像耳朵，听着像「厄恩」。挣钱就说 earn money。":[2008155,82221]},
+"seg14":{"它的意思是，欧元":[0,19437],"euro 是欧元，欧洲好多国家都用这种钱。它跟 Europe 欧洲是一家人，开头都是 Eur 三个字母。读出来像「尤罗」，重音在前面。":[19437,95085],"它的意思是，借出":[114522,19629],"lend 是借出，东西从你手里交到别人手里。要是同学跟你要笔，他会说 lend me a pen。记住方向，是往外给。":[134151,78957],"它的意思是，出售；打折":[213108,24429],"sale 是打折出售。商店玻璃上贴着大大的 sale，就是在降价卖。它跟动词 sell 卖是一家人，只是把 ll 换成了 le。":[237537,93549],"它的意思是，救；储蓄":[331086,25773],"save 有两个意思，一个是救，一个是存钱。其实是一回事，都是把东西保住不让它丢掉。存钱罐里的钱就是你 save 下来的。":[356859,88557],"它的意思是，便士（复数）":[445416,24621],"pence 是便士，英国最小的那种钱。一个便士叫 penny，好几个就变成 pence，这个复数特别不讲道理，得硬记住。":[470037,83565],"它的意思是，英镑":[553602,19629],"pound 是英镑，英国人花的钱。它还有一个意思是重量单位磅，一个词既管钱又管秤。中间的 ou 读出来像「奥」。":[573231,88557],"它的意思是，价格":[661788,19629],"price 是价格。超市货架上那张小标签写的数字，就是 price。它跟米饭 rice 押韵，前面多一个 p，听着像「普赖斯」。":[681417,90285],"它的意思是，商店；储藏":[771702,25965],"store 是商店，美国人爱这么说，英国人多说 shop。它还有一个意思是储存，把东西收起来放好，仓库里干的就是这事。":[797667,90093],"它的意思是，借入":[887760,18093],"borrow 是借进来，东西跑到你手里。刚学过的 lend 是借出去，两个方向正好相反。拼的时候中间要双写 r，别少一个。":[905853,87021],"它的意思是，支票":[992874,19629],"cheque 是支票。后面那串 que 只出一个音，整个词读起来就是「切克」。美国人写成 check，英国人才写 cheque。":[1012503,75885],"它的意思是，美元":[1088388,21357],"dollar 是美元。它结尾是 ar 不是 er，这个地方最容易写错。中间还要双写 l，读的时候重音落在最前面。":[1109745,83565],"它的意思是，钱包":[1193310,19437],"wallet 是钱包，放钞票和卡的那种扁扁的。中间是两个 l，后面跟着 et。女士用的小包一般说 purse，不太一样。":[1212747,97773],"它的意思是，收据":[1310520,18093],"receipt 是收据。它最坑的地方是中间那个 p 不发音，听起来像「瑞西特」。收银员给你的那张小纸条就是它。":[1328613,80109],"它的意思是，购物者":[1408722,19629],"shop 是商店，把最后那个 p 双写再加 er，就是买东西的人。这个规矩你见过，跑步的人 runner 也是先双写再加 er。":[1428351,91821],"它的意思是，顾客":[1520172,18093],"customer 是顾客，进店花钱的那个人。它跟 custom 习惯有关，老是习惯来这家店，那就成了熟客。读三拍，重音在最前面。":[1538265,96237],"它的意思是，折扣":[1634502,18093],"dis 有减掉的意思，count 是数。从价钱里减掉一点，就是折扣。在收银台听到 discount，那就是要便宜了。":[1652595,78957],"它的意思是，书店":[1731552,19629],"book 是书，store 是店，两个一凑就是书店。刚学的 store 跑来跟 book 做了邻居，中间不空格，一个词写到底。":[1751181,75885],"它的意思是，药房（美式）":[1827066,24621],"drug 是药，store 是店，合起来就是美式说的药房。这种店挺有趣，除了药还卖牙膏和零食，什么都有。":[1851687,82221],"它的意思是，半价":[1933908,18093],"half 是一半，price 是价钱，一半的价钱就是半价。中间那个小横线别忘了写。half 里的 l 不发音，读着像「哈夫」。":[1952001,89901],"它的意思是，部门；系":[2041902,25965],"department 是部门。大商场里分成好多区，每一区就是一个 department。它读四拍，重音落在第二拍 part 上面。":[2067867,85485]},
+"seg15":{"它的意思是，杂货店":[0,19437],"grocery 是食品杂货，store 是店，合起来就是卖菜卖米的杂货店。写的时候中间要空一格，它是两个词。":[19437,82221],"它的意思是，百货商店":[101658,19437],"刚学的 department 是部门，后面再放一个 store。一层一层分成好多部门的大店，就是百货商店。中间空一格。":[121095,73965],"它的意思是，咖啡馆":[195060,18093],"cafe 是咖啡馆。它跟 coffee 是一家人，都从同一个老词来的。结尾那个 e 要出声，整个词读起来像「卡费」。":[213153,79149],"它的意思是，俱乐部；社团":[292302,27693],"club 是俱乐部，也指学校里的社团。棋类社团就说 chess club。它还有一个意思是棍棒，一个词管两件不相干的事。":[319995,86829],"它的意思是，出口":[406824,21357],"exit 是出口。开头的 ex 有出去的意思，商场门上那块绿牌子写的就是它。找不到路的时候，就先找 exit。":[428181,79149],"它的意思是，标志；签名":[507330,27885],"sign 是标志，也是签名。它中间那个 g 不发音，读出来像「赛恩」。可一加上 al 变成 signal 信号，那个 g 又出声了。":[535215,96621],"它的意思是，关闭的":[631836,19629],"close 是关，后面加个 d 就是关着的。店门上挂着 closed，那就是今天不做生意了。反过来开门的牌子写 open。":[651465,75885],"它的意思是，正方形；广场":[727350,27693],"square 是正方形，也是广场。想一想，广场一般都方方正正的，两个意思就连上了。开头 squ 三个字母要黏在一起读。":[755043,91629],"它的意思是，药剂师；药店":[846672,25965],"chemist 是药剂师，在英国这个词还直接指药店。它开头的 ch 不读「彻」，要读成「克」，听着像「凯米斯特」。":[872637,86637],"它的意思是，工厂":[959274,21357],"factory 是工厂。它跟 fact 事实长得像，可意思一点不搭，别混在一起。变复数要把 y 改成 i 再加 es，写成 factories。":[980631,98157],"它的意思是，美术馆":[1078788,22701],"gallery 是美术馆，墙上挂满画的那种地方。中间是两个 l，别少写一个。它读三拍，重音在最前面的 ga 上。":[1101489,82221],"它的意思是，药房":[1183710,19437],"pharmacy 也是药房。它开头是 ph，这两个字母合读一个 f 的音，听着像「法马西」。英国人更爱用 chemist 这个词。":[1203147,96621],"它的意思是，汽油；气体":[1299768,25965],"gas 是汽油，美国人这么说。它还有一个意思是气体。就三个字母，很好记。美国的加油站就叫 gas station。":[1325733,82221],"它的意思是，座位":[1407954,19629],"seat 是座位。它跟 sit 坐是一家人，坐下去的那个地方就是座位。中间 ea 读长长的「衣」，跟 eat 吃一个读法。":[1427583,85101],"它的意思是，有轨电车":[1512684,19629],"tram 是有轨电车，顺着地上的铁轨慢慢走。它跟火车 train 开头三个字母一样，可 tram 短得多，车也短得多。":[1532313,77037],"它的意思是，轮胎":[1609350,21357],"tyre 是轮胎，英国人这么写，美国人写成 tire。要当心，tire 还有一个意思是累。两种写法都对，看你跟谁说话。":[1630707,92013],"它的意思是，延误；推迟":[1722720,24429],"delay 是延误，也是推迟。车站大屏幕上写着 delay，那就是车晚点了。它的重音落在后面那一拍，读着像「迪来」。":[1747149,85485],"它的意思是，发动机":[1832634,19629],"engine 是发动机。它开头读「恩」，后面 gine 读「进」，合起来像「恩进」。工程师 engineer 就是从这个词长出来的。":[1852263,87021],"它的意思是，汽油":[1939284,19437],"petrol 是汽油，英国人这么说，美国人说 gas。加油站就叫 petrol station。别跟 patrol 巡逻搞混，那个中间是 a。":[1958721,93165],"它的意思是，返回；归还":[2051886,25965],"re 有往回、再一次的意思，turn 是转。转回去，就是返回，也是把东西还回去。往返车票就叫 return ticket。":[2077851,83757]},
+"seg16":{"它的意思是，延误的":[0,19629],"delay 是延误，后面加 ed 就成了延误的。机场屏幕上航班后面写着 delayed，那就得等了。准点的话写 on time。":[19629,80493],"它的意思是，踏板车":[100122,19437],"scooter 是踏板车，一只脚踩着往前滑的那种。中间双写 o，读长长的「乌」，跟 shoot 里的 oo 一样，后面再加 ter。":[119559,93549],"它的意思是，高速公路":[213108,21357],"motor 是马达发动机，way 是路。让汽车放开跑的那条大路，就是高速公路。美国人更爱说 highway。":[234465,76077],"它的意思是，交通；运输":[310542,24429],"trans 有从这边到那边的意思，port 跟搬运有关。把人和东西送到别处去，那就是交通运输。公交地铁都算 transport。":[334971,88749],"它的意思是，停车场":[423720,21357],"park 除了公园还有停车的意思，加 ing 变成 parking。lot 是一块地。一块专门用来停车的地，就是停车场。":[445077,83757],"它的意思是，环岛":[528834,21357],"round 是圆的，about 是绕着。车子绕着一个大圆圈转出去，那就是环岛。两个熟词凑一块，中间不空格。":[550191,73965],"它的意思是，旅行；游览":[624156,24429],"tour 是旅行游览，转一大圈再回来那种。带你转的人叫 tour guide，跟着转的人叫 tourist。它只读一拍，像「吐儿」。":[648585,83757],"它的意思是，客人":[732342,19437],"guest 是客人，来你家吃饭或者住旅馆的那个人。它开头那个 u 不出声，只是陪着 g 站在那儿，读着像「盖斯特」。":[751779,77037],"它的意思是，行李":[828816,19437],"luggage 是行李。中间要双写 g，结尾是 age，这两处最容易写错。它当一整堆看，不加 s，再多箱子也是 luggage。":[848253,101421],"它的意思是，参观者；来客":[949674,25773],"visit 是拜访，后面加 or 就是来访的人。注意是 or 不是 er，这个尾巴要记牢。博物馆里转的人都是 visitors。":[975447,86637],"它的意思是，背包":[1062084,16365],"back 是背，pack 是包。背在背上的那种包，就是双肩背包。两个词里都有 ack，看着特别整齐，好记。":[1078449,79149],"它的意思是，营地":[1157598,19629],"camp 是露营，site 是地点。露营用的那块地，就是营地。site 这个词你见过，网站 website 后半截也是它。":[1177227,85485],"它的意思是，护照":[1262712,18285],"pass 是通过，port 是港口关口。有了它就能过关，那就是护照。中间要双写 s，别少写一个，出门可全靠这本。":[1280997,91629],"它的意思是，旅行指南":[1372626,22701],"guide 是指南向导，book 是书。给你指路的书，就是旅行指南。guide 开头那个 u 也不出声，跟 guest 一个样。":[1395327,90093],"它的意思是，客栈；家庭旅馆":[1485420,27693],"guest 是客人，house 是房子。给客人住的小房子，就是家庭旅馆。中间那个小横线别忘了写上去。":[1513113,70701],"它的意思是，预约":[1583814,19629],"appoint 是约定，后面加 ment 就变成约好的这件事，预约。看牙医前要先约好，那就是 appointment。中间双写 p。":[1603443,89901],"它的意思是，住宿":[1693344,18093],"accommodation 是住宿。它最容易拼错，先双写 c，再双写 m，两对挨着排。读五拍，重音落在 da 那一拍上。":[1711437,93357],"它的意思是，球门；目标":[1804794,24429],"goal 是球门，球进了大家也喊 goal。它还有一个意思是目标，心里想达到的那个地方。中间 oa 读长长的「欧」。":[1829223,83757],"它的意思是，航行":[1912980,19629],"sail 是航行，船上那张兜风的帆也叫 sail。它跟打折 sale 读音一模一样，可拼法不同，一个是 ail，一个是 ale。":[1932609,93549],"它的意思是，球场；法庭":[2026158,25965],"court 是球场，打网球那块地就是它。它还有一个意思是法庭。中间 our 只读一个长音，整个词听着像「考特」。":[2052123,86637],"它的意思是，最后的；决赛":[2138760,25965],"final 是最后的，比赛的决赛也叫 final。它跟 finish 结束是一家人，都从同一个老词来。前面那个 i 读「爱」。":[2164725,82221]},
+"seg17":{"它的意思是，橄榄球":[0,19629],"rugby 是橄榄球。这个名字来自英国一所叫 Rugby 的学校，那里的学生最早玩这种球。读的时候重音在前面，像「拉格比」。":[19629,91821],"它的意思是，得分；比分":[111450,25965],"score 是得分，也是比分。它跟 more 押韵，中间那个音拉得长长的。看球的时候大屏幕上那两个数字，就是 score。":[137415,86829],"它的意思是，跑步的人":[224244,21357],"run 是跑，后面加 er 就是跑步的人。要注意 n 得写两个，先双写再加 er。游泳的人 swimmer 也是这个规矩。":[245601,90093],"它的意思是，足球":[335694,21357],"soccer 和 football 说的是同一种球，美国人爱说 soccer，英国人说 football。中间是两个 c，别漏掉一个。":[357051,69357],"它的意思是，对；比":[426408,25965],"versus 就是「对」，中国对日本就用它。赛程表上常常缩写成 vs，只留两个字母。读的时候重音在前面一拍。":[452373,82413],"它的意思是，板球":[534786,19629],"cricket 是板球，在英国特别流行。这个词还有一个意思，是会叫的那种小虫子蟋蟀。一个词管两件事，一起记住。":[554415,86637],"它的意思是，奥运会的":[641052,22701],"Olympic 说的是奥运会的。它开头必须大写，因为来自希腊一个叫 Olympia 的地方。奥运会就是 the Olympic Games。":[663753,78765],"它的意思是，体育场":[742518,21357],"stadium 是体育场，看球时坐满人的那种大场子。读三拍，sta di um，重音在第一拍。变复数就加 s，stadiums。":[763875,95085],"它的意思是，单板滑雪板":[858960,22701],"这个词拆开就懂了，snow 是雪，board 是板。踩着一块板从雪山上滑下来，那就是单板滑雪板。":[881661,77229],"它的意思是，冲浪板":[958890,19437],"surf 是冲浪，board 还是板。合起来就是冲浪板。它跟 snowboard 是一家的，一个在雪上用，一个在海上用。":[978327,75885],"它的意思是，帆板运动":[1054212,21357],"wind 是风，surfing 是冲浪。板子上立一张帆，让风推着走，这就是帆板。中间不空格，一个词写到底。":[1075569,80493],"它的意思是，冲浪运动":[1156062,22701],"就是刚才的 surfboard 后面挂个 ing，变成这项运动本身。英语里好多运动都这样，后面加 ing 就成了。":[1178763,72237],"它的意思是，广告":[1251000,18093],"ad 就是广告。它是长词 advertisement 剪短来的，只留前面两个字母，说起来省劲多了。手机上老跳出来的就是 ad。":[1269093,83757],"它的意思是，乐队":[1352850,21357],"band 是乐队，几个人一起弹一起唱。它还有个意思是带子，一条一条的。头上的发带就叫 hairband。":[1374207,70893],"它的意思是，鼓":[1445100,18093],"drum 是鼓。打鼓的人叫 drummer，跟 runner 一个道理，先双写 m 再加 er。开头的 dr 两个字母黏在一起读。":[1463193,85485],"它的意思是，爵士乐":[1548678,19437],"jazz 是爵士乐。它结尾是两个 z，英语里这样收尾的词很少，看一眼就忘不了。开头那个 j 读得有点像「这」。":[1568115,74157],"它的意思是，新闻":[1642272,21357],"news 是新闻。它屁股上有个 s，可它是当一个整体看的，后面动词要用单数。看新闻就说 watch the news。":[1663629,79149],"它的意思是，曲调":[1742778,19437],"tune 就是一首歌的调子。它跟六月 June 押韵，读出来都是长长的「运」。哼得出调子，就说 I know that tune。":[1762215,78957],"它的意思是，迪斯科舞厅":[1841172,21357],"disco 是放音乐跳舞的地方。它是从长词 discotheque 剪短来的。中文说的迪斯科，就是照着这个词的读音叫的。":[1862529,75885],"它的意思是，电影":[1938414,18093],"movie 是电影，美国人这么说，英国人爱说 film。它跟 move 有关，move 是动，一张张画动起来就成了电影。":[1956507,82221],"它的意思是，歌剧":[2038728,19437],"opera 是歌剧，台上的人不说话，全靠唱。读三拍，重音在最前面。悉尼那座著名的白房子就叫 Opera House。":[2058165,75885]},
+"seg18":{"它的意思是，收音机":[0,19437],"radio 是收音机，也指广播。读的时候重音在最前面，听起来像「瑞迪欧」。它结尾是 o，变复数直接加 s。":[19437,85293],"它的意思是，标题；头衔":[104730,27693],"title 是标题。书封面上最大的那几个字就是它。它跟 little 长得很像，可读法不同，title 里的 i 读「爱」。":[132423,75501],"它的意思是，马戏团":[207924,21357],"circus 是马戏团，有小丑也有杂技。它跟圆圈 circle 是一家人，因为马戏的场地就是一个大圆圈。":[229281,78957],"它的意思是，喜剧":[308238,19629],"comedy 是喜剧，看着让人笑的那种。让人哭的那种叫 tragedy 悲剧。读三拍，重音在最前面的 co 上。":[327867,77037],"它的意思是，嘻哈音乐":[404904,21357],"hip hop 是嘻哈，写的时候中间要空一格，它是两个词。hip 是胯，hop 是单脚跳。中文的嘻哈就是照读音叫的。":[426261,83565],"它的意思是，恐怖":[509826,21357],"horror 是恐怖，恐怖片就是 horror film。它中间是两个 r，千万别少写一个。它的形容词是 horrible，糟透了。":[531183,82029],"它的意思是，记录；录制":[613212,24621],"record 有两个读法。重音落在前面时是名词，纪录或者唱片。重音挪到后面，就变成动词录音了。靠重音分家。":[637833,86829],"它的意思是，频道":[724662,18093],"channel 是频道，电视上换台就是换 channel。它还有个意思是海峡，英国和法国中间那条就叫 the Channel。中间双写 n。":[742755,80301],"它的意思是，节目；程序":[823056,25965],"program 是节目，也是电脑程序。美国人写 program，英国人写 programme，结尾多了 me 两个字母，意思一样。":[849021,86637],"它的意思是，杂志":[935658,19629],"magazine 是杂志。它最容易读错，重音在最后一拍 zine 上，听着像「麦格进」。中间那个字母是 a 不是 e。":[955287,82221],"它的意思是，古典的":[1037508,21357],"classic 是经典的，后面加上 al 就是 classical，古典的。古典音乐就说 classical music。中间别忘了两个 s。":[1058865,80301],"它的意思是，报纸":[1139166,21165],"news 是新闻，paper 是纸。新闻印在纸上，就是报纸。爷爷手里摊开的那一大张，就是 newspaper。":[1160331,82221],"它的意思是，展览":[1242552,21357],"exhibition 是展览。它最坑的地方是中间那个 h 不发音，听起来像「埃克西比申」。它的动词是 exhibit，展出。":[1263909,88365],"它的意思是，乐器；仪器":[1352274,25965],"instrument 是乐器，钢琴小提琴都算，它也指仪器。会弹乐器就说 play an instrument。读四拍，重音在最前面。":[1378239,85293],"它的意思是，麦克风":[1463532,19629],"micro 是小，phone 是声音。把小小的声音变大，那就是麦克风。平时大家还爱把它缩短成 mic，三个字母。":[1483161,85677],"它的意思是，电影院":[1568838,21165],"movie 是电影，theater 是剧场，合起来就是电影院。这是美式说法，英国人只说 cinema。中间要空一格。":[1590003,79149],"它的意思是，广告":[1669152,18093],"advertisement 就是广告，前面学的 ad 是它的短样子。它长，读的时候重音落在第二拍 ver 上，中间写 tise。":[1687245,96237],"它的意思是，激光唱片":[1783482,21357],"CD 两个字母都要大写，直接按字母名读，C 和 D。它是 compact disc 的缩写，圆圆一张银盘子，用来放歌。":[1804839,85485],"它的意思是，个人电脑":[1890324,24429],"PC 也是按字母名读，P 和 C。它是 personal computer 的缩写，personal 是个人的，computer 是电脑。":[1914753,81837],"它的意思是，数字光盘":[1996590,21357],"DVD 比 CD 多一个字母，读的时候三个字母名连着念，D V D。它能装整部电影，CD 一般只装歌。三个都大写。":[2017947,77229],"它的意思是，网；网页":[2095176,24621],"web 本来是蜘蛛网。后来网站一个连一个，也像张大网，就借用了这个词。网址开头那三个 w，就是 world wide web。":[2119797,86829]},
+"seg19":{"它的意思是，文件":[0,21357],"file 是文件，电脑里存下来的东西都叫 file。它跟 mile 押韵，i 读「爱」。装它的夹子叫 folder，文件夹。":[21357,83565],"它的意思是，邮件":[104922,19437],"mail 是邮件。它跟 male 男的读音一模一样，可拼法完全不同。电子邮件是 email，前面多一个 e。":[124359,72621],"它的意思是，地点；网站":[196980,24621],"site 是地点，也是网站。它跟视线 sight 读音一样，只不过那个多了不发音的 gh。网站就是 web 加 site。":[221601,83565],"它的意思是，无线网络":[305166,21357],"wifi 是无线网，住酒店最想找的就是它。它由两半拼成，前后都押「爱」的音，读起来像「歪 fai」。":[326523,69549],"它的意思是，点击":[396072,19629],"click 是点击，鼠标咔嗒一下。这个词念出来就像那声咔嗒。结尾 ck 两个字母合读一个音，只出一下声。":[415701,77229],"它的意思是，邮票":[492930,18093],"stamp 是邮票，也是盖章，还能表示用脚跺。你看这几个意思都是往下按一下，按在信上的那张就是邮票。":[511023,75693],"它的意思是，文件夹":[586716,21357],"fold 是折叠，后面加 er 就是文件夹。一张硬纸折一下，东西就能夹进去。电脑里那个黄色小图标也是它。":[608073,77421],"它的意思是，在线的":[685494,19629],"on 是在上面，line 是线。连在线上，就是在线。网上买东西就说 buy online。反过来断网叫 offline。":[705123,83757],"它的意思是，屏幕":[788880,19629],"screen 是屏幕。中间两个 e 连在一起，读长长的「衣」。电影院里那块大白布也叫 screen，银幕。":[808509,69357],"它的意思是，自拍":[877866,19629],"self 是自己，后面加上 ie 显得亲切，就成了自拍。举起手机对着自己按一下，那张照片就是 selfie。":[897495,75885],"它的意思是，上传":[973380,19437],"up 是往上，load 是装。把东西往网上装，就是上传。把 up 换成 down 就反过来了，download 是下载。":[992817,79149],"它的意思是，电池":[1071966,21357],"battery 是电池。它看着四拍，其实只读三拍，中间那个 e 几乎听不见。变复数要把 y 改成 i 再加 es。":[1093323,83373],"它的意思是，联系":[1176696,19629],"contact 是联系。con 有一起的意思，tact 跟碰到有关，两边碰上了就是联系上了。手机里的名单叫 contacts。":[1196325,89901],"它的意思是，消息；留言":[1286226,25965],"message 是消息。别跟 massage 搞混，那个中间是 a，意思是按摩。发消息就说 send a message。":[1312191,71085],"它的意思是，聊天室":[1383276,21549],"chat 是聊天，room 是房间。网上一起聊天的那个地方，就是聊天室。两个词连着写，中间不空格。":[1404825,74157],"它的意思是，文件；文档":[1478982,24621],"document 是文件，正式的那种，电脑里写好的文稿也叫它。读三拍，重音在最前面的 doc 上，后面轻轻带过。":[1503603,80685],"它的意思是，下载":[1584288,19629],"down 是往下，load 是装。把网上的东西装到自己这儿，就是下载。它跟 upload 正好反着，一下一上。":[1603917,82029],"它的意思是，电动的":[1685946,19629],"electric 是电动的，电动车就说 electric car。它换个尾巴变成 electricity，就是电这个东西本身了。":[1705575,78765],"它的意思是，信封":[1784340,21357],"envelope 是信封。前面的 en 有包进去的意思，把信包起来就是信封。读三拍，重音在最前面那个 en 上。":[1805697,83565],"它的意思是，键盘":[1889262,21357],"key 是键，board 是板。一块板上排满了键，就是键盘。board 这个词你见过好几回了，snowboard 里也有它。":[1910619,85293],"它的意思是，软件":[1995912,22701],"soft 是软的，ware 是东西货品。摸不着的那部分就叫软件。摸得着的机器叫 hardware，硬件，hard 是硬。":[2018613,90093]},
+"seg20":{"它的意思是，电话":[0,18093],"拆开看，tele 是远，phone 是声音。把声音送到很远的地方，就是电话。读的时候重音在最前面的 te。":[18093,78957],"它的意思是，耳机":[97050,21165],"head 是头，phone 是听筒。戴在头上的两个听筒，就是耳机。因为有两只，后面几乎总是带着 s。":[118215,72429],"它的意思是，电":[190644,18093],"它是 electric 的名词，electric 是电动的，electricity 才是电本身。这个词长，重音落在 tri 上。":[208737,80301],"它的意思是，手机":[289038,21357],"mobile 的意思是可移动的，能带着走的电话，就是手机。英国人说 mobile phone，美国人说 cell phone。":[310395,70701],"它的意思是，老板":[381096,18093],"boss 就是公司里说话最管用的那个人，头儿。就四个字母，中间双写的 s 别丢掉，读起来短短一下。":[399189,66093],"它的意思是，员工":[465282,18093],"staff 说的是一家店或者一家公司的全体员工，是个整体。所以它后面不加 s，动词常常用复数。":[483375,69357],"它的意思是，职业；事业":[552732,27885],"career 指一个人长期做的事业，不是一天的活儿。重音在后半截 reer，前面那个 ca 读得很轻。":[580617,69357],"它的意思是，舞者":[649974,21357],"dance 是跳舞，结尾已经有个 e，所以只加一个 r 就成了跳舞的人。跟 singer 一个道理，做这件事的人。":[671331,77613],"它的意思是，警察":[748944,21357],"police 说的是一整支警察队伍，所以从来不加 s。重音在后半截，前面那个 po 读得很轻。出事就找它。":[770301,75693],"它的意思是，作家":[845994,19437],"write 是写，结尾那个 e 要先去掉，再加 er，就是写东西的人。开头的 w 不发音，听着像 riter。":[865431,82221],"它的意思是，清洁工；清洁剂":[947652,29229],"clean 是干净，也是打扫，后面加 er 就是打扫的人。它还能指清洁剂，瓶子上写 cleaner 就是这个。":[976881,72621],"它的意思是，画家；油漆工":[1049502,27693],"paint 既是画画也是刷漆，所以 painter 有两个身份，画家和油漆工。到底哪个，得看前后在说什么。":[1077195,70701],"它的意思是，探险家":[1147896,22701],"explore 是探索，结尾有 e，直接加 r 就是探险的人。电脑上那个 Explorer 图标也是从它来的。":[1170597,74157],"它的意思是，机械师；修理工":[1244754,25965],"mechanic 和 machine 是一家人，都跟机器有关。会修机器修汽车的人就是它。重音在中间的 cha。":[1270719,70701],"它的意思是，音乐家":[1341420,19437],"music 是音乐，后面加 ian 就是搞音乐的人。注意读音变了，中间的 ci 读得像 shi，重音也在中间。":[1360857,75693],"它的意思是，助手；店员":[1436550,27885],"assist 是帮忙，加上 ant 就是帮忙的人。商店里的 shop assistant 就是店员。两个 s 挨着，别漏。":[1464435,77229],"它的意思是，同事":[1541664,19629],"colleague 就是一起上班的同事。它最容易拼错，结尾是 gue，后面那两个字母不出声，读到 g 就停。":[1561293,78957],"它的意思是，家庭主妇":[1640250,22701],"house 是家，wife 是妻子，合起来就是在家操持家务的主妇。复数要把 f 变成 v，写成 housewives。":[1662951,82029],"它的意思是，秘书":[1744980,19437],"secret 是秘密，后面加 ary。替老板管着好多事的那个人，就是秘书。中间的 re 读得很轻，别漏写。":[1764417,79149],"它的意思是，记者":[1843566,19629],"journal 是期刊，也是日志，加上 ist 就是写稿子的人，记者。开头的 jour 读起来像 zher，不读 jiu。":[1863195,86637],"它的意思是，职业":[1949832,19437],"occupation 就是职业，填表格的时候常有这一栏。拼写要小心，前面两个 c 挨在一起，重音在 pa。":[1969269,67629]},
+"seg21":{"它的意思是，男商人":[0,21357],"business 是生意，man 是男人，合起来就是做生意的男人。它变复数很特别，man 要变成 men。":[21357,74157],"它的意思是，接待员":[95514,19437],"reception 是接待处，加上 ist 就是在接待处工作的人。进酒店第一个跟你说话的就是他。":[114951,63021],"它的意思是，女商人":[177972,21357],"跟 businessman 是一对，只是把 man 换成了 woman，指做生意的女人。复数写成 businesswomen。":[199329,67629],"它的意思是，警察":[266958,21357],"police 是整支警察队伍，officer 是有职务的人。两个词合起来指具体的一位警察，能加 s 说好几位。":[288315,77229],"它的意思是，死":[365544,18093],"die 是动词，说的是死这个动作。它加 ing 很特别，要先把 ie 变成 y，写成 dying，别写错。":[383637,73773],"它的意思是，生病的":[457410,21357],"ill 是生病的，跟 sick 意思差不多。英国人更爱用 ill，而且它一般放在 be 后面，不放名词前面。":[478767,69165],"它的意思是，死的":[547932,19437],"dead 是形容词，说的是已经死了的状态。die 是动作，dead 是结果，这一对千万别用混。":[567369,70893],"它的意思是，疼痛":[638262,21357],"pain 是身体上的疼。它跟下雨的 rain 只差第一个字母，读音也押韵，记住一个就带出另一个。":[659619,70701],"它的意思是，事故；意外":[730320,25773],"accident 就是没想到会发生的事，事故。拼的时候注意开头两个 c 挨着。说偶然碰上就用 by accident。":[756093,83565],"它的意思是，救护车":[839658,21357],"ambulance 是救护车，出事了先喊它。重音在最前面的 am，后面那几个音都读得又轻又快。":[861015,69357],"它的意思是，胃疼；肚子疼":[930372,27693],"stomach 是胃，也是肚子，ache 是隐隐地疼。两个词一凑就是肚子疼。ache 里的 ch 读成 k 的音。":[958065,86445],"它的意思是，推":[1044510,16365],"push 是往外推。商场门上常贴着 push 和 pull，一个推一个拉，这两个词最好一起记。":[1060875,64365],"它的意思是，好像":[1125240,18093],"seem 是看起来好像，没有十分确定。它跟 see 长得像，see 是真看见了，seem 只是看上去像。":[1143333,69165],"它的意思是，关上":[1212498,18093],"shut 是关上，比 close 更用力一点。它很省事，过去式和过去分词都还是 shut，一个字母不变。":[1230591,69165],"它的意思是，种类；分类":[1299756,24621],"sort 是种类，问哪一种就说 what sort of。它也能当动词，意思是把东西分门别类摆好。":[1324377,72429],"它的意思是，赶快":[1396806,19629],"hurry 是赶快。它中间是两个 r，别少写一个。催人的时候说 hurry up，听着又短又急。":[1416435,67629],"它的意思是，分享；共用":[1484064,25965],"share 是分着一起用，分东西可以，合住一间房也可以。开头的 sh 要送气，别读成了 s。":[1510029,66285],"它的意思是，喊叫":[1576314,19629],"shout 是大声喊。它跟 out 押韵，中间的 ou 读同一个音。图书馆那种地方，就别 shout。":[1595943,75693],"它的意思是，偷":[1671636,18093],"steal 是偷，过去式很不规则，变成 stole。小心它跟钢 steel 读音一样，可拼写不一样。":[1689729,72621],"它的意思是，属于":[1762350,19629],"belong 是属于，后面几乎总跟着一个 to。想说这个东西是我的，就说 it belongs to me。":[1781979,67629],"它的意思是，决定":[1849608,19629],"decide 是决定。后面要接动作，就用 decide to 加动词。它的名词是 decision，c 的读音会变。":[1869237,70701],"它的意思是，发明":[1939938,19629],"invent 是发明，做出世界上原来没有的东西。加 or 变成发明家 inventor，加 ion 变成发明 invention。":[1959567,82221]},
+"seg22":{"它的意思是，修理":[0,18093],"repair 是修好。前面的 re 有再一次的意思，把坏掉的东西再弄回原样。重音在后面的 pair。":[18093,72621],"它的意思是，相信":[90714,19437],"believe 是相信。它中间那段正好是 lie，说谎。记住相信里头藏着谎，就不会把 ie 写反了。":[110151,72621],"它的意思是，递送":[182772,18285],"deliver 是送到手上。快递员把东西送到家门口，做的就是 deliver。重音在中间的 li 上。":[201057,66285],"它的意思是，讨论":[267342,18093],"discuss 是几个人一起谈事情。结尾两个 s 别漏，它的名词是 discussion。重音在后半截 cuss。":[285435,69741],"它的意思是，解释":[355176,19629],"explain 是把事情讲清楚。注意后面直接跟要讲的东西，不能说 explain me，要说 explain to me。":[374805,73965],"它的意思是，改善；提高":[448770,24621],"improve 是变得更好。它里面藏着 prove，证明。天天练，就能证明自己在变好。重音在后面。":[473391,69357],"它的意思是，收到":[542748,18285],"receive 是收到。最容易错的是中间，先 e 后 i，跟 believe 正好相反。这两个词放一起记最好。":[561033,72429],"它的意思是，猜想；认为":[633462,22701],"suppose 是猜想，觉得大概如此，没那么肯定。中间两个 p 挨着。be supposed to 的意思是应该。":[656163,73965],"它的意思是，发现":[730128,19629],"cover 是盖住，前面加上 dis 就是把盖子揭开，那就是发现。东西原来就在那儿，只是被找出来了。":[749757,69357],"它的意思是，理解；明白":[819114,25965],"under 是下面，stand 是站。站到下面去看明白，就是理解。它的过去式很怪，变成 understood。":[845079,79149],"它的意思是，低的":[924228,18093],"low 是低，跟 high 正好相反。它不光说高度，声音小价钱便宜也能用 low。结尾的 w 不出声。":[942321,72621],"它的意思是，贫穷的；可怜的":[1014942,31149],"poor 有两个意思，一个是穷，一个是可怜。看到 poor dog，说的不是狗没钱，是这只狗真可怜。":[1046091,67629],"它的意思是，宽的":[1113720,21165],"wide 是宽，反过来窄就是 narrow。它的名词是 width，结尾的 e 掉了，换成了 th，容易写错。":[1134885,78957],"它的意思是，通常的":[1213842,21357],"usual 是平常的，跟往常一样。加上 ly 就变成 usually，通常。开头那个 u 要读成 you 的音。":[1235199,73965],"它的意思是，更差的":[1309164,19437],"worse 是更差，两样东西比的时候用它。bad 这一串得连着背，bad，worse，worst，一口气念下来。":[1328601,80301],"它的意思是，最差的":[1408902,21357],"worst 是最差，三样以上里头垫底的那个，前面常常加 the。它比 worse 只多了一个 t。":[1430259,61293],"它的意思是，错的":[1491552,19629],"wrong 是错的。开头那个 w 不出声，听起来跟 long 押韵。写的时候千万别把这个 w 漏掉。":[1511181,72621],"它的意思是，更好的":[1583802,18093],"better 是更好。good 那一串也要连着背，good，better，best。身体好转了也能说 feel better，很常用。":[1601895,70893],"它的意思是，最新的":[1672788,19437],"late 是晚，最高级 latest 指时间上最靠后的，也就是最新的。手机广告里天天都有这个词。":[1692225,72621],"它的意思是，现代的":[1764846,21357],"modern 是现代的，新式的。重音在前面的 mo，后面那半截读得又轻又快。它的反面是 old。":[1786203,70701],"它的意思是，正常的":[1856904,21357],"normal 是正常的，跟平时一样。量体温看结果的时候最常听到它。反过来说奇怪就用 strange。":[1878261,72621],"它的意思是，拥挤的":[1950882,21357],"crowd 是人群，后面加 ed 就成了形容词，挤满人的。上下班时候的地铁，就是最 crowded 的。":[1972239,72813]},
+"seg23":{"它的意思是，外国的":[0,19437],"foreign 里那个 g 是个哑巴，一点声都不出，听起来像「佛林」。它的意思是外国的，外语就说 foreign language。":[19437,82221],"它的意思是，完美的":[101658,19629],"perfect 可以拆成 per 和 fect，per 是「彻底」，fect 那半来自「做」。从头到尾都做到位，当然就是完美。":[121287,75885],"它的意思是，相似的":[197172,19437],"similar 是相似的意思，三个音节 si mi lar，重音落在最前面。要说和什么像，后面加一个 to，元音是 i i a。":[216609,88365],"它的意思是，高级的":[304974,19629],"advanced 是 advance 加 d，advance 是往前走。学得比别人往前一段，就是高级的。":[324603,63021],"它的意思是，可怕的；糟糕的":[387624,25965],"horrible 和 horror 是一家人，前面那半 horr 都有两个 r，说的是让人发毛的事。结尾的 ible 表示「让人觉得怎样」。":[413589,86829],"它的意思是，可能的":[500418,21357],"possible 说的是有可能，中间是两个 s，别少写一个。它前面加上 im 就翻了面，变成不可能 impossible。":[521775,82413],"它的意思是，可用的；有空的":[604188,27693],"available 结尾是 able，able 就是「能」。东西能用得上，人能腾出时间，都用这个词。座位空着，网上就写 available。":[631881,87021],"它的意思是，极好的；聪明的":[718902,29229],"brilliant 本来是说闪闪发亮，英国人夸东西棒也用它。听见 That is brilliant，就是太棒了。":[748131,75693],"它的意思是，困难的":[823824,21165],"difficult 里的 dif 有「不」的意思，后面那半来自「容易」。不容易，就是难，反过来就是 easy。":[844989,74157],"它的意思是，极好的":[919146,19629],"excellent 是从 excel 来的，excel 就是比别人强出一截。所以它比 good 厉害多了，老师在卷子上写这个词你就乐吧。":[938775,78957],"它的意思是，有吸引力的；漂亮的":[1017732,31149],"attractive 从 attract 来，attract 是把人拉过来。能把眼睛拉过去，就是好看的。":[1048881,64365],"它的意思是，不可能的":[1113246,19437],"impossible 就是 possible 前面加 im，im 表示「不」，加上它就变成反面，很多形容词都这样。":[1132683,73965],"它的意思是，成功的":[1206648,21165],"successful 是 success 加 ful，ful 是「满满的」。装满了成功，就是成功的。":[1227813,67821],"它的意思是，舒适的":[1295634,19629],"comfortable 是 comfort 加 able，comfort 就是舒服，坐着睡着舒服都用它。":[1315263,58029],"它的意思是，国际的":[1373292,19629],"这个词里藏着 nation 国家。前面的 inter 是「在中间」，互联网 internet 也带着它。国与国之间的事，就是国际的。":[1392921,85293],"它的意思是，自从；因为":[1478214,27693],"since 有两个用法。说时间的时候是「从那时起」，后面跟一个时间点，比如 since Monday。它跟 for 不一样。":[1505907,75885],"它的意思是，几乎":[1581792,18093],"almost 里面有 most，most 是「最多」。都快顶到最多了，只差一点点，所以是「几乎」。后面既能跟动词，也能跟形容词。":[1599885,88365],"它的意思是，无论如何；反正":[1688250,27693],"anyway 是 any 加 way。any 是任何，way 是路。不管走哪条路结果都一样，那就是「反正」。大人换话题时开头就爱说它。":[1715943,88557],"它的意思是，除…之外":[1804500,24621],"except 前面的 ex 是「出去」，把一个人挑出去不算，那就是除了他。当心它和 expect 长得像。":[1829121,70701],"它的意思是，几乎；将近":[1899822,25965],"nearly 是 near 加 ly，near 是「近」。离目标只差一点点，就是快要了，快到九点就说 nearly nine。":[1925787,77421],"它的意思是，不再":[2003208,18093],"anymore 是 any 加 more，再多一点的意思。它几乎总跟 not 一起出现，合起来是一点也不再有了。位置很固定，放在句子最后面。":[2021301,93357],"它的意思是，确切地；正是":[2114658,27885],"exactly 是 exact 加 ly，exact 就是一点不差。别人说中你的心思，回一句 Exactly。":[2142543,70701]},
+"seg24":{"它的意思是，幸运的是":[0,21357],"luckily 是 lucky 变来的，结尾那个 y 要先换成 i，再加 ly。讲故事的时候把它放在句子最前面，后面跟个逗号，表示「还好，幸亏」。":[21357,98349],"它的意思是，也许":[119706,19629],"perhaps 里的 haps 和 happen 是一家人，都跟碰巧有关。碰巧会这样吧，就是也许，它和 maybe 意思一样。":[139335,79149],"它的意思是，实际上":[218484,19437],"actually 就是中文里常说的「其实」，它从 actual 真实的来。想纠正别人又不想太冲，先说它，再讲你的想法。":[237921,78957],"它的意思是，任何地方":[316878,19437],"anywhere 是 any 加 where，任何地方。somewhere，nowhere 都是它的亲戚。":[336315,51693],"它的意思是，也许；可能":[388008,25965],"possibly 是 possible 变来的副词，把结尾的 le 换成 ly。意思是说不准，听着比 maybe 更没底气。":[413973,72813],"它的意思是，仔细地":[486786,19629],"carefully 一层层拆，care 是在意，加 ful 变成 careful 小心的，再加 ly 就成了「小心地」。很多副词都这么长。":[506415,94893],"它的意思是，包括":[601308,21357],"including 从 include 来，in 是「里面」，clude 是「关」。关进里面一起算，就是包括。":[622665,85485],"它的意思是，后来；然后":[708150,24429],"afterwards 是 after 加 wards，after 是「之后」，wards 表示方向。讲完一件再接下一件。":[732579,73965],"它的意思是，不幸的是；可惜":[806544,27693],"这个词有四层，中间是 fortune 运气，加 ate 变成幸运的，前面 un 一来就翻成不幸的，最后 ly 收尾。":[834237,83565],"它的意思是，点":[917802,19437],"dot 就是一个小圆点。念网址的时候，那个点就读 dot，比如 dot com。它和小狗 dog 只差最后一个字母，读的时候舌尖要顶一下。":[937239,90093],"它的意思是，东；东方":[1027332,24429],"east 是东边，太阳从这头升起来，早上的光就从这边照进屋子。说在东边要带上 the，in the east。":[1051761,75693],"它的意思是，事实":[1127454,21357],"fact 说的是真事，不是想法。in fact 就是中文的「其实，事实上」。它和工厂 factory 前半截一样，都是从「做出来」这个意思来的。":[1148811,99693],"它的意思是，西；西方":[1248504,24429],"west 是西边，太阳落下去那一头。它和 east 一升一落，正好相反，说在西边用 in the west。":[1272933,72621],"它的意思是，人群":[1345554,21165],"crowd 是挤在一堆的一群人。给它加个 ed 变成 crowded，就是拥挤的。当心它和云 cloud 长得像，只差一个字母。":[1366719,93549],"它的意思是，事件；活动":[1460268,25965],"event 里的 vent 是「来」的意思，来了一件事，就是事件或者活动。运动会上每个比赛项目都叫一个 event。":[1486233,77229],"它的意思是，东西":[1563462,19629],"stuff 就是一堆零碎东西，懒得一个个报名字的时候用它。它不可数，后面永远不加 s。当心它和员工 staff 只差中间那个元音字母。":[1583091,86829],"它的意思是，建议":[1669920,19629],"advice 是建议，它不可数，不能说一个两个。带 c 的这个是名词，把 c 换成 s 变成 advise，就成了动词「劝」。":[1689549,86829],"它的意思是，在…旁边":[1776378,21357],"beside 里面藏着 side，就是「边」。在你的边上，那就是旁边，坐我旁边就说 sit beside me。":[1797735,69549],"它的意思是，底部":[1867284,18093],"bottom 是最下面，反过来是 top。拼的时候中间是两个 t，名字写在最下面那行就说 at the bottom。":[1885377,69549],"它的意思是，它自己":[1954926,22893],"itself 是 it 加 self，self 就是「自己」。东西自己动起来就说 by itself。":[1977819,70893],"它的意思是，记忆；记忆力":[2048712,25965],"memory 和 remember 里都有 mem，都跟「记」有关。记性好就说 a good memory。":[2074677,53421],"它的意思是，我自己":[2128098,18093],"myself 是 my 加 self，我自己。想强调是你亲手做的，就在句子最后加上它，重音落在 self 上。":[2146191,77229],"它的意思是，没有人":[2223420,19437],"nobody 是 no 加 body。body 在这里是「人」，一个人也没有，跟 no one 一样。":[2242857,61293]},
+"seg25":{"它的意思是，任何人":[0,19629],"anybody 是 any 加 body，任何一个人，疑问句和否定句里最常见到它。它和 anyone 意思一样。":[19629,77229],"它的意思是，她自己":[96858,18093],"herself 是 her 加 self，她自己。和 himself 摆一起记，一个用 her，一个用 him。":[114951,69165],"它的意思是，他自己":[184116,22701],"himself 用的是 him，不是 his，千万别写成 hisself，那个词根本不存在，重音落在 self 上。":[206817,76077],"它的意思是，执照":[282894,19629],"licence 是官方发的证，比如驾照就叫 driving licence。英国人写成 c，美国人写成 s，成了 license。":[302523,79149],"它的意思是，没有什么":[381672,18285],"nothing 是 no 加 thing，一样东西也没有。它和 something 结尾都是 thing。":[399957,49965],"它的意思是，意见；看法":[449922,24429],"opinion 是看法。想说「我觉得」，句子开头就用 in my opinion。拼的时候留意，字母 i 出现了两回。":[474351,73965],"它的意思是，成功":[548316,18285],"success 最爱考的就是拼写，两个 c 紧跟着两个 s。后面加 ful 就变成形容词 successful。":[566601,74349],"它的意思是，麻烦":[640950,18093],"trouble 是麻烦事，它不可数，不加 s。英语里麻烦不分大小，做错事被抓住就是 in trouble。":[659043,70701],"它的意思是，左边的":[729744,19437],"left-hand 是 left 加 hand，左手那一边，中间那根小横线别丢了。它是形容词，后面要接名词。":[749181,78957],"它的意思是，相反的；对面":[828138,26157],"opposite 里的 pos 是「放」，前面的 op 是「对着」。对着放的，那就是正对面。说在银行对面，中间不用加 of。":[854295,80493],"它的意思是，某人":[934788,19437],"somebody 是 some 加 body，某个人，不知道是谁，和 someone 意思一样。它后面的动词用单数。":[954225,78957],"它的意思是，在楼上":[1033182,19629],"upstairs 是 up 加 stairs，stairs 是楼梯。顺着楼梯往上就是楼上，楼下把 up 换成 down。":[1052811,80685],"它的意思是，你自己":[1133496,22701],"yourself 是 your 加 self，你自己。对着好几个人要换成 yourselves，f 变成 v 再加 es。":[1156197,80685],"它的意思是，开始；开头":[1236882,24621],"beginning 最容易错的是中间那两个 n。begin 重音在后半截，加 ing 前先写两遍 n。":[1261503,72429],"它的意思是，设备；器材":[1333932,27885],"equipment 是 equip 加 ment。equip 是给人配上装备，ment 一来就变成名词。":[1361817,64365],"它的意思是，每个人":[1426182,21357],"everybody 是 every 加 body，每一个人。说的是所有人，动词却要用单数，说 Everybody is happy。":[1447539,83373],"它的意思是，我们自己":[1530912,22701],"ourselves 是 our 加 selves。人一多，self 就变 selves，f 换成 v 再加 es。":[1553613,96429],"它的意思是，差别":[1650042,19629],"difference 是 different 的名词。different 是不一样的，它是不一样这件事。":[1669671,50157],"它的意思是，在楼下":[1719828,19437],"downstairs 是 down 加 stairs，顺着楼梯往下就是楼下，结尾永远带 s，它和 upstairs 正好一对。":[1739265,86829],"它的意思是，经历；经验":[1826094,22701],"experience 说的是亲身经过的事，一次难忘的旅行就是 a great experience。":[1848795,54765],"它的意思是，信息":[1903560,21357],"information 中间藏着 form，形式。把东西弄成你看得懂的形式交给你，那就是信息。它不可数，永远不加 s。重音在后面的 ma 那一块。":[1924917,95085],"它的意思是，说明；指示":[2020002,25965],"instructions 里的 struct 是「搭起来」，和 structure 结构是一家。教你一步一步搭好，那就是说明，常用复数。":[2045967,73965],"它的意思是，身份证明":[2119932,21357],"identification 长得吓人，其实就是 identify 接了长长一段，平时都说缩写 ID。":[2141289,64365]}
 };
 /* 取回某段的音频包，切成一条条独立音频。失败就静默放弃，自动退回在线语音。 */
 function loadVoicePack(seg){
@@ -5020,7 +5801,7 @@ function openDevList(seg){
   $("#devWords").innerHTML=ws.map(w=>
     '<div class="dw"><span class="en" lang="en">'+w.en+'</span>'+
     '<span class="zh">'+w.zh+'</span>'+
-    '<span class="mk">'+(ANIMS[w.en]?"🎬":"")+(w.talk?"🗣":"")+(S.scored[w.en]?"✓":"")+'</span>'+
+    '<span class="mk">'+(ANIMS[w.en]?"🎬":animOf(w)?"🎞":"")+(w.talk?"🗣":"")+(S.scored[w.en]?"✓":"")+'</span>'+
     '<button data-dw="'+w.en+'" data-m="study">讲解</button>'+
     '<button class="q" data-dw="'+w.en+'" data-m="quiz">测试</button></div>').join("");
   document.querySelectorAll("#devWords button[data-dw]").forEach(b=>b.onclick=()=>{
