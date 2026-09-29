@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v1.18.0</title>
-<meta name="app-version" content="1.18.0">
+<title>魔法单词学院 · v1.23.0</title>
+<meta name="app-version" content="1.23.0">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -339,6 +339,28 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 .erow .zh{font-size:14px;opacity:.75;flex:1;text-align:left}
 .erow .cnt{font-size:13px;font-weight:bold;color:var(--pink)}
 .erow .okk{font-size:13px;font-weight:bold;color:var(--green)}
+/* 家长面板的二级页面：一天一行，绿条是新词、黄条是复习，一眼看出哪天做得多 */
+.dlog{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;text-align:left}
+.dlog .dl-m{font-size:12px;font-weight:bold;color:#8A7AB8;padding:4px 2px 0}
+.dlog .drow{display:flex;align-items:center;gap:9px;background:#FBF9FF;border:2px solid #EFEAFB;
+  border-radius:13px;padding:7px 10px}
+.dlog .drow.today{border-color:#C9B6F5;background:#F5EEFF}
+.dlog .dd{width:72px;font-size:13px;font-weight:bold;color:#5B4A85;flex:0 0 auto}
+.dlog .dbars{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.dlog .dbar{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:bold;color:#745599}
+.dlog .dbar span{width:52px;flex:0 0 auto}
+.dlog .dbar i{height:9px;border-radius:5px;min-width:3px}
+.dlog .dbar.w i{background:linear-gradient(90deg,#8AE98C,#06D6A0)}
+.dlog .dbar.r i{background:linear-gradient(90deg,#FFD166,#FF9F1C)}
+.dlog .dsum{width:62px;flex:0 0 auto;text-align:right;font-size:11px;font-weight:bold;color:#9A8DBB;line-height:1.5}
+/* 阅读理解错题卡片：错在哪、正确答案、文章里最相关的那一句 */
+.rv{background:#FFF8F8;border:2px solid #FFE1E9;border-radius:14px;padding:9px 11px;margin-bottom:8px;text-align:left}
+.rv-h{font-size:11px;font-weight:bold;color:#C86A7E;margin-bottom:3px}
+.rv-q{font-size:15px;font-weight:bold;line-height:1.45}
+.rv-no{font-size:13px;font-weight:bold;color:#E5484D;margin-top:4px}
+.rv-ok{font-size:13px;font-weight:bold;color:#0AA47A}
+.rv-k{margin-top:5px;background:#FFFDF0;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;
+  padding:5px 8px;font-size:13px;line-height:1.6;color:#6B5A2B}
 .cal{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
 .cal i{aspect-ratio:1;border-radius:7px;background:#EFEAFB;display:flex;align-items:center;justify-content:center;
   font-size:10px;font-style:normal;color:#A9A0C9;font-weight:bold}
@@ -488,9 +510,11 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
 .bbox.open{background:linear-gradient(160deg,#D9FFE4,#8AE98C);box-shadow:0 5px 0 #43B14A,0 0 22px 6px rgba(138,233,140,.6);
   animation:bboxPop .5s}
 @keyframes bboxPop{0%{transform:scale(.7)}55%{transform:scale(1.22)}100%{transform:scale(1)}}
+/* 文章一次全部铺开，不给它内部滚动条：孩子要能一眼从头看到尾，
+   页面本身滚动就够了，再套一层滚动条容易把后半篇文章漏掉。 */
 .article{background:linear-gradient(160deg,#FFFDF4,#FFF6E2);border:3px dashed var(--orange);
   border-radius:20px;padding:15px 17px;font-size:18px;line-height:1.95;text-align:left;
-  max-height:38vh;overflow:auto}
+  overflow:visible}
 .article b{background:linear-gradient(transparent 62%,#FFE27A 62%);font-weight:bold}
 /* 文章里可点开看意思的单词 */
 .article b.wk{background:none;border-bottom:2px dotted var(--orange);color:#8A5A00;
@@ -938,6 +962,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       <div class="stats" id="stats"></div>
       <div class="chart" id="chart"></div>
       <p class="tips">近 7 天每天答对的题数</p>
+      <button class="btn sm ghost" id="dayLogBtn" style="width:100%;margin-top:4px">📒 每天学了多少 · 逐天记录 →</button>
+      <button class="btn sm ghost" id="bossErrBtn" style="width:100%;margin-top:6px">📕 阅读理解错题本 →</button>
       <div style="margin-top:12px;font-weight:bold;font-size:14px;text-align:left">最容易错的词</div>
       <div class="errlist" id="topErr" style="max-height:none;margin-top:8px"></div>
     </div>
@@ -1071,6 +1097,18 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
         <div id="verBody" style="display:none;margin-top:6px">
         <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.23.0</b>：阅读理解也有错题记录了。以前答错只是怪物逼近一步，事后谁都不知道错在哪。现在答错会记进存档（哪一段、第几题、错了几次、当时选的哪个答案、最后错在哪天）。两个地方能看：① 孩子这边，一场打完（赢或输）画面上多一个「📖 看看答错的 N 道题」，点开能看到题目、自己选的错答案、正确答案，还会把文章里最相关的那一句单独引出来，下面附整篇文章，带下划线的词照样能点开听；② 家长这边，家长面板多一个「📕 阅读理解错题本」，按错的次数从多到少列出所有错题，可以一眼看出孩子是哪类题总栽（因果题、推断题还是细节题），也能一键清空这本错题本，清空不影响通关记录和积分。在这个功能上线之前就打过的段、以及家长模式里直接标记过关的段，会单独写一行说明，不会被当成全对。开发者模式调试答错不写记录。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.22.0</b>：每一段都有守关挑战了。以前只有 15 段有阅读理解，现在 25 段全有，新写了 10 篇手写文章：第 1 段《隔壁的新邻居》、第 3 段《勇敢的小弟弟》、第 7 段《准备晚餐派对》、第 9 段《考试前一晚》、第 11 段《九月开学第一天》、第 13 段《野生动物园的一天》、第 17 段《周六在体育场》、第 19 段《给爷爷寄照片》、第 21 段《酒店忙碌的上午》、第 23 段《才艺表演之夜》。长度还是按老规矩递进，前面段短、后面段长，句子之间都有过渡句，题目都是要读懂才能做的理解题（前 10 段每题 3 个选项，后面 4 个）。另外修了一个老问题：有 10 篇文章里本段刚学的单词偏少，用的多是上一段的词，现在每篇补了一到两句，把本段的词补进文章，孩子读到的正好是刚背完的词。副作用是每段通关后都能开一次盲盒，转盘次数和积分会比以前多一些。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.21.0</b>：家长面板里加了「📒 每天学了多少 · 逐天记录」。点进去是一个单独的页面，一天一行：当天学会几个新词（绿条）、做了几次老词复习（黄条）、答了多少题、拿到多少分，今天那一行会高亮，按月份分隔。顶上是汇总：累计学习天数、累计新词、累计复习、平均每天新词、累计答题、连续天数。默认只列最近 30 个学习日，点「全部」看完整记录，没学的日子不占行。这样天数再多也不会把家长面板撑长。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.20.1</b>：阅读理解的文章不再放在一个带滚动条的小框里，整篇一次全部展开，往下滑页面就能看完，不会再出现孩子没注意到框里还能滚、只读了一半就去答题的情况。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.20.0</b>：加了「接着上次继续」。以前一段只做了一半就切到地图、商店，或者直接关掉浏览器，下次进来这一段要从第一个单词重新做一遍，孩子很容易烦。现在每翻一张讲解卡、每答一道题都会把位置记进存档：讲到第几张卡、词多的时候分在第几组、每个词闯到了第几关、这一轮已经拿到多少分、还没过的词排在什么顺序，全都留着。下次点这一段就直接回到上次的位置，已经三关全过的词不用再做。地图上那一段会写着「上次讲到第几张卡」或者「上次练到几个词」，首页的按钮也会变成「接着上次继续」。整段做完断点自动清掉，下次进去就是重新完整地做一遍。复习模式和开发者调试不记断点。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v1.19.0</b>：阅读理解的题目全部重做。以前的 5 道题是机器按模板套出来的，选词填空、找哪句和文章一样、哪个词没出现过，这些题不用读懂文章，在原文里找到同一个词就能答对。现在 15 篇文章每篇 5 道题都是手写的，考的是有没有真的读懂：为什么会这样、这个人心里怎么想、故事最后会怎么样、文章到底在讲什么。题面和选项都用英文，和 KET 的问法一致。每篇的顺序是先两道简单的让孩子上手，再三道要动脑筋的，前 10 段每题 3 个选项，后面 5 段 4 个选项。选项的位置每次进来都会重新打乱，答案不会总在同一个地方。文章本身没有改，带下划线的单词还是可以点开听发音、看中文。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.18.0</b>：整本词表补齐。① 剩下 317 个词的「怎么记住它」全部写完，现在 482 个词每一个都有讲解和一条额外例句，讲的都是拆词根、双写字母、不发音的字母、重音落在哪这类真能用上的记忆点。② 这 317 个词的中文意思和讲解也全部用豆包合成了真人语音，voice 文件夹里新增 seg11 到 seg25 共 15 个音频包，964 条语音、44 MB，前 10 段的老音频不变。③ 动态演示做到了全覆盖：原来只有 32 个词有手绘小剧场，现在其余 450 个词会按模板现场生成三幕动画，第一幕看图记意思，第二幕讲拼写，复合词会拆成两半，其余的摊成字母牌并把双写字母、不出声的字母标黄，第三幕是例句。开发者模式的单词表里，🎬 表示手绘，🎞 表示自动生成。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.17.0</b>：① 打赢守关怪不再固定给「50 分 + 2 次转盘」，奖励全部来自盲盒——挑一个 🎁 点开，拿到转盘 +2（25%）、转盘 +3（20%）、积分 +30（25%）、积分 +50（20%）、积分 +100（10%）其中一种。② 转盘次数取消 4 次上限，通关、每日任务、盲盒给的次数都往上累加，不会再浪费。③ 这个「版本与回退」区块默认收起，点上面的按钮才展开，家长模式不用再一路往下滑。</p>
@@ -1128,6 +1166,31 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
       </div>
       <button class="btn ghost" id="paClose" style="width:100%;margin-top:4px">关闭</button>
     </div>
+  </div>
+</div>
+
+<!-- 家长面板的二级页面：一天一行的学习记录 -->
+<div class="modal" id="logModal">
+  <div class="modal-card" style="max-width:460px">
+    <h2 class="title" style="justify-content:center">📒 每天的学习记录</h2>
+    <div class="stats" id="logSum"></div>
+    <div class="row" id="logRange" style="margin:9px 0 7px">
+      <button class="btn sm green" data-lg="30">最近 30 天</button>
+      <button class="btn sm ghost" data-lg="0">全部</button>
+    </div>
+    <div class="dlog" id="logList"></div>
+    <p class="tips" style="text-align:left">新词＝当天三关全过、第一次拿到分的单词数；复习＝当天做对的老词复习题数。
+      家长模式里直接标记过关的段、开发者模式调试都不写进这份记录。</p>
+    <button class="btn ghost" id="logClose" style="width:100%">关闭</button>
+  </div>
+</div>
+
+<!-- 阅读理解错题：孩子打完一场的回顾 + 家长的总错题本，共用这一个弹窗 -->
+<div class="modal" id="revModal">
+  <div class="modal-card" style="max-width:470px">
+    <h2 class="title" style="justify-content:center" id="revTitle">📖 答错的题</h2>
+    <div id="revBody"></div>
+    <button class="btn ghost" id="revClose" style="width:100%;margin-top:8px">关闭</button>
   </div>
 </div>
 
@@ -2826,8 +2889,14 @@ const S_DEF={v:4,family:0,coins:0,pieces:[],stars:{},spins:0,x2:0,curSeg:0,score
   ach:[],          /* 已解锁成就 id */
   boss:{},         /* {段号:true} 已打赢的 BOSS */
   pendBoss:null,   /* 等待 BOSS 胜利才解锁的拼图块（段号） */
+  bossErr:{},      /* 阅读理解错题：键 "段号:题号"，值 {n:错几次, pick:最后选错的答案, at:日期} */
+  bossPre:null,    /* 开始记错题之前就已经打赢的段号，用来在错题本里做占位说明 */
+  resume:null,     /* 没做完就退出的那一段的断点，下次进来接着做 */
   flags:{}};       /* 杂项标记，用于成就判定 */
 let S=load();
+/* 从 v1.23.0 起记阅读理解错题。升级之前打赢的那些段没有明细，先记一份名单，
+   错题本里写清楚「这几段那时候还没开始记」，免得家长以为是全对。 */
+if(S.bossPre==null)S.bossPre=Object.keys(S.boss).map(Number).sort((a,b)=>a-b);
 function load(){
   try{const o=JSON.parse(localStorage.getItem(KEY));
     if(o&&o.v>=3)return Object.assign({},S_DEF,o,{v:4});}catch(e){}
@@ -2936,6 +3005,9 @@ function renderMap(){
       else if(locked){cls+=" lock";st="尚未解锁";}
       else if(i>S.curSeg){st="🛠️ 开发者可进";}
       if(!has){cls+=" empty";st="待补词表";}
+      /* 上次做到一半退出去了，直接把断点写在这一段上，点进来就接着做 */
+      const rnote=(has&&!locked&&!done)?resumeNote(i):"";
+      if(rnote)st=rnote+" · 点我继续";
       const d=document.createElement("button");d.type="button";d.className=cls;d.dataset.seg=i;
       d.setAttribute("aria-label","第 "+(i+1)+" 段，"+(has?segTopic(i)+"，":"")+st);
       if(i===S.curSeg)d.setAttribute("aria-current","step");
@@ -2968,12 +3040,15 @@ function renderMap(){
   });
 }
 function welcome(){
+  const rn=resumeNote(S.curSeg);
   $("#learnArea").innerHTML='<div class="study">'+eggyHTML("small")+
     '<h2 class="title" style="justify-content:center">魔法单词学院</h2>'+
     '<p style="font-size:15px">90 天 · '+TOTAL_WORDS+' 词 · 25 段 · 5 枚魔法徽章</p>'+
     '<p class="hintline">每关都能加分 💰 答错会被收走 💸 三关全过才锁定分数</p>'+
     '<p class="hintline">🏆 家庭积分只累计（爸妈兑现实奖励）· 🪙 魔法币可在商店花</p>'+
-    '<button class="btn green" id="goBtn">开始第 '+(S.curSeg+1)+' 段 →</button></div>';
+    (rn?'<p class="hintline">📌 第 '+(S.curSeg+1)+' 段'+rn+'，点下面接着做</p>':'')+
+    '<button class="btn green" id="goBtn">'+
+      (rn?'接着上次继续第 ':'开始第 ')+(S.curSeg+1)+' 段 →</button></div>';
   $("#goBtn").onclick=()=>startSegment(S.curSeg);
 }
 
@@ -3111,6 +3186,7 @@ function splitBatches(ws){
   return out;
 }
 function startSegment(i,customWords,devMode){
+  if(!customWords&&!devMode&&resumeSegment(i))return;   /* 上次没做完，接着上次的位置 */
   resetSession();
   const ws=customWords||segWords(i);
   if(!ws.length){$("#learnArea").innerHTML='<div class="study"><h2 class="title">这一段还没有单词 ➕</h2></div>';return;}
@@ -3137,6 +3213,65 @@ function nextBatch(){
   preSyn(sess.words.slice(0,3));
   toast("👏 这一组过啦！接着讲第 "+(sess.batchIdx+1)+" 组");
   renderStudy();
+}
+/* ---- 断点续做 ------------------------------------------------------
+   孩子讲到一半点去别的页面，或者直接把浏览器关掉，下次进这一段要能接着做，
+   不用从第一个单词重来。存档里只留一个断点，就是当前正在做的那一段。
+   记下来的东西：讲到第几张卡、词多的话分在第几组、每个词闯到了第几关、
+   这一轮已经拿到的分、还没过关的词的出题顺序。
+   复习模式和开发者调试不记断点，整段做完就把断点清掉。 */
+function saveResume(){
+  const B=sess;
+  if(!B||B.dev||B.custom||B.reviewOnly)return false;
+  if(B.warm&&B.warm.length)return false;        /* 热身复习还没做完，下次重新热身 */
+  S.resume={seg:B.seg,batchIdx:B.batchIdx||0,studyIdx:studyIdx,studied:!!B.studied,
+            prog:Object.assign({},B.prog),earned:Object.assign({},B.earned),
+            queue:B.queue.map(w=>w.en),
+            total:B.total,right:B.right,gained:B.gained,at:Date.now()};
+  return true;
+}
+function keepResume(){if(saveResume())save();}
+/* 断点还能不能用：段号对得上、词表没被改过、这一段也还没通关 */
+function resumeOf(seg){
+  const r=S.resume;
+  if(!r||r.seg!==seg)return null;
+  const ws=segWords(seg);
+  if(!ws.length||splitBatches(ws).length<=(r.batchIdx||0))return null;
+  return r;
+}
+/* 给地图上那一段写一句「上次做到哪」 */
+function resumeNote(seg){
+  const r=resumeOf(seg);if(!r)return "";
+  const ws=segWords(seg);
+  const done=ws.filter(w=>(r.prog[w.en]||0)>=3).length;
+  return r.studied?("上次练到 "+done+"/"+ws.length+" 个词")
+                 :("上次讲到第 "+((r.studyIdx||0)+1)+" 张卡");
+}
+function resumeSegment(i){
+  const r=resumeOf(i);if(!r)return false;
+  resetSession();
+  const ws=segWords(i),batches=splitBatches(ws),map={};
+  ws.forEach(w=>map[w.en]=w);
+  sess={seg:i,allWords:ws,batches:batches,batchIdx:r.batchIdx||0,words:batches[r.batchIdx||0],
+        prog:{},earned:Object.assign({},r.earned),queue:[],total:r.total|0,right:r.right|0,
+        gained:r.gained|0,custom:false,dev:false,warm:[],studied:!!r.studied};
+  ws.forEach(w=>sess.prog[w.en]=(r.prog&&r.prog[w.en])||0);
+  sess.queue=(r.queue||[]).map(en=>map[en]).filter(Boolean);
+  energy=0;
+  studyIdx=Math.min(Math.max(0,r.studyIdx|0),sess.words.length-1);
+  renderHUD();
+  loadVoicePack(i);
+  if(sess.studied&&sess.queue.length){          /* 上次退出时正在闯关 */
+    preSyn(sess.words.slice(0,3));
+    toast("📌 接着上次继续：还剩 "+sess.queue.length+" 个词要闯关");
+    nextQ();
+  }else{                                        /* 上次退出时正在看讲解 */
+    sess.studied=false;
+    preSyn(sess.words.slice(studyIdx,studyIdx+3));
+    toast("📌 接着上次继续：第 "+(studyIdx+1)+" 张讲解卡");
+    renderStudy();
+  }
+  return true;
 }
 /* ---- 动画小剧场 ----------------------------------------------------
    给难记的词配一段小动画：三个画面轮着放，放完再从头开始，一直动着不停。
@@ -3802,6 +3937,7 @@ function renderStudy(){
   /* 预合成后面几张卡的中文语音，切卡零等待；第一张卡多备几张，开头也不会卡 */
   const ahead=studyIdx===0?4:2;
   preSyn(sess.words.slice(studyIdx+1,studyIdx+1+ahead));
+  keepResume();               /* 记下讲到第几张，退出去也能回到这里 */
 }
 
 /* ===========================================================
@@ -3822,6 +3958,7 @@ function nextQ(){
     finishSegment();return;
   }
   const w=sess.queue[0];renderHUD();
+  keepResume();               /* 记下正在闯关的进度和出题顺序 */
   render_q(w,sess.prog[w.en]+1,false);
 }
 function render_q(w,t,warm){
@@ -3979,7 +4116,7 @@ function pass(w,warm){
     }
     sess.queue.shift();
   }else{sess.queue.shift();sess.queue.push(w);}
-  if(!dev)save();
+  if(!dev){saveResume();save();}
   renderHUD();
   if(energy>=10)setTimeout(ultimate,300);
   schedNext(st>=3?1000:760);
@@ -4000,8 +4137,9 @@ function fail(w,warm){
     sess.earned[w.en]=0;sess.gained-=back;addScore(-back);
     floatScore("−"+back+"　答错，分数被收走！",true);
   }else floatScore(dev?"✗ 答错了（调试，不记错词）":"✗ 答错了，这个词重头再来",true);
-  sess.prog[w.en]=0;if(!dev)save();
+  sess.prog[w.en]=0;
   sess.queue.shift();sess.queue.push(w);
+  if(!dev){saveResume();save();}
   renderHUD();schedNext(1350);
 }
 function floatScore(t,minus){
@@ -4023,10 +4161,10 @@ function ultimate(){
 
 /* ===========================================================
    11b. BOSS 阅读理解战
-   触发：1-based 段号 % 2 === 0，或 % 5 === 0（每枚徽章的第 5 段必打）
+   触发：25 段每一段做完都要打一场（v1.22.0 之前只有一半的段有）
    难度：按段号分 5 档，文章越来越长、题型越来越接近 KET
    =========================================================== */
-const needBoss=seg=>{const n=seg+1;return n%2===0||n%5===0;};
+const needBoss=seg=>true;                   /* 每段都有守关怪，25 段各一篇阅读 */
 const holdsPiece=seg=>((seg+1)%5===0);      /* 徽章最后一块必须打赢 BOSS 才给 */
 const bossLevel=seg=>Math.min(5,1+Math.floor(seg/5));
 const BOSS_NAME=["旋风小怪","炎炎火怪","轰隆雷怪","闪电电怪","咕噜毒怪"];
@@ -4051,58 +4189,174 @@ function linkWords(txt){
     return w?'<b class="wk" data-w="'+w.en+'">'+m+'</b>':m;
   });
 }
-/* 有阅读理解的 15 段，文章全部手写，难度按 5 个场景递进：
-   Lv1（第 1-5 段）8 句短句 · Lv2（6-10 段）11 句 · Lv3（11-15 段）13 句
+/* 25 段每段一篇手写文章，键就是 0 起的段号（0 = 第 1 段）。
+   难度按 5 档递进：Lv1（第 1-5 段）8 句短句 · Lv2（6-10 段）11 句 · Lv3（11-15 段）13 句
    Lv4（16-20 段）15 句、开始用 because / while / who 这类连接
    Lv5（21-25 段）17 句、带从句和过去完成，长度接近 KET 阅读的段落。
-   带 w 的句子是「考点句」，题目就从这些原句出；没带 w 的是过渡句，负责把故事讲顺。
-   没有守关怪的那 10 段不做阅读理解，所以这里只有 15 篇。 */
+   有几篇原来本段单词偏少，v1.22.0 各补了 1 到 2 句把本段词补进去，所以句数会多一两句。
+   文章里用的词必须是本段刚学的（可以带少量前面段落的词复习）。
+   带 w 的句子里那个词是本段的重点词；没带 w 的是过渡句，负责把故事讲顺。
+   每篇后面的 qs 是手写的 5 道理解题，靠在文章里找原词是做不出来的。 */
 const BOSS_STORY={
  /* ---------- Lv1：8 句，短句 ---------- */
+ 0:{title:"The New Neighbour",lines:[
+   {s:"Today an old lady moves into the house next to ours."},
+   {s:"She has white hair, and she is a granny of eighty.",w:"granny"},
+   {s:"Everyone calls her Miss Lin, because she taught at our school years ago.",w:"Miss"},
+   {s:"My mom says she will be the kindest neighbour on our street.",w:"neighbour"},
+   {s:"Her bags are much too heavy for her to carry up the stairs."},
+   {s:"A tall teenager from the top floor takes them for her.",w:"teenager"},
+   {s:"I am still a kid, so I carry the light one.",w:"kid"},
+   {s:"Miss Lin smiles and says every adult here once sat in her class.",w:"adult"}],
+  qs:[
+   {q:"Who is Miss Lin?",a:"An old teacher who has just moved in next door",
+    w:["A new teacher at the writer's school","The writer's own granny"]},
+   {q:"Who carries the heavy bags up the stairs?",a:"A teenager from the top floor",
+    w:["The writer","Miss Lin herself"]},
+   {q:"Why does the writer carry only the light bag?",a:"He is still a small child",
+    w:["The other bags are not hers","He is in a hurry to go home"]},
+   {q:"How do we know Miss Lin has been in this street before?",a:"The grown-ups here were once her students",
+    w:["Her hair is white","She lives next to the writer"]},
+   {q:"How does the writer's mom feel about the new neighbour?",a:"She is glad to have her there",
+    w:["She thinks she is too old","She does not want to meet her"]}]},
  1:{title:"A Family Photo",lines:[
    {s:"Today is Sunday, and my family is at home."},
    {s:"My mom finds an old photo in a box.",w:"mom"},
    {s:"We all sit on the sofa and look at it."},
    {s:"The tall man in the photo is my granddad.",w:"granddad"},
    {s:"He was young then, and he had black hair."},
+   {s:"My granny stands beside him, slim and pale, with blonde hair.",w:"slim"},
    {s:"My aunt got married in the same year.",w:"married"},
    {s:"Her little boy is granddad's first grandson.",w:"grandson"},
-   {s:"We all have the same surname, so we are one family.",w:"surname"}]},
+   {s:"He is also the first grandchild of my grandparents.",w:"grandchild"},
+   {s:"We all have the same surname, so we are one family.",w:"surname"}],
+  qs:[
+   {q:"Where are the people in the story?",a:"At home on the sofa",
+    w:["In a photo shop","At granddad's school"]},
+   {q:"What is the story mainly about?",a:"A family talking about people in an old photo",
+    w:["A family taking a new photo","A boy who loses a photo"]},
+   {q:"When was this photo taken?",a:"Many years ago",
+    w:["Last Sunday","This morning"]},
+   {q:"Who is the little boy's mother?",a:"The writer's aunt",
+    w:["The writer's mom","Granddad's sister"]},
+   {q:"How is granddad different today?",a:"His hair is no longer black",
+    w:["He is taller now","He has no family now"]}]},
+ 2:{title:"The Brave Little Brother",lines:[
+   {s:"My little brother has a bad tooth this week."},
+   {s:"My brother and I both hate the smell of the dentist's room.",w:"hate"},
+   {s:"In the waiting room he is shy and holds Mom's hand.",w:"shy"},
+   {s:"The nurse gives him a small toy car to hold."},
+   {s:"The chair goes up, and he does not cry at all.",w:"cry"},
+   {s:"The dentist says he is a very brave boy.",w:"brave"},
+   {s:"On the way home Mom gives him a kiss.",w:"kiss"},
+   {s:"From today he will use his new toothbrush morning and evening.",w:"toothbrush"}],
+  qs:[
+   {q:"Why does the little brother go to the dentist?",a:"One of his teeth is bad",
+    w:["To buy a new toothbrush","To have his eyes checked"]},
+   {q:"How does he feel in the waiting room?",a:"Shy and a little afraid",
+    w:["Angry with Mom","Happy and noisy"]},
+   {q:"Why does the nurse give him a toy car?",a:"To help him stop worrying",
+    w:["Because he is her own son","Because the chair is broken"]},
+   {q:"Why does the dentist call him brave?",a:"He did not cry once during the treatment",
+    w:["He came without his mom","His teeth are very clean"]},
+   {q:"What will be different at home from now on?",a:"He will brush his teeth twice a day",
+    w:["He will never eat sweets again","He will see the dentist every week"]}]},
  3:{title:"A Little Surprise",lines:[
    {s:"It is my sister's birthday today."},
    {s:"After dinner I give her a surprise.",w:"surprise"},
    {s:"I turn off the light and bring in a small cake."},
    {s:"At first she is afraid of the dark room.",w:"afraid"},
    {s:"Then she sees six candles and starts to laugh."},
+   {s:"She is amazed, and she looks very pleased with her little cake.",w:"amazed"},
    {s:"Mom is glad that we did it together.",w:"glad"},
    {s:"Dad is a little mad, because I used all the sugar.",w:"mad"},
-   {s:"What a shame, there is no cake for tomorrow.",w:"shame"}]},
+   {s:"What a shame, there is no cake for tomorrow.",w:"shame"}],
+  qs:[
+   {q:"Who made the surprise?",a:"The writer and Mom",
+    w:["Dad on his own","The sister herself"]},
+   {q:"How does the sister feel in the end?",a:"Happy",
+    w:["Still afraid","Angry with her brother"]},
+   {q:"How old is the sister today?",a:"Six",
+    w:["Eight","Ten"]},
+   {q:"Why is the sister afraid at first?",a:"The room suddenly goes dark",
+    w:["The cake is too small","Dad shouts at her"]},
+   {q:"Why is Dad not happy?",a:"There is no sugar left",
+    w:["The writer broke a plate","The cake was for him"]}]},
  4:{title:"The New Boy",lines:[
    {s:"A new boy comes to our class today."},
    {s:"I wave at him and say hey.",w:"hey"},
    {s:"He is very polite and says thank you.",w:"polite"},
    {s:"His family moved here from another city last week."},
    {s:"At break time we chat about football.",w:"chat"},
+   {s:"He gives me a cola, and we have our first long conversation.",w:"conversation"},
    {s:"He was frightened on his first day at school.",w:"frightened"},
    {s:"A girl says excuse me and asks to join our game.",w:"excuse"},
-   {s:"Now the three of us are good friends."}]},
+   {s:"I say alright, and we start the game again with three players.",w:"alright"},
+   {s:"Now the three of us are good friends."}],
+  qs:[
+   {q:"How does the writer make the new boy feel welcome?",a:"He says hello and plays with him",
+    w:["He gives him money","He does his homework"]},
+   {q:"What is the story mainly about?",a:"Making friends with a boy who has just moved here",
+    w:["A football match","A girl who lost her ball"]},
+   {q:"Why is the new boy in this class?",a:"His family moved to this city",
+    w:["He is here on holiday","He lost his old school bag"]},
+   {q:"Why was the new boy frightened on his first day?",a:"Everything and everyone was new to him",
+    w:["He does not like football","The teacher shouted at him"]},
+   {q:"How many children are friends at the end?",a:"Three",
+    w:["Two","Five"]}]},
  /* ---------- Lv2：11 句 ---------- */
  5:{title:"Cooking with Dad",lines:[
    {s:"On Sunday afternoon Dad and I cook dinner for the family."},
    {s:"Mom is tired, so today she can rest on the sofa."},
    {s:"We want to make chicken curry with rice.",w:"curry"},
    {s:"First Dad cuts the chicken into small pieces."},
+   {s:"He also cuts a potato, some garlic and one small chilli.",w:"potato"},
    {s:"Then he puts some salt and pepper into the pot.",w:"pepper"},
    {s:"The kitchen soon smells very good."},
    {s:"While I wait, I eat one green grape.",w:"grape"},
    {s:"I also drink some cold water from my big mug.",w:"mug"},
    {s:"At six o'clock the curry is ready."},
    {s:"Mom tastes it and says congratulations to the two new cooks.",w:"congratulations"},
-   {s:"Yeah, this is the best dinner of the week.",w:"yeah"}]},
+   {s:"Yeah, this is the best dinner of the week.",w:"yeah"}],
+  qs:[
+   {q:"What does Mom think of the dinner?",a:"She thinks it is very good",
+    w:["She thinks it is too salty","She does not eat it"]},
+   {q:"What is the story mainly about?",a:"A boy helping his dad make dinner",
+    w:["A family eating in a restaurant","A boy growing grapes"]},
+   {q:"Why does Mom not cook today?",a:"She needs a rest",
+    w:["She cannot cook curry","She is not at home"]},
+   {q:"Who are the two new cooks in this story?",a:"The writer and Dad",
+    w:["Mom and Dad","The writer and Mom"]},
+   {q:"What does the writer do while Dad cooks the chicken?",a:"He waits, and eats and drinks something",
+    w:["He cuts the meat","He sleeps on the sofa"]}]},
+ 6:{title:"Getting Ready for the Party",lines:[
+   {s:"Tonight six friends are coming to our home for dinner."},
+   {s:"Mom cooks everything from her grandmother's old recipe.",w:"recipe"},
+   {s:"She has to boil the noodles for exactly ten minutes.",w:"boil"},
+   {s:"The kitchen gets hotter and hotter."},
+   {s:"Dad likes the fish grilled, not fried.",w:"grilled"},
+   {s:"Our old cooker has only three places that still work.",w:"cooker"},
+   {s:"So Mom starts the sauce a whole hour before seven."},
+   {s:"The cold drinks are waiting in the refrigerator.",w:"refrigerator"},
+   {s:"Dad puts on his grey suit but cannot find his other sock.",w:"suit"},
+   {s:"His left shoe is one size too big, and he does not mind.",w:"size"},
+   {s:"When the doorbell rings at seven, everything is ready."}],
+  qs:[
+   {q:"How many guests are coming to dinner?",a:"Six",
+    w:["Three","Ten"]},
+   {q:"How does Dad like his fish?",a:"Grilled",
+    w:["Fried","Boiled with noodles"]},
+   {q:"Why does Mom start the sauce so early?",a:"The old cooker cannot cook everything at the same time",
+    w:["The sauce has to be cold","The guests come at six"]},
+   {q:"What is wrong with Dad's clothes?",a:"One sock is missing and a shoe is too big",
+    w:["His suit is dirty","He has no suit at all"]},
+   {q:"How do we know the family is ready in time?",a:"Everything is finished when the first guest rings",
+    w:["The guests arrive very late","Mom is still cooking at eight"]}]},
  7:{title:"A Cold Sunday",lines:[
    {s:"It is cold and windy outside today."},
    {s:"Nobody in my family wants to go out."},
    {s:"When I open the window, I put on my warm red scarf.",w:"scarf"},
+   {s:"I also wear my thick jumper and keep both hands in my pocket.",w:"jumper"},
    {s:"Mom has a plan for a special dinner at home."},
    {s:"She checks every ingredient on her shopping list.",w:"ingredient"},
    {s:"Then she puts the chicken into the oven.",w:"oven"},
@@ -4110,7 +4364,41 @@ const BOSS_STORY={
    {s:"The kitchen becomes warm, and the whole house smells lovely."},
    {s:"Mom looks very nice in her new blouse.",w:"blouse"},
    {s:"Dad even puts on a red tie for the dinner.",w:"tie"},
-   {s:"We sit down together at seven, and everybody is happy."}]},
+   {s:"We sit down together at seven, and everybody is happy."}],
+  qs:[
+   {q:"Why does nobody go out today?",a:"The weather is cold and windy",
+    w:["The shops are closed","Everyone is ill"]},
+   {q:"What is the family doing at seven o'clock?",a:"Eating dinner together",
+    w:["Shopping for food","Going to bed"]},
+   {q:"Why does the writer put a scarf on inside the house?",a:"Cold air comes in through the open window",
+    w:["He is going to school","The scarf is new"]},
+   {q:"Why do Mom and Dad wear nice clothes?",a:"To make the dinner at home feel special",
+    w:["They are going out to a party","They are going to work"]},
+   {q:"What makes the kitchen warm?",a:"The oven is on",
+    w:["The window is open","Everyone is dancing"]}]},
+ 8:{title:"The Night Before the Exam",lines:[
+   {s:"Tomorrow morning we have our first maths exam.",w:"exam"},
+   {s:"I cannot start reading, because my room is a mess."},
+   {s:"First I put all my books back on the shelf.",w:"shelf"},
+   {s:"My old football poster falls off the wall again.",w:"poster"},
+   {s:"Then I push my clothes into the wardrobe and shut the door.",w:"wardrobe"},
+   {s:"Tonight the heating in our building does not work.",w:"heating"},
+   {s:"So I sit and study under a thick blanket.",w:"blanket"},
+   {s:"Rain runs down the glass, so I close the curtain.",w:"curtain"},
+   {s:"I read every page twice, because I do not want to fail.",w:"fail"},
+   {s:"At ten o'clock Mom comes in and takes my book away."},
+   {s:"I put my head on the pillow and fall asleep at once.",w:"pillow"}],
+  qs:[
+   {q:"What is happening tomorrow morning?",a:"A maths exam",
+    w:["A football match","A school trip"]},
+   {q:"Why does the writer study under a blanket?",a:"The heating is not working",
+    w:["The blanket is new","He is already asleep"]},
+   {q:"Why can the writer not start reading at first?",a:"His room is far too untidy",
+    w:["He has lost his book","The light is broken"]},
+   {q:"Why does he read every page two times?",a:"He is afraid of failing the exam",
+    w:["The book is very funny","His teacher told him to read twice"]},
+   {q:"Why does Mom take the book away at ten?",a:"She wants him to get some sleep",
+    w:["He has finished all the pages","She needs the book herself"]}]},
  9:{title:"Moving Day",lines:[
    {s:"Today my family moves to a new apartment.",w:"apartment"},
    {s:"It is on the fourth floor, and it has big windows."},
@@ -4121,9 +4409,46 @@ const BOSS_STORY={
    {s:"I try to walk fast, and then I drop one box."},
    {s:"It was my mistake, so I say sorry to Mom.",w:"mistake"},
    {s:"Inside that box I find my old maths textbook.",w:"textbook"},
+   {s:"Under it there is my biology project and a broken eraser.",w:"project"},
    {s:"My new room is small, but it is bright and quiet."},
-   {s:"Tonight I will sleep here for the first time."}]},
+   {s:"Tonight I will sleep here for the first time."}],
+  qs:[
+   {q:"Has the writer slept in this apartment before?",a:"No, tonight is the first time",
+    w:["Yes, many times","Yes, last week"]},
+   {q:"What does Mom do while the men carry the armchair?",a:"She puts the cups away in the kitchen",
+    w:["She carries the washing machine","She drives the truck"]},
+   {q:"Why does the writer carry only small boxes?",a:"The big things are too heavy for him",
+    w:["The boxes are all his","Mom asks him to count them"]},
+   {q:"Why does he drop a box?",a:"He is walking too fast",
+    w:["The stairs are wet","Someone pushes him"]},
+   {q:"How does the writer feel about his new room?",a:"He likes it, even though it is small",
+    w:["He thinks it is too dark","He thinks it is too noisy"]}]},
  /* ---------- Lv3：13 句 ---------- */
+ 10:{title:"The First Day in September",lines:[
+   {s:"Our new term starts on the fifth of September.",w:"September"},
+   {s:"Everybody wants to see the new timetable on the wall."},
+   {s:"Lessons now begin at eight a.m. and not at nine.",w:"a.m."},
+   {s:"My mom is pleased about that, but I am not."},
+   {s:"At midday we get a break of forty minutes, not one minute more.",w:"midday"},
+   {s:"Our lunchtime is shorter than it was last year.",w:"lunchtime"},
+   {s:"The better news is printed on the other side of the paper."},
+   {s:"On Friday we can go home at two p.m.",w:"p.m."},
+   {s:"On the other days we stay in school till four.",w:"till"},
+   {s:"There is also a weekly meeting with the headteacher.",w:"weekly"},
+   {s:"Every month we have a monthly test in two subjects.",w:"monthly"},
+   {s:"My friend Leo says he will forget half of this by Wednesday."},
+   {s:"Our teacher gives each of us a copy to take home."}],
+  qs:[
+   {q:"When does the new term start?",a:"On the fifth of September",
+    w:["On the first of June","In the middle of the summer","On a Friday in August"]},
+   {q:"What time do lessons begin this year?",a:"At eight in the morning",
+    w:["At nine in the morning","At two in the afternoon","At midday"]},
+   {q:"Why is the writer not happy about the new timetable?",a:"School starts an hour earlier than before",
+    w:["There is no lunch break at all","He has more tests than his friends","Lessons finish at four on Friday"]},
+   {q:"Which is the shortest school day of the week?",a:"Friday",
+    w:["Monday","Wednesday","All the days are the same"]},
+   {q:"How often does the class meet the headteacher?",a:"Once a week",
+    w:["Once a month","Every single day","Only in September"]}]},
  11:{title:"In the Garden",lines:[
    {s:"After school I go to the garden with Grandpa."},
    {s:"He grows tomatoes there, and he also keeps some flowers."},
@@ -4137,7 +4462,43 @@ const BOSS_STORY={
    {s:"Today the temperature is only five degrees.",w:"temperature"},
    {s:"So we both wear gloves while we work."},
    {s:"We stay in the garden till five, and then we go home.",w:"till"},
-   {s:"I think the garden is the best place after a long school day."}]},
+   {s:"I think the garden is the best place after a long school day."}],
+  qs:[
+   {q:"Which is taller, the writer or the tree?",a:"The tree",
+    w:["The writer","They are the same","The story does not say"]},
+   {q:"Why does the writer like the garden?",a:"It is a quiet place after a long school day",
+    w:["He can eat all the tomatoes","He plays football there","His classmates go there"]},
+   {q:"Why do they wear gloves today?",a:"It is very cold",
+    w:["The beetle can bite","The water is dirty","Grandpa has two pairs"]},
+   {q:"Why are the two birds so busy?",a:"They are bringing food to their babies",
+    w:["They are building a new nest","They are afraid of the beetle","They are looking for the garden"]},
+   {q:"What does Grandpa want the writer to do about the beetle?",a:"Leave it alone and just watch",
+    w:["Put it in a box","Move it off the leaf","Give it some water"]}]},
+ 12:{title:"A Day at the Wildlife Park",lines:[
+   {s:"On Sunday our class visits a wildlife park in the countryside.",w:"wildlife"},
+   {s:"The bus takes a whole hour to get there."},
+   {s:"At the gate our teacher pays in cash, because the machine is broken.",w:"cash"},
+   {s:"The first animal we see is a kangaroo with a baby.",w:"kangaroo"},
+   {s:"It jumps over a low fence without any trouble."},
+   {s:"Inside the dark house there is a big jellyfish tank.",w:"jellyfish"},
+   {s:"A jellyfish is a strange creature with no bones at all.",w:"creature"},
+   {s:"A woman there tells us how the park looks after sick animals."},
+   {s:"One room is only about animals that are extinct.",w:"extinct"},
+   {s:"Their bones are copies made of plastic, not real bones.",w:"plastic"},
+   {s:"Outside, the desert house is hot and dry all year.",w:"desert"},
+   {s:"On the way back a thunderstorm starts, and we all get wet.",w:"thunderstorm"},
+   {s:"Our teacher says every ticket helps the park earn money for the environment.",w:"earn"}],
+  qs:[
+   {q:"Where is the wildlife park?",a:"Out in the countryside",
+    w:["In the middle of the city","Right next to the school","On an island in the sea"]},
+   {q:"Why does the teacher pay with cash?",a:"The card machine is not working",
+    w:["Cash is cheaper there","She has no bank card","The park takes nothing else"]},
+   {q:"Why are the bones in the extinct animal room not real?",a:"They are copies made of plastic",
+    w:["They are too old to show","They are in another museum","They belong to the kangaroo"]},
+   {q:"Why do the children get wet on the way back?",a:"A thunderstorm begins",
+    w:["They swim in the jellyfish tank","Someone waters the desert house","The bus roof lets in rain"]},
+   {q:"What does the park do with the ticket money?",a:"It uses it to protect nature",
+    w:["It buys new buses","It gives it back to the children","It builds a bigger car park"]}]},
  13:{title:"At the Bookstore",lines:[
    {s:"On Saturday morning Mom takes me to a bookstore.",w:"bookstore"},
    {s:"The shop is near the park, and it is full of people."},
@@ -4151,7 +4512,18 @@ const BOSS_STORY={
    {s:"The shop gives a free bookmark to every customer.",w:"customer"},
    {s:"Mine has a picture of a small green turtle on it."},
    {s:"On the bus I read the first ten pages."},
-   {s:"I want to come back to this shop next Saturday."}]},
+   {s:"I want to come back to this shop next Saturday."}],
+  qs:[
+   {q:"How do they go home from the shop?",a:"By bus",
+    w:["On foot","By car","By bike"]},
+   {q:"Does the writer like his new book?",a:"Yes, he starts reading it straight away",
+    w:["No, it is too slow","No, it is too hard","He gives it to Mom"]},
+   {q:"Why is the book cheaper than usual?",a:"Animal books are on sale that day",
+    w:["Mom has a shop card","The book is an old one","They buy two books"]},
+   {q:"Why is the shop full of people?",a:"Many people come for the cheap books",
+    w:["It is a school holiday","A writer is signing books","The park is closed"]},
+   {q:"Why does the writer get a bookmark?",a:"The shop gives one to everyone who buys something",
+    w:["He pays extra for it","Only animal books come with one","Mom asks for it"]}]},
  14:{title:"A Day in the City",lines:[
    {s:"On Sunday we take a tram into the city.",w:"tram"},
    {s:"The tram is full of people, so we stand near the door."},
@@ -4165,7 +4537,18 @@ const BOSS_STORY={
    {s:"We have noodles in a small restaurant for lunch."},
    {s:"Before we drive home, Dad puts gas in the car.",w:"gas"},
    {s:"Our car is old, but the engine is still quiet.",w:"engine"},
-   {s:"We get home at six, tired but very happy."}]},
+   {s:"We get home at six, tired but very happy."}],
+  qs:[
+   {q:"How do they get home at the end of the day?",a:"By car",
+    w:["By tram","By bus","On foot"]},
+   {q:"What is the family car like?",a:"Old, but it still runs well",
+    w:["New and very fast","Very loud and broken","Too small for the family"]},
+   {q:"Why does Mom keep the receipt?",a:"So she can change the shoes for a bigger size",
+    w:["To pay less next time","To show it to Dad","To use it as a bookmark"]},
+   {q:"Why do they stand on the tram?",a:"There are no free seats",
+    w:["The ride is very short","They want to see the river","Children may not sit down"]},
+   {q:"Do Mom and the writer like the same painting?",a:"No, they each like a different one",
+    w:["Yes, both like the sea","Yes, both like the old street","They do not look at paintings"]}]},
  /* ---------- Lv4：15 句，开始用 because / while / who ---------- */
  15:{title:"The School Trip",lines:[
    {s:"Our class goes on a school trip today, and everybody arrives early."},
@@ -4182,7 +4565,45 @@ const BOSS_STORY={
    {s:"After that we eat our lunch in a park near the factory."},
    {s:"In the afternoon we play tennis on the court behind the school.",w:"court"},
    {s:"My team loses, but the games are great fun."},
-   {s:"On the way home most of us fall asleep on the bus."}]},
+   {s:"On the way home most of us fall asleep on the bus."}],
+  qs:[
+   {q:"How does the writer feel about losing at tennis?",a:"He does not mind, it was still fun",
+    w:["He is angry with his team","He cries about it","He refuses to play"]},
+   {q:"What happens to old books at the factory?",a:"They become new paper",
+    w:["They are sold cheaply","They are given to students","They are sent to a library"]},
+   {q:"Why must the students listen carefully in the factory?",a:"The machines make a lot of noise",
+    w:["The woman speaks very fast","There will be a test","They have lost the guidebook"]},
+   {q:"Why is nobody bored on the way to the city?",a:"There is a lot to see out of the window",
+    w:["The bus is late","The teacher tells jokes","They sleep all the way"]},
+   {q:"Why do most students fall asleep on the way home?",a:"The day has been long and busy",
+    w:["The bus is very warm","They had no lunch","The bus is delayed again"]}]},
+ 16:{title:"Saturday at the Stadium",lines:[
+   {s:"Every Saturday my dad takes me to the stadium in our city.",w:"stadium"},
+   {s:"Today our school soccer team plays versus the team from the next town.",w:"versus"},
+   {s:"The seats behind the goal are always the cheapest ones."},
+   {s:"At half time the score is one to nothing, and we are losing.",w:"score"},
+   {s:"Dad says the second half of a game is always different."},
+   {s:"Our fastest runner comes on after the break.",w:"runner"},
+   {s:"He is the smallest boy on the team, but nobody can catch him."},
+   {s:"In the last minute he wins the game for our school."},
+   {s:"On the big screen there is then a long ad for a new movie.",w:"ad"},
+   {s:"After the match a band plays outside the gate.",w:"band"},
+   {s:"The drum is so loud that we can feel it in our feet.",w:"drum"},
+   {s:"They play old jazz, and Dad knows every tune.",w:"jazz"},
+   {s:"He tries to sing along, and I ask him to stop."},
+   {s:"Next weekend this stadium has a rugby game and a cricket match.",w:"rugby"},
+   {s:"Dad says that one day we will watch an Olympic race here.",w:"Olympic"}],
+  qs:[
+   {q:"Who does the school team play against today?",a:"A team from the next town",
+    w:["A team from another country","Another team from their own school","An Olympic team"]},
+   {q:"What do they hear after the match?",a:"A band playing old jazz",
+    w:["An opera singer","A drum lesson at school","The evening news"]},
+   {q:"Why does Dad say the second half is always different?",a:"He believes a losing team can still win",
+    w:["The rules change after half time","A new team comes on","The ads only start then"]},
+   {q:"Why can nobody catch their runner?",a:"He is very fast, although he is small",
+    w:["He starts before the others","He is the biggest player","The other team is asleep"]},
+   {q:"How do we know Dad has liked this music for many years?",a:"He knows every old tune they play",
+    w:["He plays the drum himself","He sings very well","He buys the band's CD"]}]},
  17:{title:"Friday Night",lines:[
    {s:"Friday night is family night at our home, and nobody goes out."},
    {s:"While Mom cooks, Dad turns on the radio in the kitchen.",w:"radio"},
@@ -4198,11 +4619,50 @@ const BOSS_STORY={
    {s:"It is a film about school children who start a band."},
    {s:"At the end of the film the children dance at a disco.",w:"disco"},
    {s:"We are all sleepy, but we want to see the last part."},
-   {s:"Friday night is the best night of the week for me."}]},
+   {s:"Friday night is the best night of the week for me."}],
+  qs:[
+   {q:"How many films does the family watch that night?",a:"Two",
+    w:["One","Three","None"]},
+   {q:"Why is Friday night the best night for the writer?",a:"The whole family stays at home and has fun together",
+    w:["He gets a new DVD","He can eat anything he likes","He has no homework"]},
+   {q:"Why does the little brother play with his toy car?",a:"He is bored while the advertisement is on",
+    w:["He does not like dogs","He has seen the film before","Mom tells him to be quiet"]},
+   {q:"How do we know the film is funny?",a:"Everybody laughs while watching it",
+    w:["It is very short","There is a dog in it","Dad chose it"]},
+   {q:"Why does the family not go to bed when they feel sleepy?",a:"They want to see the end of the second film",
+    w:["The news is not finished","Dad is still singing","They are waiting for dinner"]}]},
+ 18:{title:"A Photo for Grandpa",lines:[
+   {s:"Today is Grandpa's birthday, and he lives far away from us."},
+   {s:"My sister and I take a selfie in front of our new bike.",w:"selfie"},
+   {s:"We try six times before we both look happy."},
+   {s:"The picture goes into the folder with all our family photos.",w:"folder"},
+   {s:"Then the difficult part of the evening starts."},
+   {s:"Our wifi is very slow tonight.",w:"wifi"},
+   {s:"The file is too big, so it will not upload.",w:"upload"},
+   {s:"We wait, and the little wheel on the screen keeps turning.",w:"screen"},
+   {s:"My phone battery goes down to four per cent.",w:"battery"},
+   {s:"So I put the phone on the charger and use the computer keyboard instead.",w:"keyboard"},
+   {s:"Grandpa has no email, so his only contact with us is by post.",w:"contact"},
+   {s:"That is why we print the photo as well."},
+   {s:"I put it in an envelope and stick a stamp in the corner.",w:"stamp"},
+   {s:"Mom takes the letter to the post box before nine."},
+   {s:"Two days later Grandpa calls and says the letter is the best present."}],
+  qs:[
+   {q:"Why do the children send Grandpa a photo?",a:"It is his birthday",
+    w:["He asked them for a new bike","He has lost his old photos","He is coming to visit them"]},
+   {q:"Why does the writer move to the computer?",a:"The phone battery is nearly empty",
+    w:["The phone screen is broken","The computer takes better photos","The phone has no camera"]},
+   {q:"Why does the photo not upload?",a:"The file is big and the wifi is slow",
+    w:["The folder is full","The photo is not good enough","Grandpa has no phone"]},
+   {q:"Why do they print the photo too?",a:"Grandpa cannot receive email",
+    w:["The screen is too small for him","Printing is cheaper than wifi","They took two different photos"]},
+   {q:"Which present does Grandpa like most?",a:"The letter with the printed photo inside",
+    w:["The photo sent from the phone","The new bike in the picture","The stamp on the envelope"]}]},
  19:{title:"Grandma and the Computer",lines:[
    {s:"My grandma is seventy, and this month she wants to learn about computers."},
    {s:"First I show her how to click on the small pictures.",w:"click"},
    {s:"She is careful, because she is afraid of breaking something."},
+   {s:"She was a secretary for thirty years, with only a telephone and paper.",w:"secretary"},
    {s:"On Monday she sends her first message to my dad.",w:"message"},
    {s:"Dad writes back in one minute, and Grandma laughs happily."},
    {s:"Now she buys rice and fruit online every week.",w:"online"},
@@ -4214,13 +4674,54 @@ const BOSS_STORY={
    {s:"Sometimes she teaches me things too, like the names of old songs."},
    {s:"She says my career will be in computers one day.",w:"career"},
    {s:"I am not sure, but I like helping her very much."},
-   {s:"Next week we will learn how to send a photo to my uncle."}]},
+   {s:"Next week we will learn how to send a photo to my uncle."}],
+  qs:[
+   {q:"Who teaches whom in this story?",a:"The writer teaches Grandma, and she teaches him a few things too",
+    w:["Grandma teaches the writer everything","The cousin teaches both of them","Dad teaches Grandma"]},
+   {q:"Why does Grandma laugh happily on Monday?",a:"Her first message gets an answer almost at once",
+    w:["She finds an old photo","She buys fruit online","A friend comes to visit"]},
+   {q:"Why is Grandma so careful with the computer?",a:"She is worried she will break something",
+    w:["She cannot see the screen","She has very little time","Her hands are cold"]},
+   {q:"Why is the chatroom important to Grandma?",a:"It lets her talk to friends who live far away",
+    w:["It is cheaper than the phone","She can buy food there","She can store photos there"]},
+   {q:"Does the writer want to work with computers?",a:"He is not sure yet",
+    w:["Yes, he has decided","No, he dislikes computers","He wants to teach music"]}]},
  /* ---------- Lv5：17 句，带从句，长度接近 KET 阅读 ---------- */
+ 20:{title:"A Busy Morning at the Hotel",lines:[
+   {s:"My aunt is a receptionist at a small hotel near the station.",w:"receptionist"},
+   {s:"On Monday she lets me sit behind her desk and watch her work."},
+   {s:"At eight o'clock a businesswoman comes down with two heavy bags.",w:"businesswoman"},
+   {s:"She is in a hurry, because her train leaves in twenty minutes.",w:"hurry"},
+   {s:"My aunt calls a taxi for her while she is paying."},
+   {s:"Then a businessman at the next desk cannot find his laptop.",w:"businessman"},
+   {s:"He starts to shout, and everybody in the hall looks at him.",w:"shout"},
+   {s:"My aunt asks me to shut the office door before she answers him.",w:"shut"},
+   {s:"She is sure that nobody in this hotel would steal a laptop.",w:"steal"},
+   {s:"So she looks at the pictures from the camera behind the desk."},
+   {s:"On the screen we see him push the laptop under a newspaper himself.",w:"push"},
+   {s:"The bag beside the door does not belong to him either.",w:"belong"},
+   {s:"The businessman says sorry about four times and goes very red."},
+   {s:"Just before noon an old guest becomes very ill.",w:"ill"},
+   {s:"He does not seem able to stand up, because of a bad stomach ache.",w:"seem"},
+   {s:"My aunt calls a doctor, who arrives in ten minutes."},
+   {s:"She tells me you must decide fast in this job and never look worried.",w:"decide"}],
+  qs:[
+   {q:"What is the writer's aunt's job?",a:"She works at a hotel desk",
+    w:["She drives a taxi","She is a hotel doctor","She cleans the hotel rooms"]},
+   {q:"Why is the businesswoman in a hurry?",a:"Her train is leaving soon",
+    w:["She has lost one of her bags","She feels ill","She is late for breakfast"]},
+   {q:"What really happened to the laptop?",a:"The businessman had hidden it under a newspaper himself",
+    w:["Another guest stole it","The aunt put it in the office","It was inside the bag by the door"]},
+   {q:"Why does the aunt look at the camera pictures?",a:"To show that nobody has stolen anything",
+    w:["To find the businesswoman","Because the police ask her to","To watch the old guest"]},
+   {q:"What does the aunt think her job needs most?",a:"Quick decisions and a calm face",
+    w:["Strong arms for heavy bags","Perfect English","A lot of free time"]}]},
  21:{title:"The Broken Bike",lines:[
    {s:"Yesterday afternoon Tom fell off his bike near the school gate."},
    {s:"It was a small accident, but everybody stopped to look.",w:"accident"},
    {s:"He got up slowly, because he felt a pain in his left arm.",w:"pain"},
    {s:"Our teacher came out of the office and asked what had happened."},
+   {s:"Tom tried to explain, but his voice was very low.",w:"explain"},
    {s:"She called an ambulance, although Tom said he was fine.",w:"ambulance"},
    {s:"At the hospital a doctor looked at his arm very carefully."},
    {s:"Luckily nothing was broken, so Tom went home before dinner."},
@@ -4233,7 +4734,47 @@ const BOSS_STORY={
    {s:"We ride to school together, and he sits behind me on the way home."},
    {s:"I cannot believe how happy he is about my old bike.",w:"believe"},
    {s:"Tom says he will be much more careful in the future."},
-   {s:"Our teacher put a big poster about bike rules on the classroom wall."}]},
+   {s:"Our teacher put a big poster about bike rules on the classroom wall."}],
+  qs:[
+   {q:"Was Tom badly hurt?",a:"No, nothing was broken",
+    w:["Yes, his arm was broken","Yes, he stayed in hospital","Yes, he hurt his leg"]},
+   {q:"Why did the class talk about bike safety?",a:"Because of Tom's accident",
+    w:["Because of a coming bike race","Because the teacher bought a bike","Because a new road opened"]},
+   {q:"Why did Tom fall off his bike?",a:"He was riding too fast on a wet road",
+    w:["A car hit him","His wheel was already bent","Someone pushed him"]},
+   {q:"Why did the teacher call an ambulance when Tom said he was fine?",a:"She wanted a doctor to make sure",
+    w:["Tom could not walk at all","His arm was clearly broken","School rules say she must"]},
+   {q:"Why can Tom not ride to school this week?",a:"His bike has not been repaired yet",
+    w:["His arm still hurts too much","His dad took the bike away","The road is closed"]}]},
+ 22:{title:"The Talent Show",lines:[
+   {s:"Our school has an international evening every year in May.",w:"international"},
+   {s:"Children from twelve countries show something from home."},
+   {s:"My class decides to dance, and our teacher says it is possible.",w:"possible"},
+   {s:"The dance looks easy, but the last part is very difficult.",w:"difficult"},
+   {s:"We practise every Tuesday after school."},
+   {s:"At the beginning we are almost never in time with the music.",w:"almost"},
+   {s:"Lin can turn twice in the air, which is an advanced step.",w:"advanced"},
+   {s:"For the rest of us that step is out of reach."},
+   {s:"Two weeks before the show it still looks impossible.",w:"impossible"},
+   {s:"Anyway, nobody in the class wants to give up.",w:"anyway"},
+   {s:"On the night everybody comes except Tom, who is ill at home.",w:"except"},
+   {s:"We wait five minutes and then start without him."},
+   {s:"In the middle of the dance I turn exactly the wrong way.",w:"exactly"},
+   {s:"It feels horrible, and my face goes red."},
+   {s:"But the music goes on, and so do we."},
+   {s:"Our teacher says the ending was brilliant and the whole show was successful.",w:"brilliant"},
+   {s:"I am not afraid of the big stage anymore.",w:"anymore"}],
+  qs:[
+   {q:"When does the international evening happen?",a:"Once a year, in May",
+    w:["Every Tuesday","Two weeks before May","In the middle of winter"]},
+   {q:"Why is Tom not in the show?",a:"He is ill at home",
+    w:["He forgot the date","He does not like dancing","He is in another class"]},
+   {q:"Why does the class keep practising when the dance looks impossible?",a:"Nobody wants to give up",
+    w:["The teacher makes them stay","Lin can do every step already","They win money if they dance"]},
+   {q:"What goes wrong during the show?",a:"The writer turns the wrong way",
+    w:["The music stops","Lin falls over","They begin too early"]},
+   {q:"What has changed for the writer after that night?",a:"He is not afraid of the stage anymore",
+    w:["He wants to dance every day","He will never dance again","He can do Lin's advanced step"]}]},
  23:{title:"My Reading Corner",lines:[
    {s:"In the corner of my bedroom there is a small reading place."},
    {s:"It has an old brown chair which is very comfortable.",w:"comfortable"},
@@ -4242,6 +4783,7 @@ const BOSS_STORY={
    {s:"This month I am reading a longer book than usual."},
    {s:"It is a foreign story about a girl who lives beside the sea.",w:"foreign"},
    {s:"Some of the words are difficult, so I use a dictionary."},
+   {s:"I read those pages carefully, and afterwards I write the new words down.",w:"carefully"},
    {s:"Many words look similar to Chinese words I already know.",w:"similar"},
    {s:"That makes the book easier than I thought at first."},
    {s:"Unfortunately, the last page of the book is missing.",w:"unfortunately"},
@@ -4251,7 +4793,18 @@ const BOSS_STORY={
    {s:"The same book is available at the school library.",w:"available"},
    {s:"I will borrow it on Monday and read the ending there."},
    {s:"Then I will tell my sister who was right."},
-   {s:"Reading before bed is the quietest part of my day."}]},
+   {s:"Reading before bed is the quietest part of my day."}],
+  qs:[
+   {q:"When does the writer usually read?",a:"In the evening, after his homework",
+    w:["Early in the morning","At school lunchtime","Only at weekends"]},
+   {q:"Do the writer and his sister agree about the ending?",a:"No, they each guess something different",
+    w:["Yes, both say a dog","Yes, both say swimming","They have not talked about it"]},
+   {q:"Why does the writer not know how the story ends?",a:"The last page of his book is missing",
+    w:["He has stopped reading it","The book is in another language","His sister has the book"]},
+   {q:"Why is the book easier than he first thought?",a:"Many words look like words he already knows",
+    w:["It is shorter than usual","His sister reads it to him","The pictures explain everything"]},
+   {q:"What will the writer do on Monday?",a:"Read the ending in the library copy",
+    w:["Buy a new book","Ask his sister to write an ending","Get another chair from grandfather"]}]},
  24:{title:"Sports Day",lines:[
    {s:"Sports day is the biggest event of the year at our school.",w:"event"},
    {s:"It happens in June, when the weather is usually warm and dry."},
@@ -4263,46 +4816,37 @@ const BOSS_STORY={
    {s:"The other boys in his group are taller and older than he is."},
    {s:"He is not the fastest runner, but he never stops."},
    {s:"In the end he finishes at the bottom of his group.",w:"bottom"},
+   {s:"In my opinion, finishing at all was already a success for him.",w:"opinion"},
    {s:"Our parents clap loudly, and his teacher gives him a small card."},
    {s:"Afterwards we all eat ice cream under the big tree.",w:"afterwards"},
    {s:"My brother eats two, because he is so hungry after the race."},
    {s:"Actually, that quiet moment is my favourite part of the day.",w:"actually"},
    {s:"We sit on the grass and watch the older students play football."},
    {s:"This sports day will be a happy memory for our whole family.",w:"memory"},
-   {s:"Next year my brother says he will practise and finish in the middle."}]}
+   {s:"Next year my brother says he will practise and finish in the middle."}],
+  qs:[
+   {q:"What will the brother do differently next year?",a:"Practise first so he can do better",
+    w:["Run a shorter race","Only watch the races","Wear a different shirt"]},
+   {q:"How will the family remember this sports day?",a:"As a happy day",
+    w:["As a disappointing day","As a day they want to forget","They will not remember it"]},
+   {q:"Why is the long race hard for the writer's brother?",a:"The other runners are older and bigger",
+    w:["He does not like running","He starts too late","His shoes are too small"]},
+   {q:"Why do the parents clap loudly even though he is last?",a:"He finished the whole race and never stopped",
+    w:["He won a prize","He was the fastest in his class","He is the youngest at school"]},
+   {q:"Which part of the day does the writer like best?",a:"Sitting quietly with ice cream after the races",
+    w:["The long race","Carrying the equipment","The rope game"]}]}
 };
-/* 手写故事的出题：考点句就是文章里的原句，所以题目和文章永远一致 */
+/* 手写故事的出题：5 道题全部手写，考的是有没有读懂意思。
+   题目不会把原句挖空，也不会让孩子去找同一个词，必须想明白前因后果才能选。
+   每篇的顺序是先两道简单的，再三道要动脑筋的，选项数量跟着难度走。 */
 function storyPaper(seg,st){
-  const lv=bossLevel(seg);
   const text=st.lines.map(l=>l.s).join(" ");
-  const html=linkWords(text);
-  const tw=st.lines.filter(l=>l.w)
-    .map(l=>({w:WORDS.find(x=>x.en===l.w),s:l.s})).filter(o=>o.w);
-  if(tw.length<4)return null;
-  const nDis=lv>=3?3:2;
-  const others=k=>shuffle(tw.filter(o=>o.w.en!==k.en).map(o=>o.w)).slice(0,nDis);
-  const cut=(s,en)=>s.replace(new RegExp("\\b"+en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i"),"______");
-  const swap=(s,en,to)=>s.replace(new RegExp("\\b"+en.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","i"),to);
-  const qMean=o=>({q:'文章里的 "'+o.w.en+'" 是什么意思？',
-    opts:shuffle([{t:o.w.zh,ok:1}].concat(others(o.w).map(x=>({t:x.zh}))))});
-  const qCloze=o=>({q:"选词填空： "+cut(o.s,o.w.en),
-    opts:shuffle([{t:o.w.en,ok:1}].concat(others(o.w).map(x=>({t:x.en}))))});
-  const qTrue=o=>({q:"哪一句和文章一致？",
-    opts:shuffle([{t:o.s,ok:1}].concat(others(o.w).map(x=>({t:swap(o.s,o.w.en,x.en)}))))});
-  const qNotIn=()=>{
-    const outs=shuffle(WORDS.filter(x=>!new RegExp("\\b"+x.en+"\\b","i").test(text))).slice(0,1);
-    const wrong=outs.length?outs[0].en:"pizza";
-    return {q:"下面哪个词【没有】出现在文章里？",
-      opts:shuffle([{t:wrong,ok:1}].concat(shuffle(tw.slice()).slice(0,nDis).map(o=>({t:o.w.en}))))};
-  };
-  const qTitle=()=>({q:"这篇文章最好的题目是？",
-    opts:shuffle([{t:st.title,ok:1}].concat(
-      shuffle(["My Maths Test","A Rainy Night","The Lost Key","At the Hospital","A Trip to the Zoo"])
-        .slice(0,nDis).map(t=>({t:t}))))});
-  const at=i=>tw[i%tw.length];
-  const qs=[qMean(at(0)),qCloze(at(1)),qTrue(at(2)),
-            (lv>=4?qNotIn():qMean(at(3))),qTitle()];
-  return {title:st.title,html:html,text:text,zh:"",qs:qs,words:tw.map(o=>o.w.en)};
+  if(!st.qs||!st.qs.length)return null;
+  /* 只打乱选项顺序，正确答案不会永远待在同一个位置 */
+  const qs=st.qs.map(o=>({q:o.q,
+    opts:shuffle([{t:o.a,ok:1}].concat(o.w.map(t=>({t:t}))))}));
+  return {title:st.title,html:linkWords(text),text:text,zh:"",qs:qs,
+          words:st.lines.filter(l=>l.w).map(l=>l.w)};
 }
 function buildBossPaper(seg){
   const st=BOSS_STORY[seg];
@@ -4325,7 +4869,7 @@ function startBoss(seg,dev){
   }
   const bi=attrOf(seg);
   bossState={seg,paper,idx:-1,hp:BOSS_HITS,hpMax:BOSS_HITS,qMax:paper.qs.length,
-             step:0,bi,mon:monOf(seg),dev:!!dev,busy:false};
+             step:0,bi,mon:monOf(seg),dev:!!dev,busy:false,wrong:[]};
   goView("learn");renderBoss();
 }
 /* 小魔法师 + 魔法枪，纯内联 SVG，不要外部图片 */
@@ -4460,6 +5004,13 @@ function bindBossOpts(){
         b.classList.add("no");B.step++;SFX.hurt();monsterStrike();
         const r=document.querySelectorAll("#learnArea .bopt")[q.opts.findIndex(o=>o.ok)];
         if(r)r.classList.add("ok");
+        /* 记错题：本场的留着打完回顾，存档里按「段号:题号」累计错的次数 */
+        const pick=q.opts[+b.dataset.i].t;
+        B.wrong.push({qi:B.idx,pick:pick});
+        if(!B.dev){
+          const ek=B.seg+":"+B.idx,e=S.bossErr[ek]||{n:0};
+          e.n++;e.pick=pick;e.at=today();S.bossErr[ek]=e;
+        }
         paintFight();
       }
       if(!B.dev)save();
@@ -4562,8 +5113,11 @@ function bossWin(){
         '正式打赢会开一次盲盒'+
         (holdsPiece(B.seg)?'<br>🧩 还会解锁徽章最后一块':'')+'</p>'+
       boxHTML+
-      '<button class="btn green" id="bossNext" style="display:none">回单词表 →</button></div>';
+      '<button class="btn green" id="bossNext" style="display:none">回单词表 →</button>'+
+      (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
+      '</div>';
     bindBossBox(true);
+    bindBossRev(B);
     $("#bossNext").onclick=()=>{const s=B.seg;bossState=null;goView("map");openDevList(s);};
     return;
   }
@@ -4577,10 +5131,21 @@ function bossWin(){
     '<p style="font-size:17px;font-weight:bold">通关奖励是一次盲盒'+
       (holdsPiece(B.seg)?'<br>🧩 徽章最后一块已解锁！':'')+'</p>'+
     boxHTML+
-    '<button class="btn green" id="bossNext" style="display:none">收下奖励 →</button></div>';
+    '<button class="btn green" id="bossNext" style="display:none">收下奖励 →</button>'+
+    (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
+    '</div>';
   bindBossBox(false,()=>{renderHUD&&renderHUD();});
   $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();renderMap();renderDaily();goView("puzzle");};
+  bindBossRev(B);
   updateSpinUI();
+}
+/* 打完一场（赢或输）都能回顾这一场答错的题 */
+function bossRevBtn(B){
+  return B.wrong&&B.wrong.length
+    ?'<button class="btn ghost sm" id="bossRev">📖 看看答错的 '+B.wrong.length+' 道题</button>':'';
+}
+function bindBossRev(B){
+  if($("#bossRev"))$("#bossRev").onclick=()=>openBossRev(B.seg,B.wrong);
 }
 function bossLose(){
   const B=bossState;SFX.lose();stopRead();
@@ -4591,12 +5156,98 @@ function bossLose(){
       (B.step>=BOSS_STEPS?B.mon.nm+"冲到你面前了":B.mon.nm+"还差 "+B.hp+" 枪才倒下")+'<br>'+
       '再读一遍文章，一定能赢！<span style="opacity:.6;font-size:13px">（不扣任何积分）</span></p>'+
     '<div class="row"><button class="btn green" id="bossAgain">🔁 再来一次</button>'+
-    '<button class="btn ghost sm" id="bossLater">稍后再战</button></div></div>';
+    '<button class="btn ghost sm" id="bossLater">稍后再战</button></div>'+
+    (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
+    '</div>';
   $("#bossAgain").onclick=()=>startBoss(B.seg,B.dev);
+  bindBossRev(B);
   $("#bossLater").onclick=()=>{
     const s=B.seg,dev=B.dev;bossState=null;renderMap();renderDaily();goView("map");
     if(dev)openDevList(s);
   };
+}
+/* ---- 阅读理解错题 --------------------------------------------------
+   答错的题会记进存档（键是「段号:题号」，累计错的次数、最后选错的答案、日期）。
+   两个地方能看：孩子打完一场可以点开回顾本场错题；家长面板里有一本总的错题本。
+   因为题目全是手写的，不用存题面，按段号和题号回到 BOSS_STORY 里取就行。 */
+const RV_STOP=new Set(("a an the and or but so because of to in on at for with from by as than then when while if is are was were be been am do does did not no yes it its this that these those he she her his they them their we us our you your i me my there here all any some one two three more most much many little few very too also still just only own same can could will would may might must shall should have has had get got go goes went come comes make makes made say says said about into out up down off over after before again what which who how why").split(" "));
+function keySentence(st,q){                 /* 文章里和正确答案最相关的一句 */
+  const pick=t=>((t||"").toLowerCase().match(/[a-z']+/g)||[])
+    .filter(w=>w.length>2&&!RV_STOP.has(w));
+  const ans=pick(q.a),ask=pick(q.q);        /* 答案里的词最重要，题面的词只做参考 */
+  if(!ans.length)return "";
+  let best=-1,bs=0;
+  st.lines.forEach((l,i)=>{
+    const ws=(l.s.toLowerCase().match(/[a-z']+/g)||[]);
+    const near=w=>w.length>4&&ws.some(x=>x.slice(0,4)===w.slice(0,4));
+    let sc=0;
+    ans.forEach(w=>{sc+=ws.indexOf(w)>=0?3:(near(w)?1:0);});
+    ask.forEach(w=>{if(ws.indexOf(w)>=0)sc+=1;});
+    if(sc>bs){bs=sc;best=i;}
+  });
+  /* 至少要有一个答案里的词对上，否则宁可不显示，免得指错句子 */
+  return bs>=3?st.lines[best].s:"";
+}
+function rvCard(seg,qi,pick,extra){         /* 一道错题的卡片 */
+  const st=BOSS_STORY[seg];if(!st||!st.qs[qi])return "";
+  const q=st.qs[qi],ks=keySentence(st,q);
+  return '<div class="rv">'+
+    '<div class="rv-h">第 '+(seg+1)+' 段 · 第 '+(qi+1)+' 题'+(extra||"")+'</div>'+
+    '<div class="rv-q" lang="en">'+q.q+'</div>'+
+    (pick?'<div class="rv-no" lang="en">✗ 选了 '+pick+'</div>':'')+
+    '<div class="rv-ok" lang="en">✓ '+q.a+'</div>'+
+    (ks?'<div class="rv-k">文章里这句最有关系：<br><span lang="en">'+linkWords(ks)+'</span></div>':'')+
+  '</div>';
+}
+function rvBind(){                          /* 弹窗里的单词也能点开看意思 */
+  $("#revBody").querySelectorAll(".wk").forEach(b=>{
+    b.onclick=e=>{e.stopPropagation();showWordPop(b.dataset.w,b);};
+  });
+}
+/* 孩子端：打完一场，回顾这一场答错的题 */
+function openBossRev(seg,wrong){
+  const st=BOSS_STORY[seg];if(!st)return;
+  $("#revTitle").textContent="📖 这一场答错的题";
+  $("#revBody").innerHTML=
+    wrong.map(it=>rvCard(seg,it.qi,it.pick)).join("")+
+    '<p class="tips" style="text-align:left;margin:10px 0 4px">下面是整篇文章，带着上面的题再读一遍，就知道答案是从哪里来的。</p>'+
+    '<div class="article" lang="en">'+linkWords(st.lines.map(l=>l.s).join(" "))+'</div>';
+  rvBind();
+  $("#revModal").classList.add("show");
+}
+/* 家长端：所有段落累计下来的阅读理解错题本 */
+function bossErrList(){
+  return Object.keys(S.bossErr).map(k=>{
+    const p=k.split(":");
+    return Object.assign({seg:+p[0],qi:+p[1]},S.bossErr[k]);
+  }).filter(o=>BOSS_STORY[o.seg]&&BOSS_STORY[o.seg].qs[o.qi])
+    .sort((a,b)=>(b.n-a.n)||(a.seg-b.seg)||(a.qi-b.qi));
+}
+function openBossErrBook(){
+  const list=bossErrList();
+  const times=list.reduce((a,o)=>a+o.n,0);
+  const segs=[...new Set(list.map(o=>o.seg))].length;
+  const pre=(S.bossPre||[]).filter(s=>!list.some(o=>o.seg===s));
+  $("#revTitle").textContent="📕 阅读理解错题本";
+  $("#revBody").innerHTML=
+    '<div class="stats" style="margin-bottom:8px">'+
+      '<div><b>'+list.length+'</b>道题错过</div>'+
+      '<div><b>'+times+'</b>累计错次</div>'+
+      '<div><b>'+segs+'</b>涉及段数</div></div>'+
+    (list.length
+      ? list.map(o=>rvCard(o.seg,o.qi,o.pick,' · 错 '+o.n+' 次 · 最后 '+(o.at||"—"))).join("")
+      : '<p class="tips">还没有阅读理解错题，全部一次答对 🎉</p>')+
+    (pre.length?'<p class="tips" style="text-align:left">第 '+pre.slice().sort((a,b)=>a-b).map(s=>s+1).join('、')+
+      ' 段没有错题记录：可能是在这个功能上线之前就打过了，也可能是在家长模式里直接标记过关的。</p>':'')+
+    (list.length?'<div class="row" style="margin-top:8px">'+
+      '<button class="btn sm ghost" id="revClear">清空这本错题本</button></div>':'');
+  rvBind();
+  if($("#revClear"))$("#revClear").onclick=()=>{
+    if(!confirm("清空阅读理解错题本？孩子的通关记录和积分都不会动。"))return;
+    S.bossErr={};S.bossPre=Object.keys(S.boss).map(Number).sort((a,b)=>a-b);
+    save();openBossErrBook();toast("错题本已清空");
+  };
+  $("#revModal").classList.add("show");
 }
 /* 徽章最后一块：打赢才发 */
 function grantPendingPiece(seg){
@@ -4667,6 +5318,7 @@ function finishSegment(){
   S.spins+=sp;                                // 次数只累加，不设上限
   let boss=false;
   if(!sess.custom){
+    S.resume=null;                            // 这一段做完了，断点清掉
     if(holdsPiece(sess.seg)){                 // 徽章最后一块先扣着，打赢 BOSS 才发
       if(!S.pieces.includes(sess.seg))S.pendBoss=sess.seg;
     }else if(!S.pieces.includes(sess.seg))S.pieces.push(sess.seg);
@@ -4963,6 +5615,56 @@ function renderParent(){
     '<div class="erow"><span class="en">'+w.en+'</span><span class="zh">'+w.zh+'</span>'+
     '<span class="cnt">错 '+S.errors[w.en]+' 次</span></div>').join("")
     :'<p class="tips">暂无错词</p>';
+}
+/* ---- 家长面板的二级页面：一天一行的学习记录 --------------------------
+   一级页面只放汇总和近 7 天的柱状图，天数一多就拖得很长。
+   逐天的明细全挪到这个弹窗里，默认看最近 30 个学习日，也能切成全部。
+   每天记四个数：新词（当天三关全过的词）、复习（做对的老词复习题）、
+   答题次数、当天拿到的积分。没学的日子不占一行。 */
+let logAll=false;
+const WK=["周日","周一","周二","周三","周四","周五","周六"];
+function dayList(){                       /* 有学习记录的日子，新的排在前面 */
+  return Object.keys(S.days)
+    .filter(k=>{const r=S.days[k];return r&&((r.q|0)||(r.w|0)||(r.rev|0)||(r.s|0));})
+    .sort().reverse();
+}
+function openDayLog(){logAll=false;renderDayLog();$("#logModal").classList.add("show");}
+function renderDayLog(){
+  const keys=dayList(),t=today();
+  const sum=keys.reduce((a,k)=>{const r=S.days[k];
+    a.w+=r.w|0;a.rev+=r.rev|0;a.q+=r.q|0;a.s+=r.s|0;return a;},{w:0,rev:0,q:0,s:0});
+  $("#logSum").innerHTML=
+    '<div><b>'+keys.length+'</b>累计学习天</div>'+
+    '<div><b>'+sum.w+'</b>累计新词</div>'+
+    '<div><b>'+sum.rev+'</b>累计复习</div>'+
+    '<div><b>'+(keys.length?(sum.w/keys.length).toFixed(1):0)+'</b>平均每天新词</div>'+
+    '<div><b>'+sum.q+'</b>累计答题</div>'+
+    '<div><b>'+streak()+'</b>连续天数</div>';
+  $("#logRange").querySelectorAll("button").forEach(b=>{
+    const on=(+b.dataset.lg===0)===logAll;
+    b.className="btn sm "+(on?"green":"ghost");
+  });
+  const show=logAll?keys:keys.slice(0,30);
+  if(!show.length){$("#logList").innerHTML='<p class="tips">还没有学习记录，做完一段就会出现在这里</p>';return;}
+  const mxW=Math.max(1,...show.map(k=>S.days[k].w|0));
+  const mxR=Math.max(1,...show.map(k=>S.days[k].rev|0));
+  let mon="",html=[];
+  show.forEach(k=>{
+    const r=S.days[k],d=new Date(k+"T00:00:00");
+    const m=d.getFullYear()+" 年 "+(d.getMonth()+1)+" 月";
+    if(m!==mon){mon=m;html.push('<div class="dl-m">'+m+'</div>');}
+    const w=r.w|0,rv=r.rev|0;
+    html.push('<div class="drow'+(k===t?" today":"")+'">'+
+      '<span class="dd">'+(d.getMonth()+1)+"/"+d.getDate()+' '+WK[d.getDay()]+'</span>'+
+      '<span class="dbars">'+
+        '<span class="dbar w"><span>新词 '+w+'</span><i style="width:'+(w/mxW*100)+'%"></i></span>'+
+        '<span class="dbar r"><span>复习 '+rv+'</span><i style="width:'+(rv/mxR*100)+'%"></i></span>'+
+      '</span>'+
+      '<span class="dsum">答题 '+(r.q|0)+'<br>'+(r.s|0)+' 分</span></div>');
+  });
+  if(!logAll&&keys.length>show.length)
+    html.push('<p class="tips">还有 '+(keys.length-show.length)+' 天更早的记录，点上面的「全部」查看</p>');
+  $("#logList").innerHTML=html.join("");
 }
 
 /* ===========================================================
@@ -5762,6 +6464,8 @@ function passSeg(i){
   if(!S.pieces.includes(i))S.pieces.push(i);
   if(!S.stars[i]||S.stars[i]<3)S.stars[i]=3;
   if(needBoss(i))S.boss[i]=true;
+  /* 家长直接判过关的段没有阅读理解错题数据，记进名单，错题本里说明一下 */
+  if(!(S.bossPre||[]).some(s=>+s===i))(S.bossPre=S.bossPre||[]).push(i);
   if(+S.pendBoss===i)S.pendBoss=null;
   const bi=attrOf(i);
   if(badgeDone(bi)&&!S.cardDate[bi])S.cardDate[bi]=today();
@@ -5774,6 +6478,8 @@ function resetSeg(i){
   segWords(i).forEach(w=>{delete S.scored[w.en];delete S.errors[w.en];delete S.srs[w.en];});
   S.pieces=S.pieces.filter(p=>+p!==i);
   delete S.stars[i];delete S.boss[i];
+  Object.keys(S.bossErr).forEach(k=>{if(+k.split(":")[0]===i)delete S.bossErr[k];});
+  S.bossPre=(S.bossPre||[]).filter(s=>+s!==i);
   if(+S.pendBoss===i)S.pendBoss=null;
   const bi=attrOf(i);if(!badgeDone(bi))delete S.cardDate[bi];
   /* curSeg 不往回退，后面已通关的段还能点开复习 */
@@ -5784,6 +6490,7 @@ function resetSeg(i){
 function resetAllWords(wipeRewards){
   S.scored={};S.errors={};S.srs={};S.pieces=[];S.stars={};S.boss={};S.cardDate={};
   S.curSeg=0;S.pendBoss=null;S.days={};S.flags={};S.ach=[];
+  S.bossErr={};S.bossPre=[];S.resume=null;
   if(wipeRewards){S.family=0;S.coins=0;S.spins=0;S.x2=0;S.owned=[];S.equip={};}
   resetSession();sess=null;
   save();
@@ -5850,6 +6557,15 @@ $("#paBtn").onclick=openParentMode;
 $("#paOk").onclick=paUnlock;
 $("#paPwd").onkeydown=e=>{if(e.key==="Enter")paUnlock();};
 $("#paClose").onclick=()=>$("#paModal").classList.remove("show");
+/* 家长面板 → 逐天学习记录（二级页面） */
+$("#dayLogBtn").onclick=()=>{SFX.click();openDayLog();};
+$("#logClose").onclick=()=>$("#logModal").classList.remove("show");
+/* 家长面板 → 阅读理解错题本（二级页面，和孩子端回顾共用弹窗） */
+$("#bossErrBtn").onclick=()=>{SFX.click();openBossErrBook();};
+$("#revClose").onclick=()=>$("#revModal").classList.remove("show");
+$("#logRange").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  logAll=+b.dataset.lg===0;SFX.click();renderDayLog();
+});
 $("#verToggle").onclick=()=>{verFold($("#verBody").style.display==="none");SFX.click();};
 $("#paSeg").onchange=paSegInfo;
 document.querySelectorAll("#paBody button[data-pa]").forEach(b=>b.onclick=()=>{
