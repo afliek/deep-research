@@ -6,8 +6,10 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v2.0.0</title>
-<meta name="app-version" content="2.0.0">
+<title>魔法单词学院 · v2.4.1</title>
+<meta name="app-version" content="2.4.1">
+<!-- 空 favicon：不声明的话浏览器会自己去请求 /favicon.ico，控制台每次都报一条 404 -->
+<link rel="icon" href="data:,">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <!-- 开机界面字体：站酷快乐体（中文可爱圆体）+ Baloo 2（拉丁圆体），异步加载不阻塞 -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -34,10 +36,43 @@ body{
     #F8F6F2;
   background-attachment:fixed;overflow-x:hidden;
 }
-body.t-rainbow{background:linear-gradient(170deg,#FFE0EC,#FFF3D6 35%,#DDF6E3 65%,#DCEEFF)!important;background-attachment:fixed!important}
-body.t-ocean{background:linear-gradient(170deg,#CFF0FF,#A8E4F5 45%,#D7F5EC)!important;background-attachment:fixed!important}
-body.t-night{background:linear-gradient(170deg,#3A3A7A,#5C4B9E 45%,#8A6BC0)!important;background-attachment:fixed!important}
+/* 结界：装备后整页换成对应的水彩背景图（v2.2.0）。
+   背景一共三层，CSS 里「先写的在上面」，所以顺序不能调：
+     ① 奶油薄纱 —— 半透明纯色，把图压淡一点，不然整页太闹、抢内容
+     ② 结界图片 —— theme/ 目录下的 882×1176 水彩图
+     ③ 原来那套渐变 —— 纯兜底。图是不透明 jpg，正常情况下压根看不见这一层，
+        只有 theme/ 没跟着一起上传、或者图加载失败时才会露出来，
+        这时整页就退回 v2.1.0 的样子，不会变成白板。
+   星夜结界不压薄纱：它本身是暗色图，再压一层反而糊掉星空。 */
+body.t-rainbow,body.t-ocean,body.t-night{
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  background-position:center top!important;
+  /* 和原来的渐变行为一致：背景不随页面滚动 */
+  background-attachment:fixed!important;
+  background-color:#F8F6F2!important;
+}
+body.t-rainbow{background-image:
+  linear-gradient(rgba(255,253,250,.30),rgba(255,253,250,.30)),
+  url("theme/t1.jpg"),
+  linear-gradient(170deg,#FFE0EC,#FFF3D6 35%,#DDF6E3 65%,#DCEEFF)!important}
+body.t-ocean{background-image:
+  linear-gradient(rgba(255,253,250,.30),rgba(255,253,250,.30)),
+  url("theme/t2.jpg"),
+  linear-gradient(170deg,#CFF0FF,#A8E4F5 45%,#D7F5EC)!important}
+body.t-night{background-image:
+  url("theme/t3.jpg"),
+  linear-gradient(170deg,#3A3A7A,#5C4B9E 45%,#8A6BC0)!important}
 body.t-night{color:#2B2D6E}
+/* 面板从不透明奶油白变成 70% 透明的毛玻璃，背景图才能从内容底下透出来。
+   不加模糊的话，面板上的文字会和水彩的笔触打架、糊成一片。
+   只在装备了结界时才生效 —— 没装备的默认页面还是原来的不透明奶油白，
+   顺带也避免了给所有人无条件加一堆 backdrop-filter 的开销。 */
+body.t-rainbow .panel,body.t-ocean .panel,body.t-night .panel{
+  background:rgba(255,253,250,.30);
+  -webkit-backdrop-filter:blur(11px) saturate(1.08);
+          backdrop-filter:blur(11px) saturate(1.08);
+}
 .wrap{max-width:920px;margin:0 auto;padding:10px 14px 116px}
 
 /* HUD */
@@ -661,6 +696,45 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   transition:transform .14s ease,border-color .14s ease}
 #spSkin button.on{border-color:#fff;transform:scale(1.14)}
 #spSkin button:active{transform:scale(.94)}
+/* ---------- 点到的鱼：图鉴信息卡 ----------
+   液态玻璃风格，和水下主题统一。
+   注意 transform 和 backdrop-filter 可以共存，但 filter / mask-image /
+   clip-path / mix-blend-mode 任何一个出现在同一元素上都会切断 backdrop-filter，
+   所以这里的动画只用 opacity + transform。
+   必须单独开 pointer-events：父层 #splashUI 是 none，卡片要能点关闭按钮。 */
+#fishCard{position:absolute;left:50%;bottom:9%;z-index:6;
+  min-width:232px;max-width:min(86vw,380px);padding:15px 18px 16px;
+  border-radius:19px;text-align:left;
+  opacity:0;pointer-events:none;transform:translateX(-50%) translateY(20px) scale(.97);
+  background:rgba(255,255,255,.28);
+  -webkit-backdrop-filter:blur(15px) saturate(1.4);backdrop-filter:blur(15px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.58);
+  box-shadow:0 18px 46px rgba(10,50,80,.24),inset 0 1px 0 rgba(255,255,255,.9);
+  transition:opacity .3s ease,transform .3s cubic-bezier(.2,.9,.2,1)}
+#fishCard.on{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0) scale(1)}
+#fishCard .fc-new{display:none;font:400 11px/1 var(--soft);letter-spacing:2px;
+  color:#0C5E80;background:rgba(255,255,255,.55);border-radius:999px;
+  padding:5px 10px;margin-bottom:7px}
+#fishCard.isnew .fc-new{display:inline-block}
+#fishCard .fc-cn{font:400 20px/1.3 var(--cute);color:var(--ink);letter-spacing:1px;
+  padding-right:26px}
+#fishCard .fc-en{font:600 13px/1.45 var(--soft);color:#166A8E;
+  letter-spacing:.7px;margin-top:3px}
+#fishCard .fc-tip{font:400 13.5px/1.7 var(--cute);color:#24507A;margin-top:8px}
+#fishCard .fc-sz{font:400 11px/1.4 var(--soft);color:#4A7C9C;margin-top:7px;opacity:.7}
+#fishCard .fc-x{position:absolute;right:9px;top:8px;width:24px;height:24px;padding:0;
+  border:0;border-radius:50%;cursor:pointer;background:rgba(255,255,255,.4);
+  color:#2B5A80;font:400 17px/1 var(--soft);min-height:0;box-shadow:none}
+#fishCard .fc-x:hover{background:rgba(255,255,255,.72)}
+/* 深色水体（极光 / 夜薰衣草）下整张卡换成暗玻璃 */
+#splash.dark #fishCard{background:rgba(8,26,42,.46);border-color:rgba(255,255,255,.28);
+  box-shadow:0 18px 46px rgba(2,12,22,.5),inset 0 1px 0 rgba(255,255,255,.35)}
+#splash.dark #fishCard .fc-new{background:rgba(255,255,255,.2);color:#CFF2FF}
+#splash.dark #fishCard .fc-en{color:#8FE0F2}
+#splash.dark #fishCard .fc-tip{color:#D8EEF8}
+#splash.dark #fishCard .fc-sz{color:#9FC4D8}
+#splash.dark #fishCard .fc-x{background:rgba(255,255,255,.18);color:#DCF2FA}
+@media(prefers-reduced-motion:reduce){#fishCard{transition-duration:.01s}}
 /* 没有 three.js 时的降级场景 */
 #spFallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
 #spFallback.on{display:flex}
@@ -692,6 +766,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .seg-btns button.on{background:var(--purple)}
 .nav{background:#FFFDFAF5;border-top:1px solid var(--line);box-shadow:0 -4px 20px #43346008;gap:8px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
 .nav button{color:#756D87;max-width:140px;padding:8px 0;font-size:12px;min-height:56px}
+/* 「徽章和海鱼」比其他标签长，窄屏上 5 个按钮分不到 60px，不收一下会换行把
+   导航撑高。nowrap + 等比缩字，比截断成「徽章和…」清楚。 */
+.nav button{white-space:nowrap}
+@media(max-width:430px){.nav{gap:4px;padding-left:4px;padding-right:4px}.nav button{font-size:11px}}
+@media(max-width:360px){.nav button{font-size:10px}}
 .nav button.on{color:#685098;background:#EEE7F8}.nav button .ic{font-size:21px;margin-bottom:3px}
 
 /* 学习时降低装饰强度，字形清晰、朗读对象明确。 */
@@ -854,6 +933,33 @@ body:has(#v-learn.on) .chip.x2{animation:none}
 .good.owned{border-color:#B6D3C2;background:#FCFEFC}.good.owned .gstatus{background:#E9F4EC;color:#398063}
 .good.on{border:2px solid #9B81C3;padding:11px;background:#F8F4FE;box-shadow:none}.good.on .gstatus{background:#E8DDF7;color:#705196}
 .good.on .gaction{background:var(--purple);color:#fff}.good.no{opacity:1}.good.no .gic{filter:saturate(.65)}.good.no .gaction{background:#F3F0F5;color:#81778B}
+/* ---------- 海鱼图鉴（底部导航「🧩 徽章」页） ----------
+   每条鱼的小图是用开机页那套着色器现渲出来的 PNG，所以图鉴里的鱼和水里
+   游的那条是同一条。没解锁的渲成黑色剪影 —— 既能看出体型轮廓（这是认鱼
+   最关键的特征），又保留了"还没见过"的感觉。 */
+.fishdex{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:12px;margin-top:4px}
+.fdx{display:block;text-align:left;cursor:pointer;padding:0;overflow:hidden;
+  background:#FFFDFB;border:1px solid var(--line);border-radius:18px;
+  font-family:inherit;color:var(--deep);box-shadow:0 3px 8px #43346006}
+/* 鱼图衬一层浅水色：鱼的配色本来就是按水下环境调的，白底上会发灰 */
+.fdx .pic{display:block;position:relative;width:100%;aspect-ratio:184/124;
+  background:linear-gradient(168deg,#D4E9F8,#95C2E2)}
+.fdx .pic img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain}
+.fdx .fx{display:block;padding:11px 13px 13px}
+.fdx .fx>span{display:block}
+.fdx .fcn{font-size:14px;font-weight:700;line-height:1.45}
+.fdx .fen{font-size:11.5px;color:#166A8E;letter-spacing:.3px;margin-top:2px}
+.fdx .ftip{font-size:11.5px;color:var(--muted);line-height:1.7;margin-top:6px}
+.fdx .flock{font-size:11.5px;color:#93809E;margin-top:6px}
+.fdx .ftier{font-size:10.5px;color:#9A90A8;margin-top:5px}
+.fdx.got{border-color:#B6D3C2}
+/* 未解锁：鱼图压成纯黑剪影（brightness(0) 只把颜色打黑、保留 alpha 形状） */
+.fdx.lock .pic{background:linear-gradient(168deg,#E6EEF5,#C3D4E2)}
+.fdx.lock .pic img{filter:brightness(0);opacity:.24}
+.fdx.lock .fcn{color:#8B8398}
+@media(hover:hover){.fdx:hover{border-color:#B5A0D1}}
+@media(max-width:600px){.fishdex{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .fdx .fx{padding:9px 10px 11px}.fdx .fcn{font-size:13px}.fdx .ftip{font-size:11px}}
 @media(hover:hover){.btn:hover:not(:disabled){filter:brightness(1.06)}.good:hover{border-color:#B5A0D1}.seg:hover .n{transform:translateY(-2px)}}
 @media(max-width:820px){.shop-layout{grid-template-columns:1fr}.wardrobe-preview{position:static;max-width:520px;width:100%;margin:auto}#stage3d{height:340px}}
 @media(max-width:600px){
@@ -884,6 +990,15 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
   <div id="spVig"></div>
   <button id="spMute" title="开机音乐开关" aria-label="开机音乐开关">🎵</button>
   <div id="spSkin"></div>
+  <!-- 鱼类图鉴卡：点到鱼时弹出，解锁新鱼时也会自动弹一次 -->
+  <div id="fishCard">
+    <button class="fc-x" id="fcX" aria-label="关闭">×</button>
+    <div class="fc-new">✦ 新 解 锁 ✦</div>
+    <div class="fc-cn" id="fcCn">--</div>
+    <div class="fc-en" id="fcEn">--</div>
+    <div class="fc-tip" id="fcTip">--</div>
+    <div class="fc-sz" id="fcSz">--</div>
+  </div>
   <div id="splashUI">
     <div class="sp-deco"><i></i><span>✦ ✦ ✦</span><i></i></div>
     <div class="sp-title">魔法单词学院</div>
@@ -942,6 +1057,11 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
     <div class="panel">
       <h2 class="title">📕 魔法图鉴</h2>
       <div class="cards" id="cardBox"></div>
+    </div>
+    <div class="panel">
+      <h2 class="title">🐠 海鱼图鉴 <span id="fdCount" style="font-size:14px;font-weight:400;color:var(--muted)"></span></h2>
+      <p class="tips" id="fdText" style="text-align:left;margin:0 0 12px"></p>
+      <div class="fishdex" id="fishDex"></div>
     </div>
   </section>
 
@@ -1136,6 +1256,16 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
         <div id="verBody" style="display:none;margin-top:6px">
         <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.4.1</b>：底部导航第三个标签从「徽章」改名为「徽章和海鱼」，因为这一页现在装了两样东西。标签变长了，窄屏上 5 个按钮分不到位置会换行把导航撑高，所以加了不换行 + 按屏宽等比缩字（430px 以下 11px、360px 以下 10px）。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.4.0</b>：海鱼图鉴挪到了底部导航的「🧩 徽章」页（v2.3.0 错放在商店里了，已经改回去，商店的徽章分类恢复原样），而且现在图鉴里显示的是<b>鱼真正的样子</b>，不是色块也不是 emoji。每条鱼的小图是用开机页那套着色器现场渲出来的，和水里游的那条逐像素一致 —— 同一套体型、鳍型、花纹、配色。还没解锁的渲成黑色剪影，能看出体型轮廓但看不到颜色花纹，留着慢慢解。已解锁的每条带中文名、英文名、一句科普和体型级别（XS 迷你到 XXL 巨型），点一下会朗读英文名。顶上写着收集进度（比如「7 / 13 种」）。没有 WebGL 的设备上图鉴会退回用该物种的背色腹色铺个底色，文字信息照样完整。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.3.0</b>：新增海鱼图鉴（当时放在商店的徽章分类里，v2.4.0 已挪到徽章页）。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.2.0</b>：三个结界从「一层渐变」换成了真正的水彩背景画。装备彩虹结界，整个页面背后就是一道淡彩虹拱门配奶油色云海；深海结界是水面下的光柱、气泡和珊瑚剪影；星夜结界是深靛蓝星空配月牙和金色星星。为了让画露出来，装备结界之后页面上的卡片会变成半透明的毛玻璃（70% 透明 + 11px 模糊），画从内容底下透出来；没装备结界时卡片还是原来的不透明奶油白，不受影响。彩虹和深海两张图上压了一层很淡的奶油薄纱，免得画面太闹抢了内容；星夜是暗色图，不压薄纱，星空才看得清。图片放在 <b>theme/</b> 文件夹里（三张共 330 KB），<b>上传时要和 voice/、music/ 一起带上</b>；万一图没带或者加载失败，页面会自动退回 v2.1.0 的那套渐变，不会变成白板。商店里结界礼物的卡片样子没动，还是原来的 emoji。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.1.0</b>：开机页的海里有鱼了，而且是跟着通关进度一条条解锁的。13 种真实海洋鱼，每通关 2 段解锁 1 种，从最小的蓝绿光鳃雀鲷一路解到蓝鳍金枪鱼；最后一种蓝鲸要 25 段全部通关才会出现。鱼的条数也跟着长：第一次解锁 8 条，集齐 13 种时 30 条。鱼全是手写着色器画的，每种都有自己的体型、尾型、鳍型、花纹和四色配色（背色 / 体侧色 / 腹色 / 花纹色），还带鱼鳞质感、体侧反光带和随角度变化的虹彩；小鱼成群游动、被指针靠近时整群会惊散开再慢慢收拢，大鱼独行。点屏幕上的任何一条鱼会弹出图鉴卡，显示它的中文名、英文名和一句科普，顺带认一个英文词。通关解锁新鱼时两处都会提示：结算页弹一条消息，下次打开开机页自动弹出那条新鱼的图鉴卡。鱼画在水体层里，所以会被水波扭曲、被气泡折射，换配色时鱼身上的光斑颜色也跟着变。顺带把水波调小了：指针划过的水波强度从 1 降到 0.30，点击的水波从 1.7 降到 0.7——原来点一下屏幕最大扭曲 27 像素，反应过猛，现在约 13 像素。另外补上了 favicon 声明，控制台不再报 favicon.ico 的 404。整套鱼用 instancing 实现，30 条鱼只有 1 次 draw call；设备不支持 instancing 时自动不画鱼，其余画面照旧。</p>
+        <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v2.0.0</b>：开机页换成「水下世界」。原来那套 3D 场景（小魔法师、圆台、旋转魔法阵、五色水晶、彩虹拱门、飞舞的字母方块）整个撤掉，换成一整屏手写的水下画面：水面透光的渐变水体、水底那层会流动的网状光斑、从上方斜射下来的几道光柱、顶上一条带波纹的水面亮边，还有一直往上浮的气泡——气泡是真的玻璃球质感，边缘会把背景折射变形、有菲涅尔亮边、偏左上一个小高光点、边上一圈很淡的薄膜彩虹。鼠标或手指划过会撕开一圈圈扩散的水波，附近的气泡被搅开，还会拖出一串小泡跟着走；点一下会「咕噜」冒出一簇小气泡，同时荡开一圈更强的水波。右上角音乐按钮下面多了四个小色块，点一下换配色：天蓝（亮）、樱花（亮）、极光（暗）、夜薰衣草（暗），选了会记住，下次打开还是这个颜色。文字层沿用水下 demo 的居中排版与系统圆体，标题「魔法单词学院」整行显示，明暗配色下自动调整字色；副标题替换为「已掌握 N / 总词数 词」，不再显示天数、段数、徽章、进度条和鼓励语。「开始冒险」保留半透明水膜底座和柔化边缘，鼠标移上去即下沉 10px、缩小到 90% 并亮起，移开恢复；点击后保持原文案，显示确认水波再进入游戏，防止重复点击。系统开启「减少动态效果」时不执行下沉缩放。原有开机音乐和静音功能保留。系统开了「减少动态效果」时气泡和光斑会静止，但点击的水波反馈还在。没有 WebGL 的设备照旧走原来的降级画面。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v1.23.0</b>：阅读理解也有错题记录了。以前答错只是怪物逼近一步，事后谁都不知道错在哪。现在答错会记进存档（哪一段、第几题、错了几次、当时选的哪个答案、最后错在哪天）。两个地方能看：① 孩子这边，一场打完（赢或输）画面上多一个「📖 看看答错的 N 道题」，点开能看到题目、自己选的错答案、正确答案，还会把文章里最相关的那一句单独引出来，下面附整篇文章，带下划线的词照样能点开听；② 家长这边，家长面板多一个「📕 阅读理解错题本」，按错的次数从多到少列出所有错题，可以一眼看出孩子是哪类题总栽（因果题、推断题还是细节题），也能一键清空这本错题本，清空不影响通关记录和积分。在这个功能上线之前就打过的段、以及家长模式里直接标记过关的段，会单独写一行说明，不会被当成全对。开发者模式调试答错不写记录。</p>
@@ -1269,7 +1399,7 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
 <nav class="nav">
   <button data-v="map" class="on"><span class="ic">🗺️</span>地图</button>
   <button data-v="learn"><span class="ic">✏️</span>学单词</button>
-  <button data-v="puzzle"><span class="ic">🧩</span>徽章</button>
+  <button data-v="puzzle"><span class="ic">🧩</span>徽章和海鱼</button>
   <button data-v="shop"><span class="ic">🛒</span>商店</button>
   <button data-v="me"><span class="ic">📊</span>我的</button>
 </nav>
@@ -2835,6 +2965,72 @@ const TALKS={
 const SEG_SIZES=[].concat(Array(5).fill(15),Array(5).fill(18),Array(5).fill(20),Array(5).fill(21),[22,22,22,23,23]);
 const SEG_COUNT=25,PER_BADGE=5,PLAN_DAYS=90;
 const TOTAL_WORDS=WORDS.length;
+
+/* ===========================================================
+   2.5 鱼类图鉴：13 个真实海洋物种，跟着通关进度解锁
+   -----------------------------------------------------------
+   外观（体型 / 鳍型 / 花纹 / 配色）全部写在开机页的着色器里，按 kind 查表，
+   这里只放"玩家看得见的信息"和解锁规则 —— 两边的 kind 必须严格同序。
+   数据放在主逻辑块是因为两处都要用：通关结算要报新解锁的名字（本块），
+   开机页要画鱼和弹图鉴卡（第 4 个脚本块）。重复定义一份迟早会对不上。
+
+   tier 是体型级别 0..5（XS/S/M/L/XL/XXL）。数组顺序就是解锁顺序，
+   所以是从最小的雀鲷一路解到蓝鲸 —— 体型越来越大，进度感最直观。
+   sw 是商店图鉴里那块小色卡的两个色，直接取着色器里这个物种的
+   **背色 c1 和腹色 c2**（把 vec3 的 0~1 乘 255 转成 hex），
+   这样图鉴上的颜色和孩子在水里真正看到的那条鱼是同一个色。 */
+const FISH_SPECIES=[
+  {kind:0 ,nm:"蓝绿光鳃雀鲷", en:"Blue-green Damselfish", tier:0, sw:["#1C998F","#9EEBCC"],
+   tip:"成千上万条挤在一起游，远看像一片会动的蓝绿色云。"},
+  {kind:1 ,nm:"黄尾蓝雀鲷",   en:"Yellowtail Damselfish", tier:0, sw:["#1742C2","#73ADF7"],
+   tip:"前半截是宝蓝色，后半截和尾巴却是亮黄色，像穿了两件衣服。"},
+  {kind:2 ,nm:"银汉鱼",       en:"Silverside", tier:0, sw:["#9EBFDB","#EDF7FC"],
+   tip:"身体几乎是透明的，只看得见一条脊骨和一点银光。"},
+  {kind:3 ,nm:"公子小丑鱼",   en:"Clownfish", tier:1, sw:["#EB5408","#FFAD52"],
+   tip:"住在海葵里。海葵的毒刺伤不到它，还帮它赶走敌人。"},
+  {kind:4 ,nm:"四间雀",       en:"Four-stripe Damselfish", tier:1, sw:["#F2B80D","#FFED94"],
+   tip:"黄身子配黑竖条，数一数正好四道，名字就是这么来的。"},
+  {kind:5 ,nm:"皇室拟雀鲷",   en:"Royal Dottyback", tier:1, sw:["#66149E","#BD66EB"],
+   tip:"前半身是鲜艳的紫色，后半身突然变成亮黄色，中间一刀切那么整齐。"},
+  {kind:6 ,nm:"黄高鳍刺尾鱼", en:"Yellow Tang", tier:2, sw:["#FFC20A","#FFF28F"],
+   tip:"全身亮黄色，尾巴根上藏着一根小刺，所以叫刺尾鱼。"},
+  {kind:7 ,nm:"蓝吊",         en:"Blue Tang", tier:2, sw:["#0852D1","#4DADFC"],
+   tip:"身上的黑色花纹像一块调色板，尾巴是亮黄色的。"},
+  {kind:8 ,nm:"金鳞鱼",       en:"Squirrelfish", tier:2, sw:["#A80D14","#F55C3D"],
+   tip:"通身鲜红带银白纵纹。它白天躲在礁石洞里，晚上才出来找吃的，所以眼睛特别大。"},
+  {kind:9 ,nm:"皇后神仙鱼",   en:"Queen Angelfish", tier:3, sw:["#1266D6","#FACC14"],
+   tip:"额头上有一块蓝紫色的斑，像戴了王冠，所以叫皇后。"},
+  {kind:10,nm:"燕尾鲹",       en:"Jack", tier:3, sw:["#33668F","#EBF5FA"],
+   tip:"身体像一枚银色的子弹，是海里游得最快的鱼之一。"},
+  {kind:11,nm:"蓝鳍金枪鱼",   en:"Bluefin Tuna", tier:4, sw:["#08244D","#E0EBF2"],
+   tip:"能游到每小时七十公里，而且一辈子不停下来。"},
+  {kind:12,nm:"蓝鲸",         en:"Blue Whale", tier:5, sw:["#305475","#A8C7DB"],
+   tip:"地球上最大的动物，比恐龙还大。它的尾巴是横着的，上下拍水前进。"}
+];
+const FISH_TOTAL=FISH_SPECIES.length;          /* 13 */
+/* 每通关 2 段解锁一种。25 段 ÷ 2 = 12 种，第 13 种（蓝鲸）要 25 段全清才出现，
+   所以蓝鲸是真正的"全图鉴奖励"，而不是走到第 24 段就顺手拿到。
+   done 用 S.pieces.length（已拿到拼图块的段数）算，和地图上的进度完全一致。 */
+const fishUnlockedN=done=>done>=SEG_COUNT?FISH_TOTAL
+  :Math.min(FISH_TOTAL-1,Math.floor(done/2));
+/* 在场鱼的条数也跟着长：第一次解锁 8 条，集齐 13 种时 30 条。
+   这样早期画面清爽、低端设备负担也小，后期才热闹起来。 */
+const FISH_MIN=8,FISH_MAX=30;
+const fishCountFor=u=>u<=0?0
+  :Math.round(FISH_MIN+(FISH_MAX-FISH_MIN)*(u-1)/(FISH_TOTAL-1));
+/* 第 k 种鱼（0 基）要通关到第几段才解锁。是 fishUnlockedN 的反函数：
+   fishUnlockedN(done)>=k+1 等价于 done>=2(k+1)，最后一种（蓝鲸）要 25 段全清。
+   商店图鉴里用它显示「通关第 N 段解锁」。 */
+const fishUnlockSeg=k=>k>=FISH_TOTAL-1?SEG_COUNT:(k+1)*2;
+/* 通关后报喜。u0 是变动之前的解锁数，由调用方在改 S.pieces 之前先存一份。
+   注意不能只在 finishSegment 里调：第 5/10/15/20/25 段的拼图块要打赢 BOSS
+   才发（holdsPiece），那几段的解锁时刻在 grantPendingPiece 里。 */
+function fishUnlockNotice(u0){
+  const u=fishUnlockedN((S.pieces||[]).length);
+  if(u<=u0)return;
+  const ns=FISH_SPECIES.slice(u0,u).map(s=>s.nm).join("、");
+  toast("🐠 海里来了新朋友："+ns+"！回首页就能看到它");
+}
 /* 每段的话题标签：取该段里出现最多的话题 */
 function segTopic(i){
   const c={};segWords(i).forEach(w=>{c[w.topic||"综合"]=(c[w.topic||"综合"]||0)+1});
@@ -3001,7 +3197,7 @@ document.querySelectorAll(".nav button").forEach(b=>{
       else welcome();
     }
     if(v==="map"){renderMap();renderDaily();}
-    if(v==="puzzle"){renderBadges();renderCards();}
+    if(v==="puzzle"){renderBadges();renderCards();renderFishDex();}
     if(v==="shop")renderShop();
     if(v==="me"){renderErr();renderCal();renderParent();renderAch();}
   };
@@ -5174,7 +5370,7 @@ function bossWin(){
     (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
     '</div>';
   bindBossBox(false,()=>{renderHUD&&renderHUD();});
-  $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();renderMap();renderDaily();goView("puzzle");};
+  $("#bossNext").onclick=()=>{bossState=null;renderBadges();renderCards();renderFishDex();renderMap();renderDaily();goView("puzzle");};
   bindBossRev(B);
   updateSpinUI();
 }
@@ -5291,11 +5487,13 @@ function openBossErrBook(){
 /* 徽章最后一块：打赢才发 */
 function grantPendingPiece(seg){
   if(S.pendBoss===seg||holdsPiece(seg)){
+    const fishU0=fishUnlockedN(S.pieces.length);
     if(!S.pieces.includes(seg))S.pieces.push(seg);
     S.pendBoss=null;
     const bi=attrOf(seg);
     if([0,1,2,3,4].every(k=>S.pieces.includes(bi*5+k))&&!S.cardDate[bi])S.cardDate[bi]=today();
     save();
+    fishUnlockNotice(fishU0);
   }
 }
 /* ===========================================================
@@ -5356,6 +5554,7 @@ function finishSegment(){
   const sp=acc>=90?4:3;
   S.spins+=sp;                                // 次数只累加，不设上限
   let boss=false;
+  const fishU0=fishUnlockedN(S.pieces.length);   /* 先存一份，下面可能会 push */
   if(!sess.custom){
     S.resume=null;                            // 这一段做完了，断点清掉
     if(holdsPiece(sess.seg)){                 // 徽章最后一块先扣着，打赢 BOSS 才发
@@ -5368,12 +5567,14 @@ function finishSegment(){
     if(acc>=100)S.flags.perfect=true;
     boss=needBoss(sess.seg)&&!S.boss[sess.seg];
   }
-  save();renderBadges();renderCards();checkAch();
+  save();renderBadges();renderCards();renderFishDex();checkAch();
   const res={acc,stars,sp,gained:sess.gained,custom:sess.custom,
              reviewOnly:sess.reviewOnly,boss:boss,seg:sess.seg};
   clearTimeout(qTimer);qTimer=null;         /* 本段结束，清掉挂起的推进定时器 */
   sess=null;renderHUD();renderMap();renderDaily();
   openWheel(res);confetti(26);
+  /* 报喜放在转盘弹出之后：toast 盖在弹窗上面，孩子一眼就看见 */
+  fishUnlockNotice(fishU0);
 }
 function buildWheel(){
   const n=WHEEL.length,ang=360/n,w=$("#wheel");
@@ -5467,6 +5668,60 @@ function renderBadges(){
   $("#pzText").textContent="已集齐 "+S.pieces.length+" / 25 块 · 完整徽章 "+fullN+" / 5"+
     (fullN===5?"　🏅 恭喜成为学院大魔法师！":"");
 }
+/* ---------- 海鱼图鉴 ----------
+   列的就是开机页水里游的那 13 种，解锁进度和那边同一个来源
+   fishUnlockedN(S.pieces.length)，不会出现「图鉴说解锁了、水里却没有」。
+   鱼的样子不是画的也不是 emoji，是拿开机页那套着色器现渲的 PNG，
+   所以图鉴里的鱼和水里那条逐像素是同一条。 */
+let FISH_PIC=null;
+function fishPics(){
+  if(FISH_PIC)return FISH_PIC;
+  /* window.fishPortraits 由第 4 个脚本块的 build() 挂上来。
+     启动时 renderBadges 这一串跑在块 1，比块 4 早，所以第一次拿不到 ——
+     先用纯色衬底顶一下，等用户点进徽章页时再渲（那时块 4 早跑完了）。
+     没有 WebGL 时它永远不存在，图鉴就一直退化成纯色卡，不会报错。 */
+  if(typeof window.fishPortraits!=="function")return null;
+  try{FISH_PIC=window.fishPortraits(240);}catch(e){FISH_PIC=null;}
+  return FISH_PIC;
+}
+const TIER_NM=["XS 迷你","S 小","M 中","L 大","XL 特大","XXL 巨型"];
+function renderFishDex(){
+  const box=$("#fishDex");
+  if(!box)return;
+  const fu=fishUnlockedN(S.pieces.length);
+  const pics=fishPics();
+  $("#fdCount").textContent=fu+" / "+FISH_TOTAL+" 种";
+  $("#fdText").textContent=fu>=FISH_TOTAL
+    ?"13 种全部集齐了！它们现在都在首页的海里游。"
+    :("每通关 2 段，首页的海里就会多出一种鱼。最后一种蓝鲸要 25 段全部通关才会出现。"
+      +(fu?"点已解锁的鱼可以听它的英文名。":""));
+  box.innerHTML=FISH_SPECIES.map((s,k)=>{
+    const got=k<fu;
+    /* 有鱼图就放图；没有（没 WebGL / 还没渲）就退回用该物种的背色腹色铺个底，
+       至少颜色是对的。 */
+    const pic=pics&&pics[k]
+      ?'<span class="pic"><img src="'+pics[k]+'" alt="'+(got?s.nm:"未解锁的鱼")+'"></span>'
+      :'<span class="pic" style="background:linear-gradient(168deg,'+s.sw[0]+','+s.sw[1]+')"></span>';
+    return '<button type="button" class="fdx '+(got?"got":"lock")+'" data-fk="'+k+'">'+pic+
+      '<span class="fx">'+
+        '<span class="fcn">'+s.nm+'</span>'+
+        (got
+          ?'<span class="fen">'+s.en+' 🔊</span>'+
+           '<span class="ftip">'+s.tip+'</span>'+
+           '<span class="ftier">体型 '+TIER_NM[s.tier]+'</span>'
+          :'<span class="flock">🔒 通关第 '+fishUnlockSeg(k)+' 段解锁</span>')+
+      '</span></button>';
+  }).join("");
+  /* 点已解锁的鱼读一遍英文名 —— 图鉴里摆着 13 个英文词，不读一下太浪费 */
+  box.querySelectorAll(".fdx").forEach(g=>g.onclick=()=>{
+    const k=+g.dataset.fk,s=FISH_SPECIES[k];
+    if(k>=fishUnlockedN(S.pieces.length)){
+      toast("🔒 「"+s.nm+"」通关第 "+fishUnlockSeg(k)+" 段就会出现在首页的海里");
+      beep(220);return;
+    }
+    say(s.en);
+  });
+}
 function renderCards(){
   const box=$("#cardBox");box.innerHTML="";
   ATTRS.forEach((a,bi)=>{
@@ -5527,7 +5782,7 @@ function renderShop(){
   $("#shopCategory").textContent=slotNames[shopTab];
   $("#shopTabs").innerHTML=SLOTS.map(s=>'<button type="button" data-k="'+s.k+'" aria-pressed="'+(s.k===shopTab)+'" class="'+(s.k===shopTab?"on":"")+'">'+slotNames[s.k]+'</button>').join("");
   document.querySelectorAll("#shopTabs button").forEach(b=>b.onclick=()=>{shopTab=b.dataset.k;renderShop();});
-  if(shopTab==="badge"){        /* 徽章靠通关获得，不花钱 */
+  if(shopTab==="badge"){        /* 徽章靠通关获得，不花钱。海鱼图鉴在底部导航的「🧩 徽章」页 */
     $("#shopCount").textContent=ATTRS.filter((_,i)=>badgeDone(i)).length+" / 5 已集齐";
     $("#goods").innerHTML=ATTRS.map((a,i)=>{
       const done=badgeDone(i),got=[0,1,2,3,4].filter(k=>S.pieces.includes(i*5+k)).length;
@@ -6621,7 +6876,7 @@ document.querySelectorAll("#paBody button[data-pa]").forEach(b=>b.onclick=()=>{
 /* 分段控制后统一刷新各页面 */
 function paRefreshAll(){
   checkAch();
-  renderPaPanel();renderHUD();renderMap();renderDaily();renderBadges();renderCards();
+  renderPaPanel();renderHUD();renderMap();renderDaily();renderBadges();renderCards();renderFishDex();
 }
 $("#paSegPass").onclick=()=>{
   const i=+$("#paSeg").value||0;
@@ -6654,7 +6909,7 @@ $("#paAllRe").onclick=()=>{
   resetAllWords(wipe);
   applyTheme();
   if(window.eggy3d&&window.eggy3d.ready)window.eggy3d.refresh();
-  renderPaPanel();renderHUD();renderMap();renderBadges();renderCards();renderShop();
+  renderPaPanel();renderHUD();renderMap();renderBadges();renderCards();renderFishDex();renderShop();
   $("#paModal").classList.remove("show");$("#setModal").classList.remove("show");
   goView("learn");toast("🧨 已重置，从第 1 段重新开始");
 };
@@ -6718,7 +6973,7 @@ function pickOthers(w,n){return shuffle(WORDS.filter(x=>x.en!==w.en)).slice(0,n)
 
 /* 启动 */
 repairState();
-applyTheme();buildWheel();renderBadges();renderCards();renderMap();renderDaily();
+applyTheme();buildWheel();renderBadges();renderCards();renderFishDex();renderMap();renderDaily();
 renderHUD();updateSpinUI();renderAch();checkAch();welcome();
 syncDev();                       /* 开发者模式开着的话，顶上先把提醒亮出来 */
 </script>
@@ -7710,6 +7965,23 @@ window.makeEggyBase=function(T){
   setTimeout(()=>{shown=0;$s("#spPNum")&&($s("#spPNum").textContent="0");paintProg(true);},1100);
   window.addEventListener("storage",e=>{if(!e.key||e.key===KEY)paintProg(true);});
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)paintProg(true);});
+
+  /* ---------- 鱼类解锁状态 ----------------------------------
+     这三个值必须在 loadThreeJs 之前就算好：loadThreeJs 是同步回调，build()
+     的执行时机比本脚本块的尾部更早，放在后面会撞上 const 的暂存死区。
+     只在开机时读一次就够 —— 开机页不会在玩家通关之后还留在屏幕上。 */
+  const FISH_DONE=(()=>{try{return (S.pieces||[]).length;}catch(e){return 0;}})();
+  const FISH_U=fishUnlockedN(FISH_DONE);         /* 已解锁几种 */
+  const FISH_N=fishCountFor(FISH_U);             /* 画几条 */
+  /* 距离上次给孩子看过的解锁数差多少。差出来的那几种就是"这次新来的"，
+     取最后一种（体型最大的那条）弹图鉴卡。 */
+  const FISH_SEEN=(()=>{try{return Math.max(0,+(S.flags&&S.flags.fishSeen)||0);}catch(e){return 0;}})();
+  const FISH_NEW=FISH_U>FISH_SEEN?FISH_U-1:-1;   /* 新解锁物种的 kind，没有就 -1 */
+  /* build() 里 S 被局部变量遮蔽（那里的 S 是画布短边），所以写存档这件事
+     必须留在外面做，让 build() 只拿到一个函数引用。 */
+  function markFishSeen(){
+    try{S.flags=S.flags||{};S.flags.fishSeen=FISH_U;save();}catch(e){}
+  }
   /* 浏览器的自动播放策略有时放行、有时不放行，所以这里反复补试：
      ① 任何一次真实交互（点、按键、触摸）都再试一次
      ② 开机页还在的时候每 700ms 检查一次，没出声就再试一次（重复调用是安全的）
@@ -7836,8 +8108,16 @@ window.makeEggyBase=function(T){
     const NW=12;                 /* 水波源槽位：指针轨迹最近 12 个点 */
     const CNT=12;                /* 实际启用的常驻气泡数，留了余量给低端机 */
 
-    /* ---- 固定参数（demo 里调好的一组，这里不再暴露滑块） ---- */
-    const PR={size:1,rise:1,refr:34,disp:.45,rain:.26,caus:.45,cspd:1,ray:.40,wave:1,grain:.012};
+    /* ---- 固定参数（demo 里调好的一组，这里不再暴露滑块） ----
+       wave 从 1 降到 0.30：1 的时候指针一划水面就整片扭动，标题都看不清了。
+       wtap 是点击水波的振幅，原先硬编码 1.7 —— 而鼠标划过最强只有 1.1，
+       点一下屏幕最大扭曲 27 像素，反应过猛，实测调到 0.7（约 13 像素）。 */
+    const PR={size:1,rise:1,refr:34,disp:.45,rain:.26,caus:.45,cspd:1,ray:.40,
+              wave:.30,wtap:.7,grain:.012,
+              /* 鱼：fsize 体长总倍率、fspd 游速倍率、fscale 鱼鳞质感、
+                 fmix 融入水色、fshy 怕人程度、school 群游、lod 细节分级 */
+              fsize:1,fspd:1,fscale:.10,fmix:.10,fshy:.5,school:1,lod:1};
+    const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
 
     /* ======================= 1. 水体 pass ======================= */
     const FS_BG=`
@@ -7912,6 +8192,441 @@ void main(){
       causAmp:{value:PR.caus},causSpd:{value:PR.cspd},rayAmp:{value:PR.ray},accent:{value:.28},
       cTop:{value:new T.Color()},cBot:{value:new T.Color()},cCaus:{value:new T.Color()},
       cRay:{value:new T.Color()},cAcc:{value:new T.Color()}
+    };
+
+    /* ======================= 1.5 小鱼 pass =======================
+       一个 InstancedBufferGeometry：每条鱼一个小 quad，一次 draw call 全画完。
+       为什么不像气泡那样在全屏着色器里循环：1080p 下全屏逐像素测 30 条鱼是
+       207 万 × 30 ≈ 6200 万次包围盒测试/帧，而 instancing 只跑鱼实际覆盖的
+       约 2% 像素，开销差两个数量级。
+       附带两个好处：
+         1) 每条鱼的参数走 instanced attribute，不占 uniform 槽位，不受
+            MAX_FRAGMENT_UNIFORM_VECTORS 限制（30 条鱼本来要 90 个 vec4，
+            而 WebGL1 规范下限只有 16 个）；
+         2) 一个 quad 内所有像素必然是同一条鱼，花纹的 if 分支完全一致，
+            不会出现 GPU warp 内分支分歧 —— 这是把 13 个物种塞进一个着色器
+            还不掉帧的前提。
+       鱼渲进 rtBg（水体层），所以被指针水波扭曲、被气泡折射、贡献泛光全保留。 */
+    const VS_FISH=`
+precision highp float;
+attribute vec3 position;   /* 基础 quad，xy 在 [-1,1] */
+attribute vec4 iPos;       /* xy 体心(像素，y 向上) z 体长(像素) w 朝向(+1 右/-1 左) */
+attribute vec4 iAnim;      /* x 摆尾相位 y 不透明度 z 俯仰角 w 鳍相位 */
+attribute vec4 iTune;      /* x 鱼种 y 鱼鳞强度 z 融入水色 w LOD(0..1) */
+uniform vec2 res;
+varying vec2 vQ;
+varying vec4 vA,vK;
+varying float vL;
+
+void main(){
+  /* 包围盒取局部单位下 x 半宽 0.92、y 半高 0.62，刚好套住含鳍的轮廓
+     （之前用 CPU 字符画量过）。只有盒内像素会进片元着色器。 */
+  vec2 q=position.xy*vec2(0.92,0.62);
+  vQ=q;vA=iAnim;vK=iTune;vL=iPos.z;
+
+  /* 局部 -> 世界。
+     iPos.w 是朝向（+1 朝右 / -1 朝左），朝左只是把局部 x 镜像过去（真实的鱼
+     向左游是左右镜像，不会肚皮朝天）；iAnim.z 只存"俯仰角"，也就是鱼头抬/低
+     的那点小角度，不含 180 度的左右翻转。
+     这两件事必须分开：早先把左右也塞进角度里，鱼被指针推得速度过零时角度会
+     瞬间跳 180 度、朝向同时翻转，看上去就是"闪一下换了个朝向"。
+     顺带好处是片元里一次 sin/cos 都不用做，旋转全在顶点阶段摊掉了。 */
+  vec2 m=vec2(q.x*iPos.w,q.y);
+  float pitch=iAnim.z*iPos.w;      /* 朝左时俯仰方向也要跟着镜像 */
+  float ca=cos(pitch),sa=sin(pitch);
+  vec2 d=vec2(m.x*ca-m.y*sa,m.x*sa+m.y*ca)*iPos.z;
+
+  gl_Position=vec4((iPos.xy+d)/res*2.0-1.0,0.0,1.0);
+}`;
+
+    const FS_FISH=`
+precision highp float;
+varying vec2 vQ;
+varying vec4 vA,vK;
+varying float vL;
+uniform vec2 res;
+uniform float time,lum,causAmp,rayAmp;
+uniform vec3 cCaus,cRay;
+
+/* 和水体 pass 同一套 caustics / 光柱公式，但这里只取一层、省掉 fbm 域扭曲。
+   鱼只覆盖约 2% 像素，再便宜也没必要算满，但完全不算鱼会像贴纸浮在水里。 */
+float net(vec2 q,float t,float f,float a){
+  float s=sin(q.x*f+t*0.9)+sin(q.y*f*0.92-t*0.72)+sin((q.x+q.y)*f*0.57+t*0.55);
+  return pow(clamp(1.0-abs(s)*0.42,0.0,1.0),4.5)*a;
+}
+float g1(float x,float w){float a=x/w;return exp(-a*a);}
+/* 给鲸皮上的斑驳用的格子随机。只要能稳定地按格子给出同一个值就够了。 */
+float hsh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float rays(vec2 p,float t){
+  float k=0.30+sin(t*0.21)*0.04;
+  float s=p.x+p.y*k;
+  float v=0.0;
+  v+=g1(s+0.46+sin(t*0.27)*0.035,0.085)*0.85;
+  v+=g1(s-0.05+sin(t*0.19+1.3)*0.045,0.135)*1.00;
+  v+=g1(s-0.48+sin(t*0.23+2.6)*0.030,0.070)*0.70;
+  v+=g1(s-0.86+sin(t*0.31+4.1)*0.040,0.105)*0.55;
+  return v*smoothstep(-0.30,0.95,p.y);
+}
+
+/* over 合成。c 用预乘 alpha 存，最后直接交给 blendFunc(ONE,ONE_MINUS_SRC_ALPHA)。 */
+void over(inout vec3 c,inout float a,vec3 sc,float sa){
+  c=sc*sa+c*(1.0-sa);
+  a=sa+a*(1.0-sa);
+}
+
+/* =================== 13 个物种的查表 ===================
+   顺序必须和主逻辑块的 FISH_SPECIES 严格一致（kind 就是数组下标）。
+
+   bp = 半体长, 背侧半高, 腹侧半高, 轮廓饱满度指数
+   fp = 尾型, 鳍型, 花纹型, 背高前倾系数
+   tp = 尾根位置, 尾长, 尾根半宽, 尾张开斜率
+   ep = 虹彩强度, 体侧高光强度, 鳍色偏移, 眼睛大小倍率
+   c1/c2/c3/c4 = 背色 / 腹色 / 花纹色 / 体侧中段色
+
+   四色而不是三色是因为：真实海鱼的体侧中段几乎都有一条和背腹都不同的
+   反光带，只做"背到腹"两段渐变会很平、很塑料。
+
+   尾型 0圆扇 1浅叉 2深新月 3鲸的水平尾叶
+   鳍型 0常规 1小鳍 2神仙鱼飘带 3金枪鱼双背鳍 4鲸型
+   花纹 0无 1三白带 2调色板斑 3竖条 4斜条 5斑点 6半透明 7后半渐变异色
+        8背腹强对比 9鲸斑 10纵向银纹 11后半锐利异色 */
+void species(float k,out vec4 bp,out vec4 fp,out vec4 tp,out vec4 ep,
+             out vec3 c1,out vec3 c2,out vec3 c3,out vec3 c4){
+  if(k<0.5){        /* 0 蓝绿光鳃雀鲷 —— XS 群游，青绿带虹彩 */
+    bp=vec4(0.44,0.255,0.235,0.45);fp=vec4(1.0,0.0,0.0,0.10);
+    tp=vec4(0.38,0.19,0.050,1.05);ep=vec4(0.55,0.60,0.10,1.0);
+    c1=vec3(0.11,0.60,0.56);c2=vec3(0.62,0.92,0.80);
+    c3=vec3(0.07,0.38,0.45);c4=vec3(0.26,0.80,0.70);
+  }else if(k<1.5){  /* 1 黄尾蓝雀鲷 —— XS 群游，宝蓝配亮黄尾 */
+    bp=vec4(0.44,0.250,0.230,0.45);fp=vec4(1.0,0.0,7.0,0.10);
+    tp=vec4(0.38,0.19,0.050,1.05);ep=vec4(0.70,0.55,0.15,1.0);
+    c1=vec3(0.09,0.26,0.76);c2=vec3(0.45,0.68,0.97);
+    c3=vec3(1.00,0.78,0.10);c4=vec3(0.20,0.46,0.90);
+  }else if(k<2.5){  /* 2 银汉鱼（玻璃鱼）—— XS 群游，半透明银，虹彩最强 */
+    bp=vec4(0.46,0.125,0.115,0.55);fp=vec4(1.0,1.0,6.0,0.06);
+    tp=vec4(0.40,0.17,0.035,1.10);ep=vec4(0.95,0.75,0.05,1.0);
+    c1=vec3(0.62,0.75,0.86);c2=vec3(0.93,0.97,0.99);
+    c3=vec3(0.78,0.88,0.94);c4=vec3(0.80,0.90,0.96);
+  }else if(k<3.5){  /* 3 公子小丑鱼 —— S，三道白带 */
+    bp=vec4(0.44,0.255,0.235,0.45);fp=vec4(0.0,0.0,1.0,0.10);
+    tp=vec4(0.38,0.20,0.055,1.05);ep=vec4(0.22,0.45,0.12,1.0);
+    c1=vec3(0.92,0.33,0.03);c2=vec3(1.00,0.68,0.32);
+    c3=vec3(1.00,0.97,0.93);c4=vec3(1.00,0.50,0.12);
+  }else if(k<4.5){  /* 4 四间雀 —— S，黄黑竖条 */
+    bp=vec4(0.40,0.245,0.225,0.42);fp=vec4(2.0,0.0,3.0,0.13);
+    tp=vec4(0.34,0.22,0.040,1.20);ep=vec4(0.28,0.50,0.10,1.0);
+    c1=vec3(0.95,0.72,0.05);c2=vec3(1.00,0.93,0.58);
+    c3=vec3(0.08,0.06,0.04);c4=vec3(1.00,0.84,0.26);
+  }else if(k<5.5){  /* 5 皇室拟雀鲷 —— S 独行，前半紫后半黄，分界极锐 */
+    bp=vec4(0.42,0.240,0.220,0.46);fp=vec4(1.0,0.0,11.0,0.10);
+    tp=vec4(0.36,0.19,0.048,1.08);ep=vec4(0.50,0.58,0.16,1.0);
+    c1=vec3(0.40,0.08,0.62);c2=vec3(0.74,0.40,0.92);
+    c3=vec3(1.00,0.80,0.10);c4=vec3(0.56,0.17,0.80);
+  }else if(k<6.5){  /* 6 黄高鳍刺尾鱼 —— M 独行，纯亮黄 */
+    bp=vec4(0.40,0.245,0.225,0.42);fp=vec4(2.0,0.0,0.0,0.13);
+    tp=vec4(0.34,0.24,0.040,1.25);ep=vec4(0.38,0.55,0.18,1.0);
+    c1=vec3(1.00,0.76,0.04);c2=vec3(1.00,0.95,0.56);
+    c3=vec3(0.84,0.58,0.00);c4=vec3(1.00,0.87,0.22);
+  }else if(k<7.5){  /* 7 蓝吊 —— M 独行，调色板黑斑 + 黄尾 */
+    bp=vec4(0.40,0.245,0.225,0.42);fp=vec4(2.0,0.0,2.0,0.13);
+    tp=vec4(0.34,0.26,0.040,1.25);ep=vec4(0.62,0.58,0.12,1.0);
+    c1=vec3(0.03,0.32,0.82);c2=vec3(0.30,0.68,0.99);
+    c3=vec3(0.02,0.04,0.11);c4=vec3(0.10,0.50,0.94);
+  }else if(k<8.5){  /* 8 金鳞鱼 —— M 独行，鲜红配银白纵纹，夜行性所以眼睛特别大 */
+    bp=vec4(0.44,0.260,0.240,0.44);fp=vec4(1.0,0.0,10.0,0.11);
+    tp=vec4(0.38,0.21,0.052,1.12);ep=vec4(0.35,0.52,0.22,1.45);
+    c1=vec3(0.66,0.05,0.08);c2=vec3(0.96,0.36,0.24);
+    c3=vec3(1.00,0.95,0.90);c4=vec3(0.88,0.13,0.11);
+  }else if(k<9.5){  /* 9 皇后神仙鱼 —— L 独行，飘带鳍 + 斜条 + 蓝紫皇冠 */
+    bp=vec4(0.36,0.285,0.270,0.40);fp=vec4(0.0,2.0,4.0,0.15);
+    tp=vec4(0.31,0.19,0.060,0.95);ep=vec4(0.78,0.62,0.28,1.0);
+    c1=vec3(0.07,0.40,0.84);c2=vec3(0.98,0.80,0.08);
+    c3=vec3(1.00,0.93,0.52);c4=vec3(0.26,0.66,0.92);
+  }else if(k<10.5){ /* 10 燕尾鲹 —— L 独行快，银蓝带强虹彩 */
+    bp=vec4(0.46,0.195,0.175,0.50);fp=vec4(2.0,3.0,8.0,0.08);
+    tp=vec4(0.40,0.24,0.030,1.35);ep=vec4(0.92,0.80,0.08,1.0);
+    c1=vec3(0.20,0.40,0.56);c2=vec3(0.92,0.96,0.98);
+    c3=vec3(0.55,0.74,0.84);c4=vec3(0.52,0.74,0.86);
+  }else if(k<11.5){ /* 11 蓝鳍金枪鱼 —— XL 独行很快，深蓝背银腹 */
+    bp=vec4(0.46,0.200,0.180,0.50);fp=vec4(2.0,3.0,8.0,0.08);
+    tp=vec4(0.40,0.26,0.028,1.40);ep=vec4(0.88,0.72,0.20,1.0);
+    c1=vec3(0.03,0.14,0.30);c2=vec3(0.88,0.92,0.95);
+    c3=vec3(0.98,0.78,0.06);c4=vec3(0.14,0.42,0.68);
+  }else{            /* 12 蓝鲸 —— XXL 远景剪影，蓝灰带斑驳 */
+    bp=vec4(0.50,0.115,0.105,0.62);fp=vec4(3.0,4.0,9.0,0.02);
+    tp=vec4(0.40,0.26,0.020,0.18);ep=vec4(0.45,0.50,0.06,1.0);
+    c1=vec3(0.19,0.33,0.46);c2=vec3(0.66,0.78,0.86);
+    c3=vec3(0.40,0.55,0.66);c4=vec3(0.31,0.47,0.60);
+  }
+}
+
+void main(){
+  vec2 q=vQ;
+  float kind=vK.x,scaleAmt=vK.y,mixW=vK.z,lod=vK.w;
+  float sway=vA.x,alpha=vA.y,finPh=vA.w;
+  float aa=1.7/max(vL,1.0);
+
+  vec4 bp,fp,tp,ep;vec3 c1,c2,c3,c4;
+  species(kind,bp,fp,tp,ep,c1,c2,c3,c4);
+  float tailType=fp.x,finType=fp.y,pat=fp.z;
+  float irid=ep.x,sheen=ep.y,finShift=ep.z;
+
+  /* ---------- LOD ----------
+     一条 20px 的鱼如果还画鱼鳞网格，会产生摩尔纹和逐帧闪烁，比不画更难看。
+     所以细节按屏幕实际体长逐项淡入，不是硬开关。 */
+  float dEye  =smoothstep(0.00,0.25,lod);
+  float dHi   =smoothstep(0.25,0.55,lod);
+  float dScale=smoothstep(0.35,0.75,lod);
+  float dFinTx=smoothstep(0.20,0.60,lod);
+  float dEdge =smoothstep(0.10,0.45,lod);
+
+  /* 行波式摆尾：相位沿体长往后推，越靠尾部振幅越大。
+     鲸和金枪鱼这类巡游动物身体很硬，摆幅要明显小一些。 */
+  float swayAmp=0.070;
+  if(finType>2.5)swayAmp=0.034;
+  q.y-=sin(sway-q.x*4.6)*swayAmp*smoothstep(0.40,-0.52,q.x);
+
+  /* ---------- 体型 ----------
+     沿 x 给一条半高曲线：pow(1-t^2, eExp) 是轮廓，eExp 越小越饱满。
+     背侧和腹侧分开算，鱼背才会比肚子高。 */
+  float halfL=bp.x;
+  float t=clamp(q.x/halfL,-1.0,1.0);
+  float e=pow(max(0.0,1.0-t*t),bp.w);
+  float hb=bp.y*(1.0+fp.w*t);
+  float hl=bp.z*(1.0+0.05*t);
+  float hw=(q.y>0.0?hb:hl)*e;
+  float body=max(abs(q.x)-halfL,abs(q.y)-hw);
+  float back=hb*e,bel=-hl*e;
+  float yn=q.y/max(hw,0.001);
+
+  /* ---------- 尾鳍 ----------
+     先做一个从尾根往后张开的楔形，再用一次布尔运算定后缘形状。 */
+  float tail;
+  if(tailType>2.5){
+    /* 鲸的尾叶是水平展开的，侧视就是一片很扁的三角 —— 鲸靠上下摆动尾叶推进，
+       而鱼是左右摆尾。这个方向差别是区分鲸和鱼最直接的外形特征，所以张开斜率
+       给得很小（0.18），不能像鱼尾那样竖着张开。 */
+    vec2 tq=vec2(-(q.x+tp.x),abs(q.y));
+    tail=max(max(-tq.x,tq.x-tp.y),tq.y-(tp.z+tq.x*tp.w));
+    /* 后缘正中挖一个圆，形成鲸尾叶中央那个 V 形缺口（两片尾叶由此分开） */
+    tail=max(tail,0.045-length(tq-vec2(tp.y,0.0)));
+  }else{
+    vec2 tq=vec2(-(q.x+tp.x),abs(q.y));
+    tail=max(max(-tq.x,tq.x-tp.y),tq.y-(tp.z+tq.x*tp.w));
+    if(tailType<0.5)
+      tail=max(tail,length(tq-vec2(-0.06,0.0))-(tp.y+0.08));   /* 圆扇：后缘外凸 */
+    else if(tailType<1.5)
+      tail=max(tail,0.105-length(tq-vec2(tp.y*1.18,0.0)));     /* 浅叉 */
+    else
+      tail=max(tail,0.180-length(tq-vec2(tp.y*1.30,0.0)));     /* 深新月 */
+  }
+
+  /* ---------- 背鳍 / 臀鳍 / 胸鳍 ---------- */
+  float dors,anal,pect;
+  float pl,pcx,pcy,pw;
+  if(finType>3.5){
+    /* 鲸型：背鳍极小且位置非常靠后（体长约四分之三处），胸鳍细长呈镰刀状。
+       这两点和鲨鱼正好相反 —— 鲨鱼的背鳍又高又大、长在身体中部。 */
+    dors=max(max(back-q.y,q.y-back-0.042*smoothstep(0.075,0.0,abs(q.x+0.20))),
+             abs(q.x+0.20)-0.075);
+    /* 鲸没有臀鳍，给一个永远在体外的值把它关掉 */
+    anal=1.0;
+    /* 胸鳍长度约体长的 15%。给到 0.2 以上就会变成两片垂在身子下面的长板。 */
+    pl=0.125;pcx=0.17;pcy=0.040;pw=0.018;
+  }else if(finType>2.5){
+    /* 金枪鱼/鲹：第一背鳍三角、第二背鳍小，尾柄极细。 */
+    float d1=max(max(back-q.y,q.y-back-0.135*smoothstep(0.20,0.02,abs(q.x-0.06))),
+                 abs(q.x-0.06)-0.16);
+    float d2=max(max(back-q.y,q.y-back-0.055),abs(q.x+0.18)-0.090);
+    dors=min(d1,d2);
+    anal=max(max(q.y-bel,bel-0.070-q.y),abs(q.x+0.14)-0.110);
+    pl=0.135;pcx=0.17;pcy=0.090;pw=0.030;
+  }else if(finType>1.5){
+    /* 神仙鱼：背鳍和臀鳍一路往后长高，在尾柄处拉出一根尖丝，把轮廓补成接近
+       菱形 —— 这是神仙鱼最标志性的外形。
+       x 范围必须夹在身体内（halfL*0.94）：背缘 back 在身体之外是 0，不夹的话
+       鳍底边会掉到中轴，在尾后悬空成一整块板。 */
+    float g=pow(clamp((0.26-q.x)/0.62,0.0,1.0),1.5);
+    float dH=(0.070+g*0.135)*smoothstep(0.34,0.24,q.x);
+    dors=max(max(back-q.y,q.y-back-dH),abs(q.x+0.02)-halfL*0.94);
+    float aH=(0.058+g*0.112)*smoothstep(0.20,0.08,q.x);
+    anal=max(max(q.y-bel,bel-aH-q.y),abs(q.x+0.04)-halfL*0.90);
+    pl=0.115;pcx=0.14;pcy=0.105;pw=0.034;
+  }else{
+    /* 常规（纺锤/圆盘）和小鳍（细长/球形）共用一套，只是高度和范围不同。 */
+    float small=step(0.5,finType);
+    float dCx=mix(-0.03,0.0,small),dR=mix(0.35,0.22,small);
+    float dH=mix(0.105,0.045,small)*smoothstep(dR+0.04,dR-0.15,abs(q.x-dCx));
+    dors=max(max(back-q.y,q.y-back-dH),abs(q.x-dCx)-dR);
+    float aCx=mix(-0.14,-0.08,small),aR=mix(0.24,0.16,small);
+    float aH=mix(0.090,0.040,small)*smoothstep(aR+0.04,aR-0.13,abs(q.x-aCx));
+    anal=max(max(q.y-bel,bel-aH-q.y),abs(q.x-aCx)-aR);
+    pl=mix(0.100,0.070,small);pcx=0.13;pcy=mix(0.105,0.120,small);pw=0.034;
+  }
+  /* 胸鳍：扇形，根窄梢宽，长度随 finPh 伸缩就有了扇动感。
+     起点要压到腹缘以下，否则整片埋在身体里等于没画。 */
+  pl+=sin(finPh)*pl*0.38;
+  vec2 pq=vec2(q.x-pcx,-q.y-pcy);
+  pect=max(max(-pq.y,pq.y-pl),abs(pq.x)-(pw+pq.y*0.45));
+
+  float fin=min(min(tail,dors),min(anal,pect));
+
+  vec2 ec=vec2(halfL*0.68,hb*0.26);
+  /* 眼睛大小带一个按物种给的倍率：金鳞鱼这类夜行鱼眼睛明显更大，
+     这是不看花纹也能一眼认出来的特征。 */
+  float er=(finType>2.5?0.030:0.040)*ep.w;
+  float eye=length(q-ec)-er;
+
+  /* ---------- 水面光斑与光柱 ----------
+     用屏幕坐标算，因为光是从水面打下来的，不该跟着鱼一起转。
+     gl_FragCoord 的原点在左下角，和项目里 px 的约定一致。 */
+  vec2 sp=gl_FragCoord.xy/res;
+  float ar=res.x/max(res.y,1.0);
+  vec2 pw2=vec2((sp.x-0.5)*ar,sp.y);
+  vec3 csv=cCaus*net(pw2*2.3,time,6.2,1.0)*causAmp;
+  vec3 rsv=cRay*rays(pw2,time)*rayAmp;
+
+  /* ---------- 底色：背 → 体侧 → 腹 三段渐变 ----------
+     只做"背到腹"两段会很平很塑料。真实海鱼的体侧中段几乎都有一条和背腹都
+     不同的反光带，所以这里分两段插值：上半从体侧色过渡到背色，下半过渡到腹色。
+     花纹 8/9（金枪鱼/鲸这类远洋巡游动物）要的是强对比，分界线做得更锐。 */
+  float sharp=(pat>7.5)?1.0:0.0;
+  vec3 bc;
+  if(yn>0.0)bc=mix(c4,c1*0.86,smoothstep(0.0,mix(0.95,0.55,sharp),yn));
+  else      bc=mix(c4,c2,smoothstep(0.0,mix(-0.88,-0.42,sharp),yn));
+
+  /* 虹彩：鱼鳞是层状结构，会产生薄膜干涉，体侧随角度泛出青紫色。
+     银色和蓝色的鱼最明显（银汉鱼、鲹、金枪鱼），橙黄色的鱼几乎没有。
+     幅度必须克制，大了立刻像油污。 */
+  float ir=sin(yn*3.1+q.x*2.4+time*0.33);
+  bc+=vec3(0.07,0.15,0.26)*ir*irid*0.34*smoothstep(0.85,0.10,abs(yn))*dEdge;
+
+  /* 体侧一条纵向反光带：水下顶光照在侧扁的鱼身上必然有这么一条，
+     加上之后鱼才有"圆柱体"的体积感，而不是一片剪纸。 */
+  bc+=vec3(1.0)*smoothstep(0.34,0.02,abs(yn-0.30))*sheen*0.13;
+
+  /* 鱼鳞：菱形网格交错排列，只取边界做很淡的明暗起伏。小鱼上由 dScale 关掉。 */
+  vec2 sc2=vec2(q.x*46.0,q.y*34.0);
+  sc2.x+=mod(floor(sc2.y),2.0)*0.5;
+  bc*=1.0+(smoothstep(0.26,0.46,length(fract(sc2)-0.5))-0.5)*scaleAmt*dScale;
+
+  /* ---------- 花纹 ---------- */
+  float isTail=smoothstep(0.004,-0.004,tail);
+  float bodyA=1.0;                 /* 整体透明度修正，只有半透明鱼会用到 */
+  if(pat<0.5){
+    /* 0 无纹：纯色渐变，刺尾鱼之类靠体型和颜色就够认 */
+  }else if(pat<1.5){
+    /* 1 小丑鱼三道白带：中间那道的前缘在体中线向前凸出一个尖，是公子小丑鱼
+       最好认的特征。白带外侧还要一圈黑边，缺了它会像塑料玩具。
+       做法是把同样的带算两遍（原宽、加宽 0.018）相减得到黑边。 */
+    float cxMid=-0.01-abs(yn)*0.055;
+    float b1=abs(q.x-0.245+yn*0.025),b2=abs(q.x-cxMid),b3=abs(q.x+0.325);
+    float wB=max(max(smoothstep(0.034,0.016,b1),smoothstep(0.072,0.050,b2)),
+                 smoothstep(0.032,0.016,b3));
+    float wBo=max(max(smoothstep(0.052,0.034,b1),smoothstep(0.090,0.072,b2)),
+                  smoothstep(0.050,0.032,b3));
+    bc=mix(bc,c3,wB);
+    bc=mix(bc,c1*0.12,max(0.0,wBo-wB)*dEdge);
+  }else if(pat<2.5){
+    /* 2 蓝吊的"调色板"黑斑：沿背缘一条带从眼后往后延伸，到体后转下来连成
+       一整片，腹部和体中前段留出亮蓝 —— palette surgeonfish 就是这么得名的。 */
+    float blk=max(max(smoothstep(0.26,0.10,abs(yn-0.72))*smoothstep(0.34,0.26,q.x),
+                      smoothstep(-0.09,-0.20,q.x)),
+                  smoothstep(0.14,0.06,length((q-vec2(0.272,0.078))/vec2(1.0,1.15))));
+    bc=mix(bc,c3,blk);
+  }else if(pat<3.5){
+    /* 3 竖条纹（四间雀）：条纹要随体高略微前倾，笔直的竖条看着像贴纸。 */
+    float s=sin((q.x*8.6+yn*0.55)*3.14159);
+    bc=mix(bc,c3,smoothstep(0.10,0.55,s)*0.92);
+  }else if(pat<4.5){
+    /* 4 斜条纹（皇后神仙鱼）：细密的斜向条纹，顺着体侧斜向后上方。 */
+    float s=sin((q.x*2.4+yn*1.35)*9.0);
+    bc=mix(bc,c3,smoothstep(0.25,0.80,s)*0.55*dEdge);
+    /* 额头上那块蓝紫色"皇冠"斑，皇后神仙鱼的名字就来自这里 */
+    bc=mix(bc,vec3(0.16,0.22,0.62),
+           smoothstep(0.10,0.03,length((q-vec2(0.215,0.145))/vec2(1.0,0.85)))*dEdge);
+  }else if(pat<5.5){
+    /* 5 规则斑点：用交错网格取圆心，比随机噪声更像真实的规则斑点。
+       目前 13 个物种都没用到这一档，留着给以后加斑点类的鱼。 */
+    vec2 g2=vec2(q.x*13.0,q.y*11.0);
+    g2.x+=mod(floor(g2.y),2.0)*0.5;
+    bc=mix(bc,c3,smoothstep(0.30,0.16,length(fract(g2)-0.5))*0.85*dEdge);
+  }else if(pat<6.5){
+    /* 6 半透明（银汉鱼）：整条鱼压得很淡，只留一条脊骨线和头部一点实体。
+       成群的玻璃鱼在水里就是这种"只看得见一片闪光"的感觉。 */
+    bodyA=0.45;
+    bc=mix(bc,c3,smoothstep(0.26,0.0,abs(yn))*0.55);
+    bc+=vec3(1.0)*smoothstep(0.09,0.0,abs(yn))*0.22;
+  }else if(pat<7.5){
+    /* 7 后半异色（黄尾雀鲷）：身体后段和尾鳍换成另一个颜色，交界带点渐变。 */
+    bc=mix(bc,c3,smoothstep(-0.02,-0.26,q.x));
+  }else if(pat<8.5){
+    /* 8 背腹强对比（金枪鱼 / 燕尾鲹）：深背 + 银白腹，交界处一条亮线。
+       这是远洋巡游鱼的标准配色，也让它们在水里显得特别"硬"。 */
+    bc+=vec3(1.0)*smoothstep(0.12,-0.02,abs(yn+0.12))*0.16;
+  }else if(pat<9.5){
+    /* 9 鲸：蓝灰底 + 不规则浅色斑驳 + 腹部的喉褶。
+       斑驳用格子里随机抖动的圆斑，比纯噪声更像鲸皮上那种成片的浅斑；
+       喉褶是蓝鲸进食时能撑开的腹部纵沟，静态下是一组细密平行线。 */
+    vec2 mg=vec2(q.x*7.5,q.y*5.5);
+    vec2 mc=floor(mg);
+    vec2 mo=vec2(hsh(mc),hsh(mc+7.3))-0.5;
+    float blob=length(fract(mg)-0.5-mo*0.55);
+    bc=mix(bc,bc*1.0+c2*0.30,smoothstep(0.34,0.14,blob)*hsh(mc+3.1)*0.55*dEdge);
+    /* 喉褶只在身体前下方 */
+    float pleat=smoothstep(0.55,0.95,sin(q.x*150.0));
+    bc=mix(bc,bc*0.86,pleat*smoothstep(0.34,0.10,q.x)*smoothstep(-0.05,-0.55,yn)*0.45*dEdge);
+    bc+=vec3(1.0)*smoothstep(0.14,-0.04,abs(yn+0.20))*0.10;
+  }else if(pat<10.5){
+    /* 10 纵向银纹（金鳞鱼）：沿体长方向的银白细线，和竖条纹正好垂直。 */
+    bc=mix(bc,c3,smoothstep(0.50,0.92,sin(yn*7.2))*0.60*dEdge);
+  }else{
+    /* 11 后半锐利异色（皇室拟雀鲷）：前半紫、后半黄，而且分界几乎是一刀切。
+       和花纹 7（黄尾雀鲷的渐变分界）区别就在这个锐度上。 */
+    bc=mix(bc,c3,smoothstep(-0.03,-0.07,q.x));
+  }
+
+  bc+=vec3(1.0)*smoothstep(-0.026,0.002,body)*0.20;   /* 轮廓边缘光 */
+  bc+=vec3(1.0)*smoothstep(0.58,1.0,yn)*0.10;         /* 背脊一道高光 */
+  bc+=csv*0.40+rsv*0.20;                              /* 光斑和光柱打在鱼身上 */
+
+  /* ---------- 鳍色 ----------
+     以体侧色为底、往花纹色偏 finShift。真实鱼的鳍普遍比身体淡且偏透，
+     但种间差异很大：神仙鱼的鳍是亮黄的，蓝吊只有尾鳍黄，小丑鱼的鳍带白带。
+     所有鱼的鳍外缘都压一圈暗边，这圈边是"像真的"的关键细节之一。 */
+  vec3 fc=mix(mix(c4,c2,0.34),c3,finShift);
+  if(pat>1.5&&pat<2.5)fc=mix(fc,vec3(1.00,0.78,0.12),isTail);   /* 蓝吊的黄尾 */
+  else if(pat>6.5&&pat<7.5)fc=mix(fc,c3,isTail);                /* 黄尾雀鲷 */
+  else if(pat>10.5)fc=mix(fc,c3,isTail);                        /* 拟雀鲷的黄尾 */
+  else if(pat>3.5&&pat<4.5)fc=mix(fc,c2,isTail*0.70);           /* 神仙鱼的黄鳍 */
+  else if(pat>9.5&&pat<10.5)fc=mix(fc,c3,isTail*0.45);          /* 金鳞鱼的浅红鳍 */
+  else if(pat<0.5)fc=mix(fc,c3,isTail*0.55);
+  else if(pat<1.5)fc=mix(fc,c3,0.35);
+  fc*=1.0+sin(atan(q.y,q.x+0.52)*70.0)*0.06*dFinTx;   /* 鳍条放射纹 */
+  fc=mix(fc,c1*0.14,smoothstep(-0.016,-0.002,fin)*0.80*dEdge);
+  fc+=csv*0.30;
+
+  /* ---------- 分层合成 ---------- */
+  vec3 c=vec3(0.0);float a=0.0;
+  over(c,a,fc,smoothstep(aa,-aa,fin)*0.78*bodyA);
+  over(c,a,bc,smoothstep(aa,-aa,body)*bodyA);
+  /* 眼睛：虹膜 + 黑瞳 + 一个偏上的小白点。白点一加鱼立刻就有神了。 */
+  vec3 iris=mix(c1,vec3(1.0),0.45);
+  over(c,a,iris,smoothstep(aa*0.8,-aa*0.8,eye)*0.95*dEye);
+  over(c,a,vec3(0.03,0.03,0.05),smoothstep(aa*0.8,-aa*0.8,length(q-ec)-er*0.55)*dEye);
+  over(c,a,vec3(1.0),smoothstep(aa*0.8,-aa*0.8,
+       length(q-(ec+vec2(er*0.30,er*0.34)))-er*0.22)*0.90*dHi);
+
+  /* 融入水色做成整体半透明：水下远处的鱼本来就被水体散射"吃掉"，
+     这样不用读背景就能实现（鱼 pass 正在写 rtBg，读不了），而且更物理。 */
+  a*=alpha*(1.0-mixW);
+  if(a<0.002)discard;
+  gl_FragColor=vec4(c*lum,a);
+}`;
+    const U_FISH={
+      res:{value:new T.Vector2(1,1)},time:{value:0},lum:{value:1},
+      causAmp:{value:PR.caus},rayAmp:{value:PR.ray},
+      cCaus:{value:new T.Color()},cRay:{value:new T.Color()}
     };
 
     /* ======================= 2/3. 可分离高斯模糊 ======================= */
@@ -8039,6 +8754,112 @@ void main(){
 
     const matBg=mk(FS_BG,U_BG),matBlur=mk(FS_BLUR,U_BLUR),matMain=mk(FS_MAIN,U_MAIN);
 
+    /* ---------- 鱼的 instancing 几何 ----------
+       一个 quad + 三条 per-instance 属性。属性每帧全量重写（30 条也只有 360 个
+       float，带宽可忽略），比在 GPU 上算运动简单得多，运动逻辑还能留在 JS 里。
+       WebGL2 原生支持 instancing；WebGL1 要 ANGLE_instanced_arrays 扩展（覆盖率
+       98%+）。两者都没有时只能把鱼关掉，总比整页崩掉好。
+       FISH_N 为 0（一关都没通）时连几何体和材质都不建 —— 这个片元着色器不小，
+       省掉一次编译就是省掉首屏的几十毫秒。 */
+    const hasInstancing=renderer.capabilities.isWebGL2||
+                        !!renderer.extensions.get("ANGLE_instanced_arrays");
+    const FISH_ON=hasInstancing&&FISH_N>0;
+    let fishGeo=null,fishMat=null,fishScene=null,aPos=null,aAnim=null,aTune=null;
+    if(FISH_ON){
+      fishGeo=new T.InstancedBufferGeometry();
+      fishGeo.setAttribute("position",new T.BufferAttribute(
+        new Float32Array([-1,-1,0, 1,-1,0, 1,1,0, -1,1,0]),3));
+      fishGeo.setIndex([0,1,2,0,2,3]);
+      aPos =new T.InstancedBufferAttribute(new Float32Array(FISH_N*4),4);
+      aAnim=new T.InstancedBufferAttribute(new Float32Array(FISH_N*4),4);
+      aTune=new T.InstancedBufferAttribute(new Float32Array(FISH_N*4),4);
+      [aPos,aAnim,aTune].forEach(a=>a.setUsage(T.DynamicDrawUsage));
+      fishGeo.setAttribute("iPos",aPos);
+      fishGeo.setAttribute("iAnim",aAnim);
+      fishGeo.setAttribute("iTune",aTune);
+      fishGeo.instanceCount=0;
+      /* 预乘 alpha 的 over 混合：片元输出的 rgb 已经乘过 alpha，所以 src 用 ONE。
+         用 RawShaderMaterial 是为了不让 three.js 往着色器里注入那堆矩阵 uniform
+         —— 这里的顶点变换是自己算的，用不上 projectionMatrix。 */
+      fishMat=new T.RawShaderMaterial({
+        uniforms:U_FISH,vertexShader:VS_FISH,fragmentShader:FS_FISH,
+        transparent:true,depthTest:false,depthWrite:false,
+        blending:T.CustomBlending,
+        blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor,
+        blendSrcAlpha:T.OneFactor,blendDstAlpha:T.OneMinusSrcAlphaFactor
+      });
+      const fm=new T.Mesh(fishGeo,fishMat);
+      fm.frustumCulled=false;          /* gl_Position 自己算的，包围球对不上 */
+      fishScene=new T.Scene();fishScene.add(fm);
+      /* 鱼 pass 要叠在已经画好的水体上，所以全程关掉自动清屏。
+         这是安全的：水体/模糊/合成三个 pass 都是不透明且铺满整个目标。 */
+      renderer.autoClear=false;
+    }
+
+    /* ---------- 图鉴用的鱼肖像 ----------
+       徽章页的「🐠 海鱼图鉴」要显示鱼真正的样子，而不是一块色卡或者 emoji。
+       这里复用上面那套 VS_FISH / FS_FISH，用一个临时的小 renderer 把每个
+       物种各渲一张透明背景的 PNG，渲完立刻 dispose —— 图鉴里的鱼和水里游
+       的那条是同一个着色器画的，逐像素一致，不会"图鉴和实物不一样"。
+
+       刻意不走 instancing：这里一次只画一条，把 iPos/iAnim/iTune 当普通的
+       per-vertex 属性填四份就行。这样连不支持 ANGLE_instanced_arrays 的
+       老设备也能出图（那些设备水里没有鱼，但图鉴照样能看）。
+
+       放在 build() 里是因为着色器字符串是 build() 的局部常量；代价是没有
+       WebGL 时 build() 根本不会跑，这个函数也就不存在 —— 图鉴那边有判断，
+       会退回纯色衬底。 */
+    window.fishPortraits=function(w){
+      /* 顶点着色器里包围盒是 x 半宽 0.92、y 半高 0.62，也就是 1.84L × 1.24L。
+         画布按这个长宽比开，鱼刚好满幅且不被裁。 */
+      const h=Math.round(w*124/184),L=w/1.84;
+      const cv2=document.createElement("canvas");cv2.width=w;cv2.height=h;
+      let r2=null;
+      try{
+        r2=new T.WebGLRenderer({canvas:cv2,antialias:true,alpha:true,
+          premultipliedAlpha:true,preserveDrawingBuffer:true});
+      }catch(e){return null;}
+      r2.setPixelRatio(1);r2.setSize(w,h,false);r2.setClearColor(0x000000,0);
+      const g2=new T.BufferGeometry();
+      g2.setAttribute("position",new T.BufferAttribute(
+        new Float32Array([-1,-1,0, 1,-1,0, 1,1,0, -1,1,0]),3));
+      g2.setIndex([0,1,2,0,2,3]);
+      /* 把一个 vec4 复制成四份（四个顶点各一份），当普通属性用 */
+      const quad4=v=>{const a=new Float32Array(16);
+        for(let i=0;i<4;i++)a.set(v,i*4);return new T.BufferAttribute(a,4);};
+      const u2={
+        res:{value:new T.Vector2(w,h)},time:{value:0},lum:{value:1},
+        /* 图鉴要看鱼本来的颜色，所以把水面光斑和光柱都关掉 */
+        causAmp:{value:0},rayAmp:{value:0},
+        cCaus:{value:new T.Color(0xffffff)},cRay:{value:new T.Color(0xffffff)}
+      };
+      const m2=new T.RawShaderMaterial({
+        uniforms:u2,vertexShader:VS_FISH,fragmentShader:FS_FISH,
+        transparent:true,depthTest:false,depthWrite:false,
+        blending:T.CustomBlending,
+        blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor,
+        blendSrcAlpha:T.OneFactor,blendDstAlpha:T.OneMinusSrcAlphaFactor
+      });
+      const mesh2=new T.Mesh(g2,m2);mesh2.frustumCulled=false;
+      const sc2=new T.Scene();sc2.add(mesh2);
+      /* 顶点着色器自己算 gl_Position，相机只是个占位，不参与计算 */
+      const cam2=new T.OrthographicCamera(-1,1,1,-1,0,1);
+      const out=[];
+      for(let k=0;k<FISH_SPECIES.length;k++){
+        /* 体心放画布正中（着色器里 y 向上，所以给 h/2）。
+           摆尾相位取 0.9、鳍相位取 1.1：尾巴稍微甩开、胸鳍张开，
+           比笔直的标本侧视图生动，也更像水里那条。 */
+        g2.setAttribute("iPos", quad4([w/2,h/2,L,1]));
+        g2.setAttribute("iAnim",quad4([0.9,1,0,1.1]));
+        /* 鱼鳞强度和水里一致（0.10）；融入水色给 0（图鉴要满不透明）；LOD 给满 */
+        g2.setAttribute("iTune",quad4([k,0.10,0,1]));
+        r2.setRenderTarget(null);r2.clear();r2.render(sc2,cam2);
+        out.push(cv2.toDataURL("image/png"));
+      }
+      g2.dispose();m2.dispose();r2.dispose();
+      return out;
+    };
+
     /* ---- RenderTarget（resize 时先 dispose 再重建，否则显存会漏） ---- */
     let rtBg=null,rtB1=null,rtB2=null,DPR=renderer.getPixelRatio();
     const BS=.35;                 /* 模糊 RT 的分辨率倍率 */
@@ -8047,7 +8868,7 @@ void main(){
       const w=innerWidth*DPR,h=innerHeight*DPR;
       if(rtBg){rtBg.dispose();rtB1.dispose();rtB2.dispose();}
       rtBg=rt(w,h);rtB1=rt(w*BS,h*BS);rtB2=rt(w*BS,h*BS);
-      U_BG.res.value.set(w,h);U_MAIN.res.value.set(w,h);
+      U_BG.res.value.set(w,h);U_MAIN.res.value.set(w,h);U_FISH.res.value.set(w,h);
     }
     function pass(mat,target){quad.material=mat;renderer.setRenderTarget(target||null);renderer.render(qs,qc);}
 
@@ -8067,6 +8888,235 @@ void main(){
       b.wb=rnd(.5,1.6);                        /* 左右摆动频率 */
       b.wa=rnd(.008,.038);                     /* 左右摆动幅度 */
       b.ux=0;b.uy=0;                           /* 交互带来的额外速度 */
+    }
+
+    /* ---------- 小鱼：六级尺寸 + 群游 ----------
+       六级尺寸都是相对屏幕短边的比例，数量按真实海洋的金字塔分配：小鱼成群、
+       大鱼独行。sp 是每秒移动多少个短边 —— 小鱼窜得快、大鱼从容，这个差异比
+       单纯的大小差异更能让画面有层次。
+       n 是这一级的名额，六级加起来正好 30，也就是集齐 13 种时的满编。 */
+    const TIERS=[
+      /*  名  体长比例      条数 群游   不透明 融水色 游速区间     */
+      {nm:"XS", lo:.016,hi:.026,n:13,school:true ,alpha:.80,mix:1.45,sp:[.075,.105]},
+      {nm:"S",  lo:.030,hi:.045,n:8 ,school:false,alpha:.88,mix:1.15,sp:[.055,.080]},
+      {nm:"M",  lo:.055,hi:.075,n:5 ,school:false,alpha:.94,mix:.85 ,sp:[.042,.060]},
+      {nm:"L",  lo:.095,hi:.115,n:2 ,school:false,alpha:.97,mix:.60 ,sp:[.034,.048]},
+      {nm:"XL", lo:.140,hi:.175,n:1 ,school:false,alpha:.98,mix:.45 ,sp:[.030,.040]},
+      /* XXL 给蓝鲸。真实蓝鲸比金枪鱼大得多，但画面上照实做就太违和了 ——
+         一条鱼占掉半屏，整个开机页会变成"鲸鱼展示页"。所以只比 XL 大一档。 */
+      {nm:"XXL",lo:.240,hi:.300,n:1 ,school:false,alpha:.90,mix:1.60,sp:[.018,.026]}
+    ];
+    const SCHOOLS=3;
+    /* 小屏补偿：手机短边只有 390px，XS 级按比例只有 7px，等于看不见。
+       所以屏幕越小整体放大越多（桌面 1.0 倍、手机约 1.9 倍）。 */
+    let SSCALE=1;
+
+    /* 只有已解锁的物种能出场。数组顺序就是解锁顺序（体型由小到大）。 */
+    const FISH_POOL=FISH_SPECIES.slice(0,FISH_U);
+    const fishes=[];
+    if(FISH_ON){
+      const cand=[];
+      TIERS.forEach((tr,ti)=>{
+        const pool=FISH_POOL.filter(s=>s.tier===ti);
+        if(!pool.length)return;                /* 这一级还没解锁任何物种，整级跳过 */
+        for(let i=0;i<tr.n;i++){
+          const sch=tr.school?(i%SCHOOLS):-1;
+          /* 群游：同一群必须是同一种 —— 真实的鱼群不混种，混了就散成一盘。
+             非群游：先让这一级的每个物种都至少出场一条，再随机填余下的名额。
+             不这么做的话，M 级只有 5 个名额却有 3 个物种，很容易某一种不出现。 */
+          const sp=tr.school?pool[sch%pool.length]
+                   :(i<pool.length?pool[i]:pool[(Math.random()*pool.length)|0]);
+          cand.push({
+            tier:ti,tname:tr.nm,kind:sp.kind,
+            rr:rnd(tr.lo,tr.hi),
+            base:rnd(tr.sp[0],tr.sp[1]),
+            alpha:tr.alpha*rnd(.92,1),
+            mixK:tr.mix,
+            school:sch,
+            dir:Math.random()<.5?-1:1,
+            x:0,y:0,py:0,oy:0,band:0,amp:0,wf:0,ph:0,
+            sway:Math.random()*6.283,fin:Math.random()*6.283,
+            ux:0,uy:0,boost:0,sign:1,ang:0,fade:1,
+            /* 群内个体偏移（体长的倍数），让队形有前后层次而不是挤成一坨 */
+            sox:rnd(-1.6,1.6),soy:rnd(-1.1,1.1),
+            nf1:rnd(.7,1.6),nf2:rnd(.9,2),np1:rnd(0,6.283),np2:rnd(0,6.283)
+          });
+        }
+      });
+      const shuf=a=>{for(let i=a.length-1;i>0;i--){
+        const j=(Math.random()*(i+1))|0,tmp=a[i];a[i]=a[j];a[j]=tmp;}};
+      shuf(cand);
+      /* 名额（FISH_N）通常少于候选数，直接截断会漏掉物种 —— 刚解锁了新鱼却
+         在首页找不到它是最糟的体验。所以先把每个物种的第一条挪到队首，
+         保证截断之后 13 种（已解锁的那些）一条都不少，再随机填剩下的名额。
+         名额恒大于已解锁物种数（最少 8 名额 / 1 种，最多 30 名额 / 13 种），
+         所以这个保底一定放得下。 */
+      const got={},head=[],rest=[];
+      cand.forEach(f=>{if(got[f.kind])rest.push(f);else{got[f.kind]=1;head.push(f);}});
+      shuf(head);
+      head.concat(rest).slice(0,FISH_N).forEach(f=>fishes.push(f));
+    }
+
+    function fishLen(f){return S*f.rr*PR.fsize*SSCALE;}
+    /* LOD 按 CSS 像素算（视觉大小），不是设备像素 —— 高 DPR 屏上同一条鱼的
+       物理像素更多，但看起来一样大，细节该不该开取决于看起来多大。 */
+    function lodOf(Lpx){return PR.lod?clamp((Lpx/DPR-28)/102,0,1):1;}
+
+    /* 朝向与俯仰。左右用 sign + 死区滞回，俯仰单独平滑插值并限幅。
+       两件事分开之后，速度在零附近抖动时鱼既不会翻面也不会甩头 —— 这是
+       "指针碰到鱼会闪一下"的根因之一。
+       死区必须按这条鱼自己的巡航速度取，不能用固定值：慢速的鱼会被固定死区
+       吃掉全部速度，然后卡着上一次的朝向倒着游。 */
+    function aimFish(f,vx,vy,dt,cruise){
+      const sp=Math.abs(vx),cz=Math.abs(cruise);
+      const dead=Math.max(S*.0015,cz*.30);
+      if(vx>dead)f.sign=1;else if(vx<-dead)f.sign=-1;   /* 死区内保持原朝向 */
+      const aim=Math.atan2(clamp(vy,-sp*1.1,sp*1.1),Math.max(sp,cz*.5+1e-3));
+      f.ang+=(clamp(aim,-.5,.5)-f.ang)*(1-Math.exp(-9*dt));
+    }
+
+    function fishReset(f,first){
+      const L=fishLen(f);
+      /* 首帧直接撒在屏幕里，之后一律从画面外侧进场 */
+      f.x=first?rnd(0,W):(f.dir>0?-L*.95:W+L*.95);
+      /* 大鱼压在画面下半部（显得近、也不挡标题），小鱼铺满整个水体 */
+      const big=f.tier>=3;
+      f.band=rnd(big?.18:.10,big?.62:.88);
+      f.amp=rnd(.025,.085)*(big?.6:1);
+      f.wf=rnd(.30,.75);
+      f.ph=rnd(0,6.283);
+      f.oy=0;f.ux=0;f.uy=0;f.boost=0;
+      f.y=H*f.band;f.py=f.y;
+      f.ang=0;
+      /* 换边重生难免是一次"传送"。给个淡入，视觉上就不会是突然蹦出来一条鱼。 */
+      f.fade=first?1:0;
+    }
+
+    function fishStep(f,dt,t){
+      const L=fishLen(f);
+      /* 怕人：指针靠近就加速逃走 + 上下躲开。
+         横向推力只取"顺着自己前进方向"的那一半 —— 早先是完整的径向推开，结果
+         鱼会被推着倒退出画面，紧接着触发换边重生，看上去就是"瞬间隐身再出现"。
+         改成只能加速不能倒退之后，鱼永远不会被推出身后的那条边。 */
+      if(pt.has&&PR.fshy>0){
+        const dx=f.x-pt.x,dy=f.y-pt.y,dd=Math.hypot(dx,dy)+1e-3,R=S*.32;
+        if(dd<R){
+          const k=(1-dd/R)*PR.fshy;
+          const pushX=dx/dd*k*S*1.5;
+          if(pushX*f.dir>0)f.ux+=pushX*dt;
+          f.uy+=dy/dd*k*S*1.5*dt;
+          f.boost=Math.min(2,f.boost+k*2.4*dt);
+        }
+      }
+      f.ux*=Math.exp(-2.2*dt);f.uy*=Math.exp(-2.2*dt);
+      f.boost*=Math.exp(-1.1*dt);
+      /* 限幅：再怎么惊吓也不许一帧窜出半个屏幕 */
+      const vmax=S*.55;
+      f.ux=clamp(f.ux,-vmax,vmax);f.uy=clamp(f.uy,-vmax,vmax);
+
+      const vx=f.dir*S*f.base*PR.fspd*(1+f.boost)+f.ux;
+      f.x+=vx*dt;
+      /* y 不做自由积分，而是"泳道正弦 + 一个会自己回零的偏移"，
+         这样被惊动后鱼会窜开，但最终总会回到自己那条泳道，不会漂出画面 */
+      f.oy+=f.uy*dt;f.oy*=Math.exp(-1.5*dt);
+      f.y=H*f.band+Math.sin(t*f.wf+f.ph)*H*f.amp+f.oy;
+
+      const vy=(f.y-f.py)/Math.max(dt,1e-4);
+      f.py=f.y;
+      aimFish(f,vx,vy,dt,f.dir*S*f.base*PR.fspd);
+      f.sway+=dt*(5.2+Math.abs(vx)/Math.max(S,1)*24+f.boost*5);
+      f.fin+=dt*(3+f.boost*4);
+
+      /* 换边重生：必须是朝着自己前进方向游出去、并且已经从惊吓里平复下来。
+         被指针推出去的鱼不重生，让它自己游回来。 */
+      const out=L*1.2;
+      if(f.boost<.15){
+        if(f.dir>0&&f.x>W+out&&vx>0){f.dir=-1;fishReset(f,false);return;}
+        else if(f.dir<0&&f.x<-out&&vx<0){f.dir=1;fishReset(f,false);return;}
+      }
+      /* 兜底：不管处于什么状态，都不许跑到画面外两个体长以上。
+         指针一路追着一条鱼时 boost 会一直满着，上面那个条件永远不成立，鱼就会
+         被加速推到画面外很远，松手后要好几秒才游回来 —— 那同样是"鱼不见了"。 */
+      const hard=L*2.2;
+      if(f.x>W+hard){f.dir=-1;fishReset(f,false);}
+      else if(f.x<-hard){f.dir=1;fishReset(f,false);}
+    }
+
+    /* ---------- 鱼群 ----------
+       每群一个不渲染的虚拟领队，群内鱼弹性跟随。完整 boids 要对 30 条鱼做
+       900 次邻居距离计算/帧，而这个方案几乎零成本，视觉上足够像鱼群。 */
+    const schools=[];
+    for(let i=0;i<SCHOOLS;i++)schools.push({
+      idx:i,x:0,y:0,oy:0,dir:i%2?-1:1,band:0,amp:0,wf:0,ph:0,
+      ux:0,uy:0,boost:0,scatter:0
+    });
+    const SCH_SP=.085;            /* 领队基础游速（每秒多少个短边） */
+    function schoolReset(sc,first){
+      const L=S*.12;              /* 领队按一个虚拟中等体长算出入场边界 */
+      const ox=sc.x,oy=sc.y;
+      sc.x=first?rnd(.2,.8)*W:(sc.dir>0?-L:W+L);
+      sc.band=rnd(.20,.80);
+      sc.amp=rnd(.03,.07);
+      sc.wf=rnd(.25,.55);
+      sc.ph=rnd(0,6.283);
+      sc.y=H*sc.band;sc.oy=0;sc.ux=0;sc.uy=0;
+      /* 领队换边时必须把整群鱼一起搬过去。不搬的话群内鱼会按追踪速度横穿整个
+         屏幕去追新位置，那是一道贴着画面飞过的闪影 —— 也是"鱼瞬间隐身"的来源
+         之一。搬完给个淡入，接缝就看不出来了。 */
+      if(!first){
+        const dx=sc.x-ox,dy=sc.y-oy;
+        for(let i=0;i<fishes.length;i++){
+          const f=fishes[i];
+          if(f.school===sc.idx){f.x+=dx;f.y+=dy;f.py=f.y;f.fade=0;}
+        }
+      }
+    }
+    function schoolStep(sc,dt,t){
+      /* 整群惊散：指针靠近群心就给整群一个远离的冲量，并把队形临时放大。
+         scatter 衰减比 boost 慢，所以鱼群会先炸开、再一边跑一边慢慢收拢。 */
+      if(pt.has&&PR.fshy>0){
+        const dx=sc.x-pt.x,dy=sc.y-pt.y,dd=Math.hypot(dx,dy)+1e-3,R=S*.42;
+        if(dd<R){
+          const k=(1-dd/R)*PR.fshy;
+          sc.ux+=dx/dd*k*S*1.7*dt;
+          sc.uy+=dy/dd*k*S*1.7*dt;
+          sc.scatter=Math.min(1,sc.scatter+k*2.6*dt);
+          sc.boost=Math.min(2.2,sc.boost+k*3*dt);
+        }
+      }
+      sc.ux*=Math.exp(-2*dt);sc.uy*=Math.exp(-2*dt);
+      sc.boost*=Math.exp(-1*dt);
+      sc.scatter*=Math.exp(-.8*dt);
+
+      const vx=sc.dir*S*SCH_SP*PR.fspd*(1+sc.boost)+sc.ux;
+      sc.x+=vx*dt;
+      sc.oy+=sc.uy*dt;sc.oy*=Math.exp(-1.4*dt);
+      sc.y=H*sc.band+Math.sin(t*sc.wf+sc.ph)*H*sc.amp+sc.oy;
+
+      const L=S*.12;
+      if(sc.dir>0&&sc.x>W+L*2){sc.dir=-1;schoolReset(sc,false);}
+      else if(sc.dir<0&&sc.x<-L*2){sc.dir=1;schoolReset(sc,false);}
+    }
+    function fishFollow(f,dt,t){
+      const sc=schools[f.school],L=fishLen(f);
+      /* 目标 = 领队位置 + 个体偏移（随朝向镜像），惊散时偏移半径临时放大 */
+      const spread=1+sc.scatter*2.4;
+      const tx=sc.x+f.sox*L*2.2*sc.dir*spread;
+      const ty=sc.y+f.soy*L*2.2*spread;
+      /* 指数平滑追踪：自带滞后，队形会被拉长又收拢，不必真去解弹簧方程 */
+      const lag=1-Math.exp(-3.2*dt);
+      f.x+=(tx-f.x)*lag;
+      f.y+=(ty-f.y)*lag;
+      /* 个体噪声：不加的话整群会像一块刚体在平移 */
+      f.x+=Math.sin(t*f.nf1+f.np1)*S*.0035;
+      f.y+=Math.sin(t*f.nf2+f.np2)*S*.0045;
+
+      const vy=(f.y-f.py)/Math.max(dt,1e-4);
+      f.py=f.y;
+      const vx=sc.dir*S*SCH_SP*PR.fspd*(1+sc.boost);
+      aimFish(f,vx,vy,dt,sc.dir*S*SCH_SP*PR.fspd);
+      f.sway+=dt*(6+Math.abs(vx)/Math.max(S,1)*26+sc.boost*6);
+      f.fin+=dt*(3.4+sc.boost*4);
     }
 
     /* ---- 交互 ----
@@ -8106,7 +9156,11 @@ void main(){
       if(!alive)return;
       const x=e.clientX*DPR,y=flipY(e.clientY);
       pt.x=x;pt.y=y;pt.has=true;lastMoveX=x;lastMoveY=y;lastMoveT=performance.now();
-      addWave(x,y,1.7);                        /* 点击的水波比划过的强很多 */
+      /* 点到鱼就弹图鉴卡，点空处就把卡收掉。水波照旧放 —— 两件事不冲突，
+         孩子点鱼的时候也该看到水面被戳了一下。 */
+      const hit=pickFish(x,y);
+      if(hit)showCard(hit);else hideCard();
+      addWave(x,y,PR.wtap);
       /* 「咕噜」一簇：8 个小泡从点击处快速上浮，边浮边变大，最后淡掉 */
       for(let i=0;i<SLOT_BURST;i++){
         const b=bBurst[i];
@@ -8122,6 +9176,48 @@ void main(){
     addEventListener("pointerup",onPUp,{passive:true});
     addEventListener("pointercancel",()=>{pt.has=false;},{passive:true});
 
+    /* ---------- 点击识别 + 图鉴卡 ----------
+       用圆形命中而不是精确的鱼形判定：XS 级的鱼只有 20 像素，按轮廓判定基本
+       点不到。给一个最小命中半径（26 CSS 像素）体验才正常，手指点也够用。 */
+    function pickFish(px,py){
+      let best=null,bd=1e18;
+      for(let i=0;i<fishes.length;i++){
+        const f=fishes[i];
+        if(f.fade<.3)continue;                 /* 正在淡入的鱼还没真正出场 */
+        const L=fishLen(f);
+        const r=Math.max(L*.58,26*DPR);
+        const d=Math.hypot(px-f.x,py-f.y);
+        if(d<r&&d<bd){bd=d;best=f;}
+      }
+      return best;
+    }
+    const card=$s("#fishCard");
+    let cardT=0;
+    /* f 可以为 null：解锁报喜时只有物种、没有具体哪一条鱼 */
+    function showCard(kindOrFish,isNew){
+      const f=(typeof kindOrFish==="object")?kindOrFish:null;
+      const sp=FISH_SPECIES[f?f.kind:kindOrFish];
+      if(!sp||!card)return;
+      $s("#fcCn").textContent=sp.nm;
+      $s("#fcEn").textContent=sp.en;
+      $s("#fcTip").textContent=sp.tip;
+      $s("#fcSz").textContent=f
+        ?(f.tname+" 级 · 屏幕上约 "+Math.round(fishLen(f)/DPR)+" 像素长"
+          +(f.school>=0?" · 群游":" · 独行"))
+        :("已收集 "+FISH_U+" / "+FISH_TOTAL+" 种 · 在海里找找它");
+      card.classList.toggle("isnew",!!isNew);
+      card.classList.add("on");
+      clearTimeout(cardT);
+      /* 解锁报喜多留一会儿，孩子要读完那句科普 */
+      cardT=setTimeout(()=>card.classList.remove("on"),isNew?11000:7000);
+    }
+    function hideCard(){if(card)card.classList.remove("on");clearTimeout(cardT);}
+    if(card){
+      $s("#fcX").onclick=e=>{e.stopPropagation();hideCard();};
+      /* 卡片自己吃掉 pointerdown：否则点在卡上会穿过去命中卡片后面的鱼 */
+      card.addEventListener("pointerdown",e=>e.stopPropagation());
+    }
+
     /* ---- 配色：右上角三个色块，点一下立刻换并记进设置 ---- */
     let lum=1;
     function applySkin(name,save){
@@ -8130,6 +9226,9 @@ void main(){
       U_BG.cRay.value.set(sk.cRay);U_BG.cAcc.value.set(sk.cAcc);
       U_BG.accent.value=sk.accent;
       U_MAIN.bloom.value=sk.bloom;
+      /* 鱼 pass 是独立的着色器，水体的光斑/光柱颜色要同步一份过去，
+         不然换成极光配色后鱼身上还打着樱花色的光斑。 */
+      U_FISH.cCaus.value.set(sk.cCaus);U_FISH.cRay.value.set(sk.cRay);
       lum=sk.lum;
       renderer.setClearColor(new T.Color(sk.cBot),1);
       /* 暗水体下文字整组换成白系，标题的字样不动只加厚白色柔光 */
@@ -8153,13 +9252,25 @@ void main(){
       renderer.setSize(innerWidth,innerHeight);
       DPR=renderer.getPixelRatio();
       W=innerWidth*DPR;H=innerHeight*DPR;S=Math.min(W,H);
+      /* 小屏补偿：屏幕越小，鱼相对放得越大，否则 XS 级在手机上只有几个像素 */
+      SSCALE=clamp(900/Math.max(1,Math.min(innerWidth,innerHeight)),1,1.9);
       alloc();
     }
     addEventListener("resize",layout);
     layout();
     /* 必须等 layout() 算出 W/H/S 之后再撒气泡，否则初始坐标是按 1x1 画布算的 */
     bMain.forEach(b=>spawnMain(b,true));
+    schools.forEach(sc=>schoolReset(sc,true));
+    fishes.forEach(f=>fishReset(f,true));
+    /* 群游的鱼首帧要直接贴到领队身边，不然会从初始泳道一路漂过去 */
+    fishes.forEach(f=>{if(f.school>=0){const sc=schools[f.school];f.x=sc.x;f.y=sc.y;f.py=f.y;}});
     applySkin(SET.spSkin,false);
+
+    /* 这次新解锁了鱼，等文字层浮完再弹图鉴卡报喜（标题 0.74s、按钮 0.98s）。
+       弹过就记进存档，下次开机不再重复报同一条。 */
+    if(FISH_ON&&FISH_NEW>=0){
+      setTimeout(()=>{if(alive){showCard(FISH_NEW,true);markFishSeen();}},2200);
+    }
 
     /* ---- 主循环 ---- */
     let t=0,last=performance.now();
@@ -8167,6 +9278,8 @@ void main(){
       if(!alive){
         /* 开机页退场后把渲染目标还回去，不然这三张全屏纹理会一直占着显存 */
         if(rtBg){rtBg.dispose();rtB1.dispose();rtB2.dispose();rtBg=null;}
+        /* 鱼的几何体和材质也要还 —— 那个片元着色器编译出来的程序不小 */
+        if(fishGeo){fishGeo.dispose();fishMat.dispose();fishGeo=null;}
         return;
       }
       raf=requestAnimationFrame(loop);
@@ -8177,6 +9290,36 @@ void main(){
       /* 1. 水体 */
       U_BG.time.value=t;U_BG.lum.value=lum;
       pass(matBg,rtBg);
+
+      /* 1.5 小鱼：instancing，一次 draw call 叠在水体上。
+         仍然渲进 rtBg，所以后面的指针水波、气泡折射、泛光都会作用到鱼身上。 */
+      if(FISH_ON){
+        let nf=0;
+        if(!reduce)for(let i=0;i<SCHOOLS;i++)schoolStep(schools[i],dt,t);
+        for(let i=0;i<fishes.length;i++){
+          const f=fishes[i];
+          if(!reduce){
+            if(PR.school&&f.school>=0)fishFollow(f,dt,t); else fishStep(f,dt,t);
+            /* 换边重生后的淡入，约 0.6 秒。有它在，即使发生"传送"也不突兀。 */
+            if(f.fade<1)f.fade=Math.min(1,f.fade+dt*1.6);
+          }
+          const L=fishLen(f);
+          const o=nf*4;
+          aPos.array[o  ]=f.x;      aPos.array[o+1]=f.y;
+          aPos.array[o+2]=L;        aPos.array[o+3]=f.sign;
+          aAnim.array[o  ]=f.sway;  aAnim.array[o+1]=f.alpha*f.fade;
+          aAnim.array[o+2]=f.ang;   aAnim.array[o+3]=f.fin;
+          aTune.array[o  ]=f.kind;  aTune.array[o+1]=PR.fscale;
+          aTune.array[o+2]=Math.min(.92,PR.fmix*f.mixK);
+          aTune.array[o+3]=lodOf(L);
+          nf++;
+        }
+        fishGeo.instanceCount=nf;
+        aPos.needsUpdate=aAnim.needsUpdate=aTune.needsUpdate=true;
+        U_FISH.time.value=t;U_FISH.lum.value=lum;
+        renderer.setRenderTarget(rtBg);
+        renderer.render(fishScene,qc);
+      }
 
       /* 2/3. 低分辨率模糊，给泛光和气泡底部反光用 */
       const bw=1/(W*BS),bh=1/(H*BS);
