@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v2.4.1</title>
-<meta name="app-version" content="2.4.1">
+<title>魔法单词学院 · v2.5.0</title>
+<meta name="app-version" content="2.5.0">
 <!-- 空 favicon：不声明的话浏览器会自己去请求 /favicon.ico，控制台每次都报一条 404 -->
 <link rel="icon" href="data:,">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -346,6 +346,13 @@ h2.title{margin:4px 0 14px;font-size:21px;display:flex;align-items:center;gap:8p
   animation:spinSlow 9s linear infinite}
 .eggy .slot-ride{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%);font-size:56px;z-index:1}
 .eggy .slot-pet{position:absolute;bottom:0;left:-32px;font-size:40px;animation:hop 1.4s ease-in-out infinite;z-index:7}
+/* 衣服 / 裤子的 2D 兜底：.leg 是 z-index 1、.body 是 2、.belt 是 3，
+   所以裤子给 2（盖住腿）、衣服给 3（盖住身体，和腰带同层但靠 DOM 顺序在前）。
+   位置参照：.body 94×88 bottom:36、.leg 18×38 bottom:14、.belt bottom:66。 */
+.eggy .slot-cloth{position:absolute;left:50%;bottom:52px;transform:translateX(-50%);
+  font-size:46px;z-index:3;pointer-events:none}
+.eggy .slot-pants{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+  font-size:38px;z-index:2;pointer-events:none}
 .eggy .slot-badge{position:absolute;left:9%;bottom:42%;width:42px;height:42px;border-radius:50%;z-index:7;
   display:flex;align-items:center;justify-content:center;font-size:24px;border:3px solid #fff;
   box-shadow:0 5px 12px rgba(43,45,110,.28);animation:bdShine 2.6s ease-in-out infinite}
@@ -1255,6 +1262,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
         <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
         <div id="verBody" style="display:none;margin-top:6px">
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.5.0</b>：商店新增「👕 衣服」和「👖 裤子」两个分类，一共 7 件，都是真 3D 模型，不是贴图。<b>衣服 4 件</b>：见习长袍（25，亚麻色 + 粗布领口 + 腰间系绳）、学院罩衫（55，学院蓝 + 白翻领 + 两颗金扣）、符文战袍（160，酒红 + 胸前一枚会呼吸发光的符文圆盘，三根符文棒绕着它转 + 下摆金边）、星辉法衣（330，深靛 + 肩甲 + 一截长下摆，轮廓都变了 + 胸前会转的星星）。<b>裤子 3 件</b>：见习布裤（25）、月影短裤（50，灯笼状短裤裙，小腿露出来）、雷纹马裤（160，大腿外扩小腿收紧，裤侧两道会跑电的雷纹）。两个分类都从 25 币起步，通半段就能买一件。换上之后在商店左边的展示台上能拖着转圈看，WebGL 跑不起来的设备上也会在小人身上显示对应图标。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v2.4.1</b>：底部导航第三个标签从「徽章」改名为「徽章和海鱼」，因为这一页现在装了两样东西。标签变长了，窄屏上 5 个按钮分不到位置会换行把导航撑高，所以加了不换行 + 按屏宽等比缩字（430px 以下 11px、360px 以下 10px）。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
@@ -3062,6 +3071,7 @@ const X2_COUNT=10;      /* 双倍积分可用次数 */
 
 /* 5. 商店商品（花魔法币）。r：稀有度 normal/rare/epic/legend；d3:true 表示真 3D 建模 */
 const SLOTS=[{k:"badge",nm:"🏅 徽章"},{k:"hat",nm:"🎩 魔帽"},{k:"face",nm:"🕶️ 脸饰"},
+  {k:"cloth",nm:"👕 衣服"},{k:"pants",nm:"👖 裤子"},
   {k:"hand",nm:"🪄 法器"},{k:"back",nm:"🪽 背饰"},{k:"aura",nm:"💫 光环"},
   {k:"ride",nm:"🛹 坐骑"},{k:"pet",nm:"🐣 魔宠"},{k:"theme",nm:"🌈 结界"}];
 const RAR={normal:"",rare:"稀有",epic:"史诗",legend:"传说"};
@@ -3102,7 +3112,20 @@ const ITEMS=[
  {id:"r3",slot:"ride",ic:"🧞",nm:"魔法飞毯",price:400,r:"legend",d3:1},
  {id:"p4",slot:"pet",ic:"🐉",nm:"小飞龙",price:170,r:"rare",d3:1},
  {id:"p5",slot:"pet",ic:"🤖",nm:"机械魔偶",price:280,r:"epic",d3:1},
- {id:"p6",slot:"pet",ic:"🐲",nm:"炎龙宝宝",price:420,r:"legend",d3:1}
+ {id:"p6",slot:"pet",ic:"🐲",nm:"炎龙宝宝",price:420,r:"legend",d3:1},
+ /* 衣服：id 用 c 前缀。实现上是「给身体换色 + 叠装饰件」而不是套一层外壳 ——
+    身体是个旋转体，外面还挂着前襟金边、腰带、金扣，再套壳必然打架；而且身体
+    每帧有 ±1.8% 的呼吸缩放，紧贴的壳会逐帧穿模闪烁。换色还顺带把肩膀一起
+    变了（肩膀和身体共用同一个材质），整体反而更协调。 */
+ {id:"c1",slot:"cloth",ic:"👕",nm:"见习长袍",price:25,r:"normal",d3:1},
+ {id:"c2",slot:"cloth",ic:"👔",nm:"学院罩衫",price:55,r:"normal",d3:1},
+ {id:"c3",slot:"cloth",ic:"🧥",nm:"符文战袍",price:160,r:"rare",d3:1},
+ {id:"c4",slot:"cloth",ic:"👘",nm:"星辉法衣",price:330,r:"epic",d3:1},
+ /* 裤子：id 用 w 前缀（p 被魔宠占了）。这个走真外壳 —— 腿只是两根光圆柱、
+    没有呼吸缩放，套一层略粗的壳就把原来的深蓝裤腿完全盖住了，零风险。 */
+ {id:"w1",slot:"pants",ic:"👖",nm:"见习布裤",price:25,r:"normal",d3:1},
+ {id:"w2",slot:"pants",ic:"🩳",nm:"月影短裤",price:50,r:"normal",d3:1},
+ {id:"w3",slot:"pants",ic:"👖",nm:"雷纹马裤",price:160,r:"rare",d3:1}
 ];
 const THEME_CLS={t1:"t-rainbow",t2:"t-ocean",t3:"t-night"};
 
@@ -5756,6 +5779,12 @@ function eggyHTML(size){
     '<div class="leg l"></div><div class="leg r"></div>'+
     '<div class="ft l"></div><div class="ft r"></div>'+
     '<div class="body"></div><div class="belt"></div>'+
+    /* 衣服和裤子压在身体/腿上面。顺序决定 DOM 层序，但真正定位靠各自的
+       z-index：.leg 是 1、.body 是 2、.belt 是 3，所以裤子给 2、衣服给 3。
+       这是 WebGL 跑不起来时的兜底画面，学习页的欢迎界面用的也是它，
+       所以新槽位必须一并补上，不然孩子最常看到的那个小人不会换装。 */
+    (get("pants")?'<div class="slot-pants">'+get("pants")+'</div>':'')+
+    (get("cloth")?'<div class="slot-cloth">'+get("cloth")+'</div>':'')+
     '<div class="arm l"></div><div class="arm r"></div>'+
     '<div class="ear l"></div><div class="ear r"></div>'+
     '<div class="head"></div>'+
@@ -5777,7 +5806,10 @@ function applyTheme(){
 function renderShop(){
   showEggyStage();
   $("#shopCoin").textContent=S.coins;
-  const slotNames={badge:"徽章",hat:"魔帽",face:"脸饰",hand:"法器",back:"背饰",aura:"光环",ride:"坐骑",pet:"魔宠",theme:"结界"};
+  /* 注意这是第二份槽位名表（SLOTS[].nm 没被用到）。加新槽位必须同时改这里，
+     漏了的话标签和分类标题会显示 undefined。 */
+  const slotNames={badge:"徽章",hat:"魔帽",face:"脸饰",cloth:"衣服",pants:"裤子",
+    hand:"法器",back:"背饰",aura:"光环",ride:"坐骑",pet:"魔宠",theme:"结界"};
   $("#outfitCount").textContent="已装备 "+Object.values(S.equip).filter(Boolean).length+" 件";
   $("#shopCategory").textContent=slotNames[shopTab];
   $("#shopTabs").innerHTML=SLOTS.map(s=>'<button type="button" data-k="'+s.k+'" aria-pressed="'+(s.k===shopTab)+'" class="'+(s.k===shopTab?"on":"")+'">'+slotNames[s.k]+'</button>').join("");
@@ -7157,6 +7189,11 @@ window.makeEggyBase=function(T){
 (function(){
   let T=null,R=null,scene,cam,root,bob,eggy,body,cape,raf=null,clock=null;
   let slotGroups={},updaters=[],dragging=false,lastX=0,rotY=.3,spinV=.0018;
+  /* 身体的出厂色，换衣服时要能还原回来。第一次 refresh() 时记下。 */
+  let bodyCol0=null;
+  /* 每件衣服对应的身体颜色。和 BUILD 里那几个装饰件的配色是一套的：
+     见习长袍 亚麻 / 学院罩衫 学院蓝 / 符文战袍 酒红 / 星辉法衣 深靛 */
+  const CLOTH_COL={c1:0xB6A587,c2:0x3D6CA8,c3:0x7A2B46,c4:0x3A3878};
   const api=window.eggy3d={ready:false,init:init,refresh:refresh};
 
   function init(){
@@ -7217,7 +7254,12 @@ window.makeEggyBase=function(T){
     /* 坐骑：踩在上面而不是悬空 */
     r1:{y:-.45},       r2:{},              r3:{y:.02},
     /* 宠物 */
-    p4:{y:.25},        p5:{y:.3},          p6:{y:.25}
+    p4:{y:.25},        p5:{y:.3},         p6:{y:.25},
+    /* 衣服 / 裤子：模型都是按人物真实尺寸直接建的，不要任何偏移和缩放。
+       写成空对象是刻意的 —— FIT[id]||SPRITE_FIT[k]||{} 这条短路里，空对象
+       是 truthy，能挡住 SPRITE_FIT 的兜底，以后给这两个槽位加了兜底也不会误伤。 */
+    c1:{}, c2:{}, c3:{}, c4:{},
+    w1:{}, w2:{}, w3:{}
   };
   const SPRITE_FIT={
     hat:{y:.3,s:.8},                 /* 帽檐正好压在头顶 */
@@ -7524,7 +7566,138 @@ window.makeEggyBase=function(T){
       const jet=puff(0x9B5DE5,.8,.6);jet.position.y=-.56;g.add(jet);
       return {obj:g,update:t=>{g.position.y=Math.sin(t*2.2)*.12;g.rotation.y=Math.sin(t*.8)*.5;
         tip.rotation.y=t*2;visor.material.opacity=.6+.4*Math.abs(Math.sin(t*4));
-        jet.scale.setScalar(.7+Math.sin(t*6)*.2);}};}
+        jet.scale.setScalar(.7+Math.sin(t*6)*.2);}};},
+
+    /* ================= 衣服 =================
+       身体本身就是一件束腰短袍，所以「换衣服」= 给身体换色（见 CLOTH_COL）
+       + 在外面叠几个装饰件。
+       装饰件的位置全部按身体轮廓精确算过，并留出 loop() 里每帧 ±1.8% 呼吸
+       缩放的余量。几个关键数（含呼吸后的身体半径）：
+         y 0.52 → 0.224   y 0.49 → 0.326   y 0.46 → 0.428   y 0.33 → 0.445
+         y 0.06 → 0.382   y -0.24 → 0.419  y -0.60 → 0.526  y -0.62 → 0.529
+       所以领口不能摆在 y0.48~0.50（那里身体还有 0.29~0.36 粗），一律放到
+       y=0.535 —— 身体顶盖在 y=0.52 就结束了，那儿只有一根半径 0.16 的脖子。
+       胸前的件必须 z > 0.40，因为前襟金边占着 z 0.34~0.40。 */
+    /* 见习长袍：最朴素的一件，只加一道粗布领口和腰间系绳 */
+    c1(){const g=new T.Group();
+      const cloth=mat({color:0xA8977A,roughness:.72,clearcoat:.1,sheen:.3});
+      const collar=new T.Mesh(new T.TorusGeometry(.26,.05,10,36),cloth);
+      collar.rotation.x=Math.PI/2;collar.position.y=.535;g.add(collar);
+      /* 腰绳：z 要到 0.44，0.40 的话会扎进身体（y-0.24 处身体 0.419） */
+      [-.1,.1].forEach(x=>{
+        const s=new T.Mesh(new T.CylinderGeometry(.018,.014,.3,8),cloth);
+        s.position.set(x,-.24,.44);s.rotation.x=-.12;g.add(s);});
+      return {obj:g,update:t=>{}};},
+    /* 学院罩衫：白翻领 + 两颗金扣，学院派 */
+    c2(){const g=new T.Group();
+      const white=mat({color:0xF6F3EC,roughness:.5});
+      const collar=new T.Mesh(new T.TorusGeometry(.26,.05,12,40),white);
+      collar.rotation.x=Math.PI/2;collar.position.y=.535;g.add(collar);
+      /* 翻领的两个尖角。z=0.47 是算出来的下限：尖角内侧在 x=0.065，
+         那里的胸部表面（含呼吸）在 z=0.44，再加半个厚度才不扎进去。 */
+      [-.13,.13].forEach(x=>{
+        const f=new T.Mesh(new T.BoxGeometry(.13,.2,.03),white);
+        f.position.set(x,.33,.47);f.rotation.z=x>0?-.3:.3;g.add(f);});
+      [.1,-.12].forEach(y=>{
+        const b=new T.Mesh(new T.CylinderGeometry(.035,.035,.025,16),gold());
+        b.rotation.x=Math.PI/2;b.position.set(0,y,.44);g.add(b);});
+      return {obj:g,update:t=>{}};},
+    /* 符文战袍：胸前一枚会呼吸发光的符文圆盘 + 下摆一道金边 */
+    c3(){const g=new T.Group();
+      const rim=new T.Mesh(new T.TorusGeometry(.12,.022,10,30),gold());
+      rim.position.set(0,.06,.44);g.add(rim);
+      const core=new T.Mesh(new T.CircleGeometry(.105,24),glowMat(0xFFD166));
+      core.position.set(0,.06,.456);g.add(core);
+      /* 三根短符文棒，围着圆盘转一圈 */
+      const runes=[];
+      for(let i=0;i<3;i++){
+        const r=new T.Mesh(new T.BoxGeometry(.028,.075,.02),glowMat(0xFFE9A3));
+        g.add(r);runes.push(r);}
+      /* 下摆金边：y-0.60 处身体含呼吸 0.526，内半径 0.543 刚好骑在外面 */
+      const hem=new T.Mesh(new T.TorusGeometry(.575,.032,10,48),gold());
+      hem.rotation.x=Math.PI/2;hem.position.y=-.6;g.add(hem);
+      const collar=new T.Mesh(new T.TorusGeometry(.26,.05,10,36),gold());
+      collar.rotation.x=Math.PI/2;collar.position.y=.535;g.add(collar);
+      return {obj:g,update:t=>{
+        core.material.opacity=.55+.45*Math.abs(Math.sin(t*1.8));
+        runes.forEach((r,i)=>{const a=t*.9+i*2.094;
+          r.position.set(Math.cos(a)*.175,.06+Math.sin(a)*.175,.45);
+          r.rotation.z=-a;});}};},
+    /* 星辉法衣：加肩甲和一截长下摆，轮廓都变了，才值这个价 */
+    c4(){const g=new T.Group();
+      const deep=mat({color:0x3A3878,roughness:.45,sheen:.9,
+        sheenColor:new T.Color(0x9FB4FF),envMapIntensity:1.2});
+      /* 长下摆：从身体下摆往下接一截，半径 .56 起（身体 .52 带呼吸最多到 .53） */
+      const skirtProf=[[.56,-.62],[.60,-.76],[.62,-.88],[.60,-.96]];
+      const skirt=new T.Mesh(new T.LatheGeometry(
+        skirtProf.map(p=>new T.Vector2(p[0],p[1])),48),
+        new T.MeshPhysicalMaterial({color:0x3A3878,roughness:.45,side:T.DoubleSide,
+          sheen:.9,sheenColor:new T.Color(0x9FB4FF)}));
+      skirt.castShadow=true;g.add(skirt);
+      /* 下摆金边要骑在「长下摆」外面，不是身体外面 —— 下摆最宽处 y-0.88 是
+         0.62，所以内半径必须大于它（0.66-0.028=0.632）。
+         按身体算成 0.615 的话金边会整条埋进下摆里看不见。 */
+      const hem=new T.Mesh(new T.TorusGeometry(.66,.028,10,48),gold());
+      hem.rotation.x=Math.PI/2;hem.position.y=-.885;g.add(hem);
+      /* 肩甲：和身体同色（CLOTH_COL.c4 就是这个色），所以即使和自带的
+         肩球有一点交叠也看不出来。金边用同心的薄球带做，同心不会 z-fighting。 */
+      [-.44,.44].forEach(x=>{
+        const pad=new T.Mesh(new T.SphereGeometry(.2,20,16,0,Math.PI*2,0,Math.PI*.62),deep);
+        pad.position.set(x,.4,0);pad.scale.set(1,.85,1.05);pad.castShadow=true;g.add(pad);
+        const band=new T.Mesh(
+          new T.SphereGeometry(.206,20,10,0,Math.PI*2,Math.PI*.5,Math.PI*.12),gold());
+        band.position.set(x,.4,0);band.scale.set(1,.85,1.05);g.add(band);});
+      /* 胸前一颗星。八面体的后尖会往回伸 0.085，所以 z 要给到 0.49
+         才不会扎进前襟金边（z 到 0.40）。 */
+      const star=new T.Mesh(new T.OctahedronGeometry(.085),glowMat(0xFFF3C4));
+      star.position.set(0,.1,.49);g.add(star);
+      const collar=new T.Mesh(new T.TorusGeometry(.26,.05,10,36),gold());
+      collar.rotation.x=Math.PI/2;collar.position.y=.535;g.add(collar);
+      return {obj:g,update:t=>{
+        star.rotation.y=t*1.2;star.rotation.z=t*.6;
+        star.material.opacity=.6+.4*Math.abs(Math.sin(t*2.2));}};},
+
+    /* ================= 裤子 =================
+       挂点已经在腿的中心高度（世界 y=-0.78），所以这里全用相对坐标。
+       腿是 (±.22, 0, 0) 的圆柱，半径 .13→.15、高 .72（相对 y -.36~.36）；
+       靴口在相对 y=-.26 处，身体下摆底在相对 y=+.16。
+       所以「看得见的那段腿」只有相对 y -.26 ~ +.16，壳子盖住这一段就够了。
+       腿没有呼吸缩放，壳子贴到 +.02 就安全。 */
+    /* 见习布裤：最简单的两根裤腿 */
+    w1(){const g=new T.Group();
+      const cv=mat({color:0x9C8B73,roughness:.72,clearcoat:.08});
+      [-.22,.22].forEach(x=>{
+        const p=new T.Mesh(new T.CylinderGeometry(.175,.19,.5,20),cv);
+        p.position.set(x,-.01,0);p.castShadow=true;g.add(p);});
+      return {obj:g,update:t=>{}};},
+    /* 月影短裤：一片灯笼状的短裤裙，小腿露出来（原来的深蓝裤腿正好当长袜） */
+    w2(){const g=new T.Group();
+      const sh=new T.Mesh(new T.LatheGeometry(
+        [[.55,.18],[.60,.06],[.56,-.06],[.46,-.14]].map(p=>new T.Vector2(p[0],p[1])),48),
+        new T.MeshPhysicalMaterial({color:0x4A5578,roughness:.55,side:T.DoubleSide,
+          sheen:.6,sheenColor:new T.Color(0xB9C6F0)}));
+      sh.castShadow=true;g.add(sh);
+      const hem=new T.Mesh(new T.TorusGeometry(.465,.026,8,40),
+        mat({color:0xC9D2EE,roughness:.4}));
+      hem.rotation.x=Math.PI/2;hem.position.y=-.145;g.add(hem);
+      return {obj:g,update:t=>{}};},
+    /* 雷纹马裤：大腿外扩、小腿收紧，裤侧两道会跑电的雷纹 */
+    w3(){const g=new T.Group();
+      const cl=mat({color:0x4B3A6B,roughness:.5,clearcoat:.4});
+      const bolts=[];
+      [-.22,.22].forEach(x=>{
+        /* 上宽下窄：radiusTop 是大腿、radiusBottom 是脚踝 */
+        const p=new T.Mesh(new T.CylinderGeometry(.245,.175,.42,22),cl);
+        p.position.set(x,-.05,0);p.castShadow=true;g.add(p);
+        const cuff=new T.Mesh(new T.TorusGeometry(.178,.026,8,26),gold());
+        cuff.rotation.x=Math.PI/2;cuff.position.set(x,-.255,0);g.add(cuff);
+        /* 雷纹贴在裤腿外侧（x 更大的那一边），z 稍微往前一点才看得见 */
+        const b=new T.Mesh(new T.BoxGeometry(.03,.3,.02),glowMat(0xFFE066));
+        b.position.set(x*1.08,-.05,.19);b.rotation.z=x>0?-.18:.18;
+        g.add(b);bolts.push(b);});
+      return {obj:g,update:t=>{
+        bolts.forEach((b,i)=>{
+          b.material.opacity=.35+.65*Math.abs(Math.sin(t*5+i*1.6));});}};}
   };
   /* 翅膀 / 龙 两个共用构造器 */
   function wings(c1,c2,op,aurora){
@@ -7640,6 +7813,12 @@ window.makeEggyBase=function(T){
     slotGroups={
       hat:anchor(0,1.30,0),          /* 帽圈高度（压在头发上）*/
       face:anchor(0,.98,0),          /* 头的球心，环绕类的眼镜才能套正 */
+      /* 衣服挂在身体原点，和 body 的旋转体同一个坐标系，装饰件直接按身体
+         轮廓的半径摆就行（腰最细 .37、肩最宽 .44、下摆 .52）。 */
+      cloth:anchor(0,0,0),
+      /* 裤子挂在腿的中心高度。腿是 (±.22,-.78,0) 的两根圆柱，
+         所以这里给 -.78，模型里只要用相对坐标。 */
+      pants:anchor(0,-.78,0),
       hand:anchor(.62,-.5,.12),      /* 右手掌位置 */
       back:anchor(0,.40,-.36),
       aura:anchor(0,-.05,0),
@@ -7709,6 +7888,14 @@ window.makeEggyBase=function(T){
     });
     /* 披风类背饰会和自带披风打架，装上就把自带的收起来 */
     if(cape)cape.visible=((S.equip||{}).back!=="k2");
+    /* 换衣服 = 给身体换色。身体本身就是那件束腰短袍，直接改材质颜色最省事，
+       而且肩膀和身体共用同一个材质（makeEggyBase 里是 body.material），
+       会一起跟着变 —— 正好协调，不会出现「换了衣服但肩膀还是绿的」。
+       卸下时要能还原，所以第一次进来先把出厂色记下来。 */
+    if(body&&body.material){
+      if(bodyCol0===null)bodyCol0=body.material.color.getHex();
+      body.material.color.setHex(CLOTH_COL[(S.equip||{}).cloth]||bodyCol0);
+    }
     /* 坐骑时人物抬高一点 */
     const hasRide=!!(S.equip||{}).ride;
     bob.position.y=hasRide?.45:0;
