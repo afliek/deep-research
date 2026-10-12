@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>班级总跳绳数统计（AI跳绳大屏 · 10 次截屏汇总） · 深层研究</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root{
+    --bg:#0d0d0f; --panel:#15151a; --panel2:#1a1a21; --gold:#d4b06a; --gold-dim:#9c854e;
+    --text:#e8e4da; --muted:#a09a8c; --line:#2a2a32; --red:#e06c5f; --green:#7fb37f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"FangSong","仿宋","STFangsong",serif;
+    line-height:1.9; font-size:17px; position:relative;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:64px 48px 96px}
+  h1{font-family:"FangSong","仿宋",serif;font-size:34px;font-weight:400;color:var(--gold);
+    letter-spacing:2px;margin-bottom:10px}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:6px}
+  .tagline{display:inline-block;border:1px solid var(--gold-dim);color:var(--gold);font-size:13px;
+    padding:2px 12px;border-radius:999px;margin:14px 0 40px;letter-spacing:1px}
+  h2{font-size:24px;color:var(--gold);font-weight:400;margin:56px 0 18px;padding-left:14px;
+    border-left:3px solid var(--gold);letter-spacing:1px}
+  h3{font-size:19px;color:#e9dcc0;font-weight:400;margin:28px 0 10px}
+  p{margin-bottom:14px;text-align:justify}
+  table{width:100%;border-collapse:collapse;margin:18px 0 28px;font-size:15px;line-height:1.7}
+  th{background:#1e1a12;color:var(--gold);font-weight:400;text-align:left;
+    padding:10px 12px;border:1px solid var(--line);letter-spacing:.5px;white-space:nowrap}
+  td{padding:10px 12px;border:1px solid var(--line);vertical-align:top;background:var(--panel)}
+  tr:nth-child(even) td{background:var(--panel2)}
+  .num{color:#eec987;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .strong{font-weight:700}
+  .rk{color:var(--muted);white-space:nowrap}
+  .cls{color:var(--gold);font-weight:400;white-space:nowrap}
+  .who{color:var(--muted);font-size:12.5px}
+  tr.top1 td{background:#1e1a12}
+  .metric-row{display:flex;gap:16px;flex-wrap:wrap;margin:20px 0 8px}
+  .metric{flex:1 1 160px;border:1px solid var(--line);border-radius:10px;padding:16px 18px;background:var(--panel)}
+  .metric .v{font-size:24px;color:var(--gold);letter-spacing:.5px}
+  .metric .v small{font-size:13px;color:var(--muted)}
+  .metric .k{font-size:13.5px;color:var(--muted);margin-top:4px}
+  .callout{border:1px solid var(--line);background:linear-gradient(135deg,#16141a,#14161a);
+    padding:22px 26px;border-radius:10px;margin:22px 0}
+  .callout b{color:var(--gold);font-weight:400}
+  .warn{border:1px solid #6b4a1f;background:linear-gradient(135deg,#1e1810,#1a160e);
+    padding:18px 24px;border-radius:10px;margin:22px 0;color:#e8c88f}
+  ul{margin:0 0 16px 26px}
+  li{margin-bottom:10px;text-align:justify}
+  .chart{width:100%;height:auto;display:block;margin:8px 0 4px}
+  text.bv{font-size:13px;font-weight:700;fill:#e8e4da;text-anchor:middle;font-family:"FangSong","仿宋",serif}
+  text.bl{font-size:13px;fill:#a09a8c;text-anchor:middle;font-family:"FangSong","仿宋",serif}
+  .duo{display:flex;gap:24px;flex-wrap:wrap}
+  .duo>div{flex:1 1 320px;min-width:300px}
+  .matrix{font-size:12px;line-height:1.5}
+  .matrix th{font-size:11.5px;padding:6px 3px;text-align:center;white-space:normal}
+  .matrix .th2{font-weight:400;color:var(--muted);font-size:10.5px}
+  .matrix td{padding:6px 3px;text-align:center;border:1px solid var(--line)}
+  .matrix td b{display:block;font-size:12.5px;color:var(--text);font-weight:400}
+  .matrix .sc{display:block;font-size:15px;color:#eec987;font-weight:700;font-variant-numeric:tabular-nums}
+  .matrix .it{display:block;font-size:10px;color:var(--muted)}
+  .matrix .nt{display:inline-block;margin-top:2px;font-size:10px;background:#2a1512;color:var(--red);
+    border-radius:4px;padding:0 4px}
+  .matrix .zero{opacity:.55}
+  .matrix .zero .sc{color:#6b6558}
+  .matrix .q{background:var(--panel2)}
+  .matrix .inv{background:#221311}
+  .matrix .inv .sc{color:var(--red)}
+  .legend{font-size:12.5px;color:var(--muted);margin:-14px 0 24px}
+  .foot{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px;line-height:1.8}
+  .site-nav{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(13,13,15,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:100}
+  .nav-brand{color:var(--text);text-decoration:none;font-size:17px;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+  .nav-brand .dot{width:8px;height:8px;background:var(--gold);border-radius:50%;box-shadow:0 0 12px var(--gold)}
+  .nav-back{color:var(--muted);text-decoration:none;font-size:13px;transition:color .2s}
+  .nav-back:hover{color:var(--gold)}
+  @media print{body{background:#fff}.site-nav{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回 跳绳</a>
+</nav>
+
+<div class="wrap" style="padding-top:96px">
+
+<h1>班级总跳绳数统计</h1>
+<div class="sub">AI跳绳大屏 10 次截屏 · 按位次归班汇总 · 2026-10-12</div>
+<div class="tagline">第 N 位 = 同一个班 · 8 个班 80 人次 · 总分 14,653 个</div>
+
+<div class="metric-row">
+  <div class="metric"><div class="v">8 <small>个班</small></div><div class="k">第 1–8 位对应 A1–A8 班</div></div>
+  <div class="metric"><div class="v">80 <small>人次</small></div><div class="k">8 班 × 10 张照片</div></div>
+  <div class="metric"><div class="v">14,653</div><div class="k">班级总分合计</div></div>
+  <div class="metric"><div class="v">209.3 <small>个/人</small></div><div class="k">有效人均（70 人次）</div></div>
+  <div class="metric"><div class="v">75 <small>次</small></div><div class="k">中断合计</div></div>
+  <div class="metric"><div class="v">288</div><div class="k">个人最高：李为又（A3 班）</div></div>
+</div>
+
+<h2>一、班级总分排名</h2>
+<p>总分 = 该班在对应位次上、10 张照片中全部有效成绩之和；每班 10 人次。中断次数为 10 次截屏合计值。</p>
+<svg class="chart" viewBox="0 0 880 290" xmlns="http://www.w3.org/2000/svg"><line x1='20' y1='252' x2='860' y2='252' stroke='#2a2a32' stroke-width='1'/><rect x='20.0' y='37.0' width='76' height='215.0' rx='4' fill='#eec987'/><text x='58.0' y='29.0' class='bv'>2,189</text><text x='58.0' y='274' class='bl'>A2 班</text><rect x='129.1' y='41.5' width='76' height='210.5' rx='4' fill='#d4b06a'/><text x='167.1' y='33.5' class='bv'>2,143</text><text x='167.1' y='274' class='bl'>A1 班</text><rect x='238.3' y='41.6' width='76' height='210.4' rx='4' fill='#d4b06a'/><text x='276.3' y='33.6' class='bv'>2,142</text><text x='276.3' y='274' class='bl'>A6 班</text><rect x='347.4' y='48.1' width='76' height='203.9' rx='4' fill='#d4b06a'/><text x='385.4' y='40.1' class='bv'>2,076</text><text x='385.4' y='274' class='bl'>A3 班</text><rect x='456.6' y='48.3' width='76' height='203.7' rx='4' fill='#d4b06a'/><text x='494.6' y='40.3' class='bv'>2,074</text><text x='494.6' y='274' class='bl'>A5 班</text><rect x='565.7' y='53.4' width='76' height='198.6' rx='4' fill='#d4b06a'/><text x='603.7' y='45.4' class='bv'>2,022</text><text x='603.7' y='274' class='bl'>A4 班</text><rect x='674.9' y='54.9' width='76' height='197.1' rx='4' fill='#d4b06a'/><text x='712.9' y='46.9' class='bv'>2,007</text><text x='712.9' y='274' class='bl'>A7 班</text><rect x='784.0' y='252.0' width='76' height='0.0' rx='4' fill='#3a3a44'/><text x='822.0' y='244.0' class='bv'>0</text><text x='822.0' y='274' class='bl'>A8 班</text></svg>
+<table>
+<thead><tr><th>排名</th><th>班级</th><th style="text-align:right">总分</th><th style="text-align:right">有效人数</th><th style="text-align:right">人均</th><th style="text-align:right">最高分</th><th style="text-align:right">最低分</th><th style="text-align:right">中断合计</th><th style="text-align:right">未识别</th></tr></thead>
+<tbody><tr class='top1'><td class='rk'>🥇 1</td><td class='cls'>A2 班</td><td class='num strong'>2,189</td><td class='num'>10</td><td class='num'>218.9</td><td class='num'>240<span class='who'>（曹荣霆）</span></td><td class='num'>204</td><td class='num'>5</td><td class='num'>—</td></tr><tr><td class='rk'>🥈 2</td><td class='cls'>A1 班</td><td class='num strong'>2,143</td><td class='num'>10</td><td class='num'>214.3</td><td class='num'>237<span class='who'>（钟正浩）</span></td><td class='num'>172</td><td class='num'>12</td><td class='num'>—</td></tr><tr><td class='rk'>🥉 3</td><td class='cls'>A6 班</td><td class='num strong'>2,142</td><td class='num'>10</td><td class='num'>214.2</td><td class='num'>250<span class='who'>（翁熙媛）</span></td><td class='num'>190</td><td class='num'>12</td><td class='num'>—</td></tr><tr><td class='rk'> 4</td><td class='cls'>A3 班</td><td class='num strong'>2,076</td><td class='num'>10</td><td class='num'>207.6</td><td class='num'>288<span class='who'>（李为又）</span></td><td class='num'>136</td><td class='num'>11</td><td class='num'>3 人</td></tr><tr><td class='rk'> 5</td><td class='cls'>A5 班</td><td class='num strong'>2,074</td><td class='num'>10</td><td class='num'>207.4</td><td class='num'>243<span class='who'>（王乙臣）</span></td><td class='num'>185</td><td class='num'>12</td><td class='num'>1 人</td></tr><tr><td class='rk'> 6</td><td class='cls'>A4 班</td><td class='num strong'>2,022</td><td class='num'>10</td><td class='num'>202.2</td><td class='num'>237<span class='who'>（石依侬）</span></td><td class='num'>178</td><td class='num'>9</td><td class='num'>1 人</td></tr><tr><td class='rk'> 7</td><td class='cls'>A7 班</td><td class='num strong'>2,007</td><td class='num'>10</td><td class='num'>200.7</td><td class='num'>219<span class='who'>（李沫霖）</span></td><td class='num'>174</td><td class='num'>14</td><td class='num'>1 人</td></tr><tr><td class='rk'> 8</td><td class='cls'>A8 班</td><td class='num strong'>0</td><td class='num'>0</td><td class='num'>—</td><td class='num'>—</td><td class='num'>—</td><td class='num'>0</td><td class='num'>3 人</td></tr></tbody>
+</table>
+
+<h2>二、每张照片总分与个人 TOP 10</h2>
+<div class="duo">
+<div>
+<h3>每张照片总分（第 1–8 位合计）</h3>
+<table><thead><tr><th>照片</th><th style="text-align:right">当屏 8 位总分</th></tr></thead>
+<tbody><tr><td class='rk'>图 1</td><td class='num strong'>1,641</td></tr><tr><td class='rk'>图 2</td><td class='num strong'>1,523</td></tr><tr><td class='rk'>图 3</td><td class='num strong'>1,487</td></tr><tr><td class='rk'>图 4</td><td class='num strong'>1,500</td></tr><tr><td class='rk'>图 5</td><td class='num strong'>1,389</td></tr><tr><td class='rk'>图 6</td><td class='num strong'>1,411</td></tr><tr><td class='rk'>图 7</td><td class='num strong'>1,451</td></tr><tr><td class='rk'>图 8</td><td class='num strong'>1,406</td></tr><tr><td class='rk'>图 9</td><td class='num strong'>1,420</td></tr><tr><td class='rk'>图 10</td><td class='num strong'>1,425</td></tr></tbody></table>
+</div>
+<div>
+<h3>个人成绩 TOP 10</h3>
+<table><thead><tr><th>#</th><th>姓名</th><th>班级</th><th style="text-align:right">跳绳数</th><th style="text-align:right">出处</th></tr></thead>
+<tbody><tr><td class='rk'>1</td><td>李为又</td><td class='cls'>A3 班</td><td class='num strong'>288</td><td class='num rk'>图 1</td></tr><tr><td class='rk'>2</td><td>翁熙媛</td><td class='cls'>A6 班</td><td class='num strong'>250</td><td class='num rk'>图 1</td></tr><tr><td class='rk'>3</td><td>王乙臣</td><td class='cls'>A5 班</td><td class='num strong'>243</td><td class='num rk'>图 8</td></tr><tr><td class='rk'>4</td><td>曹荣霆</td><td class='cls'>A2 班</td><td class='num strong'>240</td><td class='num rk'>图 3</td></tr><tr><td class='rk'>5</td><td>邵子权</td><td class='cls'>A2 班</td><td class='num strong'>238</td><td class='num rk'>图 2</td></tr><tr><td class='rk'>6</td><td>钟正浩</td><td class='cls'>A1 班</td><td class='num strong'>237</td><td class='num rk'>图 3</td></tr><tr><td class='rk'>7</td><td>石依侬</td><td class='cls'>A4 班</td><td class='num strong'>237</td><td class='num rk'>图 1</td></tr><tr><td class='rk'>8</td><td>王瑞阳</td><td class='cls'>A2 班</td><td class='num strong'>236</td><td class='num rk'>图 1</td></tr><tr><td class='rk'>9</td><td>韩初懿</td><td class='cls'>A1 班</td><td class='num strong'>233</td><td class='num rk'>图 1</td></tr><tr><td class='rk'>10</td><td>戴语聪</td><td class='cls'>A1 班</td><td class='num strong'>232</td><td class='num rk'>图 2</td></tr></tbody></table>
+</div>
+</div>
+
+<h2>三、完整数据（10 张照片 × 10 个位次）</h2>
+<div style="overflow-x:auto">
+<table class="matrix"><thead><tr><th>照片</th><th>第 1 位<br><span class='th2'>A1 班</span></th><th>第 2 位<br><span class='th2'>A2 班</span></th><th>第 3 位<br><span class='th2'>A3 班</span></th><th>第 4 位<br><span class='th2'>A4 班</span></th><th>第 5 位<br><span class='th2'>A5 班</span></th><th>第 6 位<br><span class='th2'>A6 班</span></th><th>第 7 位<br><span class='th2'>A7 班</span></th><th>第 8 位<br><span class='th2'>A8 班</span></th><th>第 9 位<br><span class='th2'>候场 班</span></th><th>第 10 位<br><span class='th2'>候场 班</span></th></tr></thead><tbody><tr><td class='rk'>图 1</td><td class='cell ok'><b>韩初懿</b><span class='sc'>233</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>王瑞阳</b><span class='sc'>236</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>李为又</b><span class='sc'>288</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>石依侬</b><span class='sc'>237</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>陈睿阳</b><span class='sc'>189</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>翁熙媛</b><span class='sc'>250</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>方伊一</b><span class='sc'>208</span><span class='it'>中断 1 次</span></td><td class='cell zero'><b>A8</b><span class='sc'>0</span><span class='it'>中断 0 次</span><span class='nt'>未识别</span></td><td class='cell zero'><b>李娟</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 2</td><td class='cell ok'><b>戴语聪</b><span class='sc'>232</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>邵子权</b><span class='sc'>238</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>邵渝馨</b><span class='sc'>203</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>A4</b><span class='sc'>223</span><span class='it'>中断 0 次</span><span class='nt'>未识别</span></td><td class='cell ok'><b>靳雅萍</b><span class='sc'>185</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>杨小阿</b><span class='sc'>230</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>高翊豪</b><span class='sc'>212</span><span class='it'>中断 1 次</span></td><td class='cell zero'><b>A8</b><span class='sc'>0</span><span class='it'>中断 0 次</span><span class='nt'>未识别</span></td><td class='cell zero'><b>李娟</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 3</td><td class='cell ok'><b>钟正浩</b><span class='sc'>237</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>曹荣霆</b><span class='sc'>240</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>王悦宁</b><span class='sc'>220</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>汪瑞玲</b><span class='sc'>196</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>段熙雯</b><span class='sc'>198</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>李欣逸</b><span class='sc'>196</span><span class='it'>中断 4 次</span></td><td class='cell ok'><b>张笑颜</b><span class='sc'>200</span><span class='it'>中断 4 次</span></td><td class='cell zero'><b>彭清如</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>王千源</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>戴语聪</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 4</td><td class='cell ok'><b>袁陈星…</b><span class='sc'>228</span><span class='it'>中断 2 次</span><span class='nt'>屏显截断</span></td><td class='cell ok'><b>康子煦</b><span class='sc'>220</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>梁芷涵</b><span class='sc'>213</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>李奕萱</b><span class='sc'>214</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>郭乐仁</b><span class='sc'>216</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>赵奕鸣</b><span class='sc'>190</span><span class='it'>中断 5 次</span></td><td class='cell ok'><b>李沫霖</b><span class='sc'>219</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>彭清如</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell q'><b>潘周子</b><span class='sc'>1</span><span class='it'>中断 0 次</span></td><td class='cell inv'><b>燕予羲</b><span class='sc'>3</span><span class='it'>中断 0 次</span><span class='nt'>成绩无效</span></td></tr><tr><td class='rk'>图 5</td><td class='cell ok'><b>秦可滢</b><span class='sc'>209</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>梁思齐</b><span class='sc'>212</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>A3</b><span class='sc'>136</span><span class='it'>中断 3 次</span><span class='nt'>未识别</span></td><td class='cell ok'><b>耿沐恩</b><span class='sc'>203</span><span class='it'>中断 3 次</span></td><td class='cell ok'><b>刘桉辰</b><span class='sc'>202</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>冷和暄</b><span class='sc'>224</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>任嘉安</b><span class='sc'>203</span><span class='it'>中断 1 次</span></td><td class='cell zero'><b>蒋思玄</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>姜梓玉</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 6</td><td class='cell ok'><b>蔡雨辰</b><span class='sc'>203</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>高亦北</b><span class='sc'>204</span><span class='it'>中断 3 次</span></td><td class='cell ok'><b>刘骁川</b><span class='sc'>190</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>胡瑀涵</b><span class='sc'>179</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>孟奕言</b><span class='sc'>225</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>靳雅萍</b><span class='sc'>197</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>A7</b><span class='sc'>213</span><span class='it'>中断 0 次</span><span class='nt'>未识别</span></td><td class='cell zero'><b>彭清如</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell q'><b>李娟</b><span class='sc'>1</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 7</td><td class='cell ok'><b>白宜平</b><span class='sc'>206</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>付烊年</b><span class='sc'>214</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>A3</b><span class='sc'>212</span><span class='it'>中断 1 次</span><span class='nt'>未识别</span></td><td class='cell ok'><b>廖明雅</b><span class='sc'>194</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>齐悦伊</b><span class='sc'>210</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>陈彦冰</b><span class='sc'>219</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>刘芊妤</b><span class='sc'>196</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>张皓淇</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>姜梓玉</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>肖羲和</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 8</td><td class='cell ok'><b>王雅菡</b><span class='sc'>172</span><span class='it'>中断 8 次</span></td><td class='cell ok'><b>杨宸翌</b><span class='sc'>208</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>A3</b><span class='sc'>213</span><span class='it'>中断 1 次</span><span class='nt'>未识别</span></td><td class='cell ok'><b>李沐梵</b><span class='sc'>178</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>王乙臣</b><span class='sc'>243</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>王毅承</b><span class='sc'>218</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>房沛谦</b><span class='sc'>174</span><span class='it'>中断 3 次</span></td><td class='cell zero'><b>A8</b><span class='sc'>0</span><span class='it'>中断 0 次</span><span class='nt'>未识别</span></td><td class='cell zero'><b>李娟</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭一辰</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 9</td><td class='cell ok'><b>牛璐予</b><span class='sc'>214</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>孙云谦</b><span class='sc'>209</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>孟奕行</b><span class='sc'>202</span><span class='it'>中断 1 次</span></td><td class='cell ok'><b>屈倚墨</b><span class='sc'>201</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>张沐欣</b><span class='sc'>205</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>范期伊</b><span class='sc'>205</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>郭彦邦</b><span class='sc'>184</span><span class='it'>中断 3 次</span></td><td class='cell zero'><b>张知愉</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>孟冠宇</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr><tr><td class='rk'>图 10</td><td class='cell ok'><b>董颜歆</b><span class='sc'>209</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>韩昕彤</b><span class='sc'>208</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>徐睿文</b><span class='sc'>199</span><span class='it'>中断 2 次</span></td><td class='cell ok'><b>叶思琦</b><span class='sc'>197</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>A5</b><span class='sc'>201</span><span class='it'>中断 3 次</span><span class='nt'>未识别</span></td><td class='cell ok'><b>吴奕霖</b><span class='sc'>213</span><span class='it'>中断 0 次</span></td><td class='cell ok'><b>邹稷阳</b><span class='sc'>198</span><span class='it'>中断 1 次</span></td><td class='cell zero'><b>张皓淇</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>孟冠宇</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td><td class='cell zero'><b>郭海</b><span class='sc'>0</span><span class='it'>中断 0 次</span></td></tr></tbody></table>
+</div>
+<div class="legend">图例：正常底 = 第 1–8 位班级位有效成绩；深底 = 第 9–10 位候场位；红色 = 成绩无效；灰色 = 0 分（尚未开始测试）。</div>
+
+<h2>四、口径与备注</h2>
+<ul>
+<li><b>位次归班依据：</b>按「每张照片第 N 位是同一个班」的规则归集；大屏上的未识别标识 A3 / A4 / A5 / A7 / A8 恰好只出现在第 3 / 4 / 5 / 7 / 8 位，与规则一一印证。</li>
+<li><b>总分口径：</b>仅统计第 1–8 位（A1–A8 班）的有效成绩；屏幕显示 0 = 该学生尚未开始测试（大屏按钮为「举手开始测试」），计入人次、不计分。</li>
+<li><b>未识别学生：</b>共 9 人次屏幕只显示班级代号（A3×3、A4、A5、A7 各 1、A8×3），其中 6 人次有有效成绩（A3：136 / 212 / 213、A4：223、A5：201、A7：213），已计入对应班总分；A8 的 3 人次均为 0 分。</li>
+<li><b>无效成绩：</b>燕予羲 3 个（图 4 · 第 10 位）屏幕标注「成绩无效」，未计入任何合计。</li>
+<li><b>第 9、10 位存疑：</b>两位从未出现 A9 / A10 标识，10 张照片中分数全部为 0–3，且反复出现同一批姓名（郭海 ×6、李娟 ×4、孟冠宇 ×2、姜梓玉 ×2），判断为候场 / 排队学生而非独立班级，故未单列。若该校确有 A9、A10 两个班，其可见有效分仅约 2 个和 3 个（另含 1 个无效成绩）。</li>
+<li><b>A8 班（第 8 位）10 个位次全部为 0：</b>该列先后出现 A8（未识别）×3、彭清如 ×3、蒋思玄、张皓淇 ×2、张知愉，均显示 0 分。如该班实际已比完，可能是大屏该列未刷新或照片时段错过。</li>
+</ul>
+<div class="warn"><b>两处数据异常（已按位次归班统计，建议与老师核对）：</b>① 戴语聪：图2第1位（232个）、图3第10位（0个）；靳雅萍：图2第5位（185个）、图6第6位（197个） —— 同一姓名出现在两个不同位次，可能是同名学生或设备串位；② 戴语聪：图 2 第 1 位 232 个、图 3 第 10 位 0 个（第 10 位为候场位，不影响总分）。</div>
+
+<div class="foot">
+数据来源：2026-10-12 现场「AI跳绳」大屏照片 10 张，每张 10 个位次，姓名 / 跳绳数 / 中断次数均为屏幕原值逐项核对录入。<br>
+统计口径：第 N 位 = 同一个班（详见上文）；有效成绩 70 人次；班级总分合计 14,653 个；人均 209.3 个。<br>
+生成：Step-5-Preview · 2026-10-12 · 深层研究 afliek.github.io/deep-research
+</div>
+
+</div>
+</body>
+</html>
