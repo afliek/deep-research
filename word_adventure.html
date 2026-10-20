@@ -6,8 +6,8 @@
 <!-- 不发送来源信息：中文语音服务会拒绝带来源的请求，去掉后中文才能正常发声；
      实测英文单词通道不受影响，反而更快。 -->
 <meta name="referrer" content="no-referrer">
-<title>魔法单词学院 · v2.5.0</title>
-<meta name="app-version" content="2.5.0">
+<title>魔法单词学院 · v2.6.0</title>
+<meta name="app-version" content="2.6.0">
 <!-- 空 favicon：不声明的话浏览器会自己去请求 /favicon.ico，控制台每次都报一条 404 -->
 <link rel="icon" href="data:,">
 <script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
@@ -88,6 +88,8 @@ body.t-rainbow .panel,body.t-ocean .panel,body.t-night .panel{
 /* 开发者模式：地图上的词表入口 + 词表弹窗 */
 .dev-list-btn{display:block;width:100%;margin-top:5px;border:2px dashed #9AA6B8;background:#F3F5F8;
   color:#3B4758;border-radius:12px;padding:5px 0;font-family:inherit;font-weight:bold;font-size:12px;cursor:pointer}
+.replay-btn{display:block;width:100%;min-height:44px;margin-top:5px;border:2px solid var(--region,#7660B4);background:#fff;
+  color:var(--region,#7660B4);border-radius:12px;padding:5px 0;font-family:inherit;font-weight:bold;font-size:12px;cursor:pointer}
 .dev-words{display:flex;flex-direction:column;gap:7px;max-height:46vh;overflow:auto;margin-bottom:8px}
 .dw{display:flex;align-items:center;gap:8px;background:#F7F9FC;border:2px solid #E4EAF2;border-radius:14px;padding:7px 10px}
 .dw .en{font-weight:bold;font-size:17px}
@@ -1262,6 +1264,8 @@ body.t-night .release-footer,body.t-night .release-footer a{color:#F1EAFB}
         <div class="pa-t">🧾 版本与回退 · <span data-app-version></span></div>
         <button class="btn sm ghost" id="verToggle" style="width:100%">📜 查看各版本详细记录 ▾</button>
         <div id="verBody" style="display:none;margin-top:6px">
+        <p class="tips" style="text-align:left;margin:0 0 6px">
+          <b>v2.6.0</b>：打赢过守关怪的关卡，地图上会多一个「📖 再做一遍阅读理解」按钮，可以随时把这一段的阅读文章和 5 道题重新做一遍。复习模式照样打怪，但不开盲盒、不发积分和转盘、不改通关记录；答错的题仍会记进家长面板的错题本。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
           <b>v2.5.0</b>：商店新增「👕 衣服」和「👖 裤子」两个分类，一共 7 件，都是真 3D 模型，不是贴图。<b>衣服 4 件</b>：见习长袍（25，亚麻色 + 粗布领口 + 腰间系绳）、学院罩衫（55，学院蓝 + 白翻领 + 两颗金扣）、符文战袍（160，酒红 + 胸前一枚会呼吸发光的符文圆盘，三根符文棒绕着它转 + 下摆金边）、星辉法衣（330，深靛 + 肩甲 + 一截长下摆，轮廓都变了 + 胸前会转的星星）。<b>裤子 3 件</b>：见习布裤（25）、月影短裤（50，灯笼状短裤裙，小腿露出来）、雷纹马裤（160，大腿外扩小腿收紧，裤侧两道会跑电的雷纹）。两个分类都从 25 币起步，通半段就能买一件。换上之后在商店左边的展示台上能拖着转圈看，WebGL 跑不起来的设备上也会在小人身上显示对应图标。</p>
         <p class="tips" style="text-align:left;margin:0 0 6px">
@@ -3286,6 +3290,12 @@ function renderMap(){
         }catch(e){alert("出错了："+(e&&e.message||e));console.error(e);}
       };
       const stop=document.createElement("li");stop.className="route-stop";stop.appendChild(d);
+      if(S.boss[i]&&BOSS_STORY[i]&&!DEV()){    /* 打赢过的段：可以再做一遍阅读理解 */
+        const b=document.createElement("button");b.type="button";b.className="replay-btn";
+        b.textContent="📖 再做一遍阅读理解";
+        b.onclick=e=>{e.stopPropagation();startBoss(i,false,true);};
+        stop.appendChild(b);
+      }
       if(DEV()&&has){                          /* 开发者模式：每段挂一个词表入口 */
         const b=document.createElement("button");b.type="button";b.className="dev-list-btn";
         b.textContent="🛠️ 单词表 / 阅读理解";
@@ -5118,16 +5128,17 @@ function buildBossPaper(seg){
 let bossState=null;
 const BOSS_HITS=4;                            /* 打几枪能放倒怪物 */
 const BOSS_STEPS=3;                           /* 怪物走几步就到小人面前 */
-function startBoss(seg,dev){
+/* practice：已经打赢过的段，从地图上再做一遍阅读理解，不发奖励、不改通关记录 */
+function startBoss(seg,dev,practice){
   clearTimeout(qTimer);qTimer=null;sess=null;stopSpeak();stopRead();
   const paper=buildBossPaper(seg);
   if(!paper){                                  /* 词不够，直接放行 */
-    if(dev){toast("这一段可用例句不够，凑不出阅读文章");return;}
+    if(dev||practice){toast("这一段可用例句不够，凑不出阅读文章");return;}
     grantPendingPiece(seg);goView("puzzle");return;
   }
   const bi=attrOf(seg);
   bossState={seg,paper,idx:-1,hp:BOSS_HITS,hpMax:BOSS_HITS,qMax:paper.qs.length,
-             step:0,bi,mon:monOf(seg),dev:!!dev,busy:false,wrong:[]};
+             step:0,bi,mon:monOf(seg),dev:!!dev,practice:!!practice,busy:false,wrong:[]};
   goView("learn");renderBoss();
 }
 /* 小魔法师 + 魔法枪，纯内联 SVG，不要外部图片 */
@@ -5164,6 +5175,7 @@ function renderBoss(){
         '<div class="f-hp" id="fHp"></div></div>'+
       '<div class="f-step" id="fStep"></div>'+
     '</div>'+
+    (B.practice?'<p class="tips" style="margin:6px 0 0">📖 复习模式：这一关已经打赢过，再练一遍不发奖励</p>':'')+
     '<div class="article"><div style="font-weight:bold;font-size:19px;margin-bottom:6px">'+p.title+'</div>'+
       p.html+'</div>'+
     '<p class="tips" style="margin:6px 0 0">点文章里带下划线的单词，可以看中文意思</p>'+
@@ -5362,6 +5374,21 @@ function bossWin(){
     [0,1,2].map(()=>'<button class="bbox">🎁</button>').join("")+
     '</div><p class="tips" id="boxTip" style="margin:2px 0 8px">🎁 挑一个盲盒打开，看看是什么奖励！</p>';
   stopRead();
+  if(B.practice&&!B.dev){                    /* 复习打赢：只庆祝，不开盲盒、不重复记通关 */
+    SFX.big();confetti(24);
+    $("#learnArea").innerHTML=
+      '<div class="study"><div style="font-size:78px">🎉</div>'+
+      '<h2 class="title" style="justify-content:center">又一次打败 '+B.mon.nm+'！</h2>'+
+      '<p style="font-size:16px;font-weight:bold">复习模式不发奖励，读懂了才是真本事</p>'+
+      '<div class="row"><button class="btn green" id="bossAgain">🔁 再做一遍</button>'+
+      '<button class="btn ghost sm" id="bossLater">回地图</button></div>'+
+      (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
+      '</div>';
+    $("#bossAgain").onclick=()=>startBoss(B.seg,false,true);
+    $("#bossLater").onclick=()=>{bossState=null;renderMap();renderDaily();goView("map");};
+    bindBossRev(B);
+    return;
+  }
   if(B.dev){                                 /* 调试打赢：不发奖、不记通关 */
     SFX.big();confetti(24);
     $("#learnArea").innerHTML=
@@ -5417,7 +5444,7 @@ function bossLose(){
     '<button class="btn ghost sm" id="bossLater">稍后再战</button></div>'+
     (bossRevBtn(B)?'<div class="row" style="margin-top:8px">'+bossRevBtn(B)+'</div>':'')+
     '</div>';
-  $("#bossAgain").onclick=()=>startBoss(B.seg,B.dev);
+  $("#bossAgain").onclick=()=>startBoss(B.seg,B.dev,B.practice);
   bindBossRev(B);
   $("#bossLater").onclick=()=>{
     const s=B.seg,dev=B.dev;bossState=null;renderMap();renderDaily();goView("map");
