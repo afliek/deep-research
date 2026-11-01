@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股AI产业链 · 生存弹性表（2026三季报）</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script src="_shared/js/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#16181d; --ink2:#4a5058; --ink3:#8a919b;
+    --line:#e3e6eb; --up:#b8232f; --down:#12795c; --gold:#b08d3f;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;padding:0 0 60px;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7;font-size:15px;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  header{padding:52px 0 28px;border-bottom:1px solid var(--line);margin-bottom:28px;}
+  .kicker{font-size:12px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+  h1{font-size:29px;margin:0 0 12px;font-weight:650;letter-spacing:-.01em;}
+  .sub{color:var(--ink3);font-size:13.5px;}
+
+  .tldr{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:4px;padding:22px 26px;margin-bottom:28px;}
+  .tldr h2{font-size:14px;margin:0 0 12px;letter-spacing:.1em;color:var(--gold);font-weight:600;}
+  .tldr p{margin:0 0 10px;}
+  .tldr p:last-child{margin-bottom:0;}
+
+  .callout{background:#fdf6f6;border:1px solid #f0dede;border-radius:4px;padding:18px 22px;
+    margin-bottom:26px;font-size:14px;color:var(--ink2);}
+  .callout b{color:var(--up);}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.08em;color:var(--up);
+    border:1px solid #e8c9c9;border-radius:2px;padding:1px 7px;margin-right:8px;vertical-align:1px;}
+
+  section{margin-bottom:40px;}
+  h3{font-size:18px;margin:0 0 6px;font-weight:620;}
+  h3 .num{color:var(--gold);font-weight:400;margin-right:8px;font-size:15px;}
+  .lede{color:var(--ink2);font-size:14px;margin:0 0 18px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:20px 22px;}
+  .chart{width:100%;height:600px;}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);}
+  th{text-align:left;padding:11px 8px;border-bottom:1.5px solid var(--ink);font-weight:600;
+    font-size:11.5px;color:var(--ink2);white-space:nowrap;}
+  td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55;}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  tr:hover td{background:#fbfbfc;}
+  .code{color:var(--ink3);font-size:11px;font-variant-numeric:tabular-nums;margin-left:6px;}
+  .seg{display:inline-block;font-size:10.5px;color:var(--ink3);border:1px solid var(--line);
+    border-radius:2px;padding:0 5px;margin-left:6px;vertical-align:1px;}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:4px;}
+  .up{color:var(--up);font-weight:600;}
+  .down{color:var(--down);font-weight:600;}
+  .loss{color:#7d1620;font-weight:700;}
+  .rk{color:var(--ink3);font-size:12px;}
+  .eff{font-weight:700;color:var(--ink);}
+  .sv{display:inline-block;min-width:30px;text-align:center;border-radius:2px;padding:1px 5px;
+    font-weight:700;font-size:12px;}
+  .sGold{background:#f4ead5;color:#8a6d2a;}
+  .sOk{background:#eef1f5;color:#3d4characters;}
+  .sOk{background:#eef1f5;color:#3d4450;}
+  .sMid{background:#f0f1f3;color:#6b7280;}
+  .sBad{background:#f7e4e4;color:#8c1f26;}
+  .vd{display:inline-block;font-size:10.5px;letter-spacing:.04em;border-radius:2px;
+    padding:0 6px;border:1px solid;margin-bottom:2px;}
+  .vA{color:#8a6d2a;border-color:#ddc79a;background:#faf5ea;}
+  .vB{color:#a33;border-color:#e8c9c9;background:#fdf6f6;}
+  .vC{color:#7d1620;border-color:#dfb9bc;background:#fbedee;}
+  .vD{color:#3d4450;border-color:#d5dae1;background:#f4f6f8;}
+  .vE{color:#6b7280;border-color:#e0e3e8;background:#f7f8fa;}
+  .vF{color:#7d1620;border-color:#dfb9bc;background:#fbedee;}
+  .cm{color:var(--ink3);font-size:11.5px;}
+
+  .formula{background:#f4f6f9;border:1px solid #e3e6eb;border-radius:4px;padding:16px 20px;
+    font-family:ui-monospace,Consolas,monospace;font-size:13px;color:var(--ink2);margin-bottom:16px;}
+
+  .note{background:#fbfaf6;border:1px solid #ece5d3;border-radius:4px;padding:16px 20px;
+    font-size:13.5px;color:var(--ink2);}
+  .note b{color:var(--ink);}
+
+  .quad{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+  .q{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:16px 18px;}
+  .q h4{margin:0 0 8px;font-size:13.5px;font-weight:650;}
+  .q .who{font-size:12.5px;color:var(--ink2);margin:0 0 6px;}
+  .q .act{font-size:12px;color:var(--ink3);margin:0;}
+  .q.gold{border-left:3px solid var(--gold);}
+  .q.red{border-left:3px solid var(--up);}
+  .q.grey{border-left:3px solid #c3c9d2;}
+
+  footer{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3);}
+  footer p{margin:0 0 6px;}
+
+  @media (max-width:760px){ h1{font-size:22px;} .chart{height:520px;} .quad{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">A-Share · AI Value Chain · Survival × Elasticity</div>
+  <h1>生存弹性表：跌得狠，还得活得下来</h1>
+  <div class="sub">在上一版<b>业绩弹性</b>基础上叠加<b>资产负债表生存力</b>，18 家 · 财务数据取 2026 年三季报</div>
+</header>
+
+<div class="tldr">
+  <h2>核心结论</h2>
+  <p><b>把"能不能活到反弹那天"算进去，排名会重排。</b>名义弹性最高的一档是 5 家低谷会亏损的公司（弹性记为 ∞），但其中<b>紫光股份综合排名掉到第 16</b>（负债率 84.3%、现金比率 0.08、经营现金流 −8.4% 营收）、<b>浪潮信息掉到第 10</b>；<b>佰维存储名义 2.6 倍看着中游，综合却是全场垫底</b>（有息负债 52.5%、经营现金流 −46.2% 营收）。</p>
+  <p><b>综合第一不是海光，是胜宏科技。</b>名义弹性 6.0 倍（低谷保留率 16.6%，不亏的公司里最低），同时生存分 69——资产负债率 46.3%、经营现金流 +19.1% 营收。<b>它是唯一"跌得狠又不会倒"的标的。</b></p>
+  <p><b>天孚通信是稳健派里的异类：</b>生存分满分（有息负债 0.04%、现金比率 1.74、经营现金流 +30.8% 营收），名义弹性还有 3.0 倍，综合排第 5——<b>比中际旭创高两位</b>。</p>
+  <p><b>一句话：弹性决定你弹多高，生存决定你有没有资格弹。</b>这张表筛掉的是那些"报表上会弹 3 倍、实际在低谷被银行和存货拖死"的公司。</p>
+</div>
+
+<section>
+  <h3><span class="num">01</span>为什么不能只看资产负债率</h3>
+  <p class="lede">中国制造业的资产负债率里，很大一块是"占用上游资金"，不是债。</p>
+  <div class="note">
+    <p style="margin:0 0 10px;"><b>浪潮信息负债率 85.4%，紫光股份 84.3%——但两家有息负债率只有 10.3% 和 26.6%。</b>剩下的大头是应付账款、应付票据、合同负债，说白了是"先拿货后付钱""先收钱后交货"。这类负债不付利息，只要生意还在转就不会爆。</p>
+    <p style="margin:0 0 10px;"><b>真正会要命的是另外两样：</b>① <b>有息负债率</b>——银行的钱到期必须还，低谷期续贷最难；② <b>经营现金流 ÷ 营收</b>——低谷期主业还能不能自己造血。</p>
+    <p style="margin:0;"><b>所以这张表的生存分用四个指标，各 25 分：</b>资产负债率（<25% 满分）、有息负债率（<5% 满分）、现金比率（>1.5 满分）、经营现金流/营收（>15% 满分）。<b>四个指标全绿才是真安全，缺一个就掉一档。</b></p>
+  </div>
+</section>
+
+<section>
+  <h3><span class="num">02</span>生存弹性表</h3>
+  <p class="lede">按<b>有效反弹</b>排序。低谷弹性沿用上一版测算（收入 −30%、毛利率压缩 30%、费用削减 15%），生存维度为本次新增。</p>
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:36px">#</th>
+        <th style="min-width:132px">公司</th>
+        <th style="text-align:right;min-width:104px">低谷弹性</th>
+        <th style="text-align:right">资产<br>负债率</th>
+        <th style="text-align:right">有息<br>负债率</th>
+        <th style="text-align:right;min-width:78px">经营现金流<br>÷ 营收</th>
+        <th style="text-align:right;width:56px">生存分</th>
+        <th style="text-align:right;width:66px">有效<br>反弹</th>
+        <th style="min-width:250px">判定与要点</th>
+      </tr>
+    </thead>
+    <tbody>
+<tr><td class="num rk">1</td><td><b>胜宏科技</b><span class="seg">PCB</span><span class="code">300476</span></td><td class="num"><span class="keep">16.6%</span> → <span class="mult">6.0×</span></td><td class="num">46.3%</td><td class="num">18.0%<br><span class="cashr">现金 0.75×</span></td><td class="num ">+19.1%</td><td class="num"><span class="sv sOk">69</span></td><td class="num eff">4.16×</td><td><span class="vd vA">攻守兼备</span><br><span class="cm">名义 6.0 倍、生存 69 分——唯一「跌得狠又不会倒」的标的，经营现金流 +19.1% 营收</span></td></tr>
+<tr><td class="num rk">2</td><td><b>海光信息</b><span class="seg">CPU/DCU</span><span class="code">688041</span></td><td class="num"><span class="loss">亏损</span> → <span class="loss">∞</span></td><td class="num">25.0%</td><td class="num">17.6%<br><span class="cashr">现金 1.05×</span></td><td class="num down">-16.3%</td><td class="num"><span class="sv sOk">62</span></td><td class="num eff">3.72×</td><td><span class="vd vB">高赔率 · 能扛</span><br><span class="cm">负债率仅 25% 看着干净，但经营现金流 −16.3% 营收——利润是账面的，钱没进来（备货与应收账款吃掉现金）</span></td></tr>
+<tr><td class="num rk">3</td><td><b>中科曙光</b><span class="seg">服务器</span><span class="code">603019</span></td><td class="num"><span class="loss">亏损</span> → <span class="loss">∞</span></td><td class="num">54.4%</td><td class="num">17.4%<br><span class="cashr">现金 1.11×</span></td><td class="num ">+2.2%</td><td class="num"><span class="sv sOk">62</span></td><td class="num eff">3.72×</td><td><span class="vd vB">高赔率 · 能扛</span><br><span class="cm">负债 54% 中性、现金流勉强打平，但四成利润靠投资收益——低谷时这部分直接消失</span></td></tr>
+<tr><td class="num rk">4</td><td><b>通富微电</b><span class="seg">封测</span><span class="code">002156</span></td><td class="num"><span class="loss">亏损</span> → <span class="loss">∞</span></td><td class="num">61.0%</td><td class="num">36.4%<br><span class="cashr">现金 0.51×</span></td><td class="num ">+22.3%</td><td class="num"><span class="sv sMid">50</span></td><td class="num eff">3.00×</td><td><span class="vd vB">高赔率 · 能扛</span><br><span class="cm">有息负债 36.4% 是封测通病，但经营现金流 +22.3% 营收全场第二好，折旧回血能力强</span></td></tr>
+<tr><td class="num rk">5</td><td><b>天孚通信</b><span class="seg">光器件</span><span class="code">300394</span></td><td class="num"><span class="keep">33.6%</span> → <span class="mult">3.0×</span></td><td class="num">20.1%</td><td class="num">0.0%<br><span class="cashr">现金 1.74×</span></td><td class="num ">+30.8%</td><td class="num"><span class="sv sGold">100</span></td><td class="num eff">2.98×</td><td><span class="vd vA">攻守兼备</span><br><span class="cm">生存分满分：有息负债 0.04%、现金比率 1.74、现金流 +30.8% 营收——稳健派里弹性最好的</span></td></tr>
+<tr><td class="num rk">6</td><td><b>寒武纪</b><span class="seg">AI 芯片</span><span class="code">688256</span></td><td class="num"><span class="keep">27.9%</span> → <span class="mult">3.6×</span></td><td class="num">32.4%</td><td class="num">0.1%<br><span class="cashr">现金 0.62×</span></td><td class="num ">+2.4%</td><td class="num"><span class="sv sOk">74</span></td><td class="num eff">2.65×</td><td><span class="vd vA">攻守兼备</span><br><span class="cm">有息负债 0.08%、账上极干净，但经营现金流只有 +2.4% 营收，利润含金量偏低</span></td></tr>
+<tr><td class="num rk">7</td><td><b>中际旭创</b><span class="seg">光模块</span><span class="code">300308</span></td><td class="num"><span class="keep">36.8%</span> → <span class="mult">2.7×</span></td><td class="num">23.5%</td><td class="num">1.4%<br><span class="cashr">现金 2.35×</span></td><td class="num ">+11.5%</td><td class="num"><span class="sv sGold">95</span></td><td class="num eff">2.58×</td><td><span class="vd vA">攻守兼备</span><br><span class="cm">有息 1.4%、现金比率 2.35，资产负债表最干净的光模块；弹性差但底盘稳</span></td></tr>
+<tr><td class="num rk">8</td><td><b>兆易创新</b><span class="seg">存储</span><span class="code">603986</span></td><td class="num"><span class="keep">41.5%</span> → <span class="mult">2.4×</span></td><td class="num">12.0%</td><td class="num">0.1%<br><span class="cashr">现金 3.75×</span></td><td class="num ">+49.9%</td><td class="num"><span class="sv sGold">100</span></td><td class="num eff">2.41×</td><td><span class="vd vA">攻守兼备</span><br><span class="cm">负债 12.0%、现金比率 3.75、现金流 +49.9% 营收，全场最「富」，也最不需要担心活不下来</span></td></tr>
+<tr><td class="num rk">9</td><td><b>澜起科技</b><span class="seg">接口芯片</span><span class="code">688008</span></td><td class="num"><span class="keep">45.2%</span> → <span class="mult">2.2×</span></td><td class="num">6.9%</td><td class="num">0.6%<br><span class="cashr">现金 13.09×</span></td><td class="num ">+53.5%</td><td class="num"><span class="sv sGold">100</span></td><td class="num eff">2.21×</td><td><span class="vd vD">稳健防守</span><br><span class="cm">负债 6.9%、现金比率 13.1，几乎无负债；代价是没有弹性，只能防守</span></td></tr>
+<tr><td class="num rk">10</td><td><b>浪潮信息</b><span class="seg">服务器</span><span class="code">000977</span></td><td class="num"><span class="loss">亏损</span> → <span class="loss">∞</span></td><td class="num">85.4%</td><td class="num">10.3%<br><span class="cashr">现金 0.08×</span></td><td class="num down">-4.9%</td><td class="num"><span class="sv sBad">33</span></td><td class="num eff">1.98×</td><td><span class="vd vC">高赔率 · 难熬</span><br><span class="cm">负债 85.4% 但有息仅 10.3%，属占款型负债；真正的问题是现金比率 0.08，账面几乎没有缓冲</span></td></tr>
+<tr><td class="num rk">11</td><td><b>新易盛</b><span class="seg">光模块</span><span class="code">300502</span></td><td class="num"><span class="keep">37.3%</span> → <span class="mult">2.7×</span></td><td class="num">36.9%</td><td class="num">0.1%<br><span class="cashr">现金 0.45×</span></td><td class="num ">+4.6%</td><td class="num"><span class="sv sOk">67</span></td><td class="num eff">1.80×</td><td><span class="vd vD">稳健防守</span><br><span class="cm">有息仅 0.09%，但现金比率 0.45——账上现金对流动负债的覆盖并不宽裕</span></td></tr>
+<tr><td class="num rk">12</td><td><b>生益科技</b><span class="seg">覆铜板</span><span class="code">600183</span></td><td class="num"><span class="keep">38.1%</span> → <span class="mult">2.6×</span></td><td class="num">47.4%</td><td class="num">10.8%<br><span class="cashr">现金 0.42×</span></td><td class="num ">+18.3%</td><td class="num"><span class="sv sOk">68</span></td><td class="num eff">1.78×</td><td><span class="vd vD">稳健防守</span><br><span class="cm">现金流 +18.3% 营收，产能扩张期还能保持这个水平，质地扎实</span></td></tr>
+<tr><td class="num rk">13</td><td><b>沪电股份</b><span class="seg">PCB</span><span class="code">002463</span></td><td class="num"><span class="keep">32.0%</span> → <span class="mult">3.1×</span></td><td class="num">52.5%</td><td class="num">21.8%<br><span class="cashr">现金 0.38×</span></td><td class="num ">+11.6%</td><td class="num"><span class="sv sMid">57</span></td><td class="num eff">1.78×</td><td><span class="vd vE">中间地带</span><br><span class="cm">有息 21.8%、现金流 +11.6%，各项都在中位，没有明显短板也没有明显优势</span></td></tr>
+<tr><td class="num rk">14</td><td><b>工业富联</b><span class="seg">整机代工</span><span class="code">601138</span></td><td class="num"><span class="keep">25.4%</span> → <span class="mult">3.9×</span></td><td class="num">67.1%</td><td class="num">22.1%<br><span class="cashr">现金 0.26×</span></td><td class="num ">+0.3%</td><td class="num"><span class="sv sBad">38</span></td><td class="num eff">1.50×</td><td><span class="vd vF">低生存 · 低弹性</span><br><span class="cm">负债 67% 但有息 22.1%，现金流刚好打平；弹性来自低毛利，不是真的杠杆</span></td></tr>
+<tr><td class="num rk">15</td><td><b>江波龙</b><span class="seg">存储模组</span><span class="code">301308</span></td><td class="num"><span class="keep">33.5%</span> → <span class="mult">3.0×</span></td><td class="num">45.1%</td><td class="num">30.7%<br><span class="cashr">现金 0.97×</span></td><td class="num down">-5.9%</td><td class="num"><span class="sv sMid">45</span></td><td class="num eff">1.34×</td><td><span class="vd vE">中间地带</span><br><span class="cm">经营现金流 −5.9%，存储模组的存货占款在价格下行期会同时吃掉利润和现金</span></td></tr>
+<tr><td class="num rk">16</td><td><b>紫光股份</b><span class="seg">服务器</span><span class="code">000938</span></td><td class="num"><span class="loss">亏损</span> → <span class="loss">∞</span></td><td class="num">84.3%</td><td class="num">26.6%<br><span class="cashr">现金 0.08×</span></td><td class="num down">-8.4%</td><td class="num"><span class="sv sBad">21</span></td><td class="num eff">1.26×</td><td><span class="vd vC">高赔率 · 难熬</span><br><span class="cm">负债 84.3%、现金比率 0.08、经营现金流 −8.4%，靠占用上游资金维持，融资一收紧最先断</span></td></tr>
+<tr><td class="num rk">17</td><td><b>东山精密</b><span class="seg">PCB</span><span class="code">002384</span></td><td class="num"><span class="keep">35.7%</span> → <span class="mult">2.8×</span></td><td class="num">65.0%</td><td class="num">35.4%<br><span class="cashr">现金 0.28×</span></td><td class="num ">+7.7%</td><td class="num"><span class="sv sBad">39</span></td><td class="num eff">1.09×</td><td><span class="vd vF">低生存 · 低弹性</span><br><span class="cm">负债 65%、有息 35.4%，扩产吃现金，是四家 PCB 里最紧的一家</span></td></tr>
+<tr><td class="num rk">18</td><td><b>佰维存储</b><span class="seg">存储模组</span><span class="code">688525</span></td><td class="num"><span class="keep">39.2%</span> → <span class="mult">2.6×</span></td><td class="num">68.3%</td><td class="num">52.5%<br><span class="cashr">现金 0.24×</span></td><td class="num down">-46.2%</td><td class="num"><span class="sv sBad">16</span></td><td class="num eff">0.41×</td><td><span class="vd vF">低生存 · 低弹性</span><br><span class="cm">有息 52.5%、经营现金流 −46.2% 营收、现金比率 0.24——名义 2.6 倍，实际可能撑不到反弹</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:16px;">
+    <b>两个自定义指标，说清楚算法：</b><br>
+    <span style="font-family:ui-monospace,Consolas,monospace;font-size:12.5px;">生存分 = 负债率得分 + 有息负债得分 + 现金比率得分 + 现金流质量得分（各 25 分，满分 100）</span><br>
+    <span style="font-family:ui-monospace,Consolas,monospace;font-size:12.5px;">有效反弹 = 名义反弹倍数 × 生存分 ÷ 100</span><br>
+    名义反弹倍数里，低谷亏损的公司理论上是无穷大，<b>实操按 6.0 倍封顶</b>（对应低谷保留率 16.7%），否则无法与其他公司横向比较。<b>生存分 ÷ 100 被当作"活到反弹那天的概率"</b>——这是简化假设，不是统计意义上的违约概率。<b>有效反弹是我为排序构造的指标，不是收益率预测，也不是任何机构的共识口径。</b>
+  </div>
+</section>
+
+<section>
+  <h3><span class="num">03</span>二维矩阵：弹性 × 生存</h3>
+  <p class="lede">横轴往右越安全，纵轴往上弹得越猛。<b>右上角是理想区，左下角是"两头不靠"。</b></p>
+  <div class="card"><div id="chartScatter" class="chart" style="height:560px;"></div></div>
+  <div class="note" style="margin-top:16px;">
+    纵轴名义倍数封顶 6.0（低谷亏损者全部压在这条线上，标 ∞）。<b>注意工业富联和浪潮信息的位置：</b>它们弹性看着不错，但都在左下或中下——资产负债表是它们的短板。
+  </div>
+</section>
+
+<section>
+  <h3><span class="num">04</span>有效反弹排行</h3>
+  <div class="card"><div id="chartEff" class="chart"></div></div>
+</section>
+
+<section>
+  <h3><span class="num">05</span>四类怎么用</h3>
+  <div class="quad">
+    <div class="q gold">
+      <h4>攻守兼备 · 5 家</h4>
+      <p class="who">胜宏科技、天孚通信、寒武纪、中际旭创、兆易创新</p>
+      <p class="act">名义弹性 2.4–6.0 倍，生存分 67–100。<b>这是唯一可以"拿住穿越低谷"的一组</b>——跌下去有弹性，扛得住不被迫割在底部。</p>
+    </div>
+    <div class="q red">
+      <h4>高赔率 · 能扛 · 3 家</h4>
+      <p class="who">海光信息、中科曙光、通富微电</p>
+      <p class="act">低谷会亏，弹性 ∞，但生存分 50–62 及格。<b>赔率最高的一档</b>，代价是必须接受账面亏损和股价腰斩。<b>海光的硬伤是经营现金流 −16.3% 营收</b>，曙光则是四成利润来自投资收益。</p>
+    </div>
+    <div class="q red">
+      <h4>高赔率 · 难熬 · 2 家</h4>
+      <p class="who">浪潮信息、紫光股份</p>
+      <p class="act">弹性 ∞ 是纸面上的，生存分只有 33 和 21。<b>现金比率 0.08 意味着账上现金只够覆盖 8% 的流动负债</b>，全靠滚动占款维持。低谷期一旦融资收紧，先倒下的是它们。</p>
+    </div>
+    <div class="q grey">
+      <h4>稳健防守 · 3 家</h4>
+      <p class="who">澜起科技、新易盛、生益科技</p>
+      <p class="act">生存分 67–100，但名义弹性只有 2.2–2.7 倍。<b>适合当底仓，不适合博反弹</b>——澜起负债率 6.9%、现金比率 13.1，安全到几乎不会出事，也安全到几乎没有杠杆。</p>
+    </div>
+  </div>
+  <div class="note" style="margin-top:16px;">
+    <b>剩下 5 家落在"中间地带 / 低生存低弹性"：</b>沪电股份（生存 57，差 3 分够不上攻守兼备的 60 分门槛）、江波龙（45）、东山精密（39）、工业富联（38）、<b>佰维存储（16，全场最低）</b>。<b>佰维是最典型的陷阱</b>：名义弹性 2.6 倍排中游，但有息负债 52.5%、经营现金流 −46.2% 营收——它的现金流为负不是收款慢，是<b>在囤存储颗粒</b>。价格一旦下行，存货跌价和现金流出会同时发生。
+  </div>
+</section>
+
+<section>
+  <h3><span class="num">06</span>三个前提，变了结论就变</h3>
+  <div class="callout" style="background:#fbfaf6;border-color:#ece5d3;">
+    <span class="tag" style="color:#b08d3f;border-color:#e5d9bc;">①</span>
+    <b style="color:#b08d3f;">如果低谷只是"增速放缓"而非收入下滑。</b>那这张表的生存维度基本失效——不亏钱的时候，负债率高低只影响估值，不影响生死。<b>本期数据是 2026 三季报的景气高点</b>，现金流和负债率都在最好状态，低谷真实发生时，这里的每一个数字都会变差。
+  </div>
+  <div class="callout" style="background:#fbfaf6;border-color:#ece5d3;">
+    <span class="tag" style="color:#b08d3f;border-color:#e5d9bc;">②</span>
+    <b style="color:#b08d3f;">存货跌价没算进来，存储模组是重灾区。</b>江波龙、佰维存储、德明利这类模组厂，低谷期最大的杀器不是毛利率，是<b>存货跌价准备</b>——2023 年江波龙全年亏 8.28 亿，主因就是高位囤货 + 价格崩塌。<b>本表只算经营现金流，没扣减值。</b>真要压测，这三家的生存分还得往下调。
+  </div>
+  <div class="callout" style="background:#fbfaf6;border-color:#ece5d3;">
+    <span class="tag" style="color:#b08d3f;border-color:#e5d9bc;">③</span>
+    <b style="color:#b08d3f;">有息负债能不能续上，表里看不出来。</b>通富微电有息负债率 36.4%、东山精密 35.4%、江波龙 30.7%——这些数字今天看着可控，是因为银行还在给额度。<b>行业下行时银行收贷是同步的</b>，届时真实压力会比表内数字大得多。这一项只能靠跟踪债券发行和授信公告，无法从财报直接读出。
+  </div>
+</section>
+
+<footer>
+  <p><b>数据来源：</b>各公司 2026 年第三季度报告（合并报表）；东方财富 F10 财务指标接口（2026-11-01 抓取，报告期 2026-09-30）；低谷弹性沿用《2027–2028 跌到低谷后，谁能反弹最多》测算（收入 −30%、毛利率压缩 30%、费用削减 15%）。</p>
+  <p><b>口径说明：</b>资产负债率、有息负债率、现金比率、经营现金流/营收均取 2026 年三季报累计数。低谷弹性列中的毛利率口径与上一版一致（个别标的为单季口径，如胜宏 34.82%、沪电 35.63%、东山 15.94%、生益 26.40%），<b>与本节三季报累计毛利率存在 1–5 个百分点的差异</b>，不影响排序结论。</p>
+  <p><b>生存分为自定义评分</b>（负债率 / 有息负债 / 现金比率 / 现金流质量各 25 分），用于横向比较，<b>不是信用评级</b>；有效反弹为排序用的合成指标，<b>不是收益率预测</b>。测算为情景推演，不构成盈利预测。</p>
+  <p style="margin-top:14px;color:#a8aeb8;">免责声明：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var sc = {"A": [{"name": "胜宏科技", "value": [69, 6.02], "loss": false, "eff": 4.16}, {"name": "天孚通信", "value": [100, 2.98], "loss": false, "eff": 2.98}, {"name": "寒武纪", "value": [74, 3.58], "loss": false, "eff": 2.65}, {"name": "中际旭创", "value": [95, 2.72], "loss": false, "eff": 2.58}, {"name": "兆易创新", "value": [100, 2.41], "loss": false, "eff": 2.41}], "B": [{"name": "海光信息", "value": [62, 6.0], "loss": true, "eff": 3.72}, {"name": "中科曙光", "value": [62, 6.0], "loss": true, "eff": 3.72}, {"name": "通富微电", "value": [50, 6.0], "loss": true, "eff": 3.0}], "C": [{"name": "浪潮信息", "value": [33, 6.0], "loss": true, "eff": 1.98}, {"name": "紫光股份", "value": [21, 6.0], "loss": true, "eff": 1.26}], "D": [{"name": "澜起科技", "value": [100, 2.21], "loss": false, "eff": 2.21}, {"name": "新易盛", "value": [67, 2.68], "loss": false, "eff": 1.8}, {"name": "生益科技", "value": [68, 2.62], "loss": false, "eff": 1.78}], "E": [{"name": "沪电股份", "value": [57, 3.12], "loss": false, "eff": 1.78}, {"name": "江波龙", "value": [45, 2.99], "loss": false, "eff": 1.34}], "F": [{"name": "工业富联", "value": [38, 3.94], "loss": false, "eff": 1.5}, {"name": "东山精密", "value": [39, 2.8], "loss": false, "eff": 1.09}, {"name": "佰维存储", "value": [16, 2.55], "loss": false, "eff": 0.41}]};
+  var eff = [{"n": "胜宏科技", "e": 4.16, "s": 69}, {"n": "海光信息", "e": 3.72, "s": 62}, {"n": "中科曙光", "e": 3.72, "s": 62}, {"n": "通富微电", "e": 3.0, "s": 50}, {"n": "天孚通信", "e": 2.98, "s": 100}, {"n": "寒武纪", "e": 2.65, "s": 74}, {"n": "中际旭创", "e": 2.58, "s": 95}, {"n": "兆易创新", "e": 2.41, "s": 100}, {"n": "澜起科技", "e": 2.21, "s": 100}, {"n": "浪潮信息", "e": 1.98, "s": 33}, {"n": "新易盛", "e": 1.8, "s": 67}, {"n": "生益科技", "e": 1.78, "s": 68}, {"n": "沪电股份", "e": 1.78, "s": 57}, {"n": "工业富联", "e": 1.5, "s": 38}, {"n": "江波龙", "e": 1.34, "s": 45}, {"n": "紫光股份", "e": 1.26, "s": 21}, {"n": "东山精密", "e": 1.09, "s": 39}, {"n": "佰维存储", "e": 0.41, "s": 16}];
+
+  function mk(name, data, color) {
+    return {
+      name: name,
+      type: 'scatter',
+      symbolSize: function (v) { return 13; },
+      data: data,
+      itemStyle: { color: color, opacity: .9, borderColor: '#fff', borderWidth: 1 },
+      label: {
+        show: true, position: 'right', fontSize: 11, color: '#4a5058',
+        formatter: function (p) { return p.data.name; }
+      },
+      labelLayout: { moveOverlap: 'shiftY' },
+      emphasis: { scale: 1.4 }
+    };
+  }
+
+  var cs = echarts.init(document.getElementById('chartScatter'));
+  cs.setOption({
+    grid: { left: 66, right: 92, top: 52, bottom: 56 },
+    legend: { top: 8, textStyle: { color: '#4a5058', fontSize: 12 } },
+    tooltip: {
+      formatter: function (p) {
+        var d = p.data;
+        return '<b>' + d.name + '</b><br/>生存分：' + d.value[0] +
+               '<br/>名义反弹：' + (d.loss ? '∞（低谷亏损，按 6.0 封顶）' : d.value[1].toFixed(1) + ' 倍') +
+               '<br/>有效反弹：' + d.eff.toFixed(2) + ' 倍';
+      }
+    },
+    xAxis: {
+      type: 'value', min: 0, max: 100,
+      name: '生存分（越高越安全）', nameLocation: 'middle', nameGap: 32,
+      nameTextStyle: { color: '#8a919b', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eef0f3' } },
+      axisLine: { show: false }, axisTick: { show: false },
+      axisLabel: { color: '#8a919b', fontSize: 11 }
+    },
+    yAxis: {
+      type: 'value', min: 1.8, max: 6.6,
+      name: '名义反弹倍数', nameLocation: 'middle', nameGap: 42,
+      nameTextStyle: { color: '#8a919b', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eef0f3' } },
+      axisLine: { show: false }, axisTick: { show: false },
+      axisLabel: { color: '#8a919b', fontSize: 11, formatter: function (v) { return v >= 6 ? '∞/6' : v; } }
+    },
+    series: [
+      mk('低谷亏损（弹性 ∞）', sc.B.concat(sc.C), '#7d1620'),
+      mk('不亏 · 攻守兼备', sc.A, '#b08d3f'),
+      mk('不亏 · 稳健防守', sc.D, '#5b7fa6'),
+      mk('不亏 · 中间/偏低', sc.E.concat(sc.F), '#b9bfc8')
+    ],
+    graphic: [{
+      type: 'text', left: 78, top: 74,
+      style: { text: '← 生存弱', fill: '#c3c9d2', fontSize: 11 }
+    }, {
+      type: 'text', right: 30, top: 74,
+      style: { text: '生存强 →', fill: '#c3c9d2', fontSize: 11 }
+    }]
+  });
+
+  var ce = echarts.init(document.getElementById('chartEff'));
+  ce.setOption({
+    grid: { left: 96, right: 96, top: 30, bottom: 42 },
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'shadow' },
+      formatter: function (p) {
+        var d = eff[p[0].dataIndex];
+        return '<b>' + d.n + '</b><br/>有效反弹：' + d.e.toFixed(2) + ' 倍<br/>生存分：' + d.s;
+      }
+    },
+    xAxis: {
+      type: 'value',
+      name: '有效反弹倍数（名义倍数 × 生存分/100）', nameLocation: 'middle', nameGap: 28,
+      nameTextStyle: { color: '#8a919b', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eef0f3' } },
+      axisLine: { show: false }, axisTick: { show: false },
+      axisLabel: { color: '#8a919b', fontSize: 11 }
+    },
+    yAxis: {
+      type: 'category', inverse: true,
+      data: eff.map(function (d) { return d.n; }),
+      axisLine: { lineStyle: { color: '#e3e6eb' } },
+      axisTick: { show: false },
+      axisLabel: { color: '#4a5058', fontSize: 12 }
+    },
+    series: [{
+      type: 'bar',
+      data: eff.map(function (d) {
+        var c = '#7d1620';
+        if (d.s >= 80) { c = '#b08d3f'; }
+        else if (d.s >= 60) { c = '#c9a961'; }
+        else if (d.s >= 40) { c = '#d8cbb0'; }
+        return { value: d.e, itemStyle: { color: c, borderRadius: [0, 2, 2, 0] } };
+      }),
+      barWidth: '60%',
+      label: {
+        show: true, position: 'right', color: '#4a5058', fontSize: 11,
+        formatter: function (p) {
+          var d = eff[p.dataIndex];
+          return d.e.toFixed(2) + '×　生存 ' + d.s;
+        }
+      }
+    }]
+  });
+
+  window.addEventListener('resize', function () { cs.resize(); ce.resize(); });
+})();
+</script>
+</body>
+</html>
