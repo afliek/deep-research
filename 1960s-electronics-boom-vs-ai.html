@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>对比1960年电子热，大浪潮能托住量，托不住价 | 深层研究</title>
+<meta name="description" content="1960—1970 全球计算机装机量涨 12.7 倍，美国半导体产值只涨 2.4 倍：价格通缩吃掉了量的增长。对照 AI 浪潮，结论是大浪潮托得住量、托不住价。">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  :root{
+    --bg:#080b12;
+    --panel:rgba(20,24,34,0.72);
+    --panel2:rgba(28,34,48,0.62);
+    --line:rgba(255,255,255,0.09);
+    --gold:#c9a24b;
+    --gold2:#e8cf8f;
+    --ink:#e2e8f0;
+    --dim:#94a3b8;
+    --muted:#64748b;
+    --red:#c0554b;
+    --green:#3e9e6a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    line-height:1.78;font-size:15px;-webkit-font-smoothing:antialiased;padding-bottom:70px;
+  }
+  .wrap{max-width:1060px;margin:0 auto;padding:0 26px}
+  /* 导航 */
+  nav.site-nav{
+    position:sticky;top:0;z-index:30;background:rgba(8,11,18,.86);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  nav.site-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:54px}
+  nav.site-nav a{color:var(--gold);text-decoration:none;font-size:13.5px;letter-spacing:.02em}
+  nav.site-nav a:hover{color:var(--gold2)}
+  nav.site-nav .tag{font-size:12px;color:var(--muted);letter-spacing:.1em}
+  /* 头部 */
+  header{padding:58px 0 38px;border-bottom:1px solid var(--line);margin-bottom:42px}
+  .kicker{color:var(--gold);font-size:12px;letter-spacing:.26em;text-transform:uppercase;margin-bottom:18px}
+  h1{font-family:"Songti SC","Noto Serif SC",SimSun,serif;font-size:34px;font-weight:700;line-height:1.4}
+  h1 em{color:var(--gold2);font-style:normal}
+  .sub{color:var(--dim);font-size:14px;margin-top:16px;max-width:820px}
+  .meta{margin-top:22px;display:flex;gap:24px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .meta b{color:var(--ink);font-weight:600}
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:0 0 18px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 16px;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;background:var(--gold)}
+  .kpi .lb{font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+  .kpi .vl{font-family:"Songti SC","Noto Serif SC",serif;font-size:27px;font-weight:700;color:var(--gold2);margin-top:7px;font-variant-numeric:tabular-nums}
+  .kpi .vl small{font-size:13px;color:var(--dim);font-weight:400;margin-left:2px}
+  .kpi .nt{font-size:11.5px;color:var(--muted);margin-top:5px}
+  /* 版块 */
+  section{margin:54px 0}
+  h2{font-family:"Songti SC","Noto Serif SC",SimSun,serif;font-size:22px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:11px}
+  h2::before{content:"◆";color:var(--gold);font-size:12px;transform:translateY(-1px)}
+  .lead{color:var(--dim);font-size:14px;margin-bottom:22px;padding-left:23px}
+  h3{font-size:15.5px;font-weight:600;margin:28px 0 10px}
+  h3 span{color:var(--gold);font-size:12px;margin-right:8px;font-weight:400}
+  p{margin-bottom:14px;color:#c3ccd9}
+  strong{color:#fff;font-weight:600}
+  .hl{color:var(--gold2);font-weight:600}
+  /* 图表 */
+  .chartbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px 16px 10px;margin:20px 0}
+  .chart{width:100%;height:370px}
+  .cap{font-size:11.5px;color:var(--muted);padding:10px 8px 4px;border-top:1px solid var(--line);margin-top:4px;line-height:1.7}
+  /* 表格 */
+  .tbl-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:10px;background:var(--panel2)}
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th{background:rgba(40,48,66,.6);color:var(--gold);font-weight:600;text-align:right;padding:11px 12px;border-bottom:1px solid var(--line);white-space:nowrap;font-size:12px}
+  th:first-child,td:first-child{text-align:left}
+  td{padding:10px 12px;text-align:right;border-bottom:1px solid rgba(255,255,255,.05);color:#c3ccd9;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,.03)}
+  td.up{color:#d4756a}
+  td.dn{color:var(--green)}
+  .row-hl td{background:rgba(201,162,75,.09)!important;color:var(--gold2);font-weight:600}
+  .note{font-size:11.5px;color:var(--muted);margin-top:-6px;padding-left:2px;line-height:1.8}
+  /* callout */
+  .call{border-left:2px solid var(--gold);background:rgba(201,162,75,.06);padding:17px 21px;margin:20px 0;border-radius:0 8px 8px 0}
+  .call .t{color:var(--gold);font-size:12px;letter-spacing:.1em;margin-bottom:7px;font-weight:600}
+  .call p{margin:0;font-size:14px;color:#d3dae5}
+  .call.warn{border-left-color:var(--red);background:rgba(192,85,75,.07)}
+  .call.warn .t{color:#d4756a}
+  ol,ul{margin:0 0 16px 22px;color:#c3ccd9}
+  li{margin-bottom:9px;padding-left:4px}
+  li::marker{color:var(--gold)}
+  .verdict{border:1px solid var(--line);background:var(--panel);padding:26px 28px;border-radius:10px;margin-top:18px}
+  .verdict h3{margin-top:0;font-family:"Songti SC","Noto Serif SC",serif;font-size:18px;color:var(--gold2)}
+  .verdict p:last-child{margin-bottom:0}
+  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted);line-height:1.95}
+  .disc{margin-top:14px;padding:13px 15px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;font-size:11px;color:#6b7688}
+  .toggle{display:inline-flex;margin-bottom:12px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .toggle button{background:transparent;border:none;color:var(--dim);padding:6px 15px;font-size:12px;cursor:pointer;font-family:inherit}
+  .toggle button.on{background:var(--gold);color:#080b12;font-weight:600}
+  .hide{display:none}
+  @media(max-width:760px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    h1{font-size:24px}.wrap{padding:0 17px}.chart{height:290px}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="wrap">
+    <a href="index.html">← 返回深层研究</a>
+    <span class="tag">临时研究</span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header>
+  <div class="kicker">Historical Analogue · 1960s Electronics Boom</div>
+  <h1>对比 1960 年电子热，<br><em>大浪潮能托住量，托不住价</em></h1>
+  <p class="sub">1960—1970 全球计算机装机量涨了 12.7 倍，同期美国半导体产值只涨 2.4 倍。差的 10 倍全部落在价格上：磁芯存储器从 1 美元/bit 跌到 1 美分，年化 -20%。把 AI 存储需求放进这个坐标系，能看清一件事——需求增速的量级历史上有过，但"量价齐升"的剧本，历史上没有。</p>
+  <div class="meta">
+    <div>研究日期 <b>2026-11-01</b></div>
+    <div>对照区间 <b>1950—1975</b></div>
+    <div>核心结论 <b>浪潮托得住量，托不住价</b></div>
+  </div>
+</header>
+
+<section>
+  <div class="kpis">
+    <div class="kpi">
+      <div class="lb">1960—1970 装机量</div>
+      <div class="vl">12.7<small>倍</small></div>
+      <div class="nt">全球 6,300 → 80,000 台</div>
+    </div>
+    <div class="kpi">
+      <div class="lb">同期芯片产值</div>
+      <div class="vl">2.4<small>倍</small></div>
+      <div class="nt">美国半导体 5.42 → 12.93 亿美元</div>
+    </div>
+    <div class="kpi">
+      <div class="lb">60 年代总算力 CAGR</div>
+      <div class="vl">59.3<small>%</small></div>
+      <div class="nt">15 年 1,080 倍</div>
+    </div>
+    <div class="kpi">
+      <div class="lb">负增长年份</div>
+      <div class="vl">6<small>年</small></div>
+      <div class="nt">1955—1975 半导体销售额</div>
+    </div>
+  </div>
+  <p class="note">"电子热"指 1950s—1960s 美国电子工业的爆发，覆盖计算机、晶体管、集成电路、军工电子与消费电子。数据来源见文末。</p>
+</section>
+
+<section>
+  <h2>先把事实摆出来：那二十年发生了什么</h2>
+  <p class="lead">三组数据：装机量、芯片产值、最细分的品类。三者增速差了一个量级，这个差距本身就是答案。</p>
+
+  <h3><span>01</span>装机量：从 2 台到 16.5 万台</h3>
+  <p>美国在用的数字电子计算机，1950 年只有 <strong>2 台</strong>；1955 年 243 台；1960 年 5,400 台；1965 年 24,700 台；1970 年 74,060 台；1974 年 165,040 台。二十四年，翻了八万倍。</p>
+  <p>分阶段看，增速是一条平滑下滑的曲线，没有任何一年是负的：</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>区间</th><th>期初(台)</th><th>期末(台)</th><th>倍数</th><th>CAGR</th></tr></thead>
+      <tbody>
+        <tr><td>1950—1955</td><td>2</td><td>243</td><td>121.5×</td><td class="up">161.2%</td></tr>
+        <tr><td>1955—1960</td><td>243</td><td>5,400</td><td>22.2×</td><td class="up">85.9%</td></tr>
+        <tr class="row-hl"><td>1960—1965</td><td>5,400</td><td>24,700</td><td>4.6×</td><td class="up">35.5%</td></tr>
+        <tr><td>1965—1970</td><td>24,700</td><td>74,060</td><td>3.0×</td><td class="up">24.6%</td></tr>
+        <tr><td>1970—1974</td><td>74,060</td><td>165,040</td><td>2.2×</td><td class="up">22.2%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">美国在用数字计算机数量。1950 年为 2 台（Royal Society 引 Ensmenger 口径），与部分文献"2,300 台"的差异来自是否计入早期机械/模拟计算机。</p>
+
+  <p>全球口径同步：1960 年 6,300 台 → 1965 年 30,000 台（CAGR 36.6%）→ 1970 年 80,000 台（21.7%）→ 1975 年 150,000 台（13.4%）。</p>
+
+  <h3><span>02</span>但真正的需求单位不是"台"，是"算力"</h3>
+  <p>这是类比里最容易被忽略、也最关键的一层。1960—1965 年，装机量只涨 4.8 倍，但<strong>单台计算机的算力涨了近 10 倍</strong>。两者相乘，六年里全球总计算能力涨了约 40 倍。</p>
+  <p>1965—1970 年：装机 3 倍 × 单机 3 倍 = 9 倍。1970—1975 年：装机 2 倍 × 单机 2 倍 = 4 倍。<strong>十五年累计约 1,080—1,500 倍，CAGR 约 59—62%。</strong></p>
+
+  <div class="chartbox">
+    <div id="chartInst" class="chart" style="height:370px"></div>
+    <div class="cap">左轴（对数）：全球装机量（台）。右轴（对数）：总算力指数（1960=1）。装机量的对数曲线明显变平，总算力的对数曲线仍接近直线——这说明"需求"的真实增速要看算力，不是看台数。来源：ERIC ED027043（引 Flamm, Creating the Computer）。</div>
+  </div>
+
+  <div class="call">
+    <div class="t">对标今天的正确姿势</div>
+    <p>拿"服务器台数"跟 60 年代的"装机台数"比是错的。正确的对标是<strong>总算力对总算力</strong>：60 年代 59—62% / 15 年，今天 AI 服务器 DRAM 位元需求 66%（2025—2027，摩根大通口径）、HBM 位元需求 63%（2026—2028）。<strong>量级上，这两组数字几乎完全重合。</strong></p>
+  </div>
+
+  <h3><span>03</span>芯片产值：增速只有装机量的四分之一</h3>
+  <p>这是整篇最反直觉的一组数。美国半导体销售额 1960 年 5.42 亿美元，1970 年 12.93 亿美元——<strong>十年只涨了 2.4 倍，CAGR 9.1%</strong>。而同期装机量涨了 12.7 倍。</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>年份</th><th>销售额<br>(百万美元)</th><th>同比</th><th>年份</th><th>销售额<br>(百万美元)</th><th>同比</th></tr></thead>
+      <tbody>
+        <tr><td>1955</td><td>40</td><td>—</td><td>1966</td><td>1,078</td><td class="up">+28.9%</td></tr>
+        <tr><td>1956</td><td>89</td><td class="up">+122.5%</td><td>1967</td><td>1,060</td><td class="dn">-1.7%</td></tr>
+        <tr><td>1957</td><td>140</td><td class="up">+57.3%</td><td>1968</td><td>1,129</td><td class="up">+6.5%</td></tr>
+        <tr><td>1958</td><td>202</td><td class="up">+44.3%</td><td>1969</td><td>1,356</td><td class="up">+20.1%</td></tr>
+        <tr><td>1959</td><td>388</td><td class="up">+92.1%</td><td>1970</td><td>1,293</td><td class="dn">-4.6%</td></tr>
+        <tr><td>1960</td><td>542</td><td class="up">+39.7%</td><td>1971</td><td>1,157</td><td class="dn">-10.5%</td></tr>
+        <tr><td>1961</td><td>538</td><td class="dn">-0.7%</td><td>1972</td><td>1,467</td><td class="up">+26.8%</td></tr>
+        <tr><td>1962</td><td>535</td><td class="dn">-0.6%</td><td>1973</td><td>2,756</td><td class="up">+87.9%</td></tr>
+        <tr><td>1963</td><td>557</td><td class="up">+4.1%</td><td>1974</td><td>3,114</td><td class="up">+13.0%</td></tr>
+        <tr><td>1964</td><td>668</td><td class="up">+19.9%</td><td>1975</td><td>3,002</td><td class="dn">-3.6%</td></tr>
+        <tr><td>1965</td><td>836</td><td class="up">+25.1%</td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">美国半导体销售额（IC + 分立器件），来源：Electronic Market Data Book（EIA, 1982/1985），经 Hart 整理。1973 年 +87.9% 的跳升部分来自口径调整，此年数据仅作趋势参考。</p>
+
+  <p>为什么装机量涨 12.7 倍、产值只涨 2.4 倍？因为<strong>单价在崩</strong>。磁芯存储器成本从 1950 年代的 <span class="hl">1 美元/bit</span> 降到 1970 年代中期的 <span class="hl">1 美分/bit</span>——二十年降了 100 倍，年化 -20%。集成电路从 1961 年的 5 百万美元做到 1973 年的 14.21 亿美元（284 倍，CAGR 60%），靠的是每个逻辑门的成本每年砍掉一半。</p>
+
+  <div class="chartbox">
+    <div id="chartSemi" class="chart" style="height:350px"></div>
+    <div class="cap">美国半导体销售额同比增速（%）。红=正增长、绿=负增长。1955—1975 的 20 年里出现 6 个负增长年，其中 1961—1963 连续三年停滞（+1.1% / -0.6% / +4.1%）——那三年，行业里同样流行"电子热结束了"的判断。</div>
+  </div>
+</section>
+
+<section>
+  <h2>横向对照：两张表放在一起</h2>
+  <p class="lead">口径说明写在前头：1960 年代用"装机量/算力"，今天用"位元需求"，两者都是终端侧的物理量，可以比。</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>对比维度</th><th>1960s 电子热</th><th>2020s AI 浪潮</th><th>差</th></tr></thead>
+      <tbody>
+        <tr><td>核心终端出货</td><td>计算机装机 35.5%（60—65）</td><td>AI 芯片出货 38%（25—28）</td><td>≈</td></tr>
+        <tr><td>终端算力/容量增速</td><td>总算力 59.3%（60—75）</td><td>AI 服务器 DRAM 位元 66%（25—27）</td><td>≈</td></tr>
+        <tr><td>最细分的紧缺品类</td><td>IC 60.1%（61—73）</td><td>HBM 63%（26—28）</td><td>≈</td></tr>
+        <tr><td>主器件产值增速</td><td class="dn">半导体 9.1%（60—70）</td><td class="up">DRAM 产值约 66%（26—27）</td><td class="up">7 倍</td></tr>
+        <tr class="row-hl"><td>价格方向</td><td>磁芯 -20%/年（通缩）</td><td>DRAM 两年 +460%（通胀）</td><td class="up">反向</td></tr>
+        <tr><td>需求驱动方</td><td>政府/军工 48%（1960）→ 6%（1973）</td><td>超大规模云厂商 → 企业/端侧</td><td>≈</td></tr>
+        <tr><td>供给硬约束</td><td>磁芯手工穿线，人工密集</td><td>HBM 3 倍晶圆 + 25% 良率</td><td>≈</td></tr>
+        <tr><td>年际波动</td><td>6 个负增长年，最大 -10.5%</td><td>2019 年 -50%、2023 年 -60%（DRAM 价格）</td><td class="up">更剧烈</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">1960s 数据：Flamm《Creating the Computer》、EIA《Electronic Market Data Book》、OECD 半导体产业报告。2020s 数据：摩根大通 2026-09、TrendForce 2026-10、花旗 2026-10。DRAM 产值 2026 为 +236%（ASP）× +25%（位元）的复合估算。</p>
+
+  <div class="chartbox">
+    <div id="chartCmp" class="chart" style="height:330px"></div>
+    <div class="cap">四个口径的年增速对比。前三个几乎重合（35—66%），第四个（主器件产值）差了 7 倍——全部差异来自价格方向。</div>
+  </div>
+
+  <div class="call warn">
+    <div class="t">类比在这里断掉了</div>
+    <p>60 年代是<strong>通缩型技术扩散</strong>：价格每年跌 20%，用量增 30%、产值只增 9%，但正因为便宜，需求能持续渗透二十年。<br>今天是<strong>通胀型供给短缺</strong>：价格两年涨 4.6 倍，用量增 30%、产值增 66%，利润弹性极大，但也意味着回归时的杀跌同样被放大。<strong>把两件事都叫"技术浪潮"没错，但用 60 年代的"持续性"去推导今天的"价格不跌"，是拿错剧本。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>三个能直接用的推论</h2>
+  <p class="lead">不是"历史会重演"，是"历史告诉你哪些变量会被托住、哪些不会"。</p>
+
+  <h3><span>01</span>装机量从未负增长，但芯片产值有 6 个负增长年</h3>
+  <p>1960—1975 年，全球计算机装机量每一年都在增长，一次没跌过。同期美国半导体销售额却有 6 年负增长（1961、1962、1967、1970、1971、1975），最差 -10.5%。</p>
+  <p><strong>终端需求和器件产值是两回事。</strong>今天也一样：token 调用量大概率会像 60 年代的装机量一样平滑上行，但这不构成"DRAM 价格不会跌"的理由——2029 年那次回调，完全可以发生在 AI 需求还在增长的时候。</p>
+
+  <h3><span>02</span>浪潮内部的"假摔"，比真摔更容易骗人</h3>
+  <p>1961—1963 年，美国半导体销售额连续三年几乎不动（+1.1% / -0.6% / +4.1%）。1962 年《Electronics》杂志已经在讨论"晶体管市场的天花板"。然后 1964 年 +19.9%、1966 年 +28.9%、1969 年 +20.1%。</p>
+  <p>这个形状对 2029 年的意义：<strong>一次 2—3 年的停滞，不足以证伪一场 15 年的浪潮。</strong>但反过来也成立——1967 年 -1.7%、1970 年 -4.6%、1971 年 -10.5% 连着来的时候，扛不住的人已经下车了。判断"这是假摔还是真摔"的窗口，从来不超过两个季度。</p>
+
+  <h3><span>03</span>需求增速的量级支持"2031 年不出大顶"，但不支持"2029 年不回调"</h3>
+  <p>把 60 年代的 59% 总算力 CAGR 和今天 AI 服务器 DRAM 的 66% 对上之后，可以下一个判断：<strong>DRAM 位元需求的长期斜率（25—30%/年）大概率能维持到 2031 年</strong>，这支持"2031 年归母净利 4,433 亿"的判断。</p>
+  <p>但同一组史料也说明，长期斜率从来不消灭年度波动。60 年代产值 CAGR 24%（1955—1975），中间照样有 -10.5% 的年份。<strong>所以 2029 年的下行不该被"AI 是长期浪潮"这句话取消，只该被调浅。</strong></p>
+</section>
+
+<section>
+  <h2>回到长鑫：只改谷底，不改峰值</h2>
+  <p class="lead">依据第 3 条推论，把 2029 年的价格跌幅从 -42% 收窄到 -30%，其余不动。</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>年份</th><th>原基准</th><th>类比修正</th><th>变化</th><th>改动内容</th></tr></thead>
+      <tbody>
+        <tr><td>2026E</td><td>1,940</td><td>1,940</td><td>—</td><td>不动</td></tr>
+        <tr><td>2027E</td><td>3,212</td><td>3,212</td><td>—</td><td>不动</td></tr>
+        <tr><td>2028E</td><td>4,001</td><td>4,001</td><td>—</td><td>不动（峰值）</td></tr>
+        <tr class="row-hl"><td>2029E</td><td>1,987</td><td>2,355</td><td class="up">+18.5%</td><td>ASP 跌幅 -42% → -30%</td></tr>
+        <tr><td>2030E</td><td>2,412</td><td>2,485</td><td class="up">+3.0%</td><td>价格底抬高 5%</td></tr>
+        <tr><td>2031E</td><td>4,433</td><td>4,433</td><td>—</td><td>不动</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">单位：亿元人民币，归母口径。2029 年营收由 6,022 亿上调至 6,925 亿，净利率从 33% 微升至 34%。2027—2031 五年累计从 16,045 亿升至 16,430 亿（+2.4%）。</p>
+
+  <div class="chartbox">
+    <div class="toggle">
+      <button class="on" data-t="c1" data-v="chart">图</button>
+      <button data-t="c1" data-v="table">表</button>
+    </div>
+    <div id="c1-chart"><div id="chartRev" class="chart" style="height:330px"></div></div>
+    <div id="c1-table" class="hide">
+      <div class="tbl-wrap" style="margin:0">
+        <table>
+          <thead><tr><th>年份</th><th>原基准</th><th>类比修正</th><th>差异</th></tr></thead>
+          <tbody>
+            <tr><td>2026E</td><td>1,940</td><td>1,940</td><td>0</td></tr>
+            <tr><td>2027E</td><td>3,212</td><td>3,212</td><td>0</td></tr>
+            <tr><td>2028E</td><td>4,001</td><td>4,001</td><td>0</td></tr>
+            <tr><td>2029E</td><td>1,987</td><td>2,355</td><td class="up">+368</td></tr>
+            <tr><td>2030E</td><td>2,412</td><td>2,485</td><td class="up">+73</td></tr>
+            <tr><td>2031E</td><td>4,433</td><td>4,433</td><td>0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="cap">两版净利路径。修正只作用在 2029—2030 的谷底，不动峰值和终点——因为历史类比能改变"跌多深"，改不了"涨多高"。</div>
+  </div>
+
+  <div class="call">
+    <div class="t">为什么只改谷底，不改峰值</div>
+    <p>历史类比给的是"需求持续性"的证据，不是"价格弹性"的证据。2031 年的 4,433 亿建立在"份额到 14%、价格回到 1.28 美元/Gb"两个假设上，60 年代的史料既不能证明也不能证伪它。<strong>能被史料修正的只有谷底深度——因为 60 年代确实证明了：长期需求增长会给每一次下行垫一层底。</strong></p>
+  </div>
+</section>
+
+<section>
+  <h2>落在纸上的判断</h2>
+  <div class="verdict">
+    <h3>这个类比成立，但它证明的恰恰是"周期无法被消灭"</h3>
+    <p>把 1960—1975 那十五年的数字摆完，最能站住的一条对照是：<strong>总算力 CAGR 59%，AI 服务器 DRAM 位元需求 CAGR 66%；IC 销售额 CAGR 60%，HBM 位元需求 CAGR 63%。</strong>四个数字两两咬合在 3 个百分点以内，而且都是十年以上的长坡。这个相似度不是巧合，它说明 AI 对存储的拉动，在量级上确实进入了"通用技术扩散"的档位，而不是一次普通的资本开支周期。</p>
+    <p>但同一批史料也给了三个冷水。第一，装机量二十年没跌过一年，芯片产值却跌了六次——<strong>需求平滑不等于产值平滑</strong>。第二，1961—1963 年那次三年停滞，当时被当成"浪潮结束"，实际是中途换挡。第三，那场浪潮之所以能走二十年，靠的是价格每年跌 20% 把需求不断拉进来；<strong>今天的 DRAM 价格两年涨了 4.6 倍，走的是完全相反的路</strong>。</p>
+    <p>所以最终的判断是：把长鑫 2029 年的谷底从 1,987 亿上修到 2,355 亿——因为 60 年代证明了长期需求会给下行垫底；但峰值 2028 年的 4,001 亿一分不动，因为没有任何一段历史能证明"价格涨了 4.6 倍之后还能不回归"。<strong>浪潮托得住量，托不住价。这句话是这篇报告唯一想留下的东西。</strong></p>
+  </div>
+</section>
+
+<footer>
+  <div><strong>数据来源与口径</strong></div>
+  <div>· 计算机装机量：ERIC ED027043《Recent Developments in the Information Sciences》（1969），引 Flamm《Creating the Computer》表 9.1、9.2 及全球装机估算；美国 1950 年 2 台、1955 年 243 台、1960 年 5,400 台来自 Royal Society《Science in the Age of AI: A Historical Review》引 Ensmenger。RAND P7536《The Effects of Military and Other Government Spending on the Computer Industry》给出同源数据。</div>
+  <div>· 单机算力与总算力倍数：ERIC ED027043 原文——"advances in computer hardware resulted in the following increases in the computational power of the average computer: ten-fold from 1960 to 1965; three-fold from 1965 to 1970; two-fold from 1970 to 1975"，总算力为装机量倍数与单机算力倍数之积。</div>
+  <div>· 美国半导体销售额及增速：Electronic Market Data Book（Electronic Industries Association, 1982 与 1985 版），经 Jonathan Hart《The Origins of the U.S.-Japanese Semiconductor Dispute》表 4 整理；1955—1983 年均增速 26% 来自 OECD《The Semi-Conductor Industry: Trade-Related Issues》(1985) 引述。</div>
+  <div>· 集成电路销售额：同上 EIA 表 4，1961 年 5 百万美元 → 1973 年 1,421 百万美元。军用占比：IC 1962 年 100% → 1978 年 9%；半导体整体 1960 年 48% → 1968 年 25%。</div>
+  <div>· 晶体管产量：1953 年约 100 万颗、1954 年 131.8 万颗、1955 年 364.7 万颗、1956 年 1,284 万颗、1957 年 2,874 万颗（《Electronics》1958-05-30 及晶体管博物馆史料）。</div>
+  <div>· 磁芯存储器成本：1 美元/bit（1950s）→ 约 1 美分/bit（1970s 中期）；PDP-6 于 1967 年装配 1.2 MiB 磁芯存储，造价 38 万美元（0.04 美元/bit）。</div>
+  <div>· 2020s 对照数据：摩根大通 2026-09（AI 服务器 DRAM 位元 CAGR 66%、HBM 三年 CAGR 63%）、TrendForce 2026-10、花旗 2026-10。DRAM 2026 年产值增速为 +236% ASP 与 +25% 位元的复合估算值。</div>
+  <div>· 长鑫净利润：本系列模型，2026 三季报为实际值（营收 2,690.24 亿、归母 1,320.40 亿）。历史类比修正仅调整 2029 年 ASP 跌幅假设（-42%→-30%）与 2030 年价格底（+5%）。相关研究见 <a href="cxmt-5y-profit-forecast-2026.html" style="color:#c9a24b">《长鑫科技未来五年净利润预测》</a>。</div>
+  <div>· 1960s 与 2020s 的"需求"口径不同（前者为装机台数与算力指数，后者为 DRAM 位元），比较建立在"终端侧物理量增速"这一共同属性上，不代表两者可直接换算。</div>
+  <div class="disc"><strong>免责声明</strong>：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。</div>
+  <div style="margin-top:16px;color:#6b7688">DS v4 flash · 2026-11-01 · 深层研究 · 临时研究</div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var GOLD='#c9a24b', GOLD2='#e8cf8f', DIM='#94a3b8', INK='#e2e8f0', GRID='rgba(255,255,255,0.07)', RED='#c0554b', GREEN='#3e9e6a', BLUE='#5b8db8';
+
+  document.querySelectorAll('.toggle button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.getAttribute('data-t');
+      var v = btn.getAttribute('data-v');
+      document.querySelectorAll('.toggle button[data-t="'+key+'"]').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var ce = document.getElementById(key+'-chart');
+      var te = document.getElementById(key+'-table');
+      if(v==='chart'){ ce.classList.remove('hide'); te.classList.add('hide'); }
+      else { ce.classList.add('hide'); te.classList.remove('hide'); }
+    });
+  });
+
+  if(typeof echarts === 'undefined'){
+    document.querySelectorAll('.chartbox').forEach(function(b){
+      b.insertAdjacentHTML('afterbegin','<p style="color:#c0554b;font-size:13px;padding:8px">图表库加载失败（无网络），数据见正文表格。</p>');
+    });
+    return;
+  }
+
+  // 图1 装机量 vs 总算力
+  var e1 = document.getElementById('chartInst');
+  if(e1){
+    var c1 = echarts.init(e1);
+    c1.setOption({
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', backgroundColor: '#161b26', borderColor: '#2b3345', textStyle: { color: INK, fontSize: 12 } },
+      legend: { data: ['全球装机量（台，左轴）','总算力指数（1960=1，右轴）'], textStyle: { color: DIM, fontSize: 12 }, top: 2, itemWidth: 14, itemHeight: 8 },
+      grid: { left: 76, right: 76, top: 48, bottom: 38 },
+      xAxis: {
+        type: 'category',
+        data: ['1960','1965','1970','1975'],
+        axisLine: { lineStyle: { color: GRID } },
+        axisLabel: { color: DIM, fontSize: 12 },
+        axisTick: { show: false }
+      },
+      yAxis: [
+        { type: 'log', name: '装机量（台）', min: 1000, axisLine: { show: false }, nameTextStyle: { color: DIM, fontSize: 11 }, axisLabel: { color: DIM, fontSize: 11, formatter: function(v){ return v >= 1000 ? (v/1000) + 'k' : v; } }, splitLine: { lineStyle: { color: GRID, type: 'dashed' } } },
+        { type: 'log', name: '总算力指数', min: 1, max: 1000, axisLine: { show: false }, nameTextStyle: { color: DIM, fontSize: 11 }, axisLabel: { color: DIM, fontSize: 11 }, splitLine: { show: false } }
+      ],
+      series: [
+        { name: '全球装机量（台，左轴）', type: 'line', data: [6300, 30000, 80000, 150000], symbol: 'circle', symbolSize: 8, lineStyle: { color: BLUE, width: 2.4 }, itemStyle: { color: BLUE } },
+        { name: '总算力指数（1960=1，右轴）', type: 'line', yAxisIndex: 1, data: [1, 40, 270, 1080], symbol: 'circle', symbolSize: 8, lineStyle: { color: GOLD, width: 2.4 }, itemStyle: { color: GOLD }, areaStyle: { color: 'rgba(201,162,75,0.09)' } }
+      ]
+    });
+    window.addEventListener('resize', function(){ c1.resize(); });
+  }
+
+  // 图2 半导体增速
+  var e2 = document.getElementById('chartSemi');
+  if(e2){
+    var c2 = echarts.init(e2);
+    var yrs = ['1956','1957','1958','1959','1960','1961','1962','1963','1964','1965','1966','1967','1968','1969','1970','1971','1972','1973','1974','1975'];
+    var gr = [122.5,57.3,44.3,92.1,39.7,-0.7,-0.6,4.1,19.9,25.1,28.9,-1.7,6.5,20.1,-4.6,-10.5,26.8,87.9,13.0,-3.6];
+    c2.setOption({
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', backgroundColor: '#161b26', borderColor: '#2b3345', textStyle: { color: INK, fontSize: 12 }, valueFormatter: function(v){ return v + '%'; } },
+      grid: { left: 56, right: 24, top: 32, bottom: 44 },
+      xAxis: {
+        type: 'category',
+        data: yrs,
+        axisLine: { lineStyle: { color: GRID } },
+        axisLabel: { color: DIM, fontSize: 10.5, interval: 0, rotate: 40 },
+        axisTick: { show: false }
+      },
+      yAxis: { type: 'value', name: '同比', axisLine: { show: false }, nameTextStyle: { color: DIM, fontSize: 11 }, axisLabel: { color: DIM, fontSize: 11.5, formatter: '{value}%' }, splitLine: { lineStyle: { color: GRID, type: 'dashed' } } },
+      series: [{
+        type: 'bar',
+        data: gr.map(function(v){ return { value: v, itemStyle: { color: v >= 0 ? RED : GREEN, borderRadius: v >= 0 ? [2,2,0,0] : [0,0,2,2] } }; }),
+        barWidth: '62%',
+        markLine: { silent: true, symbol: 'none', data: [{ yAxis: 0, lineStyle: { color: 'rgba(255,255,255,0.2)', width: 1 } }], label: { show: false } }
+      }]
+    });
+    window.addEventListener('resize', function(){ c2.resize(); });
+  }
+
+  // 图3 增速对比
+  var e3 = document.getElementById('chartCmp');
+  if(e3){
+    var c3 = echarts.init(e3);
+    c3.setOption({
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', backgroundColor: '#161b26', borderColor: '#2b3345', textStyle: { color: INK, fontSize: 12 }, valueFormatter: function(v){ return v + '%'; } },
+      legend: { data: ['1960s 电子热','2020s AI 浪潮'], textStyle: { color: DIM, fontSize: 12 }, top: 2, itemWidth: 14, itemHeight: 8 },
+      grid: { left: 58, right: 28, top: 46, bottom: 52 },
+      xAxis: {
+        type: 'category',
+        data: ['终端装机/出货','终端算力','细分品类','主器件产值'],
+        axisLine: { lineStyle: { color: GRID } },
+        axisLabel: { color: DIM, fontSize: 12 },
+        axisTick: { show: false }
+      },
+      yAxis: { type: 'value', name: 'CAGR', axisLine: { show: false }, nameTextStyle: { color: DIM, fontSize: 11 }, axisLabel: { color: DIM, fontSize: 11.5, formatter: '{value}%' }, splitLine: { lineStyle: { color: GRID, type: 'dashed' } } },
+      series: [
+        { name: '1960s 电子热', type: 'bar', data: [35.5, 59.3, 60.1, 9.1], barWidth: '30%', itemStyle: { color: '#3a4050', borderColor: '#5a6478', borderWidth: 1 }, label: { show: true, position: 'top', color: DIM, fontSize: 10.5, formatter: '{c}%' } },
+        { name: '2020s AI 浪潮', type: 'bar', data: [38, 66, 63, 66], barWidth: '30%', itemStyle: { color: GOLD }, label: { show: true, position: 'top', color: GOLD2, fontSize: 10.5, formatter: '{c}%' } }
+      ]
+    });
+    window.addEventListener('resize', function(){ c3.resize(); });
+  }
+
+  // 图4 净利修正
+  var e4 = document.getElementById('chartRev');
+  if(e4){
+    var c4 = echarts.init(e4);
+    c4.setOption({
+      backgroundColor: 'transparent',
+      tooltip: { trigger: 'axis', backgroundColor: '#161b26', borderColor: '#2b3345', textStyle: { color: INK, fontSize: 12 }, valueFormatter: function(v){ return v.toLocaleString() + ' 亿'; } },
+      legend: { data: ['原基准','类比修正'], textStyle: { color: DIM, fontSize: 12 }, top: 2, itemWidth: 14, itemHeight: 8 },
+      grid: { left: 60, right: 28, top: 46, bottom: 38 },
+      xAxis: {
+        type: 'category',
+        data: ['2026E','2027E','2028E','2029E','2030E','2031E'],
+        axisLine: { lineStyle: { color: GRID } },
+        axisLabel: { color: DIM, fontSize: 11.5 },
+        axisTick: { show: false }
+      },
+      yAxis: { type: 'value', name: '归母净利（亿元）', axisLine: { show: false }, nameTextStyle: { color: DIM, fontSize: 11 }, axisLabel: { color: DIM, fontSize: 11.5 }, splitLine: { lineStyle: { color: GRID, type: 'dashed' } } },
+      series: [
+        { name: '原基准', type: 'bar', data: [1940, 3212, 4001, 1987, 2412, 4433], barWidth: '32%', itemStyle: { color: '#3a4050' } },
+        { name: '类比修正', type: 'bar', data: [1940, 3212, 4001, 2355, 2485, 4433], barWidth: '32%', itemStyle: { color: GOLD } }
+      ]
+    });
+    window.addEventListener('resize', function(){ c4.resize(); });
+  }
+})();
+</script>
+</body>
+</html>
