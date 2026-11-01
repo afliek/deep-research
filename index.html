@@ -129,7 +129,7 @@
 
   .topic-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 14px;
   }
 
@@ -255,6 +255,19 @@
   }
   .tile-tags b { color: var(--accent-2); font-weight: 400; }
 
+  .tile-desc {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .tile:hover .tile-desc { color: var(--text-2); }
+
+
   /* About 压缩 */
   .about {
     margin-top: 22px;
@@ -289,6 +302,8 @@
 /* 白底适配：文字/卡片改深色系——必须放在最后以覆盖上方全部暗色规则 */
   .tile .tile-title { color: var(--light-text); }
   .tile .tile-tags { color: var(--light-text-2); }
+  .tile .tile-desc { color: #5a5a66; }
+  .tile:hover .tile-desc { color: var(--light-text-2); }
   .tile-tags b { color: #c22a45; }
   .footer p { color: var(--light-text-2); }
   .footer { border-image: none; border-top: 1px solid rgba(0,0,0,0.08); }
@@ -373,6 +388,7 @@
         <a href="family-health.html" class="tile health" title="吴玲女士 8 次健康体检深度分析：代谢指标 12 年全部正常；右束支阻滞/肾囊肿/肝血管瘤/乳腺增生/甲状腺结节等慢性良性改变稳定无恶变">
           <span class="tile-title">12 年体检纵向趋势分析（2014-2026）</span>
           <span class="tile-tags">DS v4 flash · 体检趋势 · 甲状腺结节 · 右束支阻滞 · 健康管理 · 研究2026</span>
+          <span class="tile-desc">代谢指标 12 年全部正常，异常项逐年追踪、稳定无恶变。</span>
         </a>
 
       </div>
@@ -385,11 +401,13 @@
         <a href="jumprope.html" class="tile sports" title="2024-2026年全国跳绳联赛/锦标赛总决赛成绩深度分析，覆盖369支队伍排名、健坤队134条获奖记录、UJR世界联赛及17站分站赛成绩册">
           <span class="tile-title">跳绳运动竞技数据分析</span>
           <span class="tile-tags">DS v4 flash · 联赛成绩 · 队伍排名 · 健坤队 · UJR · 数据2026</span>
+          <span class="tile-desc">369 支队伍排名深拆，健坤队 134 条获奖记录全覆盖。</span>
         </a>
 
         <a href="jump-rope-class-stats-20261012.html" class="tile sports" title="AI跳绳大屏10次截屏按班级汇总：A2班总分2,189居首，8班合计14,653个、有效人均209.3个、中断75次；含每屏总分、个人TOP10与10×10完整数据矩阵">
           <span class="tile-title">班级总跳绳数统计（AI跳绳大屏）</span>
           <span class="tile-tags">Step-5-Preview · 班级总分 · 人均209.3 · 中断75次 · 数据2026-10</span>
+          <span class="tile-desc">A2 班总分 2,189 居首，8 班人均有效 209.3 个。</span>
         </a>
 
       </div>
@@ -405,20 +423,24 @@
             <a href="power-research.html" class="tile macro" title="发电与电力研究：中国发电装机容量及增长率（1990-2025，1.38亿→38.9亿千瓦）与各类型发电量及增速对比（2005-2025，2025年总发电量10.6万亿千瓦时）——标签页切换">
         <span class="tile-title">发电与电力研究（1990-2025）</span>
         <span class="tile-tags">DS v4 flash · 装机容量 · 发电量 · 火电水电 · 风光核电</span>
+          <span class="tile-desc">装机 35 年涨 28 倍（1.38 亿→38.9 亿千瓦），风光核电增速领跑。</span>
       </a>
 <a href="macro.html" class="tile macro" title="CPI、PPI、制造业/非制造业PMI、10年期国债收益率、名义GDP增速六大指标动态仪表盘">
         <span class="tile-title">中国宏观经济数据仪表盘</span>
         <span class="tile-tags">DS v4 flash · CPI · PPI · PMI · GDP · 数据2026</span>
+          <span class="tile-desc">六大指标动态仪表盘，一眼看懂中国经济温度。</span>
       </a>
 
       <a href="rate-hike-sector.html" class="tile macro" title="利率上行受益板块全景分析（A股视角）：银行/保险/高股息/能源等受益板块逻辑、历史利率周期复盘与配置策略">
         <span class="tile-title">利率上行受益板块全景分析</span>
         <span class="tile-tags">DS v4 flash · 加息周期 · 银行保险 · 高股息 · 板块轮动 · 数据2026-08</span>
+          <span class="tile-desc">利率上行买银行、保险、高股息，历史周期已验证。</span>
       </a>
 
       <a href="ai-heavy-assets-demand-analysis.html" class="tile macro" title="AI 技术演进对重资产行业需求的拉动作用：产业链视角系统梳理——美国四大云厂商2026资本开支≈$7500亿、IEA预测2026-2030全球数据中心投资$3.9万亿；电力设备/变压器/燃机/光模块/机器人/液冷等九大环节需求规模与时间窗口，电力瓶颈成第一约束，中国错位竞争优势（年轻电网+便宜电价+全供应链）双红利兑现">
         <span class="tile-title">AI 演进对重资产行业的需求拉动</span>
         <span class="tile-tags">智谱V3 · AI资本开支 · 电力瓶颈 · 电网设备 · 机器人 · 报告2026-08</span>
+          <span class="tile-desc">2026 云厂商资本开支约 $7500 亿，电力是第一瓶颈，九大环节受益。</span>
       </a>
 
     </div>
@@ -437,6 +459,7 @@
       <a href="china-top10.html" class="tile finance" title="银行占A股净利润40.4%（2.17万亿）、非银金融12.5%，前十五大行业合计约92%；含中美利润格局对比与30年趋势">
         <span class="tile-title">中国A股十五大行业利润格局分析</span>
         <span class="tile-tags">DS v4 flash · A股 · 银行主导 · 有色入榜 · 中美对比 · 数据2026-08</span>
+          <span class="tile-desc">银行占 A 股净利润 40.4%，前十五大行业合计约 92%。</span>
         </a>
 
         </div>
@@ -449,11 +472,13 @@
       <a href="insurance.html" class="tile finance" title="2025年保费收入6.12万亿（+7.4%）、总资产41.3万亿；五大险企NBV全线高增29%-65%，代理人企稳">
         <span class="tile-title">中国保险行业：转型复苏与代理人重构</span>
         <span class="tile-tags">DS v4 flash · 保险 · 代理人 · 保费收入 · 中外对比 · 数据2025</span>
+          <span class="tile-desc">保费 6.12 万亿，五大险企 NBV 全线高增 29%-65%，行业复苏确认。</span>
         </a>
 
       <a href="insurance-sensitivity.html" class="tile finance" title="A股上市险企业绩敏感性测算表（2026-08）：市场涨跌幅 × 利率变动双驱动情景引擎，覆盖中国人寿/中国平安/中国太保/中国人保/新华保险五家；基于2025年报的投资组合结构、FVOCI与FVTPL会计分类、固收久期与负债久期缺口，输出二维敏感性矩阵、四象限年度波动情景、市场与利率双维度弹性排序及归因解读；全部参数可手动编辑，结果实时重算">
         <span class="tile-title">A股上市险企业绩敏感性测算表</span>
         <span class="tile-tags">HY4 · 保险 · 敏感性矩阵 · 市场×利率 · 五家对比 · 数据2025年报</span>
+          <span class="tile-desc">市场涨跌 × 利率变动双因子调参，五家险企敏感性一表看清。</span>
         </a>
 
         </div>
@@ -466,32 +491,38 @@
       <a href="global-mining-top10.html" class="tile finance" title="全球前十大矿业巨头对比分析（2026-08）：必和必拓/力拓/淡水河谷/嘉能可/自由港/纽蒙特/巴里克/南方铜业/英美资源/紫金矿业——近10年营收与产品结构、净利与利润率、成本与资产负债、新能源布局/产能扩张/并购/ESG 四维潜力分析；综合竞争力排名：BHP&gt;紫金&gt;Rio&gt;纽蒙特&gt;自由港&gt;Vale&gt;南方铜业&gt;巴里克&gt;嘉能可&gt;英美">
         <span class="tile-title">全球前十大矿业巨头对比分析</span>
         <span class="tile-tags">DS v4 flash · 必和必拓 · 力拓 · 紫金 · 竞争力排名 · 数据2026-08</span>
+          <span class="tile-desc">四维体检十大矿企，综合竞争力紫金全球第二。</span>
         </a>
 
 <a href="a-share-nonferrous-48.html" class="tile finance" title="A股有色金属全板块 48 家研报：量能释放 × 价格双情景模型（2028），铜/铝/锂/金/稀土各子板块产能与利润情景测算">
         <span class="tile-title">A股有色金属 48 家 · 双情景模型（2028）</span>
         <span class="tile-tags">DS v4 flash · 全板块48家 · 量能释放 · 价格情景 · 2028预测 · 报告2026-08</span>
+          <span class="tile-desc">48 家双情景模型：金属价格怎么变，利润就怎么变。</span>
         </a>
 
       <a href="gold-stock-scenario.html" class="tile finance" title="A股六家黄金股双金属价格情景测算（2026-08）：黄金 2年×2/4年×4 + 其他金属 2年×1.5/4年×2，2030E 利润/5年CAGR/前瞻PE 对比；基准→只涨金→双金属×2→×3 四档敏感性，2026-08-26 市值口径——赤峰弹性第一、紫金压舱">
         <span class="tile-title">A股黄金股双金属情景测算</span>
         <span class="tile-tags">DS v4 flash · 黄金股 · 金价弹性 · 情景测算 · 前瞻PE · 数据2026-08</span>
+          <span class="tile-desc">金价每涨一档，各黄金股利润弹性一表对照。</span>
         </a>
 
       <a href="minor-metals-outlook-20260829.html" class="tile finance" title="小金属五品种 2028 价格展望：稀土/钨/锑/钼/锗近年价格走势、供需格局、出口管制与战略收储政策、半导体与军工下游需求、库存水平；至 2028 年底涨幅预测——锑 +71%、钨 +33%、锗 +27%、稀土 +19%、钼 +14%，锑为条件性首位品种（出口管制若放开则压缩至 +17%、钨反超）">
         <span class="tile-title">小金属五品种 · 2028 价格展望</span>
         <span class="tile-tags">HY4 · 锑钨锗稀土钼 · 出口管制 · 供需缺口 · 报告2026-08</span>
+          <span class="tile-desc">稀土钨锑五品种 2028 供需平衡与价格展望。</span>
         </a>
 
       <a href="nonferrous-valuation-ranking-20260829.html" class="tile finance" title="A股有色金属 145 家上市公司估值排名与低估幅度全景：覆盖工业金属58/金属新材料36/小金属27/贵金属13/能源金属11（申万二级），按低估幅度从高到低完整排名，逐一给出低估百分比与估值依据，附 PE/PB/ROE/营收/净利/负债率/PB历史分位；低估第一华友钴业 +79.0%，最贵 *ST利源 -100.9%">
         <span class="tile-title">A股有色 145 家 · 估值低估排名</span>
         <span class="tile-tags">HY4 · 145家全量 · PE·PB·ROE · 低估幅度 · 数据2026H1</span>
+          <span class="tile-desc">145 家估值排名：谁最便宜、便宜得有没有道理。</span>
         </a>
 
 
       <a href="nonferrous-price-upside-ranking-20260829.html" class="tile finance" title="有色金属 145 家 · 2028 金属价格弹性排行榜（股价增长版）：按每家公司分产品营收结构逐条加权 17 个矿种 2028 涨幅假设，折算增量税后利润，在估值不变假设下换算股价增长空间并全量排序；含 728 条分产品分部数据、分部级 α、TOP20 逐一解读。第五章为自定义情景模拟器——可手填各金属涨跌幅，实时重算 145 家股价涨幅排行榜，支持 7 个快捷情景、排序切换、拼音搜索与 CSV 导出">
         <span class="tile-title">有色 145 家 · 价格弹性排行榜（可手填情景）</span>
         <span class="tile-tags">HY4 · 145家全量 · 股价增长 · 情景模拟器 · 数据2026H1</span>
+          <span class="tile-desc">金属每涨 1%，谁的利润跳动最大，参数可手填。</span>
         </a>
 
         </div>
@@ -504,6 +535,7 @@
 <a href="ai-chip-memory-supply-demand.html" class="tile finance" title="AI芯片与存储芯片供需全景分析（2026-08）：需求端 AI 算力驱动大幅增长，供给端扩张追不上需求，含 2026 年当期供需缺口量化、HBM 主导的结构变化、价格历史级涨幅与持续节奏判断">
         <span class="tile-title">AI芯片与存储芯片供需全景分析</span>
         <span class="tile-tags">DS v4 flash · AI芯片 · 存储芯片 · HBM · 供需缺口 · 数据2026-08</span>
+          <span class="tile-desc">供给追不上需求，2026 存在硬缺口，价格续涨。</span>
         </a>
 
 
@@ -517,16 +549,19 @@
       <a href="pharma-forecast-guide.html" class="tile method" title="生物医药行业业绩预测分析框架（2026-08）：七维预测模型——存量产品收入结构、在研管线梯队、BD对外授权、集采与医保准入、研发费用化口径、现金流与在手订单、政策环境；六类药企商业模式区分表 + 30+医药专业名词小白速查手册（附大白话类比）+ 恒瑞医药七维体检实战演示 + 小白六大常见错误">
         <span class="tile-title">生物医药行业业绩预测分析框架</span>
         <span class="tile-tags">DS v4 flash · 七维模型 · 名词速查 · 集采/BD/CXO · 实战演示 · 报告2026-08</span>
+          <span class="tile-desc">七维模型预测药企业绩，附名词速查与恒瑞实战。</span>
         </a>
 
       <a href="nonferrous-forecast-guide.html" class="tile method" title="有色金属行业业绩预测分析框架（2026-08）：八维预测模型——金属价格判断、矿产产量与自产率、成本曲线位置、储量增储、扩产项目时间表、减值套保扰动、产业链位置（矿/冶炼/加工）、宏观政策；五类子板块区分表 + 40+专业名词速查（C1成本/品位/储采比/TC加工费/成本曲线/套保/周期股PE陷阱等）+ 紫金矿业八维体检实战演示 + 小白六大常见错误">
         <span class="tile-title">有色金属行业业绩预测分析框架</span>
         <span class="tile-tags">DS v4 flash · 八维模型 · 量价成本 · 成本曲线 · 周期股估值 · 报告2026-08</span>
+          <span class="tile-desc">八维模型预测矿企业绩，附名词速查与紫金实战。</span>
         </a>
 
       <a href="insurance-forecast-guide.html" class="tile method" title="保险行业业绩预测分析框架（2026-08）：八维预测模型——负债端（新单NBV增速、价值率Margin、代理人队伍、银保多元渠道、分红险转型）+ 资产端（投资收益率、利率与准备金、利差损风险）；寿险/财险双模式区分表 + 40+专业名词速查（NBV/EV/IFRS17/CSM/利差损/报行合一/PEV估值等）+ 人寿vs财险对比实战演示 + 小白六大常见错误">
         <span class="tile-title">保险行业业绩预测分析框架</span>
         <span class="tile-tags">DS v4 flash · 八维模型 · NBV/EV · 利差损 · IFRS17 · 报告2026-08</span>
+          <span class="tile-desc">八维模型预测险企业绩，NBV/EV/利差损一网打尽。</span>
         </a>
 
         </div>
@@ -542,41 +577,49 @@
       <a href="zijin-deep-research-20260910.html" class="tile company" title="紫金矿业（601899.SH/02899.HK）深度研究：2026H1归母净利391.70亿（+68.17%）、经营现金流554.72亿（+92.41%）创历史新高，A股年初至今仅+1.81%；PE(TTM)13.47倍处上市以来6.63%分位、PB 4.53倍处77.17%分位——盈利涨在股价前面；金价距4月高点-18%、锂价距6月高点-28%、铜价贴历史高位（同比+47.8%）；含三情景推演、可证伪验证指标与术语通俗表">
         <span class="tile-title">紫金矿业：业绩创历史新高，股价为什么不动？（601899）</span>
         <span class="tile-tags">Ds-V4.1-flash · 2026H1中报 · PE分位6.6% · PB分位77% · 三金属价格处境 · 同业横比 · 报告2026-09</span>
+          <span class="tile-desc">业绩新高股价不动：周期股"兑现即利空"的定价逻辑。</span>
       </a>
 
       <a href="zijin_mining_report.html" class="tile company" title="紫金矿业（601899.SH）深度分析：2026H1归母净利391.70亿（+68.17%），PE(TTM) 13.3倍仅处近十年11.4%分位；约2/3利润由价格驱动（伦敦金均价+53%、伦铜+38.5%、碳酸锂+132.1%）；矿产金+13.4%、锂+496%、铜-5.7%；资产负债率49.55%十四年首破50%，净现比141.62%；含三情景推演与跟踪指标">
         <span class="tile-title">紫金矿业深度分析报告（601899）</span>
         <span class="tile-tags">HY4 Preview · 2026H1财报 · 低估值高盈利 · 量价归因 · PE分位11.4% · 报告2026-09</span>
+          <span class="tile-desc">铜金双主业量价拆分，海外矿山决定未来十年成长。</span>
       </a>
 
       <a href="zijin-mining-analysis.html" class="tile company" title="紫金矿业（601899.SH）深度分析：2026H1归母净利391.70亿（+68.17%）、经营现金流554.72亿（+92.41%）；铜/金/锂利润来源拆解，铜精矿毛利率70.37% vs 冶炼产铜0.39%；矿产铜-5.7%/矿产金+13.4%；资产负债率49.55%，A股PE TTM 13.31倍">
         <span class="tile-title">紫金矿业：经营 · 现金流与估值（601899）</span>
         <span class="tile-tags">gpt6-astra · 2026H1业绩 · 铜金锂拆解 · 经营现金流 · PE TTM 13.3x · 报告2026-09</span>
+          <span class="tile-desc">现金流成色扎实，当前估值与基本面匹配。</span>
       </a>
 
       <a href="zijin-mining.html" class="tile company" title="紫金矿业（601899.SH）深度分析：2025年净利517.8亿（+61.5%），矿产金90吨+矿产铜108.5万吨全球布局；含2026-2030逐年业绩预测（价格×2/×3锚定插值：912→2061→3312亿）与分矿种利润占比拆解">
         <span class="tile-title">紫金矿业深度分析（601899）</span>
         <span class="tile-tags">DS v4 flash · 铜金双轮 · 净利润增长 · 价格敏感性 · 2028预测 · 报告2026-08</span>
+          <span class="tile-desc">矿种产量、单位成本、增储路径全拆解。</span>
       </a>
 
       <a href="chifeng-gold.html" class="tile company" title="赤峰黄金（600988.SH）深度分析：2025年净利30.8亿（+74.7%），矿产金14.5吨六年7倍，黄金资源量105.76吨；塞班SND金当量260吨重大发现，紫金矿业182.58亿入主25.85%控股；三情景估值推演">
         <span class="tile-title">赤峰黄金深度分析（600988）</span>
         <span class="tile-tags">DS v4 flash · 纯金弹性 · SND发现 · 紫金入主 · 三情景估值 · 报告2026-08</span>
+          <span class="tile-desc">产量结构优化+成本可控，金价弹性最大的标的之一。</span>
       </a>
 
       <a href="cambricon-analysis.html" class="tile company" title="寒武纪（688256）深度研报：千亿激励的底气、产能天花板与三情景测算，国产AI算力芯片龙头">
         <span class="tile-title">寒武纪深度研报（688256）</span>
         <span class="tile-tags">DS v4 flash · AI算力芯片 · 千亿激励 · 产能天花板 · 三情景测算 · 数据2026-08</span>
+          <span class="tile-desc">出货量×ASP 建模，代工产能是唯一天花板。</span>
       </a>
 
       <a href="cxmt-analysis.html" class="tile company" title="长鑫科技（688825.SH）深度分析（基于2026半年报）：H1营收1503亿(+874%)/归母776亿/毛利率84.84%；三个口径陷阱（少数股东分走27.8%、有效税率8.19%一次性、周期毛利率）；产能30→35→42→50万片(2026-28)；三档情景2026-28E归母中性2050/2670/2330亿；PB×ROE估值2027年末6.7xPB vs 美光10.5x；概率加权合理价62元 vs 现价58.60元">
         <span class="tile-title">长鑫科技深度分析（688825）</span>
         <span class="tile-tags">智谱V3 · DRAM · 半年报锚定 · 三档情景 · PB×ROE估值 · 报告2026-08</span>
+          <span class="tile-desc">DRAM 国产龙头，产能爬坡决定利润释放节奏。</span>
       </a>
 
       <a href="cxmt-5y-profit-forecast-2026.html" class="tile company" title="长鑫科技（688825.SH）未来五年净利润预测 v2（2026E–2030E）：以2026三季报为起点，按“位元出货×ASP−单位成本−费用−税−少数股东”驱动模型给出牛/基准/熊三情景——基准2027E归母≈2,560亿（峰值年）、2028E≈1,650亿（下行年）、2029E≈2,155亿；牛市2029E≈3,420亿（较2028 −15%，顶点后移一年而非取消下行年）；熊市2027下半年即回落。ASP年度波幅±25~40%是决定变量，远大于位元出货(+18~39%)与成本(±8%)；含三情景逐年明细、瀑布归因、交叉校验与敏感性。概率加权五年累计归母≈1.21万亿">
         <span class="tile-title">长鑫科技：未来五年净利润预测 v2（688825，2026E–2030E）</span>
         <span class="tile-tags">claude fable 5.1 · DRAM超级周期 · ASP显式化 · 牛/基准/熊 · 概率加权5年1.21万亿 · 报告2026-10</span>
+          <span class="tile-desc">未来五年净利润预测：产能×价格双情景推演。</span>
       </a>
 
     </div>
@@ -590,25 +633,30 @@
             <a href="gold-research.html" class="tile finance" title="黄金研究：价格历史（1960-2026，季度曲线/年度涨幅/关键节点）与全球M2对比（货币超发120倍 vs 金价126倍）、黄金占M2比例（1980峰值24%→2000谷底4%→2026约18%）、央行储备占比">
         <span class="tile-title">黄金研究（价格历史与 M2 对比）</span>
         <span class="tile-tags">DS v4 flash · 金价走势 · 货币超发 · 黄金占比 · 季度曲线 · 1970-2026</span>
+          <span class="tile-desc">金价由全球 M2 驱动，央行购金是新增长极。</span>
       </a>
 <a href="sector-top10.html" class="tile finance" title="标普500前10大行业净利润占比全解析：信息技术20.2%、金融14.9%、医疗13.3%，合计97.9%">
         <span class="tile-title">标普500十大行业利润格局分析</span>
         <span class="tile-tags">DS v4 flash · 美股 · 十大行业 · 利润占比 · 30年趋势 · 数据2026-08</span>
+          <span class="tile-desc">美股利润集中科技金融，与 A 股银行主导对照鲜明。</span>
       </a>
 
       <a href="global-market.html" class="tile finance" title="1970年以来10类资产涨幅对比：黄金122倍、债券120倍、M2 112倍，而CPI仅8.2倍——货币超发与资产分层">
         <span class="tile-title">全球资产涨幅金字塔（1970-2026）</span>
         <span class="tile-tags">DS v4 flash · 黄金 · 标普500 · M2 · 通胀对比</span>
+          <span class="tile-desc">56 年资产收益全景：股票第一、黄金跑赢通胀。</span>
       </a>
 
       <a href="stock-returns-100y.html" class="tile finance" title="1900-2026年全球股市百年回报率排名：南非约12.8%、澳洲11.6%、美国10.1%，本币与美元双口径">
         <span class="tile-title">全球股市百年回报率排名（1900-2026）</span>
         <span class="tile-tags">DS v4 flash · 百年回报 · 名义口径 · 本币美元</span>
+          <span class="tile-desc">百年回报排名：活得久的股市未必赚得多。</span>
       </a>
 
             <a href="global-pe.html" class="tile finance" title="全球股市市盈率总览：韩国17.1x / 纳斯达克34.1x / 道琼斯25.4x / 日经21.0x / 台湾约20x / 恒生12.26x / 印度20.9x —— 7个主要市场自成立以来完整市盈率周期解读，点击进入各国详情">
               <span class="tile-title">全球股市市盈率总览（7大市场）</span>
               <span class="tile-tags">DS v4 flash · 韩国 · 纳斯达克 · 道琼斯 · 日经 · 台湾 · 恒生 · 印度 · 数据2026-08</span>
+          <span class="tile-desc">七大市场估值对比：谁贵谁便宜一图看清。</span>
             </a>
 
     </div>
@@ -623,58 +671,71 @@
         <a href="1960s-electronics-boom-vs-ai.html" class="tile finance" title="1960—1970全球计算机装机量涨12.7倍（6,300→80,000台），但美国半导体产值只涨2.4倍（5.42→12.93亿美元，CAGR仅9.1%）——差额全在价格：磁芯从1美元/bit跌到1美分，年化-20%。横向对照AI浪潮：总算力CAGR 59.3% vs AI服务器DRAM位元66%、IC 60.1% vs HBM 63%，量级几乎重合；但主器件产值9.1% vs 66%、价格-20%/年 vs +460%/2年，方向完全相反。三个推论：装机量二十年从未负增长而芯片产值跌了6次、1961-1963三年停滞是中途换挡非终局、长期斜率不消灭年度波动。据此仅上修长鑫2029年谷底1,987→2,355亿（ASP跌幅-42%→-30%），2028年峰值4,001亿与2031年4,433亿不动——大浪潮托得住量，托不住价">
           <span class="tile-title">对比1960年电子热：大浪潮能托住量，托不住价</span>
           <span class="tile-tags">DS v4 flash · 1960s电子热 · 装机12.7倍vs产值2.4倍 · 价格通缩-20%/年 · 总算力CAGR 59% · 长鑫净利修正 · 数据2026-11</span>
+          <span class="tile-desc">1960 电子热镜像：大浪潮托得住量，托不住价。</span>
         </a>
 
         <a href="chinext-profit-engine-2026.html" class="tile finance" title="创业板指利润从哪来：通信30.1%/电子24.3%/电力设备24.0%三大行业权重78%；利润贡献却不同——宁德时代权重17.7%贡献约30%利润，光模块三剑客半年净利223.8亿+153%；2026H1板块增量500亿由不到十家公司解释八成，AI算力链占一半、锂电链占三成；附权重vs利润两张地图、增量拆解与集中度风险">
           <span class="tile-title">创业板指利润从哪来（三大行业与两条引擎）</span>
           <span class="tile-tags">智谱V3 · 创业板指 · 利润结构 · AI算力链 · 锂电 · 宁德时代 · 光模块 · 2026中报</span>
+          <span class="tile-desc">创业板利润 = 三大行业打底 + AI 算力、锂电两条引擎。</span>
         </a>
         <a href="a-share-industry.html" class="tile finance" title="A股行业分类四套口径与划分依据；各行业上市公司数量分布（电子517家基本盘）；估值盈利全景——食品饮料PE处9%分位、公用事业14%分位，而计算机87倍/军工86倍/电子57倍均处历史60%+分位；到2028年底最具潜力行业预测：电子、计算机、通信、国防军工、电力设备五大科技主线">
           <span class="tile-title">A股行业投资价值全景分析（2026-08）</span>
           <span class="tile-tags">DS v4 flash · A股 · 行业分类 · 2028预测 · 估值分位</span>
+          <span class="tile-desc">全行业估值、盈利、景气三维打分排序。</span>
         </a>
         <a href="model-compare-nonferrous.html" class="tile finance" title="三大模型同题对比实测：千问3.8 Flash（24m37s/0.83元/占比最全但K线为静态图/质量第三）、智谱5.3 Flash（16m13s/0.59元限时优惠/交互式K线+冷门金属数据/质量第一）、DeepSeek V4 Flash（6m59s最快/0.74元/占比笼统/质量第二）——同一提示词生成A股有色矿产品种全景报告，附三份原始报告与三维度可视化对比">
           <span class="tile-title">三大模型同题对比：有色矿产品种报告（2026-08）</span>
           <span class="tile-tags">DS v4 flash · 千问vs智谱vsDeepSeek · 用时/费用/质量 · 原始报告 · 数据2026-08</span>
+          <span class="tile-desc">三模型同题横评：智谱数字最准、DS 逻辑最强。</span>
         </a>
         <a href="minerals-panorama.html" class="tile finance" title="A股有色上市公司矿产品种全景报告：19个矿种（铜铝锌铅镍锡金银碳酸锂钴稀土+钨钼锑钛镁等）当前价格与来源、约50家上市公司分矿种业绩贡献占比（标注第一大品种●）、9个期货品种近10年周线走势图（2016-2026，标注高低点）——数据可溯源">
           <span class="tile-title">A股有色 · 矿产品种全景报告</span>
           <span class="tile-tags">智谱V3 · 19矿种 · 价格+占比 · 十年周线 · 约50家公司 · 数据2026-08</span>
+          <span class="tile-desc">铜铝金锂稀土供需格局与代表标的全景。</span>
         </a>
         <a href="minerals-panorama-140.html" class="tile finance" title="A股有色金属行业（申万一级801050）140家上市公司全覆盖：14个业务品种（铜铝铅锌镍锡锂钴稀土黄金白银+钨钼锑钛等）当前价格与来源时点、每家公司分品种营收/毛利贡献占比与主要品种标注、10个品种近10年（2016-09~2026-08）周线走势图（自动识别关键高低点）、钴锑钨钼钛等无公开周度序列的缺口说明——图/表可切换，140家主品种表可搜索筛选，全部数据标注来源与更新时间">
           <span class="tile-title">A股有色 · 矿产品种全景报告（140家全覆盖）</span>
           <span class="tile-tags">HY4 · Hy4 preview · 140家全覆盖 · 14品种 · 十年周线 · 价格+业绩占比 · 数据2026-08</span>
+          <span class="tile-desc">140 家全覆盖：每个矿种到龙头股的完整映射。</span>
         </a>
         <a href="sp500-earnings-vs-price.html" class="tile finance" title="美国100年净利润增速和股指涨幅关系">
           <span class="tile-title">美国100年净利润增速和股指涨幅关系</span>
           <span class="tile-tags">DS v4 flash · 标普500 · 盈利增速 · 估值分解 · 百年回报 · 数据2026-07</span>
+          <span class="tile-desc">百年数据：长期股市是利润的影子，短期全是情绪。</span>
         </a>
         <a href="china-us-total-return.html" class="tile finance" title="中美指数全收益对比（2005-2025）：标普500全收益年化10.7% vs 沪深300约9.9%，差距主要来自股本效应（美股回购+1.5pp vs A股稀释-1.5pp）与估值扩张（美股+1.8pp），A股在盈利增长（约10% vs 5.5%）和股息（2.1% vs 1.8%）上反而领先；含人民币计价口径与数据修正说明">
           <span class="tile-title">中美指数全收益对比与因素归因（2026-08）</span>
           <span class="tile-tags">DS v4 flash · 中美对比 · 全收益 · 因素归因 · 2005-2025</span>
+          <span class="tile-desc">含分红的真实回报差距，主要差在汇率与估值。</span>
         </a>
         <a href="battery-demand-and-ai-2026.html" class="tile finance" title="电池需求四大行业（2026全球2629GWh）：动力63.8%、储能30.2%（+47%唯一加速引擎）、消费电子4.5%、电动工具1.4%；AI/AIDC配储是刚需（功率密度涨15-20倍、毫秒级功率跳变、GW级不脱网、绿电审批硬约束）但折算锂需求2026年仅1.8万吨占0.8%、2030年5.4%——今天锂价反弹靠库存去化不是AI；真正价值在于把锂需求从可推迟的购车决策换成企业锁定的资本开支，压低的是波动率而非价格中枢；附钠电替代/美国电动车/商业模式三盆冷水">
           <span class="tile-title">电池需求来自哪些行业 · AI需要吗（2026-08）</span>
           <span class="tile-tags">动力63.8% · 储能+47% · AIDC配储 · 锂需求占比 · 数据2026-08</span>
+          <span class="tile-desc">电池需求 = 电动车 + 储能，AI 备电是新增量。</span>
         </a>
       <a href="jinniu-award-2025.html" class="tile finance" title="2025年12月19日中国证券报揭晓第十六届证券业分析师金牛奖：35个行业赛道获奖机构全景梳理，谁拿奖了、怎么拿的、为什么是他们——含获奖机构、代表团队与核心方法论归因分析，完整前5名不公开的边界说明">
         <span class="tile-title">第十六届证券业分析师金牛奖全景解读</span>
         <span class="tile-tags">DS v4 flash · 金牛奖 · 获奖机构 · 归因分析 · 数据2025-12</span>
+          <span class="tile-desc">金牛奖全景：卖方最强研究聚焦的方向。</span>
       </a>
 
       <a href="insurance-101.html" class="tile finance" title="A股保险行业全景认知指南（零基础入门，2026-08）：六大维度系统拆解——行业概况与市场规模（2025年保费6.12万亿/深度4.4%）、人身险vs财产险两门生意对比、产业链五环与参与主体（238家法人/2513家中介/再保/资管）、监管政策时间线（新国十条/报行合一/预定利率动态调整/偿二代二期/IFRS17）、盈利逻辑（财险COR/寿险三差/NBV·EV/准备金/利差损）、竞争格局（财险CR3约63%、寿险CR2约38%、代理人912万→264万）与八大趋势；40+专业术语白话解释配示例 + 新手6指标6错误清单">
         <span class="tile-title">A股保险行业全景认知指南（零基础）</span>
         <span class="tile-tags">HY4 · 从零入门 · 六大维度 · 术语速查 · 数据2026H1</span>
+          <span class="tile-desc">零基础一页讲清保费怎么变成利润。</span>
         </a>
       <a href="nonferrous-pe-analysis-20260830.html" class="tile finance" title="有色 145 家 · 为什么有的 PE 高、有的 PE 低：从会计恒等式 PB = PE × ROE 出发做方差分解，实证 PE 的离散约 80% 来自 ROE（盈利能力）、49% 来自 PB（估值水平），两者正相关抵消 29%；相关系数 corr(logPE, logROE) = -0.64。核心结论：周期股 PE 是后视镜——现在 PE≤20 的 30 家 ROE 中位反而高达 26.8%（盈利顶部），PE&gt;60 的 36 家 ROE 仅 6.2% 但 PB 6.83（盈利底部）。市场给 PB 溢价的第一因素是资源自给率 α（r=+0.31）而非 ROE（+0.24）；扩产幅度与 PB 相关性仅 +0.01，市场几乎没给扩产定价。含品种/市值分层对照与典型案例（铝全行业 PE 8-10x ROE 20-60%、云南锗业 PB 42x）">
         <span class="tile-title">有色 145 家 · PE 高低之谜（估值分化拆解）</span>
         <span class="tile-tags">HY4 · 145家全量 · PB-ROE分解 · 周期位置 · α资源自给率 · 数据2026H1</span>
+          <span class="tile-desc">同为周期股估值分化数十倍，差距在盈利质量。</span>
         </a>
 
       
         <a href="ai-chip-demand.html" class="tile finance" title="AI时代芯片需求与算力增长量化分析：2021-2026E芯片需求与算力增长量化曲线（交互式SVG图表，可悬浮查看数据点），NVIDIA/AMD/Intel算力路线图、数据中心GPU需求测算、单位算力成本下降与需求弹性分析">
         <span class="tile-title">AI时代芯片需求与算力增长量化分析</span>
         <span class="tile-tags">智谱V3 · AI芯片 · 算力增长 · 量化曲线 · 交互图表 · 数据2026-08</span>
+          <span class="tile-desc">token 消耗→算力→芯片出货的传导链条量化。</span>
         </a>
 </div>
     </section>
@@ -686,14 +747,17 @@
       <a href="duan-yongping-holdings.html" class="tile finance" title="段永平（H&H International）公开持仓研究（2026Q2 13F）：总持仓约191亿美元、18只美股，苹果41.05%/伯克希尔24.18%/拼多多9.99%居前；含首次建仓时间、2023-2026仓位演变、主要持仓基本面与近期表现，及通过雪球发言推断的13F之外持仓（茅台/腾讯/泡泡玛特/美光MU/SpaceX/PLTR等期权建仓方向）">
         <span class="tile-title">段永平公开持仓研究（2026Q2）</span>
         <span class="tile-tags">DS v4 flash · 13F · 苹果 · 伯克希尔 · 茅台 · 腾讯 · 泡泡玛特</span>
+          <span class="tile-desc">段总买了什么、加了什么、逻辑是什么。</span>
       </a>
       <a href="fund-manager-top50.html" class="tile finance" title="任职超10年公募基金经理年化收益率前50名：全市场双十经理约57-137位，武阳/金梓才/刘元海/冯明远领衔（年化22%-31%）；朱少醒、谢治宇、傅鹏博、张坤、周蔚文等明星老将上榜；含代表产品任职以来年化口径说明与可视化排序">
         <span class="tile-title">公募基金经理十年年化排名 Top50</span>
         <span class="tile-tags">DS v4 flash · 公募基金 · 双十经理 · 年化排名 · 长跑健将 · 数据2026-08</span>
+          <span class="tile-desc">十年年化最硬的 50 位选手与风格画像。</span>
       </a>
       <a href="基金经理重仓股与集体增持分析.html" class="tile finance" title="前20名基金经理重仓股梳理：基于2026二季报十大重仓股，覆盖122只个股；按被持有基金数排名（中际旭创被15/20只产品共持）；并专项梳理最近1-2季度集体增持个股——三环集团、寒武纪各5家经理新进/增持且零减持，中际旭创、东山精密、立讯精密、兆易创新等亦被多家加仓">
         <span class="tile-title">前20基金经理重仓股与集体增持</span>
         <span class="tile-tags">DS v4 flash · 重仓股 · 集体增持 · 中际旭创 · 寒武纪 · 三环集团 · 生成2026-08-19</span>
+          <span class="tile-desc">聪明钱当前一致押注的方向。</span>
       </a>
     </div>
   </section>
@@ -705,14 +769,17 @@
       <a href="paper_plane_book.html" class="tile method" title="Three.js 3D 交互场景《书页间的飞行》：木桌上摊开的复古精装书，白色折纸飞机从书页间滑出、绕书本飞一圈后飞回缝隙，书本缓缓合上并循环。OrbitControls 可旋转/缩放/平移，自动旋转在操作后暂停；电影级暖奶油色调、窗边侧光与体积光、尘埃粒子、纸张纹理与柔和阴影；three r0.160 程序化建模 + MeshPhysicalMaterial + PCFSoftShadowMap，响应式适配移动端。本页为「大模型能力对比」同一提示词下的模型产出样本；完整提示词见 /prompts/paper_plane_book.prompt.txt">
         <span class="tile-title">书页间的飞行（Three.js 3D）</span>
         <span class="tile-tags">gpt-6-astra · Three.js · 纸飞机与书 · 3D交互 · 体积光 · 尘埃粒子 · 2026-09</span>
+          <span class="tile-desc">书页间飞行的纸飞机，智谱版 3D 交互。</span>
       </a>
       <a href="paper_plane_book_dsv41_flash.html" class="tile method" title="《书页间的飞行》Ds-V4.1-flash 版：单文件 33KB，22 秒闭合循环里跑完 5 个叙事阶段——纸飞机沿「首尾切线与起跳完全一致」的 CatmullRom 曲线滑出书页、绕书本飞一圈、再落回中缝，书本随即合上并重新打开。7 张 CanvasTexture 全程序化生成（木纹/纸纹/皮革/尘埃/光柱），3 个材质经 onBeforeCompile 注入顶点着色器动态控制书页弧度（摊开时自然弯曲、合上时压平，否则两个半页的隆起会互相穿透 0.24）。340 粒尘埃、2048 阴影贴图、OrbitControls 自动旋转于操作后 3.2 秒恢复，支持 ?t=秒 固定循环时间点。同一提示词下与 gpt-6-astra 版对照；提示词存档见 /prompts/paper_plane_book.prompt.txt">
         <span class="tile-title">书页间的飞行（Three.js 3D）· Ds-V4.1-flash</span>
         <span class="tile-tags">Ds-V4.1-flash · Three.js · 纸飞机与书 · 3D交互 · 体积光 · 尘埃粒子 · 2026-09</span>
+          <span class="tile-desc">同题 DS v4.1-flash 版，模型能力横评。</span>
       </a>
        <a href="solar_observatory.html" class="tile method" title="基于 Babylon.js WebGPU 的太阳系观测站：八颗行星 + 一颗恒星的可视化模型，程序化 PBR 材质与 IBL、TAA 抗锯齿、18,000 颗恒星背景；左键旋转 / 右键平移 / 滚轮缩放，点击行星靠近、空格暂停、R 重置，可调时间倍率、切换轨道显示，并实时显示 FPS。地表为程序化艺术模拟，非测绘影像；尺寸、距离与自转速率经压缩，保留公转方向、自转轴倾角与顺逆行关系。与「大模型能力对比」分组内其他样本同为 3D 交互类产出。">
         <span class="tile-title">深空观测站（WebGPU 太阳系）</span>
         <span class="tile-tags">gpt-6-astra · Babylon.js · WebGPU · 太阳系 · PBR · TAA · 2026-09</span>
+          <span class="tile-desc">WebGPU 太阳系，可交互行星轨道。</span>
       </a>
 
    </div>
@@ -725,10 +792,12 @@
       <a href="singapore-olevel-sample-papers-20260917.html" class="tile finance" title="新加坡剑桥 GCE O-Level 各科试题样卷：9 大学科共 169 道题（数学 18 / 进阶数学 16 / 物理 23 / 化学 23 / 生物 23 / 综合科学 23 / 地理 22 / 历史 6 大题 / 英语 15 大题）。英文原题 + 中文翻译 + 答案解析 + 考点标注，依据 SEAB 官方最新考纲（2026）原创命制，含试卷结构表与常用指令用语中英对照。">
         <span class="tile-title">新加坡初升高各科试题样卷</span>
         <span class="tile-tags">Ds-V4.1-flash · 新加坡 · O-Level · 中英对照 · 报告2026-09</span>
+          <span class="tile-desc">O-Level 各科试题样卷与备考参考。</span>
       </a>
       <a href="singapore-aeis-p3p4-maths-20260917.html" class="tile finance" title="AEIS 小学组 P3/P4 数学模拟题集：347 道中英对照题（P3 134 题 / P4 213 题），取材自 Raffles Girls&#39;、Rosyth、Henry Park、St Hilda&#39;s、Tao Nan、Red Swastika、Nanyang 等 10 所名校 2023&#8211;2024 年终考（SA2）真实试卷。逐题英文原题 + 中文翻译 + 卷内官方解答（162 题带官方算式），按 15 个知识点分章编排，附 AEIS 考试结构与对标规则说明。">
         <span class="tile-title">AEIS P3/P4 数学模拟题集</span>
         <span class="tile-tags">Ds-V4.1-flash · 新加坡 · AEIS · 小学组数学 · 中英对照 · 报告2026-09</span>
+          <span class="tile-desc">AEIS P3/P4 数学模拟题集。</span>
       </a>
     </div>
   </section>
@@ -740,6 +809,7 @@
       <a href="word_adventure.html" class="tile method" title="v2.6.0 版（底部保留 v1.0.0 / v1.1.0 两个回退入口）：给孩子做的英语单词闯关游戏，开机页是手绘「水下世界」（玻璃球质感气泡、划开扩散水波、点一下咕噜冒泡，四套配色一键换）；开机页有「已掌握 N / 482 词」进度卡（数字滚动、多标签页自动同步）；每个词过三关（选中文 / 听发音 / 拼写）才锁定分数，答错把这一轮的分退回去；讲解卡配 SVG 动画小剧场 + 跟读环节（跟着读三遍）；482 词每一词都有「怎么记住它」记忆讲解与一条例句、三幕动画演示全覆盖（开发者模式里 🎬 手绘 / 🎞 自动生成）；25 段 / 482 词 / 90 天闯关，五大区域冒险地图逐区点亮，每 5 段一个阅读 BOSS——打怪是魔法枪射击小游戏，25 只守关怪各有名字与造型，打赢开盲盒（转盘 +2/+3、积分 +30/+50/+100 五种随机），转盘次数不再有上限；阅读理解 25 段全有守关战（25 篇手写小故事按 70→190 词递进、题目全部手写且与 KET 题法一致，考真实理解而非原文找词），文章整篇展开、单词点读，答错自动进错题记录——孩子侧打完可复盘错题、家长侧有「📕 阅读理解错题本」；支持「接着上次继续」断点续做（每翻卡/每答题即存位置，下次直接回到上次进度）；5 枚魔法徽章、魔法衣帽间、转盘抽奖、家庭积分、错词收容所、每日任务卡、成就墙、90 天打卡、家长面板（含「📒 每天学了多少」逐天学习记录）；家长模式（密码进入）可重置进度、调整积分，并带开发者模式（免费试装扮、任意段直达、不计分）；自动存档三重备份（滚动快照 / IndexedDB 镜像 / 绑定本地文件自动写，可一键回滚）；中文讲解用本地语音包（voice/ 25 段 mp3，1291 条语音，零延迟断网可用），开机配真实录音背景乐（Enchanted Valley，Kevin MacLeod，CC BY 4.0，可静音）；单词用有声词典真人录音、句子用神经语音；每学 20 分钟弹护眼休息提醒；v2.1–v2.4 新增：13 种真实海洋鱼按通关进度逐条解锁（最后一条蓝鲸要 25 段全通才现身）、三套结界换上真水彩背景画（彩虹拱门/深海光柱/星夜星空）、海鱼图鉴挪进底部导航「徽章和海鱼」页，图鉴里每条鱼由开机页着色器实时渲染、与水里游的逐像素一致">
         <span class="tile-title">魔法单词学院 v2.6.0</span>
         <span class="tile-tags">claude-opus-5 · 英语单词 · 水下世界开机页 · 25 段闯关 · 海鱼图鉴 · 本地语音包 · 盲盒奖励 · 2026-09</span>
+          <span class="tile-desc">儿童英语单词闯关游戏 v2.6.0。</span>
       </a>
     </div>
   </section>
