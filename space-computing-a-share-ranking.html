@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>太空算力爆发下的 A 股受益排序 · 产业价值量与股价影响两张榜</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root{
+    --bg:#0d0d0f; --panel:#15151a; --panel2:#1a1a21; --gold:#d4b06a; --gold-dim:#9c854e;
+    --text:#e8e4da; --muted:#a09a8c; --line:#2a2a32; --red:#e06c5f; --green:#7fb37f;
+    --blue:#7fa8c9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"FangSong","仿宋","STFangsong",serif;
+    line-height:1.9; font-size:17px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:64px 48px 96px}
+  .back{display:inline-block;color:var(--gold-dim);text-decoration:none;font-size:14px;
+    border:1px solid var(--line);padding:4px 14px;border-radius:999px;margin-bottom:32px;letter-spacing:.5px}
+  .back:hover{border-color:var(--gold-dim);color:var(--gold)}
+  h1{
+    font-family:"FangSong","仿宋",serif;font-size:34px;font-weight:400;color:var(--gold);
+    letter-spacing:2px;margin-bottom:10px;line-height:1.4;
+  }
+  .sub{color:var(--muted);font-size:16px;margin-bottom:6px}
+  .tagline{display:inline-block;border:1px solid var(--gold-dim);color:var(--gold);font-size:13px;
+    padding:2px 12px;border-radius:999px;margin:14px 0 40px;letter-spacing:1px}
+  h2{
+    font-size:24px;color:var(--gold);font-weight:400;margin:56px 0 18px;padding-left:14px;
+    border-left:3px solid var(--gold);letter-spacing:1px;
+  }
+  h3{font-size:19px;color:#e9dcc0;font-weight:400;margin:30px 0 10px}
+  p{margin-bottom:14px;text-align:justify}
+  .lead{color:var(--muted);font-size:16px}
+  table{width:100%;border-collapse:collapse;margin:18px 0 26px;font-size:15px;line-height:1.7}
+  th{background:#1e1a12;color:var(--gold);font-weight:400;text-align:left;
+    padding:10px 12px;border:1px solid var(--line);letter-spacing:.5px}
+  td{padding:10px 12px;border:1px solid var(--line);vertical-align:top;background:var(--panel)}
+  tr:nth-child(even) td{background:var(--panel2)}
+  td.c,th.c{text-align:center}
+  td.r,th.r{text-align:right}
+  .num{color:#eec987}
+  .hl{color:var(--gold)}
+  .neg{color:var(--red)}
+  .pos{color:var(--green)}
+  .callout{border:1px solid var(--line);background:linear-gradient(135deg,#16141a,#14161a);
+    padding:22px 26px;border-radius:10px;margin:22px 0}
+  .callout b{color:var(--gold);font-weight:400}
+  .warn{border-left:3px solid var(--red)}
+  .warn b{color:#eaa39a}
+  .key{border-left:3px solid var(--gold)}
+  ul,ol{margin:0 0 16px 26px}
+  li{margin-bottom:8px}
+  .foot{margin-top:72px;padding-top:20px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13px;line-height:1.8}
+  .figcap{color:var(--muted);font-size:13px;text-align:center;margin:-4px 0 26px}
+  .fig{border:1px solid var(--line);border-radius:10px;padding:18px 10px 8px;background:var(--panel);margin:22px 0 6px}
+  .badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:4px;letter-spacing:.5px}
+  .b-a{background:#1e2a1e;color:#9ec99e;border:1px solid #2f4a2f}
+  .b-b{background:#2a2418;color:#d9bb82;border:1px solid #4a3f26}
+  .b-c{background:#2a1d1b;color:#d9a09a;border:1px solid #4a2f2b}
+  @media(max-width:720px){
+    .wrap{padding:36px 20px 64px}
+    h1{font-size:26px}
+    table{font-size:13.5px}
+    td,th{padding:7px 8px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<a href="index.html" class="back">← 返回首页</a>
+
+<h1>太空算力爆发下的 A 股受益排序</h1>
+<div class="sub">产业价值量与股价影响，是两个口径 · 两张榜，别搞混</div>
+<div class="tagline">临时研究 · 2026-11-07</div>
+
+<div class="callout key">
+<b>一句话结论：</b>太空算力最值钱的两个环节——算力载荷（单星 675 万元）和辐射散热器（单星 210 万元）——<b>A 股一个都买不到</b>：前者在昇腾体系和定制航天级 GPU 手里，后者最强的四家主体（锐莱热控、热数科技、微焓科技、亘满科技）全部未上市。A 股能吃到的是平台配套的 620 万元／星，占整星 41%。<br><br>
+按业绩兑现排，第一是复旦微电；按股价弹性排，第一是上海港湾。<b>两张榜几乎是反的，因为它们回答的是两个不同的问题。</b>
+</div>
+
+<h2>一、先把方法论说清楚：两个口径差在哪</h2>
+
+<p class="lead">市面上绝大多数"太空算力受益标的"清单，把这两件事混在一起讲，结论就会互相矛盾。</p>
+
+<table>
+<tr><th style="width:20%">口径</th><th style="width:40%">公式</th><th>回答的问题</th></tr>
+<tr><td><b class="hl">产业受益榜</b></td><td>拿到订单的概率 × 订单规模 ÷ 公司现有体量</td><td>谁真能从太空算力赚到这笔钱（本页第二、三节）</td></tr>
+<tr><td><b class="hl">股价影响榜</b></td><td>新增利润增幅 × 估值扩张倍数 × 预期差</td><td>谁最容易被市场炒起来（本页第五节）</td></tr>
+</table>
+
+<p>差别全在<b>分母</b>上。同样是新增 1 亿元净利，长盈通（前三季净利 0.22 亿元）增幅 +450%，复旦微电（10.60 亿元）只增 +9.4%——差 48 倍。但复旦微电拿到这 1 亿元的概率高一个数量级，因为它有宇航级 FPGA 的型号壁垒，而长盈通的主营是光纤陀螺和保偏光纤。</p>
+
+<p>我这份报告把<b>"能不能拿到订单"放在权重最高的位置</b>，原因是这门生意的性质：项目制、甲方极度强势（星网、星枢、三体都是国家队或院所主导）、宇航级认证 1–2 年、在轨考核再加一年半载、进了型号目录才有份。<b>在这种生意里，"有能力"和"有订单"之间隔着一整道鸿沟。</b></p>
+
+<h2>二、先算清池子：一颗星的钱花在哪</h2>
+
+<p>最硬的对标是 SpaceX 与英伟达联合的 Starmind。中泰证券口径：<b>单星成本约 1000 万美元，其中服务器 780 万美元、散热板 170 万美元、太阳能板 120 万美元</b>（三项合计略超 1000 万，口径存在差异，此处按原值呈现）。</p>
+
+<div class="callout">
+<b>这张成本结构里最反直觉的一条：散热板 170 万美元，比太阳能板 120 万美元还贵。</b>真空没有空气对流，芯片废热只能靠红外辐射排掉。BCG 测算，100kW 需要约 400m² 散热板，1MW 需要 4000m²——大半个足球场。所以太空算力星的热控是能不能上天的前提，不是选配。
+</div>
+
+<p>国内星枢计划的单星成本在千万元级。我按 <b>1500 万元／颗</b>推算拆分（* 本文测算，非公司披露口径）：</p>
+
+<div class="fig">
+<svg viewBox="0 0 900 340" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>单星太空算力价值量拆解与 A 股可及性</title>
+<desc>算力载荷 675 万元 A 股买不到；辐射散热器 210 万元主体未上市；太阳翼电池 195 万、平台结构 180 万、星间激光 150 万、总装发射 90 万 A 股可及。</desc>
+<text x="40" y="32" font-family="FangSong,serif" font-size="15" fill="#d4b06a">单星价值量拆解（按 1500 万元／颗推算）</text>
+<text x="800" y="32" font-family="FangSong,serif" font-size="14" fill="#a09a8c">A 股可及性</text>
+
+<rect x="260" y="60" width="420" height="20" fill="#5f5e5a"/>
+<text x="245" y="70" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">算力载荷</text>
+<text x="690" y="70" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">675 万</text>
+<text x="800" y="70" font-family="FangSong,serif" font-size="14" fill="#e06c5f" dominant-baseline="central">买不到</text>
+
+<rect x="260" y="104" width="131" height="20" fill="#8c8a82"/>
+<text x="245" y="114" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">辐射散热器</text>
+<text x="401" y="114" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">210 万</text>
+<text x="800" y="114" font-family="FangSong,serif" font-size="14" fill="#d9a05a" dominant-baseline="central">主体未上市</text>
+
+<rect x="260" y="148" width="121" height="20" fill="#d4b06a"/>
+<text x="245" y="158" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">太阳翼 + 电池</text>
+<text x="391" y="158" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">195 万</text>
+<text x="800" y="158" font-family="FangSong,serif" font-size="14" fill="#7fb37f" dominant-baseline="central">可及</text>
+
+<rect x="260" y="192" width="112" height="20" fill="#d4b06a"/>
+<text x="245" y="202" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">平台结构</text>
+<text x="382" y="202" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">180 万</text>
+<text x="800" y="202" font-family="FangSong,serif" font-size="14" fill="#7fb37f" dominant-baseline="central">可及</text>
+
+<rect x="260" y="236" width="93" height="20" fill="#d4b06a"/>
+<text x="245" y="246" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">星间激光</text>
+<text x="363" y="246" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">150 万</text>
+<text x="800" y="246" font-family="FangSong,serif" font-size="14" fill="#7fb37f" dominant-baseline="central">可及</text>
+
+<rect x="260" y="280" width="56" height="20" fill="#d4b06a"/>
+<text x="245" y="290" text-anchor="end" font-family="FangSong,serif" font-size="15" fill="#e8e4da" dominant-baseline="central">总装发射</text>
+<text x="326" y="290" font-family="FangSong,serif" font-size="14" fill="#a09a8c" dominant-baseline="central">90 万</text>
+<text x="800" y="290" font-family="FangSong,serif" font-size="14" fill="#7fb37f" dominant-baseline="central">可及</text>
+</svg>
+</div>
+<div class="figcap">图 1：单星 1500 万元价值量拆解与 A 股可及性。金色为 A 股可及环节，合计 620 万元／星（41%）。</div>
+
+<p>再乘星数——这个数字最容易让人误判：</p>
+
+<table>
+<tr><th style="width:24%">时段</th><th>中国累计星数</th><th>硬件池子（按 1500 万／星）</th><th>年均</th></tr>
+<tr><td>2026–2030</td><td>600–800 颗</td><td>90–120 亿元</td><td><b class="neg">18–24 亿元</b></td></tr>
+<tr><td>2031–2035</td><td>约 3800 颗（星枢 1000 + 三体 2800）</td><td>约 570 亿元</td><td>约 114 亿元</td></tr>
+</table>
+
+<div class="callout warn">
+<b>年均 24 亿元的池子，摊到 6 个环节、二十几家公司，每家能分到的钱在报表里看不见。</b>这就是为什么榜单里没有一家的当期业绩由太空算力驱动——复旦微电 FPGA 只增 7.17%、铖昌 Q3 单季负增长、上海港湾自己承认空间电源"规模较小、尚未盈利"。
+</div>
+
+<p>还有一条更少被提的：行业共识是单星成本要从千万元级降到百万元级、远期数十万元级。这意味着<b>星数涨 4–5 倍，池子可能只涨 2–3 倍</b>。赚"单价 × 数量"的公司弹性会自动打折，只有赚"份额提升"的公司才真受益。</p>
+
+<h2>三、业绩受益榜（产业口径，共 14 家）</h2>
+
+<p class="lead">评分三维度：弹性（池子 × 可及份额 ÷ 现有营收）、确定性（是否已在轨／有型号配套）、壁垒（不可替代性）。</p>
+
+<table>
+<tr><th class="c" style="width:5%">#</th><th style="width:15%">标的</th><th style="width:16%">卡位</th><th>关键事实（2026 三季报口径）</th><th class="c" style="width:8%">弹性</th><th class="c" style="width:8%">确定性</th></tr>
+<tr><td class="c"><b class="hl">1</b></td><td><b>复旦微电</b><br><span class="num">688385</span></td><td>抗辐照 FPGA／算力芯片</td><td>宇航级 FPGA 国内市占第一、在轨数万颗；FPAI 已流片送样数十家；<b>与星枢牵头方复旦大学技术同源</b>。但 FPGA 收入 11.96 亿元只增 <b class="neg">+7.17%</b>，总营收 35.64 亿元、归母 10.60 亿元（+221.08%，含公允价值变动）</td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-b">中</span></td></tr>
+<tr><td class="c">2</td><td><b>中国卫星</b><br><span class="num">600118</span></td><td>整星总装（五院唯一平台）</td><td>前三季营收 39.56 亿元（+27.52%）、归母 0.85 亿元（+473.40%）；外资预估星座相关量产收入占集团比重 2024 年个位数 → <b>2028 年 25–30%</b></td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-a">高</span></td></tr>
+<tr><td class="c">3</td><td><b>上海港湾</b><br><span class="num">605598</span></td><td>空间电源 + 太阳翼</td><td>伏曦已保障 25 颗卫星发射、<b>60 余套电源系统及太阳翼在轨</b>；柔性钙钛矿过 TÜV 莱茵三类全项认证。<b class="neg">公司自述"规模较小、尚未盈利"</b>，前三季归母 −0.63 亿元</td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-b">中高</span></td></tr>
+<tr><td class="c">4</td><td><b>国博电子</b><br><span class="num">688375</span></td><td>星载有源相控阵 T／R 组件</td><td>星载载荷天线分系统<b>单星价值数百万级</b>；地面端硅基氮化镓全球唯一量产</td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-b">中高</span></td></tr>
+<tr><td class="c">5</td><td><b>铖昌科技</b><br><span class="num">001270</span></td><td>星载 T／R 芯片</td><td>毛利率 <b class="hl">82.3%</b>（全链最高），但前三季营收 3.15 亿元仅 +2.86%、<b class="neg">Q3 单季 −5.72%</b>；市值 173 亿元对应 0.95 亿元净利。<b>毛利高证明价格不是瓶颈，营收负增长证明交付才是瓶颈</b></td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-b">中</span></td></tr>
+<tr><td class="c">6</td><td><b>光迅科技</b><br><span class="num">002281</span></td><td>星间激光（唯一天地通吃）</td><td>100Gbps 宇航模块量产、400Gbps 在轨验证、星网 40 亿元订单；但航天占营收约 8%，165 亿元体量把弹性稀释掉</td><td class="c"><span class="badge b-c">小</span></td><td class="c"><span class="badge b-a">高</span></td></tr>
+<tr><td class="c">7</td><td><b>中兵红箭</b><br><span class="num">000519</span></td><td>金刚石热沉（中南钻石）</td><td><b>唯一有批量航天热控供货的 A 股标的</b>：航天器热控散热片年交付 3000 片以上、配套北斗系列卫星</td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-b">中高</span></td></tr>
+<tr><td class="c">8</td><td><b>菲利华</b><br><span class="num">300395</span></td><td>石英纤维／复材结构件</td><td>卫星结构与透波材料刚需，配套关系稳定，属"每颗星都绕不开"的平台级材料</td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-b">中</span></td></tr>
+<tr><td class="c">9</td><td><b>力量钻石</b><br><span class="num">301071</span></td><td>CVD 金刚石热沉</td><td>热导率 2200 W/(m·K)；英伟达测试已过，<b>SpaceX 星载散热片认证预计 2026Q4 完成</b>；散热片尚小规模量产、商丘 500 台设备调试中。前三季净利 1.81 亿元</td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+<tr><td class="c">10</td><td><b>黄河旋风</b><br><span class="num">600172</span></td><td>8 吋金刚石热沉片</td><td>国内首条 8 吋热沉片量产线、良率 85%、一期 2 万片／年；已向商业航天配套企业<b>送样测试</b></td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+<tr><td class="c">11</td><td><b>光库科技</b><br><span class="num">300620</span></td><td>薄膜铌酸锂／航天级光器件</td><td>前三季营收 18.61 亿元（+86.41%）、归母 2.91 亿元（+152.10%）——<b>但增长全部来自 AI 数通，航天无收入披露</b></td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+<tr><td class="c">12</td><td><b>钧达股份</b><br><span class="num">002865</span></td><td>星枢计划运营方股权</td><td>控股星枢天算（与复旦共同牵头运营星枢计划）、控股巡天千河补齐整星制造。<b class="neg">主业前三季亏 4.28 亿元</b>，太空是纯期权</td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+<tr><td class="c">13</td><td><b>长盈通</b><br><span class="num">688143</span></td><td>固-固相变温控</td><td>配套太空算力试验星，但<b>主营是光纤环与保偏光纤，热控不是收入主体</b>；Q3 营收 +125% 来自无源内连光器件（AI 数通）。PE-TTM 约 <b class="neg">1611 倍</b></td><td class="c"><span class="badge b-a">大</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+<tr><td class="c">14</td><td><b>乾照光电</b><br><span class="num">300102</span></td><td>空间三结砷化镓电池</td><td>国内空间电池外延片龙头，但前三季营收 13.83 亿元（<b class="neg">−49.70%</b>）、<b class="neg">扣非仅 170 万元</b>（−95.58%），PE 约 105 倍</td><td class="c"><span class="badge b-b">中</span></td><td class="c"><span class="badge b-c">低</span></td></tr>
+</table>
+
+<h2>四、为什么把"能拿到订单"排在"弹性大"前面</h2>
+
+<p>三个理由，都不是感觉，是这门生意的结构决定的：</p>
+
+<ol>
+<li><b>项目制、甲方强势。</b>星网、星枢、三体都由国家队或院所主导，价格和份额都不是市场化竞价的结果。</li>
+<li><b>验证周期长。</b>宇航级认证 1–2 年，在轨考核再加一年半到两年。今天送样，2028 年才可能确认收入。</li>
+<li><b>订单有排他性。</b>进了型号目录才有份，不像光模块谁都能扩产。这就是为什么中兵红箭（年供 3000 片、配套北斗）排在力量钻石（认证还在推进）之前，尽管后者弹性更大。</li>
+</ol>
+
+<h2>五、股价影响榜（交易口径）</h2>
+
+<p>完整公式还得再加一项，这一项上一节完全没算：</p>
+
+<div class="callout key">
+<b>股价影响 ≈ 新增利润增幅 × 估值扩张倍数 × 预期差</b><br>
+第三项"预期差"最要命——<b>已经涨过的，未来影响幅度反而小。</b>
+</div>
+
+<table>
+<tr><th class="c" style="width:6%">序</th><th style="width:15%">标的</th><th style="width:32%">股价弹性的来源</th><th>已被定价程度</th></tr>
+<tr><td class="c"><b class="hl">1</b></td><td><b>上海港湾</b></td><td>市值约 60 亿元、空间电源刚起量、有四象限右上的位置</td><td><b class="pos">低</b>——2026 年 11 月才有券商首次覆盖</td></tr>
+<tr><td class="c">2</td><td><b>钧达股份</b></td><td>亏损无估值锚、星枢运营方独家股权、市值小</td><td>中——10 月 29 日已涨停一轮</td></tr>
+<tr><td class="c">3</td><td><b>铖昌科技</b></td><td>173 亿元市值对应 0.95 亿元净利，任何订单都会被放大</td><td><b class="neg">高</b>——PE 已过百倍</td></tr>
+<tr><td class="c">4</td><td><b>力量钻石</b></td><td>散热从 0 到 1，认证节点密集（SpaceX Q4、英伟达）</td><td>中高——概念已被反复交易</td></tr>
+<tr><td class="c">5</td><td><b>乾照光电</b></td><td>扣非仅 170 万元，分母接近零</td><td class="neg">高——PE 约 105 倍</td></tr>
+<tr><td class="c">6</td><td><b>长盈通</b></td><td>0.22 亿元净利，最小分母</td><td><b class="neg">极高——PE-TTM 约 1611 倍</b></td></tr>
+<tr><td class="c">7</td><td><b>复旦微电</b></td><td>净利 10.6 亿元、市值大，弹性最小</td><td>低，但弹性也有限</td></tr>
+<tr><td class="c">8</td><td><b>中国卫星</b></td><td>大市值、PE 较高，弹性居中</td><td>中</td></tr>
+</table>
+
+<p>按这个排，<b>钧达、长盈通、乾照会冲到前面，复旦微电掉到第 7</b>——和第四节几乎是反的。</p>
+
+<h3>统一尺子：同样新增 1 亿元净利</h3>
+
+<p>假设 2030 年太空算力给每家公司都新增 1 亿元净利（约合 3.3 亿元收入，净利率 30%），横比弹性：</p>
+
+<table>
+<tr><th style="width:24%">公司</th><th class="r" style="width:22%">2026 前三季净利</th><th class="r" style="width:18%">+1 亿后增幅</th><th class="c">业绩榜排名</th></tr>
+<tr><td>复旦微电</td><td class="r num">10.60 亿</td><td class="r"><b class="neg">+9.4%</b></td><td class="c">1</td></tr>
+<tr><td>中国卫星</td><td class="r num">0.85 亿</td><td class="r"><b class="pos">+118%</b></td><td class="c">2</td></tr>
+<tr><td>上海港湾</td><td class="r num neg">−0.63 亿</td><td class="r">亏损收窄，仍未转正</td><td class="c">3</td></tr>
+<tr><td>铖昌科技</td><td class="r num">0.95 亿</td><td class="r"><b class="pos">+105%</b></td><td class="c">5</td></tr>
+<tr><td>光迅科技</td><td class="r num">12.84 亿</td><td class="r"><b class="neg">+7.8%</b></td><td class="c">6</td></tr>
+<tr><td>力量钻石</td><td class="r num">1.81 亿</td><td class="r">+55%</td><td class="c">9</td></tr>
+<tr><td>乾照光电</td><td class="r num">0.93 亿</td><td class="r"><b class="pos">+108%</b></td><td class="c">14</td></tr>
+<tr><td>长盈通</td><td class="r num">0.22 亿</td><td class="r"><b class="pos">+450%</b></td><td class="c">13</td></tr>
+<tr><td>钧达股份</td><td class="r num neg">−4.28 亿</td><td class="r">减亏 23%</td><td class="c">12</td></tr>
+</table>
+
+<p><b>同一把尺子下，长盈通 +450%、复旦微电 +9.4%，差 48 倍。</b>可业绩榜把复旦微电排第一、长盈通排第十三——因为前者拿到这 1 亿元的概率高一个数量级。</p>
+
+<h2>六、四象限：两个口径的落点</h2>
+
+<div class="fig">
+<svg viewBox="0 0 900 460" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>太空算力标的的地位：基本面确定性与股价弹性</title>
+<desc>钧达、长盈通落高弹性低确定区；上海港湾、铖昌落最优区间；复旦微电、中国卫星、光迅落高确定低弹性区。</desc>
+
+<line x1="450" y1="60" x2="450" y2="400" stroke="#2a2a32" stroke-width="1" stroke-dasharray="5 5"/>
+<line x1="60" y1="230" x2="840" y2="230" stroke="#2a2a32" stroke-width="1" stroke-dasharray="5 5"/>
+
+<text x="60" y="46" font-family="FangSong,serif" font-size="14" fill="#a09a8c">纯题材区：弹性大、兑现弱</text>
+<text x="460" y="46" font-family="FangSong,serif" font-size="14" fill="#d4b06a">最优区间：弹性与确定性兼具</text>
+<text x="840" y="424" text-anchor="end" font-family="FangSong,serif" font-size="14" fill="#a09a8c">压舱石：确定性强、弹性小</text>
+<text x="60" y="446" font-family="FangSong,serif" font-size="13" fill="#8a8578">基本面确定性低</text>
+<text x="840" y="446" text-anchor="end" font-family="FangSong,serif" font-size="13" fill="#8a8578">基本面确定性高</text>
+
+<circle cx="177" cy="77" r="6" fill="#e06c5f"/>
+<text x="191" y="82" font-family="FangSong,serif" font-size="14" fill="#e8e4da">钧达股份</text>
+
+<circle cx="216" cy="94" r="6" fill="#e06c5f"/>
+<text x="230" y="99" font-family="FangSong,serif" font-size="14" fill="#e8e4da">长盈通</text>
+
+<circle cx="333" cy="128" r="6" fill="#8c8a82"/>
+<text x="347" y="133" font-family="FangSong,serif" font-size="14" fill="#e8e4da">力量钻石</text>
+
+<circle cx="294" cy="245" r="6" fill="#8c8a82"/>
+<text x="308" y="250" font-family="FangSong,serif" font-size="14" fill="#e8e4da">乾照光电</text>
+
+<circle cx="489" cy="162" r="6" fill="#d4b06a"/>
+<text x="503" y="167" font-family="FangSong,serif" font-size="14" fill="#e8e4da">铖昌科技</text>
+
+<circle cx="567" cy="145" r="6" fill="#d4b06a"/>
+<text x="581" y="150" font-family="FangSong,serif" font-size="14" fill="#e8e4da">上海港湾</text>
+
+<circle cx="660" cy="340" r="6" fill="#7fa8c9"/>
+<text x="674" y="345" font-family="FangSong,serif" font-size="14" fill="#e8e4da">复旦微电</text>
+
+<circle cx="740" cy="380" r="6" fill="#7fa8c9"/>
+<text x="728" y="386" text-anchor="end" font-family="FangSong,serif" font-size="14" fill="#e8e4da">光迅科技</text>
+
+<circle cx="790" cy="352" r="6" fill="#7fa8c9"/>
+<text x="790" y="336" text-anchor="middle" font-family="FangSong,serif" font-size="14" fill="#e8e4da">中国卫星</text>
+</svg>
+</div>
+<div class="figcap">图 2：竖轴为股价弹性（上强下弱），横轴为基本面确定性（左弱右强）。红色为高弹性低确定的题材区，金色为最优区间，蓝色为压舱石。</div>
+
+<p>这张图把两个口径的矛盾画出来了：<b>复旦微电是业绩榜第 1 名，却落在最右下角——股价弹性最小</b>；钧达、长盈通在左上角，弹性最大但兑现最弱。</p>
+
+<h2>七、三个反直觉的发现</h2>
+
+<h3>1. 最赚钱的三个环节，A 股全空</h3>
+<p>热控这条线最典型：<b>锐莱热控</b>的卫星液冷系统国内市占率 <b class="hl">90%</b>；<b>热数科技</b>服务超过 200 颗在轨卫星，2026 年发布全柔性可展开辐射器（减重 60%、总重 ≤40kg）；<b>微焓科技</b>配套 300 余颗卫星及深空探测器；<b>亘满科技</b>累计配套超百颗——<b>这四家一家都没上市</b>。A 股挂"太空热控"标签的（长盈通、英维克、乐凯胶片），要么主营不对，要么还在研发阶段。</p>
+
+<h3>2. 散热比星间激光值钱，这与通信星的直觉相反</h3>
+<p>Starmind 单星：散热板 170 万美元 > 太阳能板 120 万美元。通信星的平台侧核心是电源与太阳翼，但算力星的核心约束是散热。星枢首发星"15kW 发电 + 主动微通道液冷 + 可展开辐射散热器"，说明热控已从辅助系统升为设计前提。<b>所以纯按价值量，做散热的应该排在光模块前面——前提是买得到真主体，而 A 股买不到。</b></p>
+
+<h3>3. 成本下降会缩小池子，不是扩大池子</h3>
+<p>行业共识是单星从千万元级降到百万元级、远期数十万元级。星数涨 4–5 倍，池子只涨 2–3 倍。<b>谁赚"单价 × 数量"，谁的弹性自动打折；只有赚"份额提升"的公司才真受益。</b>这一点对估值模型影响很大——不能简单用"星数 × 单星价值"外推收入。</p>
+
+<h2>八、判断与风险</h2>
+
+<div class="callout key">
+<b>产业判断：</b>如果太空算力真爆发，A 股受益顺序是 <b>整星总装 &gt; 抗辐照芯片 &gt; 空间电源 &gt; 星载射频 &gt; 星间激光 &gt; 散热材料</b>。前四名吃的是"每颗星都绕不开"的平台刚需，后两名吃的是"份额能不能抢到"。<br><br>
+<b>交易判断：</b>高弹性 + 低确定组合（钧达、长盈通、乾照）涨得快、跌得更快，因为它们的弹性来自"分母接近零"，不是来自"分子变大"。<br><br>
+<b>两个口径交集最好的是上海港湾：</b>市值约 60 亿元、有真实在轨业绩（25 颗卫星、60 余套电源与太阳翼在轨）、单星 15kW 高功率电源是硬需求、且刚被市场发现。瑕疵也很实在——公司自己写"空间电源业务和钙钛矿业务规模较小，且尚未盈利"。
+</div>
+
+<h3>三条必须知道的前提</h3>
+<ol>
+<li><b>三类形态的拐点完全不同</b>（泰伯智库）：单星智能 2027 年、算力星座 2030 年、太空数据中心 <b>2035 年</b>。A 股现在交易的是 2035 年的太空数据中心，而那个形态要等发射成本降到约 200 美元／公斤以下。</li>
+<li><b>SpaceX 那条路 A 股基本吃不到。</b>Starmind 1GW 部署 425 亿美元、马斯克指引 2030 年 100GW 对应 4.25 万亿美元——但它垂直整合自产芯片与太阳能板，供应链不外放（对外只给了设计速率 25Gbps 的入门款激光终端）。别拿它的规模给 A 股估值。</li>
+<li><b>估值已透支。</b>长盈通 PE-TTM 约 1611 倍、乾照约 105 倍、铖昌 173 亿元市值对 0.95 亿元净利、钧达还在亏损。这是期权定价，不是业绩定价。按业绩买，现在没有一家能买；按期权买，就要接受它可能十年不兑现。</li>
+</ol>
+
+<h3>市场规模的多口径对照（差异来自分母，不是谁算错）</h3>
+<table>
+<tr><th style="width:26%">口径</th><th>数字</th><th style="width:22%">发布方</th></tr>
+<tr><td>全球太空算力服务</td><td>2025 年 16.4 亿美元 → 2029 年 28 亿美元（CAGR 约 14%）</td><td>窄口径</td></tr>
+<tr><td>全球太空算力整体</td><td>2025 年 29.4 亿美元 → 2030 年 190 亿 → 2035 年 1719.3 亿美元（CAGR 50.2%）</td><td>泰伯智库</td></tr>
+<tr><td>全球（另一口径）</td><td>2020 年约 3 亿美元 → 2030 年约 160 亿美元</td><td>赛迪顾问</td></tr>
+<tr><td>中国太空算力产业</td><td>2025 年 50 亿元 → 2030 年 <b class="hl">452 亿元</b> → 2035 年 3632.5 亿元（CAGR 55.4%）</td><td>泰伯智库</td></tr>
+<tr><td>中国（更宽口径）</td><td>2030 年产业规模超 2500 亿元</td><td>中国信通院</td></tr>
+<tr><td>全球全产业链</td><td>2030 年千亿美元</td><td>长江证券</td></tr>
+<tr><td>在轨数据中心（窄细分）</td><td>2035 年全球 390 亿美元（CAGR 67.4%）</td><td>—</td></tr>
+</table>
+<p class="lead">这几个数字差几十倍，但都在确认同一个方向。用的时候必须选口径，不能用最乐观的那个给最保守的标的估值。</p>
+
+<h2>九、四个可验证的跟踪指标</h2>
+
+<table>
+<tr><th style="width:28%">指标</th><th style="width:26%">现状</th><th>含义</th></tr>
+<tr><td>复旦微电 FPGA 收入增速</td><td class="num">+7.17%</td><td>突破 30% 才是太空算力真正上量；现在的增速说明需求还没到</td></tr>
+<tr><td>星枢计划年发射数</td><td>2028 年起 50 颗算力星 + 100 颗边缘星</td><td>兑现不了，全链逻辑都要往后推一年以上</td></tr>
+<tr><td>力量钻石 SpaceX 认证</td><td>预计 2026Q4</td><td>过了只是"能供货"，不是"有收入"——从认证到批量还有一整年</td></tr>
+<tr><td>单星成本</td><td>千万元级</td><td>降到 500 万元以下，商业闭环才成立；降到百万级才谈得上"爆发"</td></tr>
+</table>
+
+<div class="callout warn">
+<b>风险提示：</b>本文所有"单星价值量拆分""池子测算""可及份额"均为作者推算（* 标注），非公司披露或券商原始口径；所有公司财务数据取自 2026 年三季报，未年化；星枢计划、三体星座的星数与节奏来自公开报道，存在调整可能。本文为产业链结构分析，不构成任何投资建议。
+</div>
+
+<div class="foot">
+本篇为「临时研究」系列 · 太空算力产业与 A 股映射<br>
+研究日期：2026-11-07 ｜ 数据口径：2026 年三季报、公开报道与券商测算<br>
+相关阅读：<a href="research-guangxun-002281.html" style="color:#d4b06a">光迅科技（002281）研报总结 —— A 股唯一航天与地面光通信通吃标的</a>
+</div>
+
+</div>
+</body>
+</html>
