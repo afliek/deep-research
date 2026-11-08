@@ -1,195 +1,198 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>任职超10年公募基金经理 · 年化收益率前50名</title>
-<script data-goatcounter="https://afliek.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<title>任职超10年公募基金经理 · 年化收益率榜（2026-11-06 重算）</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif; background:#f7f5f0; color:#2c2a26; line-height:1.7; }
-  .wrap { max-width:1080px; margin:0 auto; padding:24px 18px 60px; }
+  .wrap { max-width:1180px; margin:0 auto; padding:24px 18px 60px; }
   .banner { background:linear-gradient(135deg,#1c2a3d 0%,#2c4a6b 70%,#3a5f8a 100%); color:#f4ead6; padding:34px 30px 26px; border-radius:14px; margin-bottom:22px; }
   .banner .tag { display:inline-block; font-size:12px; letter-spacing:2px; color:#d9b877; border:1px solid rgba(217,184,119,.5); border-radius:16px; padding:3px 12px; margin-bottom:12px; }
   .banner h1 { font-size:25px; letter-spacing:1px; margin-bottom:8px; }
   .banner .sub { font-size:14px; color:#c9d4e0; }
   .banner .meta { margin-top:12px; font-size:12px; color:#9fb2c8; }
   .banner .meta span { margin-right:14px; }
-
   .tldr { background:#fff; border:1px solid #e4dcc8; border-left:5px solid #c9a24b; border-radius:10px; padding:18px 22px; margin-bottom:22px; }
   .tldr h2 { font-size:16px; color:#8c6a1e; margin-bottom:10px; }
   .tldr ul { padding-left:20px; font-size:14px; }
   .tldr li { margin:5px 0; }
-
   h2.sec { font-size:20px; color:#1c2a3d; margin:30px 0 6px; padding-bottom:8px; border-bottom:2px solid #c9a24b; }
   .sec-sub { font-size:12px; color:#8a8378; margin-bottom:14px; }
-
   .kpi-row { display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 4px; }
   .kpi { flex:1; min-width:150px; background:#fff; border:1px solid #e4dcc8; border-radius:10px; padding:14px 16px; text-align:center; }
   .kpi .num { font-size:22px; font-weight:700; color:#1c2a3d; }
+  .kpi .num.red { color:#c0392b; }
+  .kpi .num.green { color:#1e8449; }
   .kpi .lab { font-size:12px; color:#8a8378; margin-top:4px; }
-
-  table { width:100%; border-collapse:collapse; background:#fff; font-size:13px; margin:12px 0 20px; }
-  th { background:#f3ead6; color:#4a3f2a; font-weight:600; padding:9px 10px; border:1px solid #e0d6bd; text-align:left; white-space:nowrap; }
-  td { padding:8px 10px; border:1px solid #ece5d4; vertical-align:top; }
+  table { width:100%; border-collapse:collapse; background:#fff; font-size:12.5px; margin:12px 0 20px; }
+  th { background:#f3ead6; color:#4a3f2a; font-weight:600; padding:8px 7px; border:1px solid #e0d6bd; text-align:left; white-space:nowrap; }
+  td { padding:7px; border:1px solid #ece5d4; vertical-align:top; }
   tr:nth-child(even) td { background:#fdfbf5; }
   .up { color:#c0392b; font-weight:700; }
+  .down { color:#1e8449; font-weight:700; }
   .top3 { background:#fdf6e3 !important; }
   .note { background:#fdf8ec; border:1px solid #e8ddc0; border-radius:8px; padding:10px 14px; font-size:12px; color:#7a6a44; margin:10px 0; }
   .warn { background:#fdeeec; border:1px solid #f0cfc9; border-radius:8px; padding:10px 14px; font-size:12px; color:#8a3f34; margin:10px 0; }
   .chartbox { background:#fff; border:1px solid #e4dcc8; border-radius:10px; padding:14px; margin:12px 0; }
-  #chartTop { width:100%; height:520px; }
+  #chartTop { width:100%; height:560px; }
+  #chartDrop { width:100%; height:520px; }
+  .badge { display:inline-block; font-size:11px; padding:1px 6px; border-radius:9px; white-space:nowrap; }
+  .b-on { background:#e6f4ea; color:#1e7d34; }
+  .b-off { background:#fdecec; color:#c0392b; }
+  .b-quit{ background:#f0ece2; color:#7a7060; }
+  .b-chg { background:#eaf2fb; color:#1f5fa8; }
   .disc { font-size:11px; color:#8a8378; border-top:1px solid #e4dcc8; margin-top:30px; padding-top:14px; }
   footer { text-align:center; font-size:11px; color:#9a9388; margin-top:18px; }
 </style>
-</head>
-<body>
-<div class="wrap">
-
-<div class="banner">
-  <div class="tag">公 募 基 金 经 理 · 长 跑 排 行</div>
-  <h1>任职超 10 年公募基金经理 · 年化收益率前 50 名</h1>
-  <div class="sub">主动权益 · 按代表产品任职以来年化收益率排序（综合 Wind / 21 世纪经济报道 / 中国基金报 / 上海证券报等多源）</div>
-  <div class="meta">
-    <span>📅 数据时点：截至 2026 年中（约 2026-06，个别口径 2025 年末）</span>
-    <span>📊 口径：代表产品"任职以来年化"，另有从业综合年化对照</span>
-  </div>
+</head><body><div class="wrap">
+<div class="banner"><div class="tag">公 募 基 金 经 理 · 长 跑 排 行 · 2 0 2 6 年 1 1 月 重 算</div>
+<h1>任职超 10 年公募基金经理 · 任职以来年化收益率榜</h1>
+<div class="sub">主动权益 · 按第一大代表产品「任职以来年化收益率」排序 · 复权净值口径一手重算</div>
+<div class="meta"><span>📅 数据时点：2026-11-06 收盘</span><span>📊 口径：天天基金复权累计净值（日增长率连乘，含分红再投）</span><span>🔄 本次刷新：2026-11-08</span></div></div>
+<div class="tldr"><h2>◆ 先看结论（TL;DR）</h2><ul>
+<li><b>榜单被 7-10 月的暴跌彻底改写。</b>按同一复权口径重算 49 位经理：<b>年化 ≥20% 的人从原来的约 15 位降到 0 位</b>，最高仅 <b>金梓才 19.51%</b>；年化 ≥15% 只剩 <b>8 位</b>，<b>3 位已转负</b>。</li>
+<li><b>跌幅的来源高度一致：抱团 AI 算力。</b>2026 年三季度科创 50 单季跌 30.7%、创业板指跌 27.8%，光模块三巨头（新易盛、中际旭创、天孚通信）从 6 月底到 11 月初分别跌 <b>−71.7%、−64.7%、−59.6%</b>；本节 49 只产品中 <b>8 只 6/30 以来跌幅超 50%</b>。</li>
+<li><b>榜首换人：金梓才（财通，19.51%）取代武阳（易方达，19.45%）居首</b>，但两者 6/30 以来分别下跌 54.4%、57.9%，年化数字是"历史积累"，不代表近半年没亏。</li>
+<li><b>人事变动比净值变化更值得注意</b>：原榜 50 条中有 <b>7 位已不再管理该产品</b>，其中 <b>6 位（曹名长、余广、史博、孙芳、张杨、王筱苓）已不在公募现任经理库</b>；另有 <b>5 条经理—产品对应关系经核实不成立</b>，已换用其现任代表产品重算（见第二节）。</li>
+<li><b>抗跌的只有价值/消费/港股派</b>：伍旋 +10.03%、萧楠 +13.05%、邹唯 +10.92%、刘彦春 +9.82%、杜洋 +6.16%、徐彦 +6.04%、刘旭 +1.53%（均为 6/30 以来），与抱团算力的产品形成两个世界。</li>
+</ul></div>
+<div class="kpi-row">
+<div class="kpi"><div class="num red">0</div><div class="lab">年化 ≥20% 的人数<br><span style="color:#8a8378">原榜约 15 位</span></div></div>
+<div class="kpi"><div class="num">19.51%</div><div class="lab">榜首年化<br><span style="color:#8a8378">金梓才 · 财通价值动量A</span></div></div>
+<div class="kpi"><div class="num red">8</div><div class="lab">6/30 以来跌超 50% 的产品数<br><span style="color:#8a8378">共 49 只样本</span></div></div>
+<div class="kpi"><div class="num red">−43.2%</div><div class="lab">创业板指 6/30 以来<br><span style="color:#8a8378">4,342 → 2,465</span></div></div>
+<div class="kpi"><div class="num red">7</div><div class="lab">已不再管理该产品<br><span style="color:#8a8378">原榜 50 条中</span></div></div>
 </div>
-
-<div class="tldr">
-  <h2>◆ 先看结论（TL;DR）</h2>
-  <ul>
-    <li>全市场基金经理约 2,900+ 名，<b>任职超过 10 年者仅约 178 位</b>；其中"任职超 10 年 + 年化超 10%"的"<b>双十</b>"基金经理约 <b>57-137 位</b>（口径不同），占比约 2%。</li>
-    <li><b>第一梯队（年化 20%+）</b>：<a href="fund-manager-nav.html#wuyang" style="color:#3a5f8a;">武阳</a>（易方达，约 30.9%）、<a href="fund-manager-nav.html#jinzhicai" style="color:#3a5f8a;">金梓才</a>（财通，28.9%）、<a href="fund-manager-nav.html#liuyuanhai" style="color:#3a5f8a;">刘元海</a>（东吴，23.4%）、<a href="fund-manager-nav.html#fengmingyuan" style="color:#3a5f8a;">冯明远</a>（信澳，23.6%）、<a href="fund-manager-nav.html#mohaibo" style="color:#3a5f8a;">莫海波</a>（万家，22.3%）、<a href="fund-manager-nav.html#chenhao" style="color:#3a5f8a;">陈皓</a>（易方达，21.8%）、<a href="fund-manager-nav.html#caojin" style="color:#3a5f8a;">曹晋</a>（富国，20.9%）、<a href="fund-manager-nav.html#caomingchang" style="color:#3a5f8a;">曹名长</a>（中欧，21.4%）、<a href="fund-manager-nav.html#liyuanbo" style="color:#3a5f8a;">李元博</a>（富国，约 21%）等。</li>
-    <li><b>明星老将档</b>：朱少醒（富国，富国天惠约 15.7%-20%）、谢治宇（兴全，兴全合润约 19.5%）、傅鹏博（睿远，约 20-21%）、周蔚文（中欧，约 17.9%）、张坤（易方达，约 19% 口径）均在榜单；其中谢治宇、傅鹏博已并入第一梯队可点开曲线，<b>前 20 名（含赵枫、郑希、盖俊龙、赵强、杜猛、杨锐文、王克玉，及朱少醒）均已补全代表产品月度累计净值曲线并可点开</b>（见下方表格 ↗ 链接）；周蔚文（#23）、张坤（#30）作为明星老将亦可点开曲线。</li>
-    <li><b>重要口径提示</b>：不同平台对同一经理年化数据差异显著（"从业综合年化" vs "代表产品任职年化"），如张坤从业综合约 7% 但代表产品约 19%；本榜优先采用<b>代表产品任职以来年化</b>，与"任职以来"本意更贴近。</li>
-    <li>榜单聚焦<b>主动权益</b>经理，不含指数/量化型；个别经理（如余广）已卸任，已标注。</li>
-  </ul>
+<h2 class="sec">一、核心榜单（按 2026-11-06 重算年化排序）</h2>
+<div class="sec-sub">口径：代表产品「任职以来年化」= 复权净值由该经理首次管理该产品之日起至 2026-11-06 的几何年化；「原榜」列为 2026-08 版多源汇编数字，仅作对照，两者口径不同不可直接相减</div>
+<h3 style="font-size:15px;color:#1c2a3d;margin:18px 0 6px;">① 第一梯队：年化 ≥15%（历史积累仍在）　<span style="font-size:12px;color:#8a8378;font-weight:400">共 8 位</span></h3>
+<table><thead><tr><th>#</th><th>基金经理</th><th>公司</th><th>代表产品（现任）</th><th>任职起始</th><th>年数</th><th>任职以来年化</th><th>原榜口径</th><th>年内</th><th>6/30 以来</th><th>9/30 以来</th><th>状态</th></tr></thead><tbody>
+<tr class='top3'><td>1</td><td><b>金梓才</b></td><td>财通</td><td>财通价值动量A<br><span style='color:#8a8378;font-size:11px'>720001</span></td><td>2014-11-19</td><td>11.96</td><td class='up'><b>+19.51%</b></td><td style='color:#8a8378'>~28.9%</td><td class='up'>+3.96%</td><td class='down'>-54.36%</td><td class='down'>-37.16%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr class='top3'><td>2</td><td><b>武阳</b></td><td>易方达</td><td>易方达瑞享<br><span style='color:#8a8378;font-size:11px'>001437</span></td><td>2017-12-30</td><td>8.85</td><td class='up'><b>+19.45%</b></td><td style='color:#8a8378'>~30.9%</td><td class='down'>-7.30%</td><td class='down'>-57.86%</td><td class='down'>-43.67%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr class='top3'><td>3</td><td><b>郑希</b></td><td>易方达</td><td>易方达信息产业<br><span style='color:#8a8378;font-size:11px'>001513</span></td><td>2016-09-27</td><td>10.11</td><td class='up'><b>+18.80%</b></td><td style='color:#8a8378'>~26.4%</td><td class='up'>+2.95%</td><td class='down'>-49.31%</td><td class='down'>-25.69%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>4</td><td><b>陈皓</b></td><td>易方达</td><td>易方达科翔<br><span style='color:#8a8378;font-size:11px'>110013</span></td><td>2014-05-10</td><td>12.5</td><td class='up'><b>+18.64%</b></td><td style='color:#8a8378'>~21.8%</td><td class='up'>+1.51%</td><td class='down'>-27.10%</td><td class='down'>-13.56%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>5</td><td><b>赵强</b></td><td>新华</td><td>新华策略精选<br><span style='color:#8a8378;font-size:11px'>001040</span></td><td>2017-05-17</td><td>9.26</td><td class='up'><b>+18.59%</b></td><td style='color:#8a8378'>20.5%</td><td class='up'>+17.73%</td><td class='down'>-41.42%</td><td class='down'>-29.71%</td><td><span class='badge b-off'>已卸任 2026-08-20</span> </td></tr>
+<tr><td>6</td><td><b>莫海波</b></td><td>万家</td><td>万家品质生活A<br><span style='color:#8a8378;font-size:11px'>519195</span></td><td>2015-08-06</td><td>11.25</td><td class='up'><b>+17.95%</b></td><td style='color:#8a8378'>~22.3%</td><td class='down'>-1.38%</td><td class='down'>-21.92%</td><td class='down'>-13.00%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>7</td><td><b>冯明远</b></td><td>信达澳亚</td><td>信澳新能源产业<br><span style='color:#8a8378;font-size:11px'>001410</span></td><td>2016-10-19</td><td>10.05</td><td class='up'><b>+17.12%</b></td><td style='color:#8a8378'>~23.6%</td><td class='up'>+2.88%</td><td class='down'>-45.13%</td><td class='down'>-18.70%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>8</td><td><b>谢治宇</b></td><td>兴证全球</td><td>兴全合润<br><span style='color:#8a8378;font-size:11px'>163406</span></td><td>2013-01-29</td><td>13.77</td><td class='up'><b>+16.10%</b></td><td style='color:#8a8378'>~19.5%</td><td class='down'>-4.40%</td><td class='down'>-32.56%</td><td class='down'>-10.11%</td><td><span class='badge b-on'>在任</span> </td></tr>
+</tbody></table>
+<h3 style="font-size:15px;color:#1c2a3d;margin:18px 0 6px;">② 第二梯队：年化 10%-15%　<span style="font-size:12px;color:#8a8378;font-weight:400">共 21 位</span></h3>
+<table><thead><tr><th>#</th><th>基金经理</th><th>公司</th><th>代表产品（现任）</th><th>任职起始</th><th>年数</th><th>任职以来年化</th><th>原榜口径</th><th>年内</th><th>6/30 以来</th><th>9/30 以来</th><th>状态</th></tr></thead><tbody>
+<tr><td>9</td><td><b>刘旭</b></td><td>大成</td><td>大成高鑫A<br><span style='color:#8a8378;font-size:11px'>000628</span></td><td>2015-07-29</td><td>11.27</td><td class='up'><b>+14.52%</b></td><td style='color:#8a8378'>17.1%</td><td class='down'>-6.32%</td><td class='up'>+1.53%</td><td class='up'>+1.33%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>10</td><td><b>曹晋</b></td><td>富国</td><td>富国中小盘精选A<br><span style='color:#8a8378;font-size:11px'>000940</span></td><td>2015-01-23</td><td>11.79</td><td class='up'><b>+14.46%</b></td><td style='color:#8a8378'>~20.9%</td><td class='up'>+7.01%</td><td class='down'>-36.90%</td><td class='down'>-12.68%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>11</td><td><b>余广</b></td><td>景顺长城</td><td>景顺长城核心竞争力<br><span style='color:#8a8378;font-size:11px'>260116</span></td><td>2011-12-20</td><td>14.55</td><td class='up'><b>+14.15%</b></td><td style='color:#8a8378'>~14.1%</td><td class='down'>-40.04%</td><td class='down'>-50.12%</td><td class='down'>-37.21%</td><td><span class='badge b-off'>已卸任 2026-07-09</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>12</td><td><b>朱少醒</b></td><td>富国</td><td>富国天惠精选成长A<br><span style='color:#8a8378;font-size:11px'>161005</span></td><td>2005-11-16</td><td>20.97</td><td class='up'><b>+14.14%</b></td><td style='color:#8a8378'>15.7%-20%</td><td class='down'>-11.16%</td><td class='down'>-20.92%</td><td class='down'>-11.49%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>13</td><td><b>刘元海</b></td><td>东吴</td><td>东吴移动互联A<br><span style='color:#8a8378;font-size:11px'>001323</span></td><td>2016-04-27</td><td>10.53</td><td class='up'><b>+14.13%</b></td><td style='color:#8a8378'>~23.4%</td><td class='down'>-31.82%</td><td class='down'>-53.37%</td><td class='down'>-32.73%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>14</td><td><b>杜猛</b></td><td>摩根</td><td>摩根新兴动力A<br><span style='color:#8a8378;font-size:11px'>377240</span></td><td>2011-07-13</td><td>15.32</td><td class='up'><b>+13.64%</b></td><td style='color:#8a8378'>~20%</td><td class='down'>-24.72%</td><td class='down'>-47.92%</td><td class='down'>-27.96%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>15</td><td><b>杨锐文</b></td><td>景顺长城</td><td>景顺长城环保优势<br><span style='color:#8a8378;font-size:11px'>001975</span></td><td>2016-03-15</td><td>10.64</td><td class='up'><b>+13.61%</b></td><td style='color:#8a8378'>超 15%</td><td class='down'>-2.19%</td><td class='down'>-27.08%</td><td class='down'>-12.67%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>16</td><td><b>伍旋</b></td><td>鹏华</td><td>鹏华盛世创新A<br><span style='color:#8a8378;font-size:11px'>160613</span></td><td>2011-12-28</td><td>14.86</td><td class='up'><b>+13.32%</b></td><td style='color:#8a8378'>13.2%</td><td class='up'>+4.28%</td><td class='up'>+10.03%</td><td class='up'>+3.89%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>17</td><td><b>杨栋</b></td><td>富国</td><td>富国低碳新经济A<br><span style='color:#8a8378;font-size:11px'>001985</span></td><td>2015-12-18</td><td>10.89</td><td class='up'><b>+12.97%</b></td><td style='color:#8a8378'>18.6%</td><td class='down'>-22.48%</td><td class='down'>-43.78%</td><td class='down'>-24.39%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>18</td><td><b>杨谷</b></td><td>诺安基金</td><td>诺安先锋混合A<br><span style='color:#8a8378;font-size:11px'>320003</span></td><td>2006-02-22</td><td>20.7</td><td class='up'><b>+12.65%</b></td><td style='color:#8a8378'>15.0%-16.5%</td><td class='down'>-0.66%</td><td class='down'>-22.09%</td><td class='down'>-12.43%</td><td><span class='badge b-on'>在任</span> <span class='badge b-chg'>原榜为诺安成长</span></td></tr>
+<tr><td>19</td><td><b>张琦</b></td><td>国寿安保基金</td><td>国寿安保智慧生活股票A<br><span style='color:#8a8378;font-size:11px'>001672</span></td><td>2015-09-23</td><td>11.13</td><td class='up'><b>+12.55%</b></td><td style='color:#8a8378'>~15.8%</td><td class='up'>+11.23%</td><td class='down'>-44.46%</td><td class='down'>-20.34%</td><td><span class='badge b-on'>在任</span> <span class='badge b-chg'>原榜为国寿安保策略精选</span></td></tr>
+<tr><td>20</td><td><b>周蔚文</b></td><td>中欧</td><td>中欧新蓝筹A<br><span style='color:#8a8378;font-size:11px'>166002</span></td><td>2011-05-23</td><td>15.46</td><td class='up'><b>+12.48%</b></td><td style='color:#8a8378'>17.9%</td><td class='down'>-9.51%</td><td class='down'>-26.03%</td><td class='down'>-14.84%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>21</td><td><b>徐彦</b></td><td>大成</td><td>大成竞争优势<br><span style='color:#8a8378;font-size:11px'>090013</span></td><td>2019-12-30</td><td>6.85</td><td class='up'><b>+12.44%</b></td><td style='color:#8a8378'>超 13%</td><td class='up'>+1.85%</td><td class='up'>+6.04%</td><td class='down'>-1.78%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>22</td><td><b>李巍</b></td><td>广发</td><td>广发制造业精选<br><span style='color:#8a8378;font-size:11px'>270028</span></td><td>2011-09-20</td><td>15.13</td><td class='up'><b>+12.41%</b></td><td style='color:#8a8378'>17.1%</td><td class='down'>-19.65%</td><td class='down'>-47.77%</td><td class='down'>-27.59%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>23</td><td><b>徐小勇</b></td><td>长安</td><td>长安裕隆<br><span style='color:#8a8378;font-size:11px'>005743</span></td><td>2018-09-07</td><td>8.16</td><td class='up'><b>+12.35%</b></td><td style='color:#8a8378'>12.6%-24%</td><td class='down'>-12.06%</td><td class='down'>-47.86%</td><td class='down'>-21.31%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>24</td><td><b>陶灿</b></td><td>建信</td><td>建信改革红利<br><span style='color:#8a8378;font-size:11px'>000592</span></td><td>2014-05-14</td><td>12.48</td><td class='up'><b>+12.25%</b></td><td style='color:#8a8378'>17.6%</td><td class='down'>-22.20%</td><td class='down'>-48.92%</td><td class='down'>-23.35%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>25</td><td><b>王筱苓</b></td><td>工银瑞信</td><td>工银瑞信大盘蓝筹<br><span style='color:#8a8378;font-size:11px'>481008</span></td><td>2012-12-05</td><td>10.96</td><td class='up'><b>+11.59%</b></td><td style='color:#8a8378'>~17.5%</td><td class='down'>-19.57%</td><td class='down'>-33.20%</td><td class='down'>-26.63%</td><td><span class='badge b-off'>已卸任 2023-11-22</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>26</td><td><b>盖俊龙</b></td><td>红土创新</td><td>红土创新新科技A<br><span style='color:#8a8378;font-size:11px'>006265</span></td><td>2022-12-16</td><td>3.89</td><td class='up'><b>+11.47%</b></td><td style='color:#8a8378'>~23.1%</td><td class='down'>-4.23%</td><td class='down'>-60.69%</td><td class='down'>-37.09%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>27</td><td><b>毕天宇</b></td><td>富国</td><td>富国高端制造行业A<br><span style='color:#8a8378;font-size:11px'>000513</span></td><td>2014-06-20</td><td>12.38</td><td class='up'><b>+11.39%</b></td><td style='color:#8a8378'>16.9%</td><td class='down'>-10.44%</td><td class='down'>-41.28%</td><td class='down'>-24.39%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>28</td><td><b>赵蓓</b></td><td>工银瑞信</td><td>工银前沿医疗A<br><span style='color:#8a8378;font-size:11px'>001717</span></td><td>2016-02-03</td><td>10.76</td><td class='up'><b>+11.08%</b></td><td style='color:#8a8378'>~17.6%</td><td class='up'>+0.59%</td><td class='down'>-1.27%</td><td class='down'>-8.27%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>29</td><td><b>杜洋</b></td><td>工银瑞信</td><td>工银战略转型<br><span style='color:#8a8378;font-size:11px'>000991</span></td><td>2015-02-16</td><td>11.72</td><td class='up'><b>+10.08%</b></td><td style='color:#8a8378'>超 15%</td><td class='down'>-14.91%</td><td class='up'>+6.16%</td><td class='down'>-5.33%</td><td><span class='badge b-on'>在任</span> </td></tr>
+</tbody></table>
+<h3 style="font-size:15px;color:#1c2a3d;margin:18px 0 6px;">③ 第三梯队：年化 0%-10%　<span style="font-size:12px;color:#8a8378;font-weight:400">共 17 位</span></h3>
+<table><thead><tr><th>#</th><th>基金经理</th><th>公司</th><th>代表产品（现任）</th><th>任职起始</th><th>年数</th><th>任职以来年化</th><th>原榜口径</th><th>年内</th><th>6/30 以来</th><th>9/30 以来</th><th>状态</th></tr></thead><tbody>
+<tr><td>30</td><td><b>潘明</b></td><td>国联安</td><td>国联安优选行业<br><span style='color:#8a8378;font-size:11px'>257070</span></td><td>2014-02-15</td><td>12.73</td><td class='up'><b>+9.84%</b></td><td style='color:#8a8378'>16.5%</td><td class='down'>-10.10%</td><td class='down'>-57.90%</td><td class='down'>-39.32%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>31</td><td><b>萧楠</b></td><td>易方达</td><td>易方达消费行业<br><span style='color:#8a8378;font-size:11px'>110022</span></td><td>2012-09-28</td><td>14.11</td><td class='up'><b>+9.46%</b></td><td style='color:#8a8378'>13.3%</td><td class='down'>-12.75%</td><td class='up'>+13.05%</td><td class='up'>+7.72%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>32</td><td><b>何肖颉</b></td><td>工银瑞信</td><td>工银核心价值A<br><span style='color:#8a8378;font-size:11px'>481001</span></td><td>2014-03-06</td><td>12.67</td><td class='up'><b>+9.31%</b></td><td style='color:#8a8378'>18.9%-26.3%</td><td class='up'>+4.35%</td><td class='down'>-43.55%</td><td class='down'>-18.49%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>33</td><td><b>魏东</b></td><td>国联安</td><td>国联安精选混合<br><span style='color:#8a8378;font-size:11px'>257020</span></td><td>2009-09-30</td><td>17.1</td><td class='up'><b>+8.91%</b></td><td style='color:#8a8378'>10.6%</td><td class='down'>-10.31%</td><td class='down'>-26.07%</td><td class='down'>-16.46%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>34</td><td><b>王克玉</b></td><td>泓德</td><td>泓德优选成长<br><span style='color:#8a8378;font-size:11px'>001256</span></td><td>2015-10-09</td><td>11.08</td><td class='up'><b>+8.83%</b></td><td style='color:#8a8378'>17.3%-20.2%</td><td class='down'>-0.53%</td><td class='down'>-8.58%</td><td class='down'>-3.88%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>35</td><td><b>史博</b></td><td>南方</td><td>南方绩优成长<br><span style='color:#8a8378;font-size:11px'>202003</span></td><td>2011-02-17</td><td>15.41</td><td class='up'><b>+8.75%</b></td><td style='color:#8a8378'>超 13%</td><td class='down'>-24.73%</td><td class='down'>-42.74%</td><td class='down'>-19.99%</td><td><span class='badge b-off'>已卸任 2026-07-15</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>36</td><td><b>徐荔蓉</b></td><td>国海富兰克林基金</td><td>国富中国收益混合A<br><span style='color:#8a8378;font-size:11px'>450001</span></td><td>2010-09-30</td><td>16.1</td><td class='up'><b>+7.38%</b></td><td style='color:#8a8378'>~16.1%</td><td class='down'>-6.68%</td><td class='down'>-18.91%</td><td class='down'>-8.45%</td><td><span class='badge b-on'>在任</span> <span class='badge b-chg'>原榜为国海富兰克林中小盘</span></td></tr>
+<tr><td>37</td><td><b>孙芳</b></td><td>上投摩根</td><td>上投摩根双息平衡<br><span style='color:#8a8378;font-size:11px'>373010</span></td><td>2011-12-08</td><td>10.69</td><td class='up'><b>+7.20%</b></td><td style='color:#8a8378'>~16.0%</td><td class='down'>-3.04%</td><td class='up'>+8.80%</td><td class='up'>+3.02%</td><td><span class='badge b-off'>已卸任 2022-08-17</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>38</td><td><b>王健</b></td><td>中欧</td><td>中欧新动力<br><span style='color:#8a8378;font-size:11px'>166009</span></td><td>2016-11-03</td><td>10.01</td><td class='up'><b>+7.16%</b></td><td style='color:#8a8378'>17.4%</td><td class='down'>-13.00%</td><td class='down'>-21.86%</td><td class='down'>-9.64%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>39</td><td><b>曹名长</b></td><td>中欧</td><td>中欧价值发现A<br><span style='color:#8a8378;font-size:11px'>166005</span></td><td>2015-11-20</td><td>9.16</td><td class='up'><b>+6.60%</b></td><td style='color:#8a8378'>~21.4%</td><td class='up'>+2.42%</td><td class='up'>+1.45%</td><td class='down'>-1.65%</td><td><span class='badge b-off'>已卸任 2025-01-16</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>40</td><td><b>郑晓辉</b></td><td>华夏基金</td><td>华夏优势增长混合<br><span style='color:#8a8378;font-size:11px'>000021</span></td><td>2013-05-10</td><td>13.49</td><td class='up'><b>+6.27%</b></td><td style='color:#8a8378'>18.4%-19.7%</td><td class='down'>-14.47%</td><td class='down'>-42.56%</td><td class='down'>-20.97%</td><td><span class='badge b-on'>在任</span> <span class='badge b-chg'>原榜为华夏回报</span></td></tr>
+<tr><td>41</td><td><b>邹唯</b></td><td>汇安</td><td>汇安均衡优选<br><span style='color:#8a8378;font-size:11px'>010412</span></td><td>2021-02-09</td><td>5.74</td><td class='up'><b>+6.19%</b></td><td style='color:#8a8378'>16.2%</td><td class='up'>+9.11%</td><td class='up'>+10.92%</td><td class='up'>+5.37%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>42</td><td><b>刘彦春</b></td><td>景顺长城</td><td>景顺长城新兴成长<br><span style='color:#8a8378;font-size:11px'>260108</span></td><td>2015-04-09</td><td>11.58</td><td class='up'><b>+5.99%</b></td><td style='color:#8a8378'>14.1%</td><td class='down'>-7.24%</td><td class='up'>+9.82%</td><td class='up'>+4.85%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>43</td><td><b>赵枫</b></td><td>睿远</td><td>睿远均衡价值<br><span style='color:#8a8378;font-size:11px'>008969</span></td><td>2020-02-21</td><td>6.71</td><td class='up'><b>+5.74%</b></td><td style='color:#8a8378'>~21%</td><td class='down'>-8.88%</td><td class='down'>-1.41%</td><td class='up'>+0.51%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>44</td><td><b>傅鹏博</b></td><td>睿远</td><td>睿远成长价值A<br><span style='color:#8a8378;font-size:11px'>007119</span></td><td>2019-03-26</td><td>7.62</td><td class='up'><b>+5.69%</b></td><td style='color:#8a8378'>~20%</td><td class='down'>-24.46%</td><td class='down'>-46.81%</td><td class='down'>-28.27%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>45</td><td><b>李元博</b></td><td>富国</td><td>富国高新技术产业<br><span style='color:#8a8378;font-size:11px'>100060</span></td><td>2015-11-23</td><td>10.95</td><td class='up'><b>+4.89%</b></td><td style='color:#8a8378'>~21%</td><td class='down'>-15.12%</td><td class='down'>-45.81%</td><td class='down'>-24.72%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>46</td><td><b>张坤</b></td><td>易方达</td><td>易方达蓝筹精选<br><span style='color:#8a8378;font-size:11px'>005827</span></td><td>2018-09-05</td><td>8.17</td><td class='up'><b>+3.18%</b></td><td style='color:#8a8378'>~19%</td><td class='down'>-24.70%</td><td class='down'>-8.19%</td><td class='down'>-3.78%</td><td><span class='badge b-on'>在任</span> </td></tr>
+</tbody></table>
+<h3 style="font-size:15px;color:#1c2a3d;margin:18px 0 6px;">④ 年化为负：任职以来白干　<span style="font-size:12px;color:#8a8378;font-weight:400">共 3 位</span></h3>
+<table><thead><tr><th>#</th><th>基金经理</th><th>公司</th><th>代表产品（现任）</th><th>任职起始</th><th>年数</th><th>任职以来年化</th><th>原榜口径</th><th>年内</th><th>6/30 以来</th><th>9/30 以来</th><th>状态</th></tr></thead><tbody>
+<tr><td>47</td><td><b>唐晓斌</b></td><td>广发</td><td>广发远见智选A<br><span style='color:#8a8378;font-size:11px'>016873</span></td><td>2022-11-22</td><td>3.96</td><td class='down'><b>-0.78%</b></td><td style='color:#8a8378'>~18.3%</td><td class='down'>-3.01%</td><td class='down'>-61.85%</td><td class='down'>-38.15%</td><td><span class='badge b-on'>在任</span> </td></tr>
+<tr><td>48</td><td><b>张杨</b></td><td>银河</td><td>银河行业优选<br><span style='color:#8a8378;font-size:11px'>519670</span></td><td>2022-03-22</td><td>1.02</td><td class='down'><b>-9.45%</b></td><td style='color:#8a8378'>~15.1%</td><td class='down'>-2.13%</td><td class='down'>-36.18%</td><td class='down'>-13.40%</td><td><span class='badge b-off'>已卸任 2023-03-30</span> <span class='badge b-quit'>已离开公募</span> </td></tr>
+<tr><td>49</td><td><b>王春</b></td><td>华安基金</td><td>华安新丝路主题股票A<br><span style='color:#8a8378;font-size:11px'>001104</span></td><td>2022-03-28</td><td>4.61</td><td class='down'><b>-15.10%</b></td><td style='color:#8a8378'>17.6%-17.9%</td><td class='down'>-40.52%</td><td class='down'>-51.35%</td><td class='down'>-21.41%</td><td><span class='badge b-on'>在任</span> <span class='badge b-chg'>原榜为华安策略优选</span></td></tr>
+</tbody></table>
+<h2 class="sec">二、这次刷新改了什么（口径变更与勘误）</h2>
+<div class="warn"><b>⚠ 三处必须知道的变化：</b><br>① <b>口径统一</b>：原榜为 Wind / 21 世纪经济报道 / 中国基金报 / 上海证券报等多源汇编，同一经理在不同来源差异可达 7 个百分点（如武阳 30.9% vs 本次一手复权口径 19.45%），且部分条目是区间值。本次全部改用天天基金复权累计净值一手重算，可复现、内部可比，但<b>与原数字不可直接相减</b>。<br>② <b>人事勘误</b>：原榜 5 条经理—产品对应关系经核实不存在（不是"已离任"，是<b>从未管理过该产品</b>），已换为其真正在管的代表产品重算。<br>③ <b>离任标注</b>：原榜部分经理已卸任，其年化为<b>历史任职业绩</b>，不代表现在。</div>
+<div class="note"><b>② 的明细：</b><br>
+• <b>杨谷</b>（诺安基金）：原榜写「诺安成长」，经天天基金经理任职表核实<b>该产品历任经理中无此人</b>；现改用其当前代表产品 <b>诺安先锋混合A（320003）</b>，任职以来年化 +12.65%。<br>
+• <b>张琦</b>（国寿安保基金）：原榜写「国寿安保策略精选」，经天天基金经理任职表核实<b>该产品历任经理中无此人</b>；现改用其当前代表产品 <b>国寿安保智慧生活股票A（001672）</b>，任职以来年化 +12.55%。<br>
+• <b>徐荔蓉</b>（国海富兰克林基金）：原榜写「国海富兰克林中小盘」，经天天基金经理任职表核实<b>该产品历任经理中无此人</b>；现改用其当前代表产品 <b>国富中国收益混合A（450001）</b>，任职以来年化 +7.38%。<br>
+• <b>郑晓辉</b>（华夏基金）：原榜写「华夏回报」，经天天基金经理任职表核实<b>该产品历任经理中无此人</b>；现改用其当前代表产品 <b>华夏优势增长混合（000021）</b>，任职以来年化 +6.27%。<br>
+• <b>王春</b>（华安基金）：原榜写「华安策略优选」，经天天基金经理任职表核实<b>该产品历任经理中无此人</b>；现改用其当前代表产品 <b>华安新丝路主题股票A（001104）</b>，任职以来年化 -15.10%。<br>
 </div>
-
-<h2 class="sec">一、核心榜单：前 50 名（按任职以来年化排序）</h2>
-<div class="sec-sub">口径：代表产品任职以来年化收益率；任职年数截至 2026 年中；数据综合 Wind、21 世纪经济报道、中国基金报、上海证券报及公司披露，不同来源数字略有出入，以各来源披露为准</div>
-
-<h3 style="font-size:16px;color:#1c2a3d;margin:14px 0 6px;">① 第一梯队：年化 20%+（约第 1-12 名）<span style="font-size:12px;color:#8a8378;font-weight:400;">　👆 点击经理姓名可查看代表产品净值曲线</span></h3>
-<table>
-  <tr><th>#</th><th>基金经理</th><th>基金公司</th><th>代表产品</th><th>任职年数</th><th>任职年化(约)</th></tr>
-  <tr class="top3"><td>1</td><td class="pos"><b><a href="fund-manager-nav.html#wuyang" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">武阳 ↗</a></b></td><td>易方达</td><td>易方达瑞享</td><td>~11 年</td><td class="up">~30.9%</td></tr>
-  <tr class="top3"><td>2</td><td class="pos"><b><a href="fund-manager-nav.html#jinzhicai" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">金梓才 ↗</a></b></td><td>财通</td><td>财通价值动量A</td><td>~11 年</td><td class="up">~28.9%</td></tr>
-  <tr class="top3"><td>3</td><td class="pos"><b><a href="fund-manager-nav.html#liuyuanhai" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">刘元海 ↗</a></b></td><td>东吴</td><td>东吴移动互联A</td><td>~14 年</td><td class="up">~23.4%</td></tr>
-  <tr><td>4</td><td class="pos"><a href="fund-manager-nav.html#fengmingyuan" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">冯明远 ↗</a></td><td>信达澳亚</td><td>信澳新能源产业</td><td>~10 年</td><td class="up">~23.6%</td></tr>
-  <tr><td>5</td><td class="pos"><a href="fund-manager-nav.html#mohaibo" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">莫海波 ↗</a></td><td>万家</td><td>万家品质生活A</td><td>~11 年</td><td class="up">~22.3%</td></tr>
-  <tr><td>6</td><td class="pos"><a href="fund-manager-nav.html#chenhao" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">陈皓 ↗</a></td><td>易方达</td><td>易方达科翔</td><td>~13 年</td><td class="up">~21.8%</td></tr>
-  <tr><td>7</td><td class="pos"><a href="fund-manager-nav.html#caomingchang" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">曹名长 ↗</a></td><td>中欧</td><td>中欧价值发现A</td><td>~15 年</td><td class="up">~21.4%</td></tr>
-  <tr><td>8</td><td class="pos"><a href="fund-manager-nav.html#caojin" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">曹晋 ↗</a></td><td>富国</td><td>富国中小盘精选A</td><td>~13 年</td><td class="up">~20.9%</td></tr>
-  <tr><td>9</td><td class="pos"><a href="fund-manager-nav.html#liyuanbo" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">李元博 ↗</a></td><td>富国</td><td>富国高新技术产业</td><td>~12 年</td><td class="up">~21%</td></tr>
-  <tr><td>10</td><td class="pos"><a href="fund-manager-nav.html#fupengbo" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">傅鹏博 ↗</a></td><td>睿远</td><td>睿远成长价值A</td><td>~13 年</td><td class="up">~20%（几何 21.3%）</td></tr>
-  <tr><td>11</td><td class="pos"><a href="fund-manager-nav.html#xiezhiyu" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">谢治宇 ↗</a></td><td>兴证全球</td><td>兴全合润</td><td>~13 年</td><td class="up">~19.5%（综合 17.5%）</td></tr>
-  <tr><td>12</td><td class="pos"><a href="fund-manager-nav.html#hexiaojie" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">何肖颉 ↗</a></td><td>工银瑞信</td><td>工银核心价值A</td><td>~14 年</td><td class="up">18.9%-26.3%（口径差异大）</td></tr>
-</table>
-
-<h3 style="font-size:16px;color:#1c2a3d;margin:14px 0 6px;">② 第二梯队：年化 15%-20%（约第 13-35 名）<span style="font-size:12px;color:#8a8378;font-weight:400;">　👆 前 20 名（第 13-20：朱少醒、赵枫、郑希、盖俊龙、赵强、杜猛、杨锐文、王克玉）均可点击查看代表产品净值曲线，周蔚文、张坤 亦可</span></h3>
-<table>
-  <tr><th>#</th><th>基金经理</th><th>基金公司</th><th>代表产品</th><th>任职年数</th><th>任职年化(约)</th></tr>
-  <tr><td>13</td><td><a href="fund-manager-nav.html#zhushaoxing" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">朱少醒 ↗</a></td><td>富国</td><td>富国天惠精选成长A</td><td>~21 年</td><td>15.7%-20%（口径不一，综合 16.7%）</td></tr>
-  <tr><td>14</td><td><a href="fund-manager-nav.html#zhaofeng" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">赵枫 ↗</a></td><td>睿远</td><td>睿远均衡价值</td><td>~10 年+</td><td>~21%（交银精选时代更高）</td></tr>
-  <tr><td>15</td><td><a href="fund-manager-nav.html#zhengxi" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">郑希 ↗</a></td><td>易方达</td><td>易方达信息产业</td><td>~10 年</td><td class="up">~26.4%（任职回报高）</td></tr>
-  <tr><td>16</td><td><a href="fund-manager-nav.html#gailong" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">盖俊龙 ↗</a></td><td>红土创新</td><td>红土创新新科技A</td><td>~12 年</td><td class="up">~23.1%</td></tr>
-  <tr><td>17</td><td><a href="fund-manager-nav.html#zhaoqiang" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">赵强 ↗</a></td><td>新华</td><td>新华策略精选</td><td>~10 年</td><td>20.5%</td></tr>
-  <tr><td>18</td><td><a href="fund-manager-nav.html#dumeng" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">杜猛 ↗</a></td><td>摩根</td><td>摩根新兴动力A</td><td>~15 年</td><td>~20%（几何 18%）</td></tr>
-  <tr><td>19</td><td><a href="fund-manager-nav.html#yangruiwen" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">杨锐文 ↗</a></td><td>景顺长城</td><td>景顺长城环保优势</td><td>~11 年</td><td>超 15%</td></tr>
-  <tr><td>20</td><td><a href="fund-manager-nav.html#wangkeyu" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">王克玉 ↗</a></td><td>泓德</td><td>泓德优选成长</td><td>~11 年</td><td>17.3%-20.2%（几何 18.5%）</td></tr>
-  <tr><td>21</td><td>唐晓斌</td><td>广发</td><td>广发远见智选A</td><td>~11 年</td><td>~18.3%</td></tr>
-  <tr><td>22</td><td>刘旭</td><td>大成</td><td>大成高鑫A</td><td>~10 年</td><td>17.1%（近十年 16.3%）</td></tr>
-  <tr><td>23</td><td><a href="fund-manager-nav.html#zhouweimin" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">周蔚文 ↗</a></td><td>中欧</td><td>中欧新蓝筹A</td><td>~19 年</td><td>17.9%（几何 18.7%）</td></tr>
-  <tr><td>24</td><td>陶灿</td><td>建信</td><td>建信改革红利</td><td>~15 年</td><td>17.6%（综合 9.9%）</td></tr>
-  <tr><td>25</td><td>王春</td><td>华安</td><td>华安策略优选</td><td>~16 年</td><td>17.6%-17.9%（几何 17.9%）</td></tr>
-  <tr><td>26</td><td>王健</td><td>中欧</td><td>中欧新动力</td><td>~16 年</td><td>17.4%（几何）</td></tr>
-  <tr><td>27</td><td>李巍</td><td>广发</td><td>广发制造业精选</td><td>~15 年</td><td>17.1%-16.8%（几何 17.1%）</td></tr>
-  <tr><td>28</td><td>郑晓辉</td><td>华夏</td><td>华夏回报</td><td>~15 年</td><td>18.4%-19.7%（几何 19.7%）</td></tr>
-  <tr><td>29</td><td>王筱苓</td><td>工银瑞信</td><td>工银瑞信大盘蓝筹</td><td>~14 年</td><td>~17.5%（几何 17.5%）</td></tr>
-  <tr><td>30</td><td><a href="fund-manager-nav.html#zhangkun" style="color:#3a5f8a;text-decoration:none;border-bottom:1px dashed #3a5f8a;">张坤 ↗</a></td><td>易方达</td><td>易方达蓝筹精选</td><td>~14 年</td><td>~19%（从业综合约 7%，口径差异大）</td></tr>
-  <tr><td>31</td><td>毕天宇</td><td>富国</td><td>富国高端制造行业A</td><td>~20 年</td><td>16.9%（综合 13.6%）</td></tr>
-  <tr><td>32</td><td>徐小勇</td><td>长安</td><td>长安裕隆</td><td>~14 年</td><td>12.6%-24%（口径差异大，几何 24%）</td></tr>
-  <tr><td>33</td><td>邹唯</td><td>汇安</td><td>汇安均衡优选</td><td>~18 年</td><td>16.2%（综合 11%）</td></tr>
-  <tr><td>34</td><td>潘明</td><td>国联安</td><td>国联安优选行业</td><td>~12 年</td><td>16.5%</td></tr>
-  <tr><td>35</td><td>徐荔蓉</td><td>国海富兰克林</td><td>国海富兰克林中小盘</td><td>~15 年</td><td>~16.1%（几何 16.1%）</td></tr>
-</table>
-
-<h3 style="font-size:16px;color:#1c2a3d;margin:14px 0 6px;">③ 第三梯队：年化 11%-16%（约第 36-50 名）</h3>
-<table>
-  <tr><th>#</th><th>基金经理</th><th>基金公司</th><th>代表产品</th><th>任职年数</th><th>任职年化(约)</th></tr>
-  <tr><td>36</td><td>孙芳</td><td>上投摩根</td><td>上投摩根双息平衡</td><td>~14 年</td><td>~16.0%（几何 16%）</td></tr>
-  <tr><td>37</td><td>张琦</td><td>国寿安保</td><td>国寿安保策略精选</td><td>~14 年</td><td>~15.8%（几何 15.8%）</td></tr>
-  <tr><td>38</td><td>张杨</td><td>银河</td><td>银河行业优选</td><td>~15 年</td><td>~15.1%（几何 15.1%）</td></tr>
-  <tr><td>39</td><td>赵蓓</td><td>工银瑞信</td><td>工银前沿医疗A</td><td>~11 年</td><td>~17.6%</td></tr>
-  <tr><td>40</td><td>杨栋</td><td>富国</td><td>富国低碳新经济A</td><td>~11 年</td><td>18.6%</td></tr>
-  <tr><td>41</td><td>杜洋</td><td>工银瑞信</td><td>工银战略转型</td><td>~11 年</td><td>超 15%</td></tr>
-  <tr><td>42</td><td>刘彦春</td><td>景顺长城</td><td>景顺长城新兴成长</td><td>~17 年</td><td>14.1%（综合 4.3%）</td></tr>
-  <tr><td>43</td><td>萧楠</td><td>易方达</td><td>易方达消费行业</td><td>~13 年</td><td>13.3%</td></tr>
-  <tr><td>44</td><td>史博</td><td>南方</td><td>南方绩优成长</td><td>~16 年</td><td>超 13%</td></tr>
-  <tr><td>45</td><td>徐彦</td><td>大成</td><td>大成竞争优势</td><td>~11 年</td><td>超 13%</td></tr>
-  <tr><td>46</td><td>伍旋</td><td>鹏华</td><td>鹏华盛世创新A</td><td>~13 年</td><td>13.2%</td></tr>
-  <tr><td>47</td><td>杨谷</td><td>诺安</td><td>诺安成长</td><td>~20 年</td><td>15.0%-16.5%（几何 16.5%）</td></tr>
-  <tr><td>48</td><td>魏东</td><td>国联安</td><td>国联安精选混合</td><td>~16 年</td><td>10.6%</td></tr>
-  <tr><td>49</td><td>余广*</td><td>景顺长城</td><td>景顺长城核心竞争力</td><td>~14 年</td><td>~14.1%（*2026-07 已卸任，标注）</td></tr>
-  <tr><td>50</td><td>刘旭/袁宜</td><td>大成/富国</td><td>大成高鑫/富国宏观策略</td><td>10 年+</td><td>~16% / 超 11%</td></tr>
-</table>
-
-<div class="note">注：① 第 50 名存在并列候选，取两位代表性经理；② 余广已于 2026 年 7 月清仓式卸任，严格说已不属"当前任职"，列示仅供参考；③ 部分经理"代表产品年化"与"从业综合年化"差异巨大（如张坤 19% vs 7%、刘彦春 14.1% vs 4.3%、陶灿 17.6% vs 9.9%），原因是综合年化覆盖其全部在管产品（含规模快速扩张后的摊薄效应），本榜按用户"任职以来"意图优先采用代表产品口径。</div>
-
-<h2 class="sec">二、前 20 名年化可视化</h2>
-<div class="chartbox">
-  <div id="chartTop"></div>
+<div class="note"><b>③ 的明细：</b><br>
+• <b>赵强</b>（原榜 新华策略精选）：已卸任该产品，最后任职止于 2026-08-20；该产品现任经理为 <b>王永明</b>。表中其年化 +18.59% 为历史任职业绩。<br>
+• <b>余广</b>（原榜 景顺长城核心竞争力）：已离开公募（不在现任经理库），最后任职止于 2026-07-09；该产品现任经理为 <b>农冰立</b>。表中其年化 +14.15% 为历史任职业绩。<br>
+• <b>王筱苓</b>（原榜 工银瑞信大盘蓝筹）：已离开公募（不在现任经理库），最后任职止于 2023-11-22；该产品现任经理为 <b>张杭</b>。表中其年化 +11.59% 为历史任职业绩。<br>
+• <b>史博</b>（原榜 南方绩优成长）：已离开公募（不在现任经理库），最后任职止于 2026-07-15；该产品现任经理为 <b>王博</b>。表中其年化 +8.75% 为历史任职业绩。<br>
+• <b>孙芳</b>（原榜 上投摩根双息平衡）：已离开公募（不在现任经理库），最后任职止于 2022-08-17；该产品现任经理为 <b>梁鹏</b>。表中其年化 +7.20% 为历史任职业绩。<br>
+• <b>曹名长</b>（原榜 中欧价值发现A）：已离开公募（不在现任经理库），最后任职止于 2025-01-16；该产品现任经理为 <b>柳世庆</b>。表中其年化 +6.60% 为历史任职业绩。<br>
+• <b>张杨</b>（原榜 银河行业优选）：已离开公募（不在现任经理库），最后任职止于 2023-03-30；该产品现任经理为 <b>袁曦</b>。表中其年化 -9.45% 为历史任职业绩。<br>
 </div>
-
-<h2 class="sec">三、口径说明与风险提示</h2>
-<div class="warn"><b>重要：本榜单为多源综合的示意性排序，非单一官方排名。</b>① 全市场无单一权威来源能精确给出"前 50 名"完整名次，本榜综合 Wind、21 世纪经济报道（57 位双十经理统计）、中国基金报、上海证券报及公司披露整理，前 30 名基本可按年化高低排列，31-50 名因数据离散为入围名单；② "任职以来年化"在不同平台口径差异显著（代表产品 vs 从业综合），同一经理数字可能相差 5-10 个百分点；③ 全市场"双十"经理数量约 57-137 位（口径不同），本榜聚焦主动权益，不含指数/量化经理（如冉凌浩、张胜记、叶乐天等）；④ 数据截至 2026 年中，基金经理任职状态与业绩持续变动，请以基金公司最新披露为准。</div>
-
-<div class="disc">
-  <b>数据来源：</b>Wind（截至 2026 年中）、21 世纪经济报道（57 位双十经理统计）、中国基金报、上海证券报、证券时报及基金公司公开披露；行情数据非实时。本报告为客观数据梳理，不构成投资建议，亦不代表对任何基金经理或基金的推荐。
+<h2 class="sec">三、可视化：年化排名与 6/30 以来的回撤</h2>
+<div class="sec-sub">左图看"历史积累谁最强"，右图看"近四个月谁最惨"——两张图几乎是镜像关系</div>
+<div class="chartbox"><div id="chartTop"></div></div>
+<div class="chartbox"><div id="chartDrop"></div></div>
+<h2 class="sec">四、7-10 月到底发生了什么</h2>
+<div class="sec-sub">这是理解整张榜单为什么被改写的关键</div>
+<div class="note" style="font-size:13px;line-height:1.8">
+<b>① 指数层面：</b>2026 年三季度科创 50 单季下跌约 <b>30.7%</b>、创业板指下跌约 <b>27.8%</b>；从 6 月 30 日到 11 月 6 日，创业板指从 4,342.71 点跌至 2,465.23 点（<b>−43.2%</b>），深证成指 −31.0%，沪深 300 −18.6%，上证指数 −10.9%。<br><br>
+<b>② 个股层面（6/30 → 11/6）：</b>新易盛 607→172（<b>−71.7%</b>）、中际旭创 1,268.81→448.00（<b>−64.7%</b>）、源杰科技 1,885→598.9（<b>−68.2%</b>）。这三个正是 20 位经理里 11-12 家共同持有的核心重仓。<br><br>
+<b>③ 触发链条：</b>海外 AI 叙事受挫（谷歌财报自由现金流连续两季为负、特斯拉下调资本开支、三星业绩预期差）→ 美联储偏鹰、12 月加息预期升温，长久期成长股杀估值 → 前期涨幅过大、交易拥挤，获利盘集中兑现 → 资金转向银行红利（四大行 A+H 市值一度破 10 万亿）。<br><br>
+<b>④ 基金端的印证：</b>三季度主动偏股基金已在减仓电子、加仓银行。这轮不是"没跑"，而是<b>跑得早的人在 Q3 季报里已经明牌（详见「前20基金经理重仓股」页）</b>，留在光模块前十里的基金净值同步崩。
 </div>
-
-<footer>Deep Research · 2026-08-18 · 基于公开数据</footer>
+<h2 class="sec">五、口径说明与风险提示</h2>
+<div class="disc" style="border:0;margin:0;padding:0;font-size:12.5px;line-height:1.9">
+• <b>样本</b>：沿用 2026-08 版榜单的 50 位经理名单（剔除第 50 条与前项重复的合并行，实际 49 位）。<br>
+• <b>年化算法</b>：以天天基金公布的每日净值增长率（equityReturn）连乘构造复权净值序列（成立日 = 1），取「该经理首次管理该产品之日 → 2026-11-06」区间的几何年化；经理连续任职段自动合并（同一人增聘/解聘共管人不算中断）。<br>
+• <b>校验</b>：朱少醒（富国天惠，2005-11-16 起）复权累计涨幅重算为 1,502.1%，天天基金公布任职回报 1,503.93%，误差 0.12%，口径吻合。<br>
+• <b>未纳入</b>：指数型、量化型、债券型经理；QDII 与沪港深产品按人民币净值计算。<br>
+• <b>净值曲线页</b>：<code>fund-manager-nav.html</code> 为 2026-08 版本，本次<b>未同步刷新</b>，其中曲线仅为示意，请勿与本页数字混用。<br>
+• <b>排名含义</b>：年化是长期几何均值，一次 4 个月的 −50% 对 10 年以上的年化影响有限，所以单看排名会低估近期伤害——务必同时看"6/30 以来"和"9/30 以来"两列。<br>
+• 数据来源：天天基金（东方财富）基金净值、基金经理任职表、基金经理大全（4,382 位现任经理）；市场行情：东方财富行情接口。数据整理：DS v4.1 flash，2026-11-08。<br>
+• 本页仅供研究参考，不构成投资建议。
 </div>
-
+<footer>深层研究 · Deep Research · 2026-11-08 刷新</footer>
+</div>
 <script>
-var chart = echarts.init(document.getElementById('chartTop'));
-chart.setOption({
-  title: { text: '前20名 · 任职以来年化收益率（%）', left: 'center', textStyle: { fontSize: 15, color: '#1c2a3d' } },
-  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: '{b}<br/>{c}%' },
-  grid: { left: 110, right: 40, top: 55, bottom: 30 },
-  xAxis: { type: 'value', name: '年化 %', max: 35 },
-  yAxis: { type: 'category', inverse: true, data: ['武阳','金梓才','刘元海','冯明远','莫海波','陈皓','曹名长','曹晋','李元博','傅鹏博','谢治宇','何肖颉','朱少醒','赵枫','郑希','盖俊龙','赵强','杜猛','杨锐文','王克玉'], axisLabel: { fontSize: 12 } },
-  series: [{
-    type: 'bar',
-    barWidth: 18,
-    data: [
-      { value: 30.9, itemStyle: { color: '#c0392b' } },
-      { value: 28.9, itemStyle: { color: '#c0392b' } },
-      { value: 23.4, itemStyle: { color: '#c0392b' } },
-      { value: 23.6, itemStyle: { color: '#c0392b' } },
-      { value: 22.3, itemStyle: { color: '#c0392b' } },
-      { value: 21.8, itemStyle: { color: '#3a5f8a' } },
-      { value: 21.4, itemStyle: { color: '#3a5f8a' } },
-      { value: 20.9, itemStyle: { color: '#3a5f8a' } },
-      { value: 21.0, itemStyle: { color: '#3a5f8a' } },
-      { value: 20.0, itemStyle: { color: '#3a5f8a' } },
-      { value: 19.5, itemStyle: { color: '#3a5f8a' } },
-      { value: 20.0, itemStyle: { color: '#3a5f8a' } },
-      { value: 17.0, itemStyle: { color: '#8e6a1a' } },
-      { value: 21.0, itemStyle: { color: '#3a5f8a' } },
-      { value: 26.4, itemStyle: { color: '#c0392b' } },
-      { value: 23.1, itemStyle: { color: '#c0392b' } },
-      { value: 20.5, itemStyle: { color: '#3a5f8a' } },
-      { value: 20.0, itemStyle: { color: '#3a5f8a' } },
-      { value: 15.0, itemStyle: { color: '#8e6a1a' } },
-      { value: 18.5, itemStyle: { color: '#8e6a1a' } }
-    ],
-    label: { show: true, position: 'right', formatter: '{c}%' }
-  }]
+var chartTop = echarts.init(document.getElementById('chartTop'));
+chartTop.setOption({
+  title: { text: '代表产品任职以来年化收益率 · 前 20 名（截至 2026-11-06）', left: 'center', textStyle: { fontSize: 14, color: '#1c2a3d' } },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '：' + p[0].value + '%'; } },
+  grid: { left: 90, right: 60, top: 50, bottom: 20 },
+  xAxis: { type: 'value', axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#eee' } } },
+  yAxis: { type: 'category', data: ["周蔚文", "张琦", "杨谷", "杨栋", "伍旋", "杨锐文", "杜猛", "刘元海", "朱少醒", "余广", "曹晋", "刘旭", "谢治宇", "冯明远", "莫海波", "赵强", "陈皓", "郑希", "武阳", "金梓才"], axisLabel: { fontSize: 11 } },
+  series: [{ type: 'bar', data: [12.48, 12.55, 12.65, 12.97, 13.32, 13.61, 13.64, 14.13, 14.14, 14.15, 14.46, 14.52, 16.1, 17.12, 17.95, 18.59, 18.64, 18.8, 19.45, 19.51], 
+    itemStyle: { color: function(p){ return p.value >= 15 ? '#c0392b' : (p.value >= 10 ? '#c9a24b' : '#3a5f8a'); } },
+    label: { show: true, position: 'right', formatter: '{c}%', fontSize: 11 } }]
 });
+var chartDrop = echarts.init(document.getElementById('chartDrop'));
+chartDrop.setOption({
+  title: { text: '6/30 以来净值涨跌 · 表现最差的 20 只（截至 2026-11-06）', left: 'center', textStyle: { fontSize: 14, color: '#1c2a3d' } },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, formatter: function(p){ return p[0].name + '：' + p[0].value + '%'; } },
+  grid: { left: 90, right: 60, top: 50, bottom: 20 },
+  xAxis: { type: 'value', axisLabel: { formatter: '{value}%' }, splitLine: { lineStyle: { color: '#eee' } } },
+  yAxis: { type: 'category', data: ["史博", "何肖颉", "杨栋", "张琦", "冯明远", "李元博", "傅鹏博", "李巍", "徐小勇", "杜猛", "陶灿", "郑希", "余广", "王春", "刘元海", "金梓才", "武阳", "潘明", "盖俊龙", "唐晓斌"], axisLabel: { fontSize: 11 } },
+  series: [{ type: 'bar', data: [-42.74, -43.55, -43.78, -44.46, -45.13, -45.81, -46.81, -47.77, -47.86, -47.92, -48.92, -49.31, -50.12, -51.35, -53.37, -54.36, -57.86, -57.9, -60.69, -61.85], 
+    itemStyle: { color: '#1e8449' },
+    label: { show: true, position: 'left', formatter: '{c}%', fontSize: 11 } }]
+});
+window.addEventListener('resize', function(){ chartTop.resize(); chartDrop.resize(); });
 </script>
-</body>
-</html>
+</body></html>
