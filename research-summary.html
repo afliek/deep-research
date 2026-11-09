@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>上市公司研报总结 · 深层研究</title>
+<script data-goatcounter="https://afliek.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+<style>
+  :root {
+    --bg: #080b12;
+    --bg-card: rgba(20, 24, 34, 0.72);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #c9a24b;
+    --accent-2: #e8cf8f;
+    --accent-glow: rgba(201, 162, 75, 0.18);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(201, 162, 75, 0.35);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "FangSong", "FangSong_GB2312", "仿宋", "STFangsong", "华文仿宋", "SimSun", serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+  .site-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 56px;
+    background: rgba(8, 11, 18, 0.85);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px; z-index: 100;
+  }
+  .nav-brand {
+    color: var(--text-primary); text-decoration: none; font-size: 17px;
+    font-weight: 700; letter-spacing: 1px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-brand .dot {
+    width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .nav-back {
+    color: var(--text-secondary); text-decoration: none; font-size: 13px;
+    display: flex; align-items: center; gap: 6px; transition: color .2s;
+  }
+  .nav-back:hover { color: var(--accent-2); }
+
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 80px 28px 0; }
+  h1 { font-size: 26px; color: #f1f5f9; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+  h1::before { content: "◆"; color: var(--accent); font-size: 16px; }
+  .meta { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; line-height: 1.8; }
+
+  .notice {
+    background: rgba(201, 162, 75, 0.07);
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+  .notice b { color: var(--accent-2); }
+
+  .toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .btn {
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all .18s;
+  }
+  .btn:hover { border-color: var(--border-strong); color: var(--accent-2); background: rgba(201, 162, 75, 0.08); }
+  .btn.primary { border-color: var(--border-strong); color: var(--accent-2); }
+  .status { margin-left: auto; font-size: 12px; color: var(--text-muted); }
+  .status.saved { color: #4ade80; }
+
+  .table-shell {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td {
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px 12px;
+    vertical-align: top;
+    text-align: left;
+    line-height: 1.7;
+  }
+  th:last-child, td:last-child { border-right: none; }
+  thead th {
+    background: rgba(201, 162, 75, 0.07);
+    color: var(--accent-2);
+    font-weight: 700;
+    font-size: 13px;
+    white-space: nowrap;
+    position: sticky; top: 0; z-index: 2;
+    border-bottom: 1px solid var(--border-strong);
+  }
+  tbody td { color: var(--text-secondary); }
+  tbody tr:hover td { background: rgba(255, 255, 255, 0.025); }
+  tbody tr.row-last td { border-bottom: none; }
+
+  [contenteditable] { outline: none; min-height: 1.7em; }
+  [contenteditable]:focus {
+    background: rgba(201, 162, 75, 0.10);
+    box-shadow: inset 0 0 0 1px var(--accent);
+    border-radius: 4px;
+  }
+  [contenteditable]:empty::before { content: "—"; color: #3a4356; }
+
+  .col-code { min-width: 96px; }
+  .col-name { min-width: 104px; }
+  .col-sector { min-width: 148px; }
+  .col-logic { min-width: 280px; }
+  .col-data { min-width: 320px; }
+  .col-view { min-width: 210px; }
+  .col-date { min-width: 96px; }
+  .col-name strong { color: #f1f5f9; font-size: 14px; }
+
+  .row-tools { width: 34px; min-width: 34px; text-align: center; }
+  .del-row {
+    opacity: 0;
+    background: none; border: none; color: #f87171;
+    cursor: pointer; font-size: 15px; line-height: 1; padding: 4px;
+    transition: opacity .15s;
+  }
+  tr:hover .del-row { opacity: .75; }
+  .del-row:hover { opacity: 1; }
+
+  .add-row-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .add-row-bar .btn { font-size: 12.5px; padding: 5px 12px; }
+
+  .footnote {
+    margin-top: 18px; font-size: 12px; color: var(--text-muted); line-height: 1.9;
+  }
+  .footnote b { color: var(--text-secondary); }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 76px 14px 0; }
+    h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="nav-brand"><span class="dot"></span>深层研究</a>
+  <a href="index.html" class="nav-back">← 返回首页</a>
+</nav>
+
+<div class="wrap">
+  <h1>上市公司研报总结</h1>
+  <div class="meta">一行一家公司 · 表头与单元格均可直接编辑 · 当前 1 家 · 数据截至 2026-11-09</div>
+
+  <div class="notice">
+    <b>数据存在本机浏览器里。</b>编辑后自动保存到当前浏览器（localStorage），换设备或清缓存会丢失。重要更新请点「导出 JSON」存一份，或换新设备后「导入 JSON」恢复。
+  </div>
+
+  <div class="toolbar">
+    <button class="btn primary" id="btnAddCol">+ 加一列</button>
+    <button class="btn" id="btnExportJson">导出 JSON</button>
+    <button class="btn" id="btnImportJson">导入 JSON</button>
+    <button class="btn" id="btnExportCsv">导出 CSV</button>
+    <button class="btn" id="btnReset">重置为默认</button>
+    <span class="status" id="status">就绪</span>
+  </div>
+
+  <input type="file" id="fileInput" accept=".json" style="display:none">
+
+  <div class="table-shell">
+    <div class="table-scroll">
+      <table id="tbl">
+        <thead><tr id="theadRow"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="add-row-bar">
+      <button class="btn" id="btnAddRow">+ 添加一行</button>
+      <span style="font-size:12px;color:var(--text-muted)">新行加在末尾，直接点单元格填写</span>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <b>用法：</b>点任意单元格直接输入，多行内容用回车换行；表头也能改，改成你习惯的字段名。删除整行把鼠标移到行尾点 ×。<br>
+    <b>当前唯一一行</b>为光迅科技（002281.SZ），财务口径为 2026 年三季报（10 月 26 日披露），估值为 10 月 23 日收盘价对应值。
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = "afliek_research_summary_v1";
+
+const DEFAULT_DATA = {
+  headers: ["代码", "公司", "板块 / 赛道", "核心逻辑", "关键数据", "结论 / 评级", "更新"],
+  rows: [
+    [
+      "002281.SZ",
+      "光迅科技",
+      "光通信 / 光模块 · 航天光通信",
+      "地面 + 航天「天地两用」，A 股唯一。地面：AI 算力资本开支驱动数通放量，400G/800G 规模交付、1.6T 全系列交付、3.2T 硅光 NPO 全球首发、1.6T CPO 获英伟达认证、MEMS-OCS 国内唯一量产，国内 CSP 份额领先。航天：100Gbps 星间激光模块量产、400Gbps 在轨验证，市占超 50%，单星配套约 220 万元，2025 年中标星网 40 亿订单。核心壁垒是同一套芯片-器件-模块 IDM 底座同时跑通宇航级与数通两套认证。",
+      "2026Q1-3：营收 116.83 亿（+36.94%）、归母 12.84 亿（+78.65%）、扣非 12.72 亿（+87.48%）。\nQ3 单季：营收 50.73 亿（+54.27%，环比 +32.25%）、归母 7.02 亿（+102.62%，环比 +105.2%），三项均创历史新高。\n毛利率 25.52%（+2.38pct）、净利率 10.9%。\n结构杠杆：航天用约 8% 收入贡献约 20% 净利（航天毛利 48% vs 整体 25.5%）。\nPE(TTM) 70.4x、PB 6.97x（10/23 收盘），同业中际旭创 PE 26.5x。\n经营现金流 -18.81 亿（上年同期 +10.76 亿）。",
+      "业绩兑现强于预期，量利齐升已确认；但 70x PE 对旭创 26.5x，市场已为「航天 + 数通」双主线付过账，属好公司 + 贵价格。\n跟踪点：① 1.6T 与相干/CPO 出货占比；② 航天订单落地节奏（星网）；③ 经营现金流能否转正；④ 物料供应（11/3 停工传闻跌停，公司已澄清）。\n102 亿硅光产业化项目一期 11/1 开工，达产年增 1000 万只产能，2027 年起释放。",
+      "2026-11-09"
+    ]
+  ]
+};
+
+let state = null;
+let saveTimer = null;
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return clone(DEFAULT_DATA);
+    const d = JSON.parse(raw);
+    if (!d || !Array.isArray(d.headers) || !Array.isArray(d.rows)) return clone(DEFAULT_DATA);
+    return d;
+  } catch (e) {
+    return clone(DEFAULT_DATA);
+  }
+}
+
+function save(immediate) {
+  clearTimeout(saveTimer);
+  const doSave = () => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const s = document.getElementById("status");
+      const t = new Date();
+      const hh = String(t.getHours()).padStart(2, "0");
+      const mm = String(t.getMinutes()).padStart(2, "0");
+      s.textContent = "已保存 " + hh + ":" + mm;
+      s.className = "status saved";
+    } catch (e) {
+      const s = document.getElementById("status");
+      s.textContent = "保存失败（存储空间不足）";
+      s.className = "status";
+    }
+  };
+  if (immediate) doSave();
+  else saveTimer = setTimeout(doSave, 600);
+}
+
+const COL_CLASSES = ["col-code", "col-name", "col-sector", "col-logic", "col-data", "col-view", "col-date"];
+
+function render() {
+  const thead = document.getElementById("theadRow");
+  thead.innerHTML = "";
+
+  state.headers.forEach((h, ci) => {
+    const th = document.createElement("th");
+    th.className = COL_CLASSES[ci] || "";
+    th.contentEditable = "true";
+    th.textContent = h;
+    th.dataset.c = ci;
+    th.addEventListener("input", () => {
+      state.headers[ci] = th.innerText.replace(/\n/g, " ").trim();
+      save();
+    });
+    th.addEventListener("paste", onPaste);
+    thead.appendChild(th);
+  });
+
+  const thTools = document.createElement("th");
+  thTools.className = "row-tools";
+  thTools.style.width = "34px";
+  thTools.textContent = "";
+  thead.appendChild(thTools);
+
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = "";
+
+  state.rows.forEach((row, ri) => {
+    const tr = document.createElement("tr");
+    if (ri === state.rows.length - 1) tr.className = "row-last";
+
+    state.headers.forEach((_, ci) => {
+      const td = document.createElement("td");
+      td.className = COL_CLASSES[ci] || "";
+      td.contentEditable = "true";
+      td.dataset.r = ri;
+      td.dataset.c = ci;
+
+      const val = row[ci] == null ? "" : row[ci];
+      if (ci === 1) {
+        const strong = document.createElement("strong");
+        strong.textContent = val;
+        td.appendChild(strong);
+      } else {
+        setMultiline(td, val);
+      }
+
+      td.addEventListener("input", () => {
+        const txt = td.innerText.replace(/\n+$/, "");
+        while (state.rows[ri].length <= ci) state.rows[ri].push("");
+        state.rows[ri][ci] = txt;
+        save();
+      });
+      td.addEventListener("paste", onPaste);
+      td.addEventListener("blur", () => {
+        if (ci === 1 && !td.querySelector("strong")) {
+          const strong = document.createElement("strong");
+          strong.textContent = td.innerText;
+          td.innerHTML = "";
+          td.appendChild(strong);
+        }
+      });
+      tr.appendChild(td);
+    });
+
+    const tools = document.createElement("td");
+    tools.className = "row-tools";
+    const del = document.createElement("button");
+    del.className = "del-row";
+    del.title = "删除这一行";
+    del.textContent = "×";
+    del.addEventListener("click", () => {
+      if (!confirm("删除「" + (state.rows[ri][1] || state.rows[ri][0] || "这一行") + "」？")) return;
+      state.rows.splice(ri, 1);
+      save(true);
+      render();
+    });
+    tools.appendChild(del);
+    tr.appendChild(tools);
+
+    tbody.appendChild(tr);
+  });
+}
+
+function setMultiline(el, text) {
+  el.innerHTML = "";
+  if (!text) return;
+  const parts = String(text).split("\n");
+  parts.forEach((p, i) => {
+    if (i > 0) el.appendChild(document.createElement("br"));
+    el.appendChild(document.createTextNode(p));
+  });
+}
+
+function onPaste(e) {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+  document.execCommand("insertText", false, text);
+}
+
+document.getElementById("btnAddRow").addEventListener("click", () => {
+  const blank = state.headers.map(() => "");
+  state.rows.push(blank);
+  save(true);
+  render();
+  const rows = document.getElementById("tbody").querySelectorAll("tr");
+  const last = rows[rows.length - 1];
+  if (last) {
+    const firstCell = last.querySelector("td[data-c='0']");
+    if (firstCell) firstCell.focus();
+  }
+});
+
+document.getElementById("btnAddCol").addEventListener("click", () => {
+  const name = prompt("新列名称：", "备注");
+  if (name === null) return;
+  state.headers.push(name.trim() || "新列");
+  state.rows.forEach(r => r.push(""));
+  save(true);
+  render();
+});
+
+document.getElementById("btnExportJson").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  download(blob, "research-summary-" + stamp() + ".json");
+});
+
+document.getElementById("btnExportCsv").addEventListener("click", () => {
+  const esc = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const lines = [state.headers.map(esc).join(",")];
+  state.rows.forEach(r => lines.push(r.map(esc).join(",")));
+  const blob = new Blob(["\ufeff" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  download(blob, "research-summary-" + stamp() + ".csv");
+});
+
+document.getElementById("btnImportJson").addEventListener("click", () => {
+  document.getElementById("fileInput").click();
+});
+
+document.getElementById("fileInput").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const d = JSON.parse(reader.result);
+      if (!d || !Array.isArray(d.headers) || !Array.isArray(d.rows)) throw new Error("格式不对");
+      state = d;
+      save(true);
+      render();
+      alert("导入成功，" + state.rows.length + " 行数据。");
+    } catch (err) {
+      alert("导入失败：文件不是本页导出的 JSON 格式。");
+    }
+  };
+  reader.readAsText(f);
+  e.target.value = "";
+});
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  if (!confirm("恢复到初始状态？当前编辑的内容会全部丢失（建议先导出 JSON 备份）。")) return;
+  state = clone(DEFAULT_DATA);
+  save(true);
+  render();
+});
+
+function download(blob, filename) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+
+function stamp() {
+  const d = new Date();
+  return d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+}
+
+state = load();
+render();
+</script>
+
+</body>
+</html>
