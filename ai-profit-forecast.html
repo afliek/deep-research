@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI 净利润占比 ≥30% 的 A 股：未来五年净利润预测（2026-2030）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+:root{--bg:#0d0d10;--panel:#16161c;--panel2:#1c1c24;--line:#2a2a33;--gold:#d4af37;--gold-dim:#9a8440;
+--txt:#e8e4d8;--sub:#a89f8c;--dim:#6f6a5d;--red:#e05a4e;--green:#4ea97c;--blue:#6a9fd8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.65}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 60px}
+a{color:var(--gold);text-decoration:none}
+.banner{padding:54px 0 30px;border-bottom:1px solid var(--line)}
+.banner .kicker{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:10px}
+h1{font-family:"STSong","SimSun",serif;font-size:30px;font-weight:600;letter-spacing:1px}
+.banner .meta{color:var(--dim);font-size:12px;margin-top:12px}
+.tldr{background:linear-gradient(135deg,#1a180f,#141418);border:1px solid #3a3420;border-left:3px solid var(--gold);
+padding:22px 26px;margin:26px 0;border-radius:6px}
+.tldr b{color:var(--gold)}
+.tldr li{margin:7px 0 7px 18px;color:var(--txt)}
+h2{font-family:"STSong","SimSun",serif;font-size:21px;color:var(--gold);margin:44px 0 6px;letter-spacing:1px}
+h2 .dia{color:var(--gold-dim);font-size:14px;margin-right:8px}
+.sec-sub{color:var(--sub);font-size:13px;margin-bottom:18px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 14px}
+.kpi .v{font-size:22px;color:var(--gold);font-family:Georgia,serif}
+.kpi .l{font-size:11.5px;color:var(--sub);margin-top:4px}
+.card3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
+.mcard h3{color:var(--gold);font-size:14.5px;margin-bottom:8px}
+.mcard p{font-size:12.8px;color:var(--sub)}
+.chart{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px;margin:16px 0}
+.chartbox{width:100%;height:430px}
+.gtb{width:100%;height:380px}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;margin:16px 0;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:12.3px;white-space:nowrap}
+th{background:#1e1e26;color:var(--gold);font-weight:600;padding:9px 8px;text-align:right;position:sticky;top:0;cursor:pointer;border-bottom:1px solid var(--line)}
+th:first-child,th:nth-child(2),th:nth-child(3),th:nth-child(4){text-align:left}
+td{padding:7px 8px;border-bottom:1px solid #202028;text-align:right;color:var(--txt)}
+td:first-child,td:nth-child(2),td:nth-child(3),td:nth-child(4){text-align:left}
+tr:hover td{background:#1a1a22}
+#main th{cursor:pointer;user-select:none}
+#main th:hover{color:var(--gold)}
+#main th.sorted{color:var(--gold)}
+#main th .arw{font-size:9px;margin-left:3px;color:var(--gold-dim)}
+td .nm{color:var(--txt);font-weight:600}
+td .cd{color:var(--dim);font-size:11px}
+.neg{color:var(--red)}
+.pos{color:var(--green)}
+.gold{color:var(--gold)}
+.dim{color:var(--dim)}
+.lowcov{color:var(--red);font-size:10.5px;border:1px solid var(--red);border-radius:3px;padding:0 3px;margin-left:4px}
+.watch{color:var(--dim);font-size:10.5px;border:1px solid var(--dim);border-radius:3px;padding:0 3px;margin-left:4px}
+.drv{font-size:11px;border-radius:3px;padding:1px 6px;white-space:nowrap}
+.drv-a{color:var(--gold);border:1px solid var(--gold-dim);background:rgba(212,175,55,.08)}
+.drv-b{color:#7fa8cc;border:1px solid #4a6a88;background:rgba(106,159,216,.08)}
+.drv-c{color:var(--red);border:1px solid var(--red);background:rgba(224,90,78,.08)}
+.vscore{font-family:Georgia,serif;font-size:15px}
+#sensT th{cursor:pointer;user-select:none}
+#sensT th:hover{color:var(--gold)}
+#sensT th.sorted{color:var(--gold)}
+#sensT th .arw{font-size:9px;margin-left:3px;color:var(--gold-dim)}
+#sensT td.lft{text-align:left;white-space:normal;max-width:300px;color:var(--sub);font-size:11.8px}
+.filters{margin:14px 0;display:flex;flex-wrap:wrap;gap:8px}
+.filters button{background:var(--panel2);color:var(--sub);border:1px solid var(--line);border-radius:20px;
+padding:4px 14px;font-size:12px;cursor:pointer}
+.filters button.on{background:var(--gold);color:#0d0d10;border-color:var(--gold);font-weight:600}
+.blurbs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.blurb{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
+.blurb h3{color:var(--gold);font-size:15px;margin-bottom:2px}
+.blurb .tagline{color:var(--sub);font-size:12px;margin-bottom:10px}
+.blurb .row{font-size:12.6px;margin:6px 0;color:var(--txt)}
+.blurb .row b{color:var(--gold)}
+.blurb .lbl{color:var(--gold-dim);font-weight:600}
+.blurb .num{font-family:Georgia,serif;color:var(--gold);font-size:13.5px}
+.note{background:#17130e;border:1px solid #4a3a18;border-left:3px solid #b8860b;border-radius:6px;
+padding:14px 20px;font-size:12.8px;color:#c9b98a;margin:16px 0}
+.warn{background:#1a1210;border:1px solid #5a2a20;border-left:3px solid var(--red);border-radius:6px;
+padding:14px 20px;font-size:12.8px;color:#d8b0a0;margin:16px 0}
+.warn b{color:var(--red)}
+.src{color:var(--dim);font-size:12px;line-height:1.9;margin-top:30px;border-top:1px solid var(--line);padding-top:18px}
+footer{color:var(--dim);font-size:11.5px;text-align:center;padding:26px 0 10px;border-top:1px solid var(--line);margin-top:40px}
+@media(max-width:900px){.kpis{grid-template-columns:repeat(3,1fr)}.card3{grid-template-columns:1fr}.blurbs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="banner">
+  <div class="kicker">DEEP RESEARCH · 行业研究 · AI 与存储芯片</div>
+  <h1>AI 净利润占比 ≥30% 的 A 股：未来五年净利润预测</h1>
+  <div class="meta">64 家入池 · 一致预期（2026-11 券商覆盖）+ 增速衰减外推 · 行情截止 2026-11-14 · 模型：智谱V3</div>
+</div>
+
+<div class="tldr">
+<b>◆ 核心结论</b>
+<ul>
+<li><b>池子规模</b>：严格按「AI 相关业务毛利占比 ≥30%」逐家判定，A 股共 <b>64 家</b>入池（另有 8 家知名"AI 概念股"因占比不足被排除，名单见第七节）。合计净利润 2026E <b>4555 亿</b>（一致预期）→ 2028E <b>9530 亿</b> → 2030E 中性 <b>12328 亿</b>（悲观 10814 亿）。</li>
+<li><b>2026→2030 中性增长 2.7 倍</b>（复合 28.3%）。但增量几乎全部来自<b>硬件——存储+光通信+服务器/整机占 2030E 合计的 84%</b>，AI 应用软件只贡献 0.6%（71 亿）。</li>
+<li><b>存储是最大弹性</b>：长鑫科技一家的 2030E（4877 亿）就超过光通信全链条合计（2654 亿）。存储涨价周期的券商上修速度全市场最快（兆易创新 2026E 五个月内从 59 亿上修到 163 亿）——也意味着<b>价格反转时反噬最猛</b>。</li>
+<li><b>2026E 是分水岭</b>：约 15 家的利润预测在 2026 年出现 3 倍以上跳增（存储/光模块/PCB）。若 2026 年报兑现不了这个跳增，全链条估值将同时坍缩。</li>
+<li><b>最重要的一条警示</b>：2029-2030 是<b>模型外推</b>（增速逐年砍半至稳态），不是券商共识——全市场没有任何一家券商发到 2030 年。第二节的公式和第八节的置信度标注，比数字本身更重要。</li>
+</ul>
+</div>
+
+<h2><span class="dia">◆</span>一、口径：什么叫"AI 占净利润 30% 以上"</h2>
+<div class="sec-sub">净利润不按业务披露，毛利结构是最可核验的代理口径</div>
+<div class="card3">
+<div class="mcard"><h3>① 判定口径</h3><p>取各公司最新披露的<b>分产品毛利占比</b>（2026 中报为主，部分为 2025 年报），人工判定 AI 相关业务的毛利占比。纯 AI 公司（寒武纪、科大讯飞等）直接 100%；混合型（工业富联、立讯精密）用公司披露的 AI 收入占比折算。表格里每家的判定依据在悬浮提示中给出。</p></div>
+<div class="mcard"><h3>② 毛利占比 ≠ 净利润占比</h3><p>费用（研发/销售/管理）不按业务分摊披露，故毛利结构是净利润结构的近似。对高研发投入的芯片设计公司，AI 业务的<b>净利润占比通常高于毛利占比</b>（研发集中在非 AI 老业务摊薄）——即 30% 毛利线对应的净利线实际更宽松，判定偏保守。</p></div>
+<div class="mcard"><h3>③ 数据源</h3><p>分业务：东方财富 F10 主营构成；一致预期：东方财富机构预测汇总（2026E/2027E/2028E，覆盖 1~26 家券商不等）；市值/PE：2026-11-14 收盘。全部为公开可复现数据，表格支持导出核对。</p></div>
+</div>
+
+<h2><span class="dia">◆</span>二、五年预测怎么来的</h2>
+<div class="sec-sub">2026-2028 用券商一致预期，2029-2030 用增速衰减外推，三情景给出区间</div>
+<div class="card3">
+<div class="mcard"><h3>2026E-2028E：一致预期</h3><p>直接采用东方财富机构预测汇总数（加权中位）。注意两个时效性问题：存储链券商正在密集上修（旧预测拉低一致预期），光模块链预测集中在 10-11 月（最新）。表格标注了券商覆盖数，覆盖 ≤3 家的标红。</p></div>
+<div class="mcard"><h3>2029E-2030E：增速衰减外推</h3><p><b>中性</b>：g2029 = max(g2028 × 0.5, 8%)，g2030 = max(g2029 × 0.5, 8%)。<b>乐观</b>：保留 7 成增速、稳态 15%。<b>悲观</b>：保留 3 成、稳态 0%。衰减逻辑：硬件产能释放→单价年降→增速自然回落；这与方法论上"算力 CapEx 不可能永续 50%+ 增长"一致。</p></div>
+<div class="mcard"><h3>为什么不给单点数</h3><p>AI 板块 2027 年后的分歧极大（CPO 替代、存储价格反转、推理需求接棒与否）。我们给出三情景区间，<b>表格默认展示中性</b>，悲观情形在第七节集中列出。单点数字在这里只会制造虚假精度。</p></div>
+</div>
+
+<h2><span class="dia">◆</span>三、总览 KPI</h2>
+<div class="kpis">
+<div class="kpi"><div class="v">64</div><div class="l">入池家数（AI 毛利占比 ≥30%）</div></div>
+<div class="kpi"><div class="v">4555 亿</div><div class="l">2026E 合计（一致预期）</div></div>
+<div class="kpi"><div class="v">9530 亿</div><div class="l">2028E 合计（一致预期终点）</div></div>
+<div class="kpi"><div class="v">12328 亿</div><div class="l">2030E 合计（中性外推）</div></div>
+<div class="kpi"><div class="v">10814 亿</div><div class="l">2030E 合计（悲观外推）</div></div>
+</div>
+<div class="note">悲观情景假设 2029 年起硬件增速砍至三成并趋于 0，主要打击存储价格反转 + 光模块 CPO 替代 + 服务器毛利坍缩三重叠加；即便如此 2030 合计利润仍是 2026E 的 2.4 倍（复合 24.1%）——<b>这不是"AI 泡沫破裂归零"情景，只是"增长失速"情景</b>。</div>
+
+<h2><span class="dia">◆</span>四、分环节：2030 年的利润都长在哪</h2>
+<div class="sec-sub">存储 + 光通信 + AI 服务器/整机 = 2030E 合计利润的 84%；AI 应用几乎可以忽略</div>
+<div class="chart"><div id="chartGrp" class="gtb"></div></div>
+<div class="tblwrap"><table><thead><tr><th>环节</th><th>家数</th><th>代表公司</th><th>2026E(亿)</th><th>2028E(亿)</th><th>2030E(亿)</th><th>26→30倍数</th></tr></thead><tbody><tr><td class='gold'>存储</td><td>8</td><td style='white-space:normal;max-width:330px'>长鑫科技、兆易创新、佰维存储、香农芯创、江波龙、澜起科技…</td><td>2335</td><td>4544</td><td class='gold'>5713</td><td>2.4×</td></tr><tr><td class='gold'>光通信</td><td>15</td><td style='white-space:normal;max-width:330px'>中际旭创、新易盛、天孚通信、剑桥科技、光迅科技、源杰科技…</td><td>669</td><td>1928</td><td class='gold'>2654</td><td>4.0×</td></tr><tr><td class='gold'>AI 服务器</td><td>4</td><td style='white-space:normal;max-width:330px'>工业富联、浪潮信息、紫光股份、中科曙光</td><td>727</td><td>1251</td><td class='gold'>1533</td><td>2.1×</td></tr><tr><td class='gold'>AI-PCB</td><td>7</td><td style='white-space:normal;max-width:330px'>胜宏科技、沪电股份、生益科技、深南电路、广合科技、生益电子…</td><td>345</td><td>779</td><td class='gold'>1038</td><td>3.0×</td></tr><tr><td class='gold'>AI 芯片</td><td>6</td><td style='white-space:normal;max-width:330px'>寒武纪、海光信息、芯原股份、通富微电、复旦微电、炬芯科技</td><td>139</td><td>387</td><td class='gold'>578</td><td>4.1×</td></tr><tr><td class='gold'>整机与硬件</td><td>1</td><td style='white-space:normal;max-width:330px'>立讯精密</td><td>202</td><td>365</td><td class='gold'>451</td><td>2.2×</td></tr><tr><td class='gold'>电源散热连接</td><td>12</td><td style='white-space:normal;max-width:330px'>英维克、麦格米特、鼎通科技、申菱环境、科士达、科华数据…</td><td>58</td><td>149</td><td class='gold'>203</td><td>3.5×</td></tr><tr><td class='gold'>AIDC/算力服务</td><td>5</td><td style='white-space:normal;max-width:330px'>润泽科技、弘信电子、奥飞数据、光环新网、数据港</td><td>37</td><td>70</td><td class='gold'>89</td><td>2.4×</td></tr><tr><td class='gold'>AI 应用</td><td>6</td><td style='white-space:normal;max-width:330px'>金山办公、科大讯飞、虹软科技、云从科技、万兴科技、海天瑞声</td><td>42</td><td>56</td><td class='gold'>71</td><td>1.7×</td></tr></tbody></table></div>
+<h2><span class="dia">◆</span>五、TOP15：2026E vs 2030E 中性外推</h2>
+<div class="chart"><div id="chartTop" class="chartbox"></div></div>
+<div class="note">柱高注意坐标差异：长鑫科技 2030E 是 2026E 的 <b>2.8 倍</b>，中际旭创是 3.9 倍，工业富联只有 2.1 倍——<b>倍数越高，越依赖"预测兑现"</b>。</div>
+
+<h2><span class="dia">◆</span>六、完整榜单（64 家，按 2030E 排序）</h2>
+<div class="sec-sub">点击任意表头按该列排名（再点一下切换升/降序，空值恒排最后）· 点击环节按钮筛选 · AI% = AI 相关业务毛利占比判定值</div>
+<div class="filters" id="filters"></div>
+<div class="tblwrap" style="max-height:760px;overflow-y:auto">
+<table id="main"><thead><tr>
+<th>代码</th><th>名称</th><th>环节</th><th>AI%</th><th>26E</th><th>27E</th><th>28E</th><th>29E外</th><th>30E外</th><th>26-30 CAGR</th><th>市值(亿)</th><th>26E PE</th><th>28E PE</th><th>券商</th>
+</tr></thead><tbody></tbody></table>
+</div>
+<div class="note">29E外 / 30E外 = 增速衰减外推值（中性），非券商预测。<span class="lowcov">低覆盖</span> = 券商覆盖 ≤3 家，预测可靠性低；<span class="watch">观察</span> = 当前仍亏损，盈利预测依赖扭亏假设。负值标红。金额单位：亿元。</div>
+
+<h2><span class="dia">◆</span>七、重点公司逐家解读（12 家）</h2>
+<div class="sec-sub">TOP12 + 江波龙（预测样本警示案例）——定位 → 驱动 → 风险，先看这一节再去看表格数字</div>
+<div class="blurbs"><div class="blurb">
+<h3>长鑫科技 <span class="dim" style="font-size:11px">688825 · 存储</span></h3>
+<div class="tagline">全球第三大 DRAM 原厂，HBM 是核心增量</div>
+<div class="row"><span class="lbl">驱动：</span>AI 服务器内存需求 + 国产替代双轮；券商预测 2026 年利润爆发至 1700 亿级</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">1770亿</span> → 2030E <span class="num">4877亿</span>（26-30 CAGR 28.8%，28E PE 7）</div>
+<div class="row"><span class="lbl">风险：</span>上市未满一年，17 家券商 2026E 区间 1413~2515 亿，离散度全榜最大；HBM 良率与扩产节奏是核心变量</div>
+</div><div class="blurb">
+<h3>中际旭创 <span class="dim" style="font-size:11px">300308 · 光通信</span></h3>
+<div class="tagline">全球数通光模块龙头，1.6T 主升级周期</div>
+<div class="row"><span class="lbl">驱动：</span>英伟达/北美云厂 800G→1.6T 换代，26 家券商一致预期 2026E +214%</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">339亿</span> → 2030E <span class="num">1332亿</span>（26-30 CAGR 40.7%，28E PE 6）</div>
+<div class="row"><span class="lbl">风险：</span>客户集中（北美云厂）；CPO 若由英伟达自研渗透将压制模块厂份额</div>
+</div><div class="blurb">
+<h3>工业富联 <span class="dim" style="font-size:11px">601138 · AI 服务器</span></h3>
+<div class="tagline">全球 AI 服务器组装龙头（GB200/GB300）</div>
+<div class="row"><span class="lbl">驱动：</span>AI 服务器收入占比约 50%，5 年 CAGR 30%，是盘子最大、确定性最高的标的</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">609亿</span> → 2030E <span class="num">1290亿</span>（26-30 CAGR 20.6%，28E PE 8）</div>
+<div class="row"><span class="lbl">风险：</span>代工毛利率仅 7%，利润弹性依赖云厂 CapEx 持续性；汇率与关税</div>
+</div><div class="blurb">
+<h3>新易盛 <span class="dim" style="font-size:11px">300502 · 光通信</span></h3>
+<div class="tagline">光模块二供崛起最快</div>
+<div class="row"><span class="lbl">驱动：</span>2026E +104%、2027E +94%，5 年 CAGR 52%；1.6T 份额提升是核心逻辑</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">194亿</span> → 2030E <span class="num">769亿</span>（26-30 CAGR 41.0%，28E PE 5）</div>
+<div class="row"><span class="lbl">风险：</span>与旭创同样面临 CPO 长期替代；估值随板块波动剧烈</div>
+</div><div class="blurb">
+<h3>立讯精密 <span class="dim" style="font-size:11px">002475 · 整机与硬件</span></h3>
+<div class="tagline">AI 互联（连接器/散热/光模块）+ 消费电子双主业</div>
+<div class="row"><span class="lbl">驱动：</span>AI 收入占比约 35%，Apple 链压舱、AI 提弹性</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">202亿</span> → 2030E <span class="num">451亿</span>（26-30 CAGR 22.2%，28E PE 11）</div>
+<div class="row"><span class="lbl">风险：</span>AI 占比口径宽，非纯 AI 标的；苹果链波动传导</div>
+</div><div class="blurb">
+<h3>寒武纪 <span class="dim" style="font-size:11px">688256 · AI 芯片</span></h3>
+<div class="tagline">国产 AI 芯片旗手</div>
+<div class="row"><span class="lbl">驱动：</span>思元系列放量，一致预期 2026E 57 亿 → 2028E 223 亿，CAGR 76%</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">57亿</span> → 2030E <span class="num">348亿</span>（26-30 CAGR 57.0%，28E PE 28）</div>
+<div class="row"><span class="lbl">风险：</span>当前市值对应 2026E PE 仍达 107 倍；对华为生态与先进制程供给高度敏感</div>
+</div><div class="blurb">
+<h3>胜宏科技 <span class="dim" style="font-size:11px">300476 · AI-PCB</span></h3>
+<div class="tagline">AI 服务器 HDI 板主力供应商</div>
+<div class="row"><span class="lbl">驱动：</span>英伟达链 PCB 核心标的，2026E +68%</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">72亿</span> → 2030E <span class="num">256亿</span>（26-30 CAGR 37.3%，28E PE 7）</div>
+<div class="row"><span class="lbl">风险：</span>客户与产能扩张节奏决定弹性兑现；覆铜板涨价挤压毛利</div>
+</div><div class="blurb">
+<h3>沪电股份 <span class="dim" style="font-size:11px">002463 · AI-PCB</span></h3>
+<div class="tagline">数通 PCB 高端产能最稀缺</div>
+<div class="row"><span class="lbl">驱动：</span>800G 交换机板+AI 服务器板双驱动，2028E PE 约 9 倍（当前市值口径）</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">73亿</span> → 2030E <span class="num">231亿</span>（26-30 CAGR 33.5%，28E PE 9）</div>
+<div class="row"><span class="lbl">风险：</span>泰国/德国产能爬坡；AI 板占比公司披露约 7 成，非 100%</div>
+</div><div class="blurb">
+<h3>生益科技 <span class="dim" style="font-size:11px">600183 · AI-PCB</span></h3>
+<div class="tagline">高速覆铜板国产化主力</div>
+<div class="row"><span class="lbl">驱动：</span>M6/M7 覆铜板供 AI 服务器，量价齐升，2026E +155%</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">84亿</span> → 2030E <span class="num">210亿</span>（26-30 CAGR 25.9%，28E PE 10）</div>
+<div class="row"><span class="lbl">风险：</span>高速料认证周期长；PCB 厂自建覆铜板产能分流</div>
+</div><div class="blurb">
+<h3>兆易创新 <span class="dim" style="font-size:11px">603986 · 存储</span></h3>
+<div class="tagline">利基存储+NOR 龙头，涨价周期最大受益者之一</div>
+<div class="row"><span class="lbl">驱动：</span>券商 5→11 月将 2026E 从 59 亿疯狂上修至 163 亿，一致预期 130 亿（含旧预测摊薄）</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">130亿</span> → 2030E <span class="num">205亿</span>（26-30 CAGR 12.1%，28E PE 10）</div>
+<div class="row"><span class="lbl">风险：</span>存储是周期品：DRAM/NAND 涨价可持续性是最大变量；预测时效风险全榜最高</div>
+</div><div class="blurb">
+<h3>佰维存储 <span class="dim" style="font-size:11px">688525 · 存储</span></h3>
+<div class="tagline">企业级存储模组黑马</div>
+<div class="row"><span class="lbl">驱动：</span>2026E 一致预期 127 亿，企业级 eSSD 国产替代</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">127亿</span> → 2030E <span class="num">181亿</span>（26-30 CAGR 9.3%，28E PE 4）</div>
+<div class="row"><span class="lbl">风险：</span>仅 5 家券商覆盖；存储价格回落时弹性反噬</div>
+</div><div class="blurb">
+<h3>江波龙 <span class="dim" style="font-size:11px">301308 · 存储</span></h3>
+<div class="tagline">存储模组龙头，但预测样本极薄</div>
+<div class="row"><span class="lbl">驱动：</span>一致预期 2026E 170 亿 → 2027E 140 亿（价格见顶预期内嵌）</div>
+<div class="row"><span class="lbl">五年：</span>2026E <span class="num">170亿</span> → 2030E <span class="num">157亿</span>（26-30 CAGR -1.9%，28E PE 7）</div>
+<div class="row"><span class="lbl">风险：</span>仅 1 家券商（爱建证券 2026-08）发布完整预测，参考价值最低，务必谨慎</div>
+</div>
+</div>
+
+<h2><span class="dia">◆</span>八、置信度警示：哪些数字不能信</h2>
+<div class="warn">
+<b>先看三类不可信数字：</b>
+<ul style="margin:8px 0 8px 18px">
+<li><b>江波龙</b>：一致预期 2026E 170 亿，但只来自 <b>1 家券商</b>（爱建证券 2026-08-13），样本量为零，参考价值最低。</li>
+<li><b>长鑫科技</b>：2026E 一致预期 1770 亿，但 17 家券商区间 1413~2515 亿（最大/最小差 78%），上市未满一年（2026 年新股），招股书口径的盈利预测天然偏乐观。</li>
+<li><b>存储链预测时效</b>：兆易创新 2026E 在 5 个月内从 59 亿被上修至 163 亿（2.8 倍），江波龙/佰维/香农芯创同类。当前一致预期里混着 5-6 月的"旧价"预测——<b>存储链 2026E 实际可能在被继续上修的路径中，一致预期是滞后下界</b>。</li>
+</ul>
+<b>结构性下修风险：</b>润泽科技 2026E 一致预期 27 亿（11 月最新研报 23~30 亿）：AIDC 转型期折旧前置 + 算力服务价格竞争，是全榜唯一 2026E 显著下滑的大市值标的。<b>金山办公 2026E 33 亿 vs 2027E 26 亿</b>的"倒挂"来自 10-11 月券商对 2026 年集中上修（可能含一次性收益），2027 年回归稳态。</div>
+<div class="note">券商覆盖 ≤3 家的低置信度标的：香农芯创(3)、江波龙(3)、博创科技(2)、鼎通科技(3)、复旦微电(4)、意华股份(2)、弘信电子(3)、腾景科技(3)、中恒电气(5)、兆龙互连(1)、炬芯科技(2)、德科立(5)、云从科技(1)、数据港(2)、海天瑞声(1)、联特科技(1)、万兴科技(3)、依米康(3)、光环新网(4)、华工科技(8)。这些公司在总表中标红"低覆盖"。</div>
+
+<h2><span class="dia">◆</span>九、被排除的知名"AI 概念股"</h2>
+<div class="sec-sub">按 30% 口径严格判定后出局的公司——避免"概念股 ≠ AI 利润股"的常见误判</div>
+<div class="tblwrap"><table><thead><tr><th>代码</th><th>名称</th><th>环节</th><th>排除原因</th></tr></thead><tbody><tr><td class='dim'>000628</td><td>高新发展</td><td class='dim'>昇腾生态</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：建筑施工毛利 88.1%（华鲲振宇占比过小）</td></tr><tr><td class='dim'>002130</td><td>沃尔核材</td><td class='dim'>铜缆</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：通信线缆毛利仅 21.3%，高速线只占其中一部分</td></tr><tr><td class='dim'>600577</td><td>精达股份</td><td class='dim'>铜缆</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：漆包线主业</td></tr><tr><td class='dim'>601231</td><td>环旭电子</td><td class='dim'>SiP封装</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：云端及存储类毛利仅 25.5%</td></tr><tr><td class='dim'>300474</td><td>景嘉微</td><td class='dim'>AI芯片</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：芯片类毛利仅 7.1%（主业军工图形显控）</td></tr><tr><td class='dim'>688047</td><td>龙芯中科</td><td class='dim'>AI芯片</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：信创 CPU，AI 相关收入占比低</td></tr><tr><td class='dim'>688709</td><td>成都华微</td><td class='dim'>特种IC</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：特种 IC（军工）为主</td></tr><tr><td class='dim'>688048</td><td>长光华芯</td><td class='dim'>光芯片</td><td style='white-space:normal;color:var(--sub)'>AI 占比 <30%：光通信芯片毛利仅 18.5%（主业高功率激光）</td></tr></tbody></table></div>
+<div class="note">另有两类未列入：①<b>北交所</b>标的（曙光数创、并行科技）流动性口径不同，未纳入；②<b>持续亏损且无有效券商预测</b>的云天励飞、格灵深瞳、长盈精密、闻泰科技——它们有 AI 属性但"净利润预测"无从谈起，扭亏假设本身就是最大的不确定性。</div>
+
+<h2><span class="dia">◆</span>十、量价敏感度：业绩靠"数量"还是靠"价格"</h2>
+<div class="sec-sub">AI 确定性最高的是数量增长（CapEx → 出货量），价格是周期变量。按「量逻辑纯度」降序排列——纯度越高，业绩越不依赖涨价</div>
+<div class="kpis">
+<div class="kpi"><div class="v">56</div><div class="l">量主导（纯度 ≥70）</div></div>
+<div class="kpi"><div class="v">4</div><div class="l">量价各半（涨价在帮忙）</div></div>
+<div class="kpi"><div class="v">4</div><div class="l">价敏感（业绩靠涨价）</div></div>
+<div class="kpi"><div class="v">≥70</div><div class="l">纯度阈值（量可解释业绩）</div></div>
+</div>
+<div class="card3">
+<div class="mcard"><h3>为什么拆量价</h3><p>AI 发展确定性最高的是<b>数量</b>：GPU 台数 → 配套的服务器/光模块/PCB/电源件数，只要 CapEx 涨这些量就涨。<b>价格</b>则分两类：制造环节普遍"单价年降"（可预期、不算风险），而<b>涨价周期</b>（存储、覆铜板、租金）是双向变量——现在帮业绩，反转时反噬。</p></div>
+<div class="mcard"><h3>纯度怎么打分</h3><p>量逻辑纯度 0-100：衡量"业绩增长有多少能由数量解释"。纯台数逻辑（服务器/电源/连接器/液冷，单价稳定）打 85-90；光模块 75（量暴增+单价年降）；涨价周期主导的存储模组打 25-30；长鑫 45（产能爬坡是长逻辑、但当前一半业绩靠 DRAM 涨价）。</p></div>
+<div class="mcard"><h3>怎么用</h3><p>想赚"AI 确定性"的钱 → 只看<b>量主导</b>组（纯度 ≥70），涨价反转与你无关；想博价格弹性 → 看<b>价敏感</b>组的存储链，但要接受周期反转（兆易 2026E 五个月上修 2.8 倍就是价格给的，也能被价格收回去）。<b>表头可点击按任意列排名</b>。</p></div>
+</div>
+<div class="filters" id="sensFilters"></div>
+<div class="tblwrap"><table id="sensT"><thead><tr>
+<th>名称</th><th>环节</th><th>驱动</th><th>纯度</th><th>量的载体（业绩跟什么数量走）</th><th>价格风险</th><th>26E(亿)</th><th>30E(亿)</th>
+</tr></thead><tbody></tbody></table></div>
+<div class="note">驱动类型：<b>量主导</b>（金色）= 单价稳定或年降可预期，量是唯一主变量；<b>量价齐升/各半</b>（蓝色）= 涨价或代际升级在当前阶段帮忙（生益的高速覆铜板涨价、澜起的 DDR5 子代升级、长鑫的 DRAM 涨价、润泽的租金——其中租金是价格战方向）；<b>价敏感</b>（红色）= 业绩弹性主要来自涨价周期，价格反转时反噬最猛。纯度为人工判定值，依据见"量的载体"一列。</div>
+
+<h2><span class="dia">◆</span>十一、方法论局限（必读）</h2>
+<div class="card3">
+<div class="mcard"><h3>毛利占比是代理口径</h3><p>费用不按业务披露。对研发重、多业务的公司（讯飞、澜起、兆易），AI 净利占比与毛利占比可能有 ±10pp 级别偏差。本表 30% 线偏保守（约等于净利口径的 25-35% 区间下沿）。</p></div>
+<div class="mcard"><h3>2029-2030 无共识</h3><p>券商预测最长发到 2028。2029/2030 是本页的机械外推，<b>不是任何机构观点</b>。若 2027-2028 年出现推理需求接棒（Agent 大规模商用），中性外推会显著低估；若 CPO/自研芯片替代加速，会显著高估。</p></div>
+<div class="mcard"><h3>一致预期的系统性偏差</h3><p>券商盈利预测存在众所周知的乐观偏差（尤其热门板块 12 个月内预测普遍高估 20-40%）。2026E 的 3.5 倍跳增中有多少能兑现，取决于存储涨价与北美 CapEx 两个外生变量——本页不对此做判断，只呈现结构。</p></div>
+</div>
+
+<div class="src">
+<b>数据来源</b><br>
+· 分业务构成：东方财富 F10 主营业务构成（2026 中报 / 2025 年报，逐家判定依据见总表悬浮提示）<br>
+· 一致预期：东方财富机构盈利预测汇总（数据截至 2026-11-15 抓取，研报发布日期 2026-05 至 2026-11-15）<br>
+· 市值 / PE：东方财富估值分析，2026-11-14 收盘<br>
+· 判定与建模：AI 毛利占比逐家人工判定 + 增速衰减外推（公式见第二节），模型署名 智谱V3<br>
+· 本页为研究测算，2029/2030 为外推值非机构共识，不构成投资建议。
+</div>
+
+<footer>Deep Research · 2026-11-15 · 基于公开数据</footer>
+</div>
+
+<script>
+var DATA = {"rows": [{"code": "688825", "name": "长鑫科技", "seg": "存储", "ai_ratio": 95, "watch": false, "n26": 176953321764.706, "n27": 286601110000, "n28": 384132272941.176, "n29": 449492918793.5074, "n30": 487733844573.3782, "n29_p": 415666014993.7513, "n30_p": 432727201751.7331, "g28": 34.0, "cagr5": 28.8, "n_est": 17, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 27140, "pe26": 15, "pe28": 7, "lowcov": false}, {"code": "300308", "name": "中际旭创", "seg": "光模块", "ai_ratio": 99, "watch": false, "n26": 33936437692.3077, "n27": 68012668846.1539, "n28": 98144981200, "n29": 119886042679.07759, "n30": 133164611753.6272, "n29_p": 109226718463.44653, "n30_p": 115393217154.26477, "g28": 44.3, "cagr5": 40.7, "n_est": 26, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 5491, "pe26": 16, "pe28": 6, "lowcov": false}, {"code": "601138", "name": "工业富联", "seg": "AI服务器", "ai_ratio": 50, "watch": false, "n26": 60938043684.2105, "n27": 82960416842.1053, "n28": 105270311111.111, "n29": 119425070693.76923, "n30": 128979076349.27077, "n29_p": 111657760638.4837, "n30_p": 115045269912.89346, "g28": 26.9, "cagr5": 20.6, "n_est": 19, "rating": "买入", "biz_date": "2025-12-31", "grp": "AI 服务器", "mcap": 7957, "pe26": 13, "pe28": 8, "lowcov": false}, {"code": "300502", "name": "新易盛", "seg": "光模块", "ai_ratio": 99, "watch": false, "n26": 19442276111.1111, "n27": 37564536111.1111, "n28": 55484784444.4445, "n29": 68719356449.072815, "n30": 76915038203.47887, "n29_p": 62315831958.332596, "n30_p": 66151860278.863075, "g28": 47.7, "cagr5": 41.0, "n_est": 18, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 2616, "pe26": 13, "pe28": 5, "lowcov": false}, {"code": "002475", "name": "立讯精密", "seg": "AI硬件", "ai_ratio": 35, "watch": false, "n26": 20192642857.1429, "n27": 28449357142.8571, "n28": 36534384615.3846, "n29": 41725740993.38685, "n30": 45063800272.857796, "n29_p": 38918510749.87826, "n30_p": 40188364335.359, "g28": 28.4, "cagr5": 22.2, "n_est": 14, "rating": "买入", "biz_date": "2026-06-30", "grp": "整机与硬件", "mcap": 3873, "pe26": 19, "pe28": 11, "lowcov": false}, {"code": "688256", "name": "寒武纪", "seg": "AI芯片", "ai_ratio": 100, "watch": false, "n26": 5726937857.14286, "n27": 13351250714.2857, "n28": 22319432857.1429, "n29": 29815537284.796066, "n30": 34822393473.390724, "n29_p": 26370706856.59194, "n30_p": 28764023920.67256, "g28": 67.2, "cagr5": 57.0, "n_est": 14, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 6156, "pe26": 107, "pe28": 28, "lowcov": false}, {"code": "300476", "name": "胜宏科技", "seg": "AI-PCB", "ai_ratio": 75, "watch": false, "n26": 7200166666.66667, "n27": 12158000000, "n28": 18205333333.3333, "n29": 22732957906.08829, "n30": 25559775106.918003, "n29_p": 20557801410.31963, "n30_p": 21886026789.809196, "g28": 49.7, "cagr5": 37.3, "n_est": 6, "rating": "买入", "biz_date": "2025-12-31", "grp": "AI-PCB", "mcap": 1211, "pe26": 17, "pe28": 7, "lowcov": false}, {"code": "002463", "name": "沪电股份", "seg": "AI-PCB", "ai_ratio": 80, "watch": false, "n26": 7264648235.29412, "n27": 11815345882.3529, "n28": 17025140588.2353, "n29": 20778627290.472607, "n30": 23069131172.696884, "n29_p": 18936729797.81298, "n30_p": 19999841381.490643, "g28": 44.1, "cagr5": 33.5, "n_est": 17, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 1590, "pe26": 22, "pe28": 9, "lowcov": false}, {"code": "600183", "name": "生益科技", "seg": "覆铜板", "ai_ratio": 55, "watch": false, "n26": 8355058823.52941, "n27": 12706882352.9412, "n28": 16767823529.4118, "n29": 19447204006.81977, "n30": 21002980327.365353, "n29_p": 18040095345.268345, "n30_p": 18724498566.2019, "g28": 32.0, "cagr5": 25.9, "n_est": 17, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 1655, "pe26": 20, "pe28": 10, "lowcov": false}, {"code": "603986", "name": "兆易创新", "seg": "存储", "ai_ratio": 85, "watch": false, "n26": 13004176875, "n27": 16058035625, "n28": 17593642500, "n29": 19001133900.0, "n30": 20521224612.0, "n29_p": 17746506076.23941, "n30_p": 17823601947.221455, "g28": 9.6, "cagr5": 12.1, "n_est": 16, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 1732, "pe26": 13, "pe28": 10, "lowcov": false}, {"code": "688525", "name": "佰维存储", "seg": "存储模组", "ai_ratio": 90, "watch": false, "n26": 12676508000, "n27": 14173358000, "n28": 15490568000, "n29": 16729813440.000002, "n30": 18068198515.200005, "n29_p": 15612644363.61384, "n30_p": 15674163568.406916, "g28": 9.3, "cagr5": 9.3, "n_est": 5, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 645, "pe26": 5, "pe28": 4, "lowcov": false}, {"code": "300475", "name": "香农芯创", "seg": "存储分销", "ai_ratio": 85, "watch": false, "n26": 7951333333.33333, "n27": 10907333333.3333, "n28": 13655000000, "n29": 15374915729.478664, "n30": 16604908987.836958, "n29_p": 14413849437.687197, "n30_p": 14814359929.840141, "g28": 25.2, "cagr5": 20.2, "n_est": 3, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 425, "pe26": 5, "pe28": 3, "lowcov": true}, {"code": "301308", "name": "江波龙", "seg": "存储模组", "ai_ratio": 90, "watch": false, "n26": 16985666666.6667, "n27": 14005000000, "n28": 13476000000, "n29": 14554080000.000002, "n30": 15718406400.000004, "n29_p": 13053774451.981436, "n30_p": 13053774451.981436, "g28": -3.8, "cagr5": -1.9, "n_est": 3, "rating": null, "biz_date": null, "grp": "存储", "mcap": 1002, "pe26": 6, "pe28": 7, "lowcov": true}, {"code": "002916", "name": "深南电路", "seg": "AI-PCB", "ai_ratio": 60, "watch": false, "n26": 6017111111.11111, "n27": 9170777777.77778, "n28": 12326235294.1176, "n29": 14446824885.833853, "n30": 15689531428.230736, "n29_p": 13352064343.264997, "n30_p": 13907665268.550877, "g28": 34.4, "cagr5": 27.1, "n_est": 18, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 1418, "pe26": 24, "pe28": 12, "lowcov": false}, {"code": "688041", "name": "海光信息", "seg": "AI芯片", "ai_ratio": 100, "watch": false, "n26": 4394662608.69565, "n27": 6796826956.52174, "n28": 9775780434.78261, "n29": 11918073839.866821, "n30": 13223954795.29466, "n29_p": 10865640869.137484, "n30_p": 11471323052.579731, "g28": 43.8, "cagr5": 31.7, "n_est": 23, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 4724, "pe26": 108, "pe28": 48, "lowcov": false}, {"code": "300394", "name": "天孚通信", "seg": "光器件", "ai_ratio": 95, "watch": false, "n26": 3395450476.19048, "n27": 5855297619.04762, "n28": 8956639047.61905, "n29": 11328644498.61264, "n30": 12828738806.321795, "n29_p": 10200709537.262825, "n30_p": 10909145014.078762, "g28": 53.0, "cagr5": 39.4, "n_est": 21, "rating": "买入", "biz_date": null, "grp": "光通信", "mcap": 1363, "pe26": 40, "pe28": 15, "lowcov": false}, {"code": "603083", "name": "剑桥科技", "seg": "光模块", "ai_ratio": 54, "watch": false, "n26": 1753250000, "n27": 5031000000, "n28": 8092500000, "n29": 10554752906.976746, "n30": 12160466285.266813, "n29_p": 9408001744.186047, "n30_p": 10172675374.32396, "g28": 60.9, "cagr5": 62.3, "n_est": 4, "rating": null, "biz_date": "2025-12-31", "grp": "光通信", "mcap": 452, "pe26": 26, "pe28": 6, "lowcov": false}, {"code": "000977", "name": "浪潮信息", "seg": "AI服务器", "ai_ratio": 90, "watch": false, "n26": 5223427222.22222, "n27": 6756565555.55556, "n28": 8437767058.82353, "n29": 9487530177.887403, "n30": 10246532592.118397, "n29_p": 8898869589.085384, "n30_p": 9142019895.04854, "g28": 24.9, "cagr5": 18.3, "n_est": 18, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 服务器", "mcap": 794, "pe26": 15, "pe28": 9, "lowcov": false}, {"code": "001389", "name": "广合科技", "seg": "AI-PCB", "ai_ratio": 75, "watch": false, "n26": 2289400000, "n27": 3995200000, "n28": 6158200000, "n29": 7825223753.504205, "n30": 8884367161.770975, "n29_p": 7035250252.102523, "n30_p": 7536230084.457014, "g28": 54.1, "cagr5": 40.4, "n_est": 5, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 433, "pe26": 19, "pe28": 7, "lowcov": false}, {"code": "688008", "name": "澜起科技", "seg": "内存接口", "ai_ratio": 95, "watch": false, "n26": 4000824666.66667, "n27": 5241540666.66667, "n28": 6926740000, "n29": 8040242534.131501, "n30": 8686493904.674305, "n29_p": 7456306720.478901, "n30_p": 7741333435.560513, "g28": 32.2, "cagr5": 21.4, "n_est": 15, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 1843, "pe26": 46, "pe28": 27, "lowcov": false}, {"code": "000938", "name": "紫光股份", "seg": "AI服务器", "ai_ratio": 45, "watch": false, "n26": 3423872777.77778, "n27": 4690345555.55556, "n28": 6030784705.88235, "n29": 6892544232.041529, "n30": 7443947770.604852, "n29_p": 6427224727.46021, "n30_p": 6638474940.650111, "g28": 28.6, "cagr5": 21.4, "n_est": 18, "rating": "增持", "biz_date": "2026-06-30", "grp": "AI 服务器", "mcap": 719, "pe26": 21, "pe28": 12, "lowcov": false}, {"code": "688183", "name": "生益电子", "seg": "AI-PCB", "ai_ratio": 80, "watch": false, "n26": 2795250000, "n27": 4265750000, "n28": 5721625000, "n29": 6698003221.517318, "n30": 7269500346.297633, "n29_p": 6193019432.910391, "n30_p": 6448135320.755175, "g28": 34.1, "cagr5": 27.0, "n_est": 8, "rating": "增持", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 575, "pe26": 21, "pe28": 10, "lowcov": false}, {"code": "002281", "name": "光迅科技", "seg": "光模块", "ai_ratio": 60, "watch": false, "n26": 1759281000, "n27": 3815242000, "n28": 5336087777.77778, "n29": 6399633231.340745, "n30": 7037394556.782941, "n29_p": 5867493294.360003, "n30_p": 6159656620.281772, "g28": 39.9, "cagr5": 41.4, "n_est": 10, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 782, "pe26": 44, "pe28": 15, "lowcov": false}, {"code": "603019", "name": "中科曙光", "seg": "AI服务器", "ai_ratio": 95, "watch": false, "n26": 3127137647.05882, "n27": 4152708823.52941, "n28": 5341814375, "n29": 6106614099.48915, "n30": 6595143227.448282, "n29_p": 5693857922.193489, "n30_p": 5881480123.137597, "g28": 28.6, "cagr5": 20.5, "n_est": 17, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 服务器", "mcap": 1191, "pe26": 38, "pe28": 22, "lowcov": false}, {"code": "300442", "name": "润泽科技", "seg": "AIDC", "ai_ratio": 100, "watch": false, "n26": 2745850909.09091, "n27": 3861465454.54545, "n28": 5124931818.18182, "n29": 5963367257.320656, "n30": 6451168717.176138, "n29_p": 5525494445.301484, "n30_p": 5741429666.45827, "g28": 32.7, "cagr5": 23.8, "n_est": 11, "rating": "买入", "biz_date": "2026-06-30", "grp": "AIDC/算力服务", "mcap": 944, "pe26": 34, "pe28": 18, "lowcov": false}, {"code": "688498", "name": "源杰科技", "seg": "光芯片", "ai_ratio": 87, "watch": false, "n26": 1379892222.22222, "n27": 2485455555.55556, "n28": 3803075555.55556, "n29": 4811141944.493872, "n30": 5448777249.894358, "n29_p": 4331853877.807436, "n30_p": 4633003617.312505, "g28": 53.0, "cagr5": 41.0, "n_est": 9, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 838, "pe26": 61, "pe28": 22, "lowcov": false}, {"code": "000988", "name": "华工科技", "seg": "光模块", "ai_ratio": 34, "watch": false, "n26": 2219375000, "n27": 3051625000, "n28": 3886375000, "n29": 4417919919.714906, "n30": 4771353513.292098, "n29_p": 4127574451.8289437, "n30_p": 4255658938.679066, "g28": 27.4, "cagr5": 21.1, "n_est": 8, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 660, "pe26": 30, "pe28": 17, "lowcov": false}, {"code": "002837", "name": "英维克", "seg": "液冷", "ai_ratio": 80, "watch": false, "n26": 1030278461.53846, "n27": 1850127692.30769, "n28": 2825171666.66667, "n29": 3569624771.59726, "n30": 4039935704.5587482, "n29_p": 3215340096.29169, "n30_p": 3437366285.1569963, "g28": 52.7, "cagr5": 40.7, "n_est": 13, "rating": "买入", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 491, "pe26": 48, "pe28": 17, "lowcov": false}, {"code": "688111", "name": "金山办公", "seg": "AI应用", "ai_ratio": 100, "watch": false, "n26": 3324898125, "n27": 2634616875, "n28": 3196370666.66667, "n29": 3537136217.553859, "n30": 3820107114.958168, "n29_p": 3336902583.86565, "n30_p": 3410257861.854405, "g28": 21.3, "cagr5": 3.5, "n_est": 16, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 1008, "pe26": 30, "pe28": 32, "lowcov": false}, {"code": "688313", "name": "仕佳光子", "seg": "光芯片", "ai_ratio": 80, "watch": false, "n26": 850091875, "n27": 1562435000, "n28": 2455281875, "n29": 3156812098.4454203, "n30": 3607798830.2229323, "n29_p": 2827094371.567252, "n30_p": 3041153096.764262, "g28": 57.1, "cagr5": 43.5, "n_est": 16, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 435, "pe26": 51, "pe28": 18, "lowcov": false}, {"code": "688521", "name": "芯原股份", "seg": "AI芯片", "ai_ratio": 55, "watch": false, "n26": -14600000, "n27": 652000000, "n28": 1550000000, "n29": 2617407975.4601226, "n30": 3518647378.05337, "n29_p": 2159444785.2760735, "n30_p": 2583981031.5593357, "g28": 137.7, "cagr5": null, "n_est": 5, "rating": null, "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 586, "pe26": null, "pe28": 38, "lowcov": false}, {"code": "002851", "name": "麦格米特", "seg": "AI电源", "ai_ratio": 40, "watch": false, "n26": 770517692.307692, "n27": 1572410000, "n28": 2425584615.38462, "n29": 3083634113.070855, "n30": 3501921701.614257, "n29_p": 2771902621.6886687, "n30_p": 2969784770.083637, "g28": 54.3, "cagr5": 46.0, "n_est": 13, "rating": "买入", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 420, "pe26": 55, "pe28": 17, "lowcov": false}, {"code": "002156", "name": "通富微电", "seg": "先进封装", "ai_ratio": 45, "watch": false, "n26": 2291714285.71429, "n27": 2322857142.85714, "n28": 2816285714.28571, "n29": 3115407819.363902, "n30": 3364640444.9130144, "n29_p": 2939433263.046911, "n30_p": 3003699469.9972906, "g28": 21.2, "cagr5": 10.1, "n_est": 7, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 741, "pe26": 32, "pe28": 26, "lowcov": false}, {"code": "300548", "name": "博创科技", "seg": "光器件", "ai_ratio": 90, "watch": false, "n26": 901500000, "n27": 1594000000, "n28": 2173000000, "n29": 2567657151.819322, "n30": 2800824261.4340315, "n29_p": 2366334291.0915937, "n30_p": 2471602022.949376, "g28": 36.3, "cagr5": 32.8, "n_est": 2, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 362, "pe26": 40, "pe28": 17, "lowcov": true}, {"code": "688668", "name": "鼎通科技", "seg": "连接器", "ai_ratio": 65, "watch": false, "n26": 633000000, "n27": 1710333333.33333, "n28": 2141666666.66667, "n29": 2411722861.0407414, "n30": 2604660689.9240007, "n29_p": 2260867049.95778, "n30_p": 2323784455.154326, "g28": 25.2, "cagr5": 42.4, "n_est": 3, "rating": null, "biz_date": "2025-12-31", "grp": "电源散热连接", "mcap": 140, "pe26": 22, "pe28": 7, "lowcov": true}, {"code": "002409", "name": "雅克科技", "seg": "HBM材料", "ai_ratio": 45, "watch": false, "n26": 1249040909.09091, "n27": 1590529090.90909, "n28": 1990707000, "n29": 2241138434.868415, "n30": 2420429509.6578884, "n29_p": 2101151720.9210486, "n30_p": 2159437826.1665487, "g28": 25.2, "cagr5": 18.0, "n_est": 11, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 411, "pe26": 33, "pe28": 21, "lowcov": false}, {"code": "002436", "name": "兴森科技", "seg": "AI-PCB", "ai_ratio": 45, "watch": false, "n26": 608055555.555556, "n27": 1131111111.11111, "n28": 1663666666.66667, "n29": 2055314718.4021037, "n30": 2297238182.1865187, "n29_p": 1865382164.3745966, "n30_p": 1978468667.5910795, "g28": 47.1, "cagr5": 39.4, "n_est": 9, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI-PCB", "mcap": 459, "pe26": 75, "pe28": 28, "lowcov": false}, {"code": "688385", "name": "复旦微电", "seg": "FPGA", "ai_ratio": 85, "watch": false, "n26": 1258217500, "n27": 1337077500, "n28": 1759092500, "n29": 2036699228.6254911, "n30": 2199635166.9155307, "n29_p": 1890474687.1752944, "n30_p": 1961072083.0486271, "g28": 31.6, "cagr5": 15.0, "n_est": 4, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 417, "pe26": 33, "pe28": 24, "lowcov": false}, {"code": "002230", "name": "科大讯飞", "seg": "AI应用", "ai_ratio": 100, "watch": false, "n26": 1031350909.09091, "n27": 1315610909.09091, "n28": 1665086000, "n29": 1886240323.5163472, "n30": 2037139549.397655, "n29_p": 1764476874.109808, "n30_p": 1817138688.2336178, "g28": 26.6, "cagr5": 18.6, "n_est": 11, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 892, "pe26": 86, "pe28": 54, "lowcov": false}, {"code": "301018", "name": "申菱环境", "seg": "液冷", "ai_ratio": 75, "watch": false, "n26": 379555555.555556, "n27": 822111111.111111, "n28": 1291555555.55556, "n29": 1660309591.3862329, "n30": 1897328378.5063472, "n29_p": 1486976865.9428525, "n30_p": 1599471820.7313619, "g28": 57.1, "cagr5": 49.5, "n_est": 9, "rating": "增持", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 236, "pe26": 62, "pe28": 18, "lowcov": false}, {"code": "300570", "name": "太辰光", "seg": "光器件", "ai_ratio": 95, "watch": false, "n26": 488998888.888889, "n27": 836704444.444444, "n28": 1235775555.55556, "n29": 1530480769.1551871, "n30": 1712973722.6515965, "n29_p": 1387883172.6042252, "n30_p": 1473298198.487248, "g28": 47.7, "cagr5": 36.8, "n_est": 9, "rating": "增持", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 258, "pe26": 53, "pe28": 21, "lowcov": false}, {"code": "002518", "name": "科士达", "seg": "IDC电源", "ai_ratio": 67, "watch": false, "n26": 753970833.333333, "n27": 1030662500, "n28": 1333364545.45455, "n29": 1529166845.0655618, "n30": 1651500192.670807, "n29_p": 1424178634.312066, "n30_p": 1472678305.870867, "g28": 29.4, "cagr5": 21.7, "n_est": 12, "rating": "增持", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 153, "pe26": 20, "pe28": 11, "lowcov": false}, {"code": "300620", "name": "光库科技", "seg": "光器件", "ai_ratio": 45, "watch": false, "n26": 343410000, "n27": 731760000, "n28": 1111918000, "n29": 1400745295.1814804, "n30": 1582671244.2377288, "n29_p": 1262976017.1088881, "n30_p": 1348765910.2487376, "g28": 52.0, "cagr5": 46.5, "n_est": 5, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 485, "pe26": 141, "pe28": 44, "lowcov": false}, {"code": "002335", "name": "科华数据", "seg": "AIDC电源", "ai_ratio": 45, "watch": false, "n26": 597400000, "n27": 850200000, "n28": 1193000000, "n29": 1433508350.9762409, "n30": 1578005722.981256, "n29_p": 1313445010.5857444, "n30_p": 1379747566.412984, "g28": 40.3, "cagr5": 27.5, "n_est": 5, "rating": "增持", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 186, "pe26": 31, "pe28": 16, "lowcov": false}, {"code": "688123", "name": "聚辰股份", "seg": "内存接口", "ai_ratio": 90, "watch": false, "n26": 666725555.555556, "n27": 798516666.666667, "n28": 1142388888.88889, "n29": 1388367352.6221864, "n30": 1537838549.2597988, "n29_p": 1267128189.35109, "n30_p": 1336308083.112715, "g28": 43.1, "cagr5": 23.2, "n_est": 9, "rating": "买入", "biz_date": "2026-06-30", "grp": "存储", "mcap": 149, "pe26": 22, "pe28": 13, "lowcov": false}, {"code": "300990", "name": "同飞股份", "seg": "液冷", "ai_ratio": 35, "watch": false, "n26": 365500000, "n27": 631625000, "n28": 893000000, "n29": 1077767761.7257073, "n30": 1189266494.6451836, "n29_p": 986000657.0354245, "n30_p": 1037343719.1528124, "g28": 41.4, "cagr5": 34.3, "n_est": 8, "rating": "增持", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 137, "pe26": 38, "pe28": 15, "lowcov": false}, {"code": "300870", "name": "欧陆通", "seg": "AI电源", "ai_ratio": 59, "watch": false, "n26": 212162222.222222, "n27": 484001111.111111, "n28": 773830000, "n29": 1005521915.5144273, "n30": 1156053232.9208822, "n29_p": 897368549.3086563, "n30_p": 968999016.4505383, "g28": 59.9, "cagr5": 52.8, "n_est": 9, "rating": "增持", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 155, "pe26": 73, "pe28": 20, "lowcov": false}, {"code": "301205", "name": "联特科技", "seg": "光模块", "ai_ratio": 95, "watch": false, "n26": 66070000, "n27": 482360000, "n28": 735960000, "n29": 929424897.5868646, "n30": 1051585811.6489908, "n29_p": 837319738.5521188, "n30_p": 894979468.5538657, "g28": 52.6, "cagr5": 99.7, "n_est": 1, "rating": "增持", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 190, "pe26": 287, "pe28": 26, "lowcov": true}, {"code": "002897", "name": "意华股份", "seg": "连接器", "ai_ratio": 40, "watch": false, "n26": 441500000, "n27": 647000000, "n28": 819000000, "n29": 927862442.0401856, "n30": 1002091437.4034005, "n29_p": 867937465.2241113, "n30_p": 893868270.7925533, "g28": 26.6, "cagr5": 22.7, "n_est": 2, "rating": "买入", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 87, "pe26": 20, "pe28": 11, "lowcov": true}, {"code": "300657", "name": "弘信电子", "seg": "算力+FPC", "ai_ratio": 45, "watch": false, "n26": 312666666.666667, "n27": 532333333.333333, "n28": 750333333.333333, "n29": 903970778.5431014, "n30": 996518820.0533063, "n29_p": 827509133.7925273, "n30_p": 870066006.1521894, "g28": 41.0, "cagr5": 33.6, "n_est": 3, "rating": "买入", "biz_date": "2026-06-30", "grp": "AIDC/算力服务", "mcap": 160, "pe26": 51, "pe28": 21, "lowcov": true}, {"code": "688195", "name": "腾景科技", "seg": "光器件", "ai_ratio": 50, "watch": false, "n26": 154666666.666667, "n27": 328333333.333333, "n28": 565666666.666667, "n29": 770110659.8984783, "n30": 909277865.4435844, "n29_p": 677019729.2724205, "n30_p": 743656341.2043611, "g28": 72.3, "cagr5": 55.7, "n_est": 3, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 179, "pe26": 116, "pe28": 32, "lowcov": true}, {"code": "300738", "name": "奥飞数据", "seg": "IDC", "ai_ratio": 85, "watch": false, "n26": 378227500, "n27": 516693750, "n28": 626325000, "n29": 692771316.2717277, "n30": 748193021.573466, "n29_p": 653666289.7630366, "n30_p": 667933706.3891814, "g28": 21.2, "cagr5": 18.6, "n_est": 8, "rating": "买入", "biz_date": "2026-06-30", "grp": "AIDC/算力服务", "mcap": 156, "pe26": 41, "pe28": 25, "lowcov": false}, {"code": "688167", "name": "炬光科技", "seg": "光器件", "ai_ratio": 35, "watch": false, "n26": 54125000, "n27": 214750000, "n28": 406500000, "n29": 587981664.7264261, "n30": 719233683.5987105, "n29_p": 507258998.83585566, "n30_p": 570126045.4203321, "g28": 89.3, "cagr5": 90.9, "n_est": 8, "rating": "增持", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 178, "pe26": 330, "pe28": 44, "lowcov": false}, {"code": "002364", "name": "中恒电气", "seg": "HVDC电源", "ai_ratio": 55, "watch": false, "n26": 211400000, "n27": 340400000, "n28": 494400000, "n29": 606235487.6615746, "n30": 674802074.8383391, "n29_p": 551613292.5969448, "n30_p": 583530376.6480302, "g28": 45.2, "cagr5": 33.7, "n_est": 5, "rating": "买入", "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 135, "pe26": 64, "pe28": 27, "lowcov": false}, {"code": "688049", "name": "炬芯科技", "seg": "端侧AI芯片", "ai_ratio": 85, "watch": false, "n26": 277000000, "n27": 375500000, "n28": 514000000, "n29": 608792276.9640479, "n30": 664929247.9091349, "n29_p": 560595366.1784288, "n30_p": 586005041.6307772, "g28": 36.9, "cagr5": 24.5, "n_est": 2, "rating": null, "biz_date": "2026-06-30", "grp": "AI 芯片", "mcap": 84, "pe26": 30, "pe28": 16, "lowcov": true}, {"code": "688205", "name": "德科立", "seg": "光模块", "ai_ratio": 60, "watch": false, "n26": 167534000, "n27": 286342000, "n28": 446152000, "n29": 570652686.4518653, "n30": 650274262.942454, "n29_p": 511929371.87111914, "n30_p": 549666923.9445325, "g28": 55.8, "cagr5": 40.4, "n_est": 5, "rating": "买入", "biz_date": "2026-06-30", "grp": "光通信", "mcap": 150, "pe26": 90, "pe28": 34, "lowcov": false}, {"code": "300913", "name": "兆龙互连", "seg": "线缆", "ai_ratio": 55, "watch": false, "n26": 307000000, "n27": 401000000, "n28": 511000000, "n29": 581087281.7955112, "n30": 627574264.3391522, "n29_p": 542832369.0773067, "n30_p": 559740040.6228817, "g28": 27.4, "cagr5": 19.6, "n_est": 1, "rating": null, "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 100, "pe26": 32, "pe28": 19, "lowcov": true}, {"code": "688088", "name": "虹软科技", "seg": "视觉AI", "ai_ratio": 95, "watch": false, "n26": 271291111.111111, "n27": 356498888.888889, "n28": 466601250, "n29": 538654629.3001633, "n30": 581746999.6441764, "n29_p": 500501252.580098, "n30_p": 518682723.11174315, "g28": 30.9, "cagr5": 21.0, "n_est": 9, "rating": "增持", "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 121, "pe26": 45, "pe28": 26, "lowcov": false}, {"code": "300383", "name": "光环新网", "seg": "IDC", "ai_ratio": 60, "watch": false, "n26": 156550000, "n27": 240955000, "n28": 348927500, "n29": 427105115.1018862, "n30": 474951815.7724869, "n29_p": 388855519.0611317, "n30_p": 411104024.2335517, "g28": 44.8, "cagr5": 32.0, "n_est": 4, "rating": "买入", "biz_date": "2026-06-30", "grp": "AIDC/算力服务", "mcap": 173, "pe26": 111, "pe28": 50, "lowcov": false}, {"code": "688327", "name": "云从科技", "seg": "视觉AI", "ai_ratio": 95, "watch": true, "n26": -350000000, "n27": 30000000, "n28": 100000000, "n29": 216666666.6666667, "n30": 343055555.55555564, "n29_p": 168000000.00000003, "n30_p": 225120000.00000006, "g28": 233.3, "cagr5": null, "n_est": 1, "rating": null, "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 101, "pe26": null, "pe28": 101, "lowcov": true}, {"code": "300249", "name": "依米康", "seg": "IDC温控", "ai_ratio": 85, "watch": false, "n26": 65523333.3333333, "n27": 121716666.666667, "n28": 210710000, "n29": 287740474.87333924, "n30": 340335950.6926489, "n29_p": 252714084.92400354, "n30_p": 277902789.50527567, "g28": 73.1, "cagr5": 51.0, "n_est": 3, "rating": null, "biz_date": "2026-06-30", "grp": "电源散热连接", "mcap": 50, "pe26": 77, "pe28": 24, "lowcov": true}, {"code": "603881", "name": "数据港", "seg": "IDC", "ai_ratio": 95, "watch": false, "n26": 150485000, "n27": 163235000, "n28": 177220000, "n29": 191397600.0, "n30": 206709408.0, "n29_p": 178230545.38548717, "n30_p": 178738699.2484602, "g28": 8.6, "cagr5": 8.3, "n_est": 2, "rating": "买入", "biz_date": "2026-06-30", "grp": "AIDC/算力服务", "mcap": 172, "pe26": 115, "pe28": 97, "lowcov": true}, {"code": "300624", "name": "万兴科技", "seg": "AI应用", "ai_ratio": 100, "watch": false, "n26": -67666666.6666667, "n27": 25333333.3333333, "n28": 65333333.3333333, "n29": 116912280.70175439, "n30": 163061865.1892891, "n29_p": 94974035.08771929, "n30_p": 116518145.15235458, "g28": 157.9, "cagr5": null, "n_est": 3, "rating": "增持", "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 97, "pe26": null, "pe28": 148, "lowcov": true}, {"code": "688787", "name": "海天瑞声", "seg": "AI数据", "ai_ratio": 90, "watch": false, "n26": 38000000, "n27": 67000000, "n28": 98000000, "n29": 120671641.79104479, "n30": 134629928.7146358, "n29_p": 109642985.07462686, "n30_p": 116156105.68055247, "g28": 46.3, "cagr5": 37.2, "n_est": 1, "rating": "买入", "biz_date": "2026-06-30", "grp": "AI 应用", "mcap": 69, "pe26": 181, "pe28": 70, "lowcov": true}], "groups": [{"grp": "存储", "n": 8, "n26": 233487597771.01913, "n28": 454407319330.06494, "n30": 571291345052.0071, "names": ["长鑫科技", "兆易创新", "佰维存储", "香农芯创", "江波龙", "澜起科技", "雅克科技", "聚辰股份"], "x5": 2.4467738351236603}, {"grp": "光通信", "n": 15, "n26": 66912358932.387054, "n28": 192834697122.61914, "n30": 265361020050.8441, "names": ["中际旭创", "新易盛", "天孚通信", "剑桥科技", "光迅科技", "源杰科技", "华工科技", "仕佳光子", "博创科技", "太辰光", "光库科技", "联特科技", "腾景科技", "炬光科技", "德科立"], "x5": 3.965799805667941}, {"grp": "AI 服务器", "n": 4, "n26": 72712481331.26933, "n28": 125080677250.81688, "n30": 153264699939.4423, "names": ["工业富联", "浪潮信息", "紫光股份", "中科曙光"], "x5": 2.107818315829255}, {"grp": "AI-PCB", "n": 7, "n26": 34529690392.15687, "n28": 77868024411.76468, "n30": 103772523725.46611, "names": ["胜宏科技", "沪电股份", "生益科技", "深南电路", "广合科技", "生益电子", "兴森科技"], "x5": 3.005312892960001}, {"grp": "AI 芯片", "n": 6, "n26": 13933932251.552801, "n28": 38734591506.21122, "n30": 57794200506.47643, "names": ["寒武纪", "海光信息", "芯原股份", "通富微电", "复旦微电", "炬芯科技"], "x5": 4.1477308388689655}, {"grp": "整机与硬件", "n": 1, "n26": 20192642857.1429, "n28": 36534384615.3846, "n30": 45063800272.857796, "names": ["立讯精密"], "x5": 2.2316940180476195}, {"grp": "电源散热连接", "n": 12, "n26": 5767808098.290596, "n28": 14912283049.728071, "n30": 20263475845.095028, "names": ["英维克", "麦格米特", "鼎通科技", "申菱环境", "科士达", "科华数据", "同飞股份", "欧陆通", "意华股份", "中恒电气", "兆龙互连", "依米康"], "x5": 3.513202155789564}, {"grp": "AIDC/算力服务", "n": 5, "n26": 3743780075.757577, "n28": 7027737651.515153, "n30": 8877541782.575397, "names": ["润泽科技", "弘信电子", "奥飞数据", "光环新网", "数据港"], "x5": 2.371277586539047}, {"grp": "AI 应用", "n": 6, "n26": 4247873478.535354, "n28": 5591391250.000003, "n30": 7079741013.45948, "names": ["金山办公", "科大讯飞", "虹软科技", "云从科技", "万兴科技", "海天瑞声"], "x5": 1.6666553392500145}], "sens": [{"code": "601138", "name": "工业富联", "grp": "AI 服务器", "drv": "量主导", "vs": 90, "vol": "AI 服务器出货台数（GB200/GB300 机柜）", "px": "代工毛利率约 7% 基本恒定，单价年降可预期；风险在云厂 CapEx 节奏", "n26": 60938043684.2105, "n30": 128979076349.27077}, {"code": "000977", "name": "浪潮信息", "grp": "AI 服务器", "drv": "量主导", "vs": 90, "vol": "AI 服务器整机台数（国内智算中心集采）", "px": "整机毛利率仅约 8%，集采竞标压价，但量是主驱动", "n26": 5223427222.22222, "n30": 10246532592.118397}, {"code": "002475", "name": "立讯精密", "grp": "整机与硬件", "drv": "量主导", "vs": 85, "vol": "AI 互联件数（连接器/散热）+ 苹果链件数", "px": "件均价值稳定；苹果链压舱", "n26": 20192642857.1429, "n30": 45063800272.857796}, {"code": "688256", "name": "寒武纪", "grp": "AI 芯片", "drv": "量主导", "vs": 85, "vol": "思元系列出货颗数（国产替代采购量）", "px": "单颗定价对标稳中有升；风险在先进制程供给", "n26": 5726937857.14286, "n30": 34822393473.390724}, {"code": "688041", "name": "海光信息", "grp": "AI 芯片", "drv": "量主导", "vs": 85, "vol": "DCU/CPU 出货颗数（信创 + 智算集采）", "px": "x86 生态定价稳定；集采竞标压价", "n26": 4394662608.69565, "n30": 13223954795.29466}, {"code": "300394", "name": "天孚通信", "grp": "光通信", "drv": "量主导", "vs": 85, "vol": "光器件件数（FAU/插芯，配套光模块）", "px": "件均价值稳定，无价格周期", "n26": 3395450476.19048, "n30": 12828738806.321795}, {"code": "000938", "name": "紫光股份", "grp": "AI 服务器", "drv": "量主导", "vs": 85, "vol": "服务器 + 交换机台数（新华三）", "px": "政企集采价格竞争", "n26": 3423872777.77778, "n30": 7443947770.604852}, {"code": "603019", "name": "中科曙光", "grp": "AI 服务器", "drv": "量主导", "vs": 85, "vol": "AI 服务器/超算整机台数（与海光配套）", "px": "整机单价年降", "n26": 3127137647.05882, "n30": 6595143227.448282}, {"code": "002837", "name": "英维克", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "液冷板/CDU 套数（随 AI 服务器台数）", "px": "液冷渗透率提升是主逻辑，设备单价稳定", "n26": 1030278461.53846, "n30": 4039935704.5587482}, {"code": "002851", "name": "麦格米特", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "AI 电源模块台数（power shelf）", "px": "件均功率提升利好单价；价格战风险低", "n26": 770517692.307692, "n30": 3501921701.614257}, {"code": "002156", "name": "通富微电", "grp": "AI 芯片", "drv": "量主导", "vs": 85, "vol": "先进封装颗数（AMD MI 系列）", "px": "封测单价年降惯例", "n26": 2291714285.71429, "n30": 3364640444.9130144}, {"code": "688668", "name": "鼎通科技", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "通信连接器件数", "px": "件均价值稳定", "n26": 633000000, "n30": 2604660689.9240007}, {"code": "301018", "name": "申菱环境", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "温控设备套数", "px": "同上", "n26": 379555555.555556, "n30": 1897328378.5063472}, {"code": "300570", "name": "太辰光", "grp": "光通信", "drv": "量主导", "vs": 85, "vol": "MT 插芯/MPO 跳线条数", "px": "件均价值稳定", "n26": 488998888.888889, "n30": 1712973722.6515965}, {"code": "002518", "name": "科士达", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "UPS 台数", "px": "单价稳定", "n26": 753970833.333333, "n30": 1651500192.670807}, {"code": "300990", "name": "同飞股份", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "温控套数", "px": "同上", "n26": 365500000, "n30": 1189266494.6451836}, {"code": "300870", "name": "欧陆通", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "电源台数", "px": "同上", "n26": 212162222.222222, "n30": 1156053232.9208822}, {"code": "002897", "name": "意华股份", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "连接器件数", "px": "件均价值稳定", "n26": 441500000, "n30": 1002091437.4034005}, {"code": "002364", "name": "中恒电气", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "HVDC 电源套数", "px": "HVDC 单价稳定；数据中心电源竞争", "n26": 211400000, "n30": 674802074.8383391}, {"code": "300913", "name": "兆龙互连", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "高速铜缆根数", "px": "铜缆单价稳定", "n26": 307000000, "n30": 627574264.3391522}, {"code": "300249", "name": "依米康", "grp": "电源散热连接", "drv": "量主导", "vs": 85, "vol": "IDC 温控设备套数", "px": "温控单价稳定；机房建设节奏", "n26": 65523333.3333333, "n30": 340335950.6926489}, {"code": "300476", "name": "胜宏科技", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "AI 服务器/交换机 HDI 板块数", "px": "高端产能稀缺带来溢价，行业扩产后价格会回落", "n26": 7200166666.66667, "n30": 25559775106.918003}, {"code": "002463", "name": "沪电股份", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "数通板块数（交换机 + AI 服务器）", "px": "新产能释放或压价；覆铜板涨价挤压毛利", "n26": 7264648235.29412, "n30": 23069131172.696884}, {"code": "002916", "name": "深南电路", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "PCB 板块数（通信 + 服务器）", "px": "行业扩产周期价格回落风险", "n26": 6017111111.11111, "n30": 15689531428.230736}, {"code": "001389", "name": "广合科技", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "服务器 PCB 板块数", "px": "同上", "n26": 2289400000, "n30": 8884367161.770975}, {"code": "688183", "name": "生益电子", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "AI 服务器板块数", "px": "同上", "n26": 2795250000, "n30": 7269500346.297633}, {"code": "688111", "name": "金山办公", "grp": "AI 应用", "drv": "量主导", "vs": 80, "vol": "AI 会员订阅数 + 政企订单数", "px": "ARPU 稳定且有提价权可能；风险在竞争分流", "n26": 3324898125, "n30": 3820107114.958168}, {"code": "300548", "name": "博创科技", "grp": "光通信", "drv": "量主导", "vs": 80, "vol": "光器件件数", "px": "件均价值稳定", "n26": 901500000, "n30": 2800824261.4340315}, {"code": "002436", "name": "兴森科技", "grp": "AI-PCB", "drv": "量主导", "vs": 80, "vol": "PCB 样板/小批量板数", "px": "样板定价高毛利，量小单价稳定", "n26": 608055555.555556, "n30": 2297238182.1865187}, {"code": "688385", "name": "复旦微电", "grp": "AI 芯片", "drv": "量主导", "vs": 80, "vol": "国产 FPGA 采购颗数", "px": "价格相对稳定，竞争来自国产同行", "n26": 1258217500, "n30": 2199635166.9155307}, {"code": "002230", "name": "科大讯飞", "grp": "AI 应用", "drv": "量主导", "vs": 80, "vol": "大模型 token 调用量/开发者数", "px": "API 定价竞争激烈", "n26": 1031350909.09091, "n30": 2037139549.397655}, {"code": "300620", "name": "光库科技", "grp": "光通信", "drv": "量主导", "vs": 80, "vol": "光纤器件件数", "px": "小批量定价稳定", "n26": 343410000, "n30": 1582671244.2377288}, {"code": "002335", "name": "科华数据", "grp": "电源散热连接", "drv": "量主导", "vs": 80, "vol": "UPS/HVDC 套数 + IDC 机柜数", "px": "IDC 租金价格战", "n26": 597400000, "n30": 1578005722.981256}, {"code": "688123", "name": "聚辰股份", "grp": "存储", "drv": "量主导", "vs": 80, "vol": "SPD/温传颗数（随 DDR5 内存条根数）", "px": "EEPROM 价格稳定", "n26": 666725555.555556, "n30": 1537838549.2597988}, {"code": "688195", "name": "腾景科技", "grp": "光通信", "drv": "量主导", "vs": 80, "vol": "精密光学元件件数", "px": "同上", "n26": 154666666.666667, "n30": 909277865.4435844}, {"code": "688049", "name": "炬芯科技", "grp": "AI 芯片", "drv": "量主导", "vs": 80, "vol": "端侧 AI 芯片颗数（AI 音箱/穿戴）", "px": "消费电子年降惯例", "n26": 277000000, "n30": 664929247.9091349}, {"code": "688088", "name": "虹软科技", "grp": "AI 应用", "drv": "量主导", "vs": 80, "vol": "算法授权机型数（手机摄像头）", "px": "单机授权费稳定；手机出货天花板", "n26": 271291111.111111, "n30": 581746999.6441764}, {"code": "300308", "name": "中际旭创", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "800G→1.6T 光模块只数（GPU 配比 1:2.5→1:4）", "px": "单价年降 10-15%，靠 1.6T 新品溢价对冲；CPO 长期替代风险", "n26": 33936437692.3077, "n30": 133164611753.6272}, {"code": "300502", "name": "新易盛", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数（份额提升最快）", "px": "同旭创", "n26": 19442276111.1111, "n30": 76915038203.47887}, {"code": "603083", "name": "剑桥科技", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数", "px": "单价年降", "n26": 1753250000, "n30": 12160466285.266813}, {"code": "002281", "name": "光迅科技", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数（电信 + 数通双轮）", "px": "电信侧价格年降", "n26": 1759281000, "n30": 7037394556.782941}, {"code": "000988", "name": "华工科技", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数", "px": "单价年降", "n26": 2219375000, "n30": 4771353513.292098}, {"code": "688521", "name": "芯原股份", "grp": "AI 芯片", "drv": "量主导", "vs": 75, "vol": "IP 授权项目数 + 量产芯片颗数", "px": "授权费按项目一次一议", "n26": -14600000, "n30": 3518647378.05337}, {"code": "002409", "name": "雅克科技", "grp": "存储", "drv": "量主导", "vs": 75, "vol": "HBM 前驱体供应量（随 HBM 颗数）", "px": "材料长协定价稳定", "n26": 1249040909.09091, "n30": 2420429509.6578884}, {"code": "301205", "name": "联特科技", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数", "px": "小厂价格战风险", "n26": 66070000, "n30": 1051585811.6489908}, {"code": "300657", "name": "弘信电子", "grp": "AIDC/算力服务", "drv": "量主导", "vs": 75, "vol": "算力服务器台数 + FPC 件数", "px": "算力租赁价格波动", "n26": 312666666.666667, "n30": 996518820.0533063}, {"code": "300738", "name": "奥飞数据", "grp": "AIDC/算力服务", "drv": "量主导", "vs": 75, "vol": "机柜数", "px": "租金价格战", "n26": 378227500, "n30": 748193021.573466}, {"code": "688167", "name": "炬光科技", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "激光光学元件件数", "px": "单件价值高但项目制定价", "n26": 54125000, "n30": 719233683.5987105}, {"code": "688205", "name": "德科立", "grp": "光通信", "drv": "量主导", "vs": 75, "vol": "光模块只数", "px": "同上", "n26": 167534000, "n30": 650274262.942454}, {"code": "300383", "name": "光环新网", "grp": "AIDC/算力服务", "drv": "量主导", "vs": 75, "vol": "机柜数", "px": "租金价格战", "n26": 156550000, "n30": 474951815.7724869}, {"code": "603881", "name": "数据港", "grp": "AIDC/算力服务", "drv": "量主导", "vs": 75, "vol": "机柜数", "px": "租金价格战", "n26": 150485000, "n30": 206709408.0}, {"code": "300624", "name": "万兴科技", "grp": "AI 应用", "drv": "量主导", "vs": 75, "vol": "订阅用户数（海外为主）", "px": "订阅价格稳定；获客成本", "n26": -67666666.6666667, "n30": 163061865.1892891}, {"code": "688498", "name": "源杰科技", "grp": "光通信", "drv": "量主导", "vs": 70, "vol": "EML/CW 激光器颗数（CW 大功率单颗价值高）", "px": "高端料号稀缺溢价，扩产后回落", "n26": 1379892222.22222, "n30": 5448777249.894358}, {"code": "688313", "name": "仕佳光子", "grp": "光通信", "drv": "量主导", "vs": 70, "vol": "AWG/PLC 芯片颗数", "px": "芯片价格随规模下降", "n26": 850091875, "n30": 3607798830.2229323}, {"code": "688327", "name": "云从科技", "grp": "AI 应用", "drv": "量主导", "vs": 70, "vol": "项目数/调用次数（当前亏损）", "px": "政务项目单价下滑", "n26": -350000000, "n30": 343055555.55555564}, {"code": "688787", "name": "海天瑞声", "grp": "AI 应用", "drv": "量主导", "vs": 70, "vol": "定制数据集项目数 + 标注量", "px": "项目制定价；大模型厂自建数据团队分流", "n26": 38000000, "n30": 134629928.7146358}, {"code": "600183", "name": "生益科技", "grp": "AI-PCB", "drv": "量价齐升", "vs": 65, "vol": "高速覆铜板张数（随 PCB 板数）", "px": "M6/M7 高速料正处涨价周期；价格回落会压缩弹性", "n26": 8355058823.52941, "n30": 21002980327.365353}, {"code": "300442", "name": "润泽科技", "grp": "AIDC/算力服务", "drv": "量价各半", "vs": 65, "vol": "智算中心上电机柜数", "px": "租金单价正被价格战压制（2026E 下修主因就是价）", "n26": 2745850909.09091, "n30": 6451168717.176138}, {"code": "688008", "name": "澜起科技", "grp": "存储", "drv": "量价各半", "vs": 55, "vol": "DDR5 内存条配套 RCD 颗数（渗透率提升）", "px": "每代子代升级单价提升，无周期反转风险", "n26": 4000824666.66667, "n30": 8686493904.674305}, {"code": "688825", "name": "长鑫科技", "grp": "存储", "drv": "量价各半", "vs": 45, "vol": "DRAM 投片产能爬坡（月产能片数）", "px": "当前 2026E 爆发约一半靠 DRAM 涨价周期；价格反转直接砍半业绩", "n26": 176953321764.706, "n30": 487733844573.3782}, {"code": "603986", "name": "兆易创新", "grp": "存储", "drv": "价敏感", "vs": 30, "vol": "NOR/利基存储出货颗数（量稳增）", "px": "利基存储涨价是 2026E 跳增主因（5 个月上修 2.8 倍）；价格反转最快最狠", "n26": 13004176875, "n30": 20521224612.0}, {"code": "300475", "name": "香农芯创", "grp": "存储", "drv": "价敏感", "vs": 30, "vol": "分销 SKU 出货量（随原厂）", "px": "分销价差随价格周期波动", "n26": 7951333333.33333, "n30": 16604908987.836958}, {"code": "688525", "name": "佰维存储", "grp": "存储", "drv": "价敏感", "vs": 25, "vol": "模组出货条数", "px": "买晶圆做模组，价差决定业绩；存储跌价时毛利率承压", "n26": 12676508000, "n30": 18068198515.200005}, {"code": "301308", "name": "江波龙", "grp": "存储", "drv": "价敏感", "vs": 25, "vol": "模组出货条数", "px": "同上；且一致预期仅 1 家券商", "n26": 16985666666.6667, "n30": 15718406400.000004}]};
+</script>
+<script>
+/* ---------- 表格 ---------- */
+var curGrp = '全部';
+var sortKey = 'n30', sortDir = -1;
+var THKEYS = ['code','name','grp','ai_ratio','n26','n27','n28','n29','n30','cagr5','mcap','pe26','pe28','n_est'];
+function fmt(v, dec) {
+  if (v === null || v === undefined) return '—';
+  var yi = v / 1e8;
+  var s = Math.abs(yi) >= 10 ? yi.toFixed(0) : yi.toFixed(dec === undefined ? 1 : dec);
+  return (yi < 0 ? '<span class="neg">−' + (-s) + '</span>' : s);
+}
+function doSort(arr) {
+  return arr.slice().sort(function (a, b) {
+    var va = a[sortKey], vb = b[sortKey];
+    var na = (va === null || va === undefined), nb = (vb === null || vb === undefined);
+    if (na && nb) return 0;
+    if (na) return 1;          /* 空值恒排最后 */
+    if (nb) return -1;
+    if (typeof va === 'string' || typeof vb === 'string')
+      return String(va).localeCompare(String(vb), 'zh') * (sortDir === -1 ? -1 : 1);
+    return (va - vb) * sortDir;
+  });
+}
+function renderTable() {
+  var tb = document.querySelector('#main tbody');
+  var html = '';
+  doSort(DATA.rows).forEach(function (r) {
+    if (curGrp !== '全部' && r.grp !== curGrp) return;
+    var flags = (r.lowcov ? '<span class="lowcov">低覆盖</span>' : '') + (r.watch ? '<span class="watch">观察</span>' : '');
+    html += '<tr>' +
+      '<td class="cd">' + r.code + '</td>' +
+      '<td><span class="nm">' + r.name + '</span>' + flags + '</td>' +
+      '<td class="dim">' + r.grp + '</td>' +
+      '<td class="gold">' + r.ai_ratio + '</td>' +
+      '<td>' + fmt(r.n26) + '</td>' +
+      '<td>' + fmt(r.n27) + '</td>' +
+      '<td>' + fmt(r.n28) + '</td>' +
+      '<td class="dim">' + fmt(r.n29) + '</td>' +
+      '<td class="gold">' + fmt(r.n30) + '</td>' +
+      '<td>' + (r.cagr5 === null ? '—' : r.cagr5 + '%') + '</td>' +
+      '<td>' + (r.mcap === null ? '—' : r.mcap) + '</td>' +
+      '<td>' + (r.pe26 === null ? '—' : r.pe26) + '</td>' +
+      '<td>' + (r.pe28 === null ? '—' : r.pe28) + '</td>' +
+      '<td class="dim">' + (r.n_est || 0) + '</td>' +
+      '</tr>';
+  });
+  tb.innerHTML = html;
+  document.querySelectorAll('#main thead th').forEach(function (th) {
+    var on = th.dataset.k === sortKey;
+    th.classList.toggle('sorted', on);
+    var old = th.querySelector('.arw');
+    if (old) old.remove();
+    if (on) {
+      var s = document.createElement('span');
+      s.className = 'arw';
+      s.textContent = sortDir === -1 ? '▼' : '▲';
+      th.appendChild(s);
+    }
+  });
+}
+(function () {
+  var ths = document.querySelectorAll('#main thead th');
+  ths.forEach(function (th, i) {
+    th.dataset.k = THKEYS[i];
+    th.title = '点击按此列排序';
+    th.onclick = function () {
+      var k = this.dataset.k;
+      var isStr = (k === 'code' || k === 'name' || k === 'grp');
+      if (k === sortKey) { sortDir = -sortDir; }
+      else { sortKey = k; sortDir = isStr ? 1 : -1; }
+      renderTable();
+    };
+  });
+})();
+(function () {
+  var gs = ['全部'];
+  DATA.rows.forEach(function (r) { if (gs.indexOf(r.grp) < 0) gs.push(r.grp); });
+  var box = document.getElementById('filters');
+  gs.forEach(function (g) {
+    var b = document.createElement('button');
+    b.textContent = g;
+    if (g === '全部') b.className = 'on';
+    b.onclick = function () {
+      curGrp = g;
+      box.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      renderTable();
+    };
+    box.appendChild(b);
+  });
+})();
+renderTable();
+
+/* ---------- 图表 ---------- */
+var GOLD = '#d4af37', BLUE = '#5b8db8', TXT = '#c9c2b0', DIM = '#6f6a5d', LINE = '#2a2a33';
+var base = { backgroundColor: 'transparent', textStyle: { color: TXT, fontSize: 11 } };
+
+var gc = echarts.init(document.getElementById('chartGrp'));
+var gnames = DATA.groups.map(function (g) { return g.grp; }).reverse();
+ge = DATA.groups.map(function (g) { return Math.round(g.n30 / 1e8); }).reverse();
+gc.setOption(Object.assign({}, base, {
+  grid: { left: 130, right: 60, top: 30, bottom: 30 },
+  legend: { data: ['2030E 中性外推'], textStyle: { color: TXT }, top: 0, right: 10 },
+  xAxis: { type: 'log', name: '亿元(对数)', nameTextStyle: { color: DIM }, axisLabel: { color: DIM, formatter: function (v) { return v >= 1000 ? (v / 1000) + 'k' : v; } }, splitLine: { lineStyle: { color: LINE } } },
+  yAxis: { type: 'category', data: gnames, axisLabel: { color: TXT, fontSize: 12.5 }, axisLine: { lineStyle: { color: LINE } } },
+  series: [
+    { name: '2030E 中性外推', type: 'bar', data: ge, itemStyle: { color: GOLD, borderRadius: 3 }, barWidth: 16, label: { show: true, position: 'right', color: GOLD, fontSize: 10.5 } }
+  ]
+}));
+
+var tc = echarts.init(document.getElementById('chartTop'));
+var top15 = DATA.rows.slice(0, 15);
+tc.setOption(Object.assign({}, base, {
+  grid: { left: 40, right: 20, top: 46, bottom: 70 },
+  legend: { data: ['2026E 一致预期', '2030E 中性外推'], textStyle: { color: TXT }, top: 4 },
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, textStyle: { color: '#333' } },
+  xAxis: { type: 'category', data: top15.map(function (r) { return r.name; }), axisLabel: { color: TXT, rotate: 42, fontSize: 11.5 }, axisLine: { lineStyle: { color: LINE } } },
+  yAxis: { type: 'value', name: '亿元', nameTextStyle: { color: DIM }, axisLabel: { color: DIM }, splitLine: { lineStyle: { color: LINE } } },
+  series: [
+    { name: '2026E 一致预期', type: 'bar', data: top15.map(function (r) { return Math.round(r.n26 / 1e8 * 10) / 10; }), itemStyle: { color: BLUE, borderRadius: [3, 3, 0, 0] }, barGap: '10%' },
+    { name: '2030E 中性外推', type: 'bar', data: top15.map(function (r) { return Math.round(r.n30 / 1e8); }), itemStyle: { color: GOLD, borderRadius: [3, 3, 0, 0] }, label: { show: true, position: 'top', color: GOLD, fontSize: 10 } }
+  ]
+}));
+
+/* ---------- 量价敏感度表 ---------- */
+var sGrp = '全部';
+var sSortKey = 'vs', sSortDir = -1;
+var STHKEYS = ['name', 'grp', 'drv', 'vs', 'vol', 'px', 'n26', 'n30'];
+var DRVCLS = { '量主导': 'drv-a', '量价齐升': 'drv-b', '量价各半': 'drv-b', '价敏感': 'drv-c' };
+function sCmp(a, b) {
+  var va = a[sSortKey], vb = b[sSortKey];
+  if (typeof va === 'string' || typeof vb === 'string')
+    return String(va).localeCompare(String(vb), 'zh') * (sSortDir === -1 ? -1 : 1);
+  var na = (va === null || va === undefined) ? -1e18 : va;
+  var nb = (vb === null || vb === undefined) ? -1e18 : vb;
+  return (na - nb) * sSortDir;
+}
+function renderSens() {
+  var html = '';
+  DATA.sens.slice().sort(sCmp).forEach(function (r) {
+    if (sGrp !== '全部' && r.drv !== sGrp) return;
+    html += '<tr>' +
+      '<td><span class="nm">' + r.name + '</span></td>' +
+      '<td class="dim">' + r.grp + '</td>' +
+      '<td><span class="drv ' + DRVCLS[r.drv] + '">' + r.drv + '</span></td>' +
+      '<td class="gold vscore">' + r.vs + '</td>' +
+      '<td class="lft">' + r.vol + '</td>' +
+      '<td class="lft">' + r.px + '</td>' +
+      '<td>' + fmt(r.n26) + '</td>' +
+      '<td class="gold">' + fmt(r.n30) + '</td>' +
+      '</tr>';
+  });
+  document.querySelector('#sensT tbody').innerHTML = html;
+  document.querySelectorAll('#sensT thead th').forEach(function (th) {
+    var on = th.dataset.k === sSortKey;
+    th.classList.toggle('sorted', on);
+    var old = th.querySelector('.arw');
+    if (old) old.remove();
+    if (on) {
+      var s = document.createElement('span');
+      s.className = 'arw';
+      s.textContent = sSortDir === -1 ? '▼' : '▲';
+      th.appendChild(s);
+    }
+  });
+}
+(function () {
+  var ths = document.querySelectorAll('#sensT thead th');
+  ths.forEach(function (th, i) {
+    th.dataset.k = STHKEYS[i];
+    th.title = '点击按此列排序';
+    th.onclick = function () {
+      var k = this.dataset.k;
+      var isStr = (k !== 'vs' && k !== 'n26' && k !== 'n30');
+      if (k === sSortKey) sSortDir = -sSortDir;
+      else { sSortKey = k; sSortDir = isStr ? 1 : -1; }
+      renderSens();
+    };
+  });
+  var box = document.getElementById('sensFilters');
+  var types = ['全部', '量主导', '量价齐升', '量价各半', '价敏感'];
+  types.forEach(function (t) {
+    var b = document.createElement('button');
+    b.textContent = t;
+    if (t === '全部') b.className = 'on';
+    b.onclick = function () {
+      sGrp = t;
+      box.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+      b.classList.add('on');
+      renderSens();
+    };
+    box.appendChild(b);
+  });
+})();
+renderSens();
+
+window.addEventListener('resize', function () { gc.resize(); tc.resize(); });
+</script>
+</body>
+</html>
