@@ -68,6 +68,11 @@ td .cd{color:var(--dim);font-size:11px}
 padding:4px 14px;font-size:12px;cursor:pointer}
 .filters button.on{background:var(--gold);color:#0d0d10;border-color:var(--gold);font-weight:600}
 .blurbs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+html{scroll-behavior:smooth}
+td a.nm{color:var(--txt);font-weight:600;text-decoration:none;border-bottom:1px dashed var(--gold-dim);cursor:pointer}
+td a.nm:hover{color:var(--gold);border-bottom:1px solid var(--gold)}
+.blurb:target{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 10px 30px rgba(212,175,55,.12);animation:blurbGlow 1.6s ease-out}
+@keyframes blurbGlow{0%{background:#2a2412}100%{background:var(--panel)}}
 .blurb{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
 .blurb h3{color:var(--gold);font-size:15px;margin-bottom:2px}
 .blurb .tagline{color:var(--sub);font-size:12px;margin-bottom:10px}
@@ -158,525 +163,525 @@ footer{color:var(--dim);font-size:11.5px;text-align:center;padding:26px 0 10px;b
 
 <h2><span class="dia">◆</span>七、75 家公司逐家解读（主营 + 利润）</h2>
 <div class="sec-sub">按 2030E 中性净利润降序全池铺开——每家：主营定位 · AI 占比口径 · 五年利润轨迹 · 量价驱动 · 三季报验证档位；金框 = 超预期，红框 = 低于预期</div>
-<div class="blurbs"><div class="blurb">
+<div class="blurbs"><div class="blurb" id="c-688825">
 <h3>长鑫科技 <span class="dim" style="font-size:11px">688825 · 存储</span> <span class="aibadge">AI 95%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">国内最大 DRAM 原厂（合肥长鑫），LPDDR5X/DDR5 全布局，HBM 在研——AI 服务器内存国产替代核心</div>
 <div class="row"><span class="lbl">AI 口径：</span>LPDDR+DDR 毛利 98.9%：DRAM+HBM，AI 服务器内存为主需求</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>19亿</b> → 26E <b>1770亿</b> → 28E <b>3841亿</b> → <span class="num">30E 中性 4877亿</span></div>
 <div class="row dim2">CAGR(26→30) 28.8% · 28E PE 7 · 券商 17 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价各半 · 纯度45</span> 量的载体：DRAM 投片产能爬坡（月产能片数）；价格风险：当前 2026E 爆发约一半靠 DRAM 涨价周期；价格反转直接砍半业绩</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300308">
 <h3>中际旭创 <span class="dim" style="font-size:11px">300308 · 光模块</span> <span class="aibadge">AI 99%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">全球数通光模块龙头，800G/1.6T 出货全球第一，深度绑定英伟达与北美云厂</div>
 <div class="row"><span class="lbl">AI 口径：</span>光通信收发模块毛利 99.6%（800G/1.6T 数通光模块全球龙头）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>108亿</b> → 26E <b>339亿</b> → 28E <b>981亿</b> → <span class="num">30E 中性 1332亿</span></div>
 <div class="row dim2">CAGR(26→30) 40.7% · 28E PE 6 · 券商 26 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：800G→1.6T 光模块只数（GPU 配比 1:2.5→1:4）；价格风险：单价年降 10-15%，靠 1.6T 新品溢价对冲；CPO 长期替代风险</div></div>
-<div class="blurb">
+<div class="blurb" id="c-601138">
 <h3>工业富联 <span class="dim" style="font-size:11px">601138 · AI服务器</span> <span class="aibadge">AI 50%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">全球 AI 服务器整机与机柜组装龙头（GB200/GB300），兼高速交换机与路由器</div>
 <div class="row"><span class="lbl">AI 口径：</span>公司披露 AI 服务器收入占比约 50%（GB200/800 系统组装主力）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>353亿</b> → 26E <b>609亿</b> → 28E <b>1053亿</b> → <span class="num">30E 中性 1290亿</span></div>
 <div class="row dim2">CAGR(26→30) 20.6% · 28E PE 8 · 券商 19 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度90</span> 量的载体：AI 服务器出货台数（GB200/GB300 机柜）；价格风险：代工毛利率约 7% 基本恒定，单价年降可预期；风险在云厂 CapEx 节奏</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300502">
 <h3>新易盛 <span class="dim" style="font-size:11px">300502 · 光模块</span> <span class="aibadge">AI 99%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">光模块第二梯队龙头，800G/1.6T 主力供应商，LPO/CPO 布局最积极</div>
 <div class="row"><span class="lbl">AI 口径：</span>光互联产品毛利 99.9%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>95亿</b> → 26E <b>194亿</b> → 28E <b>555亿</b> → <span class="num">30E 中性 769亿</span></div>
 <div class="row dim2">CAGR(26→30) 41.0% · 28E PE 5 · 券商 18 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数（份额提升最快）；价格风险：同旭创</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002475">
 <h3>立讯精密 <span class="dim" style="font-size:11px">002475 · AI硬件</span> <span class="aibadge">AI 35%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">消费电子精密制造龙头，AI 侧做连接器/光模块/散热/服务器互联，Apple 链压舱</div>
 <div class="row"><span class="lbl">AI 口径：</span>公司披露 AI 互联业务（连接器/光模块/散热）收入占比约 30-35%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>166亿</b> → 26E <b>202亿</b> → 28E <b>365亿</b> → <span class="num">30E 中性 451亿</span></div>
 <div class="row dim2">CAGR(26→30) 22.2% · 28E PE 11 · 券商 14 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：AI 互联件数（连接器/散热）+ 苹果链件数；价格风险：件均价值稳定；苹果链压舱</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002384">
 <h3>东山精密 <span class="dim" style="font-size:11px">002384 · AI-PCB光模块</span> <span class="aibadge">AI 35%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">PCB/精密组件平台 + 收购索尔思光电（400G/800G 光模块），AI 板与光模块双轮</div>
 <div class="row"><span class="lbl">AI 口径：</span>光模块（索尔思）毛利 39.3% 收入 19.2%+电子电路中 AI 服务器板部分，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>14亿</b> → 26E <b>77亿</b> → 28E <b>263亿</b> → <span class="num">30E 中性 385亿</span></div>
 <div class="row dim2">CAGR(26→30) 49.3% · 28E PE 6 · 券商 11 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：AI 服务器 PCB 板块数 + 光模块只数（索尔思）；价格风险：PCB 扩产竞价压价；光模块单价年降 10-15%</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688256">
 <h3>寒武纪 <span class="dim" style="font-size:11px">688256 · AI芯片</span> <span class="aibadge">AI 100%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">国产云端 AI 芯片龙头（思元系列训推一体），纯度最高的 AI 芯片标的</div>
 <div class="row"><span class="lbl">AI 口径：</span>云端产品线毛利占比 100%（AI 芯片纯度最高）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>21亿</b> → 26E <b>57亿</b> → 28E <b>223亿</b> → <span class="num">30E 中性 348亿</span></div>
 <div class="row dim2">CAGR(26→30) 57.0% · 28E PE 28 · 券商 14 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：思元系列出货颗数（国产替代采购量）；价格风险：单颗定价对标稳中有升；风险在先进制程供给</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300476">
 <h3>胜宏科技 <span class="dim" style="font-size:11px">300476 · AI-PCB</span> <span class="aibadge">AI 75%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">AI 服务器高多层/HDI PCB，英伟达算力板核心供应商</div>
 <div class="row"><span class="lbl">AI 口径：</span>PCB 制造毛利 82.2%（AI 服务器 HDI 主力）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>43亿</b> → 26E <b>72亿</b> → 28E <b>182亿</b> → <span class="num">30E 中性 256亿</span></div>
 <div class="row dim2">CAGR(26→30) 37.3% · 28E PE 7 · 券商 6 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：AI 服务器/交换机 HDI 板块数；价格风险：高端产能稀缺带来溢价，行业扩产后价格会回落</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002463">
 <h3>沪电股份 <span class="dim" style="font-size:11px">002463 · AI-PCB</span> <span class="aibadge">AI 80%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">企业通讯与 AI 服务器 PCB 龙头，800G 交换机板主力产能</div>
 <div class="row"><span class="lbl">AI 口径：</span>PCB 毛利 99.4%：公司披露 AI 系占比约 7 成（800G 交换机+AI 服务器板）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>38亿</b> → 26E <b>73亿</b> → 28E <b>170亿</b> → <span class="num">30E 中性 231亿</span></div>
 <div class="row dim2">CAGR(26→30) 33.5% · 28E PE 9 · 券商 17 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：数通板块数（交换机 + AI 服务器）；价格风险：新产能释放或压价；覆铜板涨价挤压毛利</div></div>
-<div class="blurb">
+<div class="blurb" id="c-600183">
 <h3>生益科技 <span class="dim" style="font-size:11px">600183 · 覆铜板</span> <span class="aibadge">AI 55%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">全球第二大覆铜板厂，高速覆铜板（M6/M7）供 AI 服务器与交换机</div>
 <div class="row"><span class="lbl">AI 口径：</span>覆铜板毛利口径缺失：高速覆铜板（M6/M7）供 AI 服务器，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>33亿</b> → 26E <b>84亿</b> → 28E <b>168亿</b> → <span class="num">30E 中性 210亿</span></div>
 <div class="row dim2">CAGR(26→30) 25.9% · 28E PE 10 · 券商 17 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价齐升 · 纯度65</span> 量的载体：高速覆铜板张数（随 PCB 板数）；价格风险：M6/M7 高速料正处涨价周期；价格回落会压缩弹性</div></div>
-<div class="blurb">
+<div class="blurb" id="c-603986">
 <h3>兆易创新 <span class="dim" style="font-size:11px">603986 · 存储</span> <span class="aibadge">AI 85%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">NOR Flash 全球前二 + 利基 DRAM + MCU，利基存储涨价核心受益</div>
 <div class="row"><span class="lbl">AI 口径：</span>存储芯片毛利 90.9%（利基 DRAM+NOR，AI 存储涨价周期驱动）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>16亿</b> → 26E <b>130亿</b> → 28E <b>176亿</b> → <span class="num">30E 中性 205亿</span></div>
 <div class="row dim2">CAGR(26→30) 12.1% · 28E PE 10 · 券商 16 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-c">价敏感 · 纯度30</span> 量的载体：NOR/利基存储出货颗数（量稳增）；价格风险：利基存储涨价是 2026E 跳增主因（5 个月上修 2.8 倍）；价格反转最快最狠</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688525">
 <h3>佰维存储 <span class="dim" style="font-size:11px">688525 · 存储模组</span> <span class="aibadge">AI 90%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">存储模组 + 自研晶圆级先进封测，HBM 封测工艺布局</div>
 <div class="row"><span class="lbl">AI 口径：</span>存储产品毛利 96.9%（嵌入式+企业级）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>9亿</b> → 26E <b>127亿</b> → 28E <b>155亿</b> → <span class="num">30E 中性 181亿</span></div>
 <div class="row dim2">CAGR(26→30) 9.3% · 28E PE 4 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-c">价敏感 · 纯度25</span> 量的载体：模组出货条数；价格风险：买晶圆做模组，价差决定业绩；存储跌价时毛利率承压</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300475">
 <h3>香农芯创 <span class="dim" style="font-size:11px">300475 · 存储分销</span> <span class="aibadge">AI 85%</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">SK 海力士国内核心分销商，转型企业级存储（eSSD/RDIMM）自研</div>
 <div class="row"><span class="lbl">AI 口径：</span>存储分销（SK 海力士代理）+海普存储毛利 99.5%，HBM/DRAM 链</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>5亿</b> → 26E <b>80亿</b> → 28E <b>137亿</b> → <span class="num">30E 中性 166亿</span></div>
 <div class="row dim2">CAGR(26→30) 20.2% · 28E PE 3 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-c">价敏感 · 纯度30</span> 量的载体：分销 SKU 出货量（随原厂）；价格风险：分销价差随价格周期波动</div></div>
-<div class="blurb">
+<div class="blurb" id="c-601869">
 <h3>长飞光纤 <span class="dim" style="font-size:11px">601869 · 光通信</span> <span class="aibadge">AI 35%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">全球光纤光缆龙头，多模光纤/AOC 供数据中心，空芯光纤领先布局</div>
 <div class="row"><span class="lbl">AI 口径：</span>光互联组件收入 22.9%（多模光模块/AOC）+光传输中数通光纤部分，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>8亿</b> → 26E <b>76亿</b> → 28E <b>136亿</b> → <span class="num">30E 中性 166亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.7% · 28E PE 15 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价齐升 · 纯度60</span> 量的载体：多模光纤/AOC 只数 + 空芯光纤公里数；价格风险：光纤价格随集采周期波动；空芯光纤处新技术溢价期</div></div>
-<div class="blurb">
+<div class="blurb" id="c-301308">
 <h3>江波龙 <span class="dim" style="font-size:11px">301308 · 存储模组</span> <span class="aibadge">AI 90%</span><span class="lowcov">低覆盖</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">存储模组龙头（嵌入式/企业级 eSSD），并购扩产企业级产能</div>
 <div class="row"><span class="lbl">AI 口径：</span>存储模组（企业级 eSSD 配 AI 数据中心，无明细）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>14亿</b> → 26E <b>170亿</b> → 28E <b>135亿</b> → <span class="num">30E 中性 157亿</span></div>
 <div class="row dim2">CAGR(26→30) -1.9% · 28E PE 7 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-c">价敏感 · 纯度25</span> 量的载体：模组出货条数；价格风险：同上；且一致预期仅 1 家券商</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002916">
 <h3>深南电路 <span class="dim" style="font-size:11px">002916 · AI-PCB</span> <span class="aibadge">AI 60%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">PCB 三强（通信板/服务器板）+ 封装基板 + 电子装联三线并进</div>
 <div class="row"><span class="lbl">AI 口径：</span>PCB+封装基板毛利 90.6%：数通板+存储基板，AI 相关约 6 成</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>33亿</b> → 26E <b>60亿</b> → 28E <b>123亿</b> → <span class="num">30E 中性 157亿</span></div>
 <div class="row dim2">CAGR(26→30) 27.1% · 28E PE 12 · 券商 18 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：PCB 板块数（通信 + 服务器）；价格风险：行业扩产周期价格回落风险</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300857">
 <h3>协创数据 <span class="dim" style="font-size:11px">300857 · AIDC算力租赁</span> <span class="aibadge">AI 45%</span><span class="lowcov">低覆盖</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">硬盘/NAS 代工转型"算力+存储"双轮：FCloud 智算平台（英伟达 NCP 认证）+ 企业级存储 + 服务器再制造</div>
 <div class="row"><span class="lbl">AI 口径：</span>智能算力产品及服务收入 25.7%（FCloud 智算平台）+企业级存储+服务器再制造，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>12亿</b> → 26E <b>49亿</b> → 28E <b>117亿</b> → <span class="num">30E 中性 150亿</span></div>
 <div class="row dim2">CAGR(26→30) 32.1% · 28E PE 6 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：智算集群 GPU 卡数/机柜数 + 企业级存储出货量；价格风险：算力租赁按机时计价相对稳定；存储业务随行就市波动大</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688041">
 <h3>海光信息 <span class="dim" style="font-size:11px">688041 · AI芯片</span> <span class="aibadge">AI 100%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">国产 x86 CPU（海光）+ DCU 协处理器（兼容 CUDA 生态），国产算力芯片核心</div>
 <div class="row"><span class="lbl">AI 口径：</span>高端处理器毛利占比 100%（CPU+DCU，国产算力核心）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>25亿</b> → 26E <b>44亿</b> → 28E <b>98亿</b> → <span class="num">30E 中性 132亿</span></div>
 <div class="row dim2">CAGR(26→30) 31.7% · 28E PE 48 · 券商 23 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：DCU/CPU 出货颗数（信创 + 智算集采）；价格风险：x86 生态定价稳定；集采竞标压价</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300394">
 <h3>天孚通信 <span class="dim" style="font-size:11px">300394 · 光器件</span> <span class="aibadge">AI 95%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">光器件一站式平台（FAU/透镜/隔离器/有源封装），光模块上游"卖铲人"</div>
 <div class="row"><span class="lbl">AI 口径：</span>光器件公司（无分业务明细）：FAU/透镜等，AI 数通为主</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>20亿</b> → 26E <b>34亿</b> → 28E <b>90亿</b> → <span class="num">30E 中性 128亿</span></div>
 <div class="row dim2">CAGR(26→30) 39.4% · 28E PE 15 · 券商 21 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：光器件件数（FAU/插芯，配套光模块）；价格风险：件均价值稳定，无价格周期</div></div>
-<div class="blurb">
+<div class="blurb" id="c-603083">
 <h3>剑桥科技 <span class="dim" style="font-size:11px">603083 · 光模块</span> <span class="aibadge">AI 54%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">800G 光模块代工新贵 + 电信 BPON，CPO 共封装布局早</div>
 <div class="row"><span class="lbl">AI 口径：</span>高速光模块毛利 53.7%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>18亿</b> → 28E <b>81亿</b> → <span class="num">30E 中性 122亿</span></div>
 <div class="row dim2">CAGR(26→30) 62.3% · 28E PE 6 · 券商 4 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数；价格风险：单价年降</div></div>
-<div class="blurb">
+<div class="blurb" id="c-000977">
 <h3>浪潮信息 <span class="dim" style="font-size:11px">000977 · AI服务器</span> <span class="aibadge">AI 90%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">国内 AI 服务器整机龙头（NF 系列），全球服务器前三</div>
 <div class="row"><span class="lbl">AI 口径：</span>服务器类毛利 92.3%（AI 服务器为主）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>24亿</b> → 26E <b>52亿</b> → 28E <b>84亿</b> → <span class="num">30E 中性 102亿</span></div>
 <div class="row dim2">CAGR(26→30) 18.3% · 28E PE 9 · 券商 18 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度90</span> 量的载体：AI 服务器整机台数（国内智算中心集采）；价格风险：整机毛利率仅约 8%，集采竞标压价，但量是主驱动</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688808">
 <h3>联讯仪器 <span class="dim" style="font-size:11px">688808 · 测试仪器</span> <span class="aibadge">AI 75%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">光通信/半导体测试仪器（采样示波器/误码仪/光芯片老化分选），光模块扩产的"卖铲人"</div>
 <div class="row"><span class="lbl">AI 口径：</span>通信测试仪器 41.1%+光电子器件测试设备 31.9%（光模块/光芯片测试）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>24亿</b> → 28E <b>69亿</b> → <span class="num">30E 中性 96亿</span></div>
 <div class="row dim2">CAGR(26→30) 40.7% · 28E PE 16 · 券商 14 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：光模块/光芯片测试设备台数（下游扩产资本开支）；价格风险：高端仪器单价稳定不降价；跟随光模块厂 CapEx 周期波动</div></div>
-<div class="blurb">
+<div class="blurb" id="c-001389">
 <h3>广合科技 <span class="dim" style="font-size:11px">001389 · AI-PCB</span> <span class="aibadge">AI 75%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">服务器 PCB 专业厂，算力板与存储板放量</div>
 <div class="row"><span class="lbl">AI 口径：</span>印制电路板毛利 83.9%（服务器板）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>10亿</b> → 26E <b>23亿</b> → 28E <b>62亿</b> → <span class="num">30E 中性 89亿</span></div>
 <div class="row dim2">CAGR(26→30) 40.4% · 28E PE 7 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：服务器 PCB 板块数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688008">
 <h3>澜起科技 <span class="dim" style="font-size:11px">688008 · 内存接口</span> <span class="aibadge">AI 95%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">全球内存接口芯片龙头（DDR5 RCD 市占率第一）+ PCIe Retimer/MRCD/MDB</div>
 <div class="row"><span class="lbl">AI 口径：</span>互连类芯片毛利 99%：DDR5 内存接口+HBM 配套，AI 服务器内存倍增是核心驱动</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>22亿</b> → 26E <b>40亿</b> → 28E <b>69亿</b> → <span class="num">30E 中性 87亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.4% · 28E PE 27 · 券商 15 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价各半 · 纯度55</span> 量的载体：DDR5 内存条配套 RCD 颗数（渗透率提升）；价格风险：每代子代升级单价提升，无周期反转风险</div></div>
-<div class="blurb">
+<div class="blurb" id="c-000063">
 <h3>中兴通讯 <span class="dim" style="font-size:11px">000063 · AI服务器</span> <span class="aibadge">AI 35%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">通信设备龙头，服务器及算力（政企+运营商集采）+ 自研芯片，AI 算力第二增长曲线</div>
 <div class="row"><span class="lbl">AI 口径：</span>算力及服务器相关收入约 30%（政企业务含服务器/算力），宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>56亿</b> → 26E <b>56亿</b> → 28E <b>73亿</b> → <span class="num">30E 中性 86亿</span></div>
 <div class="row dim2">CAGR(26→30) 11.3% · 28E PE 18 · 券商 12 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度70</span> 量的载体：服务器及算力设备台数（运营商+政企集采）；价格风险：服务器毛利率低（约 10%）且竞标压价；自研芯片放量改善结构</div></div>
-<div class="blurb">
+<div class="blurb" id="c-000938">
 <h3>紫光股份 <span class="dim" style="font-size:11px">000938 · AI服务器</span> <span class="aibadge">AI 45%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">新华三母公司：服务器/交换机/网络设备 + ICT 数字化整体方案</div>
 <div class="row"><span class="lbl">AI 口径：</span>数字化业务毛利 94%：新华三服务器/交换机/网络，AI 相关约占一半</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>17亿</b> → 26E <b>34亿</b> → 28E <b>60亿</b> → <span class="num">30E 中性 74亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.4% · 28E PE 12 · 券商 18 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：服务器 + 交换机台数（新华三）；价格风险：政企集采价格竞争</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688183">
 <h3>生益电子 <span class="dim" style="font-size:11px">688183 · AI-PCB</span> <span class="aibadge">AI 80%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">生益科技旗下 PCB，AI 服务器板与交换机板主力</div>
 <div class="row"><span class="lbl">AI 口径：</span>印制电路板毛利 86.8%（AI 服务器板主力）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>15亿</b> → 26E <b>28亿</b> → 28E <b>57亿</b> → <span class="num">30E 中性 73亿</span></div>
 <div class="row dim2">CAGR(26→30) 27.0% · 28E PE 10 · 券商 8 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：AI 服务器板块数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002281">
 <h3>光迅科技 <span class="dim" style="font-size:11px">002281 · 光模块</span> <span class="aibadge">AI 60%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">光芯片-器件-模块垂直一体化国家队，电信传输 + 数通光模块双轮</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据与接入毛利 60.2%（数通光模块+接入），宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>9亿</b> → 26E <b>18亿</b> → 28E <b>53亿</b> → <span class="num">30E 中性 70亿</span></div>
 <div class="row dim2">CAGR(26→30) 41.4% · 28E PE 15 · 券商 10 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数（电信 + 数通双轮）；价格风险：电信侧价格年降</div></div>
-<div class="blurb">
+<div class="blurb" id="c-603019">
 <h3>中科曙光 <span class="dim" style="font-size:11px">603019 · AI服务器</span> <span class="aibadge">AI 95%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">国产算力整机（海光生态）+ 液冷（曙光数创）+ 算力服务</div>
 <div class="row"><span class="lbl">AI 口径：</span>IT 设备+软件服务毛利 ~100%（算力主业，含海光生态）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>22亿</b> → 26E <b>31亿</b> → 28E <b>53亿</b> → <span class="num">30E 中性 66亿</span></div>
 <div class="row dim2">CAGR(26→30) 20.5% · 28E PE 22 · 券商 17 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：AI 服务器/超算整机台数（与海光配套）；价格风险：整机单价年降</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300442">
 <h3>润泽科技 <span class="dim" style="font-size:11px">300442 · AIDC</span> <span class="aibadge">AI 100%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">AIDC 智算中心园区龙头（廊坊等七大园区），机柜租赁 + 算力服务双业务</div>
 <div class="row"><span class="lbl">AI 口径：</span>AIDC+IDC 毛利 100%（智算中心纯度最高）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>50亿</b> → 26E <b>27亿</b> → 28E <b>51亿</b> → <span class="num">30E 中性 65亿</span></div>
 <div class="row dim2">CAGR(26→30) 23.8% · 28E PE 18 · 券商 11 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价各半 · 纯度65</span> 量的载体：智算中心上电机柜数；价格风险：租金单价正被价格战压制（2026E 下修主因就是价）</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688498">
 <h3>源杰科技 <span class="dim" style="font-size:11px">688498 · 光芯片</span> <span class="aibadge">AI 87%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">光芯片国产替代龙头（EML/DFB/CW 大功率光源），数通光芯片放量</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据中心类产品毛利 87.4%（EML/CW 光芯片）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>14亿</b> → 28E <b>38亿</b> → <span class="num">30E 中性 54亿</span></div>
 <div class="row dim2">CAGR(26→30) 41.0% · 28E PE 22 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度70</span> 量的载体：EML/CW 激光器颗数（CW 大功率单颗价值高）；价格风险：高端料号稀缺溢价，扩产后回落</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688519">
 <h3>南亚新材 <span class="dim" style="font-size:11px">688519 · 高速CCL</span> <span class="aibadge">AI 45%</span><span class="lowcov">低覆盖</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">国产覆铜板第二梯队，高速覆铜板（M6/M7/M8）供 AI 服务器 PCB，2026 爆发</div>
 <div class="row"><span class="lbl">AI 口径：</span>高速覆铜板（AI 服务器 M6/M7/M8）收入占比约 47%，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>21亿</b> → 28E <b>41亿</b> → <span class="num">30E 中性 50亿</span></div>
 <div class="row dim2">CAGR(26→30) 25.1% · 28E PE 10 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-c">价敏感 · 纯度40</span> 量的载体：高速覆铜板平米数（AI 服务器 PCB 上游）；价格风险：CCL 涨价周期弹性极大（2026 同比 +817% 即涨价驱动），反转时同样剧烈</div></div>
-<div class="blurb">
+<div class="blurb" id="c-000988">
 <h3>华工科技 <span class="dim" style="font-size:11px">000988 · 光模块</span> <span class="aibadge">AI 34%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">华工正源光模块（800G 出货）+ 激光装备 + 传感器三主业</div>
 <div class="row"><span class="lbl">AI 口径：</span>光电器件系列毛利 34.2%（联接业务），刚过线</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>15亿</b> → 26E <b>22亿</b> → 28E <b>39亿</b> → <span class="num">30E 中性 48亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.1% · 28E PE 17 · 券商 8 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数；价格风险：单价年降</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002837">
 <h3>英维克 <span class="dim" style="font-size:11px">002837 · 液冷</span> <span class="aibadge">AI 80%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">精密温控龙头，数据中心液冷全链条（Coolinside）市占率第一</div>
 <div class="row"><span class="lbl">AI 口径：</span>机房+机柜温控毛利 90.7%，数据中心液冷为主</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>5亿</b> → 26E <b>10亿</b> → 28E <b>28亿</b> → <span class="num">30E 中性 40亿</span></div>
 <div class="row dim2">CAGR(26→30) 40.7% · 28E PE 17 · 券商 13 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：液冷板/CDU 套数（随 AI 服务器台数）；价格风险：液冷渗透率提升是主逻辑，设备单价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688111">
 <h3>金山办公 <span class="dim" style="font-size:11px">688111 · AI应用</span> <span class="aibadge">AI 100%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">WPS 国产办公软件龙头，WPS AI 订阅付费渗透</div>
 <div class="row"><span class="lbl">AI 口径：</span>WPS 全线为 AI 办公软件公司（AI 付费渗透仍在早期，收入口径打折）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>18亿</b> → 26E <b>33亿</b> → 28E <b>32亿</b> → <span class="num">30E 中性 38亿</span></div>
 <div class="row dim2">CAGR(26→30) 3.5% · 28E PE 32 · 券商 16 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：AI 会员订阅数 + 政企订单数；价格风险：ARPU 稳定且有提价权可能；风险在竞争分流</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688313">
 <h3>仕佳光子 <span class="dim" style="font-size:11px">688313 · 光芯片</span> <span class="aibadge">AI 80%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">AWG/PLC 光芯片 + 室内光缆，数通 AWG 国产主力</div>
 <div class="row"><span class="lbl">AI 口径：</span>光芯片及器件收入占比 83.1%（AWG/DFB 数通为主）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>4亿</b> → 26E <b>9亿</b> → 28E <b>25亿</b> → <span class="num">30E 中性 36亿</span></div>
 <div class="row dim2">CAGR(26→30) 43.5% · 28E PE 18 · 券商 16 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度70</span> 量的载体：AWG/PLC 芯片颗数；价格风险：芯片价格随规模下降</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688521">
 <h3>芯原股份 <span class="dim" style="font-size:11px">688521 · AI芯片</span> <span class="aibadge">AI 55%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">芯片 IP 授权 + 一站式定制（Chiplet），AIoT 与算力 IP 平台</div>
 <div class="row"><span class="lbl">AI 口径：</span>IP 授权+设计服务：公司披露 AI 相关 IP 收入约占一半</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>-5.3亿</b> → 26E <b>-0.1亿</b> → 28E <b>16亿</b> → <span class="num">30E 中性 35亿</span></div>
 <div class="row dim2">CAGR(26→30) — · 28E PE 38 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：IP 授权项目数 + 量产芯片颗数；价格风险：授权费按项目一次一议</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002851">
 <h3>麦格米特 <span class="dim" style="font-size:11px">002851 · AI电源</span> <span class="aibadge">AI 40%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">电力电子平台型公司，AI 服务器电源（英伟达合格供应商）</div>
 <div class="row"><span class="lbl">AI 口径：</span>电源业务毛利 35.9%：AI 服务器电源（英伟达配套）为主力，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>8亿</b> → 28E <b>24亿</b> → <span class="num">30E 中性 35亿</span></div>
 <div class="row dim2">CAGR(26→30) 46.0% · 28E PE 17 · 券商 13 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：AI 电源模块台数（power shelf）；价格风险：件均功率提升利好单价；价格战风险低</div></div>
-<div class="blurb">
+<div class="blurb" id="c-603893">
 <h3>瑞芯微 <span class="dim" style="font-size:11px">603893 · AIoT芯片</span> <span class="aibadge">AI 75%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">AIoT SoC 龙头（RK3588 等），视觉 AI 芯片用于安防 IPC/机器人/AI 玩具/边缘计算</div>
 <div class="row"><span class="lbl">AI 口径：</span>智能应用处理器芯片收入 90.4%（NPU 视觉 AI SoC：安防/机器人/边缘）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>10亿</b> → 26E <b>17亿</b> → 28E <b>28亿</b> → <span class="num">30E 中性 34亿</span></div>
 <div class="row dim2">CAGR(26→30) 18.9% · 28E PE 33 · 券商 16 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：AIoT SoC 颗数（安防 IPC/机器人/AI 玩具）；价格风险：消费级芯片年降 5-10%；旗舰款 RK3588 价格坚挺</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002156">
 <h3>通富微电 <span class="dim" style="font-size:11px">002156 · 先进封装</span> <span class="aibadge">AI 45%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">先进封测龙头之一，AMD 大客户——MI 系列 GPU 封测主力</div>
 <div class="row"><span class="lbl">AI 口径：</span>集成电路封测毛利 95.7%：AMD AI GPU 封测主力，AI 相关约 4-5 成</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>12亿</b> → 26E <b>23亿</b> → 28E <b>28亿</b> → <span class="num">30E 中性 34亿</span></div>
 <div class="row dim2">CAGR(26→30) 10.1% · 28E PE 26 · 券商 7 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：先进封装颗数（AMD MI 系列）；价格风险：封测单价年降惯例</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300548">
 <h3>博创科技 <span class="dim" style="font-size:11px">300548 · 光器件</span> <span class="aibadge">AI 90%</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">光器件 + 硅光模块，FAU 与 DCI 器件</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据通信市场毛利 94.9%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>9亿</b> → 28E <b>22亿</b> → <span class="num">30E 中性 28亿</span></div>
 <div class="row dim2">CAGR(26→30) 32.8% · 28E PE 17 · 券商 2 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：光器件件数；价格风险：件均价值稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688668">
 <h3>鼎通科技 <span class="dim" style="font-size:11px">688668 · 连接器</span> <span class="aibadge">AI 65%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">通讯高速连接器组件（400G/800G 背板连接器壳体）+ 汽车连接器</div>
 <div class="row"><span class="lbl">AI 口径：</span>通讯连接器组件毛利 72.1%（AI 服务器/交换机高速连接器）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>6亿</b> → 28E <b>21亿</b> → <span class="num">30E 中性 26亿</span></div>
 <div class="row dim2">CAGR(26→30) 42.4% · 28E PE 7 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：通信连接器件数；价格风险：件均价值稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-600845">
 <h3>宝信软件 <span class="dim" style="font-size:11px">600845 · IDC</span> <span class="aibadge">AI 45%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">钢铁信息化龙头 + 宝之云 IDC/AIDC（服务外包），上海智算中心核心资源</div>
 <div class="row"><span class="lbl">AI 口径：</span>服务外包（宝之云 IDC/AIDC）毛利占比 45.7%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>13亿</b> → 26E <b>16亿</b> → 28E <b>22亿</b> → <span class="num">30E 中性 25亿</span></div>
 <div class="row dim2">CAGR(26→30) 11.8% · 28E PE 22 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-b">量价各半 · 纯度65</span> 量的载体：IDC 机柜上架数（宝之云 AIDC 扩容）+ 钢铁 IT 项目数；价格风险：机柜租金长协稳定；钢铁 IT 受行业周期拖累</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002409">
 <h3>雅克科技 <span class="dim" style="font-size:11px">002409 · HBM材料</span> <span class="aibadge">AI 45%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">半导体材料平台（前驱体/电子特气），HBM 用前驱体国内主供</div>
 <div class="row"><span class="lbl">AI 口径：</span>半导体化学材料毛利 54.2%：前驱体主供 HBM/DRAM 产线，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>10亿</b> → 26E <b>12亿</b> → 28E <b>20亿</b> → <span class="num">30E 中性 24亿</span></div>
 <div class="row dim2">CAGR(26→30) 18.0% · 28E PE 21 · 券商 11 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：HBM 前驱体供应量（随 HBM 颗数）；价格风险：材料长协定价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002436">
 <h3>兴森科技 <span class="dim" style="font-size:11px">002436 · AI-PCB</span> <span class="aibadge">AI 45%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">PCB 快速样板龙头 + FCBGA 封装基板</div>
 <div class="row"><span class="lbl">AI 口径：</span>PCB+封装基板+测试板毛利 ~78%，AI 相关部分约一半，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>6亿</b> → 28E <b>17亿</b> → <span class="num">30E 中性 23亿</span></div>
 <div class="row dim2">CAGR(26→30) 39.4% · 28E PE 28 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：PCB 样板/小批量板数；价格风险：样板定价高毛利，量小单价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688385">
 <h3>复旦微电 <span class="dim" style="font-size:11px">688385 · FPGA</span> <span class="aibadge">AI 85%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">国产 FPGA 龙头（亿门级）+ 安全识别芯片，AI 推理加速+特种</div>
 <div class="row"><span class="lbl">AI 口径：</span>集成电路毛利 99%：国产 FPGA 龙头，AI 推理加速+特种，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>13亿</b> → 28E <b>18亿</b> → <span class="num">30E 中性 22亿</span></div>
 <div class="row dim2">CAGR(26→30) 15.0% · 28E PE 24 · 券商 4 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：国产 FPGA 采购颗数；价格风险：价格相对稳定，竞争来自国产同行</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688676">
 <h3>金盘科技 <span class="dim" style="font-size:11px">688676 · AIDC电力设备</span> <span class="aibadge">AI 40%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">干式变压器龙头，数据中心/AIDC 配套电力设备出海（北美数据中心大单）</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据中心干变+电力集成收入约 35-40%（AIDC 出海），宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>7亿</b> → 26E <b>9亿</b> → 28E <b>17亿</b> → <span class="num">30E 中性 21亿</span></div>
 <div class="row dim2">CAGR(26→30) 25.6% · 28E PE 14 · 券商 17 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：干式变压器台数（AIDC/新能源项目数）；价格风险：项目制投标竞价有周期波动；海外数据中心订单毛利率更高</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002230">
 <h3>科大讯飞 <span class="dim" style="font-size:11px">002230 · AI应用</span> <span class="aibadge">AI 100%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">语音交互 + 星火大模型 + 教育/医疗 AI 应用，B 端 C 端全覆盖</div>
 <div class="row"><span class="lbl">AI 口径：</span>全线业务均为 AI 驱动（教育/开放平台/医疗等）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>8亿</b> → 26E <b>10亿</b> → 28E <b>17亿</b> → <span class="num">30E 中性 20亿</span></div>
 <div class="row dim2">CAGR(26→30) 18.6% · 28E PE 54 · 券商 11 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：大模型 token 调用量/开发者数；价格风险：API 定价竞争激烈</div></div>
-<div class="blurb">
+<div class="blurb" id="c-301018">
 <h3>申菱环境 <span class="dim" style="font-size:11px">301018 · 液冷</span> <span class="aibadge">AI 75%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">专用空调 + 数据中心液冷（华为链核心供应商）</div>
 <div class="row"><span class="lbl">AI 口径：</span>设备+解决方案毛利 97.6%，数据中心温控为主</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>4亿</b> → 28E <b>13亿</b> → <span class="num">30E 中性 19亿</span></div>
 <div class="row dim2">CAGR(26→30) 49.5% · 28E PE 18 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：温控设备套数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300570">
 <h3>太辰光 <span class="dim" style="font-size:11px">300570 · 光器件</span> <span class="aibadge">AI 95%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">MPO/MT 光纤连接器插芯龙头，数据中心高密度布线</div>
 <div class="row"><span class="lbl">AI 口径：</span>光器件毛利 97%（MPO/MT 插芯，数据中心用）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>5亿</b> → 28E <b>12亿</b> → <span class="num">30E 中性 17亿</span></div>
 <div class="row dim2">CAGR(26→30) 36.8% · 28E PE 21 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：MT 插芯/MPO 跳线条数；价格风险：件均价值稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300811">
 <h3>铂科新材 <span class="dim" style="font-size:11px">300811 · 芯片电感</span> <span class="aibadge">AI 45%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">金属软磁粉芯龙头 + 芯片电感（英伟达 GPU 供电电感核心供应商）</div>
 <div class="row"><span class="lbl">AI 口径：</span>芯片电感（英伟达 GPU 供电）+金属软磁收入约 45%，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>4亿</b> → 26E <b>6亿</b> → 28E <b>13亿</b> → <span class="num">30E 中性 17亿</span></div>
 <div class="row dim2">CAGR(26→30) 29.4% · 28E PE 20 · 券商 11 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度70</span> 量的载体：芯片电感颗数（GPU 供电配套）+ 软磁粉芯吨数；价格风险：金属粉末原料价格波动；芯片电感新品有溢价</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002518">
 <h3>科士达 <span class="dim" style="font-size:11px">002518 · IDC电源</span> <span class="aibadge">AI 67%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">UPS/数据中心关键基础设施 + 光伏储能充电桩</div>
 <div class="row"><span class="lbl">AI 口径：</span>智慧电源数据中心产品毛利 67.4%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>6亿</b> → 26E <b>8亿</b> → 28E <b>13亿</b> → <span class="num">30E 中性 17亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.7% · 28E PE 11 · 券商 12 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：UPS 台数；价格风险：单价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300620">
 <h3>光库科技 <span class="dim" style="font-size:11px">300620 · 光器件</span> <span class="aibadge">AI 45%</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">光纤激光器件 + 薄膜铌酸锂高速调制器（1.6T/CPO 核心增量器件）</div>
 <div class="row"><span class="lbl">AI 口径：</span>光通讯器件毛利 59.2% 中数通相关部分，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>3亿</b> → 28E <b>11亿</b> → <span class="num">30E 中性 16亿</span></div>
 <div class="row dim2">CAGR(26→30) 46.5% · 28E PE 44 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：光纤器件件数；价格风险：小批量定价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002335">
 <h3>科华数据 <span class="dim" style="font-size:11px">002335 · AIDC电源</span> <span class="aibadge">AI 45%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">UPS 数据中心电源 + IDC 服务双业务</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据中心产品+IDC 服务毛利 38.8%，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>4亿</b> → 26E <b>6亿</b> → 28E <b>12亿</b> → <span class="num">30E 中性 16亿</span></div>
 <div class="row dim2">CAGR(26→30) 27.5% · 28E PE 16 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：UPS/HVDC 套数 + IDC 机柜数；价格风险：IDC 租金价格战</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688123">
 <h3>聚辰股份 <span class="dim" style="font-size:11px">688123 · 内存接口</span> <span class="aibadge">AI 90%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">EEPROM/SPD 全球龙头，DDR5 内存条 SPD 是 AI 服务器内存标配</div>
 <div class="row"><span class="lbl">AI 口径：</span>SPD 等芯片销售毛利 100%，主要配套 DDR5 内存条（AI 服务器内存扩容受益）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>4亿</b> → 26E <b>7亿</b> → 28E <b>11亿</b> → <span class="num">30E 中性 15亿</span></div>
 <div class="row dim2">CAGR(26→30) 23.2% · 28E PE 13 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：SPD/温传颗数（随 DDR5 内存条根数）；价格风险：EEPROM 价格稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688608">
 <h3>恒玄科技 <span class="dim" style="font-size:11px">688608 · 端侧AI芯片</span> <span class="aibadge">AI 80%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">智能音频/可穿戴 SoC（TWS/手表/AI 眼镜 BES 系列），端侧 AI 芯片核心标的</div>
 <div class="row"><span class="lbl">AI 口径：</span>芯片销售收入 99.9%（TWS/AI 眼镜/手表智能音频 SoC，端侧 AI）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>6亿</b> → 26E <b>5亿</b> → 28E <b>11亿</b> → <span class="num">30E 中性 15亿</span></div>
 <div class="row dim2">CAGR(26→30) 32.8% · 28E PE 27 · 券商 10 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：TWS/AI 眼镜/手表 SoC 颗数（智能可穿戴出货量）；价格风险：大客户议价强 ASP 年降 10%+；AI 眼镜新品有溢价</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300990">
 <h3>同飞股份 <span class="dim" style="font-size:11px">300990 · 液冷</span> <span class="aibadge">AI 35%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">工业温控设备，储能 + 数据中心液冷新业务爬坡</div>
 <div class="row"><span class="lbl">AI 口径：</span>液体恒温设备毛利 60.3% 中数据中心液冷新业务，边界</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>4亿</b> → 28E <b>9亿</b> → <span class="num">30E 中性 12亿</span></div>
 <div class="row dim2">CAGR(26→30) 34.3% · 28E PE 15 · 券商 8 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：温控套数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300870">
 <h3>欧陆通 <span class="dim" style="font-size:11px">300870 · AI电源</span> <span class="aibadge">AI 59%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">电源适配器龙头转型服务器电源/数据中心电源</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据中心电源毛利 59%（AI 服务器电源主力增长）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>2亿</b> → 28E <b>8亿</b> → <span class="num">30E 中性 12亿</span></div>
 <div class="row dim2">CAGR(26→30) 52.8% · 28E PE 20 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：电源台数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-301205">
 <h3>联特科技 <span class="dim" style="font-size:11px">301205 · 光模块</span> <span class="aibadge">AI 95%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">光模块设计商（中低速基本盘），冲击 800G 数通</div>
 <div class="row"><span class="lbl">AI 口径：</span>光模块及受托加工毛利 99.1%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>0.7亿</b> → 28E <b>7亿</b> → <span class="num">30E 中性 11亿</span></div>
 <div class="row dim2">CAGR(26→30) 99.7% · 28E PE 26 · 券商 1 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数；价格风险：小厂价格战风险</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002897">
 <h3>意华股份 <span class="dim" style="font-size:11px">002897 · 连接器</span> <span class="aibadge">AI 40%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">高速连接器 + 光伏支架双主业</div>
 <div class="row"><span class="lbl">AI 口径：</span>通讯连接器产品毛利 40.5%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>4亿</b> → 28E <b>8亿</b> → <span class="num">30E 中性 10亿</span></div>
 <div class="row dim2">CAGR(26→30) 22.7% · 28E PE 11 · 券商 2 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：连接器件数；价格风险：件均价值稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300657">
 <h3>弘信电子 <span class="dim" style="font-size:11px">300657 · 算力+FPC</span> <span class="aibadge">AI 45%</span><span class="lowcov">低覆盖</span><span class="q3 q3-up">三季报超预期</span></h3>
 <div class="tagline">FPC 龙头转型算力（昇腾整机代工 + 算力服务）</div>
 <div class="row"><span class="lbl">AI 口径：</span>算力及相关业务毛利 45.5%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>3亿</b> → 28E <b>8亿</b> → <span class="num">30E 中性 10亿</span></div>
 <div class="row dim2">CAGR(26→30) 33.6% · 28E PE 21 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：算力服务器台数 + FPC 件数；价格风险：算力租赁价格波动</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688195">
 <h3>腾景科技 <span class="dim" style="font-size:11px">688195 · 光器件</span> <span class="aibadge">AI 50%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">精密光学元件（FAU/透镜）+ 光纤器件，光模块上游</div>
 <div class="row"><span class="lbl">AI 口径：</span>精密光学元组件+光纤器件毛利 88.4%，数通相关约占一半，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>0.7亿</b> → 26E <b>2亿</b> → 28E <b>6亿</b> → <span class="num">30E 中性 9亿</span></div>
 <div class="row dim2">CAGR(26→30) 55.7% · 28E PE 32 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：精密光学元件件数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300738">
 <h3>奥飞数据 <span class="dim" style="font-size:11px">300738 · IDC</span> <span class="aibadge">AI 85%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">IDC + 算力云服务（华南核心数据中心资源）</div>
 <div class="row"><span class="lbl">AI 口径：</span>IDC 综合服务毛利 90.6%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>4亿</b> → 28E <b>6亿</b> → <span class="num">30E 中性 7亿</span></div>
 <div class="row dim2">CAGR(26→30) 18.6% · 28E PE 25 · 券商 8 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：机柜数；价格风险：租金价格战</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688167">
 <h3>炬光科技 <span class="dim" style="font-size:11px">688167 · 光器件</span> <span class="aibadge">AI 35%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">激光元器件上游（光场匀化器/热沉），泛半导体制程 + 光通讯</div>
 <div class="row"><span class="lbl">AI 口径：</span>激光光学产品毛利 68.5% 中光模块上游热沉等部分，边界</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>-0.4亿</b> → 26E <b>0.5亿</b> → 28E <b>4亿</b> → <span class="num">30E 中性 7亿</span></div>
 <div class="row dim2">CAGR(26→30) 90.9% · 28E PE 44 · 券商 8 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：激光光学元件件数；价格风险：单件价值高但项目制定价</div></div>
-<div class="blurb">
+<div class="blurb" id="c-002364">
 <h3>中恒电气 <span class="dim" style="font-size:11px">002364 · HVDC电源</span> <span class="aibadge">AI 55%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">HVDC 高压直流电源 + 电力信息化</div>
 <div class="row"><span class="lbl">AI 口径：</span>数据中心电源(HVDC)毛利 54.3%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>2亿</b> → 28E <b>5亿</b> → <span class="num">30E 中性 7亿</span></div>
 <div class="row dim2">CAGR(26→30) 33.7% · 28E PE 27 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：HVDC 电源套数；价格风险：HVDC 单价稳定；数据中心电源竞争</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688049">
 <h3>炬芯科技 <span class="dim" style="font-size:11px">688049 · 端侧AI芯片</span> <span class="aibadge">AI 85%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">低功耗音频 SoC，端侧 AI 芯片（AI 音箱/AI 玩具/穿戴）</div>
 <div class="row"><span class="lbl">AI 口径：</span>智能无线音频 SoC 毛利 73%：端侧 AI 芯片属性，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>3亿</b> → 28E <b>5亿</b> → <span class="num">30E 中性 7亿</span></div>
 <div class="row dim2">CAGR(26→30) 24.5% · 28E PE 16 · 券商 2 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：端侧 AI 芯片颗数（AI 音箱/穿戴）；价格风险：消费电子年降惯例</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688205">
 <h3>德科立 <span class="dim" style="font-size:11px">688205 · 光模块</span> <span class="aibadge">AI 60%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">光传输设备（长距光放大器）+ 数通光模块</div>
 <div class="row"><span class="lbl">AI 口径：</span>接入和数据类毛利 33.8%+传输类部分，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>0.7亿</b> → 26E <b>2亿</b> → 28E <b>4亿</b> → <span class="num">30E 中性 7亿</span></div>
 <div class="row dim2">CAGR(26→30) 40.4% · 28E PE 34 · 券商 5 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：光模块只数；价格风险：同上</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300913">
 <h3>兆龙互连 <span class="dim" style="font-size:11px">300913 · 线缆</span> <span class="aibadge">AI 55%</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">数据电缆 + 高速铜缆组件（数据中心 DAC/AOC）</div>
 <div class="row"><span class="lbl">AI 口径：</span>专用电缆+数据通信毛利 68.2%（数据中心高速线）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>2亿</b> → 26E <b>3亿</b> → 28E <b>5亿</b> → <span class="num">30E 中性 6亿</span></div>
 <div class="row dim2">CAGR(26→30) 19.6% · 28E PE 19 · 券商 1 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：高速铜缆根数；价格风险：铜缆单价稳定</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688088">
 <h3>虹软科技 <span class="dim" style="font-size:11px">688088 · 视觉AI</span> <span class="aibadge">AI 95%</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">手机视觉 AI 算法龙头（GalaxyEngine），车载智能驾驶扩展</div>
 <div class="row"><span class="lbl">AI 口径：</span>视觉算法毛利 97.9%（手机+车载 AI 视觉）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>3亿</b> → 26E <b>3亿</b> → 28E <b>5亿</b> → <span class="num">30E 中性 6亿</span></div>
 <div class="row dim2">CAGR(26→30) 21.0% · 28E PE 26 · 券商 9 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度80</span> 量的载体：算法授权机型数（手机摄像头）；价格风险：单机授权费稳定；手机出货天花板</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300383">
 <h3>光环新网 <span class="dim" style="font-size:11px">300383 · IDC</span> <span class="aibadge">AI 60%</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">IDC（北京核心区机柜资源）+ 云服务增值</div>
 <div class="row"><span class="lbl">AI 口径：</span>IDC 及增值毛利 59.3%+云计算部分，宽口径</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>-7.6亿</b> → 26E <b>2亿</b> → 28E <b>3亿</b> → <span class="num">30E 中性 5亿</span></div>
 <div class="row dim2">CAGR(26→30) 32.0% · 28E PE 50 · 券商 4 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：机柜数；价格风险：租金价格战</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688327">
 <h3>云从科技 <span class="dim" style="font-size:11px">688327 · 视觉AI</span> <span class="aibadge">AI 95%</span><span class="watch">亏损观察</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">人机协同 AI 解决方案（金融/城市治理/出行）</div>
 <div class="row"><span class="lbl">AI 口径：</span>AI 解决方案毛利 97.6%（持续亏损→观察）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>-5.6亿</b> → 26E <b>-3.5亿</b> → 28E <b>1亿</b> → <span class="num">30E 中性 3亿</span></div>
 <div class="row dim2">CAGR(26→30) — · 28E PE 101 · 券商 1 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度70</span> 量的载体：项目数/调用次数（当前亏损）；价格风险：政务项目单价下滑</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300249">
 <h3>依米康 <span class="dim" style="font-size:11px">300249 · IDC温控</span> <span class="aibadge">AI 85%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">机房精密空调 + IDC 温控节能</div>
 <div class="row"><span class="lbl">AI 口径：</span>ICT 领域产品毛利 100%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>0.3亿</b> → 26E <b>0.7亿</b> → 28E <b>2亿</b> → <span class="num">30E 中性 3亿</span></div>
 <div class="row dim2">CAGR(26→30) 51.0% · 28E PE 24 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度85</span> 量的载体：IDC 温控设备套数；价格风险：温控单价稳定；机房建设节奏</div></div>
-<div class="blurb">
+<div class="blurb" id="c-603881">
 <h3>数据港 <span class="dim" style="font-size:11px">603881 · IDC</span> <span class="aibadge">AI 95%</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">定制化 IDC 数据中心（阿里核心供应商）</div>
 <div class="row"><span class="lbl">AI 口径：</span>IDC 服务毛利 98.6%</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>1亿</b> → 26E <b>2亿</b> → 28E <b>2亿</b> → <span class="num">30E 中性 2亿</span></div>
 <div class="row dim2">CAGR(26→30) 8.3% · 28E PE 97 · 券商 2 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：机柜数；价格风险：租金价格战</div></div>
-<div class="blurb">
+<div class="blurb" id="c-300624">
 <h3>万兴科技 <span class="dim" style="font-size:11px">300624 · AI应用</span> <span class="aibadge">AI 100%</span><span class="lowcov">低覆盖</span><span class="q3 q3-dn">三季报低于预期</span></h3>
 <div class="tagline">AIGC 创意软件（Filmora/万兴喵影），出海订阅模式</div>
 <div class="row"><span class="lbl">AI 口径：</span>AIGC 创意软件（视频/绘图创意毛利 76.8%+）</div>
 <div class="row"><span class="lbl">五年利润：</span>25A <b>-0.9亿</b> → 26E <b>-0.7亿</b> → 28E <b>0.7亿</b> → <span class="num">30E 中性 2亿</span></div>
 <div class="row dim2">CAGR(26→30) — · 28E PE 148 · 券商 3 家</div>
 <div class="row"><span class="lbl">量价：</span><span class="drv drv-a">量主导 · 纯度75</span> 量的载体：订阅用户数（海外为主）；价格风险：订阅价格稳定；获客成本</div></div>
-<div class="blurb">
+<div class="blurb" id="c-688787">
 <h3>海天瑞声 <span class="dim" style="font-size:11px">688787 · AI数据</span> <span class="aibadge">AI 90%</span><span class="lowcov">低覆盖</span><span class="q3 q3-mid">三季报在轨</span></h3>
 <div class="tagline">AI 训练数据集定制与合成数据服务</div>
 <div class="row"><span class="lbl">AI 口径：</span>AI 训练数据服务毛利 ~90%</div>
@@ -794,7 +799,7 @@ function renderTable() {
     var flags = (r.lowcov ? '<span class="lowcov">低覆盖</span>' : '') + (r.watch ? '<span class="watch">观察</span>' : '');
     html += '<tr>' +
       '<td class="cd">' + r.code + '</td>' +
-      '<td><span class="nm">' + r.name + '</span>' + flags + '</td>' +
+      '<td><a class="nm" href="#c-' + r.code + '" title="跳到第七章解读">' + r.name + '</a>' + flags + '</td>' +
       '<td class="dim">' + r.grp + '</td>' +
       '<td class="gold">' + r.ai_ratio + '</td>' +
       '<td>' + fmt(r.n26) + '</td>' +
