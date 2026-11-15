@@ -349,6 +349,79 @@
   .site-nav .nav-stats .stat-chip:hover { border-color: var(--gold); }
   .site-nav .nav-stats .stat-num { font-weight: 700; color: var(--gold); font-size: 13px; }
   .site-nav .nav-stats .stat-label { opacity: .75; }
+
+  /* ===== 显示设置：隐藏分组 / 隐藏单张专题卡片 ===== */
+  .dr-x {
+    position: absolute; top: 7px; right: 7px;
+    width: 18px; height: 18px; line-height: 16px;
+    text-align: center; border-radius: 50%;
+    font-size: 13px; font-family: Arial, sans-serif;
+    color: #9aa0aa; background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(0,0,0,0.18);
+    cursor: pointer; user-select: none;
+    opacity: 0; transition: opacity .2s ease;
+    z-index: 3;
+  }
+  .dr-x:hover { color: #c22a45; border-color: #c22a45; opacity: 1; }
+  a.tile:hover .dr-x { opacity: .7; }
+  @media (hover: none) { .dr-x { opacity: .5; } }
+  .dr-gx {
+    margin-left: auto; flex-shrink: 0;
+    width: 22px; height: 22px; line-height: 20px;
+    text-align: center; border-radius: 50%;
+    font-size: 13px; font-family: Arial, sans-serif;
+    color: #9aa0aa; background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(0,0,0,0.15);
+    cursor: pointer; user-select: none; letter-spacing: 0;
+    transition: color .2s, border-color .2s;
+  }
+  .dr-gx:hover { color: #c22a45; border-color: #c22a45; }
+  .dr-g-hidden, .dr-t-hidden { display: none !important; }
+
+  #dr-bar {
+    position: fixed; right: 18px; bottom: 18px; z-index: 300;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px; border-radius: 999px;
+    background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    font-size: 13px; color: #2a2f38; cursor: pointer; user-select: none;
+  }
+  #dr-bar:hover { border-color: #c22a45; color: #c22a45; }
+  #dr-bar .dr-badge {
+    min-width: 18px; height: 18px; line-height: 18px; border-radius: 9px;
+    background: #c22a45; color: #fff; font-size: 11px; text-align: center;
+    padding: 0 5px; font-variant-numeric: tabular-nums;
+  }
+  #dr-panel {
+    position: fixed; right: 18px; bottom: 64px; z-index: 300;
+    width: 300px; max-width: calc(100vw - 24px); max-height: 62vh; overflow: auto;
+    background: rgba(255,255,255,0.98); border: 1px solid rgba(0,0,0,0.14);
+    border-radius: 14px; box-shadow: 0 10px 36px rgba(0,0,0,0.22);
+    font-size: 13px; color: #2a2f38; padding: 14px 14px 12px; display: none;
+  }
+  #dr-panel.dr-open { display: block; }
+  #dr-panel h4 { font-size: 14px; margin: 0 0 6px; display: flex; align-items: center; }
+  #dr-panel h4 .dr-close { margin-left: auto; cursor: pointer; color: #9aa0aa; font-size: 16px; padding: 0 4px; }
+  #dr-panel h4 .dr-close:hover { color: #c22a45; }
+  #dr-panel .dr-sec-t { font-size: 12px; color: #5a616c; margin: 8px 0 4px; letter-spacing: 1px; }
+  #dr-panel .dr-item { display: flex; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 8px; }
+  #dr-panel .dr-item:hover { background: rgba(0,0,0,0.04); }
+  #dr-panel .dr-item .dr-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #dr-panel .dr-item .dr-cnt { color: #9aa0aa; font-size: 11px; margin-left: 4px; }
+  #dr-panel .dr-btn {
+    border: 1px solid rgba(0,0,0,0.18); background: #fff; border-radius: 999px;
+    padding: 2px 10px; font-size: 12px; color: #2a2f38; cursor: pointer; white-space: nowrap;
+  }
+  #dr-panel .dr-btn:hover { border-color: #c22a45; color: #c22a45; }
+  #dr-panel .dr-btn.dr-on { background: #c22a45; border-color: #c22a45; color: #fff; }
+  #dr-panel .dr-btn.dr-on:hover { background: #a52239; color: #fff; }
+  #dr-panel .dr-all {
+    width: 100%; margin-top: 10px; padding: 7px 0; border-radius: 9px;
+    border: 1px solid rgba(194,42,69,0.5); background: rgba(194,42,69,0.06);
+    color: #c22a45; font-size: 13px; cursor: pointer;
+  }
+  #dr-panel .dr-all:hover { background: #c22a45; color: #fff; }
+  #dr-panel .dr-empty { color: #9aa0aa; padding: 4px 8px; }
 </style>
 </head>
 <body>
@@ -878,6 +951,171 @@
     .then(function(r) { if (!r.ok) throw r.status; return r.json(); })
     .then(function(d) { setNum('gc-today', d.count || d.count_unique); })
     .catch(function() { setNum('gc-today', '-'); });
+})();
+</script>
+
+<script>
+/* ===== 显示设置：隐藏分组 / 隐藏专题卡片（localStorage 持久化） ===== */
+(function() {
+  var KEY = 'dr_hidden_v1';
+  var state = { g: [], t: [] };
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) {
+      var s = JSON.parse(raw);
+      if (s && Array.isArray(s.g)) state.g = s.g;
+      if (s && Array.isArray(s.t)) state.t = s.t;
+    }
+  } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function inArr(a, x) { return a.indexOf(x) !== -1; }
+  function toggleArr(a, x, on) { var i = a.indexOf(x); if (on && i === -1) a.push(x); if (!on && i !== -1) a.splice(i, 1); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  var groups = [].slice.call(document.querySelectorAll('main section.group'));
+  var tiles = [].slice.call(document.querySelectorAll('main a.tile'));
+
+  // 先记录分组名与卡片标题（注入按钮之前），再注入隐藏按钮
+  groups.forEach(function(g) {
+    var h = g.querySelector('.group-head');
+    var name = h ? h.textContent.trim() : '';
+    g.setAttribute('data-dr-name', name);
+    if (h) {
+      var b = document.createElement('span');
+      b.className = 'dr-gx'; b.textContent = '×'; b.title = '隐藏整个分组';
+      h.appendChild(b);
+    }
+  });
+  tiles.forEach(function(a) {
+    var b = document.createElement('span');
+    b.className = 'dr-x'; b.textContent = '×'; b.title = '隐藏此专题';
+    a.appendChild(b);
+  });
+
+  // 悬浮条 + 面板
+  var bar = document.createElement('div');
+  bar.id = 'dr-bar';
+  bar.innerHTML = '<span>显示设置</span><span class="dr-badge" style="display:none">0</span>';
+  var panel = document.createElement('div');
+  panel.id = 'dr-panel';
+  document.body.appendChild(bar);
+  document.body.appendChild(panel);
+
+  function apply() {
+    tiles.forEach(function(a) {
+      a.classList.toggle('dr-t-hidden', inArr(state.t, a.getAttribute('href')));
+    });
+    groups.forEach(function(g) {
+      var name = g.getAttribute('data-dr-name');
+      var hasVisible = [].slice.call(g.querySelectorAll('a.tile')).some(function(a) {
+        return !a.classList.contains('dr-t-hidden');
+      });
+      // 用户显式隐藏，或组内已无可显示卡片时自动隐藏
+      g.classList.toggle('dr-g-hidden', inArr(state.g, name) || !hasVisible);
+    });
+    // 并排分组行：两个组都不可见时把整行也收起来
+    [].slice.call(document.querySelectorAll('main .group-row')).forEach(function(r) {
+      var any = [].slice.call(r.querySelectorAll('section.group')).some(function(g) {
+        return !g.classList.contains('dr-g-hidden');
+      });
+      r.style.display = any ? '' : 'none';
+    });
+    // 导航计数：显示可见数
+    var vis = tiles.filter(function(a) {
+      if (a.classList.contains('dr-t-hidden')) return false;
+      var g = a.closest('section.group');
+      return !(g && g.classList.contains('dr-g-hidden'));
+    }).length;
+    var navc = document.querySelector('.nav-count');
+    if (navc) {
+      navc.textContent = vis === tiles.length
+        ? '· ' + tiles.length + ' 个研究专题'
+        : '· 显示 ' + vis + ' / ' + tiles.length + ' 个专题';
+    }
+    // 徽标：用户隐藏的项目数
+    var badge = bar.querySelector('.dr-badge');
+    var n = state.g.length + state.t.length;
+    badge.style.display = n > 0 ? '' : 'none';
+    badge.textContent = n;
+    renderPanel();
+  }
+
+  function renderPanel() {
+    var h = '<h4>显示设置<span class="dr-close">×</span></h4>';
+    h += '<div class="dr-sec-t">分组（' + groups.length + '）</div>';
+    groups.forEach(function(g) {
+      var name = g.getAttribute('data-dr-name');
+      var hidden = inArr(state.g, name);
+      var cnt = g.querySelectorAll('a.tile').length;
+      h += '<div class="dr-item"><span class="dr-name">' + esc(name) +
+        '<span class="dr-cnt">' + cnt + ' 项</span></span>' +
+        '<button class="dr-btn' + (hidden ? '' : ' dr-on') + '" data-dr-gtoggle="' + esc(name) + '">' +
+        (hidden ? '恢复' : '隐藏') + '</button></div>';
+    });
+    h += '<div class="dr-sec-t">已隐藏的专题（' + state.t.length + '）</div>';
+    if (!state.t.length) {
+      h += '<div class="dr-empty">没有单独隐藏的专题</div>';
+    } else {
+      state.t.forEach(function(href) {
+        var title = href;
+        tiles.forEach(function(a) {
+          if (a.getAttribute('href') === href) {
+            var t = a.querySelector('.tile-title');
+            title = t ? t.textContent : href;
+          }
+        });
+        h += '<div class="dr-item"><span class="dr-name" title="' + esc(title) + '">' + esc(title) +
+          '</span><button class="dr-btn" data-dr-restore="' + esc(href) + '">恢复</button></div>';
+      });
+    }
+    h += '<button class="dr-all" data-dr-all="1">全部恢复默认</button>';
+    panel.innerHTML = h;
+  }
+
+  document.addEventListener('click', function(e) {
+    var tgt = e.target;
+    if (!(tgt && tgt.closest)) return;
+    // 面板打开时点空白处关闭
+    if (panel.classList.contains('dr-open') && !tgt.closest('#dr-panel') && !tgt.closest('#dr-bar')) {
+      panel.classList.remove('dr-open');
+    }
+    var x = tgt.closest('.dr-x');
+    if (x) {
+      e.preventDefault(); e.stopPropagation();
+      var a = x.closest('a.tile');
+      if (a) { toggleArr(state.t, a.getAttribute('href'), true); save(); apply(); }
+      return;
+    }
+    var gx = tgt.closest('.dr-gx');
+    if (gx) {
+      e.preventDefault(); e.stopPropagation();
+      var g = gx.closest('section.group');
+      if (g) { toggleArr(state.g, g.getAttribute('data-dr-name'), true); save(); apply(); }
+      return;
+    }
+    if (tgt.closest('#dr-bar')) { panel.classList.toggle('dr-open'); renderPanel(); return; }
+    if (tgt.closest('.dr-close')) { panel.classList.remove('dr-open'); return; }
+    var gt = tgt.closest('[data-dr-gtoggle]');
+    if (gt) {
+      var nm = gt.getAttribute('data-dr-gtoggle');
+      toggleArr(state.g, nm, !inArr(state.g, nm));
+      save(); apply();
+      return;
+    }
+    var rs = tgt.closest('[data-dr-restore]');
+    if (rs) {
+      toggleArr(state.t, rs.getAttribute('data-dr-restore'), false);
+      save(); apply();
+      return;
+    }
+    if (tgt.closest('[data-dr-all]')) {
+      state.g = []; state.t = [];
+      save(); apply();
+      return;
+    }
+  });
+
+  apply();
 })();
 </script>
 </body>
